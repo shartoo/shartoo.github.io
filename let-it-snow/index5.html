@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" class="demo5 no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<title>Let Your Website Snow using HTML5 Canvas</title>
+		<meta name="description" content="Creating Falling Snow, that will allow you to add a beautiful interactive snow animation to your website." />
+		<meta name="keywords" content="html5 snow, css snow, website snow, christmas website snow" />
+		<meta name="author" content="Author for Onextrapixel" />
+		<link rel="shortcut icon" id="favicon" href="../file/favicon.gif"> 
+		<link rel="stylesheet" type="text/css" href="css/default.css" />
+		
+		<!-- Edit Below -->
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+	    <script type="text/javascript" src="js/jquery.let_it_snow.js"></script>
+	    <link rel="stylesheet" type="text/css" href="css/style.css" />
+	    <link rel="stylesheet" type="text/css" href="css/elusive-webfont.css" />
+	    <script src="../file/js/modernizr.js"></script>
+	</head>
+	<body class="demo5">
+	<div class="nav-top clearfix">
+		<span class="right"><a class="nav-icon icon-th" href="http://www.onextrapixel.com/category/tutorials/"><span>View all Tutorials</span></a></span>
+		<span class="right"><a class="nav-icon icon-left" href="http://www.onextrapixel.com/2013/12/24/create-and-control-festive-snow-on-your-website-using-html5-canvas/"><span>Back to Tutorial Article</span></a></span>
+	</div>
+  
+	<div class="header">
+		<h1>Let It Snow: Time to Go Crazy</h1>
+		<div class="menu">
+	  		<a href="index.html">Demo 1</a>
+	  		<a href="index2.html">Demo 2</a>
+	  		<a href="index3.html">Demo 3</a>
+	  		<a href="index4.html">Demo 4</a>
+	  		<a class="active" href="index5.html">Demo 5</a>
+	  		<a href="index6.html">Demo 6</a>
+	  	</div>
+	</div>
+  
+	
+	
+	<div class="main">
+    <div class="page_container">
+      <canvas width="100%" height="100%" class="snow"></canvas>
+      
+      <div class="direction"><strong>Note:</strong> This plugin is based on <a href="http://www.github.com/loktar00" target="_blank">Jason Brown</a>'s solution <a href="http://stackoverflow.com/questions/13983764/creating-falling-snow-using-html-5-and-js" target="_blank">found here</a>.</div>
+    </div>
+	</div>
+	<script type="text/javascript">
+	  $(document).ready( function() {
+	    $("canvas.snow").let_it_snow({
+	      windPower: 0,
+	      speed: 0,
+	      color: "#F21313",
+	      size:100,
+	      opacity: 0.00000001,
+	      count: 25,
+	      interaction: false
+	    });
+	  });
+    
+  	</script>
+		
+	</body>
+</html>
