@@ -11,7 +11,7 @@ description: 来自南京的数据挖掘菜鸟
 paginate: 5
 paginate_path: "page:num"
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
-avatar: images/myface.jpg
+avatar:https://github.com/shartoo/shartoo.github.com/tree/master/images/myface.jpg
 
 #
 # Flags below are optional
