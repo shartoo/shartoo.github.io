@@ -7,9 +7,9 @@ permalink: /about/
 Some information about you!
 
 ### More Information
-NAME:ÏÄÌÎ     ±ÏÒµÔºĞ££ºÄÏ¾©²Æ¾­´óÑ§
-Ñ§Àú£ºË¶Ê¿    ×¨Òµ£ºÈí¼ş¹¤³Ì
+NAME:å¤æ¶›     æ¯•ä¸šé™¢æ ¡ï¼šå—äº¬è´¢ç»å¤§å­¦
+å­¦å†ï¼šç¡•å£«    ä¸“ä¸šï¼šè½¯ä»¶å·¥ç¨‹
 
-### Contact me
+### Contact me è”ç³»æˆ‘
 
 [shartoo518@gmail.com](mailto:shartoo518@gmail.com)
