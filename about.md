@@ -7,9 +7,9 @@ permalink: /about/
 Some information about you!
 
 ### More Information
-
-A place to include any other types of information that you'd like to include about yourself. 
+NAME:夏涛     毕业院校：南京财经大学
+学历：硕士    专业：软件工程
 
 ### Contact me
 
-[email@domain.com](mailto:email@domain.com)
+[shartoo518@gmail.com](mailto:shartoo518@gmail.com)
