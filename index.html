@@ -1,13 +1,18 @@
 ---
 layout: default
-title: Ê×Ò³
 ---
 
-<ul class="post-list">
-    {% for post in site.posts %}
-        <a href="{{site.baseurl}}{{post.url}}"> {{ post.title }}  </a> <br>
-        {{ post.date | date: "%F" }} <br>
-        {{ post.category }} <br>
-        {{ post.excerpt }} 
-    {% endfor %}
-</ul>
+<div class="posts">
+  {% for post in site.posts %}
+    <article class="post">    
+      
+      <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
+
+      <div class="entry">
+        {{ post.content | truncatewords:40}}
+      </div>
+      
+      <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Read More</a>
+    </article>
+  {% endfor %}
+</div>
