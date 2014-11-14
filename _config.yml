@@ -7,9 +7,7 @@ name: 夏涛(测试修改)
 
 # Short bio or description (displayed in the header)
 description: 来自南京的数据挖掘菜鸟
-#添加分页机制，不知道能否实现
-paginate: 5
-paginate_path: "page:num"
+
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
 avatar:https://github.com/shartoo/shartoo.github.com/tree/master/images/myface.jpg
 
