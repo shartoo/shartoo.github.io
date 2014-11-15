@@ -3,10 +3,10 @@
 #
 
 # Name of your site (displayed in the header)
-name: ÏÄÌÎ(²âÊÔĞŞ¸Ä)
+name: å¤æ¶›(æµ‹è¯•ä¿®æ”¹)
 
 # Short bio or description (displayed in the header)
-description: À´×ÔÄÏ¾©µÄÊı¾İÍÚ¾ò²ËÄñ
+description: æ¥è‡ªå—äº¬çš„æ•°æ®æŒ–æ˜èœé¸Ÿ
 
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
 avatar:https://github.com/shartoo/shartoo.github.com/tree/master/images/myface.jpg
@@ -75,14 +75,13 @@ exclude:
 
 
 
-auto: true
+#auto: true
+#markdown: rdiscount
+#pygments: true
+#paginate: 8
+#permalink: /:title
 
-markdown: rdiscount
-pygments: true
-paginate: 8
-permalink: /:title
-
-title: ÏÄÌÎµÄ²©¿Í
-url: shartoo.github.io
-feed: /atom.xml
-author_info: <a href="shartoo.github.io/">ÁªÏµ×÷Õß</a>
+#title: å¤æ¶›çš„åšå®¢
+#url: shartoo.github.io
+#feed: /atom.xml
+#author_info: <a href="shartoo.github.io/">è”ç³»ä½œè€…</a>
