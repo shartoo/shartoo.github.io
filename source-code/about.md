@@ -1,6 +1,6 @@
----
+﻿---
 layout: page
-title: About
+title: 关于我
 permalink: /about/
 ---
 
@@ -12,4 +12,7 @@ NAME:夏涛     毕业院校：南京财经大学
 
 ### Contact me 联系我
 
-[shartoo518@gmail.com](mailto:shartoo518@gmail.com)
+[shartoo518@gmail.com](mailto:shartoo518@gmail.com)  
+
+
+##为何不能改变内容
