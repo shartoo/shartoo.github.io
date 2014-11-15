@@ -27,12 +27,12 @@ layout: default
                   var param = {
                     url:location.href,
                     type:'6',
-                    count:'', /**ÊÇ·ñÏÔÊ¾·ÖÏíÊı£¬1ÏÔÊ¾(¿ÉÑ¡)*/
-                    appkey:'', /**ÄúÉêÇëµÄÓ¦ÓÃappkey,ÏÔÊ¾·ÖÏíÀ´Ô´(¿ÉÑ¡)*/
-                    title:'', /**·ÖÏíµÄÎÄ×ÖÄÚÈİ(¿ÉÑ¡£¬Ä¬ÈÏÎªËùÔÚÒ³ÃæµÄtitle)*/
-                    pic:'', /**·ÖÏíÍ¼Æ¬µÄÂ·¾¶(¿ÉÑ¡)*/
-                    ralateUid:'1855270953', /**¹ØÁªÓÃ»§µÄUID£¬·ÖÏíÎ¢²©»á@¸ÃÓÃ»§(¿ÉÑ¡)*/
-                    language:'zh_cn', /**ÉèÖÃÓïÑÔ£¬zh_cn|zh_tw(¿ÉÑ¡)*/
+                    count:'', /**æ˜¯å¦æ˜¾ç¤ºåˆ†äº«æ•°ï¼Œ1æ˜¾ç¤º(å¯é€‰)*/
+                    appkey:'', /**æ‚¨ç”³è¯·çš„åº”ç”¨appkey,æ˜¾ç¤ºåˆ†äº«æ¥æº(å¯é€‰)*/
+                    title:'', /**åˆ†äº«çš„æ–‡å­—å†…å®¹(å¯é€‰ï¼Œé»˜è®¤ä¸ºæ‰€åœ¨é¡µé¢çš„title)*/
+                    pic:'', /**åˆ†äº«å›¾ç‰‡çš„è·¯å¾„(å¯é€‰)*/
+                    ralateUid:'1855270953', /**å…³è”ç”¨æˆ·çš„UIDï¼Œåˆ†äº«å¾®åšä¼š@è¯¥ç”¨æˆ·(å¯é€‰)*/
+                    language:'zh_cn', /**è®¾ç½®è¯­è¨€ï¼Œzh_cn|zh_tw(å¯é€‰)*/
                     rnd:new Date().valueOf()
                   }
                   var temp = [];
@@ -43,7 +43,7 @@ layout: default
                 })()
                 </script>
             </div>
-            <a href="#" class="comment" onclick="return false;">µã»÷²é¿´ÆÀÂÛ</a>
+            <a href="#" class="comment" onclick="return false;">ç‚¹å‡»æŸ¥çœ‹è¯„è®º</a>
             <div id="disqus_thread"></div>
         </div>
     </div>
@@ -53,21 +53,21 @@ layout: default
     </div>
 
     <div class="sidenav">
-        <h2>²©¿ÍµØÖ·</h2>
+        <h2>Blog</h2>
         <ul class="artical-list">
         {% for post in site.categories.blog%}
             <li><a href="{{ post.url }}">{{ post.title }}</a></li>
         {% endfor %}
         </ul>
 
-        <h2>¹Ûµã</h2>
+        <h2>Opinion</h2>
         <ul class="artical-list">
         {% for post in site.categories.opinion%}
             <li><a href="{{ post.url }}">{{ post.title }}</a></li>
         {% endfor %}
         </ul>
 
-        <h2>ÏîÄ¿</h2>
+        <h2>Project</h2>
         <ul class="artical-list">
         {% for post in site.categories.project%}
             <li><a href="{{ post.url }}">{{ post.title }}</a></li>
