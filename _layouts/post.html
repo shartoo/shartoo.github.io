@@ -12,6 +12,22 @@ layout: default
         body { background:#fff; }
     }
 </style>
+  
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'shartoo'; // required: replace example with your forum shortname 这个地方需要改成你配置的网站名
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
 
 <div id="content">
     <div class="entry">
@@ -53,21 +69,21 @@ layout: default
     </div>
     --->
     <div class="sidenav">
-        <h2>Blog</h2>
+        <h2>我的博客</h2>
         <ul class="artical-list">
         {% for post in site.categories.blog%}
             <li><a href="{{ post.url }}">{{ post.title }}</a></li>
         {% endfor %}
         </ul>
 
-        <h2>Opinion</h2>
+        <h2>观点</h2>
         <ul class="artical-list">
         {% for post in site.categories.opinion%}
             <li><a href="{{ post.url }}">{{ post.title }}</a></li>
         {% endfor %}
         </ul>
 
-        <h2>Project</h2>
+        <h2>源码</h2>
         <ul class="artical-list">
         {% for post in site.categories.project%}
             <li><a href="{{ post.url }}">{{ post.title }}</a></li>
