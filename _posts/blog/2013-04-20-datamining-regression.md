@@ -6,17 +6,18 @@ description: 数据挖掘专栏
 ---
 ##注：文中所使用代码为R
 #一 概念
-  简单线性回归模型是用于估计一个连续预测变量和一个连续回应变量的线性关系。
-     回归方程或估计回归方程(estimated regression equation,ERE)：
-              y~=b0+b1*x
-      其中
+简单线性回归模型是用于估计一个连续预测变量和一个连续回应变量的线性关系。
+回归方程或估计回归方程(estimated regression equation,ERE)：   
+  y~=b0+b1*x
+  其中
       <ul>
          <li>y~是回应变量的估计值</li>
          <li>b0是回归线在y轴上的截距</li>
          <li>b1是回归线的斜率</li>
          <li>b0和b1称为回归系数</li>
       </ul>
-  
+      
+      
 #二 实例
 ##数据来源: [谷物数据集](http://lib.stat.cmu.edu/DASL/Datafiles/Cereals.html)
 ##数据描述：谷物数据集,包含了77种早餐谷物的16个属性对应的营养信息
