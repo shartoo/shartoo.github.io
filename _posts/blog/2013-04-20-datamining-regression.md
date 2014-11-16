@@ -1,4 +1,4 @@
----
+﻿---
 layout:     post
 title:      数据挖掘方法之二：回归模型（简单线性回归）
 category: blog
@@ -30,11 +30,12 @@ description: 数据挖掘专栏
     > lm.reg<-lm(data=sugar,rating~sugars)  
     > abline(lm.reg,lty=4,lwd=3) 
 ![拟合](/images/blog/regression2.png)
-  
-  使用线性回归模型拟合结果如下：
-      > lm(data=sugar,rating~sugars)  
-      Call:  
-      lm(formula = rating ~ sugars, data = sugar)  
-      Coefficients:  
+ 
+ 
+使用线性回归模型拟合结果如下：
+    > lm(data=sugar,rating~sugars)  
+    Call:  
+    lm(formula = rating ~ sugars, data = sugar)  
+    Coefficients:  
       (Intercept)       sugars    
        59.284       -2.401   
