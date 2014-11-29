@@ -7,7 +7,37 @@ description: 数据挖掘专栏
 ##注：文中所使用代码为R
 #一 概念#
 
+# 数据挖掘方法二：回归模型
 
+标签（空格分隔）： 数据挖掘 回归分析 简单线性回归
+
+---数据挖掘方法二：回归模型
+
+##注：文中所使用代码为R
+
+#一 概念
+   简单线性回归模型是用于估计一个连续预测变量和一个连续回应变量的线性关系。回归方程或估计回归方程(estimated regression equation,ERE)：  
+<p align="center">*y'=a+bx*
+其中：
+ - 是回应变量的估计值
+ - a是回归线在y轴上的截距
+ - b是回归线的斜率
+ - a和b称为回归系数
+
+#二 实例
+  数据来源： [谷物数据集][1] 
+  数据描述：谷物数据集,包含了77种早餐谷物的16个属性对应的营养信息
+  
+ 1. 首先导入数据
+    sugar<-read.table(file=”/LabData/RData/regression/nutrition.txt”,header=TRUE)
+    sugar<-read.table(file=”/LabData/RData/regression/nutrition.txt”,header=TRUE)
+
+ 
+
+ 
+
+
+  [1]: http://lib.stat.cmu.edu/DASL/Datafiles/Cereals.html
 简单线性回归模型是用于估计一个连续预测变量和一个连续回应变量的线性关系。
 回归方程或估计回归方程(estimated regression equation,ERE)：   
   y~=b0+b1*x
