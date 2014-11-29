@@ -22,7 +22,9 @@ description: 数据挖掘专栏
       
 #二 实例   
 
-
+1. 第一个
+2. 第二个
+3. 第三个
 ##数据来源: [谷物数据集](http://lib.stat.cmu.edu/DASL/Datafiles/Cereals.html)
 ##数据描述：谷物数据集,包含了77种早餐谷物的16个属性对应的营养信息
 首先导入数据：
