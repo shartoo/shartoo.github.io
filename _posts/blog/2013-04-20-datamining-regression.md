@@ -27,13 +27,13 @@ description: 数据挖掘专栏
 ##数据描述：谷物数据集,包含了77种早餐谷物的16个属性对应的营养信息##
 首先导入数据：<br>
 <pre class="prettyprint">
-  <code class="language-R">
+  <code class="language-r">
      sugar<-read.table(file="/LabData/RData/regression/nutrition.txt",header=TRUE)
   </code>
 </pre> 
 部分数据概览如下：<br>
 <pre class="prettyprint">
-  <code class="language-R">
+  <code class="language-r">
      edit（sugar）
   </code>
 </pre> 
