@@ -26,9 +26,18 @@ description: 数据挖掘专栏
 ##数据来源: [谷物数据集](http://lib.stat.cmu.edu/DASL/Datafiles/Cereals.html)##
 ##数据描述：谷物数据集,包含了77种早餐谷物的16个属性对应的营养信息##
 首先导入数据：<br>
-    sugar<-read.table(file="/LabData/RData/regression/nutrition.txt",header=TRUE) 
+<pre class="prettyprint">
+  <code class="language-R">
+     sugar<-read.table(file="/LabData/RData/regression/nutrition.txt",header=TRUE)
+  </code>
+</pre> 
 部分数据概览如下：<br>
-  edit（sugar） 
+<pre class="prettyprint">
+  <code class="language-R">
+     edit（sugar）
+  </code>
+</pre> 
+   
 ![数据集](/images/blog/regression1.png)
 就给定谷物的含糖量对该谷物的营养成分进行评价，77种谷物的营养级别与含糖量的散点图和拟合回归线如下:
   > plot(data=sugar,rating~sugars,main="营养级别和含糖量的散点图及拟合线",xlab="含糖量",ylab="营养级别")  
