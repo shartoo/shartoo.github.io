@@ -8,7 +8,7 @@ description: 数据挖掘专栏
 
 ##一 概念    
 
-简单线性回归模型是用于估计一个连续预测变量和一个连续回应变量的线性关系。回归方程或估计回归方程(estimated regression equation,ERE)：   
+简单线性回归模型是用于估计一个连续预测变量和一个连续回应变量的线性关系。回归方程或估计回归方程(estimated regression equation,ERE)：<br>   
   y~=b0+b1*x <br>
   其中:
       <ul>
