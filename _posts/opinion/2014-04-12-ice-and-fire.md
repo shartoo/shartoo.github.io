@@ -1,4 +1,4 @@
-﻿---
+---
 layout: post
 title: 《冰与火之歌》---女人、权力与生灵
 category: opinion
