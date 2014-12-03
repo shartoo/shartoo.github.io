@@ -4,7 +4,7 @@ title: Java基础笔记-Java内存区域
 description: 关于Java JVM的一些学习笔记
 category: blog
 ---
-#一 运行时的数据区组成   
+# 一 运行时的数据区组成   
 ![图示1](/images/blog/java-jvm-store-model.png)
    
 1. 程序计数器：当前线程执行的字节码的行号指示器。自己吗解释器通过改变程序计数器(PC)的值来选取下一条需要执行的字节码指令。分支、循环、跳转、线程回复等基础功能都依赖于它。
