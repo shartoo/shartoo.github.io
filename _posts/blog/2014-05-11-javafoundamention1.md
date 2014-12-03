@@ -29,7 +29,7 @@ category: blog
 &nbsp;&nbsp;&nbsp;&nbsp;运行时常量池(Runtime Constannt Pool)：是方法区的一部分。Class文件中除了有类的版本、方法、字段、接口等描述信息外，还有一项是常量池，用于存放编译期间生成的各种字面两和符号引用，这部分内容将在类加载后进入方法区的运行时常量池中存放。<br>
 &nbsp;&nbsp;&nbsp;&nbsp;运行时常量池相对于class文件常量池的另外一个特征是动态性，Java语言并不要求常量一定是编译器才能产生。运行期间可将新的常量放入池中，比如String的intern()方法就是这种特性的直接应用。
 <br>
-<B>6 直接内存</B>
+<B>6 直接内存</B><br>
 &nbsp;&nbsp;&nbsp;&nbsp;非虚拟机运行时数据区的一部分，但频繁使用<br>
 来源：JDK 1.4之后引入NIO类，引入一种基于通道（Channel）与缓冲区（Buffer）的I/O方式。它可以使用Native函数库直接分配堆外内存，然后通过一个存储在Java堆中的DirectByteBuffer对象作为这块内存的引用进行操作。由于避免在Java堆和Native堆中来回复制数据，在某些场合可显著提高性能。
 <br>
