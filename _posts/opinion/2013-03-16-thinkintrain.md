@@ -1,4 +1,4 @@
-﻿---
+---
 layout: post
 title: 火车随想
 category: opinion
