@@ -1,4 +1,4 @@
-﻿---
+---
 layout:     post
 title:      数据挖掘方法之三：多元回归模型
 category: blog
