@@ -1,4 +1,4 @@
----
+﻿---
 layout:     post
 title:      数据挖掘方法之二：回归模型（简单线性回归）
 category: blog
@@ -94,8 +94,50 @@ r^2称为决定系数（coefficient of determination）用来衡量回归线的�
 SST衡量了回应变量变异的一部分，这部分是被回应变量和预测变量之间的线性关系所解释的。然而不是所有的数据点都正好落在回归线上，这意味着还有一部分y变量的变异不能被回归线所解释。SSE可以被认为是衡量不能被x和y之间的回归线所解释的其他变异，包括随机变异。<br>
 决定系数r^2，它衡量了用回归线来描述预测变量和回应变量之间线性关系的符合程度<br><img src="/images/blog/regression16.png"><br>
 
+###3 估计值的标准误差
+
+<B>符号：</B>S<br>
+<B>概念：</B>用于衡量由回归线产生估计值的精度的统计量。<br>
+为介绍s，首先引入均方误差(mean squares error，MSE)：<br>
+<img src="/images/blog/regression17.png">
+其中，m标示预测变量的个数，简单线性回归是m=1,多元线性回归时m大于1。与SSE一样，MSE用于衡量在回应变量中没有被回归分析所解释的变异。<br>
+标准误差的估计由下式给出:<img src="/images/blog/regression18.png"><br>
+S值为“典型”残差的估计，s是衡量估计中的典型误差，即回应预测值与实际值之间的差异。也即标准误差能反应估计回归方程做出预测的精确度，因此s越小越好。
+
+###4 其他评估   
+
+####1. 相关系数
+
+用来定义两个变量线性关系的统计量称为相关系数(correlation coefficient，也称皮尔森相关系数)，用来衡量变量之间线性关系强弱。计算公式如下：<img src="/images/blog/regression19.png">
+<ul><li>其中Sx和Sy分别代表样本x和y的标准差</li><li>相关系数r的取值范围为：(-1,1)</li><li>变量r的值越接近于1，表明二者正向相关性越大，随着x增大y也会增大。</li><li> 变量r的值越接近于-1，表明二者负向相关性越大，随着x增大y会减小。</li></ul>
+
+####2. 方差分析表(ANOVA table)   
+
+一般形式如下：
+<img src="/images/blog/regression20.png">
+下面展示了 糖含量营养级别回归结果:
+
+    > anova<-aov(data=sugar,rating~sugars)  
+    > summary(anova)  
+                 Df Sum Sq Mean Sq  F value   Pr(>F)  
+    sugars       1   8655    8655   102.3    1.15e-15  
+    Residuals   75   6342      85                   
+                 
+    sugars      ***  
+    Residuals        
+               ---  
+    Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1  
 
 
+
+####3. 异常点、高杠杠点和强影响观测值   
+
+<B>高杠杆点</B>(High leverage point)可以被认为是一个观测值在预测空间中的极限，也即一个高杠杆值可以被认为是不考虑y值得x变量的极限。杠杆第i个观察值hi可以被标示如下（x'为平均数）：
+<img src="/images/blog/regression21.png"><br>
+对于给定数据集,1/n和右边分式分母都是常数，所以第i个观察的杠杆只依赖于(xi-x')^2。<br>一个拥有大于2*(m+1)/n和3*(m+1)/n 的观察点被认为是高杠杆点。<br>
+<B>异常点：</B>观测到的偏离回归直（曲）线的点。一种粗略的评价观察值的方法是使用标准残留值(standardized residuals)一般用:<img src="/images/blog/regression22.png">来标示第i个残留数的标准差，则hi代表第i个观测值的杠杆影响，那么标准残留值可以表示为:<img src="/images/blog/regression23.png">如果标准残留值得绝对值超过了2，就可以认为是一个异常点,上图中观测点1和4应该是异常点。<br>
+<B>强影响力点：</B>对数据集的分析造成较大影响的观测点。通常强影响力观测值同时有较大的残留值和较高的杠杆，但也有可能它既不是异常点也没有较高的杠杆，但两者特点组合成一个具有影响力的点。粗略估算一个观察点是否是强影响力点的方法是看它的Cook距离(Cook's distance)是否大于1.0，更确切的说，用Cook距离与F分布(m,n-m)来比较，若观测值落在分布的第一部分（低于25个百分点），就说它对整体分布只有一点点影响，若落在中点以后就说明该点是有影响力的。Cook距离将残留值和刚刚都考虑进去的，第i个观察点的距离可以为：<img src="/images/blog/regression24.png">
+其中src="/images/blog/regression25.png">表示第i个残留值，m表示预测变量的个数，s为标准误差的估计，hi为第i个观察点的杠杆。左边的比率含有一个元素代表了残留值，右边的函数代表了杠杆值。
 
 
 
