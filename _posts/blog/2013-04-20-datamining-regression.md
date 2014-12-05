@@ -68,15 +68,15 @@ description: 数据挖掘专栏
 <B>也即回应变量y也是独立正态变量，均值不变，方差不变。</B><br>
 最小二乘回归线(least-square line)将误差的平方和最小化，总的预测误差用SSEp表示，则总的误差平方和为：   
 ![预测误差](/images/blog/regression7.png)<br>  
-利用微积分，在以下微积分方程结果为0的时候,b0和b1的取值会让总的误差平方和最小。关于b0和b1的偏微分方程为：   
+利用微积分，在以下微积分方程结果为0的时候,b0和b1的取值会让总的误差平方和最小。关于b0和b1的偏微分方程为:<br>  
 ![预测误差](/images/blog/regression8.png)<br>   
-令上式为0，则有：
+令上式为0，则有:<br>
 ![预测误差](/images/blog/regression9.png) <br>
-分别求和，得到：   
+分别求和，得到：<br>
 ![预测误差](/images/blog/regression10.png)<br>
-重新表示为：
+重新表示为：<br>
 ![预测误差](/images/blog/regression11.png)<br>  
-求出b0和b1的值：
+求出b0和b1的值：<br>
 ![预测误差](/images/blog/regression12.png)<br>
 
 
