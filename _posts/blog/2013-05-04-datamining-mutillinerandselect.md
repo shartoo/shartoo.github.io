@@ -32,12 +32,12 @@ description: 数据挖掘专栏
     >#画出对照图  
     > scatterplotMatrix(sugar_frame,spread=F,lty.smooth=2,var.labels=c("糖","纤维","钾"))   
 结果如下图：
-<img src="/images/blog/2013-05-04-datamining-mutillinerandselect1.png">
+<img src="/images/blog/muitllinerandselect1.png">
 可以看到第四张和第六张是纤维和钾的相关图，可以看出他们之间有很强相关性。
 
 ###（2）分析之后：方差膨胀因子(variance inflation factors,VIFs)
 
-<img src="/images/blog/2013-05-04-datamining-mutillinerandselect2.png">
+<img src="/images/blog/muitllinerandselect2.png">
 其中Ri^2表示R^2的值是通过在其他预测变量上回归分析xi得到的。假设xi和其他变量没有任何关系,那么Ri^2=0，于是可以得到VIFi=1/(1-0)=1。也即VIF最小值为1，没有最大值。<br>
 VIFi的变化对第i个系数的变化率Sbi如何产生影响，有如下公式：
 <img src="/images/blog/2013-05-04-datamining-mutillinerandselect3.png">
@@ -83,7 +83,13 @@ VIFi的变化对第i个系数的变化率Sbi如何产生影响，有如下公式
 
 ##二.  变量选择方法
 
-为帮助数据分析人员确定在多元回归模型中应该包含哪些变量，下面是几种变量选择方法<ol><li>向前选择</li><li>向后排除</li><li>逐步选择</li><li>最优子集</li></ol>
+为帮助数据分析人员确定在多元回归模型中应该包含哪些变量，下面是几种变量选择方法
+<ol>
+<li>向前选择</li>
+<li>向后排除</li>
+<li>逐步选择</li>
+<li>最优子集</li>
+</ol>
 注意四种选择方法所使用的数据集都是 “谷物数据集”。
 
 ###2.1   向前选择程序
@@ -96,9 +102,9 @@ VIFi的变化对第i个系数的变化率Sbi如何产生影响，有如下公式
 <B>初始：</B>模型中没有变量。<br>
 <B>过程：</B>把与回应变量（营养级别） 密切相关的变量选出来，如果是显著的就加入到模型中。变量糖在所有预测变量中与营养级别有最高的相关系数（r=0.762）。然后进行序列F检验，例如F(纤维|糖)和F(钠|糖)等，然后看到，F(纤维|糖)显著性检验具有最高的F统计序列值，这样变量纤维作为第二个变量加入到模型中。再进行一次序列F检验，比如F(钠|糖，纤维)和F(脂肪|糖，纤维)，等等。F(钠|糖，纤维)具有最高的序列F统计值。因而钠作为第三个变量加入到模型中。<br>
 <B>结束：</B>一次按照第二步进行，得到如下变量加入顺序：脂肪，蛋白质，碳水化合物，卡里路，维生素和钾。此时再也找不到其他显著的变量加入模型中才中断，此时的多元回归模型如下：
-<img src="/images/blog/2013-05-04-datamining-mutillinerandselect4.png">
-<p align="center">下图显示了一个顺序选择的模型概览：</p>
-<img src="/images/blog/2013-05-04-datamining-mutillinerandselect5.png">
+<img src="/images/blog/muitllinerandselect4.png">
+下图显示了一个顺序选择的模型概览:
+<img src="/images/blog/muitllinerandselect5.png">
 
 ###2.2 向后排除程序
 
@@ -111,12 +117,12 @@ VIFi的变化对第i个系数的变化率Sbi如何产生影响，有如下公式
 <br>
 <B>实例：</B><br>
 起始时模型包含了所有变量，然后计算该模型中每个变量的偏F统计量。例如，这些统计量分别是F(重量|糖，纤维，....杯子)，F(杯子|糖，纤维,.....重量|)。找到最小偏F统计量（Fmin）对应的变量。第一次是重量，此时Fmin不显著，因而从模型中去掉，接下来变量具有最小偏F统计是杯子，也是不显著的，因而需要被剔除。第三次具有最小偏F统计量的是货架2的指标变量，但是Fmin对应的p值并没有大道可以从模型中剔除，因而保留并中断。得到的模型为：
-<img src="/images/blog/2013-05-04-datamining-mutillinerandselect6.png">
-<img src="/images/blog/2013-05-04-datamining-mutillinerandselect7.png">
+<img src="/images/blog/muitllinerandselect6.png">
+<img src="/images/blog/muitllinerandselect7.png">
 模型1表示包含所有预测变量，模型2中剔除了重量之外所有预测变量，于是有：<br>
-<img src="/images/blog/2013-05-04-datamining-mutillinerandselect8.png">
+<img src="/images/blog/muitllinerandselect8.png">
 上表信息中显示，偏F统计量的结果为：
-<img src="/images/blog/2013-05-04-datamining-mutillinerandselect9.png">
+<img src="/images/blog/muitllinerandselect9.png">
 F统计量的值0.28 落在F1,n-p-2=F1,72分布的40%点处，对应的p值是0.60，因而重量不应该包含在模型中。
 
 ###2.3 逐步选择程序
@@ -135,7 +141,7 @@ F统计量的值0.28 落在F1,n-p-2=F1,72分布的40%点处，对应的p值是0.
 <br>
 <B>实例，下图是最优子集程序用于谷物数据集的省略概览</B>
 <font color="blue">[注意，整个过程比下图要复杂，例如变量数为1时，本应该有12行结果，下图中只简要用了两行，其他的也是]</font>
-<img src="/images/blog/2013-05-04-datamining-mutillinerandselect10.png">
+<img src="/images/blog/muitllinerandselect10.png">
 图中，每一行代表一个不同的模型，某模型中包含了哪个变量，该变量对应的方格被涂成黑色。如，第一个模型（第一行）仅包含了变量糖；第四个模型（第四行）包含了糖和钾。其中的最优模型子集被红色覆盖的那个模型（也即那一行）。
 
 
