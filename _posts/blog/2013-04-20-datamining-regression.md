@@ -1,4 +1,4 @@
-﻿---
+---
 layout:     post
 title:      数据挖掘方法之二：回归模型（简单线性回归）
 category: blog
