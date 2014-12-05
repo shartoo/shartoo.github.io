@@ -1,4 +1,4 @@
-﻿---
+---
 layout:     post
 title:      数据挖掘方法之四：多重共线性及变量选择方法
 category: blog
