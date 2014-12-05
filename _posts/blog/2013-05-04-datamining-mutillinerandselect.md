@@ -30,7 +30,8 @@ description: 数据挖掘专栏
     >#使用谷物数据集的 “糖”，“纤维”，“钾”三列数据  
     > sugar_frame<-as.data.frame(sugar[,c("糖","纤维","钾")])  
     >#画出对照图  
-    > scatterplotMatrix(sugar_frame,spread=F,lty.smooth=2,var.labels=c("糖","纤维","钾"))  
+    > scatterplotMatrix(sugar_frame,spread=F,lty.smooth=2,var.labels=c("糖","纤维","钾"))
+
 结果如下图：
 <img src="/images/blog/muitllinerandselect1.png">
 可以看到第四张和第六张是纤维和钾的相关图，可以看出他们之间有很强相关性。
