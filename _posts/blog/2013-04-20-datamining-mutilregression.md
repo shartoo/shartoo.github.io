@@ -58,16 +58,15 @@ description: 数据挖掘专栏
     Multiple R-squared:  0.8092,    Adjusted R-squared:  0.804   
     F-statistic: 156.9 on 2 and 74 DF,  p-value: < 2.2e-16  
 
- <img src="/images/blog/muitlregression2.png"><br>
- T对应的t统计量，也即检验的统计量为:<img src="/images/blog/muitlregression3.png"><br>
+<img src="/images/blog/muitlregression2.png"><br>
+T对应的t统计量，也即检验的统计量为:<img src="/images/blog/muitlregression3.png">
 P值对应的是t统计量的p值。也即: p=P(|t|>tobs)=P(|t|>-13.4713)约等于0. 使用p值来检验假设，当p值很小时就可以拒绝原假设。
 
 ###2.2 整体回归模型的显著性水平检验：F检验
 
-<p> t检验是分别对每个变量，糖，纤维，....逐个检验与回应变量线性关系。即{营养级别|糖}，{营养级别|纤维}，...</p>
-<p>F检验是对所有变量一起检测与回应变量关系，即{营养级别|糖，纤维，......}</p>
- F检验的前提是：
-<ol><li>.H0: b0=b1=......=0    也即模型为：y=b0+e</li><li>H1:至少存在一个bi不等于零</li></ol>
+<font color="cyan">t检验</font>是分别对每个变量，糖，纤维，....逐个检验与回应变量线性关系。即{营养级别|糖}，{营养级别|纤维}，.....<br>
+<font color="cyan">F检验</font>是对所有变量一起检测与回应变量关系，即{营养级别|糖，纤维，......}
+ F检验的前提是：<ol><li>.H0: b0=b1=......=0   也即模型为：y=b0+e</li><li>H1:至少存在一个bi不等于零</li></ol>
 备选假设H1并不要求任何回归系数都不是零，而是当备选假设为真时，存在一个回归系数不是零。因此，F检验的备选假设并没有唯一确定一个模型，当一个、几个或者所有回归系数都不是零时，备选假设都是成立的。<br>
 F统计量为：<img src="/images/blog/muitlregression4.png">
 <B>如何理解：</B>MSE（误差平方和均值）能很好的估计总体变异σ^2（不论原假设是否为真），而MSR只有当原假设为真时才是σ^2的优良统计量，因而只有在原假设为真的情况下MSR和MSE才会比较接近，也即F很小的时候，有足够的争取表明原假设为真。
