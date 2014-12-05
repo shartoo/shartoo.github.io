@@ -1,4 +1,4 @@
----
+﻿---
 layout:     post
 title:      数据挖掘方法之四：多重共线性及变量选择方法
 category: blog
@@ -30,7 +30,7 @@ description: 数据挖掘专栏
     >#使用谷物数据集的 “糖”，“纤维”，“钾”三列数据  
     > sugar_frame<-as.data.frame(sugar[,c("糖","纤维","钾")])  
     >#画出对照图  
-    > scatterplotMatrix(sugar_frame,spread=F,lty.smooth=2,var.labels=c("糖","纤维","钾"))   
+    > scatterplotMatrix(sugar_frame,spread=F,lty.smooth=2,var.labels=c("糖","纤维","钾"))  
 结果如下图：
 <img src="/images/blog/muitllinerandselect1.png">
 可以看到第四张和第六张是纤维和钾的相关图，可以看出他们之间有很强相关性。
@@ -40,7 +40,7 @@ description: 数据挖掘专栏
 <img src="/images/blog/muitllinerandselect2.png">
 其中Ri^2表示R^2的值是通过在其他预测变量上回归分析xi得到的。假设xi和其他变量没有任何关系,那么Ri^2=0，于是可以得到VIFi=1/(1-0)=1。也即VIF最小值为1，没有最大值。<br>
 VIFi的变化对第i个系数的变化率Sbi如何产生影响，有如下公式：
-<img src="/images/blog/2013-05-04-datamining-mutillinerandselect3.png">
+<img src="/images/blog/muitllinerandselect3.png">
 如果xi与其他预测变量不想管，那么VIFi=1，而且相关系数的标准差Sbi没有增大。然而如果xi与其他变量相关，那么较大的VIFi值会使得相关系数的标准差Sbi过度膨胀。因此，方差估计的膨胀会导致估计精度的下降。<br>
 粗略的经验法则如下:<ul><li> VIF>=5    模型有中度的多重共线性（相当于R^2=0.08）</li><li>VIF>=10  模型中有严重多重共线性(相当于R^2=0.90)</li></ul>
 下面来查看谷物数据集中 糖、纤维、钾的膨胀因子
