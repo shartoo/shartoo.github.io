@@ -7,6 +7,8 @@ description: 数据挖掘专栏
 
 ##一 为何要有逻辑回归
 
+####为了让右边显示导航
+
 假设有如下关于患者年龄与患病情况的数据集：
 <img src="/images/blog/loginregression1.png">
 我们查看数据：
