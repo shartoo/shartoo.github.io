@@ -79,8 +79,7 @@ description: 数据挖掘专栏
 <li>对于经常拨打客服电话的客户，同上，此时：<img src="/images/blog/loginregressionsample13.png"><font color="blue">注意系数的差别,上一条中的系数是1，0，这个是0，1</li>
 </ol>
 
-####4.1 Wald检验     
-
+<B> Wald检验</B><br>
 如下：
 <ol>
 <li>对于<font color="blue">CSC－中</font> 的参数进行Wald检验，b1=-0.036989,SE(b1)=0.11771<br>
@@ -89,7 +88,7 @@ description: 数据挖掘专栏
 <li>对于<font color="blue">CSC－高</font>的参数进行Wald检验，b1=2.11844,SE(b1)=0.142380　　　　故而<font align="center">Zwald=2.11844/0.142380=14.88</font><br>此时，P值P(|Z|>14.88)=0.000，显著，表明<font color="blue">CSC－高</font>与<font color="blue">CSC－低</font>的差异能有效预测客户流失。</li>
 </ol>
 
-<B>【所以，对于多分预测变量模型，关键是指示变量和参照单元编码】</B>   
+<B>所以，对于多分预测变量模型，关键是指示变量和参照单元编码</B>   
 
 ###2.3　解读连续预测变量模型
 
