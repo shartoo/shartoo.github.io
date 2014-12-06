@@ -1,4 +1,4 @@
-﻿---
+---
 layout:     post
 title:      数据挖掘方法之五：逻辑回归
 category: blog
