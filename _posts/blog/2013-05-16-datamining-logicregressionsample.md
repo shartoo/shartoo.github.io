@@ -80,7 +80,7 @@ description: 数据挖掘专栏
 <li>对于经常拨打客服电话的客户，同上，此时：<img src="/images/blog/loginregressionsample13.png"><font color="blue">注意系数的差别,上一条中的系数是1，0，这个是0，1</li>
 </ol>
 
-####Wald检验
+####Wald检验   
 
 如下：
 <ol>
