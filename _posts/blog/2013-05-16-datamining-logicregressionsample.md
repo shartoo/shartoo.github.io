@@ -82,6 +82,7 @@ description: 数据挖掘专栏
 
 ####Wald检验
 
+如下：
 <ol>
 <li>对于<font color="blue">CSC－中</font> 的参数进行Wald检验，b1=-0.036989,SE(b1)=0.11771<br>
 　故而，<p align="center">Zwald＝-0.036989/0.117701=-0.31426</p><br>
