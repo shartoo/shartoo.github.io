@@ -76,10 +76,11 @@ description: 数据挖掘专栏
 <li>对于那些很少拨打客服电话的客户：<img src="/images/blog/loginregressionsample10.png">概率为：
 <img src="/images/blog/loginregressionsample11.png">此概率比全部数据样本集中客户流失的概率14.5%要小。这表明这一类客户的流失率一定程度上比总体客　　户的流失率要小。</li>
 <li>对于拨打客服电话处于中等水平的客户，同上，此时<img src="/images/blog/loginregressionsample12.png"><font color="blue">注意系数的差别,上一条中的系数是0，0，这个是1，0</font></li>
-<li>对于经常拨打客服电话的客户，同上，此时：<img src="/images/blog/loginregressionsample13.png"><font color="blue">注意系数的差别,上一条中的系数是1，0，这个是0，1</li>
-</ol>
+<li>对于经常拨打客服电话的客户，同上，此时：<img src="/images/blog/loginregressionsample13.png"><font color="blue">注意系数的差别,上一条中的系数是1，0，这个是0，1</font></li>
+</ol>    
 
-<B> Wald检验</B><br>
+####Wald检验   
+
 如下：
 <ol>
 <li>对于<font color="blue">CSC－中</font> 的参数进行Wald检验，b1=-0.036989,SE(b1)=0.11771<br>
