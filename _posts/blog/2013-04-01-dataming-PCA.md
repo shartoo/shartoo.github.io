@@ -1,4 +1,4 @@
----
+﻿---
 layout: post
 title: 数据挖掘方法之一：主成份分析
 description: 数据挖掘专题之一
@@ -11,15 +11,29 @@ category: blog
 
 ##二 步骤
 
+<ol>
+<li>原始指标数据的标准化采集p维随机向量
+<img src="/images/blog/PCA1.png">构造样本阵，对样本元素进行如下标准化变换
+<img src="/images/blog/PCA2.png"> 得标准化矩阵Z</li>
+<li>对标准化矩阵Z求相关系数矩阵<img src="/images/blog/PCA3.png"> </li>
+<li>求解样本相关矩阵R的特征方程<img src="/images/blog/PCA4.png">确定n的值，使信息的利用率达85%以上<img src="/images/blog/PCA5.png"></li>
+<li>将标准化后的指标变量转换成主成分<img src="/images/blog/PCA6.png"></li>
+<li>对n个主成份进行综合评价<br>对n个主成份进行加权求和，即得最终评价值，权数为每个主成份的方差贡献率。</li>
+</ol>
 ![PCA1](/images/blog/PCA1.jpg)
 
 ##三 关键性结论
 
-![结论](/images/blog/PCA2.jpg)
+以下结论对主成份分析非常重要<br>
+<ol>
+<li>结论1：标准化数据集州农工的总体变动性等于所有Z向量方差之和，等于每个成分方差之和，等于特征权值之和，等于变量的个数。即<br><img src="/images/blog/PCA7.png"></li>
+<li>结论2：给定成分与给定变量间的偏相关性是特征向量与特征值的函数。具体来说<br><img src="/images/blog/PCA8.png">是相关系数矩阵p的<font color="gray">特征值-特征向量</font>对，并且偏相关系数包括了所有变量之间的影响。</li>
+<li>结论3：Z中第i个主成份解释了变量的总体变异的百分比，等于第i个特征根与变量个数之间的比率<img src="/images/blog/PCA9.png"></li>
+</ol>
 
 ##四 应用于实际数据  
 
-   ![实际数据](/images/blog/PCA3.jpg)
+   <img src="/images/blog/PCA10.png">
 <ul>
     <li>>1.使用上图的均值和标准差对变量进行标准化，得到Z向量。</li>
     <li>>2.研究下图中变量矩阵图以检验变量间是否存在相关性。</li>
