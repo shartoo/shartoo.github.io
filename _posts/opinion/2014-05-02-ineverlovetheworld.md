@@ -4,7 +4,7 @@ title: 【收藏】我从未爱过这世界
 category: opinion
 description: 收藏的小诗
 ---
-<div style="background-image:url('ineverlovetheworld.jpg')">
+<div style="background-image:url('/images/opinions/ineverlovetheworld.jpg')">
 <p align="right">文/拜伦</p>
 <p align="center">我从未爱过这世界，</p>
 <p align="center">它对我也一样</p>
