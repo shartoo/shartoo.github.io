@@ -4,8 +4,8 @@ title: 【收藏】我愿做无忧无虑的孩子
 category: opinion
 description: 收藏的小诗
 ---
-
-<img src="/images/opinions/beacarelesschild.jpg"><br>
+<img src="/images/opinions/beacarelesschild.jpg">
+    
 <p align="right">文/Byron </p>
 <p align="center">我愿做无忧无虑的孩子，</p>
 <p align="center">放我回安静的山洞</p>
