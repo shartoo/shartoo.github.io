@@ -46,6 +46,24 @@ layout: default
             <a href="#" class="comment" onclick="return false;">点击查看评论</a>
             <div id="disqus_thread"></div>
         </div>
+          <div>
+         <!-- 多说评论框 start -->
+	 <div class="ds-thread" data-thread-key={{ page.title }}  data-title={{ page.title }} data-url="http://shartoo.github.io/{{ page.url }}"></div>
+         <!-- 多说评论框 end -->
+         <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+         <script type="text/javascript">
+        var duoshuoQuery = {short_name:"shartoo"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+       <!-- 多说公共JS代码 end -->
+     </div>
     </div>
     
 <div id="disqus_thread"></div>
@@ -90,24 +108,6 @@ dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
         {% endfor %}
         </ul>
     </div>
-  <div>
-<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key={{ page.title }}  data-title={{ page.title }} data-url="http://shartoo.github.io/{{ page.url }}"></div>
-<!-- 多说评论框 end -->
-<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"shartoo"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-<!-- 多说公共JS代码 end -->
-</div>
 </div>
 
 <script src="/js/post.js" type="text/javascript"></script>
