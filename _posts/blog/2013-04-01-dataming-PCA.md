@@ -20,7 +20,6 @@ category: blog
 <li>将标准化后的指标变量转换成主成分<img src="/images/blog/PCA6.png"></li>
 <li>对n个主成份进行综合评价<br>对n个主成份进行加权求和，即得最终评价值，权数为每个主成份的方差贡献率。</li>
 </ol>
-![PCA1](/images/blog/PCA1.jpg)
 
 ##三 关键性结论
 
