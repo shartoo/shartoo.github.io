@@ -1,6 +1,6 @@
 ---
 layout: post
-title: [收藏]我从未爱过这世界
+title: 【收藏】我从未爱过这世界
 category: opinion
 description: 收藏的小诗
 ---
