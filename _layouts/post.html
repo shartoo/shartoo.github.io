@@ -18,6 +18,7 @@ layout: default
         <h1 class="entry-title"><a href="{{ page.url }}" title="{{ page.title }}">{{ page.title }}</a></h1>
         <p class="entry-date">{{ page.date|date:"%Y-%m-%d" }}</p>
         {{ content }}
+     </div>
      <!-- 取消Disque的评论插件，改用 多说的
         <div id="disqus_container">
             <div style="margin-bottom:20px" class="right">
@@ -63,12 +64,8 @@ layout: default
 	 </script>
        <!-- 多说公共JS代码 end -->
       </div>
-   </div>
-
 <!--       删除Disqus评论系统
 <div id="disqus_thread"></div>
-
-
 <script type="text/javascript">
 /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
 var disqus_shortname = 'shartoo'; // required: replace example with your forum shortname
