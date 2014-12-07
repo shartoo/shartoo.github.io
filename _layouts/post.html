@@ -18,7 +18,7 @@ layout: default
         <h1 class="entry-title"><a href="{{ page.url }}" title="{{ page.title }}">{{ page.title }}</a></h1>
         <p class="entry-date">{{ page.date|date:"%Y-%m-%d" }}</p>
         {{ content }}
-
+     <!-- 取消Disque的评论插件，改用 多说的
         <div id="disqus_container">
             <div style="margin-bottom:20px" class="right">
                 <script type="text/javascript" charset="utf-8">
@@ -46,6 +46,7 @@ layout: default
             <a href="#" class="comment" onclick="return false;">点击查看评论</a>
             <div id="disqus_thread"></div>
         </div>
+        -->
           <div>
          <!-- 多说评论框 start -->
 	 <div class="ds-thread" data-thread-key={{ page.title }}  data-title={{ page.title }} data-url="http://shartoo.github.io/{{ page.url }}"></div>
