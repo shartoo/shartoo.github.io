@@ -29,11 +29,11 @@ description: 收藏的小诗
 <p align="center">也许还有些美德，</p>
 <p align="center">它们的确怀有仁心，</p>
 <p align="center">并不给失败的人安排陷阱；</p>
-<p align="center">我还这样想： </p>
+<p align="center">我还这样想， </p>
 <p align="center">当人们伤心的时候，</p>
 <p align="center">有些人真的在伤心，</p>
 <p align="center">有那么一两个，</p>
 <p align="center">几乎就是所表现的那样—— </p>
-<p align="center">我还认为：</p>
+<p align="center">我还认为</p>
 <p align="center">善不只是空话，幸福并不只是梦想。</p>
 <hr>
