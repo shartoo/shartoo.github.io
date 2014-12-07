@@ -1,6 +1,6 @@
 ---
 layout: post
-title: [收藏]我愿做无忧无虑的孩子
+title: 【收藏】我愿做无忧无虑的孩子
 category: opinion
 description: 收藏的小诗
 ---
