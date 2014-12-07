@@ -15,7 +15,9 @@ description: 收藏的小诗
 <p align="center">正与我自由的意志相别。</p>
 <p align="center">坡道崎岖的山地令我眷念，</p>
 <p align="center">狂涛澎湃的巨石让我神悦。</p>
+
 <br>
+
 <p align="center">命运呵，请收回丰饶的田地，</p>
 <p align="center">拿走这响亮的尊荣称号！ </p>
 <p align="center">我厌恶看人们低三下四，  </p>
@@ -24,7 +26,9 @@ description: 收藏的小诗
 <p align="center">听岩石应和大海的呼啸；</p>
 <p align="center">那是我从小就熟悉的风光，  </p>
 <p align="center">只求让我再次看到。  </p>
+
 <br>
+
 <p align="center">我虽然年少，可我也明白，</p>
 <p align="center">这个世界不是为我而设。 </p>
 <p align="center">懵懵的黑夜那般长久， </p>
@@ -33,7 +37,9 @@ description: 收藏的小诗
 <p align="center">那是极乐之乡神奇的幻觉； </p>
 <p align="center">现实！你何必用可憎的明亮，</p>
 <p align="center">把我引导到这样一个俗界。</p>
+
 <br>
+
 <p align="center">爱情离我而去， </p>
 <p align="center">友谊早已终了；</p>
 <p align="center">如此的心灵怎不孤寂， </p>
@@ -42,7 +48,9 @@ description: 收藏的小诗
 <p align="center">恶劣情怀只能是瞬间避回； </p>
 <p align="center">纵饮可使痴狂的灵魂振奋， </p>
 <p align="center">可心儿啊，依然孤独伤悲。  </p>
+
 <br>
+
 <p align="center">听他们高谈阔论多无聊：</p>
 <p align="center">这群人与我并不相干， </p>
 <p align="center">可门第、权势、财富或机运，</p>
@@ -51,7 +59,9 @@ description: 收藏的小诗
 <p align="center">请还给我原有的青春和爱情！ </p>
 <p align="center">躲开那喧嚣半夜的应酬， </p>
 <p align="center">他们的欢乐只是徒有虚名。  </p>
+
 <br>
+
 <p align="center">美丽的人啊，难道你就是 </p>
 <p align="center">我的希望、慰籍和一切？  </p>
 <p align="center">连你的笑靥也失去了魅力，</p>
@@ -62,6 +72,7 @@ description: 收藏的小诗
 <p align="center">美德与它似曾相识或很熟悉。</p>
 
 <br>
+
 <p align="center">回到乡下，告别这人来人往的城市</p>
 <p align="center">我不恨人类，而是逃避   </p>
 <p align="center">我只能找寻一个宁静而幽幽的所在 </p>
