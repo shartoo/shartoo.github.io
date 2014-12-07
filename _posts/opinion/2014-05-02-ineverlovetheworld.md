@@ -1,4 +1,4 @@
-﻿---
+---
 layout: post
 title: [收藏]我从未爱过这世界
 category: opinion
