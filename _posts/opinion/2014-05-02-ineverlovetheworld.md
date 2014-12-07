@@ -19,7 +19,8 @@ description: 收藏的小诗
 <p align="center">那并非而又算作他们的思想的尸衣中，</p>
 <p align="center">一齐列队行进，</p>
 <p align="center">因此才被压抑而至温顺。</p>
-<p align="center">我没有爱过这世界，它对我也一样</p><br>
+<p align="center">我没有爱过这世界，它对我也一样</p>
+
 <p align="center">但是，尽管彼此敌视，</p>
 <p align="center">让我们方方便便分手吧；</p>
 <p align="center">虽然我自己不曾看到， </p>
