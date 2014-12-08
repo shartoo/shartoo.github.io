@@ -1,4 +1,4 @@
-﻿---
+---
 layout: post
 title: Java对象创建过程与垃圾回收机制
 description: 关于Java JVM的一些学习笔记
