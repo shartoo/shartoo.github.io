@@ -25,8 +25,9 @@ Java运行期间的各个部分：程序计数器、虚拟机栈、本地方法�
    
 有以下方法：<br>
 <ol>
-<li><B>引用记数法：</B>给对象添加一个引育弄个计数器，有一个地方引用时该计数器加1，一个引用失效时，减一<br><B>缺点：</B>无法应对循环引用，例如【objA.instance=objB和obj.instance=objA】</li>
-<li><B>可达性分析算法：<B>以一个称为"GC Root"的对象作为起始点，从这些节点往下搜索。当一个对象到"GC Root"的引用路径不可达时，证明该对象不可用。<font color="blue">java采用此方法</font><img src="/images/blog/java-jvm-obj-rubcollect1.png"></li>
+<li><B>引用记数法：</B>给对象添加一个引育弄个计数器，有一个地方引用时该计数器加1，一个引用失效时，减一<br>
+<B>缺点：</B>无法应对循环引用，例如【objA.instance=objB和obj.instance=objA】</li>
+<li><B>可达性分析算法：</B>以一个称为"GC Root"的对象作为起始点，从这些节点往下搜索。当一个对象到"GC Root"的引用路径不可达时，证明该对象不可用。<font color="blue">java采用此方法</font><img src="/images/blog/java-jvm-obj-rubcollect1.png"></li>
 </ol>
 
 ##四 回收方法区    
