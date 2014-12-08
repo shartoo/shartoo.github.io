@@ -46,11 +46,12 @@ Java程序，需要通过栈上的reference数据来操作堆行的具体对象�
 
 Java堆中划分一块内存作为句柄池，reference中存储的即对象的句柄地址，而句柄包含了对象实例数据与类型数据各自的具体地址信息。
 <img src="/images/blog/java-jvm-obj-rubcollect2.png">
+<br>
 <B>优点：</B>reference中存储的是稳定的句柄地址，对象被移动（垃圾回收时），只会改变句柄中的实例数据指针，而reference本身不需要移动
 
 ###5.2 直接指针访问
 
 Java堆中对象的布局中就必须考虑如何放置访问类型数据相关信息，reference中存储的直接是对象地址
-<img src="/images/blog/java-jvm-obj-rubcollect3.png">
+<img src="/images/blog/java-jvm-obj-rubcollect3.png"><br>
 <B>优点：</B>速度更快，节省了一次指针定位的时间开销。虚拟机Sun HotSpot即采用此方法。
 
