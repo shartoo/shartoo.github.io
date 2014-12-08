@@ -107,7 +107,7 @@ category: blog
 <li>一个整数，记为X.value，它是变量X的值。在流中均匀的随机选择1到n之间的一个位置。将X.element置为该位置上的元素，X.value初始为1，每再看到一个X.element 就将其对应的X.value 值加1。</li>
 </ol>
 &nbsp;&nbsp;&nbsp;假定流  a,b,c,b,d,a,c,d,a,b,d,c,a,a,b,流长度为15。由于a  出现5次，b 出现4次，c和d各出现3次。<img src="/images/blog/bigdata-streamdata1.png">因此二阶矩为 5^2+4^2+3^2+3^2=59.假定维护3个变量X1,X2,X3.假定随机位置为3,8,13。当到达位置3时，对应的元素为c，于是 X1.element=c,此时X1.value=1,而位置4为b，5为d，6为a，X1的值均不改变，在位置7元素c再次出现，继续往后的话，位置12再出现c，因此X1.value=3。据此可以得到 X2.value=2和X3.value=2(注意，他们都是从该元素第一次出现之后，往后出现的才算)。
-<p align="center">基于任意一个变量X，我们可以导出二阶矩的一个估计值为： n*(2*X.value-1)</p>
+<br>基于任意一个变量X，我们可以导出二阶矩的一个估计值为： n*(2*X.value-1)<br>
 根据本例中的值，我们可以通过二阶矩估算值得平均值为：<p　align="center">(15*(2*3-1)+15*(2*2-1)+15*(2*2-1))/3=55</p>可知与精确值 <font color="blue">59</font>相当接近了。
 
 ###4.3 无限流的处理
