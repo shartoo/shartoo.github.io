@@ -1,4 +1,4 @@
-﻿---
+---
 layout:     post
 title:      数据挖掘方法之分类
 category: blog
