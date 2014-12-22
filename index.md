@@ -20,7 +20,7 @@ layout: home
             </li>
         {% endfor %}
         </ul>
-        <a herf="http://shartoo.github.io/photo/">查看我的拍照作品</a>
+        <a href="http://shartoo.github.io/photo/">查看我的拍照作品</a>
     </div>
     <div class="aside">
     </div>
