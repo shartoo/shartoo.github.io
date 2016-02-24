@@ -22,7 +22,8 @@ category: blog
    <li>异步通信：消息队列提供了异步处理机制，允许用户把一个消息放入队列，但并不立即处理它。</li>
    </ol>
 <ol>
-
+    
+    
 ##二 kafka组成    
    <ol>
    <li>时间复杂度低: 以时间复杂度为O(1)的方式提供消息持久化能力，即使对TB级以上数据也能保证常数时间复杂度的访问性能。
@@ -33,7 +34,8 @@ category: blog
     <li>同时支持离线数据处理和实时数据处理</li>
     <li>支持在线水平扩展</li>
    </ol>
-   
+    
+       
 ## 二 kafka应用及组成   
      <h1>应用场景</h1>
      <img src="/images/blog/kafka-applysence.png"> 
