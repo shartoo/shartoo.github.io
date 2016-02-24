@@ -23,7 +23,7 @@ category: blog
    </ol>
 <ol>
 
-###kafka优点
+### kafka优点   
    
    <ol>
    <li>时间复杂度低: 以时间复杂度为O(1)的方式提供消息持久化能力，即使对TB级以上数据也能保证常数时间复杂度的访问性能。
@@ -35,7 +35,7 @@ category: blog
     <li>支持在线水平扩展</li>
    </ol>
    
-##二 kafka 应用及组成  
+## 二 kafka 应用及组成     
  
      <h1>应用场景</h1>
      <img src="/images/blog/kafka-applysence.png"> 
