@@ -4,8 +4,9 @@ title: kafka使用
 description: 大数据专题
 category: blog
 ---
-
-##一 概述
+    
+    
+## 一 概述
 
    Kafka是由LinkedIn开发的一个开源的分布式消息发布-订阅系统，使用Scala编写，它以可水平扩展和高吞吐率而被广泛使用的。
 
@@ -21,8 +22,8 @@ category: blog
    </li>
    <li>异步通信：消息队列提供了异步处理机制，允许用户把一个消息放入队列，但并不立即处理它。</li>
    </ol>
-<ol>
-     
+<ol>    
+
 ### 1.2  kafka优点
    
    <ol>
@@ -34,9 +35,10 @@ category: blog
     <li>同时支持离线数据处理和实时数据处理</li>
     <li>支持在线水平扩展</li>
    </ol>
-       
-       
-##二 kafka 应用及组成  
+           
+           
+           
+## 二 kafka 应用及组成  
  
      <h1>应用场景</h1>
      <img src="/images/blog/kafka-applysence.png"> 
