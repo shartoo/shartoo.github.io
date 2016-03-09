@@ -1,3 +1,9 @@
+---
+layout:     post
+title:      大数据：集群优化
+category: blog
+description: 大数据类总结
+---
 # 0 集群优化
   一个小集群:1个master,10个datanode。    
   最开始使用pig脚本分析作业，后面作业运行时观察发现，pig脚本执行的小作业太多导致任务调度频繁，集群效率低。    
