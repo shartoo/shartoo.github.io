@@ -14,7 +14,7 @@ description: 大数据
    + 如何消费同一组数据：
      1. 采用不同的group
      2. 通过一些配置，就可以将线上产生的数据同步到镜像中去，然后再由特定的集群区处理大批量的数据。详见[详细](http://my.oschina.net/ielts0909/blog/110280)
-     ![图片](kafka-question1.)
+     ![图片](/images/blog/kafka-question1.jpg)
 
 ## 1.2	如何自定义去消费已经消费过的数据
     
@@ -54,7 +54,7 @@ description: 大数据
 
 # 4 kafka如何设置生存周期与清理数据
   日志文件的删除策略非常简单:启动一个后台线程定期扫描log file列表,把保存时间超过阀值的文件直接删除(根据文件的创建时间).清理参数在server.properties文件中：
-  ![](kafka-question2.jpg)    
+  ![](/images/blog/kafka-question2.jpg)    
   [详见](http://blog.csdn.net/lizhitao/article/details/25667831)或[官网说明](http://kafka.apache.org/documentation.html)
 # 5 zookeeper如何管理kafka    
   1. Producer端使用zookeeper用来"发现"broker列表,以及和Topic下每个partition leader建立socket连接并发送消息.
