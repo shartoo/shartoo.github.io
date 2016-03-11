@@ -25,7 +25,8 @@ description: 大数据
 ###  1.2.1 Conosumer.properties配置文件中有两个重要参数:    
    + **auto.commit.enable**:如果为true，则consumer的消费偏移offset会被记录到zookeeper。下次consumer启动时会从此位置继续消费。
    + **auto.offset.reset**: 该参数只接受两个常量largest和Smallest,分别表示将当前offset指到日志文件的最开始位置和最近的位置。    
-    如果进一步想控制时间，则需要调用Simple Consumer，自己去设置相关参数。比较重要的参数是 kafka.api.OffsetRequest.EarliestTime()和kafka.api.OffsetRequest.LatestTime()分别表示从日志（数据）的开始位置读取和只读取最新日志。
+    如果进一步想控制时间，则需要调用Simple Consumer，自己去设置相关参数。比较重要的参数是 kafka.api.OffsetRequest.EarliestTime()和kafka.api.OffsetRequest.LatestTime()分别表示从日志（数据）的开始位置读取和只读取最新日志。    
+
 ### 1.2.2 如何使用SimpleConsumer     
   + 首先，你必须知道读哪个topic的哪个partition 
 然后，找到负责该partition的broker leader，从而找到存有该partition副本的那个broker    
