@@ -36,6 +36,7 @@ description: 大数据
   [参考1](http://stackoverflow.com/questions/14935755/how-to-get-data-from-old-offset-point-in-kafka)    
   [参考2](https://cwiki.apache.org/confluence/display/KAFKA/Committing+and+fetching+consumer+offsets+in+Kafka)     
   [完整代码](https://cwiki.apache.org/confluence/display/KAFKA/0.8.0+SimpleConsumer+Example)        
+    
 
 #  2 kafka partition和consumer数目关系
    1. 如果consumer比partition多，是浪费，因为kafka的设计是在一个partition上是不允许并发的，所以consumer数不要大于partition数 。
