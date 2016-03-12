@@ -53,34 +53,39 @@ org/f iles/archive/scala-2.10.4.msi (http://www.scala-lang.org/f iles/archive/sc
 ![sparkshel](/images/blog/sparkenvirnoment5.png)
 如果不希望这么麻烦地切换目录，而是希望在打开一个命令行窗口中直接运行spark-shell，那么只需要在Windows环境变量中将上面的spark-shell所在的路径加入环境变量PATH中即可。
 
-+ 建立待统计的单词文件
++ 建立待统计的单词文件    
+
 选择一个已存在的文本文件，或新建一个文本文件，作为待统计的单词文件E:\LearnSpark\word.txt，在这里我们新建一个文件,内容为：    
 
 ```apple banana
-banana banana```    
+banana banana```     
+
 + 加载单词文件    
-执行Spark程序需要一个SparkContext类实例，在Spark Shell中已经默认将SparkContext类初始化为对象实例sc。因此我们不需要再去初始化一个新的sc，直接输入以下命令使用即可。
-该行命令使用SparkContext类的textFile函数，加载待统计的单词文件，结果如图2-7所示。    
-   ```val file = sc.textFile("E:\\LearnSpark\\word.txt")```    
-![加载单词文件](/images/blog/sparkenvirnoment6.png)       
+执行Spark程序需要一个SparkContext类实例，在SparkShell中已经默认将SparkContext类初始化为对象实例sc。因此我们不需要再去初始化一个新的sc，直接输入以下命令使用即可。该行命令使用SparkContext类的textFile函数，加载待统计的单词文件，结果如图2-7所示。    
+  ```val file = sc.textFile("E:\\LearnSpark\\word.txt")```    
+
+  ![加载单词文件](/images/blog/sparkenvirnoment6.png)     
+
 + 统计单词出现次数    
-如果你用MapReduce计算框架编写过WordCount程序，那你一定能体会到执行一个简单的单词统计功能需要数十行代码的不便。而利用Spark的函数式编程
-模式，我们只需要一行Scala语句即可完成单词统计功能，结果如图2-8所示。在这里我们暂时先不解释这行代码的具体含义，留待在后面的章节中慢慢
+  如果你用MapReduce计算框架编写过WordCount程序，那你一定能体会到执行一个简单的单词统计功能需要数十行代码的不便。而利用Spark的函数式编程模式，我们只需要一行Scala语句即可完成单词统计功能，结果如图2-8所示。在这里我们暂时先不解释这行代码的具体含义，留待在后面的章节中慢慢
 学习。你只需要体会到Spark是如何大幅简化数据处理的工作的难度即可。    
   ```val counts = file.flatMap(line => line.split(" ")).map(word => (word, 1)).reduceByKey(_+_)```    
 ![统计单词次数](/images/blog/sparkenvirnoment7.png)     
 + 保存结果文件    
 在这里我们使用E:\LearnSpark\counts.txt作为输出文件。需要注意的是，要保证没有和输出文件同名的文件或者是文件夹，如果存在则需要手动删除
 该文件夹，否则会出错。保存结果文件的命令如下所示，运行过程如图2-9所示，在运行完成后打开E:\LearnSpark\counts.txt文件即可看到如图所示的单词统计结果。    
-```counts.saveAsTextFile("E:\\LearnSpark\\counts.txt")```    
-![保存结果](/images/blog/sparkenvirnoment8.png)    
-下面我们来看一下最后的输出结果，count.txt其实是个目录，在该目录下有好多个文件，其中part-00000和part-00001是我们需要的结果。
+
+  ```counts.saveAsTextFile("E:\\LearnSpark\\counts.txt")```    
+  
+  ![保存结果](/images/blog/sparkenvirnoment8.png)    
+  
+下面我们来看一下最后的输出结果，count.txt其实是个目录，在该目录下有好多个文件，其中part-00000和part-00001是我们需要的结果。       
+
 ```
 part00000
-中的内容
 (apple,1)
+
 part00001
-中的内容
 (banana,3)
 ```    
 
