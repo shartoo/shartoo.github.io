@@ -28,12 +28,12 @@ org/f iles/archive/scala-2.10.4.msi (http://www.scala-lang.org/f iles/archive/sc
   + 在命令行环境中，输入scala，然后敲回车。    
   + 如果看到如图2-3所示成功启动Scala Shell环境，则说明安装成功，然后输入exit，退出Scala Shell环境。
   + 如果启动Scala Shell环境失败，一般只需要在Windows环境变量设置界面配置SCALA_HOME环境变量为Scala的安装路径即可。
-  ![windows启动scala界面](/sparkenvirnoment1.png)    
+  ![windows启动scala界面](/images/blog/sparkenvirnoment1.png)    
   
 ### 1.1.3 安装spark    
  [Spark官网](http://spark.apache.org/downloads.html)提供了各个版本的安装包。为搭建学习试验环境，我们选择下载下载预编译好的包，例
 如spark1.3.0binhadoop2.4.tgz
- ![spark下载](sparkenvirnoment2.png)    
+ ![spark下载](/images/blog/sparkenvirnoment2.png)    
  
 ### 1.1.4 安装winutils    
 
@@ -42,19 +42,17 @@ org/f iles/archive/scala-2.10.4.msi (http://www.scala-lang.org/f iles/archive/sc
 1. 从一个可靠的网站下载winutils.exe（我们选择从Hadoop商业发行版Hortonworks提供的下载[链接](http://public-repo-1.hortonworks.com/hdp-win-alpha/winutils.exe)
 2. 将winutil.exe拷贝到一个目录，例如：E:\LearnSpark\win\bin。
 3. 按照如图2-4、2-5的步骤，设置Windows系统的环境变量HADOOP_HOME为E:\LearnSpark\win（注意没有bin）
-![设置环境变量](sparkenvirnoment3.png)
-![设置环境变量](sparkenvirnoment4.png)
+![设置环境变量](/images/blog/sparkenvirnoment3.png)
+![设置环境变量](/images/blog/sparkenvirnoment4.png)
 至此，Windows下安装Spark的过程全部完成。
 
 ## 1.2 使用spark shell    
-就像HelloWorld程序基本已成为学习某一门开发语言的第一个入门程序一样，WordCount程序就是试用大数据处理技术的HelloWorld。下面我们就以使用Spark统计一个文件中的单词出现次数为例，快速体验一下
-便捷的Spark使用方式。
+  就像HelloWorld程序基本已成为学习某一门开发语言的第一个入门程序一样，WordCount程序就是试用大数据处理技术的HelloWorld。下面我们就以使用Spark统计一个文件中的单词出现次数为例，快速体验一下便捷的Spark使用方式。
 + 启动Spark Shell环境    
-   在Windows文件管理器中，切换目录到Spark安装后生成的spark1.3.0binhadoop2.4目录下，按住Shif t键的同时点击鼠标右键，然后使用左键点击在此处打开命令窗口。在打开一个命令行的窗口
-中，输入bin\sparkshell，就可以启动spark-shell环境，如图2-6所示。
-![sparkshel](sparkenvirnoment5.png)
+在Windows文件管理器中，切换目录到Spark安装后生成的spark1.3.0binhadoop2.4目录下，按住Shift键的同时点击鼠标右键，然后使用左键点击在此处打开命令窗口。在打开一个命令行的窗口中，输入bin\sparkshell，就可以启动spark-shell环境，如图2-6所示。
+![sparkshel](/images/blog/sparkenvirnoment5.png)
 如果不希望这么麻烦地切换目录，而是希望在打开一个命令行窗口中直接运行spark-shell，那么只需要在Windows环境变量中将上面的spark-shell所在的路径加入环境变量PATH中即可。
-    
+
 + 建立待统计的单词文件
 选择一个已存在的文本文件，或新建一个文本文件，作为待统计的单词文件E:\LearnSpark\word.txt，在这里我们新建一个文件,内容为：    
 
@@ -64,18 +62,18 @@ banana banana```
 执行Spark程序需要一个SparkContext类实例，在Spark Shell中已经默认将SparkContext类初始化为对象实例sc。因此我们不需要再去初始化一个新的sc，直接输入以下命令使用即可。
 该行命令使用SparkContext类的textFile函数，加载待统计的单词文件，结果如图2-7所示。    
    ```val file = sc.textFile("E:\\LearnSpark\\word.txt")```    
-![加载单词文件](sparkenvirnoment6.png)       
+![加载单词文件](/images/blog/sparkenvirnoment6.png)       
 + 统计单词出现次数    
 如果你用MapReduce计算框架编写过WordCount程序，那你一定能体会到执行一个简单的单词统计功能需要数十行代码的不便。而利用Spark的函数式编程
 模式，我们只需要一行Scala语句即可完成单词统计功能，结果如图2-8所示。在这里我们暂时先不解释这行代码的具体含义，留待在后面的章节中慢慢
 学习。你只需要体会到Spark是如何大幅简化数据处理的工作的难度即可。    
   ```val counts = file.flatMap(line => line.split(" ")).map(word => (word, 1)).reduceByKey(_+_)```    
-![统计单词次数](sparkenvirnoment7.png)     
+![统计单词次数](/images/blog/sparkenvirnoment7.png)     
 + 保存结果文件    
 在这里我们使用E:\LearnSpark\counts.txt作为输出文件。需要注意的是，要保证没有和输出文件同名的文件或者是文件夹，如果存在则需要手动删除
 该文件夹，否则会出错。保存结果文件的命令如下所示，运行过程如图2-9所示，在运行完成后打开E:\LearnSpark\counts.txt文件即可看到如图所示的单词统计结果。    
 ```counts.saveAsTextFile("E:\\LearnSpark\\counts.txt")```    
-![保存结果](sparkenvirnoment8.png)    
+![保存结果](/images/blog/sparkenvirnoment8.png)    
 下面我们来看一下最后的输出结果，count.txt其实是个目录，在该目录下有好多个文件，其中part-00000和part-00001是我们需要的结果。
 ```
 part00000
