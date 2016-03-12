@@ -4,7 +4,6 @@ title:      大数据：spark环境部署
 category: blog
 description: 大数据
 ---      
-
 #  1 安装和使用spark
 ##  1.1 安装spark
   我们主要以Windows环境为例介绍Spark的安装。
@@ -20,13 +19,14 @@ Spark通常需要JDK 6.0以上版本，你可以在Oracle的JDK[官网](http://w
 ### 1.1.2 安装scala    
 刚才我们提到，Spark是采用Scala语言编写的，因此第二步是要安装Scala。Scala官网的[下载页面](http://www.scala-lang.org/download/)提供了多个版本的Scala下载，
 但由于Scala各个版本之间兼容性并不好，因此在下载的时候一定要注意你要安装的Spark版本所依赖的Scala版本，以免遇到一些难以预知的问题。在我们的例子中，是要安装目前最新的Spark 1.3.0版本，因此
-我们选择下载所需的Scala 2.10.4版本。选择之前的历史版本下载，需要先从如图2-2所示的下载页面中点击“All previous Scala Releases”链接，进入历史版本列表，然后选择“2.10.4”版本下载（ http://www.scalalang.
-org/f iles/archive/scala-2.10.4.msi (http://www.scala-lang.org/f iles/archive/scala-2.10.4.msi) ）。下载后按照提示一步一步执行安装即可。
-        
-  Scala安装后，要进行一个验证的过程以确认安装成功，其方法如下：
-  + 在Windows中执行命令cmd，启动Windows命令行环境。    
-  + 在命令行环境中，输入scala，然后敲回车。    
-  + 如果看到如图2-3所示成功启动Scala Shell环境，则说明安装成功，然后输入exit，退出Scala Shell环境。
+我们选择下载所需的Scala 2.10.4版本。选择之前的历史版本下载，需要先从如图2-2所示的下载页面中点击“All previous Scala Releases”链接，进入历史版本列表，然后选择“2.10.4”版本[下载](http://www.scala-lang.org/f iles/archive/scala-2.10.4.msi)
+。下载后按照提示一步一步执行安装即可。
+       
+  Scala安装后，要进行一个验证的过程以确认安装成功，其方法如下：          
+      
+  + 在Windows中执行命令cmd，启动Windows命令行环境。        
+  + 在命令行环境中，输入scala，然后敲回车。        
+  + 如果看到如图2-3所示成功启动Scala Shell环境，则说明安装成功，然后输入exit，退出Scala Shell环境。    
   + 如果启动Scala Shell环境失败，一般只需要在Windows环境变量设置界面配置SCALA_HOME环境变量为Scala的安装路径即可。
   ![windows启动scala界面](/images/blog/sparkenvirnoment1.png)    
   
@@ -92,6 +92,7 @@ part00001
 ## 1.3 了解Spark目录结构    
 
 Spark安装后，会在安装目录下生成一系列的目录，其结构如下:    
+
 + bin目录下是使用Spark时常用的一些执行程序，例如我们进行Spark命令交互环境使用的spark-shell。    
 + conf目录下存放的是运行Spark环境所需的配置文件。    
 + data目录mllib需要的一些测试数据    
