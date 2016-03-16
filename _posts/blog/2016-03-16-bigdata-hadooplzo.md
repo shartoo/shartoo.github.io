@@ -4,11 +4,10 @@ title:      大数据：hadoop环境中lzo压缩问题
 category: blog
 description: 大数据
 ---      
-
-# 1 首要问题
-
+     
+# 1 首要问题     
 ## 1.1  hadoop-gpl-compression还是hadoop-lzo
-  **hadoop-lzo-xxx** 的前身是**hadoop-gpl-compression-xxx**,之前是放在google code下管理,地址:http://code.google.com/p/hadoop-gpl-compression/ .但由于协议问题后来移植到github上,也就是现在的hadoop-lzo-xxx,github,[链接地址](https://github.com/kevinweil/hadoop-lzo).    
+  **hadoop-lzo-xxx** 的前身是**hadoop-gpl-compression-xxx**,之前是放在googlecode下管理,[地址](http://code.google.com/p/hadoop-gpl-compression/)但由于协议问题后来移植到github上,也就是现在的hadoop-lzo-xxx,github,[链接地址](https://github.com/kevinweil/hadoop-lzo).    
     网上介绍hadoop lzo压缩都是基于hadoop-gpl-compression的介绍.而hadoop-gpl-compression还是09年开发的,跟现在hadoop版本已经无法再完全兼容,会发生一些问题.而按照网上的方法,为了兼容hadoop,使用hadoop-lzo-xxx。
 
   **原理：**因为hadoop lzo实际上得依赖C/C++开发的lzo去压缩,而他们通过JNI去调用.如果使用hadoop-gpl-compression下的Native,但使用hadoop-lzo-xxx的话,会导致版本不一致问题.所以正确的做法是,将hadoop-lzo-xxx下的Native放入到/usr/local/lib下.而你每升级一个hadoop-lzo-xxx版本,或许就得重复将新lzo版本下的native目录放入/usr/local/lib下.具体需要测试.
