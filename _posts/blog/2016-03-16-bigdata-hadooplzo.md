@@ -29,7 +29,7 @@ static {
 ```  
    2. 获取了gplcompression后需要初始化加载以便可以调用,如果加载不成功,如我刚才说的版本冲突等也会报一系列错误.同时这里的加载和初始化分成两步,一步是压缩,对应Java的类是LzoCompressor.另一步解压缩,对应Java的类是LzoDecompressor.先看下LzoCompressor是如何加载初始化的,代码如下:      
   
-```Java   
+```   
 	static {  
 	  if (GPLNativeCodeLoader.isNativeCodeLoaded()) {  
 	    // Initialize the native library  
@@ -50,14 +50,14 @@ static {
 	    LZO_LIBRARY_VERSION = -1;  
 	  }  
 	}
-  ```  
+```  
    如我这里所报的警告    
   ```WARN lzo.LzoCompressor: java.lang.NoSuchFieldError: workingMemoryBuf```    
   就是由这里的 **LOG.warn(t.toString())**所抛出.同时这里也会先加载gplcompression,加载不成功同样会报    
   ```without native-hadoop library!```    
   错误.再看看解压缩LzoDecompressor,原理差不多,不再阐述,代码如下:    
   
- ```Java
+```
    static {  
 	  if (GPLNativeCodeLoader.isNativeCodeLoaded()) {  
 	    // Initialize the native library  
