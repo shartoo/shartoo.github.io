@@ -26,9 +26,9 @@ static {
 	  LOG.error("Could not load native gpl library", t);  
 	  nativeLibraryLoaded = false;  
 	 }  
-```  
-   2. 获取了gplcompression后需要初始化加载以便可以调用,如果加载不成功,如我刚才说的版本冲突等也会报一系列错误.同时这里的加载和初始化分成两步,一步是压缩,对应Java的类是LzoCompressor.另一步解压缩,对应Java的类是LzoDecompressor.先看下LzoCompressor是如何加载初始化的,代码如下:      
-  
+```      
+2. 获取了gplcompression后需要初始化加载以便可以调用,如果加载不成功,如我刚才说的版本冲突等也会报一系列错误.同时这里的加载和初始化分成两步,一步是压缩,对应Java的类是LzoCompressor.另一步解压缩,对应Java的类是LzoDecompressor.先看下LzoCompressor是如何加载初始化的,代码如下:          
+
 ```   
 	static {  
 	  if (GPLNativeCodeLoader.isNativeCodeLoaded()) {  
@@ -50,11 +50,12 @@ static {
 	    LZO_LIBRARY_VERSION = -1;  
 	  }  
 	}
-```  
+```      
+
    如我这里所报的警告    
-  ```WARN lzo.LzoCompressor: java.lang.NoSuchFieldError: workingMemoryBuf```    
+		WARN lzo.LzoCompressor: java.lang.NoSuchFieldError: workingMemoryBuf        
   就是由这里的 **LOG.warn(t.toString())**所抛出.同时这里也会先加载gplcompression,加载不成功同样会报    
-  ```without native-hadoop library!```    
+		without native-hadoop library!
   错误.再看看解压缩LzoDecompressor,原理差不多,不再阐述,代码如下:    
   
 ```
@@ -102,7 +103,8 @@ static {
    
 # 三 如何确定是否已经安装好LZO
   [参考](https://code.google.com/a/apache-extras.org/p/hadoop-gpl-compression/wiki/FAQ?redir=1)
- 执行命令:   
+ 执行命令:        
+ 
 ```
  % ls -l /usr/lib*/liblzo2*
 -rw-r--r--  1 root root 171056 Mar 20  2006 /usr/lib/liblzo2.a
@@ -114,38 +116,31 @@ lrwxrwxrwx  1 root root     16 Feb 17  2007 /usr/lib64/liblzo2.so -> liblzo2.so.
 lrwxrwxrwx  1 root root     16 Feb 17  2007 /usr/lib64/liblzo2.so.2 -> liblzo2.so.2.0.0*
 -rwxr-xr-x  1 root root 126572 Mar 20  2006 /usr/lib64/liblzo2.so.2.0.0*    
 ```
-在集群上操作，得到如下截图：    
-```
-http://blog.csdn.net/scorpiohjx2/article/details/18423529
-http://share.blog.51cto.com/278008/549393/
-http://www.tuicool.com/articles/VVj6rm
-https://code.google.com/a/apache-extras.org/p/hadoop-gpl-compression/wiki/FAQ?redir=1
-http://guoyunsky.iteye.com/blog/1237327
-```
- lzo压缩已经广泛用于Hadoop中,至于为什么要在Hadoop中使用Lzo.这里不再重述.其中很重要的一点就是由于分布式计算,所以需要支持对压缩数据进行分片,也就是Hadoop的InputSplit,这样才能分配给多台机器并行处理.所以这里花了一天的时间,看了下Hadoop lzo的源码,了解下Hadoop lzo是如何做到的.    
 
- 其实一直有种误解,就是以为lzo本身是支持分布式的,也就是支持压缩后的数据可以分片.我们提供给它分片的逻辑,由lzo本身控制.但看了Hadoop lzo源码才发现,lzo只是个压缩和解压缩的工具,如何分片,是由Hadoop lzo(Javad代码里)控制.具体的分片算法写得也很简单,就是在内存中开一块大大的缓存,默认是256K,缓存可以在通过io.compression.codec.lzo.buffersize参数指定.数据读入缓存(实际上要更小一些),如果缓存满了,则交给lzo压缩,获取压缩后的数据,同时在lzo文件中写入压缩前后的大小以及压缩后的数据.所以这里,一个分片,其实就是<=缓存大小.具体lzo文件格式(这里针对Lzop):    
+ lzo压缩已经广泛用于Hadoop中,至于为什么要在Hadoop中使用Lzo.这里不再重述.其中很重要的一点就是由于分布式计算,所以需要支持对压缩数据进行分片,也就是Hadoop的InputSplit,这样才能分配给多台机器并行处理.所以这里花了一天的时间,看了下Hadoop lzo的源码,了解下Hadooplzo是如何做到的.    
 
-   1.lzo文件头
-    + 写入lzo文件标识： 此时长度9
-    + 写入版本    
+ 其实一直有种误解,就是以为lzo本身是支持分布式的,也就是支持压缩后的数据可以分片.我们提供给它分片的逻辑,由lzo本身控制.但看了Hadoop lzo源码才发现,lzo只是个压缩和解压缩的工具,如何分片,是由Hadooplzo(Javad代码里)控制.具体的分片算法写得也很简单,就是在内存中开一块大大的缓存,默认是256K,缓存可以在通过io.compression.codec.lzo.buffersize参数指定.数据读入缓存(实际上要更小一些),如果缓存满了,则交给lzo压缩,获取压缩后的数据,同时在lzo文件中写入压缩前后的大小以及压缩后的数据.所以这里,一个分片,其实就是<=缓存大小.具体lzo文件格式(这里针对Lzop):    
+ 1.lzo文件头
+ + 写入lzo文件标识： 此时长度9
+ + 写入版本    
     ```
 	LZOP_VERSION		lzo版本，short，此时长度11
 	LZO_VERSION_LIBRARY	lzo压缩库版本，short，此时长度13
-	LZOP_COMPAT_VERSION	最后lzo应该一直的版本，short，此时长度15    
-	```    
-	写入压缩策略    
-     + LZO1X_1的话writeByte写入1和5，此时长度17 
-     + writeInt写入flag(标识)，此时长度21    
-     + writeInt写入mode(模式)，此时长度25    
-     + writeInt写入当前时间秒，此时长度29    
-     + writeInt写入0,不知道做何用途，此时长度33   
-     + writeBye写入0，不知道做何用途，此时长度34    
-     + writeInt写入之前数据的checksum，此时长度38
+	LZOP_COMPAT_VERSION	最后lzo应该一直的版本，short，此时长度15     
+   ```    
+  + 写入压缩策略    
+  + LZO1X_1的话writeByte写入1和5，此时长度17 
+  + writeInt写入flag(标识)，此时长度21    
+  + writeInt写入mode(模式)，此时长度25    
+  + writeInt写入当前时间秒，此时长度29    
+  + writeInt写入0,不知道做何用途，此时长度33   
+  + writeBye写入0，不知道做何用途，此时长度34    
+  + writeInt写入之前数据的checksum，此时长度38
+    
 
-  2.  写入多个块,会有多个.循环处理,直到压缩完成
+ 2. 写入多个块,会有多个.循环处理,直到压缩完成
    写入压缩前的数据长度,此时长度为39如果压缩前的长度小于压缩后的长度,则写入未压缩的数据长度,再写入未压缩的数据.反之则写入压缩后的数据长度,以及压缩后的数据    
-   3.lzo文件尾,只是写入4个0,不知道做什么用途    		   同时如果你指定索引文件路径的话,则一个缓存写完后便会将写入的数据长度写到索引文件中.如此在Hadoop分布式时只要根据索引文件的各个长度,读取该长度的数据 ,便可交给map处理.
+ 3. lzo文件尾,只是写入4个0,不知道做什么用途    		   同时如果你指定索引文件路径的话,则一个缓存写完后便会将写入的数据长度写到索引文件中.如此在Hadoop分布式时只要根据索引文件的各个长度,读取该长度的数据 ,便可交给map处理.     
     以上是hadoop lzo大概原理,同时LzopCodec支持在压缩时又生成对应的索引文件.而LzoCodec不支持.具体代码看下来,还不明确LzoCodec为何没法做到,也是一样的切片逻辑.具体待测试.
        
 # 4 hadoop中使用lzo的压缩    
@@ -226,3 +221,10 @@ Running MR Jobs over Indexed Files
 Now run any job, say wordcount, over the new file. In Java-based M/R jobs, just replace any uses of TextInputFormat by LzoTextInputFormat. In streaming jobs, add "-inputformat com.hadoop.mapred.DeprecatedLzoTextInputFormat" (streaming still uses the old APIs, and needs a class that inherits from org.apache.hadoop.mapred.InputFormat). Note that to use the DeprecatedLzoTextInputFormat properly with hadoop-streaming, you should also set the jobconf propertystream.map.input.ignoreKey=true. That will replicate the behavior of the default TextInputFormat by stripping off the byte offset keys from the input lines that get piped to the mapper process. For Pig jobs, email me or check the pig list -- I have custom LZO loader classes that work but are not (yet) contributed back.
 Note that if you forget to index an .lzo file, the job will work but will process the entire file in a single split, which will be less efficient.
 
+参考资料    
+
+[lzo本地压缩与解压缩实例](http://blog.csdn.net/scorpiohjx2/article/details/18423529)    
+[hadoop集群内lzo的安装与配置](http://share.blog.51cto.com/278008/549393/)
+[安装 Hadoop 2.0.0-cdh4.3.0 LZO 成功](http://www.tuicool.com/articles/VVj6rm)
+[hadoop-lzo源代码](https://code.google.com/a/apache-extras.org/p/hadoop-gpl-compression/wiki/FAQ?redir=1)
+[Hadoop Could not load native gpl library异常解决](http://guoyunsky.iteye.com/blog/1237327)
