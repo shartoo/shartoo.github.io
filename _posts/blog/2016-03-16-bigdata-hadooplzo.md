@@ -57,7 +57,7 @@ static {
    如我这里所报的警告    
 	`WARN lzo.LzoCompressor: java.lang.NoSuchFieldError: workingMemoryBuf`     
   就是由这里的 **LOG.warn(t.toString())**所抛出.同时这里也会先加载gplcompression,加载不成功同样会报    
-	`without native-hadoop library!`
+	`without native-hadoop library!`    
   错误.再看看解压缩LzoDecompressor,原理差不多,不再阐述,代码如下:    
   
 ```
@@ -81,12 +81,13 @@ static {
 	    LZO_LIBRARY_VERSION = -1;  
 	  }  
 	}
-```      
-	
+```          
+		
+		
 # 二 如何安装LZO    
 
 
-1.首先下载https://github.com/kevinweil/hadoop-lzo/,我这里下载到/home/guoyun/Downloads//home/guoyun/hadoop/kevinweil-hadoop-lzo-2dd49ec    
+1.首先下载https://github.com/kevinweil/hadoop-lzo/,我这里下载到      **/home/guoyun/Downloads//home/guoyun/hadoop/kevinweil-hadoop-lzo-2dd49ec**    
 2. 去lzo源码根目录下执行     
 
 ``` 
