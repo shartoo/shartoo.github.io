@@ -131,30 +131,25 @@ http://guoyunsky.iteye.com/blog/1237327
     + 写入lzo文件标识： 此时长度9
     + 写入版本    
     ```
-		LZOP_VERSION				lzo版本，short，此时长度11
-		LZO_VERSION_LIBRARY	lzo压缩库版本，short，此时长度13
-		LZOP_COMPAT_VERSION	最后lzo应该一直的版本，short，此时长度15    
+	LZOP_VERSION		lzo版本，short，此时长度11
+	LZO_VERSION_LIBRARY	lzo压缩库版本，short，此时长度13
+	LZOP_COMPAT_VERSION	最后lzo应该一直的版本，short，此时长度15    
 	```    
 	写入压缩策略    
-	
-	+ LZO1X_1的话writeByte写入1和5，此时长度17
-	+ writeInt写入flag(标识)，此时长度21    
-	+ writeInt写入mode(模式)，此时长度25    
-	+ writeInt写入当前时间秒，此时长度29    
-	+ writeInt写入0,不知道做何用途，此时长度33   
-	+ writeBye写入0，不知道做何用途，此时长度34    
-	+ writeInt写入之前数据的checksum，此时长度38
+     + LZO1X_1的话writeByte写入1和5，此时长度17 
+     + writeInt写入flag(标识)，此时长度21    
+     + writeInt写入mode(模式)，此时长度25    
+     + writeInt写入当前时间秒，此时长度29    
+     + writeInt写入0,不知道做何用途，此时长度33   
+     + writeBye写入0，不知道做何用途，此时长度34    
+     + writeInt写入之前数据的checksum，此时长度38
 
-    2.  写入多个块,会有多个.循环处理,直到压缩完成
-   写入压缩前的数据长度,此时长度为39如果压缩前的长度小于压缩后的长度,则写入未压缩的数据长度,再写入未压缩的数据.反之则写入压缩后的数据长度,以及压缩后的数据
+  2.  写入多个块,会有多个.循环处理,直到压缩完成
+   写入压缩前的数据长度,此时长度为39如果压缩前的长度小于压缩后的长度,则写入未压缩的数据长度,再写入未压缩的数据.反之则写入压缩后的数据长度,以及压缩后的数据    
+   3.lzo文件尾,只是写入4个0,不知道做什么用途    		   同时如果你指定索引文件路径的话,则一个缓存写完后便会将写入的数据长度写到索引文件中.如此在Hadoop分布式时只要根据索引文件的各个长度,读取该长度的数据 ,便可交给map处理.
+    以上是hadoop lzo大概原理,同时LzopCodec支持在压缩时又生成对应的索引文件.而LzoCodec不支持.具体代码看下来,还不明确LzoCodec为何没法做到,也是一样的切片逻辑.具体待测试.
        
-   3.lzo文件尾,只是写入4个0,不知道做什么用途
-
-  同时如果你指定索引文件路径的话,则一个缓存写完后便会将写入的数据长度写到索引文件中.如此在Hadoop分布式时只要根据索引文件的各个长度,读取该长度的数据 ,便可交给map处理.
-
-  以上是hadoop lzo大概原理,同时LzopCodec支持在压缩时又生成对应的索引文件.而LzoCodec不支持.具体代码看下来,还不明确LzoCodec为何没法做到,也是一样的切片逻辑.具体待测试.
-       
-# 4 hadoop中使用lzo的压缩
+# 4 hadoop中使用lzo的压缩    
  在hadoop中使用lzo的压缩算法可以减小数据的大小和数据的磁盘读写时间，不仅如此，lzo是基于block分块的，这样他就允许数据被分解成chunk，并行的被hadoop处理。这样的特点，就可以让lzo在hadoop上成为一种非常好用的压缩格式。    
 
    lzo本身不是splitable的，所以当数据为text格式时，用lzo压缩出来的数据当做job的输入是一个文件作为一个map。但是sequencefile本身是分块的，所以sequencefile格式的文件，再配上lzo的压缩格式，就可实现lzo文件方式的splitable。    
