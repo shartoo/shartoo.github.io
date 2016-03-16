@@ -5,9 +5,8 @@ category: blog
 description: 大数据
 ---      
 
-# 1 首要问题 
--------
--------
+<h1> 1 首要问题 </h1>
+
 ## 1.1  hadoop-gpl-compression还是hadoop-lzo
  **hadoop-lzo-xxx** 的前身是**hadoop-gpl-compression-xxx**,之前是放在google code下管理,地址:http://code.google.com/p/hadoop-gpl-compression/ .但由于协议问题后来移植到github上,也就是现在的hadoop-lzo-xxx,github,[链接地址](https://github.com/kevinweil/hadoop-lzo).    
      网上介绍hadoop lzo压缩都是基于hadoop-gpl-compression的介绍.而hadoop-gpl-compression还是09年开发的,跟现在hadoop版本已经无法再完全兼容,会发生一些问题.而按照网上的方法,为了兼容hadoop,使用hadoop-lzo-xxx。
