@@ -224,7 +224,7 @@ Note that if you forget to index an .lzo file, the job will work but will proces
 参考资料    
 
 [lzo本地压缩与解压缩实例](http://blog.csdn.net/scorpiohjx2/article/details/18423529)    
-[hadoop集群内lzo的安装与配置](http://share.blog.51cto.com/278008/549393/)
-[安装 Hadoop 2.0.0-cdh4.3.0 LZO 成功](http://www.tuicool.com/articles/VVj6rm)
-[hadoop-lzo源代码](https://code.google.com/a/apache-extras.org/p/hadoop-gpl-compression/wiki/FAQ?redir=1)
+[hadoop集群内lzo的安装与配置](http://share.blog.51cto.com/278008/549393/)     
+[安装 Hadoop 2.0.0-cdh4.3.0 LZO 成功](http://www.tuicool.com/articles/VVj6rm)     
+[hadoop-lzo源代码](https://code.google.com/a/apache-extras.org/p/hadoop-gpl-compression/wiki/FAQ?redir=1)     
 [Hadoop Could not load native gpl library异常解决](http://guoyunsky.iteye.com/blog/1237327)
