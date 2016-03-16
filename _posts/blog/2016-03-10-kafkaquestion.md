@@ -45,7 +45,8 @@ category: blog
    
   [详见](http://www.cnblogs.com/fxjwind/p/3794255.html)     
 
-# 3 kafka topic 副本问题    
+# 3	kafka topic 副本问题
+    
    Kafka尽量将所有的Partition均匀分配到整个集群上。一个典型的部署方式是一个Topic的Partition数量大于Broker的数量。    
    
 ## 3.1 	如何分配副本
