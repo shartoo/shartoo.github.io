@@ -1,10 +1,12 @@
 ---
-layout:     post
-title:      大数据：spark环境部署
+layout: post
+title: spark环境部署
+description: 大数据专题
 category: blog
-description: 大数据
----      
-#  1 安装和使用spark
+---
+    
+    
+## 一 spark安装和使用
 ##  1.1 安装spark
   我们主要以Windows环境为例介绍Spark的安装。
   整个安装过程主要分为四个步骤：安装JDK、安装Scala、安装Spark、安装WinUtil。在Linux和Mac OS X下
