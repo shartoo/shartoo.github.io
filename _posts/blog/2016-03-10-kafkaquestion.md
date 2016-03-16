@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 大数据：kafka常见问题
+title: 大数据：kafka常见问题11
 description: 大数据专题
 category: blog
 ---
