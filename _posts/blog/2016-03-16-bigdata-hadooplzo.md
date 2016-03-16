@@ -52,9 +52,9 @@ static {
 ```      
 
    如我这里所报的警告    
-		WARN lzo.LzoCompressor: java.lang.NoSuchFieldError: workingMemoryBuf        
+	'WARN lzo.LzoCompressor: java.lang.NoSuchFieldError: workingMemoryBuf'    
   就是由这里的 **LOG.warn(t.toString())**所抛出.同时这里也会先加载gplcompression,加载不成功同样会报    
-		without native-hadoop library!
+	without native-hadoop library!
   错误.再看看解压缩LzoDecompressor,原理差不多,不再阐述,代码如下:    
   
 ```
