@@ -52,11 +52,11 @@ pre code{background-color:transparent;border:none;padding:0;word-wrap:normal;}
 pre ol{margin-left:25px;list-style-type:decimal;}
 
 /************layout style*****************/
-#content {width:1060px;margin:90px auto 60px;min-height:400px;height:auto !important;height:400px; }
+#content {width:85%;margin:90px auto 60px;min-height:400px;height:auto !important;height:400px; }
 
 
 /****************entry style**************/
-.sidenav { width:240px; background:#fff; float:right; padding:20px; margin-bottom:50px; box-shadow:0 1px 4px #ccc; }
+.sidenav { width:10%; background:#fff; float:right; padding:20px; margin-bottom:50px; box-shadow:0 1px 4px #ccc; }
 .sidenav h2 { font-size:18px; color:#333; margin-bottom:15px; }
 .sidenav ul { margin-bottom:50px; }
 .sidenav li { margin-bottom:12px; word-break: break-all;}
