@@ -6,7 +6,7 @@ category: blog
 ---
     
     
-## 一 kafka如何处理消费过的数据  
+# 一 kafka如何处理消费过的数据  
 
 
 ## 1.1 	如果想消费已经被消费过的数据    
@@ -45,9 +45,9 @@ category: blog
    
   [详见](http://www.cnblogs.com/fxjwind/p/3794255.html)     
 
-# 3	kafka topic 副本问题
+## 3	kafka副本问题
     
-   Kafka尽量将所有的Partition均匀分配到整个集群上。一个典型的部署方式是一个Topic的Partition数量大于Broker的数量。    
+   kafka尽量将所有的Partition均匀分配到整个集群上。一个典型的部署方式是一个Topic的Partition数量大于Broker的数量。    
    
 ## 3.1 	如何分配副本
    Producer在发布消息到某个Partition时，先通过ZooKeeper找到该Partition的Leader，然后无论该Topic的Replication Factor为多少（也即该Partition有多少个Replica），Producer只将该消息发送到该Partition的Leader。Leader会将该消息写入其本地Log。每个Follower都从Leader pull数据。这种方式上，Follower存储的数据顺序与Leader保持一致.    
@@ -59,19 +59,24 @@ category: blog
     
    [算法详细](http://www.haokoo.com/internet/2877400.html)    
 
-# 4 kafka如何设置生存周期与清理数据
-  日志文件的删除策略非常简单:启动一个后台线程定期扫描log file列表,把保存时间超过阀值的文件直接删除(根据文件的创建时间).清理参数在server.properties文件中：
+## 4	kafka如何设置生存周期与清理数据
+    
+   日志文件的删除策略非常简单:启动一个后台线程定期扫描log file列表,把保存时间超过阀值的文件直接删除(根据文件的创建时间).清理参数在server.properties文件中：
   ![](/images/blog/kafka-question2.jpg)    
   [详见](http://blog.csdn.net/lizhitao/article/details/25667831)或[官网说明](http://kafka.apache.org/documentation.html)    
   
-# 5 zookeeper如何管理kafka    
+
+## 5	zookeeper如何管理kafka 
+    
   1. Producer端使用zookeeper用来"发现"broker列表,以及和Topic下每个partition leader建立socket连接并发送消息.
   2. Broker端使用zookeeper用来注册broker信息,以及监测partition leader存活性.
   3. Consumer端使用zookeeper用来注册consumer信息,其中包括consumer消费的partition列表等,同时也用来发现broker列表,并和partition leader建立socket连接,并获取消息.    
      
+  
 
-# 6 补充问题，kafka能否自动创建topics
-  Server.properties配置文件中的一个参数:***auto.create.topics.enable=true***    
+## 6	补充问题，kafka能否自动创建topics 
+    
+  producer.properties配置文件中的一个参数:***auto.create.topics.enable=true***    
   是否自动创建    
   如果broker中没有topic的信息,当producer/consumer操作topic时,是否自动创建.  
   如果为false,则只能通过API或者command创建topic  
