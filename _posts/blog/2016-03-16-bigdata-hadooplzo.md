@@ -84,10 +84,12 @@ static {
 ```          
 		
 		
+
 # 二 如何安装LZO    
 
 
-1.首先下载https://github.com/kevinweil/hadoop-lzo/,我这里下载到      **/home/guoyun/Downloads//home/guoyun/hadoop/kevinweil-hadoop-lzo-2dd49ec**    
+1.首先下载https://github.com/kevinweil/hadoop-lzo/,我这里下载到 
+			**/home/guoyun/Downloads//home/guoyun/hadoop/kevinweil-hadoop-lzo-2dd49ec**    
 2. 去lzo源码根目录下执行     
 
 ``` 
@@ -98,15 +100,20 @@ static {
 	export CXXFLAGS=-m64
 	ant compile-native tar    
 ```  
-2. 通过ant生成native和jar,命令如下:
-  在build目录下生成对应的tar包,解压缩后,进入该目录可以看到对应的jar包hadoop-lzo-0.4.14.jar.同时将lib/native/Linux-amd64-64/目录下所有文件拷贝到$HADOOP_HOME/lib和/usr/local/lib两个目录下.
+2. 通过ant生成native和jar,命令如下:    
+
+  在build目录下生成对应的tar包,解压缩后,进入该目录可以看到对应的jar包hadoop-lzo-0.4.14.jar.同时将lib/native/Linux-amd64-64/目录下所有文件拷贝到$HADOOP_HOME/lib和/usr/local/lib两个目录下.    
+  
   **注明:**拷贝到/usr/local/lib是便于调试,如是生产环境则无需拷贝.    
 
-  **注意：**如果 Hadoop/lib/目录下没有native/Linux-amd64-64/ 目录，需要手工创建。或者下载hadoop-gpl-compression。参考(http://guoyunsky.iteye.com/blog/1237327),安装步骤中的第四步，复制库文件到hadoop/lib目录下的操作。
+  **注意：**如果 Hadoop/lib/目录下没有native/Linux-amd64-64/ 目录，需要手工创建。或者下载hadoop-gpl-compression。参考(http://guoyunsky.iteye.com/blog/1237327),安装步骤中的第四步，复制库文件到hadoop/lib目录下的操作。     
+  
   ```mv hadoop-gpl-compression-0.1.0/lib/native/Linux-amd64-64/* $HADOOP_HOME/lib/native/Linux-amd64-64/```
- 
-   
-# 三 如何确定是否已经安装好LZO
+		 
+		 
+    
+# 三 如何确定是否已经安装好LZO     
+
   [参考](https://code.google.com/a/apache-extras.org/p/hadoop-gpl-compression/wiki/FAQ?redir=1)
  执行命令:        
  
