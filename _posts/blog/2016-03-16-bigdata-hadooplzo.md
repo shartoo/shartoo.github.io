@@ -5,31 +5,31 @@ category: blog
 description: 大数据
 ---      
 
-# 1 首要问题    
+#1 首要问题    
 
 ##1.1  hadoop-gpl-compression还是hadoop-lzo
- **hadoop-lzo-xxx** 的前身是**hadoop-gpl-compression-xxx**,之前是放在google code下管理,地址:http://code.google.com/p/hadoop-gpl-compression/ .但由于协议问题后来移植到github上,也就是现在的hadoop-lzo-xxx,github,[链接地址](https://github.com/kevinweil/hadoop-lzo).网上介绍hadoop lzo压缩都是基于hadoop-gpl-compression的介绍.而hadoop-gpl-compression还是09年开发的,跟现在hadoop版本已经无法再完全兼容,会发生一些问题.而按照网上的方法,为了兼容hadoop,使用hadoop-lzo-xxx。
+ **hadoop-lzo-xxx** 的前身是**hadoop-gpl-compression-xxx**,之前是放在google code下管理,地址:http://code.google.com/p/hadoop-gpl-compression/ .但由于协议问题后来移植到github上,也就是现在的hadoop-lzo-xxx,github,[链接地址](https://github.com/kevinweil/hadoop-lzo).    
+     网上介绍hadoop lzo压缩都是基于hadoop-gpl-compression的介绍.而hadoop-gpl-compression还是09年开发的,跟现在hadoop版本已经无法再完全兼容,会发生一些问题.而按照网上的方法,为了兼容hadoop,使用hadoop-lzo-xxx。
 
   **原理：**因为hadoop lzo实际上得依赖C/C++开发的lzo去压缩,而他们通过JNI去调用.如果使用hadoop-gpl-compression下的Native,但使用hadoop-lzo-xxx的话,会导致版本不一致问题.所以正确的做法是,将hadoop-lzo-xxx下的Native放入到/usr/local/lib下.而你每升级一个hadoop-lzo-xxx版本,或许就得重复将新lzo版本下的native目录放入/usr/local/lib下.具体需要测试.
 同时这里说下,hadoop-lzo-xxx的验证原理,让我们更系统的了解为什么使用hadoop-lzo会报的一系列错误.   
 1. 首先Hadoop-lzo会通过JNI调用gplcompression,如果调取不到会报Could not load native gpl library异常.具体代码如下:    
 
 ```
-	 static {   
-	try {  
-	      //try to load the lib     
-	      System.loadLibrary("gplcompression");  
-	      nativeLibraryLoaded = true;  
-	      LOG.info("Loaded native gpl library");  
-	    } catch (Throwable t) {  
-	      LOG.error("Could not load native gpl library", t);  
-	      nativeLibraryLoaded = false;  
-	    }  
+static {   
+   try {  
+       //try to load the lib      
+         System.loadLibrary("gplcompression"); 
+         nativeLibraryLoaded = true;  
+         LOG.info("Loaded native gpl library");  
+      } catch (Throwable t) {  
+	  LOG.error("Could not load native gpl library", t);  
+	  nativeLibraryLoaded = false;  
+	 }  
 ```  
    2. 获取了gplcompression后需要初始化加载以便可以调用,如果加载不成功,如我刚才说的版本冲突等也会报一系列错误.同时这里的加载和初始化分成两步,一步是压缩,对应Java的类是LzoCompressor.另一步解压缩,对应Java的类是LzoDecompressor.先看下LzoCompressor是如何加载初始化的,代码如下:      
-   
-   ```
-   Java代码   
+  
+```Java   
 	static {  
 	  if (GPLNativeCodeLoader.isNativeCodeLoaded()) {  
 	    // Initialize the native library  
@@ -54,11 +54,10 @@ description: 大数据
    如我这里所报的警告    
   ```WARN lzo.LzoCompressor: java.lang.NoSuchFieldError: workingMemoryBuf```    
   就是由这里的 **LOG.warn(t.toString())**所抛出.同时这里也会先加载gplcompression,加载不成功同样会报    
-
   ```without native-hadoop library!```    
-  错误.再看看解压缩LzoDecompressor,原理差不多,不再阐述,代码如下:
-	```
-	Java代码  
+  错误.再看看解压缩LzoDecompressor,原理差不多,不再阐述,代码如下:    
+  
+ ```Java
    static {  
 	  if (GPLNativeCodeLoader.isNativeCodeLoaded()) {  
 	    // Initialize the native library  
@@ -79,7 +78,7 @@ description: 大数据
 	    LZO_LIBRARY_VERSION = -1;  
 	  }  
 	}
-	```      
+```      
 	
 # 二 如何安装LZO    
 
