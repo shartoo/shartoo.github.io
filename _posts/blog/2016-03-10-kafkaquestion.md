@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 大数据：kafka常见问题11
+title: 大数据：kafka常见问题
 description: 大数据专题
 category: blog
 ---
@@ -37,7 +37,9 @@ category: blog
   [完整代码](https://cwiki.apache.org/confluence/display/KAFKA/0.8.0+SimpleConsumer+Example)        
     
 
-#  2 kafka partition和consumer数目关系
+#  2 kafka partition和consumer数目关系    
+
+
    1. 如果consumer比partition多，是浪费，因为kafka的设计是在一个partition上是不允许并发的，所以consumer数不要大于partition数 。
    2. 如果consumer比partition少，一个consumer会对应于多个partitions，这里主要合理分配consumer数和partition数，否则会导致partition里面的数据被取的不均匀 。最好partiton数目是consumer数目的整数倍，所以partition数目很重要，比如取24，就很容易设定consumer数目 。
    3. 如果consumer从多个partition读到数据，不保证数据间的顺序性，kafka只保证在一个partition上数据是有序的，但多个partition，根据你读的顺序会有不同 
@@ -45,7 +47,8 @@ category: blog
    
   [详见](http://www.cnblogs.com/fxjwind/p/3794255.html)     
 
-# 3 kafka topic 副本问题
+# 3 kafka topic 副本问题    
+
 
    Kafka尽量将所有的Partition均匀分配到整个集群上。一个典型的部署方式是一个Topic的Partition数量大于Broker的数量。    
    
