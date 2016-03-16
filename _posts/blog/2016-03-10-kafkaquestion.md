@@ -35,9 +35,8 @@ category: blog
   [参考1](http://stackoverflow.com/questions/14935755/how-to-get-data-from-old-offset-point-in-kafka)    
   [参考2](https://cwiki.apache.org/confluence/display/KAFKA/Committing+and+fetching+consumer+offsets+in+Kafka)     
   [完整代码](https://cwiki.apache.org/confluence/display/KAFKA/0.8.0+SimpleConsumer+Example)        
-    
 
-#  2 kafka partition和consumer数目关系    
+#  2 kafka partition和consumer数目关系        
 
 
    1. 如果consumer比partition多，是浪费，因为kafka的设计是在一个partition上是不允许并发的，所以consumer数不要大于partition数 。
@@ -48,7 +47,6 @@ category: blog
   [详见](http://www.cnblogs.com/fxjwind/p/3794255.html)     
 
 # 3 kafka topic 副本问题    
-
 
    Kafka尽量将所有的Partition均匀分配到整个集群上。一个典型的部署方式是一个Topic的Partition数量大于Broker的数量。    
    
