@@ -1,13 +1,12 @@
 ---
-layout:     post
-title:      大数据：kafka常见问题
+layout: post
+title: 大数据：kafka常见问题
+description: 大数据专题
 category: blog
-description: 大数据
----    
+---
     
     
-        
-# 1 kafka如何处理消费过的数据    
+## 一 kafka如何处理消费过的数据  
 
 
 ## 1.1 	如果想消费已经被消费过的数据    
