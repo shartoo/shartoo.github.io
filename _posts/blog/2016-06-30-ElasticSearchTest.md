@@ -16,7 +16,7 @@ category: blog
  测试使用了860万份文档，取自Geonames的POI数据。
 
 
-|项|参数|    
+|||    
 |---|---|
 |文档数|860万| 
 |数据大小|2.8GB(JSON)| 
@@ -27,7 +27,7 @@ category: blog
 
 **服务器配置**
 
-|项|参数|
+|||
 |----|---|
 |核心数|36个real cores,使用超线程可达72个|
 |RAM|256|
@@ -35,6 +35,7 @@ category: blog
 
 
 **默认设置**
+
 + 默认，2个节点都是追加，使用全部默认配置，2个节点运行在一个沙盒中（5个shards,1份拷贝）
 + 4GB heap(ES_HEAP_SIZE)
 + refresh_interval: 30s
@@ -43,7 +44,7 @@ category: blog
 + index.translog.flush_threshold_size: 4g
 
 
-##索引性能
+## 索引性能
 以下图片展示的是ElasticSearch每晚基于master分支代码的性能测试结果。
  ![索引性能测试](/images/blog/索引性能测试.png)
 <hr>
