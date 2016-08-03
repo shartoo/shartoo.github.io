@@ -63,6 +63,16 @@ layout: default
 		(document.getElementsByTagName('head')[0] 
 		 || document.getElementsByTagName('body')[0]).appendChild(ds);
 	  })();
+	
+	<!--加入百度统计代码-->  
+	var _hmt = _hmt || [];
+        (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?92dd25f6b8d1fe006b8d4eece44f19e4";
+        var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+        <!-- 加入百度统计end-->
 	 </script>
        <!-- 多说公共JS代码 end -->
       </div>
@@ -113,16 +123,5 @@ dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
         </ul>
     </div>
 </div>
-
-<!--加入百度统计生成的代码-->
-<script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?92dd25f6b8d1fe006b8d4eece44f19e4";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
 
 <script src="/js/post.js" type="text/javascript"></script>
