@@ -3,6 +3,7 @@ layout: default
 ---
 
 <link rel="stylesheet" href="/js/prettify/prettify.css" />
+<script src="http://jerry-cdn.b0.upaiyun.com/hit-kounter/hit-kounter-0.1.1.js"></script>
 <style type="text/css">
     body { background:##A56666; }
     @media screen and (max-width: 750px){
@@ -17,6 +18,7 @@ layout: default
     <div class="entry">
         <h1 class="entry-title"><a href="{{ page.url }}" title="{{ page.title }}">{{ page.title }}</a></h1>
         <p class="entry-date">{{ page.date|date:"%Y-%m-%d" }}</p>
+        <span data-hk-page="current"> - </span>
         {{ content }}
      
      <!-- 取消Disque的评论插件，改用 多说的
