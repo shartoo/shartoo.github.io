@@ -54,3 +54,9 @@ $n$个样本 $x_i= (x_{i1},x_{i2},x_{i3},...x_{ip})^T,i=1,2..n, n>p $
    </li>  
 ![12](/images/blog/PCA6.jpg)
    
+
+
+| root |pass   |
+|---|---|
+|test|admin|
+|aaa|pop|
