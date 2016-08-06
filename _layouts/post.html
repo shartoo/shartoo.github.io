@@ -38,7 +38,11 @@ layout: default
 <div id="content">
     <div class="entry">
         <h1 class="entry-title"><a href="{{ page.url }}" title="{{ page.title }}">{{ page.title }}</a></h1>
-        浏览量：<span data-hk-page="current"> - </span>次<span class="pause"> | </span>
+        
+        <span id="busuanzi_container_page_pv">
+              本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+        </span>
+        
         <p class="entry-date">{{ page.date|date:"%Y-%m-%d" }}</p>
         
         {{ content }}
