@@ -13,7 +13,12 @@ category: blog
 
 <ol>
 <li>原始指标数据的标准化采集p维随机向量
-<img src="/images/blog/PCA1.png">构造样本阵，对样本元素进行如下标准化变换
+
+$$
+x = (x_1,x_2,...x_p)^T
+$$
+$n$个样本 $x_i= (x_{i1},x_{i2},x_{i3},...x_{ip})^T,i=1,2..n, n>p $
+构造样本阵，对样本元素进行如下标准化变换
 <img src="/images/blog/PCA2.png"> 得标准化矩阵Z。<br></li>
 <li>对标准化矩阵Z求相关系数矩阵<img src="/images/blog/PCA3.png"> </li>
 <li>求解样本相关矩阵R的特征方程<img src="/images/blog/PCA4.png">确定n的值，使信息的利用率达85%以上。<img src="/images/blog/PCA5.png"><br></li>
