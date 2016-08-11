@@ -22,11 +22,9 @@ $$
   $n$个样本 $x_i= (x_{i1},x_{i2},x_{i3},...x_{ip})^T,i=1,2..n, n>p$
 
  构造样本阵，对样本元素进行如下标准化变换
-$$
-Z_{ij}=\frac{x_{ij}-\bar x_j}{s_J},i =1,2,..\pi, j =1,2,...p
+$$Z_{ij}=\frac{x_{ij}-\bar x_j}{s_J},i =1,2,..\pi, j =1,2,...p$$
 
-$$
-   其$中 \bar x_j =\frac{\sum^n_{i-1}x_{ij}}{n},s^2_j =\frac{\sum^n_{i-1}(x_{ij}-\bar x_j)^2}{n-1}$
+其中 $\bar x_j =\frac{\sum^n_{i-1}x_{ij}}{n},s^2_j=\frac{\sum^n_{i-1}(x_{ij}-\bar x_j)^2}{n-1}$
    得标准化矩阵Z。
 
 2. 对标准化矩阵Z求相关系数矩阵    
@@ -36,7 +34,7 @@ $$
 3. 求解样本相关矩阵R的特征方程
 
    $R-\lambda I_p =0$得$p$个特征根，按
-   $\frac{sum^m_{j-1}\lambda _j}{\sum^p_{j-1}\lambda _j}\geq0.85$
+   $\frac{sum^m_{j-1}\lambda _j}{\sum^p_{j-1}\lambda _j}\geq 0.85$
    确定n的值，使信息的利用率达85%以上。对每个 $\lambda_j,i=1,2,..m$ 解方程组$R_b= \lambda_jb$得单位特征向量$b^0_j$
 4. 将标准化后的指标变量转换成主成分。
 
