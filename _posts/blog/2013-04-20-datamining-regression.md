@@ -212,9 +212,10 @@ $$
 |合计| *SST=SSR+SSE* | *n-1* |||
 
 下面展示了 糖含量营养级别回归结果:
+
 ```
-    anova<-aov(data=sugar,rating~sugars)  
-    summary(anova)  
+anova<-aov(data=sugar,rating~sugars)  
+summary(anova)  
                  Df Sum Sq Mean Sq  F value   Pr(>F)  
     sugars       1   8655    8655   102.3    1.15e-15  
     Residuals   75   6342      85                   
@@ -222,7 +223,8 @@ $$
     sugars      ***  
     Residuals        
                ---  
-    Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1  
+  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1  
+
 ```
 
 
