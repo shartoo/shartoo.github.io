@@ -38,6 +38,7 @@ $$\bar y=b_0+b_1x$$
 ![拟合](/images/blog/regression2.png)
 
 使用线性回归模型拟合结果如下：
+
 ```
     lm(data=sugar,rating~sugars)  
     Call:  
@@ -101,7 +102,8 @@ $$
 (y_i-\beta_0-\beta_1x_i) =0
 $$
 
-分别求和，得到：<br>
+分别求和，得到
+
 $$
   \sum^n_{i-1}y_i-nb_0-b_1\sum^a_{i-1}x_i=0
 $$
@@ -237,7 +239,8 @@ summary(anova)
  $$
 
 对于给定数据集,1/n和右边分式分母都是常数，所以第i个观察的杠杆只依赖于 $(x_i-x')^2$。
-一个拥有大于 $\frac {2*(m+1)}{n}$ 和 $\frac{3*(m+1)}{n}$ 的观察点被认为是高杠杆点。<br><br>
+一个拥有大于 $\frac {2*(m+1)}{n}$ 和 $\frac {3*(m+1)}{n}$ 的观察点被认为是高杠杆点。
+
 **异常点** 观测到的偏离回归直（曲）线的点。一种粗略的评价观察值的方法是使用标准残留值 *(standardized residuals)*一般用:
 
 $$
@@ -326,10 +329,11 @@ $$
 $$
 
 相关代码及结果如下：<br>
+
 ```
- lm.reg<-lm(data=sugar,rating~sugars)  
- #level=0.95为置信度  
- confint(lm.reg,level=0.95)  
+lm.reg<-lm(data=sugar,rating~sugars)  
+#level=0.95为置信度  
+confint(lm.reg,level=0.95)  
                     2.5 %    97.5 %  
     (Intercept) 55.402783 63.165952  
     sugars      -2.873567 -1.92807
