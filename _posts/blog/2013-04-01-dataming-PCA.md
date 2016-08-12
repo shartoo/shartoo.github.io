@@ -22,19 +22,19 @@ category: blog
 
 $$Z_{ij}=\frac{x_{ij}-\bar x_j}{s_J},i =1,2,..\pi, j =1,2,...p$$
 
-其中 $\bar x_j =\frac{\sum^n_{i-1}x_{ij}}{n},s^2_j=\frac{\sum^n_{i-1}(x_{ij}-\bar x_j)^2}{n-1}$
+其中$$\bar x_j =\frac{\sum^n_{i-1}x_{ij}}{n},s^2_j=\frac{\sum^n_{i-1}(x_{ij}-\bar x_j)^2}{n-1}$$
 
    得标准化矩阵Z。
 
 2. 对标准化矩阵Z求相关系数矩阵    
 
-    $R = [r_{ij}] xp =\frac{Z^TZ}{n-1}其中r_{ij}=\frac{\sum z_{kj}\cdot z_{kj}}{n-1}, i,j = 1,2...p$
+    $$R = [r_{ij}] xp =\frac{Z^TZ}{n-1}其中r_{ij}=\frac{\sum z_{kj}\cdot z_{kj}}{n-1}, i,j = 1,2...p$$
 
 3. 求解样本相关矩阵R的特征方程
 
    $R-\lambda I_p =0$ 得 $p$ 个特征根，按
-   $\frac{sum^m_{j-1}\lambda _j}{\sum^p_{j-1}\lambda _j}\geq 0.85$
-   确定n的值，使信息的利用率达85%以上。对每个 $\lambda_j,i=1,2,..m$ 解方程组$R_b= \lambda_jb$得单位特征向量$b^0_j$
+   $$\frac{sum^m_{j-1}\lambda _j}{\sum^p_{j-1}\lambda _j}\geq 0.85
+   确定n的值，使信息的利用率达85%以上。对每个 $\lambda_j,i=1,2,..m$ 解方程组$R_b= \lambda_jb$得单位特征向量$b^0_j$$
 4. 将标准化后的指标变量转换成主成分。
 
    $U_{ij}=z^Tb^0_j,j=1,2,...m$
@@ -42,7 +42,6 @@ $$Z_{ij}=\frac{x_{ij}-\bar x_j}{s_J},i =1,2,..\pi, j =1,2,...p$$
    $U_1$称为第一主成分，$U_2$称为第二主成分，$U_3$称为第三主成分，...
 
    对n个主成份进行综合评价。对n个主成份进行加权求和，即得最终评价值，权数为每个主成份的方差贡献率。
-
 
 ## 三 关键性结论
 
