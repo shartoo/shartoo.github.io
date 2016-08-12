@@ -11,9 +11,10 @@ description: 数据挖掘专栏
 
 ### 避免不正交的方法
 
-###（1）分析之前
+### 1分析之前
 
 #### a.逐个计算预测变量之间的相关系数
+
 
 ```
 > cor(sugar$sugars,sugar$shelf)  
@@ -25,6 +26,7 @@ description: 数据挖掘专栏
 可以看到纤维和钾含量存在高度相关性，需要注意
 
 #### b.为预测变量建立矩阵图
+
 
 ```
 > #同时画多个变量的对照图需要使用 car包中的 scatterplotMatrix函数  
@@ -40,7 +42,7 @@ description: 数据挖掘专栏
 <img src="/images/blog/muitllinerandselect1.png">
 可以看到第四张和第六张是纤维和钾的相关图，可以看出他们之间有很强相关性。
 
-###（2）分析之后：方差膨胀因子(variance inflation factors,VIFs)
+### 1.2 分析之后：方差膨胀因子(variance inflation factors,VIFs)
 
 $$
   VIF=\frac{1}{1-R^2_i}
@@ -128,7 +130,7 @@ Warning message:
 下图显示了一个顺序选择的模型概览:
 <img src="/images/blog/muitllinerandselect5.png">
 
-###2.2 向后排除程序
+### 2.2 向后排除程序
 
 向后排除程序是从模型中所有变量或者所有用户自定义变量集开始的。步骤如下:
 
@@ -138,7 +140,11 @@ Warning message:
 
 **实例**：
 起始时模型包含了所有变量，然后计算该模型中每个变量的偏F统计量。例如，这些统计量分别是F(重量\|糖，纤维，....杯子)，F(杯子\|糖，纤维,.....重量\|)。找到最小偏F统计量（ $F_{min}$ ）对应的变量。第一次是重量，此时 $F_{min}$ 不显著，因而从模型中去掉，接下来变量具有最小偏F统计是杯子，也是不显著的，因而需要被剔除。第三次具有最小偏F统计量的是货架2的指标变量，但是Fmin对应的p值并没有大道可以从模型中剔除，因而保留并中断。得到的模型为：
-<img src="/images/blog/muitllinerandselect6.png">
+
+$$
+  y =b_0+b_1(糖)+b_2(纤维)+b_3(钠)+b_4(脂肪)+b_5(蛋白质)+b_6(碳水化合物)+b_7(卡里路)+b_8(维生素)+b_9(钾)+b_10(货架2)+e
+$$
+
 <img src="/images/blog/muitllinerandselect7.png">
 模型1表示包含所有预测变量，模型2中剔除了重量之外所有预测变量，于是有：
 
