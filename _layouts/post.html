@@ -11,10 +11,10 @@ layout: default
     @media screen and (max-width: 750px){
         body { background:#fff; }
     }
-    @media screen and (max-width: 1020px){
+    @media screen and (max-width: 920px){
         body { background:#fff; }
     }
-       table{
+  table{
 		border-collapse: collapse;
 	   	border-spacing: 0 !important;
 	   	border:1px solid #000 !important;
@@ -41,15 +41,15 @@ layout: default
 <div id="content">
     <div class="entry">
         <h1 class="entry-title"><a href="{{ page.url }}" title="{{ page.title }}">{{ page.title }}</a></h1>
-        
+
         <span id="busuanzi_container_page_pv">
               本文总阅读量<span id="busuanzi_value_page_pv"></span>次
         </span>
-        
+
         <p class="entry-date">{{ page.date|date:"%Y-%m-%d" }}</p>
-        
+
         {{ content }}
-     
+
      <!-- 取消Disque的评论插件，改用 多说的
         <div id="disqus_container">
             <div style="margin-bottom:20px" class="right">
@@ -89,14 +89,14 @@ layout: default
 		ds.type = 'text/javascript';ds.async = true;
 		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
 		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
+		(document.getElementsByTagName('head')[0]
 		 || document.getElementsByTagName('body')[0]).appendChild(ds);
 	  })();
-	
+
 	 </script>
        <!-- 多说公共JS代码 end -->
       </div>
-    
+
 <!--       删除Disqus评论系统
 <div id="disqus_thread"></div>
 <script type="text/javascript">
