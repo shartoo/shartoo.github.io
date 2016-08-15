@@ -4,8 +4,8 @@ title: hadoop lzo问题
 description: 大数据专题
 category: blog
 ---
-    
-    
+
+
 ## 一 重要问题       
 
 ## 1.1  hadoop-gpl-compression还是hadoop-lzo
@@ -21,7 +21,7 @@ category: blog
 static {   
    try {  
        //try to load the lib      
-         System.loadLibrary("gplcompression"); 
+         System.loadLibrary("gplcompression");
          nativeLibraryLoaded = true;  
          LOG.info("Loaded native gpl library");  
       } catch (Throwable t) {  
@@ -59,7 +59,7 @@ static {
   就是由这里的 **LOG.warn(t.toString())**所抛出.同时这里也会先加载gplcompression,加载不成功同样会报    
 	`without native-hadoop library!`    
   错误.再看看解压缩LzoDecompressor,原理差不多,不再阐述,代码如下:    
-  
+
 ```
    static {  
 	  if (GPLNativeCodeLoader.isNativeCodeLoaded()) {  
@@ -82,20 +82,19 @@ static {
 	  }  
 	}
 ```          
-		
-		
-
-# 二 如何安装LZO    
 
 
-1.首先下载https://github.com/kevinweil/hadoop-lzo/,我这里下载到 
+
+#  二 如何安装LZO    
+
+1.首先下载https://github.com/kevinweil/hadoop-lzo/,我这里下载到
 			**/home/guoyun/Downloads//home/guoyun/hadoop/kevinweil-hadoop-lzo-2dd49ec**    
 2. 去lzo源码根目录下执行     
 
-``` 
+```
 	wget https://download.github.com/kevinweil-hadoop-lzo-2ad6654.tar.gz  
 	tar -zxvf kevinweil-hadoop-lzo-2ad6654.tar.gz  
-	cd kevinweil-hadoop-lzo-2ad6654 
+	cd kevinweil-hadoop-lzo-2ad6654
 	export CFLAGS=-m64
 	export CXXFLAGS=-m64
 	ant compile-native tar    
@@ -103,20 +102,19 @@ static {
 2. 通过ant生成native和jar,命令如下:    
 
   在build目录下生成对应的tar包,解压缩后,进入该目录可以看到对应的jar包hadoop-lzo-0.4.14.jar.同时将lib/native/Linux-amd64-64/目录下所有文件拷贝到$HADOOP_HOME/lib和/usr/local/lib两个目录下.    
-  
-  **注明:**拷贝到/usr/local/lib是便于调试,如是生产环境则无需拷贝.    
 
+  **注明:**拷贝到/usr/local/lib是便于调试,如是生产环境则无需拷贝.    
   **注意：**如果 Hadoop/lib/目录下没有native/Linux-amd64-64/ 目录，需要手工创建。或者下载hadoop-gpl-compression。参考(http://guoyunsky.iteye.com/blog/1237327),安装步骤中的第四步，复制库文件到hadoop/lib目录下的操作。     
-  
+
   ```mv hadoop-gpl-compression-0.1.0/lib/native/Linux-amd64-64/* $HADOOP_HOME/lib/native/Linux-amd64-64/```
-		 
-		 
-    
+
+
+
 # 三 如何确定是否已经安装好LZO     
 
   [参考](https://code.google.com/a/apache-extras.org/p/hadoop-gpl-compression/wiki/FAQ?redir=1)
  执行命令:        
- 
+
 ```
  % ls -l /usr/lib*/liblzo2*
 -rw-r--r--  1 root root 171056 Mar 20  2006 /usr/lib/liblzo2.a
@@ -131,30 +129,33 @@ lrwxrwxrwx  1 root root     16 Feb 17  2007 /usr/lib64/liblzo2.so.2 -> liblzo2.s
 
  lzo压缩已经广泛用于Hadoop中,至于为什么要在Hadoop中使用Lzo.这里不再重述.其中很重要的一点就是由于分布式计算,所以需要支持对压缩数据进行分片,也就是Hadoop的InputSplit,这样才能分配给多台机器并行处理.所以这里花了一天的时间,看了下Hadoop lzo的源码,了解下Hadooplzo是如何做到的.    
 
- 其实一直有种误解,就是以为lzo本身是支持分布式的,也就是支持压缩后的数据可以分片.我们提供给它分片的逻辑,由lzo本身控制.但看了Hadoop lzo源码才发现,lzo只是个压缩和解压缩的工具,如何分片,是由Hadooplzo(Javad代码里)控制.具体的分片算法写得也很简单,就是在内存中开一块大大的缓存,默认是256K,缓存可以在通过io.compression.codec.lzo.buffersize参数指定.数据读入缓存(实际上要更小一些),如果缓存满了,则交给lzo压缩,获取压缩后的数据,同时在lzo文件中写入压缩前后的大小以及压缩后的数据.所以这里,一个分片,其实就是<=缓存大小.具体lzo文件格式(这里针对Lzop):    
+ 其实一直有种误解,就是以为lzo本身是支持分布式的,也就是支持压缩后的数据可以分片.我们提供给它分片的逻辑,由lzo本身控制.但看了Hadoop lzo源码才发现,lzo只是个压缩和解压缩的工具,如何分片,是由Hadooplzo(Javad代码里)控制.具体的分片算法写得也很简单,就是在内存中开一块大大的缓存,默认是256K,缓存可以在通过io.compression.codec.lzo.buffersize参数指定.数据读入缓存(实际上要更小一些),如果缓存满了,则交给lzo压缩,获取压缩后的数据,同时在lzo文件中写入压缩前后的大小以及压缩后的数据.所以这里,一个分片,其实就是<=缓存大小.具体lzo文件格式(这里针对Lzop):
+
  1.lzo文件头
- + 写入lzo文件标识： 此时长度9
- + 写入版本    
-    ```
+  + 写入lzo文件标识： 此时长度9
+  + 写入版本    
+
+  ```
 	LZOP_VERSION		lzo版本，short，此时长度11
 	LZO_VERSION_LIBRARY	lzo压缩库版本，short，此时长度13
-	LZOP_COMPAT_VERSION	最后lzo应该一直的版本，short，此时长度15     
-   ```    
+	LZOP_COMPAT_VERSION	最后lzo应该一直的版本，short，此时长度15    
+   ```
+
   + 写入压缩策略    
-  + LZO1X_1的话writeByte写入1和5，此时长度17 
+  + LZO1X_1的话writeByte写入1和5，此时长度17
   + writeInt写入flag(标识)，此时长度21    
   + writeInt写入mode(模式)，此时长度25    
   + writeInt写入当前时间秒，此时长度29    
   + writeInt写入0,不知道做何用途，此时长度33   
   + writeBye写入0，不知道做何用途，此时长度34    
   + writeInt写入之前数据的checksum，此时长度38
-    
+
 
  2. 写入多个块,会有多个.循环处理,直到压缩完成
    写入压缩前的数据长度,此时长度为39如果压缩前的长度小于压缩后的长度,则写入未压缩的数据长度,再写入未压缩的数据.反之则写入压缩后的数据长度,以及压缩后的数据    
  3. lzo文件尾,只是写入4个0,不知道做什么用途    		   同时如果你指定索引文件路径的话,则一个缓存写完后便会将写入的数据长度写到索引文件中.如此在Hadoop分布式时只要根据索引文件的各个长度,读取该长度的数据 ,便可交给map处理.     
     以上是hadoop lzo大概原理,同时LzopCodec支持在压缩时又生成对应的索引文件.而LzoCodec不支持.具体代码看下来,还不明确LzoCodec为何没法做到,也是一样的切片逻辑.具体待测试.
-       
+
 # 4 hadoop中使用lzo的压缩    
  在hadoop中使用lzo的压缩算法可以减小数据的大小和数据的磁盘读写时间，不仅如此，lzo是基于block分块的，这样他就允许数据被分解成chunk，并行的被hadoop处理。这样的特点，就可以让lzo在hadoop上成为一种非常好用的压缩格式。    
 
@@ -164,9 +165,9 @@ lrwxrwxrwx  1 root root     16 Feb 17  2007 /usr/lib64/liblzo2.so.2 -> liblzo2.s
 
    + 第一，有些压缩格式不能被分块，并行的处理，比如gzip。    
    + 第二，另外的一些压缩格式虽然支持分块处理，但是解压的过程非常的缓慢，使job的瓶颈转移到了cpu上，例如bzip2。比如我们有一个1.1GB的gzip文件，该文件 被分成128MB/chunk存储在hdfs上，那么它就会被分成9块。为了能够在mapreduce中并行的处理各个chunk，那么各个mapper之间就有了依赖。而第二个mapper就会在文件的某个随机的byte出进行处理。那么gzip解压时要用到的上下文字典就会为空，这就意味这gzip的压缩文件无法在hadoop上进行正确的并行处理。也就因此在hadoop上大的gzip压缩文件只能被一个mapper来单个的处理，这样就很不高效，跟不用mapreduce没有什么区别了。而另一种bzip2压缩格式，虽然bzip2的压缩非常的快，并且甚至可以被分块，但是其解压过程非常非常的缓慢，并且不能被用streaming来读取，这样也无法在hadoop中高效的使用这种压缩。即使使用，由于其解压的低效，也会使得job的瓶颈转移到cpu上去。    
-  
+
   如果能够拥有一种压缩算法，即能够被分块，并行的处理，速度也非常的快，那就非常的理想。这种方式就是lzo。lzo的压缩文件是由许多的小的blocks组成（约256K），使的hadoop的job可以根据block的划分来splitjob。不仅如此，lzo在设计时就考虑到了效率问题，它的解压速度是gzip的两倍，这就让它能够节省很多的磁盘读写，它的压缩比的不如gzip，大约压缩出来的文件比gzip压缩的大一半，但是这样仍然比没有经过压缩的文件要节省20%-50%的存储空间，这样就可以在效率上大大的提高job执行的速度。以下是一组压缩对比数据，使用一个8.0GB的未经过压缩的数据来进行对比：    
-    
+
 
 |压缩格式|文件大小(GB)|压缩时间|解压时间|
 |:-------:|:-----------:|:-------:|:-------:|
