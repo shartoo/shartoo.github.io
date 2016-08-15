@@ -17,7 +17,8 @@ description: 数据挖掘专栏
 
 + 学习阶段：通过分析或从训练集“学习”来构造分类器。训练集由数据元组和相应的类标号组成。
  + **元组**：是用n维向量 $X=(x_1,x_2,x_3...)$ 表示的一条数据记录，其中n维向量表示的是元组X在n个属性上的度量。例如下图中黑边框标记的一条记录的元组表示为：*X=("Ricky Field","Middle_aged","Low")* 该数据有4个属性，分别是 *"name","age","income","Loan_descision"* ，其中属性"Loan_descision"也是分类属性，类标号为"Risky"。
- <img src="/images/blog/classfymain1.png"></li><li>分类阶段，如下图所示，它属于一种映射过程。根据分类模型中的规则，给予测试数据元组X特定的类标号
+ <img src="/images/blog/classfymain1.png">
+ + 分类阶段，如下图所示，它属于一种映射过程。根据分类模型中的规则，给予测试数据元组X特定的类标号
 <img src="/images/blog/classfymain2.png">
 
 ## 三 分类的评估
