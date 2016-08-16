@@ -5,6 +5,8 @@ description: tensorflow
 category: blog
 ---
 
+注: 原文翻译自 [Image Completion with Deep Learning in TensorFlow](https://bamos.github.io/2016/08/09/deep-completion/)
+
 # 一 文章结构
 
 + 入门简介
