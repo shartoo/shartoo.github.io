@@ -97,3 +97,4 @@ CIFAR-10分类问题是机器学习领域的一个通用基准，其问题是将
  *input()*和*inference()* 函数提供了在模型上进行评估的全部所需组件。我们先将注意力移到训练模型。
 
  # 九 模型训练
+  训练一个完成N类分类的网络的常用方法是多项式logstic回归,aka.softmax回归。softmax回归应用一个 [softmax](https://www.tensorflow.org/versions/r0.10/api_docs/python/nn.html#softmax)
