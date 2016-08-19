@@ -156,20 +156,19 @@ CIFAR-10分类问题是机器学习领域的一个通用基准，其问题是将
 
 ## 十一 评估模型
 
-    接下来，我们需要评估我们的训练模型在hold-out数据集上的性能。模型由脚本*cifar10_eval.py*评估。它由*inference()*函数构建模型，并使用cifar-10数据集中的10000张图像。它会计算图像的真实标签的最高预测匹配的频率。
-    为观察模型如何逐步在训练过程提高，评估脚本会阶段性地运行由*cifar10_train.py*脚本创建的checkpoint files。
+接下来，我们需要评估我们的训练模型在hold-out数据集上的性能。模型由脚本*cifar10_eval.py*评估。它由*inference()*函数构建模型，并使用cifar-10数据集中的10000张图像。它会计算图像的真实标签的最高预测匹配的频率。
+ 为观察模型如何逐步在训练过程提高，评估脚本会阶段性地运行由*cifar10_train.py*脚本创建的checkpoint files。
 
     ```
     python cifar10_eval.py
     ```
-    **注意:不要在相同的GPU上运行训练和评估，否则会出现内存不足错误。可以考虑在分开的GPU上运行，或者在运行评估程序时挂起训练程序**
+ **注意:不要在相同的GPU上运行训练和评估，否则会出现内存不足错误。可以考虑在分开的GPU上运行，或者在运行评估程序时挂起训练程序**
 
-    你将会看到如下输出：
+你将会看到如下输出：
     ```
     2015-11-06 08:30:44.391206: precision @ 1 = 0.860
     ...
     ```
-
    脚本极少情况下会返回精确度为precision @ 1 ，当前这个例子返回的是86%的准确率。*cifar10_eval.py*也会导出一些可以在*TensorBoard*里可视化的概要信息。
   训练脚本计算所有的学习参数的变动均值(moving average version)。评估脚本则用变动均值(moving average version)替换所有的学习的模型参数，这些替换将有益于模型评估时的性能。
 
@@ -193,5 +192,15 @@ CIFAR-10分类问题是机器学习领域的一个通用基准，其问题是将
  在设备上放置操作和变量需要一些特殊抽象。
  第一个抽象是我们需要一个函数来计算模型的单个副本的*inference*和梯度。在代码中，我们将这种抽象标为**tower**。我们必须为每个**tower**设置两个参数。
 
-    + 一个*tower*内所有的操作都需要一个独一无二的名字。*tf.name_scope()*通过前置范围的形式提供了方法。比如说，第一个tower,tower_0内的所有操作都会有一个前置 *tower_0/conv1/Conv2D*。
-    + 某个tower的首选硬件设备。*tf.device()*可以来指定。
+  + 一个*tower*内所有的操作都需要一个独一无二的名字。*tf.name_scope()*通过前置范围的形式提供了方法。比如说，第一个tower,tower_0内的所有操作都会有一个前置 *tower_0/conv1/Conv2D*。
+  + 某个tower的首选硬件设备。*tf.device()*可以来指定。比如说，第一个tower的所有的操作使用范围 *device('/gpu:0')* 指明其应当在第一颗GPU上运行。
+
+  所有的变量都会被固定到**CPU**，并且可以通过*tf.get_variable()*在多GPU之间共享。关于如何[共享变量](https://www.tensorflow.org/versions/r0.10/how_tos/variable_scope/index.html)请见下文。
+
+## 十四 在多GPU上运行和训练模型
+
+对于有多颗GPU的机器，使用*cifar10_multi_gpu_train.py*脚本将会更快的训练模型。次代码在多颗GPU之间并行训练模型。
+
+    python cifar10_multi_gpu_train.py --num_gpus=2
+
+GPU数量默认为1.
