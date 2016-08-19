@@ -7,13 +7,13 @@ category: blog
 
 本文翻译自: [使用tensorflow构建简单卷积神经网络](https://www.tensorflow.org/versions/r0.10/tutorials/deep_cnn/index.html)
 
-# 一 概要
+## 一 概要
 
 
 CIFAR-10分类问题是机器学习领域的一个通用基准，其问题是将32X32像素的RGB图像分类成10种类别:`飞机`，`手机`，`鸟`，`猫`，`鹿`，`狗`，`青蛙`，`马`，`船`和`卡车`。
 更多信息请移步[CIFAR-10](http://www.cs.toronto.edu/~kriz/cifar.html)和[Alex Krizhevsky的演讲报告](http://www.cs.toronto.edu/~kriz/learning-features-2009-TR.pdf)
 
-# 二 目标
+## 二 目标
 
 本教程的目标是建立一个相对简单的CNN卷积神经网络用以识别图像。在此过程中，本教程:
 1. 高亮网络架构，训练和验证的典型组织。
@@ -21,7 +21,7 @@ CIFAR-10分类问题是机器学习领域的一个通用基准，其问题是将
 
 选择 CIFAR-10的原因是其复杂程度足以训练tensorFlow拓展成超大模型能力的大部分。同时，于训练而言，此模型也足够小，这对于想实现新想法和尝试新技术堪称完美。
 
-# 三 教程的高亮部分
+## 三 教程的高亮部分
 
   CIFAR-10教程演示了使用TensorFlow构建更大更复杂模型几个重要结构：
 
@@ -32,16 +32,17 @@ CIFAR-10分类问题是机器学习领域的一个通用基准，其问题是将
   + 为消除从磁盘读取模型的延迟和代价极大的图像预处理的预取队列。
 
  我们同时提供了一个[多GPU版本](https://www.tensorflow.org/versions/r0.10/tutorials/deep_cnn/index.html#training-a-model-using-multiple-gpu-cards)的模型演示：
+
  + 配置并行环境下跨多个GPU的训练的单个模型
  + 在多GPU中共享和更新变量
  我们期望此教程能为基于TensorFlow的可视化任务创建更大CNNs模型提供起点。
 
-# 四 模型架构
+## 四 模型架构
 
   CIFAR-10教程中的模型是一个由可选的卷积和非线性层组成的多层架构。这些网络层之后是连接到一个softmax分类器的全连接的网络层。模型遵照Alxe Krizhevsky所描述的模型架设，只是最前面的几层有细微差别。
    此模型获得了一个极致的表现，在一个GPU上训练几个小时可以达到约86%的准确率。下文和代码部分有详细说明。模型由1068298个可学习的参数并且单张图片需要195000000个加乘操作以计算推理。
 
-# 五 代码组织
+## 五 代码组织
 
  此教程的代码位于 [tensorflow/models/image/cifar10](https://www.tensorflow.org/code/tensorflow/models/image/cifar10/)
 
@@ -53,15 +54,16 @@ CIFAR-10分类问题是机器学习领域的一个通用基准，其问题是将
  cifar10_multi_gpu_train.py|在多个GPU上训练CIFAR-10模型
  cifar10_eval.py	|评估CIFAR-10模型的预测性能
 
-# 六 CIFAR-10 模型
+## 六 CIFAR-10 模型
 
   CIFAR-10网络大部分代码在 `cifar10.py`。完整的训练图包括大概765个操作，我们发现通过使用以下模块来构建计算图，我们可以最大限度的重用代码:
+
  1. **模型输入**: inputs() 和 distorted_inputs() 分别是评估和训练的读取并预处理CIFAR图像的加法操作
  2. **模型预测**: inference()是推理加法操作，即在提供的图像中进行分类。
  3. **模型训练**： loss() 和 train() 的加法操作是用来计算损失函数，梯度，变量更新和可视化摘要。
 
 
-# 七 模型输入
+## 七 模型输入
 
   模型的输入部分由从CIFAR-10的二进制文件读取函数 inputs()和distorted_inputs() 完成。这些文件包括固定字节长度的记录，因此我们使用`tf.FixedLengthRecordReader` 。查看**读取数据**来学习*Reader class*如何实现。
   图像将按照以下步骤进行处理：
@@ -70,7 +72,7 @@ CIFAR-10分类问题是机器学习领域的一个通用基准，其问题是将
   + 它们是[ approximately whitened](https://www.tensorflow.org/versions/r0.10/api_docs/python/image.html#per_image_whitening) 用以使模型对动态变化不敏感。
 
   对于训练部分，我们会额外应用一系列随机扭曲来人为增加数据集：
-  
+
   + 将图像随机的左右翻转[随机翻转](https://www.tensorflow.org/versions/r0.10/api_docs/python/image.html#random_flip_left_right)
   + 随机扰乱图像亮度[随机亮度](https://www.tensorflow.org/versions/r0.10/api_docs/python/image.html#random_brightness)
   + 随机扰乱图像对比度[随机对比度](https://www.tensorflow.org/versions/r0.10/api_docs/python/image.html#random_contrast)
@@ -79,7 +81,7 @@ CIFAR-10分类问题是机器学习领域的一个通用基准，其问题是将
 ![](/images/blog/cifar_image_summary.png)
 从磁盘中读取图像并扰乱，可能会消耗不确定的时间。为防止这些操作拖慢训练过程，我们使用16个独立线程不断地从一个TensorFlow队列。
 
-# 八 模型预测
+## 八 模型预测
 
  模型的预测部分由*inference()*函数构建，该操作会添加其他操作以计算预测逻辑。模型的此部分组织如下：
 
@@ -100,7 +102,7 @@ CIFAR-10分类问题是机器学习领域的一个通用基准，其问题是将
 
  *input()*和*inference()* 函数提供了在模型上进行评估的全部所需组件。我们先将注意力移到训练模型。
 
-# 九 模型训练
+## 九 模型训练
 
   训练一个完成N类分类的网络的常用方法是多项式logstic回归,aka.softmax回归。softmax回归在网络输出上应用一个 [softmax](https://www.tensorflow.org/versions/r0.10/api_docs/python/nn.html#softmax)非线性函数并计算标准预测和标签的**1-hot**编码的交叉熵。我们也将通常使用的权值衰减损益应用到所有学习变量上来完成正则化。  模型的目标函数是交叉熵损失之和，以及由 *loss()*函数返回的权值衰减项。
   我们在*TensorBoard*使用**scalar_summary**对其可视化：
@@ -111,7 +113,7 @@ CIFAR-10分类问题是机器学习领域的一个通用基准，其问题是将
   **train()**函数添加必要的操作通过计算梯度和更新学习变量（详见[GradientDescentOptimizer](https://www.tensorflow.org/versions/r0.10/api_docs/python/train.html#GradientDescentOptimizer)）以最小化目标变量。
   该函数返回一个执行所有的训练和更新一批图像所需的计算操作。
 
-# 十 运行和训练模型
+## 十 运行和训练模型
 
    通过运行脚本*cifar10_train.py*训练操作
    ```
@@ -152,7 +154,7 @@ CIFAR-10分类问题是机器学习领域的一个通用基准，其问题是将
 
   损失函数值会随着时间呈现，但是由于训练过程中某些批量数据量过小而出现一些噪音数据。实际情况中，我们发现可视化原生数据之外的均线(moving averages)很有用。可以通过脚本[ExponentialMovingAverage](https://www.tensorflow.org/versions/r0.10/api_docs/python/train.html#ExponentialMovingAverage)查看。
 
-# 十一 评估模型
+## 十一 评估模型
 
     接下来，我们需要评估我们的训练模型在hold-out数据集上的性能。模型由脚本*cifar10_eval.py*评估。它由*inference()*函数构建模型，并使用cifar-10数据集中的10000张图像。它会计算图像的真实标签的最高预测匹配的频率。
     为观察模型如何逐步在训练过程提高，评估脚本会阶段性地运行由*cifar10_train.py*脚本创建的checkpoint files。
