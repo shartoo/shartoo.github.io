@@ -65,10 +65,12 @@ CIFAR-10分类问题是机器学习领域的一个通用基准，其问题是将
 
   模型的输入部分由从CIFAR-10的二进制文件读取函数 inputs()和distorted_inputs() 完成。这些文件包括固定字节长度的记录，因此我们使用`tf.FixedLengthRecordReader` 。查看**读取数据**来学习*Reader class*如何实现。
   图像将按照以下步骤进行处理：
+
   + 它们被裁减成24x24的像素，中央部分用来做评估或随机地用以训练。
   + 它们是[ approximately whitened](https://www.tensorflow.org/versions/r0.10/api_docs/python/image.html#per_image_whitening) 用以使模型对动态变化不敏感。
 
   对于训练部分，我们会额外应用一系列随机扭曲来人为增加数据集：
+  
   + 将图像随机的左右翻转[随机翻转](https://www.tensorflow.org/versions/r0.10/api_docs/python/image.html#random_flip_left_right)
   + 随机扰乱图像亮度[随机亮度](https://www.tensorflow.org/versions/r0.10/api_docs/python/image.html#random_brightness)
   + 随机扰乱图像对比度[随机对比度](https://www.tensorflow.org/versions/r0.10/api_docs/python/image.html#random_contrast)
@@ -109,7 +111,8 @@ CIFAR-10分类问题是机器学习领域的一个通用基准，其问题是将
   **train()**函数添加必要的操作通过计算梯度和更新学习变量（详见[GradientDescentOptimizer](https://www.tensorflow.org/versions/r0.10/api_docs/python/train.html#GradientDescentOptimizer)）以最小化目标变量。
   该函数返回一个执行所有的训练和更新一批图像所需的计算操作。
 
-  # 十 运行和训练模型
+# 十 运行和训练模型
+
    通过运行脚本*cifar10_train.py*训练操作
    ```
    python cifar10_train.py
@@ -128,7 +131,9 @@ CIFAR-10分类问题是机器学习领域的一个通用基准，其问题是将
 2015-11-04 11:46:00.437717: step 50, loss = 4.59 (406.4 examples/sec; 0.315 sec/batch)
 ...
 ```
+
  脚本每运行10次输出一次总的损失函数值。注意：
+
  + 第一批数据可能会相当慢（例如：几分钟），因为预处理线程会将20万张处理过的图像数据填充混洗队列。
  + 输出的损失函数值是最近一批数据的均值，要记得损失函数值是 交叉熵和权值递减项的总和。
  + 密切关注批处理速度，以上数据由 *Tesla K40c*机器上输出，如果在CPU上运行可能会输出比这个更低的速率。
