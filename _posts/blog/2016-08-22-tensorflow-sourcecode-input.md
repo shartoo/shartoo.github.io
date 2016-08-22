@@ -26,6 +26,8 @@ category: blog
   NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN = 50000
   NUM_EXAMPLES_PER_EPOCH_FOR_EVAL = 10000
 
+```
+
   '''
    作用： 读取并解析CIFAR10数据文件抽样数据。  
    注意:  如果需要N路并行读取，N次调用此函数即可。它会返回N个读取不同文件和位置的独立的reader
@@ -39,6 +41,7 @@ category: blog
             label:  一个 int32类型的标签，取值范围 0..9.
             uint8image: 一个[height, width, depth]维度的图像数据
   '''
+```
   def read_cifar10(filename_queue):
     class CIFAR10Record(object):
       pass
@@ -67,8 +70,9 @@ category: blog
     # 将 [depth, height, width] 转换为[height, width, depth].
     result.uint8image = tf.transpose(depth_major, [1, 2, 0])
     return result
+```
 
-  '''
+
    作用： 构建一队列的批量图像和标签
 
    @param  image :             维度为[height, width, 3]的3D张量
@@ -80,8 +84,9 @@ category: blog
    @return
           images:              图像. 维度为 [batch_size, height, width, 3] 的4D张量
           labels:              一维标签，尺寸为 [batch_size]
-  '''
-  def _generate_image_and_label_batch(image, label, min_queue_examples,
+
+```
+    def _generate_image_and_label_batch(image, label, min_queue_examples,
                                       batch_size, shuffle):
 
     # 创建一个混排样本的队列，然后从样本队列中读取 'batch_size'数量的 images + labels数据（每个样本都是由images + labels组成）
