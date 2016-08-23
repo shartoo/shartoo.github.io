@@ -18,6 +18,6 @@ category: blog
 
 ## padding的类别
 
-![padding](/img/blog/padding-example.png)
+![padding](/images/blog/padding-example.png)
 
 用一个3x3的网格在一个28x28的图像上做切片并移动,移动到边缘上的时候，如果不超出边缘，3x3的中心就到不了边界，因此得到的内容就会缺乏边界的一圈像素点，只能得到26x26的结果。而可以越过边界的情况下，就可以让3x3的中心到达边界的像素点，超出部分的矩阵补零就行
