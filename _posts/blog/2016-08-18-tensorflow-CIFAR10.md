@@ -14,7 +14,7 @@ category: blog
 CIFAR-10分类问题是机器学习领域的一个通用基准，其问题是将32X32像素的RGB图像分类成10种类别:`飞机`，`手机`，`鸟`，`猫`，`鹿`，`狗`，`青蛙`，`马`，`船`和`卡车`。
 更多信息请移步[CIFAR-10](http://www.cs.toronto.edu/~kriz/cifar.html)和[Alex Krizhevsky的演讲报告](http://www.cs.toronto.edu/~kriz/learning-features-2009-TR.pdf)
 
-[测试](_posts\blog\2016-08-18-tensorflow-CIFAR10.md#L45)
+
 ## 二 目标
 
 本教程的目标是建立一个相对简单的CNN卷积神经网络用以识别图像。在此过程中，本教程:
