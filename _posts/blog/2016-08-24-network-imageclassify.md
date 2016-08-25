@@ -44,7 +44,7 @@ category: blog
      y^{c_1}=\sum_cX^c*W^{c,c_1}
   $$
 
-  矩阵 $wc,c_1\epsilon R_{w\times h}$ 称之为卷积核。属于卷积层的参数，一般通过随机梯度下降更新。$x^c$ 为输入数据的第 c 个特征图，但在一些情况下，也会在图像的周围补白。符号 ∗ 表示二维数据的卷积运算。卷积定义为
+  矩阵 $w_{c,c_1}\epsilon R_{w\times h}$ 称之为卷积核。属于卷积层的参数，一般通过随机梯度下降更新。$x^c$ 为输入数据的第 c 个特征图，但在一些情况下，也会在图像的周围补白。符号 ∗ 表示二维数据的卷积运算。卷积定义为
   $$
     (X^c*W^{c,c_1})=\sum_{m,n}x^c_{m,n}w^{c,c_1}_{u-m,v-n}
   $$
@@ -136,7 +136,7 @@ $$
 
   LRN层做的事是对当前层的输出结果做平滑处理。下图是示例:
 
-  ![LRN示例](/images/blog/lrn.png)
+  ![LRN示例](/images/blog/lrn.jpg)
  前后几层（对应位置的点）对中间这一层做一下平滑约束。
 
   输入时一个三维信号$x\epsilon R^{W\times H\times C}$，输出也是一个三维信号$y\epsilon R^{W\times H\times C}$ 局部响应一体化层（Local Response Normalization）通过如下公式计算：
