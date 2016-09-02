@@ -184,7 +184,15 @@ $$
    y = -log(Z_k)
 $$
 该损失函数主要应用与单类别分类问题中。
+下图是$softmax$函数的坐标轴图像:
+![softmax_function](/images/blog/softmax_function.png)
+从数学上来看，非线性的Sigmoid函数对中央区的信号增益较大，对两侧区的信号增益小，在信号的特征空间映射上，有很好的效果。
+从神经科学上来看，中央区酷似神经元的兴奋态，两侧区酷似神经元的抑制态，因而在神经网络学习方面，可以将重点特征推向中央区，将非重点特征推向两侧区。
 
+### 4.2   近似神经激活函数:Softplus&ReLu
+
+2001年，神经科学家Dayan、Abott从生物学角度，模拟出了脑神经元接受信号更精确的激活模型，该模型如下图所示:
+![softplus](/images/blog/Softplus_function1.png)
 
 
 <hr>
