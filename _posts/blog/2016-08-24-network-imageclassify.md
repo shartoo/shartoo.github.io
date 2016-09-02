@@ -4,6 +4,7 @@ title: 深度学习：卷积神经网络与图像识别基本概念
 description: 神经网络基础
 category: blog
 ---
+
 ## 一 卷积神经网络的组成
 
  图像分类可以认为是给定一副测试图片作为输入 $I \epsilon R^{W×H×C}$，输出该图片
