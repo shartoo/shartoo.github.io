@@ -48,10 +48,9 @@ test_filepaths, test_labels = read_label_file(dataset_path + test_labels_file)
 
 ## 在字符串列表上选择性地做一些处理
 
-   接下来，我们将图像数据的相对路径转换为绝对路径，同时将训练数据和测试数据拼接在一起。然后混洗数据并创建我们自己的训练和测试集合。
-   为使脚本输出结果易于理解，我们将只从数据集中抽样20个样本。
+接下来，我们将图像数据的相对路径转换为绝对路径，同时将训练数据和测试数据拼接在一起。然后混洗数据并创建我们自己的训练和测试集合。为使脚本输出结果易于理解，我们将只从数据集中抽样20个样本。
 
-   ```
+```
 # transform relative path into full path
 train_filepaths = [ dataset_path + fp for fp in train_filepaths]
 test_filepaths = [ dataset_path + fp for fp in test_filepaths]
@@ -63,28 +62,31 @@ all_labels = train_labels + test_labels
 # we limit the number of files to 20 to make the output more clear!
 all_filepaths = all_filepaths[:20]
 all_labels = all_labels[:20]
+
 ```
 
 ## 开始构建pipelines
 
-  确保我们所使用 *tensor*的数据类型*dtype*与列表中的已有的数据是一致的。载入以下包可以创建我们的tensorflow对象
+确保我们所使用 *tensor*的数据类型*dtype*与列表中的已有的数据是一致的。载入以下包可以创建我们的tensorflow对象
 
-  ```
+```
   from tensorflow.python.framework import ops
   from tensorflow.python.framework import dtypes
   # convert string into tensors
   all_images = ops.convert_to_tensor(all_filepaths, dtype=dtypes.string)
   all_labels = ops.convert_to_tensor(all_labels, dtype=dtypes.int32)
-  ```
+```
 
 ## 开始对数据分区
 
-   这一步是可选的。鉴于我们已经将我们的20个样本置于一个大集合之中，我们需要执行一些*partition*操作来构建测试机和训练集。tensorflow可以在tensors上即时完成，所以不必预先做。如果对 partition操作感到困惑，可以参考[tensorflow partition](https://www.tensorflow.org/versions/r0.9/api_docs/python/array_ops.html#dynamic_partition).我们将 *test_set_size*设置为5个样本。下图显示了如何从数据集中随机选出训练集和测试集
-   ![tensorflow partition操作示例图](/images/blog/tensorflow_partition.png)
-   注意*partition*类似于位置因子或标签，数据某个位置上的不同标签将会将数据分成不同部分。
+这一步是可选的。鉴于我们已经将我们的20个样本置于一个大集合之中，我们需要执行一些*partition*操作来构建测试机和训练集。tensorflow可以在tensors上即时完成，所以不必预先做。如果对 partition操作感到困惑，可以参考[tensorflow partition](https://www.tensorflow.org/versions/r0.9/api_docs/python/array_ops.html#dynamic_partition).我们将 *test_set_size*设置为5个样本。下图显示了如何从数据集中随机选出训练集和测试集
 
-   ```
-   # create a partition vector
+   ![tensorflow partition操作示例图](/images/blog/tensorflow_partition.png)
+
+注意*partition*类似于位置因子或标签，数据某个位置上的不同标签将会将数据分成不同部分。
+
+```
+# create a partition vector
 partitions = [0] * len(all_filepaths)
 partitions[:test_set_size] = [1] * test_set_size
 random.shuffle(partitions)
