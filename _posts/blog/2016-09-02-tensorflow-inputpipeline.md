@@ -18,12 +18,15 @@ category: blog
 ## 载入标签数据
 
  假定我们有如下数据集：
+
  ```
  dataset_path      = "/path/to/out/dataset/mnist/"
 test_labels_file  = "test-labels.csv"
 train_labels_file = "train-labels.csv"
 ```
+
 首先要做的事情就是从生成的文本文件中载入图像和标签信息。**注意，我们并不是要训练模型,所以不需要进行one-hot编码**
+
 ```
 def encode_label(label):
   return int(label)
@@ -43,7 +46,7 @@ train_filepaths, train_labels = read_label_file(dataset_path + train_labels_file
 test_filepaths, test_labels = read_label_file(dataset_path + test_labels_file)
 ```
 
- ## 在字符串列表上选择性地做一些处理
+## 在字符串列表上选择性地做一些处理
 
    接下来，我们将图像数据的相对路径转换为绝对路径，同时将训练数据和测试数据拼接在一起。然后混洗数据并创建我们自己的训练和测试集合。
    为使脚本输出结果易于理解，我们将只从数据集中抽样20个样本。
@@ -65,6 +68,7 @@ all_labels = all_labels[:20]
 ## 开始构建pipelines
 
   确保我们所使用 *tensor*的数据类型*dtype*与列表中的已有的数据是一致的。载入以下包可以创建我们的tensorflow对象
+
   ```
   from tensorflow.python.framework import ops
   from tensorflow.python.framework import dtypes
