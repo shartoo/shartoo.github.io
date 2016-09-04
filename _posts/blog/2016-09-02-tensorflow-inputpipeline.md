@@ -100,7 +100,7 @@ train_labels, test_labels = tf.dynamic_partition(all_labels, partitions, 2)
 
  *slice_input_producer*将tensors切分成许许多多的单个实例，并使用多线程将它们入队列。关于进一步的参数，比如线程数和队列容量等需要参考API文档。然后，我们使用路径信息将文件读入到 *pipelines*，然后使用*jpg decoder*解码（也可以使用其他解码器）。
 
- ```
+```
  # create input queues
 train_input_queue = tf.train.slice_input_producer(
                                     [train_images, train_labels],
@@ -117,12 +117,14 @@ train_label = train_input_queue[1]
 file_content = tf.read_file(test_input_queue[0])
 test_image = tf.image.decode_jpeg(file_content, channels=NUM_CHANNELS)
 test_label = test_input_queue[1]
+
 ```
 
 ## 分组抽样并汇成一批批
 
  如果在*session*中执行*train_image*，你将会得到一张图片信息（比如,(28,28,1)），这是我们的mnist图像的维度。在一张图片上训练模型是十分低效的，因此我们将图像汇入队列中称为一批，并在这一批批的数据上训练。目前为止，我们没有开始 *runners*来载入图像，只是描述了 *pipelines*初步形象，此时tensorflow 尚不了解图像的形状。使用**tf.train_batch**之前，需要先定义图像张量的*shape*，以便于将图像汇成一批批数据。此示例中，我们使用的是5个样本作为一批数据。
- ```
+
+```
  # define tensor shape
 train_image.set_shape([IMAGE_HEIGHT, IMAGE_WIDTH, NUM_CHANNELS])
 test_image.set_shape([IMAGE_HEIGHT, IMAGE_WIDTH, NUM_CHANNELS])
@@ -139,14 +141,16 @@ test_image_batch, test_label_batch = tf.train.batch(
                                     batch_size=BATCH_SIZE
                                     #,num_threads=1
                                     )
+
 ```
 
 ## 运行 Queue Runners并启动session
 
+
  上面的步骤已经完成 *input pipelines*的构建。但是若此时去访问比如*test_image_batch*，将不会有任何数据，因为我们并没有启动载入队列并将数据注入到 tensorflowd对象中的线程。完成这一步之后，接下来是两个循环，其一是处理训练数据，其二是吹测试数据。
  你可能留意到循环次数比每个数据的抽样数据大
 
- ```
+```
  with tf.Session() as sess:
 
   # initialize the variables
@@ -168,10 +172,12 @@ test_image_batch, test_label_batch = tf.train.batch(
   coord.request_stop()
   coord.join(threads)
   sess.close()
-  ```
-  但是从下面的输出结果看，你就会知道tensorflow不关心回合数(epochs)。我们不会混洗数据（查看input slicer的参数），同时 input pipelines只是在训练集上按照既定频率循环。你自己应该确保回合数(epochs)的准确性。尝试着调节 *batch size*和 *shuffle*并预测这将如何改变输出结果。你能预测到如果 *batch_size*改成4而不是5将会改变什么吗？
 
-  ```
+```
+
+但是从下面的输出结果看，你就会知道tensorflow不关心回合数(epochs)。我们不会混洗数据（查看input slicer的参数），同时 input pipelines只是在训练集上按照既定频率循环。你自己应该确保回合数(epochs)的准确性。尝试着调节 *batch size*和 *shuffle*并预测这将如何改变输出结果。你能预测到如果 *batch_size*改成4而不是5将会改变什么吗？
+
+```
   tf-env)worker1:~$ python mnist_feed.py
 I tensorflow/stream_executor/dso_loader.cc:105] successfully opened CUDA library libcublas.so locally
 I tensorflow/stream_executor/dso_loader.cc:105] successfully opened CUDA library libcudnn.so locally
@@ -221,6 +227,7 @@ from the test set:
 [0 4 5 3 8]
 [0 4 5 3 8]
 [0 4 5 3 8]
+
 ```
 由于我们混洗了 partition 向量，很显然你会得到不同的标签。但是注意，此处重点是理解tensorflow的载入机制是如何工作的。因为每我们的 *batch size*与测试集合的一样大。
 
