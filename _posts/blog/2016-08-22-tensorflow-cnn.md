@@ -17,6 +17,36 @@ category: blog
   + Depth: 数据的深度(通道数)，图像数据是三维的，长宽和RGB，神经网络的预测输出也属于一维
   + 池化：就是在图像上采样，抽取部分数据。
 
+  ## 误差函数
+
+    令$y_j(n)$记为在输出层第$j$个神经元输出产生的函数信号。相应的，神经元$j$输出所产生的误差信号定义为：
+
+    $$
+             e_j(n)=d_j(n)-y_j(n)
+    $$
+
+    其中$d_j(n)$是响应向量$d(n)$的第$j$个元素。那么**瞬时误差能量**(*instaneous error energy*)定义为:
+
+    $$
+        \Im _j(n)=\frac{1}{2}e^2_j(n)
+    $$
+
+    将所有输出层误差能量相加，得到整个网络的全部瞬时误差能量:
+
+    $$
+        \Im (n)=\sum _{j\epsilon C}\Im(n)=\frac{1}{2}\sum_{i\epsilon C}e^2_j(n)
+    $$
+
+  其中集合C包括输出层的所有神经元。设训练样本中包含N个样例，训练样本上的**平均误差能量(error energy averaged over the training sample)**或者说经验风险(empirical risk)定义为:
+
+  $$
+      \Im_{av}(N) = \frac{1}{N}\sum^N_{n=1}\Im (n)=\frac{1}{2N}\sum^N_{n=1}\sum_{j\epsilon C}e^2_j(n)
+  $$
+
+  ## epoch 回合
+
+     epoch可以理解为回合，一回合代表全部输入数据都走了一遍训练过程，神经网络的训练可能需要经历m个回合。注意：虽然每个回合都是全部输入数据，但是每次输入的组合(即batch组合)是随机的，因为每个batch都是随机从输入样本中抽取固定数量的样本，因而每次的组合各不相同。
+
 ## padding的类别
 
 ![padding](/images/blog/padding-example.png)
