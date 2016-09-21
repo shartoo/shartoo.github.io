@@ -20,12 +20,13 @@ category: blog
  + 随着数据集的海量增加和内存限制，一次载入所有数据不现实。
  + 以Rprop的方式迭代，会由于各个batch之间的采样差异性，各此梯度修正值相互抵消，无法修正。这才有了后来的**RMSprop**的妥协方案。
 
- ## Full Batch Learning的另一个极端 Online Learning
+## Full Batch Learning的另一个极端 Online Learning
+
  既然 Full Batch Learning 并不适用大数据集，那么走向另一个极端怎么样？所谓另一个极端，就是每次只训练一个样本，即 Batch_Size = 1。这就是**在线学习(Online Learning)** 。线性神经元在均方误差代价函数的错误面是一个抛物面，横截面是椭圆。对于多层神经元、非线性网络，在局部依然近似是抛物面。使用在线学习，每次修正方向以各自样本的梯度方向修正，横冲直撞各自为政，**难以达到收敛**
 
  ![batch_size](/images/blogs/batch_size1.png)
 
- ## 选取适中的batch_size
+## 选取适中的batch_size
 
   可不可以选择一个适中的 Batch_Size 值呢？当然可以，这就是**批梯度下降法（Mini-batches Learning）**。因为如果数据集足够充分，那么用一半（*甚至少得多*）的数据训练算出来的梯度与用全部数据训练出来的梯度是**几乎一样**的。
   在合理范围内，增大 Batch_Size 有何好处？
