@@ -45,9 +45,9 @@ category: blog
 
   这里跑一个 LeNet 在 MNIST 数据集上的效果。MNIST 是一个手写体标准库
 
-   ![batch_size](/images/blog/batch_size1.png)
+   ![batch_size](/images/blog/batch_size2.png)
 
-  运行结果如上图所示，其中绝对时间做了标幺化处理。运行结果与上文分析相印证：
+  运行结果如上图所示，其中绝对时间做了标准化处理。运行结果与上文分析相印证：
   + Batch_Size 太小，算法在 200 epoches 内不收敛。
   + 随着 Batch_Size 增大，处理相同数据量的速度越快。
   + 随着 Batch_Size 增大，达到相同精度所需要的 epoch 数量越来越多。
