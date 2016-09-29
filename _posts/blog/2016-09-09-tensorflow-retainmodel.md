@@ -5,11 +5,11 @@ category: blog
 description: tensorflow
 ---
 
-本文整理自 (retrain network)[https://www.tensorflow.org/versions/r0.10/how_tos/image_retraining/index.html]
+本文整理自 [retrain network](https://www.tensorflow.org/versions/r0.10/how_tos/image_retraining/index.html)
 
 ## 在Flowers数据集上重新训练
 
-!(flowers数据集)[/images/blog/retain_flowers.jpg]
+![flowers数据集](/images/blog/retain_flowers.jpg)
 
 训练开始之前你需要一些数据集，以告诉网络，你有哪些新分类需要学习。后面的部分会道明如何准备自己的数据，首先按照如下操作下载一些数据集
 
