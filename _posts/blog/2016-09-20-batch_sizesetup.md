@@ -24,7 +24,7 @@ category: blog
 
  既然 Full Batch Learning 并不适用大数据集，那么走向另一个极端怎么样？所谓另一个极端，就是每次只训练一个样本，即 Batch_Size = 1。这就是**在线学习(Online Learning)** 。线性神经元在均方误差代价函数的错误面是一个抛物面，横截面是椭圆。对于多层神经元、非线性网络，在局部依然近似是抛物面。使用在线学习，每次修正方向以各自样本的梯度方向修正，横冲直撞各自为政，**难以达到收敛**
 
- ![batch_size](/images/blogs/batch_size1.png)
+ ![batch_size](/images/blog/batch_size1.png)
 
 ## 选取适中的batch_size
 
@@ -45,7 +45,7 @@ category: blog
 
   这里跑一个 LeNet 在 MNIST 数据集上的效果。MNIST 是一个手写体标准库
 
-   ![batch_size](/images/blogs/batch_size1.png)
+   ![batch_size](/images/blog/batch_size1.png)
 
   运行结果如上图所示，其中绝对时间做了标幺化处理。运行结果与上文分析相印证：
   + Batch_Size 太小，算法在 200 epoches 内不收敛。
