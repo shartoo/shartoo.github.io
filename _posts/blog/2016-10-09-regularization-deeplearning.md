@@ -1,3 +1,10 @@
+---
+layout: post
+title: 深度学习：参数正规化
+description: deep learning基础
+category: blog
+---
+
 # 第七章 深度学习中的正规化
 ## 7.1 概念
 
