@@ -5,7 +5,6 @@ description: deep learning基础
 category: blog
 ---
 
-# 第七章 深度学习中的正规化
 ## 7.1 概念
 
   深度学习中用以减小测试误差，但可能会增加训练误差的策略称为正规化。
