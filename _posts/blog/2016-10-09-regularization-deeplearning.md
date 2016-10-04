@@ -13,7 +13,7 @@ category: blog
 
   深度学习中大部分正规化策略都是基于估计正规化，而估计正规化则是通过增加偏置来减少方差。(>比如，神经网络中的神经元都有一个偏置项b<)。 一个估计的正规化的目标是在大幅度减小方差的同时，尽可能小的带来偏置的增加。我们在讨论泛化和过拟合问题时会遇到以下三种情形:
 
-  ![拟合情况](D:\workspace\github\shartoo.github.com/images/blog/regular1.png)
+  ![拟合情况](/images/blog/regular1.png)
 
   <p align="Center">图7.1</p>
 
@@ -82,7 +82,7 @@ L2范数是指向量各元素的平方和然后求平方根。我们让L2范数�
 
  过拟合的时候，拟合函数的系数往往非常大，为什么？如下图(图7.2)所示，过拟合，就是拟合函数需要顾及每一个点，最终形成的拟合函数波动很大。在某些很小的区间里，函数值的变化很剧烈。这就意味着函数在某些小区间里的导数值（绝对值）非常大，由于自变量值可大可小，所以只有系数足够大，才能保证导数值很大。
 
- ![L2正则化示例](D:\workspace\github\shartoo.github.com/images/blog/regular2.png)
+ ![L2正则化示例](/images/blog/regular2.png)
 
  <p align="Center">图7.2</p>
 
@@ -178,7 +178,7 @@ $$
 
  下图(图7.3)展示了一个多任务学习方法的常见形式，不同的监督学习任务(对于给定输入X预测输出Y)，共享了相同的输入X，以及一些中间表述层 $h^{shared}$ (捕获参数的一些平均特征)。
 
- ![](D:\workspace\github\shartoo.github.com/images/blog/regular3.png)
+ ![](/images/blog/regular3.png)
 
  <p align="Center">图7.3</p>
 
@@ -190,7 +190,7 @@ $$
 
  看一张图(图7.4)：
 
- ![](D:\workspace\github\shartoo.github.com/images/blog/regular4.png)
+ ![](/images/blog/regular4.png)
 
  <p align="Center">图7.4</p>
 
@@ -312,7 +312,7 @@ $$
 
 集成学习方法的简单示例:
 
- ![拟合情况](D:\workspace\github\shartoo.github.com/images/blog/regular5.png)
+ ![拟合情况](/images/blog/regular5.png)
 
   <p align="Center">图7.5</p>
 
@@ -326,11 +326,11 @@ $$
 
  集成学习方法需要训练多个模型，如果模型巨大，无法实现。dropout训练的是从基础（原始）网络中移除非输出单元构成的全部子网的集合。下图（图7.6）展示了此过程。
 
- ![dropout训练过程](D:\workspace\github\shartoo.github.com/images/blog/regular6.png)
+ ![dropout训练过程](/images/blog/regular6.png)
 <p align="Center">图7.6</p>
   集成学习定义了k个模型，k个从训练数据集中抽样的自集。dropout的目标就是模拟这一过程。训练dropout过程中，我们使用了一个基于*mini-batch*的学习算法，如*SGD*(随机梯度下降)。每载入一个样本到*mini-batch*时，对网络中所有输入和隐藏神经元应用一个二进制掩码，决定每个神经元是否被纳入（二进制掩码为1时），每个神经元取掩码值得过程是独立抽样。掩码取值为1的概率在训练之前就固定的，一般取值是，输入神经元0.8，隐藏神经元0.5。下图是一个前馈网络示例:
 
-   ![dropout训练过程](D:\workspace\github\shartoo.github.com/images/blog/regular7.png)  
+   ![dropout训练过程](/images/blog/regular7.png)  
   <p align="Center">图7-7</p>
 
   集成学习的模型都是独立的(每个模型参数和训练数据)，dropout的每个模型的参数都是原网络参数的一个子集，这种共享机制使得dropout 网络有能力表述指数级的特征。**集成学习**每个子模型分别在其训练子集中收敛，而在dropout中，大部分模型并没有得到完全训练（不是每个模型都达到了收敛状态），其魔性太大无法穷尽。dropout网络中，子网的某些部分在迭代中一步步训练，同时参数共享机制使得剩余子网的参数达到一个较好的状态。
@@ -371,9 +371,6 @@ $$
   **优点二:** 对模型类型和训练过程没有太大限制。几乎对所有使用分布式表述(*distribute representation*)并使用SGD的模型都可以很好。
 
   **注意:** 尽管dropout的每一步代价不高，但是整体权衡下来还是会比较高，作为一种正则化技术，会削弱模型性能，增大模型可以一定程度上抵消这种削弱，但是切记勿得不偿失。一般标签分类任务中，如果样本较少，比如少于5000时，dropout性能一般。
-
-  pandoc -t beamer D:\workspace\github\shartoo.github.com\_posts\blog\2016-10-09-regularization-deeplearning.md  -o test.pdf
-
 
 ## 7.13 对抗训练
 
