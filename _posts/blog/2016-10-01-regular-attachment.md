@@ -12,7 +12,7 @@
 泰勒级数（英语：Taylor series）用无限项连加式——级数来表示一个函数，这些相加的项由函数在某一点的导数求得。如果  在点x=x0具有任意阶导数，则幂级数
 
 $$
-\sum_{n=0}^{\infity}\frac{f^{(n)}(x_0)}{n!}(x-x_0)^n=f(x_0)+f'(x_0)(x-x_0)+\frac{f''(x_0))}{2!}(x-x_0)^2+...
+\sum_{n=0}^{\infty}\frac{f^{(n)}(x_0)}{n!}(x-x_0)^n=f(x_0)+f'(x_0)(x-x_0)+\frac{f''(x_0))}{2!}(x-x_0)^2+...
 $$
 
 称为  在点x0处的泰勒级数
@@ -117,8 +117,56 @@ $$
  对于方程组Ra=y，R为n×m矩阵，且n<m。则方程组有无穷多组解，此时称方程组为欠定方程组。
  内点法和梯度投影法是目前解欠定方程组的常用方法。
 
+## 多元线性回归参数估计问题
 
- ## 几何概率
+### 回归参数的最小二乘估计
+
+对于含有k个解释变量的多元线性回归模型
+
+$$
+ Y_i=\beta_0+\beta_1X_{1i}+\beta_2X_{2i}+...+\beta_kX_{ki}+\mu_i
+$$
+
+设 $\bar \beta_0,\bar \beta_2,\bar \beta_2,..\bar \beta_k$ 分别作为参数 $\beta_0,\beta_1,\beta_2,...\beta_k$ 的估计量，得样本回归方程为：
+
+$$
+   Y_i=\bar \beta_0+\bar \beta_1X_{1i}+\bar \beta_2X_{2i}+...+\bar \beta_kX_{ki}
+$$
+
+观测值 $Y_i$ 与回归值 $\bar Y_i$ 的残差 $e_i$ 为：
+
+ $$
+  e_i=Y_i-\bar Y_i=Y_i-(\bar \beta_0+\bar \beta_1X_{1i}+\bar \beta_2X_{2i}+...+\bar \beta_kX_{ki})
+ $$
+
+由最小二乘法可知 $\bar \beta_0,\bar \beta_2,\bar \beta_2,..\bar \beta_k$ 应使全部观测值$Y_i$ 与回归值 $\bar Y_i$ 的残差 $e_i$ 的平方和最小，即使
+
+$$
+  Q(\bar \beta_0,\bar \beta_2,\bar \beta_2,..\bar \beta_k)=\sum e^2_i=\sum(Y-\bar Y_i)^2\\
+  =\sum(Y_i-\bar \beta _0-\bar \beta_1X_{1i}-\bar \beta_2X_{2i}-...\bar \beta_kX_{ki})
+$$
+
+取得最小值。令 $Y=(Y_i,Y_1,Y_2,..Y_n),X=(x_0,x_1,...x_n),\bar B=(\bar \beta_0,\bar \beta_2,\bar \beta_2,..\bar \beta_k)$  ,上式可写为
+
+$$
+Q((\bar \beta_0,\bar \beta_2,\bar \beta_2,..\bar \beta_k)=(Y-\bar BX)^T(Y-\bar BX)\\
+=(Y^TY-Y^TX\bar B-\bar BX^TY+\bar B^TX^TX\bar B)\\
+=Y^TY-2\bar B^TX^TY+\bar B^TX^TX\bar B
+$$
+
+根据多元函数的极值原理，$Q$ 分别对 $\bar \beta_0,\bar \beta_2,\bar \beta_2,..\bar \beta_k$ 求一阶偏导，并令其等于零，即
+
+$$
+ \frac{\partial Q}{\partial \bar \beta _j}=0(j=0,1,2...k)
+$$
+
+即 $-X^TY+X^TX\bar B=0$ 。则为向量 $B$ 的估计量为
+
+$$
+  \bar B= (X^TX)^{-1}X^TY
+$$
+
+## 几何概率
 
   几何概率(*geometric probability*)可以用几何方法向某一可度量的区域求得的概率。向区域内投一质点，如果所投的点落在域*O*中任意区域*g*内的可能性大小与*g*的度量成正比，而与*g*的具体形状无关，则称这个随机试验为几何型随机试验或几何概率。此处的度量就是测度，一维是长度，二维是面积，三维是体积。对于几何概率，若记 $A = 质点落在区域g内$ 这一事件，则其概率定义为
 
