@@ -102,7 +102,7 @@ $$
  =  max_{a,b} f(x0)+a\times g(x0)+b\times h(x0) = f(x0)
 $$
 
-可以看到上述本质上是说 $min_xf(x)+a*g(x)+b*h(x)$ 在 $x_0$ 取得了最小值，用fermat定理，即是说对于函数 $f(x)+a*g(x)+b*h(x)$，求取导数要等于零，即 $f(x)的梯度+a*g(x)的梯度+b*h(x)的梯度 = 0$
+可以看到上述本质上是说 $min_xf(x)+a\times g(x)+b\times h(x)$ 在 $x_0$ 取得了最小值，用fermat定理，即是说对于函数 $f(x)+a\times g(x)+b\times h(x)$，求取导数要等于零，即 $f(x)的梯度+a\times g(x)的梯度+b*h(x)的梯度 = 0$
 
 这就是kkt条件中第一个条件：$L(a, b, x)$ 对 $x$ 求导为零。
 
