@@ -206,13 +206,13 @@ $$
 +  $\Omega (\theta)\gt k$时 $\alpha$ 增加
 + $\Omega(\theta)<k$时 $\alpha$ 减小
 
-所有的正 $\alpha$ 都会缩小 $\Omega(\theta)$ ，而最优的 $\alpha ^*$ 会缩小 $\Omega(\theta)$ 但是不会使得 $\Omega(\theta)$ 过于小于k。为了解受限条件的效果，我们可以固定 $\alpha ^*$，将问题转化为 $\theta$ 的函数。
+所有的正 $\alpha$ 都会缩小 $\Omega(\theta)$ ，而最优的 $\alpha ^* $ 会缩小 $\Omega(\theta)$ 但是不会使得 $\Omega(\theta)$ 过于小于k。为了解受限条件的效果，我们可以固定 $\alpha ^* $，将问题转化为 $\theta$ 的函数。
 
 $$
   \theta ^* =arg\quad min_{\theta}L(\theta,\alpha ^*)=arg\quad min_{\theta}J(\theta;X,y)+\alpha ^*\Omega(\theta)
 $$
 
-该式子与最小化 $\widetilde J$ 的正则化训练问题完全一致。可以将参数正则惩罚问题看做权重约束。通过系数 $\alpha ^*$ 的权重衰减，无法知晓约束区域，因为 $\alpha^*$ 并没有直接指明k的值。我们可以求解k,但k与 $\alpha^*$ 的关系依赖于 $J$ 的形式。
+该式子与最小化 $\widetilde J$ 的正则化训练问题完全一致。可以将参数正则惩罚问题看做权重约束。通过系数 $\alpha ^* $ 的权重衰减，无法知晓约束区域，因为 $\alpha^* $ 并没有直接指明k的值。我们可以求解k,但k与 $\alpha^*$ 的关系依赖于 $J$ 的形式。
 
 虽然无法精确制导约束区间大小，但是可通过调整 $\alpha$ 来控制，$\alpha$ 增加，则约束区间减小，反之则增大（参照惩罚项）。
 
