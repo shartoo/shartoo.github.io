@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 深度学习：mxnet重新训练inceptionv3模型
-description: deep learning基础
+description: deep learning实战
 category: blog
 ---
 
