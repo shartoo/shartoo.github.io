@@ -240,6 +240,7 @@ from the test set:
 完整代码如下：
 
 ```
+
 # Example on how to use the tensorflow input pipelines. The explanation can be found here ischlag.github.io.
 import tensorflow as tf
 import random
@@ -356,4 +357,4 @@ with tf.Session() as sess:
   coord.join(threads)
   sess.close()
 
-  ```
+```
