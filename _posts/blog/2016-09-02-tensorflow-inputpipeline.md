@@ -177,6 +177,7 @@ test_image_batch, test_label_batch = tf.train.batch(
 
 但是从下面的输出结果看，你就会知道tensorflow不关心回合数(epochs)。我们不会混洗数据（查看input slicer的参数），同时 input pipelines只是在训练集上按照既定频率循环。你自己应该确保回合数(epochs)的准确性。尝试着调节 *batch size*和 *shuffle*并预测这将如何改变输出结果。你能预测到如果 *batch_size*改成4而不是5将会改变什么吗？
 
+
 ```
   tf-env)worker1:~$ python mnist_feed.py
 I tensorflow/stream_executor/dso_loader.cc:105] successfully opened CUDA library libcublas.so locally
@@ -216,7 +217,9 @@ from the train set:
 [1 7 2 6 9]
 [5 4 1 9 2]
 [1 3 1 3 6]
+
 from the test set:
+
 [0 4 5 3 8]
 [0 4 5 3 8]
 [0 4 5 3 8]
@@ -229,9 +232,12 @@ from the test set:
 [0 4 5 3 8]
 
 ```
+
 由于我们混洗了 partition 向量，很显然你会得到不同的标签。但是注意，此处重点是理解tensorflow的载入机制是如何工作的。因为每我们的 *batch size*与测试集合的一样大。
 
 ## 完整代码
+
+完整代码如下：
 
 ```
 # Example on how to use the tensorflow input pipelines. The explanation can be found here ischlag.github.io.
