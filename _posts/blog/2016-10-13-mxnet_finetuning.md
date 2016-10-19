@@ -52,8 +52,8 @@ python ~/mxnet/example/image-classification/fine_tune_0923.py --data-dir    # �
 
 ## 模型预测
 
-  预测代码：
+预测代码：
 
-  ```
+```
 python ~/mxnet/example/image-classification/0923_predict.py --prefix ./save0923/ --epoch 17 --path ../img_t6_val/
-  ```
+```
