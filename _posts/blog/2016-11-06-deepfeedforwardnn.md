@@ -119,14 +119,62 @@ $$
 
  最大似然框架易于学习高斯分布的方差，使得高斯分布的协方差成为输入的一个函数。但是所有的输入其输出必须为正的有限的矩阵。
 
- #### 3.2.2 Bernoulli输出分布的Sigmoid神经元
+#### 3.2.2 Bernoulli输出分布的Sigmoid神经元
 
 许多二分类问题都可以使用Sigmoid神经元输出。最大似然估计的方法是定义一个在条件 $x$ 上的 $y$ 的Bernoulli分布。
 
 定义Bernoulli 分布只需要一个参数（概率），神经网络只需预测概率 $P(y=1\|x)$ 即可。假若使用线性激活神经元，网络输出的预测概率
 
 $$
-  P(y=1\|x) =max \lbrace 0,min\lbrace 1,w^Th+b\rbrace \rbrace
+  P(y=1\mid x) =max \lbrace 0,min\lbrace 1,w^Th+b\rbrace \rbrace
 $$
 
-其中 $w^Th+b$ 很容易就不在区间 [0,1]上，为0.梯度为0，如何保证一直有较强的梯度呢？我们选用 Sigmoid 作为
+其中 $w^Th+b$ 很容易就不在区间 [0,1]上，为0.梯度为0，如何保证一直有较强的梯度呢？我们选用 Sigmoid 作为激活函数即可。Sigmoid激活神经元的输出为
+
+$$
+  \bar y = \sigma (w^Th+b)
+$$
+
+而 $\sigma (x) =\frac{1}{1+e^{-x}}$ 。我们可以把 $sigma$ 输出单元看做两个组成部分：1.第一步是一个线性层，计算输出 $z= w^Th+b$ 即可。2. 使用**Sigmoid**将输出 $z$ 转换为概率。
+
+我们考虑如何使用上面提到的 $z$ 来定义 $y$ 上的概率分布。我们可以通过构建一个非正态概率分布 $\tilde p(y)$(概率和不等于1)来理解 **Sigmoid**。下面是公式推导过程:
+
+先假设对数概率在y,z上是线性
+
+$$
+  log\tilde p(y)=yz \quad \\
+$$
+
+取指数得非正态概率
+
+$$
+  \tilde p(y)  =exp(yz)
+$$
+
+对每个概率除以总概率即可归一化（概率和为1）
+
+$$
+  p(y) =\frac{exp(yz)}{\sum^1_{y'=0}exp(y'z)}
+$$
+
+通过对 $z$ 的Sigmoid转换，获取一个Bernoulli分布
+
+$$
+ p(y) =\sigma ((2y-1)z)
+$$
+
+此方法来预测对数空间的概率可以用最大似然方法。因为最大似然的代价函数是 $-log p(y\mid x)$ ，这个对数log 移除了Sigmoid中的指数式exp。如果没有这一步，sigmoid的饱和性会阻止梯度学习。
+
+使用sigmoid参数化的Bernoulli分布的最大似然学习过程的损失函数如下:
+
+$$
+ J(\theta) = -log P(y\mid x) \\
+ =-log \sigma ((2y-1)z) \\
+ =\varsigma ((2y-1)z)
+$$
+
+重写softplus损失函数中的部分项，我们可以看到当(1-2y)z，是负数且很大时，损失函数loss才会饱和。**只有当模型基本准确时，才会出现饱和现象，其中 $y=1$ 时，z将会是很大的正数(very positive), $y=0$ 时，z是很小的负数(very negative)**。如果使用其他损失函数，如均方差， $\sigma (z)$ 饱和时，损失函数就会饱和。
+
+#### 3.2.3  多重Bernoulli分布Softmax输出神经元
+
+softmax是sigmoid函数的普遍形式，用于多分类。用在输出层，作为一个分类器，表述为多个分类上的概率分布。
