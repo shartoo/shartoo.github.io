@@ -47,7 +47,7 @@ category: blog
 
  其中 $y \epsilon \lbrace0,1\rbrace$ ，$c_i(x)\epsilon \lbrace0,1\rbrace$ 表明 $x$ 是否为人脸。使用多模型消耗更多时间，但是所有模型共享相同的LAB特征映射（用来特征抽取）。
 
- ### 2.2  Coarse MLP cascade 粗粒度多层感知机级联
+### 2.2  Coarse MLP cascade 粗粒度多层感知机级联
 
   LAB级联阶段之后，大部分非人脸窗口被抛弃，剩下的部分对于单个LAB 特征难以处理。因此，接下来，候选窗口将交给更复杂的分类器来处理，比如带 **SURF（Speeded-up Robust Feature）** 的MLP。为避免增加太多计算，小型网络被开发为更好，但是依旧粗粒度的校验。
 
