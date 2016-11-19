@@ -24,12 +24,11 @@ category: blog
   ~/mxnet/bin/im2rec temp.lst ../all_img/ test.rec resize=480 quality=90
  ```
 
- 示例代码为:
+示例代码为:
 
- ```
+```
  /home/xiatao/mxnet/bin/im2rec train_BackLight.txt /data/bot_img/bot_secondround/all/ train_backlight.rec resize=480 quality=90
-
- ```
+```
 
 ## 训练代码
 
