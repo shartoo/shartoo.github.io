@@ -164,21 +164,21 @@ $$
 
 那么人脸对齐问题是需要寻找一个梯度方向步长，使得下面的目标函数误差最小：
 $$
- f(x_0+\triangle x)=\mid\mid h (d(x_0+\tiangle x))-\phi _0\mid\mid ^2_2
+ f(x_0+\triangle x)=\mid\mid h (d(x_0+\triangle x))-\phi _0\mid\mid ^2_2
 $$
 
-其中 $\phi _#=h(d(x_#))$ 是人工标定的66个标记点的SIFT特征向量，在训练阶段 $\phi _#$ 和 $\triangle x$ 都是知道的。
+其中 $\phi _#=h(d(x_*))$ 是人工标定的66个标记点的SIFT特征向量，在训练阶段 $\phi _*$ 和 $\triangle x$ 都是知道的。
 
 好了，用牛顿法求解上述问题，其迭代的公式为：
 
 $$
- x_k=x_{k-1}-2H^{-1}J_h^T(\phi _{k-1}-\phi _#)
+ x_k=x_{k-1}-2H^{-1}J_h^T(\phi _{k-1}-\phi _*)
 $$
 
 其中，H和J分别表示Hessian矩阵和雅克比矩阵。它可以被进一步的拆分为下面的迭代公式：
 
 $$
- x_k=x_{k-1}+R_{k-1}\phi _{k-1}+2H^{-1}J_h^T\phi_#
+ x_k=x_{k-1}+R_{k-1}\phi _{k-1}+2H^{-1}J_h^T\phi_*
 $$
 
 注意到，既然H和J难求，那就直接求它们的乘积，即可，于是上述的迭代公式又可以变为：
