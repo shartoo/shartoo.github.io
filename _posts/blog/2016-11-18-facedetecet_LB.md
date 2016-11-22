@@ -167,7 +167,7 @@ $$
  f(x_0+\triangle x)=\mid\mid h (d(x_0+\triangle x))-\phi _0\mid\mid ^2_2
 $$
 
-其中 $\phi _#=h(d(x_*))$ 是人工标定的66个标记点的SIFT特征向量，在训练阶段 $\phi _*$ 和 $\triangle x$ 都是知道的。
+其中 $\phi _*=h(d(x_*))$ 是人工标定的66个标记点的SIFT特征向量，在训练阶段 $\phi _*$ 和 $\triangle x$ 都是知道的。
 
 好了，用牛顿法求解上述问题，其迭代的公式为：
 
