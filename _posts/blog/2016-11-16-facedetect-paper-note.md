@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Funnel-structured cascade for multi-view face detection with alignmentawareness 论文阅读笔记
+title: 《漏斗形级联结构的多角度人脸检测算法》论文阅读笔记
 description: 图像处理笔记
 category: blog
 ---
