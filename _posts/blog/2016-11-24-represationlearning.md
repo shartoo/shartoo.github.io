@@ -103,7 +103,7 @@ zero-shot是一种特殊形式的迁移学习。同样的原理可以解释如�
  
 ### 2.2 实例
  
- 1.游戏之间的参数迁移
+ **1.游戏之间的参数迁移**
  
    Deepmind的作品 progressive neural network. [ progressive neural network](https://link.zhihu.com/?target=https%3A//arxiv.org/pdf/1606.04671v3.pdf) 文章里将三个小游戏Pong, Labyrinth, Atari 通过将已学其一的游戏的parameter 通过一个 lateral connection feed 到一个新游戏。有一个视频展示了其结果 [游戏之间迁移学习参数](https://www.youtube.com/watch?v=aWAP_CWEtSI) 。迁移学习的一个简单框架如下图
  
@@ -111,15 +111,22 @@ zero-shot是一种特殊形式的迁移学习。同样的原理可以解释如�
   
  迁移学习的一篇博客介绍参考 [从虚拟到现实，迁移深度增强学习让机器人革命成为可能！](https://zhuanlan.zhihu.com/p/21470871)
 
-2. 图像之间迁移学习
+**2. 图像之间迁移学习**
 
-  最近比较火的风格图像生成，`tensorflow`,`caffe`,`torch`都出了对应的开源代码。比如 tensorflow的 [eural-style](https://github.com/anishathalye/neural-style)
+ 最近比较火的风格图像生成，`tensorflow`,`caffe`,`torch`都出了对应的开源代码。比如 tensorflow的 [eural-style](https://github.com/anishathalye/neural-style)。
+  该代码的原理论文来自 [图像风格迁移学习](http://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Gatys_Image_Style_Transfer_CVPR_2016_paper.pdf)
   
    ![迁移学习](/images/blog/repretation12.jpg)
    
- 
-  
-### 3 半监督解释因果关系
+上图中，输入图像被表示为CNN不同阶段地的被过滤后的图像集合,处理层次越深，过滤器的数量越多，尺寸越小（CNN中使用了最大池化），这导致了每一层的神经元总数减少。
+
++ **内容重构：**上图中，仅仅使用已知的输入图像在每一层的网络得响应来可视化了CNN不同阶段处理，上图重构的是输入图像在原始**VGG网络**在`conv1 2` (a),`1conv2 2` (b), `conv3 2` (c), `conv4 2` (d) 和 `conv5 2` (e)上的重构信息。
+
++ **风格重构：**在原始CNN网络的顶层激活函数，使用的是输入图像的质地信息作为特征。风格表征计算不同CNN网络层之间的不同特征的相关性。这可以构建图像，其风格与输入图像上不断增长的特征尺寸相仿，同时丢弃场景中全局布局信息。
+
+关于风格的计算参考该论文。
+
+## 3 半监督解释因果关系
 
  如何确定一种表征比另外一种更好？我们假设，最理想的表征的特征能够追溯到观测数据分布的本质。特征空间中不同的特征或方向源于不同的促因，从而使得表征有能力将这些促因区分。如果y是产生x的重要原因之一，那么 $p(x)$ 可能是计算 $p(y\mid x)$ 的一种良好表征形式。
 
