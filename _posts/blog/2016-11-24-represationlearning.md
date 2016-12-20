@@ -101,7 +101,7 @@ zero-shot是一种特殊形式的迁移学习。同样的原理可以解释如�
 ![迁移学习](/images/blog/representation3.png)
 
  
- ### 2.2 实例
+### 2.2 实例
  
  1.游戏之间的参数迁移
  
@@ -115,7 +115,7 @@ zero-shot是一种特殊形式的迁移学习。同样的原理可以解释如�
 
   最近比较火的风格图像生成，`tensorflow`,`caffe`,`torch`都出了对应的开源代码。比如 tensorflow的 [eural-style](https://github.com/anishathalye/neural-style)
   
-   ![迁移学习](/images/blog/representation12.jpg)
+   ![迁移学习](/images/blog/repretation12.jpg)
    
  
   
