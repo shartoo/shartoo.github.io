@@ -98,8 +98,8 @@ zero-shot学习要求T被表示为某种泛化的形式。例如，T不仅仅是
 
 zero-shot是一种特殊形式的迁移学习。同样的原理可以解释如何能执行多模态学习(multimodal learning)，学习两种模态的表示，和一种模态中的观察x 和另一种模态中的观察y 组成的对(x; y) 之间的关系（通常是一个联合分）(Srivastavaand Salakhutdinov, 2012)。通过学习所有的三组参数（从x 到它的表示，从y 到它的表示，以及两个表示之间的关系），一个表示中的概念被锚定在另一个表示中，反之亦然，从而可以有意义地推广到新的对组。这个过程如图15.3所示。
 
-![迁移学习](/images/blog/representation3.png)
-
+![迁移学习](/images/blog/representation3.png) 
+关于迁移学习应用到机器翻译中，我们可以参考谷歌翻译的得 [谷歌发布 Zero-Shot 神经机器翻译系统：AI 巴别塔有望成真](http://www.im2maker.com/news/20161123/f0995a12c3328fc8.html)								
  
 ### 2.2 实例
  
