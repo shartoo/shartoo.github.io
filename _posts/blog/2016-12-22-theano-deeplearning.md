@@ -248,4 +248,4 @@ class AbstractConv2d(AbstractConv):
                                              filter_dilation=filter_dilation)
 ```
 
-从代码中可以看到，它实际是`super(AbstractConv2d, self)`继续调用父类`AbstractConv`的`super(AbstractConv2d, self)``的构造方法。但是`theano`中此处的父类是个抽象类，它在执行```super(AbstractConv2d, self)```时，实际是调用了自己的构造方法（）。
+从代码中可以看到，它实际是`super(AbstractConv2d, self)`继续调用父类`AbstractConv`的`super(AbstractConv2d, self)`的构造方法。但是`theano`中此处的父类是个抽象类，它在执行```super(AbstractConv2d, self)```时，实际是调用了自己的构造方法。
