@@ -41,7 +41,9 @@ IOU=SI/(SA+SB-SI)
 
 就这样一直重复，找到所有被保留下来的矩形框。
 
+### 1.3 一张图概览RCNN
 
+![RCNN相关方法对比](/images/blog/rcnn11.png)
 
 ## 二 RCNN
 
@@ -90,7 +92,98 @@ IOU=SI/(SA+SB-SI)
 
 
 
+## 三 Fast RCNN
 
+### 3.1 引入原因
+
+ FRCNN针对RCNN在训练时是multi-stage pipeline和训练的过程中很耗费时间空间的问题进行改进。它主要是将深度网络和后面的SVM分类两个阶段整合到一起，使用一个新的网络直接做分类和回归。主要做以下改进:
+
+1. 最后一个卷积层后加了一个ROI pooling layer。ROI pooling layer首先可以将image中的ROI定位到feature map，然后是用一个单层的SPP layer将这个feature map patch池化为固定大小的feature之后再传入全连接层。
+
+2. 损失函数使用了多任务损失函数(multi-task loss)，将边框回归直接加入到CNN网络中训练。
+
+### 3.2 模型
+
+fast rcnn 的结构如下
+
+![fast rcnn结构](/images/blog/rcnn7.png)
+
+图中省略了通过ss获得proposal的过程，第一张图中红框里的内容即为通过ss提取到的proposal，中间的一块是经过深度卷积之后得到的conv feature map，图中灰色的部分就是我们红框中的proposal对应于conv feature map中的位置，之后对这个特征经过ROI pooling layer处理，之后进行全连接。在这里得到的ROI feature vector最终被分享，一个进行全连接之后用来做softmax回归，用来进行分类，另一个经过全连接之后用来做bbox回归。
+
+**注意：** 对中间的Conv feature map进行特征提取。每一个区域经过RoI pooling layer和FC layers得到一个 **固定长度** 的feature vector(这里需要注意的是，输入到后面RoI pooling layer的feature map是在Conv feature map上提取的，故整个特征提取过程，只计算了一次卷积。虽然在最开始也提取出了大量的RoI，但他们还是作为整体输入进卷积网络的，最开始提取出的RoI区域只是为了最后的Bounding box 回归时使用，用来输出原图中的位置)。
+
+
+### 3.3 SPP网络
+
+何恺明研究员于14年撰写的论文，主要是把经典的Spatial Pyramid Pooling结构引入CNN中，从而使CNN可以处理任意size和scale的图片；这中方法不仅提升了分类的准确率，而且还非常适合Detection，比经典的RNN快速准确。
+
+本文不打算详细解释SPP网络，只介绍其中的SPP-layer，由于fast rcnn会使用到SPP-layer。
+
+**SPP layer**
+
+根据pooling规则，每个pooling   bin（window）对应一个输出，所以最终pooling后特征输出由bin的个数来决定。本文就是分级固定bin的个数，调整bin的尺寸来实现多级pooling固定输出。
+
+如图所示，layer-5的unpooled FM维数为16*24，按照图中所示分为3级，
+
+![fast rcnn结构](/images/blog/rcnn8.png)
+
+第一级bin个数为1，最终对应的window大小为16*24；
+
+第二级bin个数为4个，最终对应的window大小为4*8
+
+第三级bin个数为16个，最终对应的window大小为1*1.5（小数需要舍入处理）
+
+通过融合各级bin的输出，最终每一个unpooled FM经过SPP处理后，得到了1+4+16维的SPPed FM输出特征，经过融合后输入分类器。
+
+这样就可以在任意输入size和scale下获得固定的输出；不同scale下网络可以提取不同尺度的特征，有利于分类。
+
+
+### 3.4  RoI pooling layer
+
+每一个RoI都有一个四元组（r,c,h,w）表示，其中（r，c）表示左上角，而（h，w）则代表高度和宽度。这一层使用最大池化（max pooling）来将RoI区域转化成固定大小的H*W的特征图。假设一个RoI的窗口大小为h*w,则转换成H*W之后，每一个网格都是一个h/H * w/W大小的子网，利用最大池化将这个子网中的值映射到H*W窗口即可。Pooling对每一个特征图通道都是独立的，这是SPP layer的特例，即只有一层的空间金字塔。
+
+### 3.5 从预训练的网络中初始化数据
+
+有三种预训练的网络：CaffeNet，VGG_CNN_M_1024，VGG-16，他们都有5个最大池化层和5到13个不等的卷积层。用他们来初始化Fast R-CNN时，需要修改三处：
+
+①最后一个池化层被RoI pooling layer取代
+
+②最后一个全连接层和softmax被替换成之前介绍过的两个兄弟并列层
+
+③网络输入两组数据：一组图片和那些图片的一组RoIs
+
+### 3.6 检测中的微调
+
+使用BP算法训练网络是Fast R-CNN的重要能力，前面已经说过，SPP-net不能微调spp层之前的层，主要是因为当每一个训练样本来自于不同的图片时，经过SPP层的BP算法是很低效的（感受野太大）. Fast R-CNN提出SGD mini_batch分层取样的方法：首先随机取样N张图片，然后每张图片取样R/N个RoIs  e.g.  N=2 and R=128
+除了分层取样，还有一个就是FRCN在一次微调中联合优化softmax分类器和bbox回归，看似一步，实际包含了多任务损失（multi-task loss）、小批量取样（mini-batch sampling）、RoI pooling层的反向传播（backpropagation through RoI pooling layers）、SGD超参数（SGD hyperparameters）。
+
+
+
+## 4 Faster RCNN
+
+Faster R-CNN统一的网络结构如下图所示，可以简单看作RPN网络+Fast R-CNN网络。
+
+![fast rcnn结构](/images/blog/rcnn9.png)
+
+原理步骤如下:
+
+1. 首先向CNN网络【ZF或VGG-16】输入任意大小图片；
+
+2. 经过CNN网络前向传播至最后共享的卷积层，一方面得到供RPN网络输入的特征图，另一方面继续前向传播至特有卷积层，产生更高维特征图；
+
+3. 供RPN网络输入的特征图经过RPN网络得到区域建议和区域得分，并对区域得分采用非极大值抑制【阈值为0.7】，输出其Top-N【文中为300】得分的区域建议给RoI池化层；
+
+4. 第2步得到的高维特征图和第3步输出的区域建议同时输入RoI池化层，提取对应区域建议的特征；
+
+5. 第4步得到的区域建议特征通过全连接层后，输出该区域的分类得分以及回归后的bounding-box。
+
+### 4.1 单个RPN网络结构
+
+单个RPN网络结构如下:
+
+![fast rcnn结构](/images/blog/rcnn10.png)
+
+**注意：** 上图中卷积层/全连接层表示卷积层或者全连接层，作者在论文中表示这两层实际上是全连接层，但是网络在所有滑窗位置共享全连接层，可以很自然地用n×n卷积核【论文中设计为3×3】跟随两个并行的1×1卷积核实现
 
 
 
@@ -121,4 +214,6 @@ IOU=SI/(SA+SB-SI)
 
 [Faster RCNN论文笔记](http://blog.csdn.net/qq_17448289/article/details/52871461)
 
-[]()
+[Fast RCNN简要笔记](http://www.cnblogs.com/RayShea/p/5568841.html)
+
+[SPP网络](http://www.itdadao.com/articles/c15a296465p0.html)
