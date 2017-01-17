@@ -229,6 +229,127 @@ RPN网络被ImageNet网络【ZF或VGG-16】进行了有监督预训练，利用�
 
 #### 4.5.3 RPN网络微调训练
 
+PASCAL VOC 数据集中既有物体类别标签，也有物体位置标签；
+正样本仅表示前景，负样本仅表示背景；
+回归操作仅针对正样本进行；
+训练时弃用所有超出图像边界的anchors，否则在训练过程中会产生较大难以处理的修正误差项，导致训练过程无法收敛；
+对去掉超出边界后的anchors集采用非极大值抑制，最终一张图有2000个anchors用于训练【详细见下】；
+对于ZF网络微调所有层，对VGG-16网络仅微调conv3_1及conv3_1以上的层，以便节省内存。
+
+**SGD mini-batch采样方式：** 同Fast R-CNN网络，采取 `image-centric` 方式采样，即采用层次采样，先对图像取样，再对anchors取样，同一图像的anchors共享计算和内存。每个mini-batch包含从一张图中随机提取的256个anchors，正负样本比例为1:1【当然可以对一张图所有anchors进行优化，但由于负样本过多最终模型会对正样本预测准确率很低】来计算一个mini-batch的损失函数，如果一张图中不够128个正样本，拿负样本补凑齐。
+
+**训练超参数选择：** 在PASCAL VOC数据集上前60k次迭代学习率为0.001，后20k次迭代学习率为0.0001；动量设置为0.9，权重衰减设置为0.0005。
+
+多任务目标函数【`分类损失+回归损失`】具体如下：
+
+$$
+
+ L(\{p_i\},\{t_i\})=\frac{1}{N_{cls}}\sum _i L_{cls}(p_i,p_i^*)+\lambda \frac{1}{N_{reg}}\sum _i p_i ^* L_{reg}(t_i,t_i^*)
+
+$$
+
++ `i` 为一个anchor在一个mini-batch中的下标
+
++ $p_i$ 是anchor i为一个object的预测可能性
+
++ $p_i^*$ 为ground-truth标签。如果这个anchor是positive的，则ground-truth标签 $p_i^*$ 为1，否则为0。
+
++ $t_i$ 表示表示正样本anchor到预测区域bounding box的4个参数化坐标，【**以anchor为基准的变换**】
+
++ $t_i^*$ 是这个positive anchor对应的ground-truth  box。【**以anchor为基准的变换**】
+
++ $L_{cls}$  分类的损失（classification loss），是一个二值分类器（是object或者不是）的softmax loss。其公式为 $L_{cls}(p_i,p_i^*)=-log[p_i*p_i^*+(1-p_i^*)(1-p_i)]$
+
++ $L_{reg}$ 回归损失（regression loss），$L_{reg}(t_i,t_i^*)=R(t_i-t_i^*)$ 【两种变换之差越小越好】，其中R是Fast R-CNN中定义的robust ross function (smooth L1)。$p_i^*L_{reg}$ 表示回归损失只有在positive anchor（ $p_i^*=1$ )的时候才会被激活。cls与reg层的输出分别包含{$p_i$}和{ $t_i$ }。R函数的定义为:
+$smooth_{L1}(x)= 0.5x^2 \quad if \mid x\mid <1 \quad otherwise \quad \mid x \mid-0.5$
+
++ λ参数用来权衡分类损失 $L_{cls}$ 和回归损失 $L_reg$ ，默认值λ=10【文中实验表明 λ从1变化到100对mAP影响不超过1%】；
+
++ $N_{cls}$ 和 $N_{reg}$ 分别用来标准化分类损失项 $L_{cls}$ 和回归损失项 $L_{reg}$，默认用mini-batch size=256设置 $N_{cls}$，用anchor位置数目~2400初始化 $N_{reg}$，文中也说明标准化操作并不是必须的，可以简化省略。
+
+#### 4.5.4 RPN网络、Fast R-CNN网络联合训练
+
+训练网络结构示意图如下所示：
+
+![fast rcnn结构](/images/blog/rcnn13.png)
+
+如上图所示，**RPN网络、Fast R-CNN网络联合训练是为了让两个网络共享卷积层，降低计算量**。
+
+文中通过4步训练算法，交替优化学习至共享特征：
+
+1. 进行上面RPN网络预训练，和以区域建议为目的的RPN网络end-to-end微调训练。
+
+2. 进行上面Fast R-CNN网络预训练，用第①步中得到的区域建议进行以检测为目的的Fast R-CNN网络end-to-end微调训练【此时无共享卷积层】。
+
+3. 使用第2步中微调后的Fast R-CNN网络重新初始化RPN网络，固定共享卷积层【即设置学习率为0，不更新】，仅微调RPN网络独有的层【此时共享卷积层】。
+
+4.  固定第3步中共享卷积层，利用第③步中得到的区域建议，仅微调Fast R-CNN独有的层，至此形成统一网络如上图所示。
+
+
+### 4.6 相关解释
+
+**RPN网络中bounding-box回归怎么理解？同Fast R-CNN中的bounding-box回归相比有什么区别？ **
+
+对于bounding-box回归，采用以下公式：
+
++ t
+
+$$
+t_x = \frac{(x-x_a)}{w_a}\\
+t_y = \frac{(y-y_a)}{h_a}\\
+t_w =log\frac{w}{w_a}\\
+t_h = log\frac{h}{h_a}
+$$
+
++ $t^*$
+
+$$
+
+t_x^* = \frac{(x^*-x_a)}{w_a}\\
+t_y^* = \frac{(y^*-y_a)}{h_a}\\
+t_w^* =log\frac{w^*}{w_a}\\
+t_h^* = log\frac{h^*}{h_a}
+
+$$
+
+其中，x，y，w，h表示窗口中心坐标和窗口的宽度和高度，变量x，$x_a$ 和 $x^∗$ 分别表示预测窗口、anchor窗口和Ground Truth的坐标【y，w，h同理】，因此这可以被认为是一个从anchor窗口到附近Ground Truth的bounding-box 回归；
+
+RPN网络中bounding-box回归的实质其实就是计算出预测窗口。这里以anchor窗口为基准，计算Ground Truth对其的平移缩放变化参数，以及预测窗口【可能第一次迭代就是anchor】对其的平移缩放参数，因为是以anchor窗口为基准，所以只要使这两组参数越接近，以此构建目标函数求最小值，那预测窗口就越接近Ground Truth，达到回归的目的；
+
+文中提到， Fast R-CNN中基于RoI的bounding-box回归所输入的特征是在特征图上对任意size的RoIs进行Pool操作提取的，所有size RoI共享回归参数，而在Faster R-CNN中，用来bounding-box回归所输入的特征是在特征图上相同的空间size【3×3】上提取的，为了解决不同尺度变化的问题，同时训练和学习了k个不同的回归器，依次对应为上述9种anchors，这k个回归量并不分享权重。因此尽管特征提取上空间是固定的【3×3】，但由于anchors的设计，仍能够预测不同size的窗口。
+
+**文中提到了三种共享特征网络的训练方式？**
+
+1. **交替训练**,训练RPN，得到的区域建议来训练Fast R-CNN网络进行微调；此时网络用来初始化RPN网络，迭代此过程【文中所有实验采用】；
+
+2. **近似联合训练:** 如上图所示，合并两个网络进行训练，前向计算产生的区域建议被固定以训练Fast R-CNN；反向计算到共享卷积层时RPN网络损失和Fast R-CNN网络损失叠加进行优化，但此时把区域建议【Fast R-CNN输入，需要计算梯度并更新】当成固定值看待，忽视了Fast R-CNN一个输入：区域建议的导数，则无法更新训练，所以称之为近似联合训练。实验发现，这种方法得到和交替训练相近的结果，还能减少20%~25%的训练时间，公开的python代码中使用这种方法；
+
+3. **联合训练** 需要RoI池化层对区域建议可微，需要RoI变形层实现，具体请参考这片paper：Instance-aware Semantic Segmentation via Multi-task Network Cascades。
+
+**图像Scale细节问题？**
+
+文中提到训练和检测RPN、Fast R-CNN都使用单一尺度，统一缩放图像短边至600像素；
+在缩放的图像上，对于ZF网络和VGG-16网络的最后卷积层总共的步长是16像素，因此在缩放前典型的PASCAL图像上大约是10像素【~500×375；600/16=375/10】。
+
+**Faster R-CNN中三种尺度怎么解释：**
+
++ **原始尺度**：原始输入的大小，不受任何限制，不影响性能；
+
++ **归一化尺度**：输入特征提取网络的大小，在测试时设置，源码中opts.test_scale=600。anchor在这个尺度上设定，这个参数和anchor的相对大小决定了想要检测的目标范围；
+
++ **网络输入尺度**：输入特征检测网络的大小，在训练时设置，源码中为224×224。
+
+**理清文中anchors的数目**
+
+文中提到对于1000×600的一张图像，大约有20000(~60×40×9)个anchors，忽略超出边界的anchors剩下6000个anchors，利用非极大值抑制去掉重叠区域，剩2000个区域建议用于训练；
+测试时在2000个区域建议中选择Top-N【文中为300】个区域建议用于Fast R-CNN检测。
+
+
+
+
+
+
+
 
 
 
