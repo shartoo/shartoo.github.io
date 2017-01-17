@@ -252,15 +252,15 @@ $$
 
 + $p_i$ 是anchor i为一个object的预测可能性
 
-+ $p_i^*$ 为ground-truth标签。如果这个anchor是positive的，则ground-truth标签 $p_i^*$ 为1，否则为0。
++ $p_i^{*}$ 为ground-truth标签。如果这个anchor是positive的，则ground-truth标签 $p_i^{*}$ 为1，否则为0。
 
 + $t_i$ 表示表示正样本anchor到预测区域bounding box的4个参数化坐标，【**以anchor为基准的变换**】
 
 + $t_i^*$ 是这个positive anchor对应的ground-truth  box。【**以anchor为基准的变换**】
 
-+ $L_{cls}$  分类的损失（classification loss），是一个二值分类器（是object或者不是）的softmax loss。其公式为 $L_{cls}(p_i,p_i^*)=-log[p_i*p_i^*+(1-p_i^*)(1-p_i)]$
++ $L_{cls}$  分类的损失（classification loss），是一个二值分类器（是object或者不是）的softmax loss。其公式为 $L_{cls}(p_i,p_i^*)=-log[p_i*p_i^{*}+(1-p_i^{*})(1-p_i)]$
 
-+ $L_{reg}$ 回归损失（regression loss），$L_{reg}(t_i,t_i^*)=R(t_i-t_i^*)$ 【两种变换之差越小越好】，其中R是Fast R-CNN中定义的robust ross function (smooth L1)。$p_i^*L_{reg}$ 表示回归损失只有在positive anchor（ $p_i^*=1$ )的时候才会被激活。cls与reg层的输出分别包含{$p_i$}和{ $t_i$ }。R函数的定义为:
++ $L_{reg}$ 回归损失（regression loss），$L_{reg}(t_i,t_i^*)=R(t_i-t_i^{*})$ 【两种变换之差越小越好】，其中R是Fast R-CNN中定义的robust ross function (smooth L1)。$p_i^{*}L_{reg}$ 表示回归损失只有在positive anchor（ $p_i^{*}=1$ )的时候才会被激活。cls与reg层的输出分别包含{$p_i$}和{ $t_i$ }。R函数的定义为:
 $smooth_{L1}(x)= 0.5x^2 \quad if \mid x\mid <1 \quad otherwise \quad \mid x \mid-0.5$
 
 + λ参数用来权衡分类损失 $L_{cls}$ 和回归损失 $L_reg$ ，默认值λ=10【文中实验表明 λ从1变化到100对mAP影响不超过1%】；
