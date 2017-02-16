@@ -11,15 +11,23 @@ description: 大数据
 
 ## 二 节点不纯度和信息增益
 
-&emsp;&emsp;节点不纯度是用以衡量节点同质化标签的度量。当前为了分类提供两种不纯度方法（Gini impurity和信息熵），为回归提供了一个不纯度度量（方差）。
+节点不纯度是用以衡量节点同质化标签的度量。当前为了分类提供两种不纯度方法（Gini impurity和信息熵），为回归提供了一个不纯度度量（方差）。
+
 
 |impurity(不纯度)|作业|公式|描述|
 |-------------|----|----|----|
-|Gini impurity|分类|$\sum_{i=1}^cf_i(1-f_i)$| $f_i$ 是某个节点上标签为i的频率,C是标签数据|
-|信息熵|分类|$\sum_{i=1}^c-f_i\log(f_i)$|$f_i$是某个节点上标签为i的频率,C是标签数据|
-|方差|回归|$\frac{1}{N}\sum_{i=1}^N(y_i-\mu)^2$|$y_i$是某个数据实例的标签，N是数据实例的总数，$\mu$是由$\frac{1}{N}\sum_{i=1}^Ny_i$均值|
-&emsp;&emsp;信息增益是衡量父母节点的不纯度与两个孩子节点不纯度权值求和的差异。假设一个分裂$s$将数据集 D(包含N个元素)分裂成两个子集合 $D_{left}$（包含$N_{left}$个元素）和$D_{right}$(包含$N_{right}$)，相应的信息增益是:
-$$IG(D,s) = Impurity(D)-\frac{N_{left}}{N}Impurity(D_{left})-\frac{N_{right}}{N}Impurity(D_{right})$$
+|Gini impurity|分类| $\sum_{i=1}^cf_i(1-f_i)$ | $f_i$ 是某个节点上标签为i的频率,C是标签数据|
+|信息熵|分类| $\sum_{i=1}^c-f_i\log(f_i)$|$f_i $是某个节点上标签为i的频率,C是标签数据|
+|方差|回归| $\frac{1}{N}\sum_{i=1}^N(y_i-\mu)^2$|$y_i$是某个数据实例的标签，N是数据实例的总数，$\mu$是由$\frac{1}{N}\sum_{i=1}^Ny_i$均值|
+
+
+信息增益是衡量父母节点的不纯度与两个孩子节点不纯度权值求和的差异。假设一个分裂$s$将数据集 D(包含N个元素)分裂成两个子集合 $D_{left}$（包含$N_{left}$个元素）和 $D_{right}$ (包含 $N_{right}$ )，相应的信息增益是:
+
+$$
+
+IG(D,s) = Impurity(D)-\frac{N_{left}}{N}Impurity(D_{left})-\frac{N_{right}}{N}Impurity(D_{right})
+
+$$
 
 ## 三 分裂候选
 
