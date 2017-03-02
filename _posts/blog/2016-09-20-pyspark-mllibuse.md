@@ -1,7 +1,7 @@
 ---
 layout: post
 title: pyspark机器学习库使用
-description:大数据
+description: 大数据
 category: blog
 ---
 
