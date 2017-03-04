@@ -1,3 +1,4 @@
+###########
 ---
 layout: post
 title: 肺结节自动切割方法总论
@@ -116,6 +117,7 @@ $$
 第一个KNN分类器，总共18个特征需要在特征选取之前计算。整个需要计算的特征列表如表下表
 
 下表是 Features of the voxel cluster
+
 |ID |Description| Notes|
 |---|---|---|
 |a1| Cluster size (number of voxels)|-|
@@ -129,6 +131,7 @@ $$
 |a9 |Ratio Sphericity:r|-|
 
 下表是 Features of voxels in spherical kernels at the candidate location
+
 |ID |Description| Notes|
 |---|---|---|
 |a10-a18| On grey-values over spherical kernels K: Average, Median, Standard-Deviation |Halfsizes of K: 1 (a10-a12), 3 (a13-a15), r (a16-a18)  |
