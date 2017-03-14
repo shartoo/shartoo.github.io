@@ -7,7 +7,7 @@
 html{color:#002b36;}
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td,hr,button,article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{margin:0;padding:0;}
 article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block;}
-body,button,input,select,textarea{font-size:12px/1.5;}
+body,button,input,select,textarea{font-size:15px/1.5;}
 input,select,textarea{font-size:100%;}
 table{border-collapse:collapse;border-spacing:0;}
 th{text-align:inherit;}
