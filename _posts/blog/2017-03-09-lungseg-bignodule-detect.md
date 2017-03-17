@@ -30,7 +30,7 @@ category: blog
 
 从888个scan中制作了36378个标注。由于结节可能被多个读者标注，不同的读者的标注在近似位置（小于标注的半径之和）的会被合并。只对 $nodule\gt 3mm$的结节标注做合并，因为这个作为引用标准。其半径、容积、和坐标都平均化。我们仅仅选择被分类为潜在恶性结节的作为大结节的引用标准。根据Dutch-Belgian NELSON肺癌实验，潜在恶性结节指的是容积大于$500mm^3$的，其对应的半径为近似 10mm。然后，选择被大多数读者(4个中的3个)接受的结节，获得了269个结节。并且设计CAD系统只关注 solid 结节的。由读者打分的各种各样的形态学特征用来定义结节类型。本文中，只有当大多数读者给出的上下文特征分数高于3(1=ground-glass/nonsolid,3=part-solid,5=solid)结节被认为是solid。最终获得了238个solid结节，这形成了分析所用的最终结节集合。
 
-评估过程中，CAD标记的位置在标注半径范围内的可被认为是命中了。如果CAD标记命中了引用集中的结节，则被分类为正样本(True  Positive)。不在病变引用集上的标记(即$nodule\ge 10mm$只被一两个放射医师接受，$nodules\gl 10mm$,subsolid nodules,non-nodules)被认为是不相关的，且没有被记入为假阳性(False Positive).
+评估过程中，CAD标记的位置在标注半径范围内的可被认为是命中了。如果CAD标记命中了引用集中的结节，则被分类为正样本(True  Positive)。不在病变引用集上的标记(即$nodule\ge 10mm$只被一两个放射医师接受，$nodules\gt 10mm$,subsolid nodules,non-nodules)被认为是不相关的，且没有被记入为假阳性(False Positive).
 
 ## 三 方法
 
