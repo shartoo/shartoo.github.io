@@ -149,32 +149,131 @@ import numpy as np
 ```
 
 
-### 3.3 读取一个病人的scan
-
-定义读取`dicom`格式医学图像。读取一个文件夹下面的`dicom`格式数据，合并为一个numpy的三维ndarray格式。
+DICOM是医学图像中标准文件，这些文件包含了诸多的元数据信息（比如像素尺寸，每个维度的一像素代表真实世界里的长度）。如下代码是载入一个扫描面，包含了多个切片(slices)，我们仅简化的将其存储为python列表。**数据集中每个目录都是一个扫描面集（一个病人）**。有个元数据域丢失，即Z轴方向上的像素尺寸，也即切片的厚度 。所幸，我们可以用其他值推测出来，并加入到元数据中。
 
 ```
-def read_ct_scan(folder_name):
-    '''
-      read all the dicom slices for a scan and then stack them with respect to their Instance Number to get the 3D Lung CT Scanned Image.
-    :param folder_name:
-    :return:
-    '''
-    # Read the slices from the dicom file
-    slices = [dicom.read_file(os.path.join(folder_name,filename)) for filename in os.listdir(folder_name)]
-
-    # Sort the dicom slices in their respective order
-    slices.sort(key=lambda x: int(x.InstanceNumber))
-
-    # Get the pixel values for all the slices
-    slices = np.stack([s.pixel_array for s in slices])
-    slices[slices == -2000] = 0
+# Load the scans in given folder path
+def load_scan(path):
+    slices = [dicom.read_file(path + '/' + s) for s in os.listdir(path)]
+    slices.sort(key = lambda x: int(x.ImagePositionPatient[2]))
+    try:
+        slice_thickness = np.abs(slices[0].ImagePositionPatient[2] - slices[1].ImagePositionPatient[2])
+    except:
+        slice_thickness = np.abs(slices[0].SliceLocation - slices[1].SliceLocation)
+        
+    for s in slices:
+        s.SliceThickness = slice_thickness
+        
     return slices
 ```
 
-一个病人扫描件文件夹下所有dicom文件被整合成三维图像，此处的图像输出相当于输出三维图片的一个个切面。
+### 3.3 像素转换为HU单元
 
-### 3.4 输出一个病人scans中所有切面slices
+有些扫描面有圆柱形扫描边界，但是输出图像是正方形。边界之外的像素值固定为-2000,。第一步是设定这些值为0，当前对应为空气（值为0）。然后回到HU单元，乘以rescale比率并加上intercept(存储在扫描面的元数据中)。
+
+```
+def get_pixels_hu(slices):
+    image = np.stack([s.pixel_array for s in slices])
+    # Convert to int16 (from sometimes int16), 
+    # should be possible as values should always be low enough (<32k)
+    image = image.astype(np.int16)
+    # Set outside-of-scan pixels to 0
+    # The intercept is usually -1024, so air is approximately 0
+    image[image == -2000] = 0
+    
+    # Convert to Hounsfield units (HU)
+    for slice_number in range(len(slices)):
+        
+        intercept = slices[slice_number].RescaleIntercept
+        slope = slices[slice_number].RescaleSlope
+        
+        if slope != 1:
+            image[slice_number] = slope * image[slice_number].astype(np.float64)
+            image[slice_number] = image[slice_number].astype(np.int16)
+            
+        image[slice_number] += np.int16(intercept)
+    
+    return np.array(image, dtype=np.int16)
+```
+可以查看病人的扫描HU值分布情况
+
+```
+first_patient = load_scan(INPUT_FOLDER + patients[0])
+first_patient_pixels = get_pixels_hu(first_patient)
+plt.hist(first_patient_pixels.flatten(), bins=80, color='c')
+plt.xlabel("Hounsfield Units (HU)")
+plt.ylabel("Frequency")
+plt.show()
+```
+
+![dicom格式的图像](/images/blog/HU_histograph.png)
+
+### 3.4  重新采样
+
+不同扫描面的像素尺寸、粗细粒度是不同的。这不利于我们进行CNN任务，我们可以使用同构采样。
+
+一个扫描面的像素区间可能是[2.5,0.5,0.5],即切片之间的距离为2.5mm。可能另外一个扫描面的范围是[1.5,0.725,0.725]。这可能不利于自动分析。
+
+常见的处理方法是从全数据集中以固定的同构分辨率重新采样。如果我们选择，将所有的东西采样为1mmx1mmx1mm像素，我们可以使用3D卷积网络
+
+```
+def resample(image, scan, new_spacing=[1,1,1]):
+    # Determine current pixel spacing
+    spacing = map(float, ([scan[0].SliceThickness] + scan[0].PixelSpacing))
+    spacing = np.array(list(spacing))
+    resize_factor = spacing / new_spacing
+    new_real_shape = image.shape * resize_factor
+    new_shape = np.round(new_real_shape)
+    real_resize_factor = new_shape / image.shape
+    new_spacing = spacing / real_resize_factor
+    
+    image = scipy.ndimage.interpolation.zoom(image, real_resize_factor, mode='nearest')
+    
+    return image, new_spacing
+```
+
+现在重新取样病人的像素，将其映射到一个同构分辨率 1mm x1mm x1mm。
+
+```
+pix_resampled, spacing = resample(first_patient_pixels, first_patient, [1,1,1])
+
+```
+
+输出肺部扫描的3D图像方法
+
+```
+def plot_3d(image, threshold=-300):
+    
+    # Position the scan upright, 
+    # so the head of the patient would be at the top facing the camera
+    p = image.transpose(2,1,0)
+    
+    verts, faces = measure.marching_cubes(p, threshold)
+    fig = plt.figure(figsize=(10, 10))
+    ax = fig.add_subplot(111, projection='3d')
+    # Fancy indexing: `verts[faces]` to generate a collection of triangles
+    mesh = Poly3DCollection(verts[faces], alpha=0.1)
+    face_color = [0.5, 0.5, 1]
+    mesh.set_facecolor(face_color)
+    ax.add_collection3d(mesh)
+    ax.set_xlim(0, p.shape[0])
+    ax.set_ylim(0, p.shape[1])
+    ax.set_zlim(0, p.shape[2])
+    plt.show()
+```
+
+
+打印函数有个阈值参数，来打印特定的结构，比如tissue或者骨头。400是一个仅仅打印骨头的阈值(HU对照表)
+
+```
+plot_3d(pix_resampled, 400)
+
+```
+
+![dicom格式的图像](/images/blog/lung3d_bone.jpg)
+
+
+### 3.5 输出一个病人scans中所有切面slices
 
 ```
 def plot_ct_scan(scan):
@@ -194,7 +293,7 @@ def plot_ct_scan(scan):
 ![dicom格式的图像](/images/blog/lung_slices_2.png)
 
 
-### 3.5 定义分割出CT切面里面肺部组织的函数
+### 3.6 定义分割出CT切面里面肺部组织的函数
 
 
 ```
@@ -293,7 +392,7 @@ def get_segmented_lungs(im, plot=False):
 ![dicom格式的图像](/images/blog/lung_seg_example.png)
 
 
-### 3.6 存储每个病人scan的所有slice肺部特征
+### 3.7 存储每个病人scan的所有slice肺部特征
 
 下述代码为main函数中整体过程
 
@@ -330,167 +429,15 @@ plot_ct_scan(segmented_ct_scan)
 
 ## 4.1 处理思路
 
-mhd的数据只是格式与dicom不一样，其实质包含的都是病人扫描。
-
-主要步骤如下：
-
-+ 载入 DICOM文件，同时加入缺失的元数据信息
-
-+ 将像素值转化为 `Hounsfield Unit`(HU),以及不同的HU值所对应的物质
-
-+ 重新采样，将图像采样为同一分辨率，以移除scanner分辨率之间的方差
-
-+ 3D绘图，可视化有助于我们理解所要处理的图像
-
-+  肺的相关片段
-
-+ 数据归一化Normazation
-
-+ 对所有的scan（扫描数据）0中心化（归一化的一部分）
+mhd的数据只是格式与dicom不一样，其实质包含的都是病人扫描。处理MHD需要借助`SimpleIKT`这个包，处理思路详情可以参考Data Science Bowl2017的toturail [Data Science Bowl 2017](https://www.kaggle.com/c/data-science-bowl-2017#tutorial)。MHD
 
 ### 4.2 载入必要的包并加入缺失的数据
 
-载入必要的包
 
-```
-import numpy as np # linear algebra
-import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
-import dicom
-import os
-import scipy.ndimage
-import matplotlib.pyplot as plt
-from skimage import measure, morphology
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-# Some constants
-INPUT_FOLDER = '../input/sample_images/'
-patients = os.listdir(INPUT_FOLDER)
-patients.sort()
-```
 
 加入slices切片厚度值到原数据中。
 
-DICOM是医学图像中标准文件，这些文件包含了诸多的元数据信息（比如像素尺寸，每个维度的一像素代表真实世界里的长度）。如下代码是载入一个扫描面，包含了多个切片(slices)，我们仅简化的将其存储为python列表。**数据集中每个目录都是一个扫描面集（一个病人）**。有个元数据域丢失，即Z轴方向上的像素尺寸，也即切片的厚度 。所幸，我们可以用其他值推测出来，并加入到元数据中。
 
-```
-# Load the scans in given folder path
-def load_scan(path):
-    slices = [dicom.read_file(path + '/' + s) for s in os.listdir(path)]
-    slices.sort(key = lambda x: int(x.ImagePositionPatient[2]))
-    try:
-        slice_thickness = np.abs(slices[0].ImagePositionPatient[2] - slices[1].ImagePositionPatient[2])
-    except:
-        slice_thickness = np.abs(slices[0].SliceLocation - slices[1].SliceLocation)
-        
-    for s in slices:
-        s.SliceThickness = slice_thickness
-        
-    return slices
-```
-
-### 4.3 像素转换为HU单元
-
-有些扫描面有圆柱形扫描边界，但是输出图像是正方形。边界之外的像素值固定为-2000,。第一步是设定这些值为0，当前对应为空气（值为0）。然后回到HU单元，乘以rescale比率并加上intercept(存储在扫描面的元数据中)。
-
-```
-def get_pixels_hu(slices):
-    image = np.stack([s.pixel_array for s in slices])
-    # Convert to int16 (from sometimes int16), 
-    # should be possible as values should always be low enough (<32k)
-    image = image.astype(np.int16)
-    # Set outside-of-scan pixels to 0
-    # The intercept is usually -1024, so air is approximately 0
-    image[image == -2000] = 0
-    
-    # Convert to Hounsfield units (HU)
-    for slice_number in range(len(slices)):
-        
-        intercept = slices[slice_number].RescaleIntercept
-        slope = slices[slice_number].RescaleSlope
-        
-        if slope != 1:
-            image[slice_number] = slope * image[slice_number].astype(np.float64)
-            image[slice_number] = image[slice_number].astype(np.int16)
-            
-        image[slice_number] += np.int16(intercept)
-    
-    return np.array(image, dtype=np.int16)
-```
-可以查看病人的扫描HU值分布情况
-
-```
-first_patient = load_scan(INPUT_FOLDER + patients[0])
-first_patient_pixels = get_pixels_hu(first_patient)
-plt.hist(first_patient_pixels.flatten(), bins=80, color='c')
-plt.xlabel("Hounsfield Units (HU)")
-plt.ylabel("Frequency")
-plt.show()
-```
-
-![dicom格式的图像](/images/blog/HU_histograph.png)
-
-### 4.4  重新采样
-
-不同扫描面的像素尺寸、粗细粒度是不同的。这不利于我们进行CNN任务，我们可以使用同构采样。
-
-一个扫描面的像素区间可能是[2.5,0.5,0.5],即切片之间的距离为2.5mm。可能另外一个扫描面的范围是[1.5,0.725,0.725]。这可能不利于自动分析。
-
-常见的处理方法是从全数据集中以固定的同构分辨率重新采样。如果我们选择，将所有的东西采样为1mmx1mmx1mm像素，我们可以使用3D卷积网络
-
-```
-def resample(image, scan, new_spacing=[1,1,1]):
-    # Determine current pixel spacing
-    spacing = map(float, ([scan[0].SliceThickness] + scan[0].PixelSpacing))
-    spacing = np.array(list(spacing))
-    resize_factor = spacing / new_spacing
-    new_real_shape = image.shape * resize_factor
-    new_shape = np.round(new_real_shape)
-    real_resize_factor = new_shape / image.shape
-    new_spacing = spacing / real_resize_factor
-    
-    image = scipy.ndimage.interpolation.zoom(image, real_resize_factor, mode='nearest')
-    
-    return image, new_spacing
-```
-
-现在重新取样病人的像素，将其映射到一个同构分辨率 1mm x1mm x1mm。
-
-```
-pix_resampled, spacing = resample(first_patient_pixels, first_patient, [1,1,1])
-
-```
-
-输出肺部扫描的3D图像方法
-
-```
-def plot_3d(image, threshold=-300):
-    
-    # Position the scan upright, 
-    # so the head of the patient would be at the top facing the camera
-    p = image.transpose(2,1,0)
-    
-    verts, faces = measure.marching_cubes(p, threshold)
-    fig = plt.figure(figsize=(10, 10))
-    ax = fig.add_subplot(111, projection='3d')
-    # Fancy indexing: `verts[faces]` to generate a collection of triangles
-    mesh = Poly3DCollection(verts[faces], alpha=0.1)
-    face_color = [0.5, 0.5, 1]
-    mesh.set_facecolor(face_color)
-    ax.add_collection3d(mesh)
-    ax.set_xlim(0, p.shape[0])
-    ax.set_ylim(0, p.shape[1])
-    ax.set_zlim(0, p.shape[2])
-    plt.show()
-```
-
-
-打印函数有个阈值参数，来打印特定的结构，比如tissue或者骨头。400是一个仅仅打印骨头的阈值(HU对照表)
-
-```
-plot_3d(pix_resampled, 400)
-
-```
-
-![dicom格式的图像](/images/blog/lung3d_bone.jpg)
 
 ### 4.5 肺部图像分割
 
