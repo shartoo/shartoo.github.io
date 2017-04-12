@@ -392,54 +392,7 @@ def get_segmented_lungs(im, plot=False):
 ![dicom格式的图像](/images/blog/lung_seg_example.png)
 
 
-### 3.7 存储每个病人scan的所有slice肺部特征
-
-下述代码为main函数中整体过程
-
-```
-    lung_head_dir = '/data/lung_competition/stage1/'
-    img_save_head = '/data/lung_competition/roi_images/'
-    patient_scans_list = [x for x in os.listdir(lung_head_dir) if os.path.isdir(os.path.join(lung_head_dir,x))]
-    #patient_labels_file = '/data/lung_competition/stage1_labels.csv'
-    #patient_labels = pd.read_csv(patient_labels_file)
-    selem = ball(2)
-    #print(patient_scans_list)
-    for scan in patient_scans_list:
-        scan_files = os.path.join(lung_head_dir,scan)
-        ct_scan = read_ct_scan(scan_files)
-        save_npy_path = os.path.join(img_save_head, scan)
-        if os.path.exists(save_npy_path):
-            os.mkdir(save_npy_path)
-
-       
-```
-
-存储病人scan的所有slice肺部特征的关键代码为
-
-```
-segmented_ct_scan = segment_lung_from_ct_scan(ct_scan)
-save_npy = save_npy_path+'.npy'
-np.save(save_npy,segmented_ct_scan)
-print('file %s saved ..'%save_npy)
-plot_ct_scan(segmented_ct_scan)
-
-```
-
-## 四 mhd格式数据处理过程
-
-## 4.1 处理思路
-
-mhd的数据只是格式与dicom不一样，其实质包含的都是病人扫描。处理MHD需要借助`SimpleIKT`这个包，处理思路详情可以参考Data Science Bowl2017的toturail [Data Science Bowl 2017](https://www.kaggle.com/c/data-science-bowl-2017#tutorial)。MHD
-
-### 4.2 载入必要的包并加入缺失的数据
-
-
-
-加入slices切片厚度值到原数据中。
-
-
-
-### 4.5 肺部图像分割
+### 3.7 肺部图像分割
 
 为了减少有问题的空间，我们可以分割肺部图像（有时候是附近的组织）。这包含一些步骤，包括区域增长和形态运算，此时，我们只分析相连组件。
 
@@ -527,7 +480,8 @@ plot_3d(segmented_lungs_fill, 0)
 使用掩码时，要注意首先进行形态扩充(python的`skimage`的skimage.morphology)操作（即使用圆形kernel，结节是球体），参考 [python形态操作](http://www.cnblogs.com/denny402/p/5166258.html)。这会在所有方向（维度）上扩充掩码。仅仅肺部的空气+结构将不会包含所有结节，事实上有可能遗漏黏在肺部一侧的结节（这会经常出现，所以建议最好是扩充掩码）。
 
 
-### 4.6 归一化处理
+### 3.8
+归一化处理
 
 当前的值范围是[-1024,2000]。任意大于400的值都是我们所感兴趣的，因为它们都是不同反射密度下的骨头。LUNA16竞赛中常用来做归一化处理的阈值集是-1000和400.以下代码
 
@@ -558,10 +512,50 @@ def zero_center(image):
     return image
 ```
 
-## 五  分水岭算法
 
+### 3.7 存储每个病人scan的所有slice肺部特征
 
-## 六 特征提取
+下述代码为main函数中整体过程
+
+```
+    lung_head_dir = '/data/lung_competition/stage1/'
+    img_save_head = '/data/lung_competition/roi_images/'
+    patient_scans_list = [x for x in os.listdir(lung_head_dir) if os.path.isdir(os.path.join(lung_head_dir,x))]
+    #patient_labels_file = '/data/lung_competition/stage1_labels.csv'
+    #patient_labels = pd.read_csv(patient_labels_file)
+    selem = ball(2)
+    #print(patient_scans_list)
+    for scan in patient_scans_list:
+        scan_files = os.path.join(lung_head_dir,scan)
+        ct_scan = read_ct_scan(scan_files)
+        save_npy_path = os.path.join(img_save_head, scan)
+        if os.path.exists(save_npy_path):
+            os.mkdir(save_npy_path)
+
+       
+```
+
+存储病人scan的所有slice肺部特征的关键代码为
+
+```
+segmented_ct_scan = segment_lung_from_ct_scan(ct_scan)
+save_npy = save_npy_path+'.npy'
+np.save(save_npy,segmented_ct_scan)
+print('file %s saved ..'%save_npy)
+plot_ct_scan(segmented_ct_scan)
+
+```
+
+## 四 mhd格式数据处理过程
+
+## 4.1 处理思路
+
+mhd的数据只是格式与dicom不一样，其实质包含的都是病人扫描。处理MHD需要借助`SimpleIKT`这个包，处理思路详情可以参考Data Science Bowl2017的toturail [Data Science Bowl 2017](https://www.kaggle.com/c/data-science-bowl-2017#tutorial)。需要注意的是MHD格式的数据没有HU值，它的值域范围与dicom很不同。MHD值得坐标体系是体素，以mm为单位。结节的位置是CT scanner坐标轴里面相对原点的mm值，需要将其转换到真实坐标轴位置，可以使用`SimpleITK`包中的 `GetOrigin()` ` GetSpacing()`。图像数据是以512x512数组的形式给出的。
+
+坐标变换如下：
+
+![dicom格式的图像](/images/blog/mhd_coordinate_transfer.png)
+
 
 ### 6.1 包含结节位置信息的mhd格式数据特征
 
