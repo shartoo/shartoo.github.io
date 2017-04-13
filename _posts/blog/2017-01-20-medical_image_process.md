@@ -513,7 +513,7 @@ def zero_center(image):
 ```
 
 
-### 3.7 存储每个病人scan的所有slice肺部特征
+### 3.9 存储每个病人scan的所有slice肺部特征
 
 下述代码为main函数中整体过程
 
@@ -548,13 +548,73 @@ plot_ct_scan(segmented_ct_scan)
 
 ## 四 mhd格式数据处理过程
 
-## 4.1 处理思路
+### 4.1 处理思路
 
-mhd的数据只是格式与dicom不一样，其实质包含的都是病人扫描。处理MHD需要借助`SimpleIKT`这个包，处理思路详情可以参考Data Science Bowl2017的toturail [Data Science Bowl 2017](https://www.kaggle.com/c/data-science-bowl-2017#tutorial)。需要注意的是MHD格式的数据没有HU值，它的值域范围与dicom很不同。MHD值得坐标体系是体素，以mm为单位。结节的位置是CT scanner坐标轴里面相对原点的mm值，需要将其转换到真实坐标轴位置，可以使用`SimpleITK`包中的 `GetOrigin()` ` GetSpacing()`。图像数据是以512x512数组的形式给出的。
+mhd的数据只是格式与dicom不一样，其实质包含的都是病人扫描。处理MHD需要借助`SimpleIKT`这个包，处理思路详情可以参考Data Science Bowl2017的toturail [Data Science Bowl 2017](https://www.kaggle.com/c/data-science-bowl-2017#tutorial)。需要注意的是MHD格式的数据没有HU值，它的值域范围与dicom很不同。
+
+我们以LUNA2016年的数据处理流程为例。参考代码为 [LUNA2016数据切割](https://github.com/booz-allen-hamilton/DSB3Tutorial/tree/master/tutorial_code)
+
+
+### 4.2 载入必要的包
+
+```
+import SimpleITK as sitk
+import numpy as np
+import csv
+from glob import glob
+import pandas as pd
+file_list=glob(luna_subset_path+"*.mhd")
+#####################
+#
+# Helper function to get rows in data frame associated 
+# with each file
+def get_filename(case):
+    global file_list
+    for f in file_list:
+        if case in f:
+            return(f)
+#
+# The locations of the nodes
+df_node = pd.read_csv(luna_path+"annotations.csv")
+df_node["file"] = df_node["seriesuid"].apply(get_filename)
+df_node = df_node.dropna()
+#####
+#
+# Looping over the image files
+#
+fcount = 0
+for img_file in file_list:
+    print "Getting mask for image file %s" % img_file.replace(luna_subset_path,"")
+    mini_df = df_node[df_node["file"]==img_file] #get all nodules associate with file
+    if len(mini_df)>0:       # some files may not have a nodule--skipping those 
+        biggest_node = np.argsort(mini_df["diameter_mm"].values)[-1]   # just using the biggest node
+        node_x = mini_df["coordX"].values[biggest_node]
+        node_y = mini_df["coordY"].values[biggest_node]
+        node_z = mini_df["coordZ"].values[biggest_node]
+        diam = mini_df["diameter_mm"].values[biggest_node]
+```
+
+
+### 4.3 坐标体系变换
+
+MHD值得坐标体系是体素，以mm为单位。结节的位置是CT scanner坐标轴里面相对原点的mm值，需要将其转换到真实坐标轴位置，可以使用`SimpleITK`包中的 `GetOrigin()` ` GetSpacing()`。图像数据是以512x512数组的形式给出的。
 
 坐标变换如下：
 
 ![dicom格式的图像](/images/blog/mhd_coordinate_transfer.png)
+
+相应的代码处理如下:
+
+```
+itk_img = sitk.ReadImage(img_file) 
+img_array = sitk.GetArrayFromImage(itk_img) # indexes are z,y,x (notice the ordering)
+center = np.array([node_x,node_y,node_z])   # nodule center
+origin = np.array(itk_img.GetOrigin())      # x,y,z  Origin in world coordinates (mm)
+spacing = np.array(itk_img.GetSpacing())    # spacing of voxels in world coor. (mm)
+v_center =np.rint((center-origin)/spacing)  # nodule center in voxel space (still x,y,z ordering)
+```
+
+
 
 
 ### 6.1 包含结节位置信息的mhd格式数据特征
