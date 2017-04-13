@@ -614,6 +614,42 @@ spacing = np.array(itk_img.GetSpacing())    # spacing of voxels in world coor. (
 v_center =np.rint((center-origin)/spacing)  # nodule center in voxel space (still x,y,z ordering)
 ```
 
+**在LUNA16的标注CSV文件中标注了结节中心的X,Y,Z轴坐标，但是实际取值的时候取的是Z轴最后三层的数组(img_array)**。
+
+下述代码只提取了包含结节的最后三个slice的数据
+
+```
+i = 0
+for i_z in range(int(v_center[2])-1,int(v_center[2])+2):
+    mask = make_mask(center,diam,i_z*spacing[2]+origin[2],width,height,spacing,origin)
+    masks[i] = mask
+    imgs[i] = matrix2int16(img_array[i_z])
+    i+=1
+np.save(output_path+"images_%d.npy" % (fcount) ,imgs)
+np.save(output_path+"masks_%d.npy" % (fcount) ,masks)
+
+```
+
+### 4.4 查看结节
+
+以下代码用于查看原始CT和结节mask。
+
+```
+import matplotlib.pyplot as plt
+imgs = np.load(output_path+'images_0.npy')
+masks = np.load(output_path+'masks_0.npy')
+for i in range(len(imgs)):
+    print "image %d" % i
+    fig,ax = plt.subplots(2,2,figsize=[8,8])
+    ax[0,0].imshow(imgs[i],cmap='gray')
+    ax[0,1].imshow(masks[i],cmap='gray')
+    ax[1,0].imshow(imgs[i]*masks[i],cmap='gray')
+    plt.show()
+    raw_input("hit enter to cont : ")
+    
+```
+
+![示例结节和mask](/images/blog/nodule_mask1.png)
 
 
 
