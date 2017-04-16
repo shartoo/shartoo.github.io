@@ -480,7 +480,8 @@ plot_3d(segmented_lungs_fill, 0)
 使用掩码时，要注意首先进行形态扩充(python的`skimage`的skimage.morphology)操作（即使用圆形kernel，结节是球体），参考 [python形态操作](http://www.cnblogs.com/denny402/p/5166258.html)。这会在所有方向（维度）上扩充掩码。仅仅肺部的空气+结构将不会包含所有结节，事实上有可能遗漏黏在肺部一侧的结节（这会经常出现，所以建议最好是扩充掩码）。
 
 
-### 3.8
+### 3.8 数据预处理
+
 归一化处理
 
 当前的值范围是[-1024,2000]。任意大于400的值都是我们所感兴趣的，因为它们都是不同反射密度下的骨头。LUNA16竞赛中常用来做归一化处理的阈值集是-1000和400.以下代码
@@ -594,8 +595,12 @@ for img_file in file_list:
         diam = mini_df["diameter_mm"].values[biggest_node]
 ```
 
+### 4.3 LUNA16的MHD格式数据的值
 
-### 4.3 坐标体系变换
+一直在寻找MHD格式数据的处理方法，对于dicom格式的CT有很多论文根据其HU值域可以轻易地分割肺、骨头、血液等，但是对于MHD没有这样的参考。从[LUNA16论坛](https://grand-challenge.org/site/luna16/forum/)得到的解释是，LUNA16的MHD数据已经转换为HU值了，不需要再使用slope和intercept来做rescale变换了。此论坛主题下，有人提出MHD格式没有提供pixel spacing(mm) 和 slice thickness(mm) ，而标准文件annotation.csv文件中结节的半径和坐标都是mm单位，最后确认的是MHD格式文件中只保留了体素尺寸以及坐标原点位置，没有保存slice thickness。如此来说，dicom才是原始数据格式。
+
+
+### 4.4 坐标体系变换
 
 MHD值得坐标体系是体素，以mm为单位。结节的位置是CT scanner坐标轴里面相对原点的mm值，需要将其转换到真实坐标轴位置，可以使用`SimpleITK`包中的 `GetOrigin()` ` GetSpacing()`。图像数据是以512x512数组的形式给出的。
 
@@ -630,7 +635,7 @@ np.save(output_path+"masks_%d.npy" % (fcount) ,masks)
 
 ```
 
-### 4.4 查看结节
+### 4.5 查看结节
 
 以下代码用于查看原始CT和结节mask。
 
@@ -653,10 +658,7 @@ for i in range(len(imgs)):
 
 
 
-### 6.1 包含结节位置信息的mhd格式数据特征
+### 4.6 包含结节位置信息的mhd格式数据特征
 
 参考一个开源代码实现 [UNET训练肺组织结节分割](https://github.com/booz-allen-hamilton/DSB3Tutorial/blob/master/Tutorial.ipynb)
-
-
-
 
