@@ -95,7 +95,7 @@ Inception Net是一个大家族，包括了以下系列。
 |Inception V3|2015年12月|Top-5 3.5%|**(1)**引入Factorization into small convolutions，将较大卷积拆分为两个小卷积，比如7x7拆成1x7和7x1卷积，节省了大量参数，加速运算同时减轻过拟合，同时增加一层非线性拓展模型表达能力**(2)**在Inception V3中使用了分之，还在分支之中使用了分支|
 |Inception V4|2016年2月|Top-5 3.08%|结合了微软的ResNet|
 
-##  ResNet
+##  四  ResNet
 
 ResNet(Residual Neural Network)由微软研究院Kaiming He等四位华人提出，通过使用Residual Unit成功训练152层深的神经网络，在ILSVRC 2015比赛中获得冠军，获得3.57%的Top-5准确率，同时参数量比VGGNet低。
 
