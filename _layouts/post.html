@@ -78,7 +78,7 @@ layout: default
             <a href="#" class="comment" onclick="return false;">点击查看评论</a>
             <div id="disqus_thread"></div>
        -->
-          <!-- 多说评论框 start -->
+          <!-- 多说评论框 start # 多说评论已经关闭
        <div class="ds-thread" data-thread-key={{ page.title }}  data-title={{ page.title }} data-url="http://shartoo.github.io/{{ page.url }}"></div>
            <!-- 多说评论框 end -->
            <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
@@ -92,7 +92,27 @@ layout: default
 		(document.getElementsByTagName('head')[0]
 		 || document.getElementsByTagName('body')[0]).appendChild(ds);
 	  })();
+-->
+<!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8yODgxNi81Mzg2">
+	<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
 
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+	</script>
+<noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+	
+<!-- City版安装代码已完成 -->
+	
 	 </script>
        <!-- 多说公共JS代码 end -->
       </div>
