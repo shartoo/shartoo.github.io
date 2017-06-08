@@ -86,7 +86,7 @@ category: blog
 
 转换后的音频，是一种频率的表示——我们只关心这个波形到底是以什么样的频率在震动，而恰好，我们人类对于声音的认知，也是基于频率而不是振幅的——实际上这样的表示，更加符合人类对于声音的认知，也更容易对其进行数字处理（DSP）。
 
-![音频的波形表示](/images/blog/voice_wave_represtation_fluir.jpg) 
+![音频的傅里叶变换](/images/blog/voice_wave_represtation_fluir.jpg) 
 
 
 
