@@ -21,7 +21,7 @@ category: blog
 
 下表是数据概况
 
-|Aggrement levels|Nodules $\ge 3mm$|Nodules $\ge 10mm$|solid nodules $\ge 10mm$|
+|Aggrement levels|Nodules $\ge 3mm$ |Nodules $\ge 10mm$ |solid nodules $\ge 10mm$ |
 |---|---|---|---|
 |At least 1|2290|393|322|
 |At least 2|1602|325|277|
