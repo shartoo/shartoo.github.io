@@ -46,7 +46,7 @@ CAD系统的第一步的肺分割用来决定肺的ROI(region of interest)。主
 
 我们使用Rikxoort提出的算法作为初始的肺分割segmentation。方法由这些组成：大气道抽取、肺分割、左右肺分割和segmentation 平滑。当肺分割算法失败时，我们通过手动衡量输入参数，比如气管的seed point来更正肺分割。
 
-为了在肺分割segmentation包含入大的肺结节，使用了额外的细化的肺分割segmentation。肺结节被剔除的区域通常看起来像在肺segmentation的表面上有个洞。我们实验了两种方法**(1)**使用形态学逻辑滚球rolling-ball操作**(2)**在rolling-ball操作之后做扩张操作。所有的形态学操作使用的是球形结构元素。结构元素的半径$d_{struct}$设置为一个x维度在输入scan中的比率。我们评估了$d_{struct}={2%,3%,4%,6%,8%}$的rolling-ball操作和$d_{struct}={1%,2%}$ 的扩张操作。
+为了在肺分割segmentation包含入大的肺结节，使用了额外的细化的肺分割segmentation。肺结节被剔除的区域通常看起来像在肺segmentation的表面上有个洞。我们实验了两种方法**(1)**使用形态学逻辑滚球rolling-ball操作**(2)**在rolling-ball操作之后做扩张操作。所有的形态学操作使用的是球形结构元素。结构元素的半径$d_{struct}$设置为一个x维度在输入scan中的比率。我们评估了$d_{struct}=\lbrace 2%,3%,4%,6%,8%\rbrace$ 的rolling-ball操作和$d_{struct}=\lbrace 1%,2%\rbrace$ 的扩张操作。
 
 ### 3.2 预处理 
 
