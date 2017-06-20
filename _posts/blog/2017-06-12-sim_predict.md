@@ -113,7 +113,7 @@ $$
 
 特别地，如果f是严格凸函数，当且仅当X是常量时，上式取等号。
 
-![/images/blog/jensen_fourma.jpg]
+![公式](/images/blog/jensen_fourma.jpg)
 
 实线f是凸函数，X是随机变量，有0.5的概率是a，有0.5的概率是b。（就像掷硬币一样）。X的期望值就是a和b的中值了，图中可以看到E[f(X)]>=f(E[X])成立。**Jensen不等式应用于凹函数时，不等号方向反向。**
 
