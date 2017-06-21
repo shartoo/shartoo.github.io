@@ -167,10 +167,10 @@ $$
 
 ![GroundTrue参考点](/images/blog/GroundTrue_according_points.jpg)
 
-那么人脸对齐问题是需要寻找一个梯度方向步长$\deta x$ ，使得下面的目标函数误差最小：
+那么人脸对齐问题是需要寻找一个梯度方向步长$\Delta x$ ，使得下面的目标函数误差最小：
 
 $$
-  f(x_0+\deta x) =\|\|h(x_0+\deta x)-\Phi _{phi}\|\|^2_2
+  f(x_0+\Delta x) =\|\|h(x_0+\Delta x)-\Phi _{phi}\|\|^2_2
 $$
 
 其中 $\Phi _{phi}=h(d(x_{\phi}))$ 是人工标定的66个标记点的SIFT特征向量，在训练阶段$\Phi_{\phi} $和 $\deta x $ 都是知道的。好了，用牛顿法求解上述问题，其迭代的公式为：
@@ -196,7 +196,7 @@ $$
 思路很简单，就是用训练数据告诉算法下一步该往哪里走，即用当前（及之前）的迭代误差之和最小化，该问题也是一个最优化问题。如下公式所示：
 
 $$
- arg _{R_k}\quad min_{b_k} \sum _{d_i} \sum _{x^i_k}\|\|\deta x^{ki}_{\star}-R_k\Phi^i_k-b_k\|\|^2
+ arg _{R_k}\quad min_{b_k} \sum _{d_i} \sum _{x^i_k}\|\|\Delta x^{ki}_{\star}-R_k\Phi^i_k-b_k\|\|^2
 $$
 
 d_i表示第i张训练图片，xki表示第i张图片在第k次迭代后的标记点的位置。实际中这样的迭代4-5次即可得到最优解，用贪心法求解。
