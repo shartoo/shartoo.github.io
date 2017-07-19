@@ -215,3 +215,10 @@ $d_i$ 表示第i张训练图片，$x_ki$ 表示第 $i$ 张图片在第 $k$ 次�
 
 
 ![](/images/blog/face_detection_3.png)
+
+
+
+
+### 参考
+
+[基于Haar特征的Adaboost级联人脸检测分类器](http://blog.csdn.net/stdcoutzyx/article/details/34842233)
