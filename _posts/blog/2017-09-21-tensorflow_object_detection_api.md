@@ -56,7 +56,7 @@ window 端的为 [linux cudnn 6.0]( http://developer.download.nvidia.com/compute
 protoc object_detection/protos/*.proto --python_out=.
 ```
 注意该命令是在你的 `object_detection`文件夹的上一层目录下执行，默认是在`tensorflow/model`下。
-
+ 
 ![protoc前后](/images/blog/tf_obj_detect_proto_effect.jpg)
  
 ### 1.5 预知的错误
