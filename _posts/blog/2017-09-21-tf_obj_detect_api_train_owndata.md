@@ -114,6 +114,14 @@ python object_detection/train.py \
 
 ![训练效果](/images/blog/tf_obj_detect_own_train_result.jpg)
 
+如果训练得当，应该可以用tensorboard查看训练参数变化：
+
+![tensorboard](/images/blog/tf_obj_detect_own_tensorboard_cmd.jpg)
+
+打开浏览器中的： http://localhost:6006/#scalars
+
+![tensorboard2](/images/blog/tf_obj_detect_own_tensorboard2.jpg)
+
 ##  3 转换权重文件
 
 训练完成之后的权重文件大概是会包含如下文件:
@@ -150,13 +158,6 @@ python object_detection/export_inference_graph.py \
 
 ![pb文件](/images/blog/tf_obj_detect_own_graph.png)
 
-如果训练得当，应该可以用tensorboard查看训练参数变化：
-
-![tensorboard](/images/blog/tf_obj_detect_own_tensorboard_cmd.jpg)
-
-打开浏览器中的： http://localhost:6006/#scalars
-
-![tensorboard2](/images/blog/tf_obj_detect_own_tensorboard2.jpg)
 
  ## 4  预测
 
