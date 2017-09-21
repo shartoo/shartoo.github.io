@@ -57,7 +57,7 @@ protoc object_detection/protos/*.proto --python_out=.
 ```
 注意该命令是在你的 `object_detection`文件夹的上一层目录下执行，默认是在`tensorflow/model`下。
  
-![protoc前后](/images/blog/tf_obj_detect_proto_effect.jpg)
+![protoc前后](/images/blog/tf_obj_detect_proto_effect.png)
  
 ### 1.5 预知的错误
 
@@ -93,7 +93,7 @@ from object_detection.nets import inception_resnet_v2
 
 测试代码基本复制自官方的 jupyter notebook脚本，名字为`object_detection_test.py` 
 
-![测试demo](/images/blog/tf_obj_detect_test_code.jpg)
+![测试demo](/images/blog/tf_obj_detect_test_code.png)
  
 代码为：
 
@@ -205,7 +205,7 @@ with detection_graph.as_default():
 
 测试效果
 
-![测试demo效果](/images/blog/tf_obj_detect_test_result.jpg)
+![测试demo效果](/images/blog/tf_obj_detect_test_result.png)
 
 参考 :http://blog.csdn.net/c20081052/article/details/77608954
 
