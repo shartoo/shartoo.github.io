@@ -148,7 +148,7 @@ python object_detection/export_inference_graph.py \
 
 生成的效果为：
 
-![pb文件](/images/blog/tf_obj_detect_own_graph.jpg)
+![pb文件](/images/blog/tf_obj_detect_own_graph.png)
 
 
  ## 4  预测
