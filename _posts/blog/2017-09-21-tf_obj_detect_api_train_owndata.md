@@ -143,13 +143,20 @@ python object_detection/export_inference_graph.py \
 我的脚本为：
 
 ```
---input_type image_tensor --pipeline_config_path D:/data/robot_auto_seller/config/faster_rcnn_inception_resnet_v2_robot.config --trained_checkpoint_prefix D:/data/robot_auto_seller/tf_ckpt/model.ckpt-6359  --output_directory  D:/data/robot_auto_seller/robot_inference_graph
+--input_type image_tensor --pipeline_config_path D:/data/aa/config/faster_rcnn_inception_resnet_v2_robot.config --trained_checkpoint_prefix D:/data/aa/tf_ckpt/model.ckpt-6359  --output_directory  D:/data/aa/robot_inference_graph
 ```
 
 生成的效果为：
 
 ![pb文件](/images/blog/tf_obj_detect_own_graph.png)
 
+如果训练得当，应该可以用tensorboard查看训练参数变化：
+
+![tensorboard](/images/blog/tf_obj_detect_own_tensorboard_cmd.jpg)
+
+打开浏览器中的： http://localhost:6006/#scalars
+
+![tensorboard2](/images/blog/tf_obj_detect_own_tensorboard2.jpg)
 
  ## 4  预测
 
@@ -174,8 +181,8 @@ from object_detection.utils import label_map_util
 from object_detection.utils import visualization_utils as vis_util
 
 cap = cv2.VideoCapture(0)
-PATH_TO_CKPT = 'D:/data/robot_auto_seller/robot_inference_graph/frozen_inference_graph.pb'
-PATH_TO_LABELS = os.path.join('D:/data/robot_auto_seller', 'robot_label_map.pbtxt')
+PATH_TO_CKPT = 'D:/data/aa/robot_inference_graph/frozen_inference_graph.pb'
+PATH_TO_LABELS = os.path.join('D:/data/aa', 'robot_label_map.pbtxt')
 NUM_CLASSES = 3
 
 # Load a (frozen) Tensorflow model into memory.
@@ -199,7 +206,7 @@ def load_image_into_numpy_array(image):
 
 
 # # Detection
-PATH_TO_TEST_IMAGES_DIR = 'D:/data/robot_auto_seller/images'
+PATH_TO_TEST_IMAGES_DIR = 'D:/data/aa/images'
 TEST_IMAGE_PATHS = [os.path.join(PATH_TO_TEST_IMAGES_DIR, '000{}.jpg'.format(i)) for i in range(109, 115)]
 # Size, in inches, of the output images.
 IMAGE_SIZE = (12, 8)
