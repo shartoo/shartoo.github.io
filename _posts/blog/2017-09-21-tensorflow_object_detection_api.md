@@ -46,7 +46,7 @@ window 端的为 [linux cudnn 6.0]( http://developer.download.nvidia.com/compute
 
  为了避免夜长梦多，我直接把这个路径加入到window环境变量
 
-![protoc环境变量](/images/blog/tf_obj_detect_win_var.jpg)
+![protoc环境变量](/images/blog/tf_obj_detect_win_var.png)
  
 ### 1.4 将proto文件生成对应的代码
 
