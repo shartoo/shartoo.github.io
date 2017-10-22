@@ -106,7 +106,7 @@ CNN的输出是几个channel（即feature map）的集合。我们可以在每�
 
 另外一种做法是，将CNN的输出作为一个3D-tensor，然后在那个tensor的2D slice上运行**单个**GRU。
 
-![CNN+RNN](/images/blog/cnn+rnn_cnn-multi-rnn.png)
+![CNN+RNN](/images/blog/cnn+rnn_cnn-multi-rnn2.png)
 
 后一个做法需要更多的参数，但是**不同channel的信息会在GRU中混淆，这看起来会提升一点性能**。这种架构类似于[这篇语音识别论文](http://static.googleusercontent.com/media/research.google.com/en//pubs/archive/43455.pdf)，除了他们会使用一些从输入到RNN和CNN到全连接层的残差(residual)连接。注意到类似的架构在[文本分类](http://arxiv.org/abs/1602.00367)上效果较好。
 
@@ -138,6 +138,8 @@ CNN的输出是几个channel（即feature map）的集合。我们可以在每�
 这些CNN+RNN混合模型的超参数数量十分之多。受限于硬件，我们只覆盖了很少一部分可能的配置。
 
 由于原始的[竞赛](https://apps.topcoder.com/forums/?module=Thread&threadID=866217&start=0&mc=3)是非公开的数据集，所以我们没法发布全部的源代码在[Github](https://github.com/YerevaNN/Spoken-language-identification/tree/master/theano)。
+
+
 
 参考：　http://blog.revolutionanalytics.com/2016/09/deep-learning-part-3.html
 
