@@ -5,8 +5,10 @@ description: 深度学习实践
 category: blog
 ---
 
-翻译自： https://yerevann.github.io/2016/06/26/combining-cnn-and-rnn-for-spoken-language-identification/
-github：https://github.com/harvitronix/continuous-online-video-classification-blog
+翻译自： [combining-cnn-and-rnn-for-spoken-language-identificatio](https://yerevann.github.io/2016/06/26/combining-cnn-and-rnn-for-spoken-language-identification/)
+
+
+github：[源码](https://github.com/harvitronix/continuous-online-video-classification-blog)
 
 **翻译的原因是觉得示意图很好**
 
