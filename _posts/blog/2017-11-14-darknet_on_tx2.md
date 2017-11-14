@@ -337,9 +337,9 @@ darknet可以基于其他预训练的权重文件再训练，重新训练时可�
 ### 3.1 error 1:
 
 ```
-nvidia@tegra-ubuntu:~/workspace/cpp/darknet$ sudo ./darknet detector train ~/data/robot_yolo_data/cfg/robot.data ~/data/robot_yolo_data/cfg/robot.cfg ./weights/tiny-yolo-voc.weights 
+nvidia@tegra-ubuntu:~/workspace/cpp/darknet$ sudo ./darknet detector train ~/data/test_yolo_data/cfg/test.data ~/data/test_yolo_data/cfg/test.cfg ./weights/tiny-yolo-voc.weights 
 [sudo] password for nvidia: 
-robot
+test
 First section must be [net] or [network]: No such file or directory
 darknet: ./src/utils.c:253: error: Assertion `0' failed.
 Aborted (core dumped)
@@ -347,18 +347,25 @@ Aborted (core dumped)
 将 darknet源代码 `cfg/voc-yolo.cfg`拷贝一份再修改参数。修改如下参数
 
 + 第三行修改为：
+
 ```
     batch=64
 ```
+
 + 第四行修改为,注意这个地方可能会导致 `could't open file train.txt`问题，可以尝试修改为其他，比如16,32
+
 ```
 subdivisions=8
 ```
+
 + 第244行修改为
+
 ```
 classes=4
 ```
+
 + 237行修改为。修改规则为 (classes+5)*5，当前有4个分类，所以是 (4+5)*5=45
+
 
 ```
 filters=45
@@ -368,8 +375,8 @@ filters=45
 ### 3.2 error 2
 
 ```
-nvidia@tegra-ubuntu:~/workspace/cpp/darknet$ sudo ./darknet detector train ~/data/robot_yolo_data/cfg/robot.data ~/data/robot_yolo_data/cfg/yolo-robot.cfg ~/data/robot_yolo_data/darknet19_448.conv.23 
-yolo-robot
+nvidia@tegra-ubuntu:~/workspace/cpp/darknet$ sudo ./darknet detector train ~/data/test_yolo_data/cfg/test.data ~/data/test_yolo_data/cfg/yolo-test.cfg ~/data/test_yolo_data/darknet19_448.conv.23 
+yolo-test
 layer     filters    size              input                output
     0 conv     32  3 x 3 / 1   416 x 416 x   3   ->   416 x 416 x  32
     1 max          2 x 2 / 2   416 x 416 x  32   ->   208 x 208 x  32
@@ -415,8 +422,8 @@ Aborted (core dumped)
 ###  3.3 error 3
 
 ```
-nvidia@tegra-ubuntu:~/workspace/cpp/darknet$ sudo ./darknet detector train ~/data/robot_yolo_data/cfg/robot.data ~/data/robot_yolo_data/cfg/yolo-robot.cfg ~/data/robot_yolo_data/darknet19_448.conv.23 
-yolo-robot
+nvidia@tegra-ubuntu:~/workspace/cpp/darknet$ sudo ./darknet detector train ~/data/test_yolo_data/cfg/test.data ~/data/test_yolo_data/cfg/yolo-test.cfg ~/data/test_yolo_data/darknet19_448.conv.23 
+yolo-test
 layer     filters    size              input                output
     0 conv     32  3 x 3 / 1   416 x 416 x   3   ->   416 x 416 x  32
     1 max          2 x 2 / 2   416 x 416 x  32   ->   208 x 208 x  32
@@ -451,13 +458,13 @@ layer     filters    size              input                output
    30 conv     45  1 x 1 / 1    13 x  13 x1024   ->    13 x  13 x  45
    31 detection
 mask_scale: Using default '1.000000'
-Loading weights from /home/nvidia/data/robot_yolo_data/darknet19_448.conv.23...Done!
+Loading weights from /home/nvidia/data/test_yolo_data/darknet19_448.conv.23...Done!
 Learning Rate: 0.001, Momentum: 0.9, Decay: 0.0005
 Couldn't open file: train.txt
 ```
 
 参考： https://groups.google.com/forum/#!msg/darknet/7JgHFfTyFHM/kPzfynNnAQAJ
-这个解决办法是将 `robot.cfg`文件中的 `subdivisions=8`修改为 `subdivisions=16`或者其他32,64等。但是这个解决办法对我无效，我后来发现需要在linux下重新 编辑一个新的文件`robot.data`(voc.data)。是由于之前的文件是在windows下生成的，与ubuntu系统的编码格式不同。
+这个解决办法是将 `test.cfg`文件中的 `subdivisions=8`修改为 `subdivisions=16`或者其他32,64等。但是这个解决办法对我无效，我后来发现需要在linux下重新 编辑一个新的文件`test.data`(voc.data)。是由于之前的文件是在windows下生成的，与ubuntu系统的编码格式不同。
 
 
 
