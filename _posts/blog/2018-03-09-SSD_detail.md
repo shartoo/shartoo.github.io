@@ -13,7 +13,7 @@ category: blog
 
 **横向流程图**
 
- ![网络横向结构图](/images/blog/ssd_structure2.png)
+ ![网络横向结构图](/images/blog/ssd_structure2.jpg)
 
 ### 1.1 网络结构(代码)
 
