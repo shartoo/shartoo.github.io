@@ -193,9 +193,9 @@ prior box是按照不同的 scale 和 ratio 生成，m(默认是6，但是有的
 
 + **scale**: 假定使用N个不同层的feature map 来做预测。最底层的 feature map 的 scale 值为 $s_{min}=0.2$，最高层的为$s_{max} = 0.9$ ，其他层通过下面公式计算得到 $s_k = s_{min}+\frac{s_{max}-s_{min}}{m-1}(k-1), k\in [1,N]$ (低层检测小目标，高层检测大目标)。当前$300\times3\times3$网络一共使用了6(N=6)个feature map，即网络结构图中的detector1..detector6。比如第一层**detector1**的$s_k=0.2$，第二层的**detector2**的$s_k=0.2+\frac{0.9-0.2}{6-1}(2-1)=0.34$,...第五层**detector5**的$s_k=0.2+\frac{0.9-0.2}{6-1}(5-1)=0.76$
 
-+ **ratio**: 使用不同的 ratio值 $a_r \in \left\{1,2,\frac{1}{2},3,\frac{1}{3}\right\}$ 计算 default box 的宽度和高度： $w_K^{a} = s_k \sqrt{a_r} , h_k^{a} =s_k/\sqrt{a_r}$ 。另外对于 ratio = 1 的情况，额外再指定 scale 为 $s_k{`}=\sqrt{s_ks_{k+1}}$ 也就是总共有 6 中不同的 default box。比如示意图中的为**detector4**，其$s_k=0.62$,依据公式 $w_K^{a} = s_k \sqrt{a_r}$ 按照 $\left\{1,2,\frac{1}{2},3,\frac{1}{3}\right\}$ 顺序可以有 $w_k^a$ : $[0.62\times300,0.62\times1.414\times300,0.62\times0.707\times300,0.62\times1.732\times300,0.62\times0.577\times300]$ 。**与图中的168不一致**
++ **ratio**: 使用不同的 ratio值 $a_r\in \left\{1,2,\frac{1}{2},3,\frac{1}{3}\right\}$ 计算 default box 的宽度和高度： $w_K^{a} = s_k \sqrt{a_r} , h_k^{a} =s_k/\sqrt{a_r}$ 。另外对于 ratio = 1 的情况，额外再指定 scale 为 $s_k{`}=\sqrt{s_ks_{k+1}}$ 也就是总共有 6 中不同的 default box。比如示意图中的为**detector4**，其$s_k=0.62$,依据公式 $w_K^{a} = s_k \sqrt{a_r}$ 按照 $\left\{1,2,\frac{1}{2},3,\frac{1}{3}\right\}$ 顺序可以有 $w_k^a$ : $[0.62\times300,0.62\times1.414\times300,0.62\times0.707\times300,0.62\times1.732\times300,0.62\times0.577\times300]$ 。**与图中的168不一致**
 
-+ **default box中心**：上每个 default box的中心位置设置成 $(\frac{i+0.5}{\left| f_k \right|},\frac{j+0.5}{\left|f_k\right|})$ ，其中 $\left|f_k \right|$ 表示第k个特征图的大小 $i,j\in [0,\left|f_k\right|]$  。
++ **default box中心**：上每个 default box的中心位置设置成 $(\frac{i+0.5}{\vert f_k \vert},\frac{j+0.5}{\vertf_k\vert})$ ，其中 $\vert f_k \vert$ 表示第k个特征图的大小 $i,j\in [0,\vert f_k\vert]$  。
 
 
 注意：每一层的scale参数是
