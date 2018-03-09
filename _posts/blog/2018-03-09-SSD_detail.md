@@ -195,7 +195,7 @@ prior box是按照不同的 scale 和 ratio 生成，m(默认是6，但是有的
 
 + **ratio**: 使用不同的 ratio值 $a_r\in \lbrace 1,2,\frac{1}{2},3,\frac{1}{3}\rbrace$ 计算 default box 的宽度和高度： $w_K^{a} = s_k \sqrt{a_r} , h_k^{a} =s_k/\sqrt{a_r}$ 。另外对于 ratio = 1 的情况，额外再指定 scale 为 $s_k{`}=\sqrt{s_ks_{k+1}}$ 也就是总共有 6 中不同的 default box。比如示意图中的为**detector4**，其$s_k=0.62$,依据公式 $w_K^{a} = s_k \sqrt{a_r}$ 按照 $\lbrace 1,2,\frac{1}{2},3,\frac{1}{3}\rbrace$ 顺序可以有 $w_k^a$ : $[0.62\times300,0.62\times1.414\times300,0.62\times0.707\times300,0.62\times1.732\times300,0.62\times0.577\times300]$ 。**与图中的168不一致**
 
-+ **default box中心**：上每个 default box的中心位置设置成 $(\frac{i+0.5}{\vert f_k \vert},\frac{j+0.5}{\vertf_k\vert})$ ，其中 $\vert f_k \vert$ 表示第k个特征图的大小 $i,j\in [0,\vert f_k\vert]$  。
++ **default box中心**：上每个 default box的中心位置设置成 $(\frac{i+0.5}{\vert f_k \vert},\frac{j+0.5}{\vert f_k\vert})$ ，其中 $\vert f_k \vert$ 表示第k个特征图的大小 $i,j\in [0,\vert f_k\vert]$  。
 
 
 注意：每一层的scale参数是
