@@ -390,8 +390,8 @@ AnchorBox是FasterRCNN的叫法，SSD的是PriorBox。下面的代码是`ssd_box
 1. 先收集整个网络的PriorBox。包含了根据SSD所有特征层生成的PriorBox。作为全部正样本候选
 2. 拷贝一份正样本，作为负样本的候选。
 3. 计算每个正样本与全部真实标记框的IOU
-3.1 . 如果所有的PriorBox与真实标记得IOU都没有高于阈值的，则将有最高IOU的PriorBox作为正样本。同时从负样本中剔除该PriorBox
-3.2  IOU高于阈值的PriorBox会作为正样本保留，同时将对应的priorbox从负样本中剔除
+ + 3.1 如果所有的PriorBox与真实标记得IOU都没有高于阈值的，则将有最高IOU的PriorBox作为正样本。同时从负样本中剔除该PriorBox
+ + 3.2 IOU高于阈值的PriorBox会作为正样本保留，同时将对应的priorbox从负样本中剔除
 
 
 ![](/images/blog/ssd_13_bbox.png)
