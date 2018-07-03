@@ -279,6 +279,7 @@ input = np.ones([16,5,5,512],dtype=np.int16)
 
 然后再创建一个`variances_tensor`，它和上面的`boxes_tensor`维度一样，只不过它的值都为0加上variance(尺寸和n_boxes一样).然后将`variances_tensor`和`boxes_tensor`做连接（concatenate）操作。所以生成的priorbox 会变成 ***size= [feature_map_height,feature_map_width,n_boxes,8]*** (论文里面不会说得这么具体)
 
+下图可以看出，原图中两个动物分别在不同层次的`detector & classifier` 被检测出来。
 ![](/images/blog/ssd_9_code0.png)
 
 
