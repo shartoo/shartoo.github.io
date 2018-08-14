@@ -206,28 +206,27 @@ aligner.align(work_dir, lab_align_dir)
 + 音素 a: 的波形
 
 ![TTS merlin技术路线](/images/blog/merlin_tts_tch2_44.png)
-![TTS merlin技术路线](/images/blog/merlin_tts_tch2_45.png)
 
 + 音素a:的magnitude spectrum（幅度频谱）
 
+![TTS merlin技术路线](/images/blog/merlin_tts_tch2_45.png)
 ![TTS merlin技术路线](/images/blog/merlin_tts_tch2_46.png)
-![TTS merlin技术路线](/images/blog/merlin_tts_tch2_47.png)
 
 
 ### 8.2 术语
 
 + Spectral Envelope：频谱封装
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch2_48.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch2_47.png)
 
 + F0
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch2_49.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch2_48.png)
 
 
 + Aperiodic energy：非周期能量
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch2_50.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch2_49.png)
 
 ### 8.5 典型声码器 WORLD
 + 语音特征
@@ -239,24 +238,24 @@ aligner.align(work_dir, lab_align_dir)
 
 + Hanning窗长度3T0
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch2_51.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch2_50.png)
 
 + 使用一个**长度为 2/3 F0**移动平均过滤器
 
+![TTS merlin技术路线](/images/blog/merlin_tts_tch2_51.png)
 ![TTS merlin技术路线](/images/blog/merlin_tts_tch2_52.png)
-![TTS merlin技术路线](/images/blog/merlin_tts_tch2_53.png)
 
 + 使用一个**长度为 2 F0**移动平均过滤器
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch2_54.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch2_53.png)
 
 + $SpEnv= q_0logSp(F)+q1logSp(F+F0)+q1logSp(F-F0)$
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch2_55.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch2_54.png)
 
 #### 8.5.3 F0 评估
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch2_56.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch2_55.png)
 
 #### 8.5.4 band aperiodicities
 
@@ -267,28 +266,28 @@ aligner.align(work_dir, lab_align_dir)
  - 更多band： b
  - 最高band： c
  
-![TTS merlin技术路线](/images/blog/merlin_tts_tch2_57.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch2_56.png)
 
 
 ### 8.6 声学特征工程
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch2_58.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch2_57.png)
 
 原始声学特征与实际使用的声学特征
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch2_59.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch2_58.png)
 
 抽取一部分来分析
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch2_60.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch2_59.png)
 
 再细致来看
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch2_61.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch2_60.png)
 
 处理步骤如下
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch2_62.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch2_61.png)
 
 可以直接运行脚本`03_prepare_acoustic_features.sh`得到
 ```
