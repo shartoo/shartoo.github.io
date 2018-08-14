@@ -20,9 +20,11 @@ category: blog
 ![TTS merlin技术路线](/images/blog/merlin_tts_tch3.png)
 
 可以看到其实统计模型的任务就是做一个sequence-to-sequence的回归
+
 ![TTS merlin技术路线](/images/blog/merlin_tts_tch4.png)
 
 即：输入序列(语义特征)回归到输出序列的声学特征。但是由于二者之间不同的声学始终频率而导致长度不一。
+
 ![TTS merlin技术路线](/images/blog/merlin_tts_tch5.png)
 
 ## 三 TTS的三个方向
