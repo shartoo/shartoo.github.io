@@ -261,31 +261,31 @@ echo "synthesizing speech..."
 
 将源声转换为另外一个人的声音，而不改变声音内容
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch3_19.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch3_20.png)
 
 使用神经网络完成
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch3_20.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch3_21.png)
 
 ### 7.1 输入和输出的声学特征的抽取和工程
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch3_21.png)
 ![TTS merlin技术路线](/images/blog/merlin_tts_tch3_22.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch3_23.png)
 
 ### 7.2 输入输出的对齐
 
 + 从波形waveform中声学特征
 + 使用动态时间封装(Dynamic Time Wraping(DTW))
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch3_23.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch3_24.png)
 
 ### 7.3 最简单的方法：对齐输入和输出特征+逐帧回归
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch3_24.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch3_25.png)
 
 ### 7.4 当然，我们也可以用前馈神经网络做得更好
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch3_25.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch3_26.png)
 
 我们可以使用`Merlin/egs/voice_conversion/s1/`目录下的脚本完成这个工作
 
@@ -307,7 +307,7 @@ ${src_feat_dir} ${tgt_feat_dir} ${src_aligned_feat_dir} ${bap_dim}
 
 + 只使用了目标讲话人一小段录音来创造一个新的声音
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch3_27.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch3_28.png)
 
 ### 8.1 使用DNN方法的讲话人调整
 
@@ -317,11 +317,11 @@ ${src_feat_dir} ${tgt_feat_dir} ${src_aligned_feat_dir} ${bap_dim}
 + 共享层(hat swapping)
 + 在目标讲述人数据上fine-tuning整个模型
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch3_28.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch3_29.png)
 
 共享层和hot swapping
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch3_29.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch3_30.png)
 
 
 
