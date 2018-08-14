@@ -119,11 +119,11 @@ category: blog
 + 在标注过的数据集上训练
 + 类别是为文本设计的，而非语音
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch17.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch16_1.png)
 
 #### 4.2.3  Pronuncication /LTS
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch18.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch17.png)
 
 + 发音模型：
   - 查找词典，等等
