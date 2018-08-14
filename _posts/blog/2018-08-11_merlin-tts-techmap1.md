@@ -110,7 +110,7 @@ category: blog
 3. 第三步： 对每一类非标准词(NSW)，使用一些特殊模块来处理。
 ![TTS merlin技术路线](/images/blog/merlin_tts_tch15.png)
 
-#### 4.2.2 POS tagging
+#### 4.2.2 POS tagging 词性标注
 
 ![TTS merlin技术路线](/images/blog/merlin_tts_tch16.png)
 
@@ -134,17 +134,17 @@ category: blog
  
  发音词典示例
  
- ![TTS merlin技术路线](/images/blog/merlin_tts_tch19.png)
+ ![TTS merlin技术路线](/images/blog/merlin_tts_tch18.png)
  
 #### 4.2.4 语言规范
 
 得到语言规范如下
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch20.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch19.png)
 
 ## 5 语言特征工程
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch21.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch20.png)
 
 ### 5.1 术语
 
@@ -158,45 +158,45 @@ category: blog
 
 ### 5.3 Upsample：添加时域信息
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch21.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch22.png)
 
 ## 6 统计模型
 
 ### 6.1  声学模型：一个简单的前馈神经网络
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch22.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch23.png)
 
 有向权重连接
 
 这些网络层的不同作用：
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch23.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch24.png)
 
 ### 6.2 用神经网络来合成
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch24.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch25.png)
 
 ## 7 波形生成（waveform generator）
 
 ### 7.1 声学特征是什么
 
 
-![TTS merlin技术路线](/images/blog/merlin_tts_tch25.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch26.png)
 
 ## 8 使用神经网络的TTS系统
 如果我们把所有的这一切综合起来的示意图如下：
 
 第一步：
-![TTS merlin技术路线](/images/blog/merlin_tts_tch26.png)
+![TTS merlin技术路线](/images/blog/merlin_tts_tch27.png)
 
 第二步：
-![TTS merlin技术路线](/images/blog/merlin_tts_tch27.png)
-第三步：
 ![TTS merlin技术路线](/images/blog/merlin_tts_tch28.png)
-第四步
+第三步：
 ![TTS merlin技术路线](/images/blog/merlin_tts_tch29.png)
-第五步
+第四步
 ![TTS merlin技术路线](/images/blog/merlin_tts_tch30.png)
+第五步
+![TTS merlin技术路线](/images/blog/merlin_tts_tch31.png)
 
 
 
