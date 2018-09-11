@@ -50,90 +50,31 @@ layout: default
 
         {{ content }}
 
-     <!-- 取消Disque的评论插件，改用 多说的
-        <div id="disqus_container">
-            <div style="margin-bottom:20px" class="right">
-                <script type="text/javascript" charset="utf-8">
-                (function(){
-                  var _w = 86 , _h = 16;
-                  var param = {
-                    url:location.href,
-                    type:'6',
-                    count:'', /**是否显示分享数，1显示(可选)*/
-                    appkey:'', /**您申请的应用appkey,显示分享来源(可选)*/
-                    title:'', /**分享的文字内容(可选，默认为所在页面的title)*/
-                    pic:'', /**分享图片的路径(可选)*/
-                    ralateUid:'2820853451', /**关联用户的UID，分享微博会@该用户(可选)*/
-                    language:'zh_cn', /**设置语言，zh_cn|zh_tw(可选)*/
-                    rnd:new Date().valueOf()
-                  }
-                  var temp = [];
-                  for( var p in param ){
-                    temp.push(p + '=' + encodeURIComponent( param[p] || '' ) )
-                  }
-                  document.write('<iframe allowTransparency="true" frameborder="0" scrolling="no" src="http://hits.sinajs.cn/A1/weiboshare.html?' + temp.join('&') + '" width="'+ _w+'" height="'+_h+'"></iframe>')
-                })()
-                </script>
-            </div>
-            <a href="#" class="comment" onclick="return false;">点击查看评论</a>
-            <div id="disqus_thread"></div>
-       -->
-          <!-- 多说评论框 start # 多说评论已经关闭
-       <div class="ds-thread" data-thread-key={{ page.title }}  data-title={{ page.title }} data-url="http://shartoo.github.io/{{ page.url }}"></div>
-           <!-- 多说评论框 end -->
-           <!-- 多说公共JS代码 start (一个网页只需插入一次)
-          <script type="text/javascript">
-          var duoshuoQuery = {short_name:"shartoo"};
-	  (function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0]
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	  })();
--->
-<!-- 来必力City版安装代码 -->
-<div id="lv-container" data-id="city" data-uid="MTAyMC8yODgxNi81Mzg2">
-	<script type="text/javascript">
-   (function(d, s) {
-       var j, e = d.getElementsByTagName(s)[0];
 
-       if (typeof LivereTower === 'function') { return; }
 
-       j = d.createElement(s);
-       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
-       j.async = true;
+<!-- Gitalk 评论 start  -->
 
-       e.parentNode.insertBefore(j, e);
-   })(document, 'script');
-	</script>
-<noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
-</div>
-	
-<!-- City版安装代码已完成 -->
-	
-	 </script>
-       <!-- 多说公共JS代码 end -->
-      </div>
+<!-- Link Gitalk 的支持文件  -->
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script> 
+<div id="gitalk-container"></div>     <script type="text/javascript">
+    var gitalk = new Gitalk({
 
-<!--       删除Disqus评论系统
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-var disqus_shortname = 'shartoo'; // required: replace example with your forum shortname
-
-/* * * DON'T EDIT BELOW THIS LINE * * */
-(function() {
-var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
--->
-
+    // gitalk的主要参数
+		clientID: `4f6fc23bda36104b0889`,	//https://github.com/settings/applications/877829
+		clientSecret: `8993eae6346821460176fed11d49545e6d4bd79f`, 
+		repo: `ShartooComment`,
+		owner: 'shartoo',  //存储你评论 issue 的 Github 仓库名（建议直接用 GitHub Page 的仓库名）
+		admin: ['shartoo'],//建议自己的用户名
+		id: 'window.location.pathname', //页面的唯一标识，gitalk 会根据这个标识自动创建的issue的标签,我们使用页面的相对路径作为标识
+    
+    });
+    gitalk.render('gitalk-container');
+</script> 
+<!-- Gitalk end -->
+ </script>
+ <!-- 多说公共JS代码 end -->
+ </div>
 
   <!--删除微博秀
     <div class="sidenav">
