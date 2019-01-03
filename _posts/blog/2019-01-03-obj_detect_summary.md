@@ -45,11 +45,13 @@ category: blog
 |RPN+VGG,shared|300|voc2007+voc2012+coco|75.9|
 
 **coco数据集**
+
 ![目标检测概览](/images/blog/obj_detect_summary-2.png)
 
 ### 1.2 R-FCN
 
 **voc数据集**
+
 |方法|训练集|mAP(%)|测试时间(sec/image)|
 |---|---|---|---|
 |FasterRCNN|voc 2007+voc2012|73.8|0.42|
@@ -120,15 +122,15 @@ category: blog
 + 对于yolo，输入图像尺寸有288x288,416x416,544x544
 更高的分辨率可以得到更好的准确率，但是速度会相应下降。
 
-![目标检测概览](/images/blog/obj_detect_summary-14.png)
+![目标检测概览](/images/blog/obj_detect_summary-13.png)
 
 输入图像的分辨率和特征抽取对速度有极大影响。下面是最高和最低的FPS，当然下图可能在使用不同mAP时结果有较大出入
 
-![目标检测概览](/images/blog/obj_detect_summary-15.png)
+![目标检测概览](/images/blog/obj_detect_summary-14.png)
 
 **coco数据集的表现**
 
-![目标检测概览](/images/blog/obj_detect_summary-16.png)
+![目标检测概览](/images/blog/obj_detect_summary-15.png)
 
 可以看到，FPN和FasterRCNN有很高的准确率，但是RetinaNet最高。取得最高准确率的RetinaNet是借助了
 
@@ -142,7 +144,7 @@ category: blog
 
 研究了特征抽取器对准确率的影响，其中FasterRCNN和R-FCN可以利用一个更好的特征抽取器，但是对SSD效果提升程度不大。
 
-![目标检测概览](/images/blog/obj_detect_summary-17.png)
+![目标检测概览](/images/blog/obj_detect_summary-16.png)
 
 上图中x轴 是每个特征抽取器在分类上的top1的准确率。
 
@@ -150,25 +152,25 @@ category: blog
 
 对于大目标SSD即使使用很简单的抽取器也可以表现很好，如果使用更好的抽取其，SSD甚至可以达到其他分类器的准确率。但是**SSD在小目标上表现很差**
 
-![目标检测概览](/images/blog/obj_detect_summary-18.png)
+![目标检测概览](/images/blog/obj_detect_summary-17.png)
 
 ### 3.3 输入图像的分辨率
 
 更高的分辨率有利于提升小目标的检测准确率，对大目标也有帮助。对分辨率在长宽维度上以因子2递减，准确率平均降低15.88%，但是对应的inference时间也会平均以因子 27.4%下降。
 
-![目标检测概览](/images/blog/obj_detect_summary-19.png)
+![目标检测概览](/images/blog/obj_detect_summary-18.png)
 
 ### 3.4 区域候选的数目
 
 区域候选的数目可以极大地影响FasterRCNN(FRCNN)，而对准确率不会有太大降低。例如，Inception ResNet,FasterRCNN可以提升三倍速度，如果使用50个区域候选而不是300个的话，对应的准确率只降低了4%。但是R-FCN对每个ROI只有少得多的操作需要做，所以减少区域候选，对它的速度的提升并不显著。
 
-![目标检测概览](/images/blog/obj_detect_summary-20.png)
+![目标检测概览](/images/blog/obj_detect_summary-19.png)
 
 ### 3.5 GPU时间
 
 下面是不同模型使用不同特征抽取器的GPU时间
 
-![目标检测概览](/images/blog/obj_detect_summary-21.png)
+![目标检测概览](/images/blog/obj_detect_summary-20.png)
 
 大部分论文使用FLOPS(浮点运算)来衡量模型复杂度，但是这个没法反映准确的速度。模型密度(稀疏和稠密模型)影响的是所耗费的时间。讽刺的是，欠稠密模型通常平均需要更长的时间来完成一个浮点运算。
 
@@ -176,7 +178,7 @@ category: blog
 
 MobileNet有最少的参数，它需要不到1GB的内存。
 
-![目标检测概览](/images/blog/obj_detect_summary-22.png)
+![目标检测概览](/images/blog/obj_detect_summary-21.png)
 
 ## 4 结论
 
