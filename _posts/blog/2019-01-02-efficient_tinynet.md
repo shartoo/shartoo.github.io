@@ -32,6 +32,15 @@ category: blog
 
 ![iou1](/images/blog/effient-smallnet-3.png)
 
+### 1.2.1 1x1卷积的效果
+
++ 先看看$3\times 3$卷积效果
+
+![卷积1](/images/blog/small_effient_3x3.gif)
+
++ 再看$1\times 1$卷积效果
+![卷积2](/images/blog/small_effient_1x1.gif)
+
 ### 1.3 分组卷积
 
 分组卷积为卷积的变种，特点是**输入特征的通道数被分组，并且每个分组独立地进行卷积操作**（标准卷积相当于只有一个分组，所有通道之间信息会互通）。
