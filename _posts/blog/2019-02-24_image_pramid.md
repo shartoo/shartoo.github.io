@@ -77,6 +77,9 @@ $$
 
 ![图像金字塔](/images/blog/gauss_image_praid.jpg)
 
+**不过，我查看opencv官方文档，高斯金字塔的算法完全不是这么做的**
+
+
 ## 3 laplace金字塔
 
 
@@ -88,3 +91,5 @@ $$
 [IO头条 图像金字塔算法](http://www.10tiao.com/html/295/201609/2651988200/3.html)
 
 [csdn Sift中尺度空间、高斯金字塔、差分金字塔（DOG金字塔）、图像金字塔](https://blog.csdn.net/dcrmg/article/details/52561656)
+
+[opencv 官方文档](https://docs.opencv.org/3.4/d4/d1f/tutorial_pyramids.html)
