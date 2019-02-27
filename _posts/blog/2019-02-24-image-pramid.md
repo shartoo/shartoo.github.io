@@ -50,7 +50,7 @@ src = cv.pyrUp(src, dstsize=(2 * cols, 2 * rows))
 
 在opencv中的代码
 ```
-src = cv.pyrDown(src, dstsize=(cols // 2, rows // 2))
+src = cv.pyrDown(src, dstsize=(cols / 2, rows / 2))
 ```
 显而易见，结果图像只有原图的四分之一。通过对输入图像$G_i$(原始图像)不停迭代以上步骤就会得到整个金字塔。同时我们也可以看到，向下取样会逐渐丢失图像的信息。 以上就是对图像的向下取样操作，即缩小图像
 
@@ -85,7 +85,14 @@ $$
 
 ![图像金字塔](/images/blog/gauss_image_praid.jpg)
 
+**代码示例**
+我们以下图的lnea.jpg为例
+![图像金字塔](/images/blog/lnea.jpg)
+得到的图像金字塔结果如下
+![图像金字塔](/images/blog/image_pyramid_result.png)
 
+
+代码位于 [python实现图像金字塔](https://github.com/shartoo/BeADataScientist/blob/master/codes/4_4-image/image_pyramid.py)
 
 
 ## 3 laplace金字塔
