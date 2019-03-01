@@ -104,9 +104,13 @@ DOG金字塔的第1组第1层是由高斯金字塔的第1组第2层减第1组第
 
 概括为DOG金字塔的第o组第l层图像是有高斯金字塔的第o组第l+1层减第o组第l层得到的。图示如下
 
-![图像金字塔](/images/blog/gauss_dog_image_praid.jpg)
+![图像金字塔](/images/blog/image_dog_result.png) 
+
+可以看到结果都是黑的，人眼看不到效果。实际计算结果包含了大量信息点。
 
 代码位于 [python实现图像金字塔](https://github.com/shartoo/BeADataScientist/blob/master/codes/4_4-image/image_pyramid.py)
+
+
 
 ## 4 laplace金字塔
 
