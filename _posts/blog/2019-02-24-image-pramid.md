@@ -107,6 +107,14 @@ DOG金字塔的第1组第1层是由高斯金字塔的第1组第2层减第1组第
 ![图像金字塔](/images/blog/image_dog_result.png) 
 
 可以看到结果都是黑的，人眼看不到效果。实际计算结果包含了大量信息点。
+我们对结果进行归一化操作，借助opencv的api
+
+```
+cv2.normalize(im, None, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_32F)
+```
+得到结果如下，可以看到清晰地特征。
+
+![图像金字塔](/images/blog/image_dog_norm_result.png) 
 
 代码位于 [python实现图像金字塔](https://github.com/shartoo/BeADataScientist/blob/master/codes/4_4-image/image_pyramid.py)
 
