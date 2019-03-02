@@ -96,18 +96,40 @@ $$
 
 ## 3 laplace金字塔
 
-laplace金字塔是在高斯金字塔的基础上构建起来的，其实生成高斯金字塔的目的就是为了构建laplace金字塔。
+## 3 差分金字塔DOG
+
+DOG（差分金字塔）金字塔是在高斯金字塔的基础上构建起来的，其实生成高斯金字塔的目的就是为了构建DOG差分金字塔。
 
 **构建过程**
 
-laplace金字塔的第1组第1层是由高斯金字塔的第1组第2层减第1组第1层得到的。以此类推，逐组逐层生成每一个差分图像，所有差分图像构成差分金字塔。
+差分金字塔的第1组第1层是由高斯金字塔的第1组第2层减第1组第1层得到的。以此类推，逐组逐层生成每一个差分图像，所有差分图像构成差分金字塔。
 
-概括为laplace金字塔的第o组第l层图像是有高斯金字塔的第o组第l+1层减第o组第l层得到的。图示如下
+概括为差分金字塔的第o组第l层图像是有高斯金字塔的第o组第l+1层减第o组第l层得到的。图示如下
 
 ![图像金字塔](/images/blog/image_dog_result.png) 
 
 可以看到结果都是黑的，人眼看不到效果。实际计算结果包含了大量信息点。
-我们对结果进行归一化操作，借助opencv的api
+我们对结果进行归一化操作，此时就变成了laplace金字塔了。
+
+
+## 4 laplace金字塔
+
+之前一直没弄清楚，差分金字塔和laplace金字塔之间的关系。直到看到这个[文档](http://www.cse.yorku.ca/~kosta/CompVis_Notes/DoG_vs_LoG.pdf) 
+
+我们先看差分金字塔的公式定义：
+
+$$
+Dog(x,y,\sigma)=(G(x,y,k\sigma)-G(x,y,\sigma))*I(x,y) =L(x,y,k\sigma)-L(x,y,\sigma) \\
+其中 G(x,y,\sigma)代表了高斯核，G(x,y,\sigma)=\frac{1}{\sqrt{2\pi}}e^{\frac{x^2+y^2}{2\sigma ^2}},而L(x,y,\sigma)=G(x,y,\sigma)*I(x,y)
+$$
+
+缩放之后的LoG表达式为：
+
+$$
+LoG(x,y,\sigma)=\sigma ^2\triangle ^2 L(x,y,\sigma)
+$$
+
+借助opencv的api
 
 ```
 cv2.normalize(im, None, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_32F)
