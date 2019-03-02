@@ -94,7 +94,6 @@ $$
 
 代码位于 [python实现图像金字塔](https://github.com/shartoo/BeADataScientist/blob/master/codes/4_4-image/image_pyramid.py)
 
-## 3 laplace金字塔
 
 ## 3 差分金字塔DOG
 
@@ -126,10 +125,18 @@ $$
 缩放之后的LoG表达式为：
 
 $$
-LoG(x,y,\sigma)=\sigma ^2\triangle ^2 L(x,y,\sigma)
+LoG(x,y,\sigma)=\sigma ^2\bigtriangledown ^2 L(x,y,\sigma) \\
+= \sigma ^2(L_{xx}+L_{yy})
 $$
 
-借助opencv的api
+最终推导结果如下：
+$$
+(k-1)\sigma ^2LoG \approx =DoG
+$$
+
+可以看到，DoG近似等于将LoG尺度缩放到一个常量$k-1$.
+
+我们来看实际效果，借助opencv的api
 
 ```
 cv2.normalize(im, None, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_32F)
@@ -141,7 +148,7 @@ cv2.normalize(im, None, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV
 代码位于 [python实现图像金字塔](https://github.com/shartoo/BeADataScientist/blob/master/codes/4_4-image/image_pyramid.py)
 
 
-
+此特征可以等价理解成Laplace特征。
 
 **参考**
 
