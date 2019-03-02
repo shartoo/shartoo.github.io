@@ -130,3 +130,5 @@ cv2.normalize(im, None, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV
 [csdn Sift中尺度空间、高斯金字塔、差分金字塔（DOG金字塔）、图像金字塔](https://blog.csdn.net/dcrmg/article/details/52561656)
 
 [opencv 官方文档](https://docs.opencv.org/3.4/d4/d1f/tutorial_pyramids.html)
+
+[图像金字塔的算法构建图示(强烈推荐)](https://www.uio.no/studier/emner/matnat/its/UNIK4690/v16/forelesninger/lecture_2_3_blending.pdf)
