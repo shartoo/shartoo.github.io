@@ -94,15 +94,15 @@ $$
 
 代码位于 [python实现图像金字塔](https://github.com/shartoo/BeADataScientist/blob/master/codes/4_4-image/image_pyramid.py)
 
-## 3 DOG 差分金字塔
+## 3 laplace金字塔
 
-DOG（Difference of Gaussian）金字塔是在高斯金字塔的基础上构建起来的，其实生成高斯金字塔的目的就是为了构建DOG金字塔。
+laplace金字塔是在高斯金字塔的基础上构建起来的，其实生成高斯金字塔的目的就是为了构建laplace金字塔。
 
 **构建过程**
 
-DOG金字塔的第1组第1层是由高斯金字塔的第1组第2层减第1组第1层得到的。以此类推，逐组逐层生成每一个差分图像，所有差分图像构成差分金字塔。
+laplace金字塔的第1组第1层是由高斯金字塔的第1组第2层减第1组第1层得到的。以此类推，逐组逐层生成每一个差分图像，所有差分图像构成差分金字塔。
 
-概括为DOG金字塔的第o组第l层图像是有高斯金字塔的第o组第l+1层减第o组第l层得到的。图示如下
+概括为laplace金字塔的第o组第l层图像是有高斯金字塔的第o组第l+1层减第o组第l层得到的。图示如下
 
 ![图像金字塔](/images/blog/image_dog_result.png) 
 
@@ -118,9 +118,6 @@ cv2.normalize(im, None, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV
 
 代码位于 [python实现图像金字塔](https://github.com/shartoo/BeADataScientist/blob/master/codes/4_4-image/image_pyramid.py)
 
-
-
-## 4 laplace金字塔
 
 
 
