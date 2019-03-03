@@ -1,7 +1,7 @@
 ---
 layout: post
-title: 图像处理基础
-description: 图像特征:Haar特征
+title: 图像处理基础Haar特征
+description: 图像特征
 category: blog
 ---
 
