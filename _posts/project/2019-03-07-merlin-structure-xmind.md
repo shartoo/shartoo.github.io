@@ -1,3 +1,10 @@
+---
+layout: project
+title: sklean机器学习
+category: 机器学习xmind
+description: 机器学习笔记
+---
+
 .post-svg-container{
   display: flex;
   overflow-x: auto;
