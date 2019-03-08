@@ -14,6 +14,7 @@ category: blog
 主要工作是创建一个目录，做好准备工作。主要创建了如下文件夹:
 
 + experiments
+
 ```
 ─ mandarin_voice(voice name)
     ├── acoustic_model
@@ -34,7 +35,9 @@ category: blog
         ├── test_id_list.scp
         └── wav
 ```
+
 + database
+
 ```
  feats
 │ ├── bap
@@ -54,6 +57,7 @@ category: blog
 
 ```
 
+
 将一些基本参数写入到`conf/global_setting.cfg`文件中
 
 
@@ -61,20 +65,24 @@ category: blog
 
 
 **注意：一定要在setup.sh里面定义好train,valid,test的数量，不然修改global_config.cfg里面的值也没用。这三者相加的值要等于（duration_model/FileIdList下）file_id_list.scp总行数**
+
 ### 02_prepare_lab
 
 需要两个参数：
+
 + lab_dir: 第一步中的标注目录 `database/labels`
 + prompt_lab_dir :第一步中生成的`database/prompt-lab`
 
 #### 2.1 准备文件夹
 
 + 将 `database/labels`目录下的`lab_phone_align`下的lab文件分别复制到`experiments/mandarin_voice/duration_model/data`（时域模型）和`experiments/mandarin_voice/acoustic_model/data`（声学模型）下。【用于训练】
+
 + 将`database/prompt-lab`下的lab文件复制到`experiments/mandarin_voice/test_synthesis`下【用于测试（合成）】
 
 #### 2.2 生成文件列表
 
 + 将`database/labels`目录下的`lab_phone_align`下的lab文件列表写入到`experiments/mandarin_voice/duration_model/FileIdList'和`experiments/mandarin_voice/acoustic_model/FileIdList'。并移除文件后缀【训练集文件列表】
+
 +  将`database/prompt-lab`下的lab文件列表写入到`experiments/mandarin_voice/test_synthesis/test_id_list.scp`文件中，并移除文件后缀【用于合成语音的文本列表】
 
 ###  03_prepare_acoustic_feature
@@ -86,12 +94,15 @@ category: blog
 #### 3.1 使用声码器抽取声学特征
 
 使用`merlin/misc/scripts/vocoder/world/extract_features_for_merlin.py`脚本抽取，注意，其中的声码器可以是`WORLD`也可以是其他的，比如`straight`,`WORLD_2`。其实依然是在python中调用以下脚本：
+
 ```
 world = os.path.join(merlin_dir, "tools/bin/WORLD")
 sptk = os.path.join(merlin_dir, "tools/bin/SPTK-3.9")
 reaper = os.path.join(merlin_dir, "tools/bin/REAPER")
 ```
+
 生成的特征目录如下：
+
 ```
 sp_dir = os.path.join(feat_dir, 'sp' )
 mgc_dir = os.path.join(feat_dir, 'mgc')
@@ -100,6 +111,7 @@ bap_dir = os.path.join(feat_dir, 'bap')
 f0_dir = os.path.join(feat_dir, 'f0' )
 lf0_dir = os.path.join(feat_dir, 'lf0')
 ```
+
 如果我们使用world作为vocoder的话，会使用`misc/scripts/vocoder/world/extract_features_for_merlin.py`脚本，生成步骤其实是：
 1. 直接从原始wav文件，使用`world analysis`抽取 `sp`,`bapd`特征。`straight`vocoder 会产生 `ap`,如果使用reaper会产生`f0`特征。
 2. `f0`$\rightarrow$ `lf0`,`bapd`$\rightarrow$ `bap`,`sp`$\rightarrow$ `mgc`
