@@ -49,7 +49,6 @@ category: blog
 │ ├── A11_0.lab
 │ ├── A11_1.lab
 │ ├── A11_2.lab
-...
 └── wav
     ├── A11_0.wav
     ├── A11_100.wav
