@@ -1,6 +1,6 @@
 ---
 layout: post
-title:使用HOG+SVM+滑窗+NMS完成目标定位分类
+title: 使用HOG+SVM+滑窗+NMS完成目标定位分类
 description: 图像处理
 category: blog
 ---
