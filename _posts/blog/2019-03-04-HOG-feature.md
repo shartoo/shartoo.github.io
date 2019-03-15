@@ -186,7 +186,7 @@ plt.show()
 效果如下
 
 
-![sift1](imagesbloghog_feature_10.jpg) 
+![sift1](/images/blog/hog_feature_10.jpg)
 
 ## 7 参考
 
