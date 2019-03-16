@@ -130,12 +130,12 @@ $$
 3. 统计累计落在每个方向点的关键点个数，依次生成梯度直方图
 
 
-![sift1](/images/blog/sift_feature6.png) 
+![sift1](/images/blog/sift_feature5.png) 
 
 具体在图像实例中，某个极值点的梯度方向直方图如下：
 
 
-![sift1](/images/blog/sift_feature7.png) 
+![sift1](/images/blog/sift_feature6.png) 
 
 上图中，左图矩形框内的红色小圆圈代表点击的极值点，中间图案代表最终得到的极值点的主方向，右图为对应的梯度方向直方图。
 
@@ -148,19 +148,19 @@ $$
 如下图，对于2*2块，每块的所有像素点的梯度做高斯加权，每块最终取8个方向，即可以生成2*2*8维度的向量，以这2*2*8维向量作为中心关键点的数学描述
 
 
-![sift1](/images/blog/sift_feature8.png) 
+![sift1](/images/blog/sift_feature7.png) 
 
 但是实际上，在原论文中证明，对每个关键点周围采用$4\times 4$块(每个块内依然是8个方向)的邻域描述子效果最佳
 
 
-![sift1](/images/blog/sift_feature9.png) 
+![sift1](/images/blog/sift_feature8.png) 
 
 所以，**此时我们计算的不是一个梯度方向直方图，而是16个**。每个梯度直方图对应的是新坐标系统的中心点附近的点以及圆形周围邻居梯度的分量。
 
 下图是某个极值点用于生成的描述子的邻居以及坐标系统，即直方图（被归一化并以$4\times 4\times 8=128$个整型数字）。仔细看下图，会发现有16个直方图(16个块)，每个直方图有8个bins(代表每个块的8个主方向)。
 
 
-![sift1](/images/blog/sift_feature10.png) 
+![sift1](/images/blog/sift_feature9.png) 
 
 
 
