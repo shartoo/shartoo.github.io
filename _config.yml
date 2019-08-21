@@ -1,6 +1,12 @@
-#
-# This file contains configuration flags to customize your site
-#
+# Gitment
+ # Introduction: https://imsun.net/posts/gitment-introduction/
+gitment:
+  enable: true
+  githubID: shartoo
+  repo: shartoo.github.io
+  ClientID: 5716282
+  ClientSecret: ------
+  lazy: false
 
 # Name of your site (displayed in the header)
 name: (测试修改)
