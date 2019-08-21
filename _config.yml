@@ -4,8 +4,8 @@ gitment:
   enable: true
   githubID: shartoo
   repo: shartoo.github.io
-  ClientID: 5716282
-  ClientSecret: ------
+  ClientID: bfe6fab5dad2540799c1
+  ClientSecret: 939dfc5951819b613b08d452710a0c27dae944b9
   lazy: false
 
 # Name of your site (displayed in the header)
