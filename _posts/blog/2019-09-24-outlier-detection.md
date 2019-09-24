@@ -204,5 +204,5 @@ for i ,(clf_name,clf) in enumerate(classifiers.items()):
 ![](/images/blog/outlier_detection_CBLOF.png)
 ![](/images/blog/outlier_detection_feature_bagging.png)
 ![](/images/blog/outlier_detection_HBOS.png)
-![](/images/blog/outlier_detection_Isolation Forest.png)
+![](/images/blog/outlier_detection_Isolation_Forest.png)
 ![](/images/blog/outlier_detection_KNN.png)
