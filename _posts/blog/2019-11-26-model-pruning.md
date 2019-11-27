@@ -338,7 +338,7 @@ Epoch 00020: val_accuracy did not improve from 0.90274
 查看对应的验证集的tensorboard如下
 
 
-![模型剪枝和优化](/images/blog/model_pruning_7.png)
+![模型剪枝和优化](/images/blog/model_pruning_7.jpg)
 
 ### 4.3  对卷积核排序
 
