@@ -1,99 +1,135 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  
+    <meta charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
+    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
+    
+    <title>tensorflow：理解tensorflow中的输入管道 | Hexo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
+    <meta name="keywords" content="Jelon, 前端, Web, 张德龙, 前端开发" >
+    <meta name="description" content="Jelon个人前端小站" >
 
-  
-  <title>tensorflow：理解tensorflow中的输入管道 | Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="tensorflow">
-<meta property="og:type" content="article">
-<meta property="og:title" content="tensorflow：理解tensorflow中的输入管道">
-<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2016-09-02-tensorflow-inputpipeline/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="tensorflow">
-<meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://shartoo.github.com/images/blog/tensorflow_partition.png">
-<meta property="article:published_time" content="2019-12-23T10:45:59.327Z">
-<meta property="article:modified_time" content="2019-12-23T09:55:14.199Z">
-<meta property="article:author" content="shartoo">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://shartoo.github.com/images/blog/tensorflow_partition.png">
-  
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  
+    
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml" >
+    
+    
+    <link rel="shortcut icon" href="/favicon.ico" >
+    
+    
 <link rel="stylesheet" href="/css/style.css">
+
+    <!--[if lt IE 9]>
+    
+<script src="/js/html5.js"></script>
+
+    <![endif]-->
+    
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?fd459238242776d173cdc64918fb32f2";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
 
 <meta name="generator" content="Hexo 4.2.0"></head>
 
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
-      
+<body class="home">
+    <!--[if lt IE 9]>
+    <div class="browsehappy">
+        当前网页 <strong>不支持</strong>
+        你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/" target="_blank" rel="noopener">升级你的浏览器</a>.
     </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
-      </div>
-    </div>
-  </div>
+    <![endif]-->
+
+    <!-- 博客头部 -->
+    <header class="header">
+    <section class="container header-main">
+        <div class="logo">
+            <a href="/">
+                <div class="cover">
+                    <span class="name">Hexo</span>
+                    <span class="description"></span>
+                </div>
+            </a>
+        </div>
+        <div class="dropnav icon-paragraph-justify" id="JELON__btnDropNav"></div>
+        <ul class="menu hidden" id="JELON__menu">
+            
+            <li rel="/2019/12/23/2016-09-02-tensorflow-inputpipeline/index.html" class="item ">
+                <a href="/" title="首页" class="icon-home">&nbsp;首页</a>
+            </li>
+            
+            <li rel="/2019/12/23/2016-09-02-tensorflow-inputpipeline/index.html" class="item ">
+                <a href="/lab/" title="实验室" class="icon-lab">&nbsp;实验室</a>
+            </li>
+            
+            <li rel="/2019/12/23/2016-09-02-tensorflow-inputpipeline/index.html" class="item ">
+                <a href="/about/" title="关于" class="icon-about">&nbsp;关于</a>
+            </li>
+            
+            <li rel="/2019/12/23/2016-09-02-tensorflow-inputpipeline/index.html" class="item ">
+                <a href="/comment/" title="留言" class="icon-comment">&nbsp;留言</a>
+            </li>
+            
+        </ul>
+        <div class="profile clearfix">
+            <div class="feeds fl">
+                
+                
+                <p class="links">
+                    
+                        <a href="https://github.com/jangdelong" target="_blank">Github</a>
+                        |
+                    
+                        <a href="https://pages.coding.me" target="_blank">Hosted by Coding Pages</a>
+                        
+                    
+                </p>
+                <p class="sns">
+                    
+                        <a href="http://weibo.com/jangdelong" class="sinaweibo" target="_blank"><b>■</b> 新浪微博</a>
+                    
+                        <a href="https://www.facebook.com/profile.php?id=100011855760219&amp;ref=bookmarks" class="qqweibo" target="_blank"><b>■</b> Facebook</a>
+                    
+                    <a href="javascript: void(0);" class="wechat">
+                        <b>■</b>
+                        公众号
+                        <span class="popover">
+                            <img src="/img/wechat_mp.jpg" width="120" height="120" alt="我的微信订阅号">
+                            <i class="arrow"></i>
+                        </span>
+                    </a>
+                </p>
+                
+            </div>
+            <div class="avatar fr">
+                <img src="/img/jelon.jpg" alt="avatar" title="Jelon" >
+            </div>
+        </div>
+    </section>
 </header>
-      <div class="outer">
-        <section id="main"><article id="post-2016-09-02-tensorflow-inputpipeline" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/12/23/2016-09-02-tensorflow-inputpipeline/" class="article-date">
-  <time datetime="2019-12-23T10:45:59.327Z" itemprop="datePublished">2019-12-23</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/blog/">blog</a>
-  </div>
 
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      tensorflow：理解tensorflow中的输入管道
-    </h1>
-  
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
+    <!-- 博客正文 -->
+    <div class="container body clearfix">
+        <section class="content">
+            <div class="content-main widget">
+                <!-- 文章页 -->
+<!-- 文章 -->
+<article class="post article">
+    <header class="text-center">
+        <h3 class="post-title"><span>tensorflow：理解tensorflow中的输入管道</span></h3>
+    </header>
+    <p class="post-meta text-center">
+        Jelon 发表于
+        <time datetime="2019-12-23T10:45:59.327Z">2019-12-23</time>
+    </p>
+    <div class="post-content">
         <p>原文翻译整理自： <a href="https://ischlag.github.io/2016/06/19/tensorflow-input-pipeline-example/" target="_blank" rel="noopener">理解tensorflow中输入管道</a></p>
 <h2 id="主要内容"><a href="#主要内容" class="headerlink" title="主要内容"></a>主要内容</h2><p>  本文旨在根据mnist数据集构建一个简单而有效的输入管道。</p>
 <h2 id="使用tensorflow加载数据"><a href="#使用tensorflow加载数据" class="headerlink" title="使用tensorflow加载数据"></a>使用tensorflow加载数据</h2><p> 有两种方式来加载数据，其一是使用<strong>feeding</strong>方法并在每一步提供<strong>data</strong>和<strong>label</strong>给<strong>feed_dict</strong>对象。这种方式在数据集太大而无法在内存中存放时将无能为力，因此tensorflow的作者提出了使用 <em>input pipelines</em>。下一步将描述 <em>pipelines</em>，但是，注意：只有在session操作之前启动队列runners才能激活pipelines并载入数据。<br> <em>input pipeline</em>将会处理读取csv文件，解析文件格式，重构数据，混洗数据，数据增强以及其他数据处理，然后在批处理中使用线程载入数据。</p>
@@ -130,137 +166,205 @@
 <h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><p>完整代码如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># Example on how to use the tensorflow input pipelines. The explanation can be found here ischlag.github.io.</span><br><span class="line">import tensorflow as tf</span><br><span class="line">import random</span><br><span class="line">from tensorflow.python.framework import ops</span><br><span class="line">from tensorflow.python.framework import dtypes</span><br><span class="line"></span><br><span class="line">dataset_path      &#x3D; &quot;&#x2F;path&#x2F;to&#x2F;your&#x2F;dataset&#x2F;mnist&#x2F;&quot;</span><br><span class="line">test_labels_file  &#x3D; &quot;test-labels.csv&quot;</span><br><span class="line">train_labels_file &#x3D; &quot;train-labels.csv&quot;</span><br><span class="line"></span><br><span class="line">test_set_size &#x3D; 5</span><br><span class="line"></span><br><span class="line">IMAGE_HEIGHT  &#x3D; 28</span><br><span class="line">IMAGE_WIDTH   &#x3D; 28</span><br><span class="line">NUM_CHANNELS  &#x3D; 3</span><br><span class="line">BATCH_SIZE    &#x3D; 5</span><br><span class="line"></span><br><span class="line">def encode_label(label):</span><br><span class="line">  return int(label)</span><br><span class="line"></span><br><span class="line">def read_label_file(file):</span><br><span class="line">  f &#x3D; open(file, &quot;r&quot;)</span><br><span class="line">  filepaths &#x3D; []</span><br><span class="line">  labels &#x3D; []</span><br><span class="line">  for line in f:</span><br><span class="line">    filepath, label &#x3D; line.split(&quot;,&quot;)</span><br><span class="line">    filepaths.append(filepath)</span><br><span class="line">    labels.append(encode_label(label))</span><br><span class="line">  return filepaths, labels</span><br><span class="line"></span><br><span class="line"># reading labels and file path</span><br><span class="line">train_filepaths, train_labels &#x3D; read_label_file(dataset_path + train_labels_file)</span><br><span class="line">test_filepaths, test_labels &#x3D; read_label_file(dataset_path + test_labels_file)</span><br><span class="line"></span><br><span class="line"># transform relative path into full path</span><br><span class="line">train_filepaths &#x3D; [ dataset_path + fp for fp in train_filepaths]</span><br><span class="line">test_filepaths &#x3D; [ dataset_path + fp for fp in test_filepaths]</span><br><span class="line"></span><br><span class="line"># for this example we will create or own test partition</span><br><span class="line">all_filepaths &#x3D; train_filepaths + test_filepaths</span><br><span class="line">all_labels &#x3D; train_labels + test_labels</span><br><span class="line"></span><br><span class="line">all_filepaths &#x3D; all_filepaths[:20]</span><br><span class="line">all_labels &#x3D; all_labels[:20]</span><br><span class="line"></span><br><span class="line"># convert string into tensors</span><br><span class="line">all_images &#x3D; ops.convert_to_tensor(all_filepaths, dtype&#x3D;dtypes.string)</span><br><span class="line">all_labels &#x3D; ops.convert_to_tensor(all_labels, dtype&#x3D;dtypes.int32)</span><br><span class="line"></span><br><span class="line"># create a partition vector</span><br><span class="line">partitions &#x3D; [0] * len(all_filepaths)</span><br><span class="line">partitions[:test_set_size] &#x3D; [1] * test_set_size</span><br><span class="line">random.shuffle(partitions)</span><br><span class="line"></span><br><span class="line"># partition our data into a test and train set according to our partition vector</span><br><span class="line">train_images, test_images &#x3D; tf.dynamic_partition(all_images, partitions, 2)</span><br><span class="line">train_labels, test_labels &#x3D; tf.dynamic_partition(all_labels, partitions, 2)</span><br><span class="line"></span><br><span class="line"># create input queues</span><br><span class="line">train_input_queue &#x3D; tf.train.slice_input_producer(</span><br><span class="line">                                    [train_images, train_labels],</span><br><span class="line">                                    shuffle&#x3D;False)</span><br><span class="line">test_input_queue &#x3D; tf.train.slice_input_producer(</span><br><span class="line">                                    [test_images, test_labels],</span><br><span class="line">                                    shuffle&#x3D;False)</span><br><span class="line"></span><br><span class="line"># process path and string tensor into an image and a label</span><br><span class="line">file_content &#x3D; tf.read_file(train_input_queue[0])</span><br><span class="line">train_image &#x3D; tf.image.decode_jpeg(file_content, channels&#x3D;NUM_CHANNELS)</span><br><span class="line">train_label &#x3D; train_input_queue[1]</span><br><span class="line"></span><br><span class="line">file_content &#x3D; tf.read_file(test_input_queue[0])</span><br><span class="line">test_image &#x3D; tf.image.decode_jpeg(file_content, channels&#x3D;NUM_CHANNELS)</span><br><span class="line">test_label &#x3D; test_input_queue[1]</span><br><span class="line"></span><br><span class="line"># define tensor shape</span><br><span class="line">train_image.set_shape([IMAGE_HEIGHT, IMAGE_WIDTH, NUM_CHANNELS])</span><br><span class="line">test_image.set_shape([IMAGE_HEIGHT, IMAGE_WIDTH, NUM_CHANNELS])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># collect batches of images before processing</span><br><span class="line">train_image_batch, train_label_batch &#x3D; tf.train.batch(</span><br><span class="line">                                    [train_image, train_label],</span><br><span class="line">                                    batch_size&#x3D;BATCH_SIZE</span><br><span class="line">                                    #,num_threads&#x3D;1</span><br><span class="line">                                    )</span><br><span class="line">test_image_batch, test_label_batch &#x3D; tf.train.batch(</span><br><span class="line">                                    [test_image, test_label],</span><br><span class="line">                                    batch_size&#x3D;BATCH_SIZE</span><br><span class="line">                                    #,num_threads&#x3D;1</span><br><span class="line">                                    )</span><br><span class="line"></span><br><span class="line">print &quot;input pipeline ready&quot;</span><br><span class="line"></span><br><span class="line">with tf.Session() as sess:</span><br><span class="line"></span><br><span class="line">  # initialize the variables</span><br><span class="line">  sess.run(tf.initialize_all_variables())</span><br><span class="line"></span><br><span class="line">  # initialize the queue threads to start to shovel data</span><br><span class="line">  coord &#x3D; tf.train.Coordinator()</span><br><span class="line">  threads &#x3D; tf.train.start_queue_runners(coord&#x3D;coord)</span><br><span class="line"></span><br><span class="line">  print &quot;from the train set:&quot;</span><br><span class="line">  for i in range(20):</span><br><span class="line">    print sess.run(train_label_batch)</span><br><span class="line"></span><br><span class="line">  print &quot;from the test set:&quot;</span><br><span class="line">  for i in range(10):</span><br><span class="line">    print sess.run(test_label_batch)</span><br><span class="line"></span><br><span class="line">  # stop our queue threads and properly close the session</span><br><span class="line">  coord.request_stop()</span><br><span class="line">  coord.join(threads)</span><br><span class="line">  sess.close()</span><br></pre></td></tr></table></figure>
 
-      
     </div>
-    <footer class="article-footer">
-      <a data-url="http://shartoo.github.com/2019/12/23/2016-09-02-tensorflow-inputpipeline/" data-id="ck4ig03qs0017b8jea5z17wgs" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2019/12/23/2016-09-09-tensorflow-retainmodel/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          tensorflow：如何重新训练Inception模型的最后一层，以应对新分类
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2019/12/23/2016-08-24-network-imageclassify/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">深度学习：卷积神经网络与图像识别基本概念</div>
-    </a>
-  
-</nav>
-
-  
+    <p class="post-meta">
+        <span class="post-cat">分类：
+            <a class="cat-link" href="/categories/blog/">blog</a>
+        </span>
+        <span class="post-tags">
+            标签：
+            
+        </span>
+    </p>
 </article>
+<!-- 分享按钮 -->
 
-</section>
-        
-          <aside id="sidebar">
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
-    <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+  <div class="article-share clearfix text-center">
+    <div class="share-area">
+      <span class="share-txt">分享到：</span>
+      <a href="javascript: window.open('http://service.weibo.com/share/share.php?url=' + encodeURIComponent(location.href) + '&title=' + document.title + '&language=zh_cn');" class="share-icon weibo"></a>
+      <a href="javascript: alert('请复制链接到微信并发送');" class="share-icon wechat"></a>
+      <a href="javascript: window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + encodeURIComponent(location.href) + '&title=' + document.title);" class="share-icon qqzone"></a>
+      <a href="javascript: window.open('http://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(location.href) + '&desc=Jelon个人博客&title=' + document.title + '&callback=' + encodeURIComponent(location.href));" class="share-icon qq"></a>
+      <a href="javascript: window.open('http://shuo.douban.com/!service/share?href=' + encodeURIComponent(location.href) + '&name=' + document.title + '&text=' + document.title);" class="share-icon douban"></a>
     </div>
   </div>
 
 
-  
+<!-- 上一篇/下一篇 -->
+
+<div class="article-nav clearfix">
+    
+    <span class="prev fl">
+        上一篇<br >
+        <a href="/2019/12/23/2016-09-09-tensorflow-retainmodel/">
+            
+                tensorflow：如何重新训练Inception模型的最后一层，以应对新分类
+            
+        </a>
+    </span>
     
 
-  
     
-  
+    <span class="next fr">
+        下一篇<br >
+        <a href="/2019/12/23/2016-08-24-network-imageclassify/">
+            
+                深度学习：卷积神经网络与图像识别基本概念
+            
+        </a>
+    </span>
     
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+</div>
+
+<!-- 文章评论 -->
+
+  
+<script src="/js/comment.js"></script>
+
+  <div id="comments" class="comment">
+    <!--
+    <div class="sign-bar">
+      GitHub 已登录!
+      <span class="sign-link">登出</span>
     </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2019/12/23/template/">博客题目</a>
-          </li>
-        
-          <li>
-            <a href="/2019/12/23/hello-world/">Hello World</a>
-          </li>
-        
-          <li>
-            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
-          </li>
-        
-          <li>
-            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
-          </li>
-        
-          <li>
-            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
+    <section class="box">
+      <div class="com-avatar"><img src="/img/jelon.jpg" alt="avatar"></div>
+      <div class="com-text">
+        <div class="main">
+          <textarea class="text-area-edited show" placeholder="欢迎评论！"></textarea>
+          <div class="text-area-preview"></div>
+        </div>
+        <div class="switch">
+          <div class="switch-item on">编辑</div>
+          <div class="switch-item">预览</div>
+        </div>
+        <div class="button">提交</div>
       </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2019 shartoo<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
+    </section>
+    <section class="tips">注：评论支持 markdown 语法！</section>
+    <section class="list-wrap">
+      <ul class="list">
+        <li>
+          <div class="user-avatar">
+            <a href="/">
+              <img src="/img/jelon.jpg" alt="user-avatar">
+            </a>
+          </div>
+          <div class="user-comment">
+            <div class="user-comment-header">
+              <span class="post-name">张德龙</span>
+              <span class="post-time">2017年12月12日</span>
+              <span class="like liked">已赞</span>
+              <span class="like-num">2</span>
+            </div>
+            <div class="user-comment-body">333333</div>
+          </div>
+        </li>
+        <li>
+          <div class="user-avatar">
+            <a href="/">
+              <img src="/img/jelon.jpg" alt="user-avatar">
+            </a>
+          </div>
+          <div class="user-comment">
+            <div class="user-comment-header">
+              <span class="post-name">刘德华</span>
+              <span class="post-time">2017年12月12日</span>
+              <span class="like">点赞</span>
+              <span class="like-num">2</span>
+            </div>
+            <div class="user-comment-body">vvvvv</div>
+          </div>
+        </li>
+      </ul>
+      <div class="page-nav">
+        <a href="javascript: void(0);" class="item">1</a>
+        <a href="javascript: void(0);" class="item">2</a>
+        <a href="javascript: void(0);" class="item current">3</a>
+      </div>
+    </section>
+    -->
   </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
+  <script>
+  JELON.Comment({
+    container: 'comments',
+    label: '2016-09-02-tensorflow-inputpipeline' || '2019/12/23/2016-09-02-tensorflow-inputpipeline/',
+    owner: 'your_github_id',
+    repo: 'your_blog_comments',
+    clientId: 'your_client_id',
+    clientSecret: 'your_client_secret'
+  });
+  </script>
+
+
+            </div>
+
+        </section>
+        <!-- 侧栏部分 -->
+<aside class="sidebar">
+    <section class="widget">
+        <h3 class="widget-hd"><strong>文章分类</strong></h3>
+        <!-- 文章分类 -->
+<ul class="widget-bd">
+    
+    <li>
+        <a href="/categories/blog/">blog</a>
+        <span class="badge">(94)</span>
+    </li>
+    
+</ul>
+    </section>
+
+    
+    <section class="widget">
+        <h3 class="widget-hd"><strong>热门标签</strong></h3>
+        <!-- 文章标签 -->
+<div class="widget-bd tag-wrap">
   
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
+</div>
+    </section>
     
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    
 
+    
+    <!-- 友情链接 -->
+    <section class="widget">
+        <h3 class="widget-hd"><strong>友情链接</strong></h3>
+        <!-- 文章分类 -->
+<ul class="widget-bd">
+    
+        <li>
+            <a href="https://jelon.top" target="_blank" title="Jelon个人前端小站">前端博客小站</a>
+        </li>
+    
+        <li>
+            <a href="https://www.baidu.com" target="_blank" title="百度搜索">百度</a>
+        </li>
+    
+</ul>
+    </section>
+    
+</aside>
+<!-- / 侧栏部分 -->
+    </div>
 
-  
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+    <!-- 博客底部 -->
+    <footer class="footer">
+    &copy;
+    
+        2016-2019
+    
 
-  
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
+    <a href="/">Jelon Loves You</a>
+</footer>
+<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
 
+    <!--博客js脚本 -->
+    <!-- 这里放网站js脚本 -->
 
+<script src="/js/main.js"></script>
 
-
-<script src="/js/script.js"></script>
-
-
-
-
-  </div>
 </body>
 </html>
