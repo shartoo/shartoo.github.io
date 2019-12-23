@@ -1,238 +1,343 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" >
-    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
-    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
-    
-    <title>CT图像中肺结节自动检测:使用CNN移除假阳性【论文笔记】 | Hexo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
-    <meta name="keywords" content="Jelon, 前端, Web, 张德龙, 前端开发" >
-    <meta name="description" content="Jelon个人前端小站" >
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml" >
-    
-    
-    <link rel="shortcut icon" href="/favicon.ico" >
-    
-    
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/main.css">
 
-    <!--[if lt IE 9]>
-    
-<script src="/js/html5.js"></script>
 
-    <![endif]-->
-    
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "//hm.baidu.com/hm.js?fd459238242776d173cdc64918fb32f2";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://shartoo.github.com').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
 </script>
 
+  <meta name="description" content="图像检测">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CT图像中肺结节自动检测:使用CNN移除假阳性【论文笔记】">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2017-02-26-mutliview-falseremove-usingcnn/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="图像检测">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/multiview1.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.466Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.211Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/multiview1.png">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<link rel="canonical" href="http://shartoo.github.com/2019/12/23/2017-02-26-mutliview-falseremove-usingcnn/">
 
-<body class="home">
-    <!--[if lt IE 9]>
-    <div class="browsehappy">
-        当前网页 <strong>不支持</strong>
-        你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/" target="_blank" rel="noopener">升级你的浏览器</a>.
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>CT图像中肺结节自动检测:使用CNN移除假阳性【论文笔记】 | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
     </div>
-    <![endif]-->
+  </div>
 
-    <!-- 博客头部 -->
-    <header class="header">
-    <section class="container header-main">
-        <div class="logo">
-            <a href="/">
-                <div class="cover">
-                    <span class="name">Hexo</span>
-                    <span class="description"></span>
-                </div>
-            </a>
-        </div>
-        <div class="dropnav icon-paragraph-justify" id="JELON__btnDropNav"></div>
-        <ul class="menu hidden" id="JELON__menu">
-            
-            <li rel="/2019/12/23/2017-02-26-mutliview-falseremove-usingcnn/index.html" class="item ">
-                <a href="/" title="首页" class="icon-home">&nbsp;首页</a>
-            </li>
-            
-            <li rel="/2019/12/23/2017-02-26-mutliview-falseremove-usingcnn/index.html" class="item ">
-                <a href="/lab/" title="实验室" class="icon-lab">&nbsp;实验室</a>
-            </li>
-            
-            <li rel="/2019/12/23/2017-02-26-mutliview-falseremove-usingcnn/index.html" class="item ">
-                <a href="/about/" title="关于" class="icon-about">&nbsp;关于</a>
-            </li>
-            
-            <li rel="/2019/12/23/2017-02-26-mutliview-falseremove-usingcnn/index.html" class="item ">
-                <a href="/comment/" title="留言" class="icon-comment">&nbsp;留言</a>
-            </li>
-            
-        </ul>
-        <div class="profile clearfix">
-            <div class="feeds fl">
-                
-                
-                <p class="links">
-                    
-                        <a href="https://github.com/jangdelong" target="_blank">Github</a>
-                        |
-                    
-                        <a href="https://pages.coding.me" target="_blank">Hosted by Coding Pages</a>
-                        
-                    
-                </p>
-                <p class="sns">
-                    
-                        <a href="http://weibo.com/jangdelong" class="sinaweibo" target="_blank"><b>■</b> 新浪微博</a>
-                    
-                        <a href="https://www.facebook.com/profile.php?id=100011855760219&amp;ref=bookmarks" class="qqweibo" target="_blank"><b>■</b> Facebook</a>
-                    
-                    <a href="javascript: void(0);" class="wechat">
-                        <b>■</b>
-                        公众号
-                        <span class="popover">
-                            <img src="/img/wechat_mp.jpg" width="120" height="120" alt="我的微信订阅号">
-                            <i class="arrow"></i>
-                        </span>
-                    </a>
-                </p>
-                
-            </div>
-            <div class="avatar fr">
-                <img src="/img/jelon.jpg" alt="avatar" title="Jelon" >
-            </div>
-        </div>
-    </section>
-</header>
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
 
 
-    <!-- 博客正文 -->
-    <div class="container body clearfix">
-        <section class="content">
-            <div class="content-main widget">
-                <!-- 文章页 -->
-<!-- 文章 -->
-<article class="post article">
-    <header class="text-center">
-        <h3 class="post-title"><span>CT图像中肺结节自动检测:使用CNN移除假阳性【论文笔记】</span></h3>
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
     </header>
-    <p class="post-meta text-center">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.466Z">2019-12-23</time>
-    </p>
-    <div class="post-content">
-        <h2 id="0-综述"><a href="#0-综述" class="headerlink" title="0 综述"></a>0 综述</h2><p>本文做出以下共享:</p>
-<ol>
-<li><p>我们提出了一种用于肺结节检测的<strong>多角度</strong>卷积网络ConvNet用以剔除假阳性的步骤。候选样本是由三种现存的检测算法结合计算出来的，这也可用于增强候选检测步骤的灵敏性。</p>
-</li>
-<li><p>评估不同的多角度卷积网络的架构以及它们对检测性能的影响。同时也评估了增加更多角度和应用一种确定的融合技术对于每种架构的性能</p>
-</li>
-<li><p>提出一种性能基准和在完全独立的筛选实验的数据集上的外部验证。</p>
-</li>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://shartoo.github.com/2019/12/23/2017-02-26-mutliview-falseremove-usingcnn/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CT图像中肺结节自动检测:使用CNN移除假阳性【论文笔记】
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2019-12-23 18:45:59 / Modified: 17:55:14" itemprop="dateCreated datePublished" datetime="2019-12-23T18:45:59+08:00">2019-12-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">图像检测</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="综述">0 综述</h2>
+<p>本文做出以下共享:</p>
+<ol type="1">
+<li><p>我们提出了一种用于肺结节检测的<strong>多角度</strong>卷积网络ConvNet用以剔除假阳性的步骤。候选样本是由三种现存的检测算法结合计算出来的，这也可用于增强候选检测步骤的灵敏性。</p></li>
+<li><p>评估不同的多角度卷积网络的架构以及它们对检测性能的影响。同时也评估了增加更多角度和应用一种确定的融合技术对于每种架构的性能</p></li>
+<li><p>提出一种性能基准和在完全独立的筛选实验的数据集上的外部验证。</p></li>
 </ol>
-<h2 id="1-数据材料"><a href="#1-数据材料" class="headerlink" title="1 数据材料"></a>1 数据材料</h2><h3 id="1-1-LIDC-IDRI"><a href="#1-1-LIDC-IDRI" class="headerlink" title="1.1 LIDC-IDRI"></a>1.1 LIDC-IDRI</h3><p>使用大的公开数据集<code>Lung Image Database Consortium(LIDC-IDRI)</code>训练和验证了CAD系统。该数据集包含了来自7个机构的<code>1018</code>个异质病例。CT图像的切片(slices)厚度从<code>0.6mm-5.0mm</code>之间,中值为2.0mm。数据的引用标准由人工标注，来自四位放射医师，对每个scan进行两轮评审。第一轮的盲审阶段，可疑病变是独立标注的并且每个都被分类 为<code>非结节</code>,<code>结节&lt;3mm</code>,<code>结节&gt;3mm</code>。人工的3D切割只针对<code>结节&gt;3mm</code>的。第二轮中，来自全部四位的放射医师的标注被评审（非盲审），同时每个放射医师决定接受或反对此标注。</p>
+<h2 id="数据材料">1 数据材料</h2>
+<h3 id="lidc-idri">1.1 LIDC-IDRI</h3>
+<p>使用大的公开数据集<code>Lung Image Database Consortium(LIDC-IDRI)</code>训练和验证了CAD系统。该数据集包含了来自7个机构的<code>1018</code>个异质病例。CT图像的切片(slices)厚度从<code>0.6mm-5.0mm</code>之间,中值为2.0mm。数据的引用标准由人工标注，来自四位放射医师，对每个scan进行两轮评审。第一轮的盲审阶段，可疑病变是独立标注的并且每个都被分类 为<code>非结节</code>,<code>结节&lt;3mm</code>,<code>结节&gt;3mm</code>。人工的3D切割只针对<code>结节&gt;3mm</code>的。第二轮中，来自全部四位的放射医师的标注被评审（非盲审），同时每个放射医师决定接受或反对此标注。</p>
 <p>我们抛弃了结节<strong>厚度大于2.5mm</strong>的样本(它们已经不被推荐使用)，以及包含了不相连切片(slices)空间的scans，最后获得<code>888</code>个scans。最后挑选的scans列表我们公开在 <a href="http://luna.grand-challenge.org/" target="_blank" rel="noopener">公开的scans列表</a> 。我们仅考虑标注中结节半径大于等于3mm的，小于3mm的被丢弃。最后选择了结节半径大于等于3mm的，并且被大部分放射医师 （4个中有3个）。最后选出了1186个结节。</p>
-<h3 id="1-2-ANODE09"><a href="#1-2-ANODE09" class="headerlink" title="1.2 ANODE09"></a>1.2 ANODE09</h3><p>为了进一步验证系统的性能，使用完全独立于训练集的数据集 <strong>ANODE09竞赛</strong>, 该数据集由55个CT scans组成。每个CT由2个观察者盲审标注。5个scans作为训练集，剩余的50个作为测试集。这些引用没法公开获取。</p>
+<h3 id="anode09">1.2 ANODE09</h3>
+<p>为了进一步验证系统的性能，使用完全独立于训练集的数据集 <strong>ANODE09竞赛</strong>, 该数据集由55个CT scans组成。每个CT由2个观察者盲审标注。5个scans作为训练集，剩余的50个作为测试集。这些引用没法公开获取。</p>
 <p>所有的样本由 University Medical Center Utrecht 收集。图像被重构为 1.0mm厚度。</p>
-<h3 id="1-3-DLCST"><a href="#1-3-DLCST" class="headerlink" title="1.3  DLCST"></a>1.3  DLCST</h3><p>为了进一步验证系统的性能，使用了Danish Lung Cancer Screening Trial的数据集。该评测基于612个baseline的scans，这些scans是最近公开在临床研究上的。两个观测者的半径被平均，然后正样本被定义为结节半径大于等于3mm。这个结果产生了898个结节。</p>
-<h2 id="二-方法"><a href="#二-方法" class="headerlink" title="二 方法"></a>二 方法</h2><p>我们提出的CAD系统架构图如下，由两个主要部分组成：<strong>(1)</strong>候选检测<strong>(2)</strong>假阳性剔除。</p>
-<p> <img src="/images/blog/multiview1.png" alt="总流程"></p>
+<h3 id="dlcst">1.3 DLCST</h3>
+<p>为了进一步验证系统的性能，使用了Danish Lung Cancer Screening Trial的数据集。该评测基于612个baseline的scans，这些scans是最近公开在临床研究上的。两个观测者的半径被平均，然后正样本被定义为结节半径大于等于3mm。这个结果产生了898个结节。</p>
+<h2 id="二-方法">二 方法</h2>
+<p>我们提出的CAD系统架构图如下，由两个主要部分组成：<strong>(1)</strong>候选检测<strong>(2)</strong>假阳性剔除。</p>
+<figure>
+<img src="/images/blog/multiview1.png" alt="总流程" /><figcaption>总流程</figcaption>
+</figure>
 <p>我们分别为<code>solid</code>,<code>subsolid</code>,<code>large solid</code>结节使用了三个定制候选检测器。这些检测器的结合用以增加结节灵敏度。注意到结节尺寸和形态特征变化很大，每个候选从固定平面抽取多个2-D视角。每个2-D视角被一个ConvNets流处理。ConvNets特征被用于计算最终分数。</p>
-<h3 id="2-1-候选检测"><a href="#2-1-候选检测" class="headerlink" title="2.1 候选检测"></a>2.1 候选检测</h3><p>候选检测关系到后续阶段的最大检测灵敏度，候选检测算法应该完美的识别所有可疑的病变。</p>
-<p>为了检测更广泛的结节，我们应用了多种候选检测算法的结合。结合已有的三种用以检测结节候选的CAD系统。每个算法关注于一种类别的结节，即<code>solid</code>,<code>subsolid</code>,<code>large solid</code> 结节。对于每一个候选，其位置 $p= (x,y,z)$ 和它为结节的概率被给出。三个集合的结节候选被计算，并合并以最大化检测器的灵敏度。候选位置密集度小于5mm的结节被合并，这些合并的结节的位置和为结节的概率以均值表示。</p>
+<h3 id="候选检测">2.1 候选检测</h3>
+<p>候选检测关系到后续阶段的最大检测灵敏度，候选检测算法应该完美的识别所有可疑的病变。</p>
+<p>为了检测更广泛的结节，我们应用了多种候选检测算法的结合。结合已有的三种用以检测结节候选的CAD系统。每个算法关注于一种类别的结节，即<code>solid</code>,<code>subsolid</code>,<code>large solid</code> 结节。对于每一个候选，其位置 <span class="math inline">\(p= (x,y,z)\)</span> 和它为结节的概率被给出。三个集合的结节候选被计算，并合并以最大化检测器的灵敏度。候选位置密集度小于5mm的结节被合并，这些合并的结节的位置和为结节的概率以均值表示。</p>
 <p>候选检测阶段的方法，获取每个VOI(volume of interest)的位置。</p>
-<p><strong>对于solid结节</strong>，实现了论文3中的方法。计算肺部的每个体素，shape index和轮廓，并在两种方法使用了阈值用以定义seedpoint。一种自动切割方法会在seedpoint执行，这可获得 cluster of interest。然后cluster位置相邻的被合并。最后丢弃体积小于 $40mm^3$ 的cluster。</p>
-<p><strong>对于subsolid结节</strong>，论文5(<em>Automatic detection of subsolid pulmonary nodules in thoracic computed tomography images *)中的一种方法是。一种双阈值密度mask (-750,-350 HU)首次用来获得 voxel of interest的mask。形态open运算（一种图形学的操作）用来移除相连的cluster，紧接着做3D相连组件分析。最后精确的候选切割是通过一种先前提出的结节算法（论文</em>Morphological segmentation and partial volume analysis for volumetry of solid pulmonary lesions in thoracic CT scans *）获得。</p>
+<p><strong>对于solid结节</strong>，实现了论文3中的方法。计算肺部的每个体素，shape index和轮廓，并在两种方法使用了阈值用以定义seedpoint。一种自动切割方法会在seedpoint执行，这可获得 cluster of interest。然后cluster位置相邻的被合并。最后丢弃体积小于 <span class="math inline">\(40mm^3\)</span> 的cluster。</p>
+<p><strong>对于subsolid结节</strong>，论文5(<em>Automatic detection of subsolid pulmonary nodules in thoracic computed tomography images </em>)中的一种方法是。一种双阈值密度mask (-750,-350 HU)首次用来获得 voxel of interest的mask。形态open运算（一种图形学的操作）用来移除相连的cluster，紧接着做3D相连组件分析。最后精确的候选切割是通过一种先前提出的结节算法（论文<em>Morphological segmentation and partial volume analysis for volumetry of solid pulmonary lesions in thoracic CT scans </em>）获得。</p>
 <p><strong>对于Large solid结节(大于等于10mm</strong>，它有着与小结节病变不同的surface/shape index值，并且有着不同的密度分布，solid和subsolid结节检测算法无法检测到。除此之外，粘附于胸膜壁的large solid结节可能被肺部切割算法排除在外，因为它与胸部的对比度很低。基于这些原因，论文27提出第三种检测器算法，并由以下三步组成：</p>
-<ol>
-<li><p>肺部切割后处理：通过对切割mask应用一个滚球算法，这会在肺切割时包含粘附于胸腔的large solid结节。</p>
-</li>
-<li><p>密度阈值(-300HU)，为了获取 voxels of interest的mask</p>
-</li>
-<li><p>多阶段获取候选cluster的形态开运算(opening)(论文29)，我们以大的结构元素来抽取更大的结节，然后渐渐的继续使用小结构元素来抽取小的结节。</p>
-</li>
+<ol type="1">
+<li><p>肺部切割后处理：通过对切割mask应用一个滚球算法，这会在肺切割时包含粘附于胸腔的large solid结节。</p></li>
+<li><p>密度阈值(-300HU)，为了获取 voxels of interest的mask</p></li>
+<li><p>多阶段获取候选cluster的形态开运算(opening)(论文29)，我们以大的结构元素来抽取更大的结节，然后渐渐的继续使用小结构元素来抽取小的结节。</p></li>
 </ol>
 <p>有个重要问题是，训练算法时使用高度不均衡的数据会导致学习到的参数会向最常见的候选的特征(比如 vessels(血管))倾斜，并忽略更稀有的结节的重要特征。为防止对最普遍的假阳性结节的过拟合，我们丢弃了概率较低的结节候选。这些概率都是由后续的分类阶段的算法给出，并且阈值都是基于经验值设定用以减少大量的假阳性，同时保留高检测灵敏性。</p>
-<h3 id="2-2-patches-抽取"><a href="#2-2-patches-抽取" class="headerlink" title="2.2 patches 抽取"></a>2.2 patches 抽取</h3><p>对于每个候选，我们抽取了多个2-D patches，尺寸为$50\times 50mm$，中心坐标位置为 $p$ 。选择此大小的尺寸是为了让所有的结节($\le 30mm$)在2D视角的完全可见，并包含充分的上下文信息，这有助于在候选分类阶段。我们将尺寸为 $50\times 50 mm$的patches转换为 $64\times 64 px$（注意单位），分辨率为0.78mm，这对应于典型的CT数据切片分辨率。像素密度范围从(-1000,400HU)转换为(0,1)，不在此范围的被切除。</p>
-<p>为了抽取patches，我们首先考虑了立方块尺寸为 $50\times 50\times 50 mm$,完全包含候选。在立方块的9个对称轴面抽取9个patches。上图中的图a展示了9个对称轴面的pathes方法。</p>
-<h3 id="2-3-假阳性剔除-2-D-ConvNets配置"><a href="#2-3-假阳性剔除-2-D-ConvNets配置" class="headerlink" title="2.3 假阳性剔除:2-D ConvNets配置"></a>2.3 假阳性剔除:2-D ConvNets配置</h3><p> 假阳性剔除阶段结合了不同流式的ConvNets，可被看做一种多视角架构。每种流处理一个候选的特定种角度的patches。</p>
+<h3 id="patches-抽取">2.2 patches 抽取</h3>
+<p>对于每个候选，我们抽取了多个2-D patches，尺寸为<span class="math inline">\(50\times 50mm\)</span>，中心坐标位置为 <span class="math inline">\(p\)</span> 。选择此大小的尺寸是为了让所有的结节(<span class="math inline">\(\le 30mm\)</span>)在2D视角的完全可见，并包含充分的上下文信息，这有助于在候选分类阶段。我们将尺寸为 <span class="math inline">\(50\times 50 mm\)</span>的patches转换为 <span class="math inline">\(64\times 64 px\)</span>（注意单位），分辨率为0.78mm，这对应于典型的CT数据切片分辨率。像素密度范围从(-1000,400HU)转换为(0,1)，不在此范围的被切除。</p>
+<p>为了抽取patches，我们首先考虑了立方块尺寸为 <span class="math inline">\(50\times 50\times 50 mm\)</span>,完全包含候选。在立方块的9个对称轴面抽取9个patches。上图中的图a展示了9个对称轴面的pathes方法。</p>
+<h3 id="假阳性剔除2-d-convnets配置">2.3 假阳性剔除:2-D ConvNets配置</h3>
+<p>假阳性剔除阶段结合了不同流式的ConvNets，可被看做一种多视角架构。每种流处理一个候选的特定种角度的patches。</p>
 <p>2-D卷积网络的架构由一个小数据集决定的。这个数据集上，几个超参数(比如，层数，kernel size，学习速率，视角数目，融合方法)在此优化。这些超参数中，我们规定了两个最重要的参数需要微调，即<strong>(1)视角数目(2)融合方法</strong>。其他参数被设置为最佳配置（从那个小数据集上获得的最优值）。</p>
-<p>2-D ConvNets由3个连续卷积层和一个最大池化层组成。网络的输入是 $64\times 64 $的patches。具体如下</p>
+<p>2-D ConvNets由3个连续卷积层和一个最大池化层组成。网络的输入是 $6464 $的patches。具体如下</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>网络层数</th>
 <th>类型</th>
 <th>kernel 数目</th>
 <th>kernel size</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr class="odd">
 <td>1</td>
 <td>conv</td>
 <td>24</td>
 <td>5x5x1</td>
 </tr>
-<tr>
+<tr class="even">
 <td>2</td>
 <td>conv</td>
 <td>32</td>
 <td>3x3x24</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>3</td>
 <td>conv</td>
 <td>48</td>
 <td>3x3x32</td>
 </tr>
-<tr>
+<tr class="even">
 <td>4</td>
 <td>maxpool</td>
 <td>1</td>
 <td>2x2(stride 2) non-overlap</td>
 </tr>
-</tbody></table>
-<p>每个kernel产生一个2-D图像输出(比如第一层卷积之后，输出24个60x60的图像)。Kernel的值都是随机初始化的，并且在训练过程优化。最大池化层，使用非重叠窗口kernel size是2x2，步长为2，这会将patches suze减小为一半(例如，从24@60x60减小为24@30x30)。最后一层是全连接层，输出16个神经元。<strong>Relu激活函数</strong>用于<strong>卷积层和全连接层</strong></p>
-<h3 id="2-4-假阳性剔除：ConvNets融合"><a href="#2-4-假阳性剔除：ConvNets融合" class="headerlink" title="2.4 假阳性剔除：ConvNets融合"></a>2.4 假阳性剔除：ConvNets融合</h3><p>有三种方式对多个2-D ConvNets网络的融合，做了如下调查：</p>
+</tbody>
+</table>
+<p>每个kernel产生一个2-D图像输出(比如第一层卷积之后，输出24个60x60的图像)。Kernel的值都是随机初始化的，并且在训练过程优化。最大池化层，使用非重叠窗口kernel size是2x2，步长为2，这会将patches suze减小为一半(例如，从24@60x60减小为24<span class="citation" data-cites="30x30">@30x30</span>)。最后一层是全连接层，输出16个神经元。<strong>Relu激活函数</strong>用于<strong>卷积层和全连接层</strong></p>
+<h3 id="假阳性剔除convnets融合">2.4 假阳性剔除：ConvNets融合</h3>
+<p>有三种方式对多个2-D ConvNets网络的融合，做了如下调查：</p>
 <p><strong>(1)committee-fusion</strong>:最常见的融合方法，它对多个卷积网络的输出预测做一个基于委员会的融合。我们连接每个流的全连接层的输出到一个分类层，该分类层由一个使用softmax激活函数的全连接层组成。每个ConvNets流使用不同视角的patches独立训练，并且输出预测使用一种product-rule来组合输出概率，上图图c所示。</p>
 <p><strong>(2)late-fusion</strong>:该方法拼接第一个全连接层的输出，并直接将此拼接输出与分类层相连（上图图C）。此种方法，分类层可以通过对比多个ConvNets的输出学习3-D特征。这种配置中，不同流的卷积层参数是共享的。</p>
 <p><strong>(3)mixed-fusion</strong>:上面两种方法的结合。多个<strong>late-fusion</strong> ConvNets用固定数量的正交平面实现。利用更多的视角，系统的预测准确率可以通过在委员会中结合多个late-fusion ConvNets来提高。我们将9个patches分为3个独立的集合，每个集合包含了三个不同的pacthes。</p>
-<h3 id="2-5-训练"><a href="#2-5-训练" class="headerlink" title="2.5 训练"></a>2.5 训练</h3><p>评估方法是在888个<strong>LIDC-IDRI</strong>使用的是5-折交叉验证。我们将888个样本切分为5个子集，并每个子集的候选数目相近。每一折中，使用3个子集作为训练，一个子集为验证，一个子集为测试。使用ConvNets的一大挑战是在给定的训练集有效的优化ConvNets的权重。损失函数使用交叉熵误差，权重更新使用128样本的mini-batches。</p>
+<h3 id="训练">2.5 训练</h3>
+<p>评估方法是在888个<strong>LIDC-IDRI</strong>使用的是5-折交叉验证。我们将888个样本切分为5个子集，并每个子集的候选数目相近。每一折中，使用3个子集作为训练，一个子集为验证，一个子集为测试。使用ConvNets的一大挑战是在给定的训练集有效的优化ConvNets的权重。损失函数使用交叉熵误差，权重更新使用128样本的mini-batches。</p>
 <ul>
-<li><p>权重初始化：由Glorot and Bengio提出的一种正态随机初始化。</p>
-</li>
-<li><p>偏置初始化：偏置初始化为0</p>
-</li>
-<li><p>学习速率：RMSProp是一种学习算法，它会自动将学习速率除以最近梯度大小的平均值，常用语优化模型。</p>
-</li>
-<li><p>Dropout：用在第一个全连接层的输出，概率为0.5.</p>
-</li>
-<li><p>停止条件：验证数据集上的准确率3个epoches之后不再提高</p>
-</li>
+<li><p>权重初始化：由Glorot and Bengio提出的一种正态随机初始化。</p></li>
+<li><p>偏置初始化：偏置初始化为0</p></li>
+<li><p>学习速率：RMSProp是一种学习算法，它会自动将学习速率除以最近梯度大小的平均值，常用语优化模型。</p></li>
+<li><p>Dropout：用在第一个全连接层的输出，概率为0.5.</p></li>
+<li><p>停止条件：验证数据集上的准确率3个epoches之后不再提高</p></li>
 </ul>
-<h3 id="2-6-数据增强"><a href="#2-6-数据增强" class="headerlink" title="2.6 数据增强"></a>2.6 数据增强</h3><p>ConvNets上使用不均衡的数据集会导致算法陷入局部最优，其预测结果会偏向出现频率最高的特征，并导致过拟合。</p>
-<p>(1) 训练数据集增强：由于结节数远小于非结节数，因此数据增强仅用于结节。此步骤仅用于训练和验证。将候选坐标每个轴转换为1mm，并将patches的尺寸变换为40，45,50，和55mm。此类转换设置为1mm是为了保证结节(&gt;3mm)可以被patches捕获到。可以通过在结节上随机上采样候选 来进一步均衡数据集。</p>
+<h3 id="数据增强">2.6 数据增强</h3>
+<p>ConvNets上使用不均衡的数据集会导致算法陷入局部最优，其预测结果会偏向出现频率最高的特征，并导致过拟合。</p>
+<ol type="1">
+<li>训练数据集增强：由于结节数远小于非结节数，因此数据增强仅用于结节。此步骤仅用于训练和验证。将候选坐标每个轴转换为1mm，并将patches的尺寸变换为40，45,50，和55mm。此类转换设置为1mm是为了保证结节(&gt;3mm)可以被patches捕获到。可以通过在结节上随机上采样候选 来进一步均衡数据集。</li>
+</ol>
 <p>(2)测试数据集增强：测试集数据增强可能有助于提高系统的鲁棒性，因为候选早在非常多的不同条件下评估，比如分析不同尺寸的输入图像。测试数据增强在每个候选(结节和非结节上都有)，通过缩放patches尺寸为40，45,50,55mm，每个都是被ConvNets-CAD系统独立地处理。每个候选的预测是平均所有的增强的数据得来的。最终预测结果是预测的集合，它被用来作为补充信息，因此使得最终的预测结果更加准确和稳定。</p>
-<h3 id="2-7-评估"><a href="#2-7-评估" class="headerlink" title="2.7 评估"></a>2.7 评估</h3><p>评测了两种性能指标。(1)ROC曲线下区域(2)竞赛性能指标CPM，即衡量FROC曲线7个操作点(1/8,1/4,1/2,1,2,4,8Fps/scan)的平均灵敏度。AUC显示ConvNets在是否为结节时分类候选的性能，CPM显示的CAD系统在操作点的性能。注意，系统有更好AUC分数并不一定会有更高的CPM。我们同时计算95%内部置信度和p值，使用1000个boostrapping。</p>
-<h2 id="三-实验结果"><a href="#三-实验结果" class="headerlink" title="三 实验结果"></a>三 实验结果</h2><p>候选检测算法的检测灵敏度</p>
+<h3 id="评估">2.7 评估</h3>
+<p>评测了两种性能指标。(1)ROC曲线下区域(2)竞赛性能指标CPM，即衡量FROC曲线7个操作点(1/8,1/4,1/2,1,2,4,8Fps/scan)的平均灵敏度。AUC显示ConvNets在是否为结节时分类候选的性能，CPM显示的CAD系统在操作点的性能。注意，系统有更好AUC分数并不一定会有更高的CPM。我们同时计算95%内部置信度和p值，使用1000个boostrapping。</p>
+<h2 id="三-实验结果">三 实验结果</h2>
+<p>候选检测算法的检测灵敏度</p>
 <ul>
-<li><p><strong>total number of CT scans</strong>: 888</p>
-</li>
-<li><p><strong>Total number of nodules</strong>:1186</p>
-</li>
+<li><p><strong>total number of CT scans</strong>: 888</p></li>
+<li><p><strong>Total number of nodules</strong>:1186</p></li>
 </ul>
 <table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>Candidate detection</th>
 <th>Detected nodules</th>
 <th>Sensitivity(%)</th>
@@ -240,46 +345,48 @@
 <th>FPs per scan</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr class="odd">
 <td>solid</td>
 <td>1016</td>
 <td>85.7</td>
 <td>292413</td>
 <td>329.3</td>
 </tr>
-<tr>
+<tr class="even">
 <td>subsolid</td>
 <td>428</td>
 <td>36.1</td>
 <td>255027</td>
 <td>287.2</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Large solid</td>
 <td>377</td>
 <td>31.8</td>
 <td>41816</td>
 <td>47.1</td>
 </tr>
-<tr>
+<tr class="even">
 <td>combines set</td>
 <td>1120</td>
 <td>94.4</td>
 <td>543160</td>
 <td>611.7</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Reduced set</td>
 <td>1106</td>
 <td>93.3</td>
 <td>239041</td>
 <td>269.2</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p>训练集中结节和非结节数据统计。为了平衡数据集，数据增强(aug)和上采样(up)在结节上的表现</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>Training dataset</th>
 <th>Fold 0</th>
 <th>Fold 1</th>
@@ -288,7 +395,8 @@
 <th>Fold 4</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr class="odd">
 <td>scans</td>
 <td>428</td>
 <td>522</td>
@@ -296,7 +404,7 @@
 <td>629</td>
 <td>511</td>
 </tr>
-<tr>
+<tr class="even">
 <td>nodule</td>
 <td>528</td>
 <td>669</td>
@@ -304,7 +412,7 @@
 <td>773</td>
 <td>635</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>-aug</td>
 <td>57552</td>
 <td>72921</td>
@@ -312,7 +420,7 @@
 <td>84257</td>
 <td>69215</td>
 </tr>
-<tr>
+<tr class="even">
 <td>-agu+up</td>
 <td>143838</td>
 <td>143796</td>
@@ -320,7 +428,7 @@
 <td>142823</td>
 <td>142927</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>non-nodule</td>
 <td>143838</td>
 <td>143796</td>
@@ -328,260 +436,252 @@
 <td>142823</td>
 <td>142927</td>
 </tr>
-</tbody></table>
-<p> Performance benchmark of ConvNets configurations on LIDC-IDRI dataset.</p>
+</tbody>
+</table>
+<p>Performance benchmark of ConvNets configurations on LIDC-IDRI dataset.</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>Configuration</th>
 <th>Number of views</th>
 <th>AUC</th>
 <th>CPM</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr class="odd">
 <td>combines algorithms</td>
 <td>-</td>
 <td>0.969</td>
 <td>0.573</td>
 </tr>
-<tr>
+<tr class="even">
 <td>single-view</td>
 <td>1</td>
 <td>0.969</td>
 <td>0.481</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>committee-fusion</td>
 <td>3</td>
 <td>0.981</td>
 <td>0.696</td>
 </tr>
-<tr>
+<tr class="even">
 <td></td>
 <td>9</td>
 <td>0.987</td>
 <td>0.780</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>late-fusion</td>
 <td>3</td>
 <td>0.987</td>
 <td>0.742</td>
 </tr>
-<tr>
+<tr class="even">
 <td></td>
 <td>9</td>
 <td>0.993</td>
 <td>0.827</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>mixed-fusion</td>
 <td>3*3</td>
 <td>0.996</td>
 <td>0.824</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 
     </div>
-    <p class="post-meta">
-        <span class="post-cat">分类：
-            <a class="cat-link" href="/categories/blog/">blog</a>
-        </span>
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-</article>
-<!-- 分享按钮 -->
 
-  <div class="article-share clearfix text-center">
-    <div class="share-area">
-      <span class="share-txt">分享到：</span>
-      <a href="javascript: window.open('http://service.weibo.com/share/share.php?url=' + encodeURIComponent(location.href) + '&title=' + document.title + '&language=zh_cn');" class="share-icon weibo"></a>
-      <a href="javascript: alert('请复制链接到微信并发送');" class="share-icon wechat"></a>
-      <a href="javascript: window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + encodeURIComponent(location.href) + '&title=' + document.title);" class="share-icon qqzone"></a>
-      <a href="javascript: window.open('http://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(location.href) + '&desc=Jelon个人博客&title=' + document.title + '&callback=' + encodeURIComponent(location.href));" class="share-icon qq"></a>
-      <a href="javascript: window.open('http://shuo.douban.com/!service/share?href=' + encodeURIComponent(location.href) + '&name=' + document.title + '&text=' + document.title);" class="share-icon douban"></a>
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2017-02-10-LUNA2016-3DCNN/" rel="prev" title="医疗图像处理：LUNA2016 3DCNN 网络论文详解">
+      <i class="fa fa-chevron-left"></i> 医疗图像处理：LUNA2016 3DCNN 网络论文详解
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2017-02-27-lungseg-subsolid/" rel="next" title="从胸椎中自动subsolid 病变结节检测方法【论文笔记】">
+      从胸椎中自动subsolid 病变结节检测方法【论文笔记】 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
   </div>
 
 
-<!-- 上一篇/下一篇 -->
+          </div>
+          
 
-<div class="article-nav clearfix">
-    
-    <span class="prev fl">
-        上一篇<br >
-        <a href="/2019/12/23/2017-02-27-lungseg-subsolid/">
-            
-                从胸椎中自动subsolid 病变结节检测方法【论文笔记】
-            
-        </a>
-    </span>
-    
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
 
-    
-    <span class="next fr">
-        下一篇<br >
-        <a href="/2019/12/23/2017-02-10-LUNA2016-3DCNN/">
-            
-                医疗图像处理：LUNA2016 3DCNN 网络论文详解
-            
-        </a>
-    </span>
-    
-</div>
-
-<!-- 文章评论 -->
-
+        </div>
+          
   
-<script src="/js/comment.js"></script>
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
 
-  <div id="comments" class="comment">
-    <!--
-    <div class="sign-bar">
-      GitHub 已登录!
-      <span class="sign-link">登出</span>
-    </div>
-    <section class="box">
-      <div class="com-avatar"><img src="/img/jelon.jpg" alt="avatar"></div>
-      <div class="com-text">
-        <div class="main">
-          <textarea class="text-area-edited show" placeholder="欢迎评论！"></textarea>
-          <div class="text-area-preview"></div>
-        </div>
-        <div class="switch">
-          <div class="switch-item on">编辑</div>
-          <div class="switch-item">预览</div>
-        </div>
-        <div class="button">提交</div>
-      </div>
-    </section>
-    <section class="tips">注：评论支持 markdown 语法！</section>
-    <section class="list-wrap">
-      <ul class="list">
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">张德龙</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like liked">已赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">333333</div>
-          </div>
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
         </li>
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">刘德华</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like">点赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">vvvvv</div>
-          </div>
+        <li class="sidebar-nav-overview">
+          Overview
         </li>
       </ul>
-      <div class="page-nav">
-        <a href="javascript: void(0);" class="item">1</a>
-        <a href="javascript: void(0);" class="item">2</a>
-        <a href="javascript: void(0);" class="item current">3</a>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#综述"><span class="nav-number">1.</span> <span class="nav-text">0 综述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据材料"><span class="nav-number">2.</span> <span class="nav-text">1 数据材料</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lidc-idri"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 LIDC-IDRI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#anode09"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 ANODE09</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dlcst"><span class="nav-number">2.3.</span> <span class="nav-text">1.3 DLCST</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-方法"><span class="nav-number">3.</span> <span class="nav-text">二 方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#候选检测"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 候选检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#patches-抽取"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 patches 抽取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#假阳性剔除2-d-convnets配置"><span class="nav-number">3.3.</span> <span class="nav-text">2.3 假阳性剔除:2-D ConvNets配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#假阳性剔除convnets融合"><span class="nav-number">3.4.</span> <span class="nav-text">2.4 假阳性剔除：ConvNets融合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#训练"><span class="nav-number">3.5.</span> <span class="nav-text">2.5 训练</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据增强"><span class="nav-number">3.6.</span> <span class="nav-text">2.6 数据增强</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#评估"><span class="nav-number">3.7.</span> <span class="nav-text">2.7 评估</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-实验结果"><span class="nav-number">4.</span> <span class="nav-text">三 实验结果</span></a></li></ol></div>
       </div>
-    </section>
-    -->
-  </div>
-  <script>
-  JELON.Comment({
-    container: 'comments',
-    label: '2017-02-26-mutliview-falseremove-usingcnn' || '2019/12/23/2017-02-26-mutliview-falseremove-usingcnn/',
-    owner: 'your_github_id',
-    repo: 'your_blog_comments',
-    clientId: 'your_client_id',
-    clientSecret: 'your_client_secret'
-  });
-  </script>
+      <!--/noindex-->
 
-
-            </div>
-
-        </section>
-        <!-- 侧栏部分 -->
-<aside class="sidebar">
-    <section class="widget">
-        <h3 class="widget-hd"><strong>文章分类</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-    <li>
-        <a href="/categories/blog/">blog</a>
-        <span class="badge">(94)</span>
-    </li>
-    
-</ul>
-    </section>
-
-    
-    <section class="widget">
-        <h3 class="widget-hd"><strong>热门标签</strong></h3>
-        <!-- 文章标签 -->
-<div class="widget-bd tag-wrap">
-  
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
 </div>
-    </section>
-    
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
 
-    
 
-    
-    <!-- 友情链接 -->
-    <section class="widget">
-        <h3 class="widget-hd"><strong>友情链接</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-        <li>
-            <a href="https://jelon.top" target="_blank" title="Jelon个人前端小站">前端博客小站</a>
-        </li>
-    
-        <li>
-            <a href="https://www.baidu.com" target="_blank" title="百度搜索">百度</a>
-        </li>
-    
-</ul>
-    </section>
-    
-</aside>
-<!-- / 侧栏部分 -->
+
+      </div>
+
     </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
 
-    <!-- 博客底部 -->
+
+      </div>
+    </main>
+
     <footer class="footer">
-    &copy;
-    
-        2016-2019
-    
+      <div class="footer-inner">
+        
 
-    <a href="/">Jelon Loves You</a>
-</footer>
-<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
 
-    <!--博客js脚本 -->
-    <!-- 这里放网站js脚本 -->
+        
 
-<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
 
 </body>
 </html>

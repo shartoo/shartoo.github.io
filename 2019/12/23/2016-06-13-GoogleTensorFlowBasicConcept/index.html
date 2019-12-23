@@ -1,250 +1,329 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" >
-    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
-    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
-    
-    <title>谷歌TensorFlow基本概念 | Hexo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
-    <meta name="keywords" content="Jelon, 前端, Web, 张德龙, 前端开发" >
-    <meta name="description" content="Jelon个人前端小站" >
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml" >
-    
-    
-    <link rel="shortcut icon" href="/favicon.ico" >
-    
-    
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/main.css">
 
-    <!--[if lt IE 9]>
-    
-<script src="/js/html5.js"></script>
 
-    <![endif]-->
-    
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "//hm.baidu.com/hm.js?fd459238242776d173cdc64918fb32f2";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://shartoo.github.com').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
 </script>
 
+  <meta name="description" content="深度学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="谷歌TensorFlow基本概念">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2016-06-13-GoogleTensorFlowBasicConcept/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="深度学习">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/tensorflow_basicconcept.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.306Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.197Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/tensorflow_basicconcept.png">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<link rel="canonical" href="http://shartoo.github.com/2019/12/23/2016-06-13-GoogleTensorFlowBasicConcept/">
 
-<body class="home">
-    <!--[if lt IE 9]>
-    <div class="browsehappy">
-        当前网页 <strong>不支持</strong>
-        你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/" target="_blank" rel="noopener">升级你的浏览器</a>.
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>谷歌TensorFlow基本概念 | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
     </div>
-    <![endif]-->
+  </div>
 
-    <!-- 博客头部 -->
-    <header class="header">
-    <section class="container header-main">
-        <div class="logo">
-            <a href="/">
-                <div class="cover">
-                    <span class="name">Hexo</span>
-                    <span class="description"></span>
-                </div>
-            </a>
-        </div>
-        <div class="dropnav icon-paragraph-justify" id="JELON__btnDropNav"></div>
-        <ul class="menu hidden" id="JELON__menu">
-            
-            <li rel="/2019/12/23/2016-06-13-GoogleTensorFlowBasicConcept/index.html" class="item ">
-                <a href="/" title="首页" class="icon-home">&nbsp;首页</a>
-            </li>
-            
-            <li rel="/2019/12/23/2016-06-13-GoogleTensorFlowBasicConcept/index.html" class="item ">
-                <a href="/lab/" title="实验室" class="icon-lab">&nbsp;实验室</a>
-            </li>
-            
-            <li rel="/2019/12/23/2016-06-13-GoogleTensorFlowBasicConcept/index.html" class="item ">
-                <a href="/about/" title="关于" class="icon-about">&nbsp;关于</a>
-            </li>
-            
-            <li rel="/2019/12/23/2016-06-13-GoogleTensorFlowBasicConcept/index.html" class="item ">
-                <a href="/comment/" title="留言" class="icon-comment">&nbsp;留言</a>
-            </li>
-            
-        </ul>
-        <div class="profile clearfix">
-            <div class="feeds fl">
-                
-                
-                <p class="links">
-                    
-                        <a href="https://github.com/jangdelong" target="_blank">Github</a>
-                        |
-                    
-                        <a href="https://pages.coding.me" target="_blank">Hosted by Coding Pages</a>
-                        
-                    
-                </p>
-                <p class="sns">
-                    
-                        <a href="http://weibo.com/jangdelong" class="sinaweibo" target="_blank"><b>■</b> 新浪微博</a>
-                    
-                        <a href="https://www.facebook.com/profile.php?id=100011855760219&amp;ref=bookmarks" class="qqweibo" target="_blank"><b>■</b> Facebook</a>
-                    
-                    <a href="javascript: void(0);" class="wechat">
-                        <b>■</b>
-                        公众号
-                        <span class="popover">
-                            <img src="/img/wechat_mp.jpg" width="120" height="120" alt="我的微信订阅号">
-                            <i class="arrow"></i>
-                        </span>
-                    </a>
-                </p>
-                
-            </div>
-            <div class="avatar fr">
-                <img src="/img/jelon.jpg" alt="avatar" title="Jelon" >
-            </div>
-        </div>
-    </section>
-</header>
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
 
 
-    <!-- 博客正文 -->
-    <div class="container body clearfix">
-        <section class="content">
-            <div class="content-main widget">
-                <!-- 文章页 -->
-<!-- 文章 -->
-<article class="post article">
-    <header class="text-center">
-        <h3 class="post-title"><span>谷歌TensorFlow基本概念</span></h3>
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
     </header>
-    <p class="post-meta text-center">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.306Z">2019-12-23</time>
-    </p>
-    <div class="post-content">
-        <h1 id="start-up"><a href="#start-up" class="headerlink" title="start up"></a>start up</h1><h2 id="1-1-谷歌深度学习工具历史"><a href="#1-1-谷歌深度学习工具历史" class="headerlink" title="1.1 谷歌深度学习工具历史:"></a>1.1 谷歌深度学习工具历史:</h2><ol>
-<li>第一代：<strong>DistBelief</strong> 由 Dean于2011年发起，主要产品有：<ul>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://shartoo.github.com/2019/12/23/2016-06-13-GoogleTensorFlowBasicConcept/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          谷歌TensorFlow基本概念
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2019-12-23 18:45:59 / Modified: 17:55:14" itemprop="dateCreated datePublished" datetime="2019-12-23T18:45:59+08:00">2019-12-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">深度学习</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="start-up">start up</h1>
+<h2 id="谷歌深度学习工具历史">1.1 谷歌深度学习工具历史:</h2>
+<ol type="1">
+<li>第一代：<strong>DistBelief</strong> 由 Dean于2011年发起，主要产品有：
+<ul>
 <li>Inception (图像识别领域)</li>
 <li>谷歌Search</li>
 <li>谷歌翻译</li>
 <li>谷歌照片</li>
-</ul>
-</li>
+</ul></li>
 <li>第二代：<strong>TensorFlow</strong> 由Dean于2015年11月发起，大部分DistBelief都转向了TensorFlow</li>
 </ol>
-<h2 id="1-2-产品特性"><a href="#1-2-产品特性" class="headerlink" title="1.2 产品特性"></a>1.2 产品特性</h2><table>
+<h2 id="产品特性">1.2 产品特性</h2>
+<table>
 <thead>
-<tr>
+<tr class="header">
 <th>概念</th>
 <th>描述</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr class="odd">
 <td>编程模型</td>
 <td>类数据流的模型</td>
 </tr>
-<tr>
+<tr class="even">
 <td>语言</td>
 <td>Python C++</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>部署</td>
 <td>code once,run ererywhere</td>
 </tr>
-<tr>
+<tr class="even">
 <td>计算资源</td>
 <td>cpu,gpu</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>分布式处理</td>
 <td>本地实现，分布式实现</td>
 </tr>
-<tr>
+<tr class="even">
 <td>数学表达式</td>
 <td>数学图表达式，自动分化</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>优化</td>
 <td>自动消除，kernel 优化，通信优化，支持模式，数据并行</td>
 </tr>
-</tbody></table>
-<h2 id="1-3-计算图"><a href="#1-3-计算图" class="headerlink" title="1.3 计算图"></a>1.3 计算图</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line">b &#x3D; tf.Variable(tf.zeros([100]))                   # 100维的向量，都初始化为0</span><br><span class="line">w &#x3D; tf.Variable(tf.random_uniform([784,100],-1,1)) # 784x100的矩阵</span><br><span class="line">x &#x3D; tf.placeholder(name&#x3D;&quot;x&quot;)                       # 输入的占位符placeholder</span><br><span class="line">relu &#x3D; tf.nn.relu(tf.matmul(w,x)+b)                # Relu(Wx+b)</span><br><span class="line">C &#x3D;[...]                                           # 使用relu的一个函数计算代价</span><br></pre></td></tr></table></figure>
-<p>对应的计算图如下:<br><img src="/images/blog/tensorflow_basicconcept.png" alt="计算图"></p>
-<h2 id="1-4-Tensorflow的代码样例"><a href="#1-4-Tensorflow的代码样例" class="headerlink" title="1.4 Tensorflow的代码样例"></a>1.4 Tensorflow的代码样例</h2><ol>
+</tbody>
+</table>
+<h2 id="计算图">1.3 计算图</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line">b &#x3D; tf.Variable(tf.zeros([100]))                   # 100维的向量，都初始化为0</span><br><span class="line">w &#x3D; tf.Variable(tf.random_uniform([784,100],-1,1)) # 784x100的矩阵</span><br><span class="line">x &#x3D; tf.placeholder(name&#x3D;&quot;x&quot;)                       # 输入的占位符placeholder</span><br><span class="line">relu &#x3D; tf.nn.relu(tf.matmul(w,x)+b)                # Relu(Wx+b)</span><br><span class="line">C &#x3D;[...]                                           # 使用relu的一个函数计算代价</span><br></pre></td></tr></table></figure>
+<p>对应的计算图如下: <img src="/images/blog/tensorflow_basicconcept.png" alt="计算图" /></p>
+<h2 id="tensorflow的代码样例">1.4 Tensorflow的代码样例</h2>
+<ol type="1">
 <li>构建数据流图的第一部分代码</li>
 </ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line">import numpy as np</span><br><span class="line"># 创建100个numpy的 x,y 假数据点，y &#x3D; x*0.1+0.3</span><br><span class="line">x_data &#x3D; np.random.rand(100).astype(&quot;float32&quot;)</span><br><span class="line">y_data &#x3D; x_data*0.1+0.3</span><br><span class="line"># 找出计算 y_data &#x3D;W*x_data+b的w和b的值，虽然我们知道w&#x3D;0.1,b&#x3D;0.3,但是tensorflow会找到并计算出来</span><br><span class="line">w &#x3D; tf.Variable(tf.random_uniform)</span><br></pre></td></tr></table></figure>
-
-<h1 id="2-tensorflow概览"><a href="#2-tensorflow概览" class="headerlink" title="2 tensorflow概览"></a>2 tensorflow概览</h1><p>要使用tensorflow的话，你需要理解以下概念:</p>
+<h1 id="tensorflow概览">2 tensorflow概览</h1>
+<p>要使用tensorflow的话，你需要理解以下概念: + 图代表了计算 + 图需要在会话(Sessions)中执行 + 张量(tensor)代表数据 + 使用Variables来持有状态 + 使用<strong>feeds</strong> 和 <strong>fetches</strong>来获得任何操作的输入输出数据</p>
+<p>tensorflow的概览 + 一个将计算转化为图的编程系统 + 图中的节点是： + 操作(op):执行某些计算 + 输入(input):一个或多个张量(tensorflow) + Tensor张量：一个有类型的多维数组</p>
+<h1 id="两个计算阶段">3 两个计算阶段</h1>
+<h2 id="在图中计算">3.1 在图中计算</h2>
 <ul>
-<li>图代表了计算</li>
-<li>图需要在会话(Sessions)中执行</li>
-<li>张量(tensor)代表数据</li>
-<li>使用Variables来持有状态</li>
-<li>使用<strong>feeds</strong> 和 <strong>fetches</strong>来获得任何操作的输入输出数据</li>
-</ul>
-<p>tensorflow的概览</p>
-<ul>
-<li>一个将计算转化为图的编程系统</li>
-<li>图中的节点是：<ul>
-<li>操作(op):执行某些计算</li>
-<li>输入(input):一个或多个张量(tensorflow)</li>
-<li>Tensor张量：一个有类型的多维数组</li>
-</ul>
-</li>
-</ul>
-<h1 id="3-两个计算阶段"><a href="#3-两个计算阶段" class="headerlink" title="3 两个计算阶段"></a>3 两个计算阶段</h1><h2 id="3-1-在图中计算"><a href="#3-1-在图中计算" class="headerlink" title="3.1 在图中计算"></a>3.1 在图中计算</h2><ul>
 <li>图必须在Session中运行</li>
-<li>会话(Session)<ul>
+<li>会话(Session)
+<ul>
 <li>将图操作放入到设备上，比如CPUs和GPUs</li>
 <li>提供执行方法</li>
 <li>返回操作产生的张量，比如python中的<strong>numpy ndarray对象</strong>，以及C和C++<strong>tensorflow::Tensor</strong>实例。</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h2 id="3-2-图中的两个计算阶段"><a href="#3-2-图中的两个计算阶段" class="headerlink" title="3.2 图中的两个计算阶段"></a>3.2 图中的两个计算阶段</h2><ol>
-<li><p>构建阶段</p>
+<h2 id="图中的两个计算阶段">3.2 图中的两个计算阶段</h2>
+<ol type="1">
+<li>构建阶段
 <ul>
 <li>形成图</li>
 <li>创建图来代表神经网络并训练这个神经网络</li>
-</ul>
-</li>
-<li><p>执行阶段</p>
+</ul></li>
+<li>执行阶段
 <ul>
 <li>使用会话执行途中的操作</li>
 <li>重复执行图中训练操作集合</li>
-</ul>
-</li>
-<li><p>构建图</p>
-</li>
+</ul></li>
+<li>构建图</li>
 </ol>
 <ul>
 <li>开始那些不需要任何输入(source ops)的操作(op)，常量</li>
 <li>将它们的输出传入到其他做计算的操作</li>
-<li>操作构建者返回对象<ul>
+<li>操作构建者返回对象
+<ul>
 <li>代表了结构化操作的输出</li>
 <li>将这些输出传入其他操作构建者作为输入</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<ol start="4">
-<li><p>默认图</p>
-<p>将节点加入此图的操作构建者</p>
-</li>
+<ol start="4" type="1">
+<li>默认图</li>
 </ol>
+<p>将节点加入此图的操作构建者</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line"># 创建一个产生1x2的矩阵的常量操作，操作被作为节点加入到默认图</span><br><span class="line"># 构建者的返回值代表了常量操作的输出</span><br><span class="line">matrix1 &#x3D; tf.constant([[3,3.]])</span><br><span class="line"># 创建另外一个产生 2x1矩阵的常量操作</span><br><span class="line">matrix2 &#x3D; tf.constant([[2.0],[2.]])</span><br></pre></td></tr></table></figure>
-<p>   有三个节点：两个<strong>constant</strong>操作(ops)以及一个<strong>matmul</strong>操作</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 创建一个Matmul操作，将 matrix1和matrix2作为输入</span><br><span class="line"># 返回值，‘product’，代表了矩阵相乘的结果</span><br><span class="line">product &#x3D; tf.matmul(matrix1,matrix2)</span><br></pre></td></tr></table></figure>
-
-<ol start="5">
+<p>有三个节点：两个<strong>constant</strong>操作(ops)以及一个<strong>matmul</strong>操作 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 创建一个Matmul操作，将 matrix1和matrix2作为输入</span><br><span class="line"># 返回值，‘product’，代表了矩阵相乘的结果</span><br><span class="line">product &#x3D; tf.matmul(matrix1,matrix2)</span><br></pre></td></tr></table></figure></p>
+<ol start="5" type="1">
 <li>在会话Session中运行图</li>
 </ol>
 <ul>
@@ -252,12 +331,12 @@
 <li>没有参数，session构建者运行默认图</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 运行默认图</span><br><span class="line">sess &#x3D; tf.Session()</span><br><span class="line"># 要运行matmul操作，我们调用了session的‘run()’方法，传入&#39;producr&#39;代表了matmul操作的输出。这即回调了matmul操作的输出结果</span><br><span class="line"># 操作的输出以一个numpy的&#39;ndarray&#39;对象返回&#39;result&#39;</span><br><span class="line">result &#x3D; sess.run(product)</span><br><span class="line">print result</span><br><span class="line"># &#x3D;&#x3D;&gt;[[12.]]</span><br><span class="line">#关闭会话</span><br><span class="line">sess.close()</span><br></pre></td></tr></table></figure>
-<ol start="6">
+<ol start="6" type="1">
 <li>Session运行图，Session.run()方法执行操作</li>
-<li>一个Session块(block)<ul>
-<li>在块的结尾自动关闭<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">with tf.Session() as sess:</span><br><span class="line">    result &#x3D; sess.run([product])</span><br><span class="line">    print result</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
+<li>一个Session块(block)
+<ul>
+<li>在块的结尾自动关闭 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">with tf.Session() as sess:</span><br><span class="line">    result &#x3D; sess.run([product])</span><br><span class="line">    print result</span><br></pre></td></tr></table></figure></li>
+</ul></li>
 <li>GPU的使用</li>
 </ol>
 <ul>
@@ -271,185 +350,207 @@
 <li>这可以避免必须用一个变量来保持一个session</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># 进入一个交互的Tensorflow Session</span><br><span class="line">import tensorflow as tf</span><br><span class="line">sess &#x3D; tf.InteractiveSession()</span><br><span class="line"></span><br><span class="line">x &#x3D; tf.Variable([1.0,2.0])</span><br><span class="line">y &#x3D; tf.constant([3.0,3.0])</span><br><span class="line">#使用&#39;x&#39;的initializer的 run() 方法初始化</span><br><span class="line">x.initializer.run()</span><br><span class="line"></span><br><span class="line"># 添加一个操作从&#39;x&#39;中抽取&#39;a&#39;，执行并打印结果</span><br><span class="line">sub &#x3D; tf.sub(x,a)</span><br><span class="line">print sub.eval()</span><br><span class="line"># &#x3D;&#x3D;&gt;[-2,-1.]</span><br><span class="line"></span><br><span class="line"># 关闭session</span><br><span class="line">sess.close()</span><br></pre></td></tr></table></figure>
-
-<h1 id="5-张量-Tensors"><a href="#5-张量-Tensors" class="headerlink" title="5 张量(Tensors)"></a>5 张量(Tensors)</h1><ul>
+<h1 id="张量tensors">5 张量(Tensors)</h1>
+<ul>
 <li>Tensor(张量)数据结构代表了所有数据</li>
 <li>在计算图中只有张量在操作之间传递</li>
-<li>n维数组或者列表<ul>
+<li>n维数组或者列表
+<ul>
 <li>静态类型，秩，或者 shape</li>
-</ul>
-</li>
+</ul></li>
 </ul>
 <p><strong>rank(秩)</strong></p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>rank</th>
 <th>数学实体</th>
 <th>python示例</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr class="odd">
 <td>0</td>
 <td>Scalar(大小)</td>
 <td>s =483</td>
 </tr>
-<tr>
+<tr class="even">
 <td>1</td>
 <td>Vector(大小和方向)</td>
 <td>v=[1.1,2.2,3.3]</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>2</td>
 <td>Matrix(数据表)</td>
 <td>m=[[1,2,3],[4,5,6],[7,8,9]]</td>
 </tr>
-<tr>
+<tr class="even">
 <td>3</td>
 <td>3-Tensor(立方(cube)的数量)</td>
 <td>t=[[[2],[4],[6],[8]],[[10],[12]]]</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>n</td>
 <td>n-Tensor</td>
 <td>同上</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p><strong>shape</strong></p>
-<p>|Rank| Shape|维数|示例|<br>|—|—|—|<br>|0|[]|0-D|一个0-D张量，一个标量|<br>|1|[D0]|1-D|一个1-D张量，shape是[5]|<br>|2|[D0,D1]|2-D|一个2-D张量，shape是[3,4]|<br>|3|[D0,D1,D2]|3-D|一个3-D张量，shape[1,4,3]|<br>|n|[D0,D1,D2,…Dn]|n-D|一个n-D张量，shape是[D0,D1,…Dn]|</p>
+<table>
+<thead>
+<tr class="header">
+<th>Rank</th>
+<th>Shape</th>
+<th>维数</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>[]</td>
+<td>0-D</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>[D0]</td>
+<td>1-D</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>[D0,D1]</td>
+<td>2-D</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>[D0,D1,D2]</td>
+<td>3-D</td>
+</tr>
+<tr class="odd">
+<td>n</td>
+<td>[D0,D1,D2,...Dn]</td>
+<td>n-D</td>
+</tr>
+</tbody>
+</table>
 <p><strong>数据类型</strong></p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>Data type</th>
 <th>python类型</th>
 <th>描述</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr class="odd">
 <td>DT_FLOAT</td>
 <td>tf.float32</td>
 <td>32位浮点类型</td>
 </tr>
-<tr>
+<tr class="even">
 <td>DT_DOUBLE</td>
 <td>tf.float64</td>
 <td>64位浮点类型</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>DT_INT64</td>
 <td>tf.int64</td>
 <td>64位有符号整型</td>
 </tr>
-<tr>
+<tr class="even">
 <td>DT_INT32</td>
 <td>tf.int32</td>
 <td>32位有符号整型</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>DT_INT16</td>
 <td>tf.int16</td>
 <td>16位有符号整型</td>
 </tr>
-<tr>
+<tr class="even">
 <td>DT_INt8</td>
 <td>tf.int8</td>
 <td>8位有符号整型</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>DT_UINT</td>
 <td>tf.unit8</td>
 <td>8位无符号整型</td>
 </tr>
-<tr>
+<tr class="even">
 <td>DT_STRING</td>
 <td>tf.string</td>
 <td>变量长度的字节数组，Tensor每个元素是一个字节数组</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>DT_BOOL</td>
 <td>tf.bool</td>
 <td>Boolean</td>
 </tr>
-<tr>
+<tr class="even">
 <td>DT_COMPLEX64</td>
 <td>tf.complex64</td>
 <td>由两个32位浮点数组成的复数，实数和大小部分</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>DT_QINT32</td>
 <td>tf.qint32</td>
 <td>量化操作中32位有符号整型</td>
 </tr>
-<tr>
+<tr class="even">
 <td>DT_QINT8</td>
 <td>tf.qint8</td>
 <td>量化操作中8位有符号整型</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>DT_QUINT8</td>
 <td>tf.quint8</td>
 <td>量化操作中8位无符号整型</td>
 </tr>
-</tbody></table>
-<p>#6 变量<br>变量的创建、初始化、存储和载入</p>
-<ul>
-<li>为了持有和更新参数，在图中保持状态可以通过调用 <strong>run()</strong>方法</li>
-<li>内存buffer包含张量</li>
-<li>必须是明确初始化并且在训练期间和训练之后存储到磁盘上的</li>
-<li>类 <strong>tf.Variable</strong><ul>
-<li>构造器：变量的初始化值，一个任意类型和shape的张量</li>
-<li>构造之后，类型和shape都会固定</li>
-<li>使用<strong>assign</strong>操作op， validate_shape = False<h2 id="6-1-创建"><a href="#6-1-创建" class="headerlink" title="6.1 创建"></a>6.1 创建</h2></li>
-</ul>
-</li>
-<li>传入一个张量作为初始值到 Variable构造方法中</li>
-<li>初始值：常量constants,序列化和随机值<ul>
-<li>tf.zeros(),tf.linspace(),tf.random_normal()</li>
-</ul>
-</li>
-<li>固定shape：与操作的shape相同</li>
-</ul>
+</tbody>
+</table>
+<p>#6 变量 变量的创建、初始化、存储和载入 + 为了持有和更新参数，在图中保持状态可以通过调用 <strong>run()</strong>方法 + 内存buffer包含张量 + 必须是明确初始化并且在训练期间和训练之后存储到磁盘上的 + 类 <strong>tf.Variable</strong> + 构造器：变量的初始化值，一个任意类型和shape的张量 + 构造之后，类型和shape都会固定 + 使用<strong>assign</strong>操作op， validate_shape = False ## 6.1 创建 + 传入一个张量作为初始值到 Variable构造方法中 + 初始值：常量constants,序列化和随机值 + tf.zeros(),tf.linspace(),tf.random_normal() + 固定shape：与操作的shape相同</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 创建两个变量</span><br><span class="line">weight &#x3D; tf.Variable(tf.random_normal([784,200],stddev&#x3D;0.35),name &#x3D;&quot;weights&quot;)</span><br><span class="line">biases &#x3D; tf.Variable(tf.zeros([200]),name &#x3D;&quot;biases&quot;)</span><br></pre></td></tr></table></figure>
 <ul>
 <li>调用 tf.Variable() 加入操作到图中</li>
 </ul>
-<h2 id="6-2-初始化"><a href="#6-2-初始化" class="headerlink" title="6.2 初始化"></a>6.2 初始化</h2><ul>
+<h2 id="初始化">6.2 初始化</h2>
+<ul>
 <li>添加一个操作并执行</li>
 <li>tf.initialize_all_variables()</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 添加一个操作来初始化变量</span><br><span class="line">init_op &#x3D; tf.initialize_all_variables()</span><br><span class="line"># 过后，执行model</span><br><span class="line">with tf.Session() as sess:</span><br><span class="line">    #运行初始化操作</span><br><span class="line">    sess.run（init_op）</span><br></pre></td></tr></table></figure>
-<h2 id="6-3-存储和恢复"><a href="#6-3-存储和恢复" class="headerlink" title="6.3 存储和恢复"></a>6.3 存储和恢复</h2><ul>
+<h2 id="存储和恢复">6.3 存储和恢复</h2>
+<ul>
 <li><strong>tf.saver</strong></li>
 <li>检查点文件：Variables都存储在二进制文件中，该文件包含了一个变量名到张量值得map</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># 创建一些变量</span><br><span class="line">v1 &#x3D; tf.Variables(...,name &#x3D;&quot;v1&quot;)</span><br><span class="line">v2 &#x3D; tf.Variables(...,name&#x3D;&quot;v2&quot;)</span><br><span class="line">...</span><br><span class="line">#添加一个操作来初始化变量</span><br><span class="line">init_op &#x3D; tf.initialize_all_variables()</span><br><span class="line"></span><br><span class="line"># 添加操作来保存和恢复所有变量</span><br><span class="line">saver &#x3D; tf.train.Saver()</span><br><span class="line"># 然后，运行模型，初始化变量，做一些操作，保存变量到磁盘中</span><br><span class="line">with tf.Session() as sess:</span><br><span class="line">     sess.run(init_op)</span><br><span class="line">     # 对模型做一些操作</span><br><span class="line">    .....</span><br><span class="line">    #存储变量到磁盘中</span><br><span class="line">    save_path &#x3D; saver.save(sess,&quot;&#x2F;tmp&#x2F;model.ckpt&quot;)</span><br><span class="line">    print (&quot;Model saved in file: %s&quot;%save_path)</span><br></pre></td></tr></table></figure>
 <p>** 恢复**</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">with tf.Session() as sess:</span><br><span class="line">    # 从磁盘中恢复变量</span><br><span class="line">    saver.restore(sess,&quot;&#x2F;tmp&#x2F;model.ckpt&quot;)</span><br><span class="line">    print (&quot;Model restored&quot;)</span><br><span class="line">    # 做一些操作</span><br></pre></td></tr></table></figure>
-
-<h2 id="6-4-选择哪些变量来存储和恢复"><a href="#6-4-选择哪些变量来存储和恢复" class="headerlink" title="6.4 选择哪些变量来存储和恢复"></a>6.4 选择哪些变量来存储和恢复</h2><ul>
-<li><p>在 ** tf.train.Saver()**中没有参数</p>
+<h2 id="选择哪些变量来存储和恢复">6.4 选择哪些变量来存储和恢复</h2>
+<ul>
+<li>在 ** tf.train.Saver()**中没有参数
 <ul>
 <li>处理图中所有变量，每个变量都会被保存在该名字之下</li>
-</ul>
-</li>
-<li><p>存储和恢复变量的子集</p>
+</ul></li>
+<li>存储和恢复变量的子集
 <ul>
 <li>训练5层神经网络，想训练一个新的6层神经网络，从5层圣经网络中恢复参数</li>
-</ul>
-</li>
-<li><p>向<strong>tf.train.Saver()</strong>构造方法中传入一个Python词典:keys</p>
-</li>
+</ul></li>
+<li>向<strong>tf.train.Saver()</strong>构造方法中传入一个Python词典:keys</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># 创建一些变量</span><br><span class="line">v1 &#x3D; tf.Variables(...,name &#x3D;&quot;v1&quot;)</span><br><span class="line">v2 &#x3D; tf.Variables(...,name &#x3D;&quot;v2&quot;)</span><br><span class="line"># 添加操作存储和恢复变量 v2,使用名字 &quot;my_v2&quot;</span><br><span class="line">saver &#x3D; tf.train.Saver(&#123;&quot;my_v2&quot;:v2&#125;)</span><br><span class="line"># 使用saver对象</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-<h2 id="6-5-简单计数器的示例代码"><a href="#6-5-简单计数器的示例代码" class="headerlink" title="6.5 简单计数器的示例代码"></a>6.5 简单计数器的示例代码</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"># 创建一个变量，初始化为标量0</span><br><span class="line">state &#x3D; tf.Variables(0,name&#x3D;&quot;Counter&quot;)</span><br><span class="line"># 创建一个操作来给&quot;state&quot;加1</span><br><span class="line">one &#x3D; tf.constant(1)</span><br><span class="line">new_value &#x3D; tf.add(state,one)</span><br><span class="line">update &#x3D; tf.assign(state,new_value)</span><br><span class="line"></span><br><span class="line"># 在图被运行，变量必须是通过运行一个&quot;init&quot;操作被初始化。</span><br><span class="line"># 我们首先要将&quot;init&quot;操作加入到图中</span><br><span class="line">init_op &#x3D; tf.initialize_all_variables()</span><br><span class="line"></span><br><span class="line"># 运行图，和操作</span><br><span class="line">with tf.Session() as sess:</span><br><span class="line">    #运行 &#39;init&#39;操作</span><br><span class="line">    sess.run(init_op)</span><br><span class="line">    # 打印&#39;state&#39;的初始化值</span><br><span class="line">    print (sess.run(state))</span><br><span class="line">    # 运行更新&#39;state&#39;的操作，并打印&#39;state&#39;</span><br><span class="line">    for _ in range(3):</span><br><span class="line">        sess.run(update)</span><br><span class="line">        print (sess.run(state))</span><br><span class="line"># 输出</span><br><span class="line">#0</span><br><span class="line">#1</span><br><span class="line">#2</span><br><span class="line">#3</span><br></pre></td></tr></table></figure>
-
-<h2 id="6-6-取数据Fetches"><a href="#6-6-取数据Fetches" class="headerlink" title="6.6 取数据Fetches"></a>6.6 取数据Fetches</h2><ul>
+<h2 id="简单计数器的示例代码">6.5 简单计数器的示例代码</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"># 创建一个变量，初始化为标量0</span><br><span class="line">state &#x3D; tf.Variables(0,name&#x3D;&quot;Counter&quot;)</span><br><span class="line"># 创建一个操作来给&quot;state&quot;加1</span><br><span class="line">one &#x3D; tf.constant(1)</span><br><span class="line">new_value &#x3D; tf.add(state,one)</span><br><span class="line">update &#x3D; tf.assign(state,new_value)</span><br><span class="line"></span><br><span class="line"># 在图被运行，变量必须是通过运行一个&quot;init&quot;操作被初始化。</span><br><span class="line"># 我们首先要将&quot;init&quot;操作加入到图中</span><br><span class="line">init_op &#x3D; tf.initialize_all_variables()</span><br><span class="line"></span><br><span class="line"># 运行图，和操作</span><br><span class="line">with tf.Session() as sess:</span><br><span class="line">    #运行 &#39;init&#39;操作</span><br><span class="line">    sess.run(init_op)</span><br><span class="line">    # 打印&#39;state&#39;的初始化值</span><br><span class="line">    print (sess.run(state))</span><br><span class="line">    # 运行更新&#39;state&#39;的操作，并打印&#39;state&#39;</span><br><span class="line">    for _ in range(3):</span><br><span class="line">        sess.run(update)</span><br><span class="line">        print (sess.run(state))</span><br><span class="line"># 输出</span><br><span class="line">#0</span><br><span class="line">#1</span><br><span class="line">#2</span><br><span class="line">#3</span><br></pre></td></tr></table></figure>
+<h2 id="取数据fetches">6.6 取数据Fetches</h2>
+<ul>
 <li>在Session对象中调用<strong>run()</strong>方法来执行图，并传入张量来取回数据</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">input1 &#x3D; tf.constant(3.0)</span><br><span class="line">input2 &#x3D; tf.constant(2.0)</span><br><span class="line">input3 &#x3D; tf.constant(5.0)</span><br><span class="line">intermed &#x3D; tf.add(input2,input3)</span><br><span class="line">mul &#x3D; tf.mul(input1,intermed)</span><br><span class="line"></span><br><span class="line">with tf.Session() as sess:</span><br><span class="line">     result &#x3D; sess.run([mul,intermed])</span><br><span class="line">     print (result)</span><br><span class="line"># 输出</span><br><span class="line"># [array([21.],dtype &#x3D; float32),array([7.],dtype &#x3D; float32)]</span><br></pre></td></tr></table></figure>
-
-<h2 id="6-7-Feeds"><a href="#6-7-Feeds" class="headerlink" title="6.7 Feeds"></a>6.7 Feeds</h2><ul>
+<h2 id="feeds">6.7 Feeds</h2>
+<ul>
 <li>直接打包一个张量到图中的任何操作</li>
 <li>使用一个张量值临时替换一个操作的输出值</li>
 <li>feed数据作为<strong>run()</strong>方法的一个参数</li>
@@ -457,247 +558,238 @@
 <li><strong>tf.placeholder()</strong></li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">input1 &#x3D; tf.placeholder(tf.float32)</span><br><span class="line">input2 &#x3D;tf.placeholder(tf.float32)</span><br><span class="line">output &#x3D; tf.mul(input1,input2)</span><br><span class="line"></span><br><span class="line">with tf.Session() as sess:</span><br><span class="line">    print (sess.run([output],feed_dict &#x3D; &#123;input1:[7.],input2:[2.]&#125;))</span><br><span class="line"></span><br><span class="line">#输出</span><br><span class="line">#[array([14.],dtype&#x3D;float32)]</span><br></pre></td></tr></table></figure>
-
-<h1 id="7-操作"><a href="#7-操作" class="headerlink" title="7 操作"></a>7 操作</h1><table>
+<h1 id="操作">7 操作</h1>
+<table>
 <thead>
-<tr>
+<tr class="header">
 <th>类别</th>
 <th>示例</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr class="odd">
 <td>逐元素数学运算</td>
-<td>Add,Sub,Mul,Div,Exp,Log,Greater,Less,Equal…</td>
+<td>Add,Sub,Mul,Div,Exp,Log,Greater,Less,Equal...</td>
 </tr>
-<tr>
+<tr class="even">
 <td>数组操作</td>
 <td>Concat,Slice,Split,Constant,Rank,Shape,Shuffle..</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>矩阵运算</td>
-<td>MatMul,MatrixInverse,MatrixDeterminant…</td>
+<td>MatMul,MatrixInverse,MatrixDeterminant...</td>
 </tr>
-<tr>
+<tr class="even">
 <td>状态操作</td>
-<td>Variable,Assign,AssignAdd…</td>
+<td>Variable,Assign,AssignAdd...</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>神经元构建块</td>
-<td>SoftMax,Sigmoid,ReLU,Convolution2D,MaxPool…</td>
+<td>SoftMax,Sigmoid,ReLU,Convolution2D,MaxPool...</td>
 </tr>
-<tr>
+<tr class="even">
 <td>检查点操作</td>
 <td>Save,Restore</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>队列和同步操作</td>
-<td>Enqueue,Dequeue,MutexAcquire,MutexRelease,…</td>
+<td>Enqueue,Dequeue,MutexAcquire,MutexRelease,...</td>
 </tr>
-<tr>
+<tr class="even">
 <td>控制流操作</td>
 <td>Merge,Switch,Enter,Leave,NextIteration</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 
     </div>
-    <p class="post-meta">
-        <span class="post-cat">分类：
-            <a class="cat-link" href="/categories/blog/">blog</a>
-        </span>
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-</article>
-<!-- 分享按钮 -->
 
-  <div class="article-share clearfix text-center">
-    <div class="share-area">
-      <span class="share-txt">分享到：</span>
-      <a href="javascript: window.open('http://service.weibo.com/share/share.php?url=' + encodeURIComponent(location.href) + '&title=' + document.title + '&language=zh_cn');" class="share-icon weibo"></a>
-      <a href="javascript: alert('请复制链接到微信并发送');" class="share-icon wechat"></a>
-      <a href="javascript: window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + encodeURIComponent(location.href) + '&title=' + document.title);" class="share-icon qqzone"></a>
-      <a href="javascript: window.open('http://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(location.href) + '&desc=Jelon个人博客&title=' + document.title + '&callback=' + encodeURIComponent(location.href));" class="share-icon qq"></a>
-      <a href="javascript: window.open('http://shuo.douban.com/!service/share?href=' + encodeURIComponent(location.href) + '&name=' + document.title + '&text=' + document.title);" class="share-icon douban"></a>
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2016-03-16-bigdata-hadooplzo/" rel="prev" title="hadoop lzo问题">
+      <i class="fa fa-chevron-left"></i> hadoop lzo问题
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2016-06-30-ElasticSearchTest/" rel="next" title="elastic search 性能测试">
+      elastic search 性能测试 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
   </div>
 
 
-<!-- 上一篇/下一篇 -->
+          </div>
+          
 
-<div class="article-nav clearfix">
-    
-    <span class="prev fl">
-        上一篇<br >
-        <a href="/2019/12/23/2016-06-30-ElasticSearchTest/">
-            
-                elastic search 性能测试
-            
-        </a>
-    </span>
-    
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
 
-    
-    <span class="next fr">
-        下一篇<br >
-        <a href="/2019/12/23/2016-03-16-bigdata-hadooplzo/">
-            
-                hadoop lzo问题
-            
-        </a>
-    </span>
-    
-</div>
-
-<!-- 文章评论 -->
-
+        </div>
+          
   
-<script src="/js/comment.js"></script>
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
 
-  <div id="comments" class="comment">
-    <!--
-    <div class="sign-bar">
-      GitHub 已登录!
-      <span class="sign-link">登出</span>
-    </div>
-    <section class="box">
-      <div class="com-avatar"><img src="/img/jelon.jpg" alt="avatar"></div>
-      <div class="com-text">
-        <div class="main">
-          <textarea class="text-area-edited show" placeholder="欢迎评论！"></textarea>
-          <div class="text-area-preview"></div>
-        </div>
-        <div class="switch">
-          <div class="switch-item on">编辑</div>
-          <div class="switch-item">预览</div>
-        </div>
-        <div class="button">提交</div>
-      </div>
-    </section>
-    <section class="tips">注：评论支持 markdown 语法！</section>
-    <section class="list-wrap">
-      <ul class="list">
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">张德龙</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like liked">已赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">333333</div>
-          </div>
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
         </li>
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">刘德华</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like">点赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">vvvvv</div>
-          </div>
+        <li class="sidebar-nav-overview">
+          Overview
         </li>
       </ul>
-      <div class="page-nav">
-        <a href="javascript: void(0);" class="item">1</a>
-        <a href="javascript: void(0);" class="item">2</a>
-        <a href="javascript: void(0);" class="item current">3</a>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#start-up"><span class="nav-number">1.</span> <span class="nav-text">start up</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#谷歌深度学习工具历史"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 谷歌深度学习工具历史:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#产品特性"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 产品特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算图"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 计算图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tensorflow的代码样例"><span class="nav-number">1.4.</span> <span class="nav-text">1.4 Tensorflow的代码样例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tensorflow概览"><span class="nav-number">2.</span> <span class="nav-text">2 tensorflow概览</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#两个计算阶段"><span class="nav-number">3.</span> <span class="nav-text">3 两个计算阶段</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#在图中计算"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 在图中计算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图中的两个计算阶段"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 图中的两个计算阶段</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#张量tensors"><span class="nav-number">4.</span> <span class="nav-text">5 张量(Tensors)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化"><span class="nav-number">4.1.</span> <span class="nav-text">6.2 初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#存储和恢复"><span class="nav-number">4.2.</span> <span class="nav-text">6.3 存储和恢复</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选择哪些变量来存储和恢复"><span class="nav-number">4.3.</span> <span class="nav-text">6.4 选择哪些变量来存储和恢复</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单计数器的示例代码"><span class="nav-number">4.4.</span> <span class="nav-text">6.5 简单计数器的示例代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#取数据fetches"><span class="nav-number">4.5.</span> <span class="nav-text">6.6 取数据Fetches</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#feeds"><span class="nav-number">4.6.</span> <span class="nav-text">6.7 Feeds</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#操作"><span class="nav-number">5.</span> <span class="nav-text">7 操作</span></a></li></ol></div>
       </div>
-    </section>
-    -->
-  </div>
-  <script>
-  JELON.Comment({
-    container: 'comments',
-    label: '2016-06-13-GoogleTensorFlowBasicConcept' || '2019/12/23/2016-06-13-GoogleTensorFlowBasicConcept/',
-    owner: 'your_github_id',
-    repo: 'your_blog_comments',
-    clientId: 'your_client_id',
-    clientSecret: 'your_client_secret'
-  });
-  </script>
+      <!--/noindex-->
 
-
-            </div>
-
-        </section>
-        <!-- 侧栏部分 -->
-<aside class="sidebar">
-    <section class="widget">
-        <h3 class="widget-hd"><strong>文章分类</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-    <li>
-        <a href="/categories/blog/">blog</a>
-        <span class="badge">(94)</span>
-    </li>
-    
-</ul>
-    </section>
-
-    
-    <section class="widget">
-        <h3 class="widget-hd"><strong>热门标签</strong></h3>
-        <!-- 文章标签 -->
-<div class="widget-bd tag-wrap">
-  
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
 </div>
-    </section>
-    
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
 
-    
 
-    
-    <!-- 友情链接 -->
-    <section class="widget">
-        <h3 class="widget-hd"><strong>友情链接</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-        <li>
-            <a href="https://jelon.top" target="_blank" title="Jelon个人前端小站">前端博客小站</a>
-        </li>
-    
-        <li>
-            <a href="https://www.baidu.com" target="_blank" title="百度搜索">百度</a>
-        </li>
-    
-</ul>
-    </section>
-    
-</aside>
-<!-- / 侧栏部分 -->
+
+      </div>
+
     </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
 
-    <!-- 博客底部 -->
+
+      </div>
+    </main>
+
     <footer class="footer">
-    &copy;
-    
-        2016-2019
-    
+      <div class="footer-inner">
+        
 
-    <a href="/">Jelon Loves You</a>
-</footer>
-<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
 
-    <!--博客js脚本 -->
-    <!-- 这里放网站js脚本 -->
+        
 
-<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
 
 </body>
 </html>

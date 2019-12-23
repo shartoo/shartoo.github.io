@@ -1,392 +1,469 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" >
-    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
-    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
-    
-    <title>使用pyspark做数据挖掘 | Hexo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
-    <meta name="keywords" content="Jelon, 前端, Web, 张德龙, 前端开发" >
-    <meta name="description" content="Jelon个人前端小站" >
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml" >
-    
-    
-    <link rel="shortcut icon" href="/favicon.ico" >
-    
-    
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/main.css">
 
-    <!--[if lt IE 9]>
-    
-<script src="/js/html5.js"></script>
 
-    <![endif]-->
-    
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "//hm.baidu.com/hm.js?fd459238242776d173cdc64918fb32f2";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://shartoo.github.com').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
 </script>
 
+  <meta name="description" content="大数据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用pyspark做数据挖掘">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2016-09-26-pyspark-moiverecommand/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="大数据">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-12-23T10:45:59.340Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.202Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<link rel="canonical" href="http://shartoo.github.com/2019/12/23/2016-09-26-pyspark-moiverecommand/">
 
-<body class="home">
-    <!--[if lt IE 9]>
-    <div class="browsehappy">
-        当前网页 <strong>不支持</strong>
-        你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/" target="_blank" rel="noopener">升级你的浏览器</a>.
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>使用pyspark做数据挖掘 | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
     </div>
-    <![endif]-->
+  </div>
 
-    <!-- 博客头部 -->
-    <header class="header">
-    <section class="container header-main">
-        <div class="logo">
-            <a href="/">
-                <div class="cover">
-                    <span class="name">Hexo</span>
-                    <span class="description"></span>
-                </div>
-            </a>
-        </div>
-        <div class="dropnav icon-paragraph-justify" id="JELON__btnDropNav"></div>
-        <ul class="menu hidden" id="JELON__menu">
-            
-            <li rel="/2019/12/23/2016-09-26-pyspark-moiverecommand/index.html" class="item ">
-                <a href="/" title="首页" class="icon-home">&nbsp;首页</a>
-            </li>
-            
-            <li rel="/2019/12/23/2016-09-26-pyspark-moiverecommand/index.html" class="item ">
-                <a href="/lab/" title="实验室" class="icon-lab">&nbsp;实验室</a>
-            </li>
-            
-            <li rel="/2019/12/23/2016-09-26-pyspark-moiverecommand/index.html" class="item ">
-                <a href="/about/" title="关于" class="icon-about">&nbsp;关于</a>
-            </li>
-            
-            <li rel="/2019/12/23/2016-09-26-pyspark-moiverecommand/index.html" class="item ">
-                <a href="/comment/" title="留言" class="icon-comment">&nbsp;留言</a>
-            </li>
-            
-        </ul>
-        <div class="profile clearfix">
-            <div class="feeds fl">
-                
-                
-                <p class="links">
-                    
-                        <a href="https://github.com/jangdelong" target="_blank">Github</a>
-                        |
-                    
-                        <a href="https://pages.coding.me" target="_blank">Hosted by Coding Pages</a>
-                        
-                    
-                </p>
-                <p class="sns">
-                    
-                        <a href="http://weibo.com/jangdelong" class="sinaweibo" target="_blank"><b>■</b> 新浪微博</a>
-                    
-                        <a href="https://www.facebook.com/profile.php?id=100011855760219&amp;ref=bookmarks" class="qqweibo" target="_blank"><b>■</b> Facebook</a>
-                    
-                    <a href="javascript: void(0);" class="wechat">
-                        <b>■</b>
-                        公众号
-                        <span class="popover">
-                            <img src="/img/wechat_mp.jpg" width="120" height="120" alt="我的微信订阅号">
-                            <i class="arrow"></i>
-                        </span>
-                    </a>
-                </p>
-                
-            </div>
-            <div class="avatar fr">
-                <img src="/img/jelon.jpg" alt="avatar" title="Jelon" >
-            </div>
-        </div>
-    </section>
-</header>
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
 
 
-    <!-- 博客正文 -->
-    <div class="container body clearfix">
-        <section class="content">
-            <div class="content-main widget">
-                <!-- 文章页 -->
-<!-- 文章 -->
-<article class="post article">
-    <header class="text-center">
-        <h3 class="post-title"><span>使用pyspark做数据挖掘</span></h3>
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
     </header>
-    <p class="post-meta text-center">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.340Z">2019-12-23</time>
-    </p>
-    <div class="post-content">
-        <h2 id="一-环境准备"><a href="#一-环境准备" class="headerlink" title="一 环境准备"></a>一 环境准备</h2><h3 id="1-1-编程环境"><a href="#1-1-编程环境" class="headerlink" title="1.1 编程环境"></a>1.1 编程环境</h3><pre><code>必须加入spark内容，将以下代码加入推荐逻辑之前   </code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># Path for spark source folder</span><br><span class="line">os.environ[&#39;SPARK_HOME&#39;]&#x3D;&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6&quot;</span><br><span class="line"># Append pyspark  to Python Path</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python&quot;)</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python\lib\py4j-0.9-src.zip&quot;)</span><br><span class="line">from pyspark import SparkContext</span><br><span class="line">from pyspark import SparkConf</span><br><span class="line">conf &#x3D; SparkConf()</span><br><span class="line">conf.set(&quot;YARN_CONF_DIR &quot;, &quot;D:\javaPackages\hadoop_conf_dir\yarn-conf&quot;)</span><br><span class="line">conf.set(&quot;spark.driver.memory&quot;, &quot;2g&quot;)</span><br></pre></td></tr></table></figure>
 
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://shartoo.github.com/2019/12/23/2016-09-26-pyspark-moiverecommand/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用pyspark做数据挖掘
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2019-12-23 18:45:59 / Modified: 17:55:14" itemprop="dateCreated datePublished" datetime="2019-12-23T18:45:59+08:00">2019-12-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">大数据</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="一-环境准备">一 环境准备</h2>
+<h3 id="编程环境">1.1 编程环境</h3>
+<pre><code>必须加入spark内容，将以下代码加入推荐逻辑之前   </code></pre>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># Path for spark source folder</span><br><span class="line">os.environ[&#39;SPARK_HOME&#39;]&#x3D;&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6&quot;</span><br><span class="line"># Append pyspark  to Python Path</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python&quot;)</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python\lib\py4j-0.9-src.zip&quot;)</span><br><span class="line">from pyspark import SparkContext</span><br><span class="line">from pyspark import SparkConf</span><br><span class="line">conf &#x3D; SparkConf()</span><br><span class="line">conf.set(&quot;YARN_CONF_DIR &quot;, &quot;D:\javaPackages\hadoop_conf_dir\yarn-conf&quot;)</span><br><span class="line">conf.set(&quot;spark.driver.memory&quot;, &quot;2g&quot;)</span><br></pre></td></tr></table></figure>
 <p>各个参数视个人机器配置而定</p>
-<h3 id="1-2-本地模式"><a href="#1-2-本地模式" class="headerlink" title="1.2  本地模式"></a>1.2  本地模式</h3><pre><code>在本地模式运行时，参数需要如下设定</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">conf.setMaster(&quot;client&quot;)</span><br><span class="line">此时代码会在本地执行，对于小数据集（小于1MB的数据）可以正常执行，如果数据超过1MB将会遇到以下问题：</span><br><span class="line">ERROR PythonRDD: Python worker exited unexpectedly (crashed)</span><br><span class="line">java.net.SocketException: Connection reset by peer: socket write error</span><br><span class="line">        at java.net.SocketOutputStream.socketWrite0(Native Method)</span><br><span class="line">解决办法参考“pyspark处理大数据集” 这篇笔记</span><br></pre></td></tr></table></figure>
-
-<h3 id="1-3-数据准备"><a href="#1-3-数据准备" class="headerlink" title="1. 3 数据准备"></a>1. 3 数据准备</h3><pre><code>数据都是存放在HDFS上，需要先将数据上传到个人目录。</code></pre><h2 id="二-数据挖掘视角"><a href="#二-数据挖掘视角" class="headerlink" title="二 数据挖掘视角"></a>二 数据挖掘视角</h2><pre><code>接下来进入数据挖掘的思路，数据挖掘标准流程如下：</code></pre><ul>
-<li><p>数据收集（本案例中数据已经准备好）</p>
-</li>
-<li><p>数据清洗转换</p>
-</li>
-<li><p>根据数据选择算法模型（本案例以推荐算法为例）</p>
-</li>
-<li><p>训练模型：使用训练数据训练算法模型中一些参数。</p>
-</li>
-<li><p>使用模型：使用训练好的模型预测或者对检验数据分类、聚类</p>
-</li>
-<li><p>评估模型：验证模型预测结果与真实结果误差，评估准确率、召回率等指标</p>
-</li>
-</ul>
-<h3 id="2-1-收集数据"><a href="#2-1-收集数据" class="headerlink" title="2.1 收集数据"></a>2.1 收集数据</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dataset_path &#x3D; os.path.join(&#39;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;moive_recommend&#x2F;&#39;,&#39;&#39;)</span><br><span class="line">complete_dataset_path &#x3D;   os.path.join(dataset_path,&#39;ml-latest.zip&#39;)</span><br><span class="line">small_dataset_path &#x3D; os.path.join(dataset_path,&#39;ml-latest-small.zip&#39;)</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-2-数据清洗转换"><a href="#2-2-数据清洗转换" class="headerlink" title="2.2 数据清洗转换"></a>2.2 数据清洗转换</h3><p>   本示例中数据清洗和转换比较简单，只是去掉数据头，并将数据封装成RDD。在其他数据中可能需要去除部分没用的列，数据降维，连续型数据转换为离散型等操作。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># 载入数据，将数据的头过滤出来</span><br><span class="line">small_rating_file &#x3D; os.path.join(dataset_path,&#39;latest_small&#39;,&#39;ratings.csv&#39;)</span><br><span class="line">small_rating_raw_data &#x3D; sc.textFile(small_rating_file)</span><br><span class="line">small_rating_raw_data_header &#x3D; small_rating_raw_data.take(1)[0]</span><br><span class="line"># 将原始数据封装成新的RDD</span><br><span class="line">small_rating_data  &#x3D; small_rating_raw_data.filter(lambda line:line!&#x3D;small_rating_raw_data_header)\</span><br><span class="line">    .map(lambda line:line.split(&quot;,&quot;)).map(lambda tokens:(tokens[0],tokens[1],tokens[2])).cache()</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-3-根据数据选择算法模型"><a href="#2-3-根据数据选择算法模型" class="headerlink" title="2.3 根据数据选择算法模型"></a>2.3 根据数据选择算法模型</h3><pre><code>本示例以推荐算法中的ALS（最小交替二乘法）为例，关于交替二乘法参考 https://www.zhihu.com/question/31509438</code></pre><h3 id="2-4-训练模型"><a href="#2-4-训练模型" class="headerlink" title="2.4  训练模型"></a>2.4  训练模型</h3><pre><code>在开始之前，我们先将数据分为三份，分别是training_rdd（训练数据） ,validation_rdd（验证数据）,test_rdd（测试数据）。使用training_rdd获得一个训练模型，然后去预测validation_rdd结果，并计算训练模型对validation_rdd预测结果与validation_rdd真实结果之间误差，以此来决定模型应该使用的参数。</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 使用小数据集选择 交叉最小二乘法参数</span><br><span class="line"># 首先将数据分为训练数据，校验数据，测试数据</span><br><span class="line">training_rdd ,validation_rdd,test_rdd &#x3D; small_rating_data.randomSplit([6,2,2],seed&#x3D;0L)</span><br><span class="line">validation_for_predict_rdd &#x3D; validation_rdd.map(lambda x:(x[0],x[1]))</span><br><span class="line">test_for_predict_rdd &#x3D;test_rdd.map(lambda x:(x[0],x[1]))</span><br></pre></td></tr></table></figure>
-
-<p> 推荐算法ALS中最重要的比较重要的参数有如下：</p>
+<h3 id="本地模式">1.2 本地模式</h3>
+<pre><code>在本地模式运行时，参数需要如下设定</code></pre>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">conf.setMaster(&quot;client&quot;)</span><br><span class="line">此时代码会在本地执行，对于小数据集（小于1MB的数据）可以正常执行，如果数据超过1MB将会遇到以下问题：</span><br><span class="line">ERROR PythonRDD: Python worker exited unexpectedly (crashed)</span><br><span class="line">java.net.SocketException: Connection reset by peer: socket write error</span><br><span class="line">        at java.net.SocketOutputStream.socketWrite0(Native Method)</span><br><span class="line">解决办法参考“pyspark处理大数据集” 这篇笔记</span><br></pre></td></tr></table></figure>
+<h3 id="数据准备">1. 3 数据准备</h3>
+<pre><code>数据都是存放在HDFS上，需要先将数据上传到个人目录。</code></pre>
+<h2 id="二-数据挖掘视角">二 数据挖掘视角</h2>
+<pre><code>接下来进入数据挖掘的思路，数据挖掘标准流程如下：</code></pre>
 <ul>
-<li><p>rank：特征向量秩大小，越大的秩会得到更好的模型，但是计算消耗也相应增加。默认是 10</p>
-</li>
-<li><p>iteration： 算法迭代次数（默认是10）</p>
-</li>
-<li><p>lambda：正则参数，默认是 0.01。详细解释参考</p>
-</li>
-<li><p>alpha：在隐式ALS中用于计算置信度的常量，默认为1.0</p>
-</li>
+<li><p>数据收集（本案例中数据已经准备好）</p></li>
+<li><p>数据清洗转换</p></li>
+<li><p>根据数据选择算法模型（本案例以推荐算法为例）</p></li>
+<li><p>训练模型：使用训练数据训练算法模型中一些参数。</p></li>
+<li><p>使用模型：使用训练好的模型预测或者对检验数据分类、聚类</p></li>
+<li><p>评估模型：验证模型预测结果与真实结果误差，评估准确率、召回率等指标</p></li>
+</ul>
+<h3 id="收集数据">2.1 收集数据</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dataset_path &#x3D; os.path.join(&#39;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;moive_recommend&#x2F;&#39;,&#39;&#39;)</span><br><span class="line">complete_dataset_path &#x3D;   os.path.join(dataset_path,&#39;ml-latest.zip&#39;)</span><br><span class="line">small_dataset_path &#x3D; os.path.join(dataset_path,&#39;ml-latest-small.zip&#39;)</span><br></pre></td></tr></table></figure>
+<h3 id="数据清洗转换">2.2 数据清洗转换</h3>
+<p>本示例中数据清洗和转换比较简单，只是去掉数据头，并将数据封装成RDD。在其他数据中可能需要去除部分没用的列，数据降维，连续型数据转换为离散型等操作。 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># 载入数据，将数据的头过滤出来</span><br><span class="line">small_rating_file &#x3D; os.path.join(dataset_path,&#39;latest_small&#39;,&#39;ratings.csv&#39;)</span><br><span class="line">small_rating_raw_data &#x3D; sc.textFile(small_rating_file)</span><br><span class="line">small_rating_raw_data_header &#x3D; small_rating_raw_data.take(1)[0]</span><br><span class="line"># 将原始数据封装成新的RDD</span><br><span class="line">small_rating_data  &#x3D; small_rating_raw_data.filter(lambda line:line!&#x3D;small_rating_raw_data_header)\</span><br><span class="line">    .map(lambda line:line.split(&quot;,&quot;)).map(lambda tokens:(tokens[0],tokens[1],tokens[2])).cache()</span><br></pre></td></tr></table></figure></p>
+<h3 id="根据数据选择算法模型">2.3 根据数据选择算法模型</h3>
+<pre><code>本示例以推荐算法中的ALS（最小交替二乘法）为例，关于交替二乘法参考 https://www.zhihu.com/question/31509438</code></pre>
+<h3 id="训练模型">2.4 训练模型</h3>
+<pre><code>在开始之前，我们先将数据分为三份，分别是training_rdd（训练数据） ,validation_rdd（验证数据）,test_rdd（测试数据）。使用training_rdd获得一个训练模型，然后去预测validation_rdd结果，并计算训练模型对validation_rdd预测结果与validation_rdd真实结果之间误差，以此来决定模型应该使用的参数。</code></pre>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 使用小数据集选择 交叉最小二乘法参数</span><br><span class="line"># 首先将数据分为训练数据，校验数据，测试数据</span><br><span class="line">training_rdd ,validation_rdd,test_rdd &#x3D; small_rating_data.randomSplit([6,2,2],seed&#x3D;0L)</span><br><span class="line">validation_for_predict_rdd &#x3D; validation_rdd.map(lambda x:(x[0],x[1]))</span><br><span class="line">test_for_predict_rdd &#x3D;test_rdd.map(lambda x:(x[0],x[1]))</span><br></pre></td></tr></table></figure>
+<p>推荐算法ALS中最重要的比较重要的参数有如下：</p>
+<ul>
+<li><p>rank：特征向量秩大小，越大的秩会得到更好的模型，但是计算消耗也相应增加。默认是 10</p></li>
+<li><p>iteration： 算法迭代次数（默认是10）</p></li>
+<li><p>lambda：正则参数，默认是 0.01。详细解释参考</p></li>
+<li><p>alpha：在隐式ALS中用于计算置信度的常量，默认为1.0</p></li>
 <li><p>numUserBlocks,numProductBlocks：将用户和产品数据分解的块数目，用来控制并行度；你可以传入-1来让MLlib自动决定。</p>
-<p>   本示例中，算法迭代次数固定为10（可以根据实际情况调整），lambda参数固定位 0.1 ，由于本文的电影评分数据是确信数据，使用的ALS是确定模型，因此不需要alpha参数，numUserBlocks和numProductBlocks参数使用默认参数。<br>  因此，本示例中需要训练的参数是 rank，不同的rank会影响模型的预测准确度，不同的模型其预测误差可以通过均方根误差（标准方差RMSE）来衡量优劣。选取均方根误差最小的rank作为预测模型的rank。</p>
-</li>
+<p>本示例中，算法迭代次数固定为10（可以根据实际情况调整），lambda参数固定位 0.1 ，由于本文的电影评分数据是确信数据，使用的ALS是确定模型，因此不需要alpha参数，numUserBlocks和numProductBlocks参数使用默认参数。 因此，本示例中需要训练的参数是 rank，不同的rank会影响模型的预测准确度，不同的模型其预测误差可以通过均方根误差（标准方差RMSE）来衡量优劣。选取均方根误差最小的rank作为预测模型的rank。</p></li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">seed &#x3D;5L</span><br><span class="line">iterations &#x3D;10</span><br><span class="line">regularization_parmeter &#x3D;0.1</span><br><span class="line">ranks &#x3D;[4,5,6,7,8,10,12]</span><br><span class="line">errors &#x3D; [0,0,0,0,0,0,0]</span><br><span class="line">err &#x3D;0</span><br><span class="line">min_error &#x3D; float(&#39;inf&#39;)</span><br><span class="line">best_rank &#x3D;-1</span><br><span class="line">best_interation &#x3D;-1</span><br><span class="line">for rank in ranks:</span><br><span class="line">    model &#x3D; ALS.train(training_rdd,rank,seed&#x3D;seed,iterations&#x3D;iterations,lambda_&#x3D;regularization_parmeter)</span><br><span class="line">    predictions &#x3D; model.predictAll(validation_for_predict_rdd).map(lambda r:((r[0],r[1],r[2])))</span><br><span class="line">    rates_and_preds &#x3D;validation_rdd.map(lambda r:(int(r[0]),int(r[1]),float(r[2]))).join(predictions)</span><br><span class="line">    error &#x3D; math.sqrt(rates_and_preds.map(lambda r:(r[1][0]-r[1][1])**2).mean())</span><br><span class="line">    errors[err] &#x3D; error</span><br><span class="line">    err+&#x3D;1</span><br><span class="line">    print &#39;For rank %s the RMSE is %s&#39;%(rank,error)</span><br><span class="line">    if error &lt; min_error:</span><br><span class="line">        min_error &#x3D;error</span><br><span class="line">        best_rank &#x3D; rank</span><br></pre></td></tr></table></figure>
-
-<h2 id="2-5-使用模型"><a href="#2-5-使用模型" class="headerlink" title="2.5 使用模型"></a>2.5 使用模型</h2><pre><code>使用训练数据中获得的最佳参数来构建新的推荐模型，本示例中使用完整数据集ml-lates数据集检验模型预测结果,为了检验模型准确率，我们将数据分为训练数据和验证数据两份，分别为training_complete_rdd(70%),test_complete_rdd (30%)</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#现在开始使用完整数据集来构建最终模型</span><br><span class="line">complete_rating_file &#x3D; os.path.join(dataset_path,&#39;latest_all&#39;,&#39;ratings.csv&#39;)</span><br><span class="line">complete_rating_raw_data &#x3D;sc.textFile(complete_rating_file)</span><br><span class="line">complete_rating_raw_data_header &#x3D; complete_rating_raw_data.take(1)[0]</span><br><span class="line">complete_rating_data &#x3D; complete_rating_raw_data.filter(lambda line:line!&#x3D;complete_rating_raw_data_header)\</span><br><span class="line">    .map(lambda line:line.split(&quot;,&quot;)).map(lambda tokens:(int(tokens[0]),int(tokens[1]),float(tokens[2]))).cache()</span><br><span class="line">#现在开始训练推荐模型</span><br><span class="line">training_complete_rdd,test_complete_rdd &#x3D; complete_rating_data.randomSplit([7,3],seed &#x3D;0L)</span><br><span class="line">complete_model &#x3D; ALS.train(training_complete_rdd,best_rank,seed &#x3D; seed,iterations&#x3D;\</span><br><span class="line">    iterations,lambda_ &#x3D;regularization_parmeter)</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-6-评估验证模型"><a href="#2-6-评估验证模型" class="headerlink" title="2.6 评估验证模型"></a>2.6 评估验证模型</h3><pre><code>使用完整数据集中30%的部分来测试模型预测结果准确率。 </code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#在测试数据集上测试</span><br><span class="line">test_for_predict_rdd &#x3D; test_complete_rdd.map(lambda x:(x[0],x[1]))</span><br><span class="line">predictions_complete &#x3D;complete_model.predictAll(test_for_predict_rdd).map(lambda r:((r[0],r[1],r[2])))</span><br><span class="line">rates_and_preds_complete &#x3D; test_complete_rdd.map(lambda r:((int(r[0]),int(r[1])),float(r[2]))).join(predictions_complete)</span><br><span class="line">error_complete &#x3D; math.sqrt(rates_and_preds_complete.map(lambda r: (r[1][0]-r[1][1]) **2).mean())</span><br><span class="line">mylog.append( &quot;完整数据集的误差是RMSE   %s&quot;%(error_complete))</span><br></pre></td></tr></table></figure>
-
-<pre><code>此示例中只使用了平方根误差来评估模型。</code></pre><h3 id="2-7-模型后续使用"><a href="#2-7-模型后续使用" class="headerlink" title="2.7 模型后续使用"></a>2.7 模型后续使用</h3><h4 id="2-7-1-给老用户（对部分电影有评分）推荐"><a href="#2-7-1-给老用户（对部分电影有评分）推荐" class="headerlink" title="2.7.1 给老用户（对部分电影有评分）推荐"></a>2.7.1 给老用户（对部分电影有评分）推荐</h4><pre><code>添加新数据，每次添加新数据都需要重新训练模型，此时将新数据与原数据合并再训练并得到模型。</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#添加新的用户评分，</span><br><span class="line">new_user_ID &#x3D; 0</span><br><span class="line">new_user_rating &#x3D;[</span><br><span class="line">    (0,260,9),</span><br><span class="line">    (0,1,8),</span><br><span class="line">    (0,16,7),</span><br><span class="line">    (0,25,8),</span><br><span class="line">    (0,32,9),</span><br><span class="line">    (0,335,4),</span><br><span class="line">    (0,379,4),</span><br><span class="line">    (0,296,4),</span><br><span class="line">    (0,854,10),</span><br><span class="line">    (0,50,8)</span><br><span class="line">]</span><br><span class="line">new_user_rating_RDD &#x3D; sc.parallelize(new_user_rating)</span><br><span class="line">mylog.append( &quot;新用户的评分是 %s&quot;%new_user_rating_RDD.take(10))</span><br><span class="line"># 将数据加入到推荐模型将使用的训练数据中，</span><br><span class="line">complete_data_with_new_rating_RDD &#x3D; complete_rating_data.union(new_user_rating_RDD)</span><br><span class="line"># 最后，使用前面选择的最优参数来训练ALS模型</span><br><span class="line">from time import time</span><br><span class="line">new_rating_model &#x3D; ALS.train(complete_data_with_new_rating_RDD,best_rank,seed &#x3D; seed,iterations&#x3D;iterations,lambda_ &#x3D;regularization_parmeter)</span><br></pre></td></tr></table></figure>
-
-<p>再利用此模型向老用户推荐电影   </p>
+<h2 id="使用模型">2.5 使用模型</h2>
+<pre><code>使用训练数据中获得的最佳参数来构建新的推荐模型，本示例中使用完整数据集ml-lates数据集检验模型预测结果,为了检验模型准确率，我们将数据分为训练数据和验证数据两份，分别为training_complete_rdd(70%),test_complete_rdd (30%)</code></pre>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#现在开始使用完整数据集来构建最终模型</span><br><span class="line">complete_rating_file &#x3D; os.path.join(dataset_path,&#39;latest_all&#39;,&#39;ratings.csv&#39;)</span><br><span class="line">complete_rating_raw_data &#x3D;sc.textFile(complete_rating_file)</span><br><span class="line">complete_rating_raw_data_header &#x3D; complete_rating_raw_data.take(1)[0]</span><br><span class="line">complete_rating_data &#x3D; complete_rating_raw_data.filter(lambda line:line!&#x3D;complete_rating_raw_data_header)\</span><br><span class="line">    .map(lambda line:line.split(&quot;,&quot;)).map(lambda tokens:(int(tokens[0]),int(tokens[1]),float(tokens[2]))).cache()</span><br><span class="line">#现在开始训练推荐模型</span><br><span class="line">training_complete_rdd,test_complete_rdd &#x3D; complete_rating_data.randomSplit([7,3],seed &#x3D;0L)</span><br><span class="line">complete_model &#x3D; ALS.train(training_complete_rdd,best_rank,seed &#x3D; seed,iterations&#x3D;\</span><br><span class="line">    iterations,lambda_ &#x3D;regularization_parmeter)</span><br></pre></td></tr></table></figure>
+<h3 id="评估验证模型">2.6 评估验证模型</h3>
+<pre><code> 使用完整数据集中30%的部分来测试模型预测结果准确率。 </code></pre>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#在测试数据集上测试</span><br><span class="line">test_for_predict_rdd &#x3D; test_complete_rdd.map(lambda x:(x[0],x[1]))</span><br><span class="line">predictions_complete &#x3D;complete_model.predictAll(test_for_predict_rdd).map(lambda r:((r[0],r[1],r[2])))</span><br><span class="line">rates_and_preds_complete &#x3D; test_complete_rdd.map(lambda r:((int(r[0]),int(r[1])),float(r[2]))).join(predictions_complete)</span><br><span class="line">error_complete &#x3D; math.sqrt(rates_and_preds_complete.map(lambda r: (r[1][0]-r[1][1]) **2).mean())</span><br><span class="line">mylog.append( &quot;完整数据集的误差是RMSE   %s&quot;%(error_complete))</span><br></pre></td></tr></table></figure>
+<pre><code>此示例中只使用了平方根误差来评估模型。</code></pre>
+<h3 id="模型后续使用">2.7 模型后续使用</h3>
+<h4 id="给老用户对部分电影有评分推荐">2.7.1 给老用户（对部分电影有评分）推荐</h4>
+<pre><code>添加新数据，每次添加新数据都需要重新训练模型，此时将新数据与原数据合并再训练并得到模型。</code></pre>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#添加新的用户评分，</span><br><span class="line">new_user_ID &#x3D; 0</span><br><span class="line">new_user_rating &#x3D;[</span><br><span class="line">    (0,260,9),</span><br><span class="line">    (0,1,8),</span><br><span class="line">    (0,16,7),</span><br><span class="line">    (0,25,8),</span><br><span class="line">    (0,32,9),</span><br><span class="line">    (0,335,4),</span><br><span class="line">    (0,379,4),</span><br><span class="line">    (0,296,4),</span><br><span class="line">    (0,854,10),</span><br><span class="line">    (0,50,8)</span><br><span class="line">]</span><br><span class="line">new_user_rating_RDD &#x3D; sc.parallelize(new_user_rating)</span><br><span class="line">mylog.append( &quot;新用户的评分是 %s&quot;%new_user_rating_RDD.take(10))</span><br><span class="line"># 将数据加入到推荐模型将使用的训练数据中，</span><br><span class="line">complete_data_with_new_rating_RDD &#x3D; complete_rating_data.union(new_user_rating_RDD)</span><br><span class="line"># 最后，使用前面选择的最优参数来训练ALS模型</span><br><span class="line">from time import time</span><br><span class="line">new_rating_model &#x3D; ALS.train(complete_data_with_new_rating_RDD,best_rank,seed &#x3D; seed,iterations&#x3D;iterations,lambda_ &#x3D;regularization_parmeter)</span><br></pre></td></tr></table></figure>
+<p>再利用此模型向老用户推荐电影</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># 获取最好的推荐。鉴于我们将获得新用户没有评分的RDD</span><br><span class="line">#获得电影ID</span><br><span class="line">new_users_ratings_ids &#x3D; map(lambda x:x[1],new_user_rating)</span><br><span class="line">#获得不在ID列表中的</span><br><span class="line">new_user_unrated_moive_RDD &#x3D; (complete_moive_data.filter(lambda x:x[0] not in new_users_ratings_ids)\</span><br><span class="line">                              .map(lambda x:(new_user_ID,x[0])))</span><br><span class="line"># 使用输入的RDD和 new_user_unrated_moive_RDD，使用 new_rating_mode.predictAll() 来预测电影</span><br><span class="line">new_user_recommendations_RDD &#x3D; new_rating_model.predictAll(new_user_unrated_moive_RDD)</span><br><span class="line">new_user_recommendations_rating_RDD &#x3D; new_user_recommendations_RDD.map(lambda x:(x.product,x.rating))</span><br><span class="line">new_user_recommendations_rating_title_and_count_RDD &#x3D;new_user_recommendations_rating_RDD.join(complete_moive_titles)\</span><br><span class="line">    .join(moive_rating_counts_RDD)</span><br><span class="line">new_user_recommendations_rating_title_and_count_RDD.take(3)</span><br><span class="line">top_moives &#x3D; new_user_recommendations_rating_title_and_count_RDD.map(lambda r:(r[1][0][1],r[1][0][0],r[1][1]))\</span><br><span class="line">    .filter(lambda r:r[2]&gt;&#x3D;25).takeOrdered(25,key&#x3D;lambda x:-x[1])</span><br><span class="line">mylog.append( &quot;推荐的电影（浏览量超过25的）%s&quot;%&#39;\n&#39;.join(map(str,top_moives)))</span><br></pre></td></tr></table></figure>
-
-<h4 id="2-7-2-预测新用户对某部电影评分"><a href="#2-7-2-预测新用户对某部电影评分" class="headerlink" title="2.7.2  预测新用户对某部电影评分"></a>2.7.2  预测新用户对某部电影评分</h4><h2 id="三-模型的保存于复用"><a href="#三-模型的保存于复用" class="headerlink" title="三  模型的保存于复用"></a>三  模型的保存于复用</h2><pre><code>可以将我们的模型存储起来作为后续的在线推荐系统使用，尽管每次有新的用户评分数据时都会生成新的模型，为了节省服务启动时间。当前的模型也是值得存储的。我们可以通过存储那些RDD以节省时间，尤其是那些需要消耗极大时间的。</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from pyspark.mllib.recommendation import MatrixFactorizationModel</span><br><span class="line">model_path &#x3D; os.path.join(dataset_path,&#39;models&#39;,&#39;moive_lens_als&#39;)</span><br><span class="line">model.save(sc,model_path)</span><br><span class="line">same_model &#x3D; MatrixFactorizationModel.load(sc,model_path)</span><br></pre></td></tr></table></figure>
-
-
-
-
-
+<h4 id="预测新用户对某部电影评分">2.7.2 预测新用户对某部电影评分</h4>
+<h2 id="三-模型的保存于复用">三 模型的保存于复用</h2>
+<pre><code> 可以将我们的模型存储起来作为后续的在线推荐系统使用，尽管每次有新的用户评分数据时都会生成新的模型，为了节省服务启动时间。当前的模型也是值得存储的。我们可以通过存储那些RDD以节省时间，尤其是那些需要消耗极大时间的。</code></pre>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from pyspark.mllib.recommendation import MatrixFactorizationModel</span><br><span class="line">model_path &#x3D; os.path.join(dataset_path,&#39;models&#39;,&#39;moive_lens_als&#39;)</span><br><span class="line">model.save(sc,model_path)</span><br><span class="line">same_model &#x3D; MatrixFactorizationModel.load(sc,model_path)</span><br></pre></td></tr></table></figure>
 
     </div>
-    <p class="post-meta">
-        <span class="post-cat">分类：
-            <a class="cat-link" href="/categories/blog/">blog</a>
-        </span>
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-</article>
-<!-- 分享按钮 -->
 
-  <div class="article-share clearfix text-center">
-    <div class="share-area">
-      <span class="share-txt">分享到：</span>
-      <a href="javascript: window.open('http://service.weibo.com/share/share.php?url=' + encodeURIComponent(location.href) + '&title=' + document.title + '&language=zh_cn');" class="share-icon weibo"></a>
-      <a href="javascript: alert('请复制链接到微信并发送');" class="share-icon wechat"></a>
-      <a href="javascript: window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + encodeURIComponent(location.href) + '&title=' + document.title);" class="share-icon qqzone"></a>
-      <a href="javascript: window.open('http://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(location.href) + '&desc=Jelon个人博客&title=' + document.title + '&callback=' + encodeURIComponent(location.href));" class="share-icon qq"></a>
-      <a href="javascript: window.open('http://shuo.douban.com/!service/share?href=' + encodeURIComponent(location.href) + '&name=' + document.title + '&text=' + document.title);" class="share-icon douban"></a>
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2016-09-25-sparkmllib/" rel="prev" title="大数据：spark mllib集成学习">
+      <i class="fa fa-chevron-left"></i> 大数据：spark mllib集成学习
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2016-10-01-regular-attachment/" rel="next" title="深度学习：参数正则化参考资料">
+      深度学习：参数正则化参考资料 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
   </div>
 
 
-<!-- 上一篇/下一篇 -->
+          </div>
+          
 
-<div class="article-nav clearfix">
-    
-    <span class="prev fl">
-        上一篇<br >
-        <a href="/2019/12/23/2016-10-01-regular-attachment/">
-            
-                深度学习：参数正则化参考资料
-            
-        </a>
-    </span>
-    
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
 
-    
-    <span class="next fr">
-        下一篇<br >
-        <a href="/2019/12/23/2016-09-25-sparkmllib/">
-            
-                大数据：spark mllib集成学习
-            
-        </a>
-    </span>
-    
-</div>
-
-<!-- 文章评论 -->
-
+        </div>
+          
   
-<script src="/js/comment.js"></script>
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
 
-  <div id="comments" class="comment">
-    <!--
-    <div class="sign-bar">
-      GitHub 已登录!
-      <span class="sign-link">登出</span>
-    </div>
-    <section class="box">
-      <div class="com-avatar"><img src="/img/jelon.jpg" alt="avatar"></div>
-      <div class="com-text">
-        <div class="main">
-          <textarea class="text-area-edited show" placeholder="欢迎评论！"></textarea>
-          <div class="text-area-preview"></div>
-        </div>
-        <div class="switch">
-          <div class="switch-item on">编辑</div>
-          <div class="switch-item">预览</div>
-        </div>
-        <div class="button">提交</div>
-      </div>
-    </section>
-    <section class="tips">注：评论支持 markdown 语法！</section>
-    <section class="list-wrap">
-      <ul class="list">
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">张德龙</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like liked">已赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">333333</div>
-          </div>
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
         </li>
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">刘德华</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like">点赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">vvvvv</div>
-          </div>
+        <li class="sidebar-nav-overview">
+          Overview
         </li>
       </ul>
-      <div class="page-nav">
-        <a href="javascript: void(0);" class="item">1</a>
-        <a href="javascript: void(0);" class="item">2</a>
-        <a href="javascript: void(0);" class="item current">3</a>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-环境准备"><span class="nav-number">1.</span> <span class="nav-text">一 环境准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#编程环境"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 编程环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#本地模式"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 本地模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据准备"><span class="nav-number">1.3.</span> <span class="nav-text">1. 3 数据准备</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-数据挖掘视角"><span class="nav-number">2.</span> <span class="nav-text">二 数据挖掘视角</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#收集数据"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 收集数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据清洗转换"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 数据清洗转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#根据数据选择算法模型"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 根据数据选择算法模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#训练模型"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 训练模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用模型"><span class="nav-number">3.</span> <span class="nav-text">2.5 使用模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#评估验证模型"><span class="nav-number">3.1.</span> <span class="nav-text">2.6 评估验证模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模型后续使用"><span class="nav-number">3.2.</span> <span class="nav-text">2.7 模型后续使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#给老用户对部分电影有评分推荐"><span class="nav-number">3.2.1.</span> <span class="nav-text">2.7.1 给老用户（对部分电影有评分）推荐</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#预测新用户对某部电影评分"><span class="nav-number">3.2.2.</span> <span class="nav-text">2.7.2 预测新用户对某部电影评分</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-模型的保存于复用"><span class="nav-number">4.</span> <span class="nav-text">三 模型的保存于复用</span></a></li></ol></div>
       </div>
-    </section>
-    -->
-  </div>
-  <script>
-  JELON.Comment({
-    container: 'comments',
-    label: '2016-09-26-pyspark-moiverecommand' || '2019/12/23/2016-09-26-pyspark-moiverecommand/',
-    owner: 'your_github_id',
-    repo: 'your_blog_comments',
-    clientId: 'your_client_id',
-    clientSecret: 'your_client_secret'
-  });
-  </script>
+      <!--/noindex-->
 
-
-            </div>
-
-        </section>
-        <!-- 侧栏部分 -->
-<aside class="sidebar">
-    <section class="widget">
-        <h3 class="widget-hd"><strong>文章分类</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-    <li>
-        <a href="/categories/blog/">blog</a>
-        <span class="badge">(94)</span>
-    </li>
-    
-</ul>
-    </section>
-
-    
-    <section class="widget">
-        <h3 class="widget-hd"><strong>热门标签</strong></h3>
-        <!-- 文章标签 -->
-<div class="widget-bd tag-wrap">
-  
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
 </div>
-    </section>
-    
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
 
-    
 
-    
-    <!-- 友情链接 -->
-    <section class="widget">
-        <h3 class="widget-hd"><strong>友情链接</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-        <li>
-            <a href="https://jelon.top" target="_blank" title="Jelon个人前端小站">前端博客小站</a>
-        </li>
-    
-        <li>
-            <a href="https://www.baidu.com" target="_blank" title="百度搜索">百度</a>
-        </li>
-    
-</ul>
-    </section>
-    
-</aside>
-<!-- / 侧栏部分 -->
+
+      </div>
+
     </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
 
-    <!-- 博客底部 -->
+
+      </div>
+    </main>
+
     <footer class="footer">
-    &copy;
-    
-        2016-2019
-    
+      <div class="footer-inner">
+        
 
-    <a href="/">Jelon Loves You</a>
-</footer>
-<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
 
-    <!--博客js脚本 -->
-    <!-- 这里放网站js脚本 -->
+        
 
-<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
 
 </body>
 </html>

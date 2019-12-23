@@ -1,313 +1,456 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" >
-    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
-    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
-    
-    <title>肺部CT大结节检测 | Hexo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
-    <meta name="keywords" content="Jelon, 前端, Web, 张德龙, 前端开发" >
-    <meta name="description" content="Jelon个人前端小站" >
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml" >
-    
-    
-    <link rel="shortcut icon" href="/favicon.ico" >
-    
-    
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/main.css">
 
-    <!--[if lt IE 9]>
-    
-<script src="/js/html5.js"></script>
 
-    <![endif]-->
-    
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "//hm.baidu.com/hm.js?fd459238242776d173cdc64918fb32f2";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://shartoo.github.com').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
 </script>
 
+  <meta name="description" content="图像处理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="肺部CT大结节检测">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2017-03-09-lungseg-bignodule-detect/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="图像处理">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/lung_bignodule1.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/lung_bignodule2.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/lung_bignodule3.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/lung_bignodule4.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.479Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.212Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/lung_bignodule1.png">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<link rel="canonical" href="http://shartoo.github.com/2019/12/23/2017-03-09-lungseg-bignodule-detect/">
 
-<body class="home">
-    <!--[if lt IE 9]>
-    <div class="browsehappy">
-        当前网页 <strong>不支持</strong>
-        你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/" target="_blank" rel="noopener">升级你的浏览器</a>.
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>肺部CT大结节检测 | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
     </div>
-    <![endif]-->
+  </div>
 
-    <!-- 博客头部 -->
-    <header class="header">
-    <section class="container header-main">
-        <div class="logo">
-            <a href="/">
-                <div class="cover">
-                    <span class="name">Hexo</span>
-                    <span class="description"></span>
-                </div>
-            </a>
-        </div>
-        <div class="dropnav icon-paragraph-justify" id="JELON__btnDropNav"></div>
-        <ul class="menu hidden" id="JELON__menu">
-            
-            <li rel="/2019/12/23/2017-03-09-lungseg-bignodule-detect/index.html" class="item ">
-                <a href="/" title="首页" class="icon-home">&nbsp;首页</a>
-            </li>
-            
-            <li rel="/2019/12/23/2017-03-09-lungseg-bignodule-detect/index.html" class="item ">
-                <a href="/lab/" title="实验室" class="icon-lab">&nbsp;实验室</a>
-            </li>
-            
-            <li rel="/2019/12/23/2017-03-09-lungseg-bignodule-detect/index.html" class="item ">
-                <a href="/about/" title="关于" class="icon-about">&nbsp;关于</a>
-            </li>
-            
-            <li rel="/2019/12/23/2017-03-09-lungseg-bignodule-detect/index.html" class="item ">
-                <a href="/comment/" title="留言" class="icon-comment">&nbsp;留言</a>
-            </li>
-            
-        </ul>
-        <div class="profile clearfix">
-            <div class="feeds fl">
-                
-                
-                <p class="links">
-                    
-                        <a href="https://github.com/jangdelong" target="_blank">Github</a>
-                        |
-                    
-                        <a href="https://pages.coding.me" target="_blank">Hosted by Coding Pages</a>
-                        
-                    
-                </p>
-                <p class="sns">
-                    
-                        <a href="http://weibo.com/jangdelong" class="sinaweibo" target="_blank"><b>■</b> 新浪微博</a>
-                    
-                        <a href="https://www.facebook.com/profile.php?id=100011855760219&amp;ref=bookmarks" class="qqweibo" target="_blank"><b>■</b> Facebook</a>
-                    
-                    <a href="javascript: void(0);" class="wechat">
-                        <b>■</b>
-                        公众号
-                        <span class="popover">
-                            <img src="/img/wechat_mp.jpg" width="120" height="120" alt="我的微信订阅号">
-                            <i class="arrow"></i>
-                        </span>
-                    </a>
-                </p>
-                
-            </div>
-            <div class="avatar fr">
-                <img src="/img/jelon.jpg" alt="avatar" title="Jelon" >
-            </div>
-        </div>
-    </section>
-</header>
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
 
 
-    <!-- 博客正文 -->
-    <div class="container body clearfix">
-        <section class="content">
-            <div class="content-main widget">
-                <!-- 文章页 -->
-<!-- 文章 -->
-<article class="post article">
-    <header class="text-center">
-        <h3 class="post-title"><span>肺部CT大结节检测</span></h3>
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
     </header>
-    <p class="post-meta text-center">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.479Z">2019-12-23</time>
-    </p>
-    <div class="post-content">
-        <h2 id="0-摘要"><a href="#0-摘要" class="headerlink" title="0 摘要"></a>0 摘要</h2><p><strong>目的</strong>：当前使用CAD系统检测对肺结节检测时，只在较小结节上有很好性能，通常不能检测更少的更大的结节的，这些可能是癌性。我们专门为大于10mm的solid结节检测设计了算法。</p>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://shartoo.github.com/2019/12/23/2017-03-09-lungseg-bignodule-detect/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          肺部CT大结节检测
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2019-12-23 18:45:59 / Modified: 17:55:14" itemprop="dateCreated datePublished" datetime="2019-12-23T18:45:59+08:00">2019-12-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">图像处理</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="摘要">0 摘要</h2>
+<p><strong>目的</strong>：当前使用CAD系统检测对肺结节检测时，只在较小结节上有很好性能，通常不能检测更少的更大的结节的，这些可能是癌性。我们专门为大于10mm的solid结节检测设计了算法。</p>
 <p><strong>方法</strong>：我们提出的检测流程，初始时由三维肺分割算法，通过形态学操作包含入黏着在肺壁上的大结节。额外的处理是mask out肺空间的外部结构，以确保肺和实质结节有着相似的轮廓。接着，通过多阶段的阈值和形态学操作获得结节候选，以检测大结节和小结节。对每个候选分割之后，计算出一个基于强度、形状、blobness、和空间结构的24个特征的集合。使用一个径向偏置SVM分类器对结节候选分类，在完全公开的肺部图像数据集上使用10折交叉验证评估性能。</p>
 <p><strong>结果</strong>：本文提出的CAD系统弄获得了98.3%(234/238)的灵敏度，94.1%(224/238)大结节的准确率，平均4.0和1.0 FPs/scan。</p>
-<h2 id="一-数据集"><a href="#一-数据集" class="headerlink" title="一  数据集"></a>一  数据集</h2><p>本论文中，使用的是LIDC-IDRI数据集。数据集包含了来自7个机构的1018个病例异构数据。在第一轮盲读阶段，每个可疑病变被标注同时被分类为 $non-nodule,nodeul&lt;3mm,nodule\ge 3mm$ 。对于 $nodules\ge 3mm$ 的被充分表征为3D分割，会提供其半径和形态学特征描述。</p>
+<h2 id="一-数据集">一 数据集</h2>
+<p>本论文中，使用的是LIDC-IDRI数据集。数据集包含了来自7个机构的1018个病例异构数据。在第一轮盲读阶段，每个可疑病变被标注同时被分类为 <span class="math inline">\(non-nodule,nodeul&lt;3mm,nodule\ge 3mm\)</span> 。对于 <span class="math inline">\(nodules\ge 3mm\)</span> 的被充分表征为3D分割，会提供其半径和形态学特征描述。</p>
 <p>我们使用区域厚度小于等于2.5mm的，比这更厚的区域数据被丢弃，因为我们将这些数据定义为质量不足。尽管slice厚度为3mm的大结节依然可以被检测到，最近的临床指南推荐使用thin-slice,因而我们也使用thin-slice CT scan。除此之外，包含不连通的slice空间的也被丢弃，最后获得了888个适于分析的CT scan。</p>
 <p>下表是数据概况</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>Aggrement levels</th>
-<th>Nodules $\ge 3mm$</th>
-<th>Nodules $\ge 10mm$</th>
-<th>solid nodules $\ge 10mm$</th>
+<th>Nodules <span class="math inline">\(\ge 3mm\)</span></th>
+<th>Nodules <span class="math inline">\(\ge 10mm\)</span></th>
+<th>solid nodules <span class="math inline">\(\ge 10mm\)</span></th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr class="odd">
 <td>At least 1</td>
 <td>2290</td>
 <td>393</td>
 <td>322</td>
 </tr>
-<tr>
+<tr class="even">
 <td>At least 2</td>
 <td>1602</td>
 <td>325</td>
 <td>277</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>At least 3</td>
 <td>1186</td>
 <td>269</td>
 <td>238</td>
 </tr>
-<tr>
+<tr class="even">
 <td>At least 4</td>
 <td>777</td>
 <td>199</td>
 <td>172</td>
 </tr>
-</tbody></table>
-<p>从888个scan中制作了36378个标注。由于结节可能被多个读者标注，不同的读者的标注在近似位置（小于标注的半径之和）的会被合并。只对 $nodule\gt 3mm$的结节标注做合并，因为这个作为引用标准。其半径、容积、和坐标都平均化。我们仅仅选择被分类为潜在恶性结节的作为大结节的引用标准。根据Dutch-Belgian NELSON肺癌实验，潜在恶性结节指的是容积大于$500mm^3$的，其对应的半径为近似 10mm。然后，选择被大多数读者(4个中的3个)接受的结节，获得了269个结节。并且设计CAD系统只关注 solid 结节的。由读者打分的各种各样的形态学特征用来定义结节类型。本文中，只有当大多数读者给出的上下文特征分数高于3(1=ground-glass/nonsolid,3=part-solid,5=solid)结节被认为是solid。最终获得了238个solid结节，这形成了分析所用的最终结节集合。</p>
-<p>评估过程中，CAD标记的位置在标注半径范围内的可被认为是命中了。如果CAD标记命中了引用集中的结节，则被分类为正样本(True  Positive)。不在病变引用集上的标记(即$nodule\ge 10mm$只被一两个放射医师接受，$nodules\gt 10mm$,subsolid nodules,non-nodules)被认为是不相关的，且没有被记入为假阳性(False Positive).</p>
-<h2 id="三-方法"><a href="#三-方法" class="headerlink" title="三 方法"></a>三 方法</h2><p>算法的主要流程如下，算法的开始时肺分割。肺分割被细化以将那些与肺壁相连的结节包含进来。</p>
-<p><img src="/images/blog/lung_bignodule1.png" alt=""></p>
-<p> 之后的后续处理步骤是移除肺外部的背景并重新将图像抽样为各向同性分辨率。候选检测阶段确认大结节候选的位置并为每个候选构建segmentation。使用特征抽取来获得候选的判别特征，这在分类阶段将被用来将候选分为结节和非结节。</p>
-<h3 id="3-1-肺分割"><a href="#3-1-肺分割" class="headerlink" title="3.1 肺分割"></a>3.1 肺分割</h3><p>CAD系统的第一步的肺分割用来决定肺的ROI(region of interest)。主流的算法依赖于一种基于阈值的方法。由于相似的强度特征，粘附在肺壁的结节通常无法包含入肺分割内。</p>
+</tbody>
+</table>
+<p>从888个scan中制作了36378个标注。由于结节可能被多个读者标注，不同的读者的标注在近似位置（小于标注的半径之和）的会被合并。只对 <span class="math inline">\(nodule\gt 3mm\)</span>的结节标注做合并，因为这个作为引用标准。其半径、容积、和坐标都平均化。我们仅仅选择被分类为潜在恶性结节的作为大结节的引用标准。根据Dutch-Belgian NELSON肺癌实验，潜在恶性结节指的是容积大于<span class="math inline">\(500mm^3\)</span>的，其对应的半径为近似 10mm。然后，选择被大多数读者(4个中的3个)接受的结节，获得了269个结节。并且设计CAD系统只关注 solid 结节的。由读者打分的各种各样的形态学特征用来定义结节类型。本文中，只有当大多数读者给出的上下文特征分数高于3(1=ground-glass/nonsolid,3=part-solid,5=solid)结节被认为是solid。最终获得了238个solid结节，这形成了分析所用的最终结节集合。</p>
+<p>评估过程中，CAD标记的位置在标注半径范围内的可被认为是命中了。如果CAD标记命中了引用集中的结节，则被分类为正样本(True Positive)。不在病变引用集上的标记(即<span class="math inline">\(nodule\ge 10mm\)</span>只被一两个放射医师接受，<span class="math inline">\(nodules\gt 10mm\)</span>,subsolid nodules,non-nodules)被认为是不相关的，且没有被记入为假阳性(False Positive).</p>
+<h2 id="三-方法">三 方法</h2>
+<p>算法的主要流程如下，算法的开始时肺分割。肺分割被细化以将那些与肺壁相连的结节包含进来。</p>
+<p><img src="/images/blog/lung_bignodule1.png" /></p>
+<p>之后的后续处理步骤是移除肺外部的背景并重新将图像抽样为各向同性分辨率。候选检测阶段确认大结节候选的位置并为每个候选构建segmentation。使用特征抽取来获得候选的判别特征，这在分类阶段将被用来将候选分为结节和非结节。</p>
+<h3 id="肺分割">3.1 肺分割</h3>
+<p>CAD系统的第一步的肺分割用来决定肺的ROI(region of interest)。主流的算法依赖于一种基于阈值的方法。由于相似的强度特征，粘附在肺壁的结节通常无法包含入肺分割内。</p>
 <p>我们使用Rikxoort提出的算法作为初始的肺分割segmentation。方法由这些组成：大气道抽取、肺分割、左右肺分割和segmentation 平滑。当肺分割算法失败时，我们通过手动衡量输入参数，比如气管的seed point来更正肺分割。</p>
-<p>为了在肺分割segmentation包含入大的肺结节，使用了额外的细化的肺分割segmentation。肺结节被剔除的区域通常看起来像在肺segmentation的表面上有个洞。我们实验了两种方法<strong>(1)</strong>使用形态学逻辑滚球rolling-ball操作<strong>(2)</strong>在rolling-ball操作之后做扩张操作。所有的形态学操作使用的是球形结构元素。结构元素的半径$d_{struct}$设置为一个x维度在输入scan中的比率。我们评估了$d_{struct}=\lbrace 2%,3%,4%,6%,8%\rbrace $ 的rolling-ball操作和$d_{struct}=\lbrace 1%,2%\rbrace $ 的扩张操作。</p>
-<h3 id="3-2-预处理"><a href="#3-2-预处理" class="headerlink" title="3.2 预处理"></a>3.2 预处理</h3><p>肺segmentation用作mask，segmentation之外的区域被设置为肺组织的平均强度(-900HU)。这可以避免肺病变看起来与其内部的结节非常不同，这就要求有不同的或者额外的特征来准确检测这些结节。肺segmentation使用高斯过滤器重新取样为1.0mm的    各向同性分辨率(isotropic resolution)。</p>
-<h3 id="3-3-候选检测"><a href="#3-3-候选检测" class="headerlink" title="3.3 候选检测"></a>3.3 候选检测</h3><p>候选检测步骤旨在局部化所有肺内部的结节。这个任务之所以艰难，是因为结节在形态上、尺寸上和强度上变化范围太广。本文中，候选检测由三部分组成:初始候选检测，连通组件分析，结节检测细化。</p>
-<h4 id="3-3-1-初始候选检测"><a href="#3-3-1-初始候选检测" class="headerlink" title="3.3.1 初始候选检测"></a>3.3.1 初始候选检测</h4><p>与其他相似度密度较高的结构(主要是血管)相比，大结节通常有着十分不同的形态学特征，一个简单的阈值和形态学开运算就足够充分检测大部分大结节。然后，由于它们的尺寸，与其他非密度结构（大部分是胸膜壁和脉管系统）相比大结节倾向于内部相连。这使得检测器的参数选取变得复杂，尤其是形态学开运算的结构元素的尺寸。相连结构的尺寸可能变化范围广。举一个例子，一个大的结构元素需要移除结节上的大结构的黏着(attachment of large structure)，但是会导致小结节无法检测。</p>
+<p>为了在肺分割segmentation包含入大的肺结节，使用了额外的细化的肺分割segmentation。肺结节被剔除的区域通常看起来像在肺segmentation的表面上有个洞。我们实验了两种方法<strong>(1)</strong>使用形态学逻辑滚球rolling-ball操作<strong>(2)</strong>在rolling-ball操作之后做扩张操作。所有的形态学操作使用的是球形结构元素。结构元素的半径<span class="math inline">\(d_{struct}\)</span>设置为一个x维度在输入scan中的比率。我们评估了$d_{struct}=2%,3%,4%,6%,8%$ 的rolling-ball操作和$d_{struct}=1%,2%$ 的扩张操作。</p>
+<h3 id="预处理">3.2 预处理</h3>
+<p>肺segmentation用作mask，segmentation之外的区域被设置为肺组织的平均强度(-900HU)。这可以避免肺病变看起来与其内部的结节非常不同，这就要求有不同的或者额外的特征来准确检测这些结节。肺segmentation使用高斯过滤器重新取样为1.0mm的 各向同性分辨率(isotropic resolution)。</p>
+<h3 id="候选检测">3.3 候选检测</h3>
+<p>候选检测步骤旨在局部化所有肺内部的结节。这个任务之所以艰难，是因为结节在形态上、尺寸上和强度上变化范围太广。本文中，候选检测由三部分组成:初始候选检测，连通组件分析，结节检测细化。</p>
+<h4 id="初始候选检测">3.3.1 初始候选检测</h4>
+<p>与其他相似度密度较高的结构(主要是血管)相比，大结节通常有着十分不同的形态学特征，一个简单的阈值和形态学开运算就足够充分检测大部分大结节。然后，由于它们的尺寸，与其他非密度结构（大部分是胸膜壁和脉管系统）相比大结节倾向于内部相连。这使得检测器的参数选取变得复杂，尤其是形态学开运算的结构元素的尺寸。相连结构的尺寸可能变化范围广。举一个例子，一个大的结构元素需要移除结节上的大结构的黏着(attachment of large structure)，但是会导致小结节无法检测。</p>
 <p>为检测不同尺寸的候选，使用多阶段阈值和形态开运算。强度阈值为-300HU来区分solid nodule。每个阶段，顺序使用半径为9,7,5或者3mm的球形结构的扩张操作，并产生了中间候选mask。候选检测始于大结构半径并渐渐使用更小的半径。为防止先前候选与新候选合并，在处理下一阶段之前先前候选使用了一个3mm的保障边界。在阶段n计算候选检测，新的中间mask与阶段n-1的输出mask合并，使用逻辑与操作。下图示意了候选检测的输出。每一阶段使用不同的阈值和形态扩张操作，mask的结果与上一阶段的mask合并。第一行是检测大结节，第二行是小一点的结节检测过程。</p>
-<p><img src="/images/blog/lung_bignodule2.png" alt=""></p>
-<h4 id="3-3-2-连通组件分析"><a href="#3-3-2-连通组件分析" class="headerlink" title="3.3.2 连通组件分析"></a>3.3.2 连通组件分析</h4><p>使用初始候选检测之后，所有相连体素使用连通组件分析聚合为候选。为了移除cluster size超出目标范围的，我们丢弃了cluster容积小于 $268mm^3$的和大于 $33524mm^3$的，其分别对应的完美球形半径为8mm和40mm。</p>
-<h4 id="3-3-3-结节segmentation"><a href="#3-3-3-结节segmentation" class="headerlink" title="3.3.3 结节segmentation"></a>3.3.3 结节segmentation</h4><p>初始候选指示了候选cluster的坐标。作为候选的一个准确的容积和形态学评估，量化结节特性尤为重要，我们使用了由Kuhnigk提出的robust结节分割方法。给定cluster上的立方块输入容积和seed point，算法进行区域增长并使用有效的形态学开运算来从血脉组织和胸腔壁分离结节。对每个候选cluster，从cluster的主轴(major axis)上获得seed point。VOI(volume of interest)被定义为初始边长为60mm的在cluster附近的立方块。立方块的尺寸是自动适应的，必要的话，推荐更大的结节。</p>
+<p><img src="/images/blog/lung_bignodule2.png" /></p>
+<h4 id="连通组件分析">3.3.2 连通组件分析</h4>
+<p>使用初始候选检测之后，所有相连体素使用连通组件分析聚合为候选。为了移除cluster size超出目标范围的，我们丢弃了cluster容积小于 <span class="math inline">\(268mm^3\)</span>的和大于 <span class="math inline">\(33524mm^3\)</span>的，其分别对应的完美球形半径为8mm和40mm。</p>
+<h4 id="结节segmentation">3.3.3 结节segmentation</h4>
+<p>初始候选指示了候选cluster的坐标。作为候选的一个准确的容积和形态学评估，量化结节特性尤为重要，我们使用了由Kuhnigk提出的robust结节分割方法。给定cluster上的立方块输入容积和seed point，算法进行区域增长并使用有效的形态学开运算来从血脉组织和胸腔壁分离结节。对每个候选cluster，从cluster的主轴(major axis)上获得seed point。VOI(volume of interest)被定义为初始边长为60mm的在cluster附近的立方块。立方块的尺寸是自动适应的，必要的话，推荐更大的结节。</p>
 <p>为进一步移除大于或小于预定目标的候选，我们使用3.3.2节中相同的阈值。为避免结节中出现重复结节，与任何已经被接受的segmentation位置小于10mm的都被丢弃。结节segmentation的结果集合将进一步用作特征抽取和分类。</p>
-<h3 id="3-4-特征抽取"><a href="#3-4-特征抽取" class="headerlink" title="3.4 特征抽取"></a>3.4 特征抽取</h3><p>特征抽取用来获得可以区分结节和非结节的特征。定义了四个不同集合的特征：强度、cluster、blobness、和上下文特征。下表展示了所有特征的概览</p>
+<h3 id="特征抽取">3.4 特征抽取</h3>
+<p>特征抽取用来获得可以区分结节和非结节的特征。定义了四个不同集合的特征：强度、cluster、blobness、和上下文特征。下表展示了所有特征的概览</p>
 <p><strong>强度特征</strong></p>
 <table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>ID</th>
 <th>强度特征</th>
 <th>Notes</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr class="odd">
 <td>1-3</td>
 <td>Density inside candidate segmentation (mean,stdev, entropy)</td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>4-6</td>
 <td>Density inside bounding box (mean, stdev, entropy)</td>
 <td></td>
 </tr>
-<tr>
+<tr class="odd">
 <td>7-9</td>
 <td>Density around candidate segmentation (mean,stdev, entropy)</td>
 <td>within 8mm outside segmentation</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p><strong>cluster feature</strong></p>
 <table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>ID</th>
 <th>cluster feature</th>
 <th>Note</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr class="odd">
 <td>10</td>
-<td>Volume of candidate segmentation $V_{cand}$</td>
+<td>Volume of candidate segmentation <span class="math inline">\(V_{cand}\)</span></td>
 <td></td>
 </tr>
-<tr>
+<tr class="even">
 <td>11</td>
-<td>Diameter of candidate segmentation $D_{cand}$</td>
+<td>Diameter of candidate segmentation <span class="math inline">\(D_{cand}\)</span></td>
 <td>The longest diameter on axial plane</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>12</td>
 <td>Sphericity: ratio of candidate’s volume inside sphere S to the volume of sphere S</td>
-<td>Sphere S is centered at the candidate location with diameter $D_{cand}$</td>
+<td>Sphere S is centered at the candidate location with diameter <span class="math inline">\(D_{cand}\)</span></td>
 </tr>
-<tr>
+<tr class="even">
 <td>13</td>
-<td>Compactness1: $V_{cand}/(dim_x ·dim_y ·dim_z)$</td>
-<td>$dim_i$ is the width of bounding box indimension i</td>
+<td>Compactness1: <span class="math inline">\(V_{cand}/(dim_x ·dim_y ·dim_z)\)</span></td>
+<td><span class="math inline">\(dim_i\)</span> is the width of bounding box indimension i</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>14</td>
-<td>Compactness2: $V_{cand}/((max(dim_x, dim_y, dim_z))^3$)</td>
+<td>Compactness2: <span class="math inline">\(V_{cand}/((max(dim_x, dim_y, dim_z))^3\)</span>)</td>
 <td></td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p><strong>Blobness feature</strong></p>
 <table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>ID</th>
 <th>Blobness feature</th>
 <th>Note</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr class="odd">
 <td>15</td>
 <td>Maximum flter response</td>
 <td>Features are computed using the flter</td>
 </tr>
-<tr>
+<tr class="even">
 <td>16-17</td>
 <td>Filter response inside candidate segmentation(mean, stdev)</td>
 <td>response of Li blobness flter(scale: 2, 5, and 8 mm)</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>18-19</td>
 <td>Filter response inside bounding box (mean, stdev)</td>
 <td></td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p><strong>Context feature</strong></p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>ID</th>
 <th>Context feature</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr class="odd">
 <td>20</td>
 <td>Distance to pleural wall</td>
 </tr>
-<tr>
+<tr class="even">
 <td>21-23</td>
 <td>Distance to carina in X, Y, and Z</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>24</td>
 <td>Distance to top of the lung in Z</td>
 </tr>
-</tbody></table>
-<h4 id="3-4-1-强度特征"><a href="#3-4-1-强度特征" class="headerlink" title="3.4.1 强度特征"></a>3.4.1 强度特征</h4><p>强度特征用来量化候选segmentation内外区域的强度特征。特征集直接计算自各向同性（isotropically）重新取样的CT scan。使用了三个不同的区域<strong>(1)</strong>候选segmentation内的区域<strong>(2)</strong>候选segmentation的bounding box内的区域<strong>(3)</strong>在候选segmentation周围距离小于8mm的区域。每个区域，计算均值、标准差和体素强度熵。</p>
-<h4 id="3-4-2-cluster特征"><a href="#3-4-2-cluster特征" class="headerlink" title="3.4.2 cluster特征"></a>3.4.2 cluster特征</h4><p>cluster 特征从候选segmentation中计算得来。这些特征集由半径、容积、球形性、紧凑性1(compactness1)和紧凑性2(compactness2)。</p>
-<p>半径是通过segmentation的轴状位的部分最长的轴得到。容积通过计算cluster size的$mm^3$。为计算球形性，与候选有着相同容积的球S在候选质心处构建。球形性定义为候选容积在球S内与球形S的容积的比例。紧凑性为候选容积与候选segmentation周围的bounding box容积的比例。使用了两个不同的boundiing box。紧凑性1使用的bounding box为在全部x,y,z维度包容候选segmentation的最小box。紧凑性2使用的bounding box定义为立方块，其尺寸为候选segmentation的最大维度的大小。</p>
-<h4 id="3-4-3-blobness特征"><a href="#3-4-3-blobness特征" class="headerlink" title="3.4.3 blobness特征"></a>3.4.3 blobness特征</h4><p>blobness特征广泛用于增强结节结构和提高结节检测的灵敏度。我们使用的是由<strong>Li,Sone 和 Doi</strong>开发出来的结节增强过滤器，并偶从过滤图中抽取blobness特征。</p>
-<p>算法通过对输入图像进行高斯kernel的二阶导数做卷积来计算Hessian矩阵。给定Hessian矩阵，三个特征值，定义为 $\lambda_1=f_{xx},\lambda_2=f_{y},\lambda_3 = f_{xy}$，其中 $\lambda _1&gt;\lambda _2&gt;\lambda _3$。增强过滤器的最终输出是通过计算 $Z(\lambda _1,\lambda _2,\lambda_3)=|\lambda _3|^3/|\lambda _1|\quad if\quad \lambda _1&lt;0,\lambda _2&lt;0,\lambda _3&lt;0$；否则为0。为了获得范围分布广泛的结节尺寸，使用来了多尺寸增强过滤器。我们对高斯kernel定义了三种(2mm,5mm,8mm)，这是基于要增强的目标结节的经验值。结果会有三种不同的输出图像，是一种从所有图像中选择最大值的结合。</p>
+</tbody>
+</table>
+<h4 id="强度特征">3.4.1 强度特征</h4>
+<p>强度特征用来量化候选segmentation内外区域的强度特征。特征集直接计算自各向同性（isotropically）重新取样的CT scan。使用了三个不同的区域<strong>(1)</strong>候选segmentation内的区域<strong>(2)</strong>候选segmentation的bounding box内的区域<strong>(3)</strong>在候选segmentation周围距离小于8mm的区域。每个区域，计算均值、标准差和体素强度熵。</p>
+<h4 id="cluster特征">3.4.2 cluster特征</h4>
+<p>cluster 特征从候选segmentation中计算得来。这些特征集由半径、容积、球形性、紧凑性1(compactness1)和紧凑性2(compactness2)。</p>
+<p>半径是通过segmentation的轴状位的部分最长的轴得到。容积通过计算cluster size的<span class="math inline">\(mm^3\)</span>。为计算球形性，与候选有着相同容积的球S在候选质心处构建。球形性定义为候选容积在球S内与球形S的容积的比例。紧凑性为候选容积与候选segmentation周围的bounding box容积的比例。使用了两个不同的boundiing box。紧凑性1使用的bounding box为在全部x,y,z维度包容候选segmentation的最小box。紧凑性2使用的bounding box定义为立方块，其尺寸为候选segmentation的最大维度的大小。</p>
+<h4 id="blobness特征">3.4.3 blobness特征</h4>
+<p>blobness特征广泛用于增强结节结构和提高结节检测的灵敏度。我们使用的是由<strong>Li,Sone 和 Doi</strong>开发出来的结节增强过滤器，并偶从过滤图中抽取blobness特征。</p>
+<p>算法通过对输入图像进行高斯kernel的二阶导数做卷积来计算Hessian矩阵。给定Hessian矩阵，三个特征值，定义为 <span class="math inline">\(\lambda_1=f_{xx},\lambda_2=f_{y},\lambda_3 = f_{xy}\)</span>，其中 <span class="math inline">\(\lambda _1&gt;\lambda _2&gt;\lambda _3\)</span>。增强过滤器的最终输出是通过计算 <span class="math inline">\(Z(\lambda _1,\lambda _2,\lambda_3)=\|\lambda _3\|^3/\|\lambda _1\|\quad if\quad \lambda _1&lt;0,\lambda _2&lt;0,\lambda _3&lt;0\)</span>；否则为0。为了获得范围分布广泛的结节尺寸，使用来了多尺寸增强过滤器。我们对高斯kernel定义了三种(2mm,5mm,8mm)，这是基于要增强的目标结节的经验值。结果会有三种不同的输出图像，是一种从所有图像中选择最大值的结合。</p>
 <p>blobness特征的抽取通过衡量<strong>(1)</strong>过滤器的最大输出<strong>(2)</strong>结节segmentation内部的输出的均值和标准差<strong>(3)</strong>bounding box内部输出的均值和标准差。</p>
-<h4 id="3-4-4-上下文特征"><a href="#3-4-4-上下文特征" class="headerlink" title="3.4.4 上下文特征"></a>3.4.4 上下文特征</h4><p>上下文特征描述了候选与其他肺结构如胸膜壁，隆突和肺上部的相对位置。根据它们的位置，肺结节和假阳性候选可能有着不同的形态学特征和恶性概率。结节粘附于更加刚性的结构上时，结节更可能是细长的。<strong>Horeweg</strong>的研究表明，大部分病变结节位于costal-hilar半径的外部的三分之一的上叶（at outer one-third of the costal-hilar diameter and at upper lobes ）。意味着这些区域应该引起注意。到carina的距离和肺的顶部区域需要给予更多的权重。</p>
+<h4 id="上下文特征">3.4.4 上下文特征</h4>
+<p>上下文特征描述了候选与其他肺结构如胸膜壁，隆突和肺上部的相对位置。根据它们的位置，肺结节和假阳性候选可能有着不同的形态学特征和恶性概率。结节粘附于更加刚性的结构上时，结节更可能是细长的。<strong>Horeweg</strong>的研究表明，大部分病变结节位于costal-hilar半径的外部的三分之一的上叶（at outer one-third of the costal-hilar diameter and at upper lobes ）。意味着这些区域应该引起注意。到carina的距离和肺的顶部区域需要给予更多的权重。</p>
 <p>为计算相对于胸膜壁的距离，我们做了在肺分割内做了距离变换并抽取候选质心中心的值。carina点的检测方法是，找到轴向(axial)区域中气管被一分为二的地方，在分叉处周围选取气管区域，并抽取其质心。从carina到坐标轴的相对X，Y，Z距离作为特征。从候选到肺顶部的相对距离的计算方法为，计算候选的Z轴世界坐标到肺分割的top slice的Z轴世界坐标的距离。</p>
-<h4 id="3-4-5-分类器"><a href="#3-4-5-分类器" class="headerlink" title="3.4.5 分类器"></a>3.4.5 分类器</h4><p>对特征向量的分类器，使用了径向偏置核函数SVM-RBF。其中的C和伽马参数在训练集上的网格搜索的10折交叉验证得到的。C定义了正则化参数，伽马定义了RBF核函数的宽度。搜索区间为 $C={2^1,2^2,2^3,…2^12}$，并且$\Gamma ={2^{-12},2^{-11},…2^{-5}}$。本文使用的是LIBSVM实现。分类之前先对所有特征进行正则化，均值为0，单位标准差。</p>
-<h2 id="四-结果"><a href="#四-结果" class="headerlink" title="四 结果"></a>四 结果</h2><p>评估CAD系统检测大结节的性能。在病人级别的10折交叉验证，分类器在嵌套的交叉验证中优化得到。</p>
-<h3 id="4-1-肺分割"><a href="#4-1-肺分割" class="headerlink" title="4.1 肺分割"></a>4.1 肺分割</h3><p>888个scan中有12个分割失败，因为气管处的seed point没有被正确检测到。这可以通过手动提供seed point来修正。下表显示了在CAD系统上使用细化的肺分割之后的影响。肺结节的位置坐标如果在segmentation内部，则其分类为包含在肺segmentation内。算法的评估方法为，被检测到的结节的数量和候选的数量。</p>
+<h4 id="分类器">3.4.5 分类器</h4>
+<p>对特征向量的分类器，使用了径向偏置核函数SVM-RBF。其中的C和伽马参数在训练集上的网格搜索的10折交叉验证得到的。C定义了正则化参数，伽马定义了RBF核函数的宽度。搜索区间为 <span class="math inline">\(C={2^1,2^2,2^3,...2^12}\)</span>，并且<span class="math inline">\(\Gamma ={2^{-12},2^{-11},...2^{-5}}\)</span>。本文使用的是LIBSVM实现。分类之前先对所有特征进行正则化，均值为0，单位标准差。</p>
+<h2 id="四-结果">四 结果</h2>
+<p>评估CAD系统检测大结节的性能。在病人级别的10折交叉验证，分类器在嵌套的交叉验证中优化得到。</p>
+<h3 id="肺分割-1">4.1 肺分割</h3>
+<p>888个scan中有12个分割失败，因为气管处的seed point没有被正确检测到。这可以通过手动提供seed point来修正。下表显示了在CAD系统上使用细化的肺分割之后的影响。肺结节的位置坐标如果在segmentation内部，则其分类为包含在肺segmentation内。算法的评估方法为，被检测到的结节的数量和候选的数量。</p>
 <p><strong>Without additional lung segmentation refinement</strong></p>
 <table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>Rolling ball(kernel size (% of image))</th>
 <th>Dilation(kernel size (% of image))</th>
 <th>Inside segmentation (%)</th>
@@ -315,18 +458,27 @@
 <th>Candidates/Scan</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr class="odd">
 <td>-</td>
 <td>-</td>
 <td>84.9</td>
 <td>87.8</td>
 <td>39.5</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p><strong>With additonal lung segmentation refinement</strong></p>
 <table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>Rolling ball(kernel size (% of image))</th>
 <th>Dilation(kernel size (% of image))</th>
 <th>Inside segmentation (%)</th>
@@ -334,98 +486,104 @@
 <th>Candidates/Scan</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr class="odd">
 <td>2</td>
 <td>-</td>
 <td>84.9</td>
 <td>87.8</td>
 <td>39.5</td>
 </tr>
-<tr>
+<tr class="even">
 <td>4</td>
 <td>-</td>
 <td>97.1</td>
 <td>98.3</td>
 <td>47.4</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>6</td>
 <td>-</td>
 <td>98.3</td>
 <td>99.2</td>
 <td>56.6</td>
 </tr>
-<tr>
+<tr class="even">
 <td>8</td>
 <td>-</td>
 <td>99.6</td>
 <td>98.7</td>
 <td>63.2</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>2</td>
 <td>1</td>
 <td>88.7</td>
 <td>95.4</td>
 <td>120.7</td>
 </tr>
-<tr>
+<tr class="even">
 <td>4</td>
 <td>1</td>
 <td>99.6</td>
 <td>97.9</td>
 <td>133.1</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>6</td>
 <td>1</td>
 <td>100.0</td>
 <td>96.6</td>
 <td>145.5</td>
 </tr>
-</tbody></table>
-<p>上表显示没有使用额外的细化算法时，肺分割只有84.9%的大结节被包含入。使用额外的细化算法时可以减少被排除的结节数直至所有的结节都被包含入内。但是也可以看到，细化算法会增大肺segmentation，它可能会引入不相关区域(比如肺壁,hilar)，这会恶化候选检测的性能。因而，我们同时评估了候选检测的灵敏度。数据集中至少3个放射医师标注的，包含全部 $nodules\ge 10mm$的287个scan的数据集。实验表明，初始肺分割之后，使用 $d_{struct}=6%$ rolling-ball操作和 $d_{struct}=0%$的扩张操作，可以使得候选检测获得最高的灵敏度和差不多数目的 candidates/scan。此配置应用于后续的实验中。</p>
-<h3 id="4-2-候选检测"><a href="#4-2-候选检测" class="headerlink" title="4.2 候选检测"></a>4.2 候选检测</h3><p>888个 CTscan中，候选检测平均生成48.3 candidates/scan，包括了99.2%（236/238）的全部大结节。此集合用作进一步的分类 任务。不同准入水平的候选检测性能如下表。结节的候选检测的灵敏度随着放射医师的准入水平的上升而增加。</p>
+</tbody>
+</table>
+<p>上表显示没有使用额外的细化算法时，肺分割只有84.9%的大结节被包含入。使用额外的细化算法时可以减少被排除的结节数直至所有的结节都被包含入内。但是也可以看到，细化算法会增大肺segmentation，它可能会引入不相关区域(比如肺壁,hilar)，这会恶化候选检测的性能。因而，我们同时评估了候选检测的灵敏度。数据集中至少3个放射医师标注的，包含全部 <span class="math inline">\(nodules\ge 10mm\)</span>的287个scan的数据集。实验表明，初始肺分割之后，使用 <span class="math inline">\(d_{struct}=6%\)</span> rolling-ball操作和 <span class="math inline">\(d_{struct}=0%\)</span>的扩张操作，可以使得候选检测获得最高的灵敏度和差不多数目的 candidates/scan。此配置应用于后续的实验中。</p>
+<h3 id="候选检测-1">4.2 候选检测</h3>
+<p>888个 CTscan中，候选检测平均生成48.3 candidates/scan，包括了99.2%（236/238）的全部大结节。此集合用作进一步的分类 任务。不同准入水平的候选检测性能如下表。结节的候选检测的灵敏度随着放射医师的准入水平的上升而增加。</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>Aggrement levels</th>
 <th>Solid nodules &gt;10mm</th>
 <th>Detected nodules (%)</th>
 <th>Candidates/scan</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr class="odd">
 <td>At least 1</td>
 <td>322</td>
 <td>97.2</td>
 <td>48.3</td>
 </tr>
-<tr>
+<tr class="even">
 <td>At least 2</td>
 <td>277</td>
 <td>98.9</td>
 <td>48.3</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>At least 3</td>
 <td>238</td>
 <td>99.2</td>
 <td>48.3</td>
 </tr>
-<tr>
+<tr class="even">
 <td>At least 4</td>
 <td>182</td>
 <td>100.0</td>
 <td>48.3</td>
 </tr>
-</tbody></table>
-<h3 id="4-3-特征抽取和分类"><a href="#4-3-特征抽取和分类" class="headerlink" title="4.3 特征抽取和分类"></a>4.3 特征抽取和分类</h3><p>CAD系统在包含大结节数据集上的不同准入水平的FROC曲线如下图左图所示，右图表示的 是CAD系统包含或不包含不相关的发现(被当做false positive假阳性的)时的性能。假阳性的数目现实的是求对数之后的结果。</p>
-<p><img src="/images/blog/lung_bignodule3.png" alt=""></p>
+</tbody>
+</table>
+<h3 id="特征抽取和分类">4.3 特征抽取和分类</h3>
+<p>CAD系统在包含大结节数据集上的不同准入水平的FROC曲线如下图左图所示，右图表示的 是CAD系统包含或不包含不相关的发现(被当做false positive假阳性的)时的性能。假阳性的数目现实的是求对数之后的结果。</p>
+<p><img src="/images/blog/lung_bignodule3.png" /></p>
 <p>为了量化比较，不同假阳性率的平均灵敏度如下表。CAD系统识别分别在 1FPs/scan和 4FPs/scan时识别了94.1%(224/238)和98.3%(234/238)的大结节。注意到分类阶段的最大灵敏度收敛到候选检测阶段的灵敏度，为99.2%(236/238)。这意味着与检测到的候选相关的，分类阶段的准确分类率在 1FP/scan和4FPs/scan分别为 94.9%和99.1%。</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>Agreement levels</th>
 <th>1/8</th>
 <th>1/4</th>
@@ -437,7 +595,8 @@
 <th>Average</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr class="odd">
 <td>At least 1</td>
 <td>0.773</td>
 <td>0.804</td>
@@ -448,7 +607,7 @@
 <td>0.960</td>
 <td>0.874</td>
 </tr>
-<tr>
+<tr class="even">
 <td>At least 2</td>
 <td>0.841</td>
 <td>0.866</td>
@@ -459,7 +618,7 @@
 <td>0.982</td>
 <td>0.920</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>At least 3</td>
 <td>0.874</td>
 <td>0.895</td>
@@ -470,7 +629,7 @@
 <td>0.992</td>
 <td>0.938</td>
 </tr>
-<tr>
+<tr class="even">
 <td>At least 4</td>
 <td>0.929</td>
 <td>0.940</td>
@@ -481,209 +640,200 @@
 <td>1.000</td>
 <td>0.971</td>
 </tr>
-</tbody></table>
-<h3 id="4-4-与已有的CAD系统对比"><a href="#4-4-与已有的CAD系统对比" class="headerlink" title="4.4 与已有的CAD系统对比"></a>4.4 与已有的CAD系统对比</h3><p>ISICAD系统获得了ANODE09的最高排名，用作对比。两个CAD系统的FROC曲线如下图，候选检测阶段检测到99.2%(236/238)(本文算法)和84.9%(202/238)(ISICAD)。在 1FP/scan时，63.0%(150/238)更多的大结节被本文提出的算法正确分类。不过要注意的是两个CAD系统为不同类型的结节设计的。</p>
-<p><img src="/images/blog/lung_bignodule4.png" alt=""></p>
+</tbody>
+</table>
+<h3 id="与已有的cad系统对比">4.4 与已有的CAD系统对比</h3>
+<p>ISICAD系统获得了ANODE09的最高排名，用作对比。两个CAD系统的FROC曲线如下图，候选检测阶段检测到99.2%(236/238)(本文算法)和84.9%(202/238)(ISICAD)。在 1FP/scan时，63.0%(150/238)更多的大结节被本文提出的算法正确分类。不过要注意的是两个CAD系统为不同类型的结节设计的。</p>
+<p><img src="/images/blog/lung_bignodule4.png" /></p>
 
     </div>
-    <p class="post-meta">
-        <span class="post-cat">分类：
-            <a class="cat-link" href="/categories/blog/">blog</a>
-        </span>
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-</article>
-<!-- 分享按钮 -->
 
-  <div class="article-share clearfix text-center">
-    <div class="share-area">
-      <span class="share-txt">分享到：</span>
-      <a href="javascript: window.open('http://service.weibo.com/share/share.php?url=' + encodeURIComponent(location.href) + '&title=' + document.title + '&language=zh_cn');" class="share-icon weibo"></a>
-      <a href="javascript: alert('请复制链接到微信并发送');" class="share-icon wechat"></a>
-      <a href="javascript: window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + encodeURIComponent(location.href) + '&title=' + document.title);" class="share-icon qqzone"></a>
-      <a href="javascript: window.open('http://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(location.href) + '&desc=Jelon个人博客&title=' + document.title + '&callback=' + encodeURIComponent(location.href));" class="share-icon qq"></a>
-      <a href="javascript: window.open('http://shuo.douban.com/!service/share?href=' + encodeURIComponent(location.href) + '&name=' + document.title + '&text=' + document.title);" class="share-icon douban"></a>
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2017-03-08-lungseg-localfeature/" rel="prev" title="肺结节自动分割:使用图像局部特征【论文笔记】">
+      <i class="fa fa-chevron-left"></i> 肺结节自动分割:使用图像局部特征【论文笔记】
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2017-03-11-autoseg-bylungvolumne/" rel="next" title="Morphological Segmentation and Partial Volume of Solid Pulmonary Lesions in Thoracic CT Scans">
+      Morphological Segmentation and Partial Volume of Solid Pulmonary Lesions in Thoracic CT Scans <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
   </div>
 
 
-<!-- 上一篇/下一篇 -->
+          </div>
+          
 
-<div class="article-nav clearfix">
-    
-    <span class="prev fl">
-        上一篇<br >
-        <a href="/2019/12/23/2017-03-11-autoseg-bylungvolumne/">
-            
-                Morphological Segmentation and Partial Volume of Solid Pulmonary Lesions in Thoracic CT Scans
-            
-        </a>
-    </span>
-    
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
 
-    
-    <span class="next fr">
-        下一篇<br >
-        <a href="/2019/12/23/2017-03-08-lungseg-localfeature/">
-            
-                肺结节自动分割:使用图像局部特征【论文笔记】
-            
-        </a>
-    </span>
-    
-</div>
-
-<!-- 文章评论 -->
-
+        </div>
+          
   
-<script src="/js/comment.js"></script>
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
 
-  <div id="comments" class="comment">
-    <!--
-    <div class="sign-bar">
-      GitHub 已登录!
-      <span class="sign-link">登出</span>
-    </div>
-    <section class="box">
-      <div class="com-avatar"><img src="/img/jelon.jpg" alt="avatar"></div>
-      <div class="com-text">
-        <div class="main">
-          <textarea class="text-area-edited show" placeholder="欢迎评论！"></textarea>
-          <div class="text-area-preview"></div>
-        </div>
-        <div class="switch">
-          <div class="switch-item on">编辑</div>
-          <div class="switch-item">预览</div>
-        </div>
-        <div class="button">提交</div>
-      </div>
-    </section>
-    <section class="tips">注：评论支持 markdown 语法！</section>
-    <section class="list-wrap">
-      <ul class="list">
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">张德龙</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like liked">已赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">333333</div>
-          </div>
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
         </li>
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">刘德华</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like">点赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">vvvvv</div>
-          </div>
+        <li class="sidebar-nav-overview">
+          Overview
         </li>
       </ul>
-      <div class="page-nav">
-        <a href="javascript: void(0);" class="item">1</a>
-        <a href="javascript: void(0);" class="item">2</a>
-        <a href="javascript: void(0);" class="item current">3</a>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">0 摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一-数据集"><span class="nav-number">2.</span> <span class="nav-text">一 数据集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-方法"><span class="nav-number">3.</span> <span class="nav-text">三 方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#肺分割"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 肺分割</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#预处理"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 预处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#候选检测"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 候选检测</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#初始候选检测"><span class="nav-number">3.3.1.</span> <span class="nav-text">3.3.1 初始候选检测</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#连通组件分析"><span class="nav-number">3.3.2.</span> <span class="nav-text">3.3.2 连通组件分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#结节segmentation"><span class="nav-number">3.3.3.</span> <span class="nav-text">3.3.3 结节segmentation</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特征抽取"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 特征抽取</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#强度特征"><span class="nav-number">3.4.1.</span> <span class="nav-text">3.4.1 强度特征</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cluster特征"><span class="nav-number">3.4.2.</span> <span class="nav-text">3.4.2 cluster特征</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#blobness特征"><span class="nav-number">3.4.3.</span> <span class="nav-text">3.4.3 blobness特征</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#上下文特征"><span class="nav-number">3.4.4.</span> <span class="nav-text">3.4.4 上下文特征</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分类器"><span class="nav-number">3.4.5.</span> <span class="nav-text">3.4.5 分类器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-结果"><span class="nav-number">4.</span> <span class="nav-text">四 结果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#肺分割-1"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 肺分割</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#候选检测-1"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 候选检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特征抽取和分类"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 特征抽取和分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#与已有的cad系统对比"><span class="nav-number">4.4.</span> <span class="nav-text">4.4 与已有的CAD系统对比</span></a></li></ol></li></ol></div>
       </div>
-    </section>
-    -->
-  </div>
-  <script>
-  JELON.Comment({
-    container: 'comments',
-    label: '2017-03-09-lungseg-bignodule-detect' || '2019/12/23/2017-03-09-lungseg-bignodule-detect/',
-    owner: 'your_github_id',
-    repo: 'your_blog_comments',
-    clientId: 'your_client_id',
-    clientSecret: 'your_client_secret'
-  });
-  </script>
+      <!--/noindex-->
 
-
-            </div>
-
-        </section>
-        <!-- 侧栏部分 -->
-<aside class="sidebar">
-    <section class="widget">
-        <h3 class="widget-hd"><strong>文章分类</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-    <li>
-        <a href="/categories/blog/">blog</a>
-        <span class="badge">(94)</span>
-    </li>
-    
-</ul>
-    </section>
-
-    
-    <section class="widget">
-        <h3 class="widget-hd"><strong>热门标签</strong></h3>
-        <!-- 文章标签 -->
-<div class="widget-bd tag-wrap">
-  
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
 </div>
-    </section>
-    
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
 
-    
 
-    
-    <!-- 友情链接 -->
-    <section class="widget">
-        <h3 class="widget-hd"><strong>友情链接</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-        <li>
-            <a href="https://jelon.top" target="_blank" title="Jelon个人前端小站">前端博客小站</a>
-        </li>
-    
-        <li>
-            <a href="https://www.baidu.com" target="_blank" title="百度搜索">百度</a>
-        </li>
-    
-</ul>
-    </section>
-    
-</aside>
-<!-- / 侧栏部分 -->
+
+      </div>
+
     </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
 
-    <!-- 博客底部 -->
+
+      </div>
+    </main>
+
     <footer class="footer">
-    &copy;
-    
-        2016-2019
-    
+      <div class="footer-inner">
+        
 
-    <a href="/">Jelon Loves You</a>
-</footer>
-<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
 
-    <!--博客js脚本 -->
-    <!-- 这里放网站js脚本 -->
+        
 
-<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
 
 </body>
 </html>

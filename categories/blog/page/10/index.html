@@ -1,747 +1,429 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" >
-    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
-    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
-    
-    <title>`blog`分类下的文章 | Hexo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
-    <meta name="keywords" content="Jelon, 前端, Web, 张德龙, 前端开发" >
-    <meta name="description" content="Jelon个人前端小站" >
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml" >
-    
-    
-    <link rel="shortcut icon" href="/favicon.ico" >
-    
-    
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/main.css">
 
-    <!--[if lt IE 9]>
-    
-<script src="/js/html5.js"></script>
 
-    <![endif]-->
-    
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "//hm.baidu.com/hm.js?fd459238242776d173cdc64918fb32f2";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://shartoo.github.com').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
 </script>
 
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://shartoo.github.com/categories/blog/page/10/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
-
-<body class="home">
-    <!--[if lt IE 9]>
-    <div class="browsehappy">
-        当前网页 <strong>不支持</strong>
-        你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/" target="_blank" rel="noopener">升级你的浏览器</a>.
-    </div>
-    <![endif]-->
-
-    <!-- 博客头部 -->
-    <header class="header">
-    <section class="container header-main">
-        <div class="logo">
-            <a href="/">
-                <div class="cover">
-                    <span class="name">Hexo</span>
-                    <span class="description"></span>
-                </div>
-            </a>
-        </div>
-        <div class="dropnav icon-paragraph-justify" id="JELON__btnDropNav"></div>
-        <ul class="menu hidden" id="JELON__menu">
-            
-            <li rel="/categories/blog/page/10/index.html" class="item ">
-                <a href="/" title="首页" class="icon-home">&nbsp;首页</a>
-            </li>
-            
-            <li rel="/categories/blog/page/10/index.html" class="item ">
-                <a href="/lab/" title="实验室" class="icon-lab">&nbsp;实验室</a>
-            </li>
-            
-            <li rel="/categories/blog/page/10/index.html" class="item ">
-                <a href="/about/" title="关于" class="icon-about">&nbsp;关于</a>
-            </li>
-            
-            <li rel="/categories/blog/page/10/index.html" class="item ">
-                <a href="/comment/" title="留言" class="icon-comment">&nbsp;留言</a>
-            </li>
-            
-        </ul>
-        <div class="profile clearfix">
-            <div class="feeds fl">
-                
-                
-                <p class="links">
-                    
-                        <a href="https://github.com/jangdelong" target="_blank">Github</a>
-                        |
-                    
-                        <a href="https://pages.coding.me" target="_blank">Hosted by Coding Pages</a>
-                        
-                    
-                </p>
-                <p class="sns">
-                    
-                        <a href="http://weibo.com/jangdelong" class="sinaweibo" target="_blank"><b>■</b> 新浪微博</a>
-                    
-                        <a href="https://www.facebook.com/profile.php?id=100011855760219&amp;ref=bookmarks" class="qqweibo" target="_blank"><b>■</b> Facebook</a>
-                    
-                    <a href="javascript: void(0);" class="wechat">
-                        <b>■</b>
-                        公众号
-                        <span class="popover">
-                            <img src="/img/wechat_mp.jpg" width="120" height="120" alt="我的微信订阅号">
-                            <i class="arrow"></i>
-                        </span>
-                    </a>
-                </p>
-                
-            </div>
-            <div class="avatar fr">
-                <img src="/img/jelon.jpg" alt="avatar" title="Jelon" >
-            </div>
-        </div>
-    </section>
-</header>
+<link rel="canonical" href="http://shartoo.github.com/categories/blog/page/10/">
 
 
-    <!-- 博客正文 -->
-    <div class="container body clearfix">
-        <section class="content">
-            <div class="content-main widget">
-                <!-- 文章分类 -->
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: false
+  };
+</script>
 
-    <h3 class="widget-hd">
-        <strong>
-            
-                `blog`分类下的文章
-            
-        </strong>
-    </h3>
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2013-05-24-datamining-classfy-main/">
-    		数据挖掘方法之分类
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.252Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <p>博文参考《数据挖掘概念与技术》：韩家威著（机械工业出版社）</p>
-<h2 id="一-分类的概念"><a href="#一-分类的概念" class="headerlink" title="一 分类的概念"></a>一 分类的概念</h2><p>在面向对象编程（OOP）中我们说“一切皆对象”，在数据挖掘中，我们应该认为“一切皆数据”。而分类就是按照您的选择评估标准将数据进行分离，使得具有某些相同特性的数据属于一个类，不相同的数据不在一个类。</p>
-<h2 id="二-分类的一般过程"><a href="#二-分类的一般过程" class="headerlink" title="二 分类的一般过程"></a>二 分类的一般过程</h2><p>分类一般分为两个阶段：<code>学习阶段(构建模型)</code>和<code>分类阶段（使用分类模型给测试数据的赋予类标号）</code>。</p>
-<ul>
-<li>学习阶段：通过分析或从训练集“学习”来构造分类器。训练集由数据元组和相应的类标号组成。<ul>
-<li><strong>元组</strong>：是用n维向量 $X=(x_1,x_2,x_3…)$ 表示的一条数据记录，其中n维向量表示的是元组X在n个属性上的度量。例如下图中黑边框标记的一条记录的元组表示为：<em>X=(“Ricky Field”,”Middle_aged”,”Low”)</em> 该数据有4个属性，分别是 *”name”,”age”,”income”,”Loan_descision”* ，其中属性”Loan_descision”也是分类属性，类标号为”Risky”。<img src="/images/blog/classfymain1.png"></li>
-<li>分类阶段，如下图所示，它属于一种映射过程。根据分类模型中的规则，给予测试数据元组X特定的类标号<img src="/images/blog/classfymain2.png">
-
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="三-分类的评估"><a href="#三-分类的评估" class="headerlink" title="三 分类的评估"></a>三 分类的评估</h2><h3 id="3-1-度量的基础术语"><a href="#3-1-度量的基础术语" class="headerlink" title="3.1 度量的基础术语"></a>3.1 度量的基础术语</h3><ul>
-<li><strong>正元组</strong>：感兴趣的主要元组，即我们要在第二章图中的数据中找到类标号”Loan_edscision”为”safe”的记录。</li>
-<li><strong>负元组</strong>：除去正元组以外的其他元组（或称为记录）。</li>
-</ul>
-<h3 id="3-2-度量的四个构件"><a href="#3-2-度量的四个构件" class="headerlink" title="3.2 度量的四个构件"></a>3.2 度量的四个构件</h3><ul>
-<li><strong>真正例/真阳例（True Positive ,TP）</strong>：指的是被分类器正确分类的我们”感兴趣”的元组。</li>
-<li><strong>真负例/真阴例（True Negative ,TN）</strong>：指的是被分类器正确分类的我们”不感兴趣”的元组。</li>
-<li><strong>假正例/假阳例（False Positive,FP）</strong>：指的是被分类器错误的分类的元组，即将我们”不感兴趣”的元组分成了”感兴趣”的元组。</li>
-<li><strong>假负例/假阳例（False Negative,FN）</strong>：指的是被分类器错误的分类的元组，即将我们”感兴趣”的元组分成了”不感兴趣”的元组。</li>
-</ul>
-<h3 id="3-3-评估度量"><a href="#3-3-评估度量" class="headerlink" title="3.3 评估度量"></a>3.3 评估度量</h3><p>有了度量的四个构件，我们可以得到常用的评估度量公式。如下</p>
-<table>
-<thead>
-<tr>
-<th>度量</th>
-<th>公式</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>准确率(识别率)</td>
-<td>$\frac{TP+TN}{P+N}$</td>
-</tr>
-<tr>
-<td>错误率(误分类率)</td>
-<td>$\frac{FP+FN}{P+N}$</td>
-</tr>
-<tr>
-<td>敏感率(真正例率、召回率)</td>
-<td>$\frac{TP}{P}$</td>
-</tr>
-<tr>
-<td>特效性(真负例率)</td>
-<td>$\frac{TN}{N}$</td>
-</tr>
-<tr>
-<td>精度</td>
-<td>$\frac{TP}{TP+FP}$</td>
-</tr>
-<tr>
-<td>F分数(精度和召回率的调和均值)</td>
-<td>$\frac{2<em>精度</em>召回率}{精度+召回率}$</td>
-</tr>
-</tbody></table>
-<p>如何理解：</p>
-<ul>
-<li>准确率和错误率是相对的：前者计算的是<B>全部记录</B>中，分类器正确分类的元组数量，包括正确分类的”感兴趣”元组和”不感兴趣”元组；而后者计算的是<B>全部记录</B>中分类器错误分类的元组，也包括错误分类的”感兴趣”元组和”不感兴趣”元组。</li>
-<li>敏感度和特效性是相对的：前者计算的是<B>“感兴趣”元组</B>中，被正确分类的元组数量，可以理解为“我们得到的”感兴趣”元组，有多少是真正的”感兴趣”元组”；特效性计算的是<B>“不感兴趣”元组</B>中被正确分类的元组数量，可以理解为“我们的得到的”不感兴趣”元组，有多少真正是”不感兴趣”元组”。</li>
-<li>精度：是一个完全关乎”感兴趣”元组的统计项，一般情况下与敏感度等同。</li>
-</ul>
-<h2 id="四-对模型的评估"><a href="#四-对模型的评估" class="headerlink" title="四 对模型的评估"></a>四 对模型的评估</h2><h3 id="4-1-保持-holdout-方法和随机二次抽样"><a href="#4-1-保持-holdout-方法和随机二次抽样" class="headerlink" title="4.1 保持(holdout)方法和随机二次抽样"></a>4.1 保持(holdout)方法和随机二次抽样</h3><ul>
-<li><strong>保持(holdout)方法</strong> 是我们在讨论准确率时默认使用的方法。此方法中，数据会被随机地划分为两个独立的集合：<br><code>训练数据集合</code>和<code>检验数据集合</code>。通常,2/3的数据分配到训练集，其余1/3分配到检验集。</li>
-<li><strong>随机二次抽样方法</strong> ，是保持方法的一种变形，只是将保持方法重复k次，总准确率取每次迭代准确率的平均值。</li>
-</ul>
-<h3 id="4-2-k折交叉验证"><a href="#4-2-k折交叉验证" class="headerlink" title="4.2 k折交叉验证"></a>4.2 k折交叉验证</h3><p>将数据分成互不相交的k等份 $D_1,D_2,D_3,…D_k$，训练和校验进行k次。第i次迭代时，将第i个等份(“折”)作为校验集，而其他等份(“折”)全体作为训练集合。注意，在保持方法中数据是随机分的，而此处是均分，并且每份数据集合都有一次机会作为校验集。下图显示的是第四次迭代时的一个示例：<br><img src="/images/blog/classfymain4.png"></p>
-<h3 id="4-3-自助法"><a href="#4-3-自助法" class="headerlink" title="4.3 自助法"></a>4.3 自助法</h3>
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2013-05-24-datamining-classfy-main/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2013-05-24-datamining-classfy-main/" title="数据挖掘方法之分类">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2013-05-16-datamining-logicregressionsample/">
-    		数据挖掘方法之六：解读逻辑回归
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.248Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h2 id="一-使用数据"><a href="#一-使用数据" class="headerlink" title="一 使用数据"></a>一 使用数据</h2><p>本文着重示例如何使用逻辑回归<br><br><a herf="http://download.csdn.net/detail/huangxia73/7059709">数据来源:电信数据集合</a><br><br><B>描述：</B>电信数据，有多个属性，用来预测客户流失。<br><br>载入数据：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">call_consumer&lt;-read.table(file&#x3D;&quot;d:&#x2F;LabData&#x2F;RData&#x2F;churn.txt&quot;,header&#x3D;TRUE,sep&#x3D;&quot;,&quot;)  </span><br><span class="line">   Warning message:  </span><br><span class="line">   In read.table(file &#x3D; &quot;d:&#x2F;LabData&#x2F;RData&#x2F;churn.txt&quot;, header &#x3D; TRUE,  :  </span><br><span class="line">    incomplete final line found by readTableHeader on &#39;d:&#x2F;LabData&#x2F;RData&#x2F;churn.txt&#39;  </span><br><span class="line"> &gt; edit(call_consumer)</span><br></pre></td></tr></table></figure>
-
-<img src="/images/blog/loginregressionsample1.png">
-
-<h2 id="二-解读逻辑回归模型"><a href="#二-解读逻辑回归模型" class="headerlink" title="二 .解读逻辑回归模型"></a>二 .解读逻辑回归模型</h2><p>分三种：</p>
-<ul>
-<li>一个两分预测变量的模型</li>
-<li>多分预测变量</li>
-<li>连续的预测变量</li>
-</ul>
-<h3 id="2-1-两分预测变量模型"><a href="#2-1-两分预测变量模型" class="headerlink" title="2.1 两分预测变量模型"></a>2.1 两分预测变量模型</h3><p>假定唯一的预测变量是语音邮箱套餐（Intl.plan），这是一个表示是否为套餐会员的标记变量。下表显示了语音邮箱套餐会员流失情况。</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>语音邮箱=否(x=0)</th>
-<th>语音邮箱=是(x=1)</th>
-<th>合计</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>流失=假(y=0)</td>
-<td>2008</td>
-<td>842</td>
-<td>2850</td>
-</tr>
-<tr>
-<td>流失=真(y=1)</td>
-<td>403</td>
-<td>80</td>
-<td>483</td>
-</tr>
-<tr>
-<td>合计</td>
-<td>2411</td>
-<td>922</td>
-<td>3333</td>
-</tr>
-</tbody></table>
-<p>似然函数可以表示为：</p>
-<p>$$<br> L(b|x)=[\pi(0)]^{403}<em>[1-\pi(0)]^{2008}</em>[\pi(1)]^{80}[1-\pi(1)]^{842}<br>$$</p>
-<p>使用语音邮箱套餐的客户流失的发生比＝ $\frac{\pi(1)}{1-\pi(1)} =\frac{80}{842}=0.095$</p>
-<p>没有使用语音邮箱套餐的客户流失的发生比＝ $\frac{\pi(0)}{1-\pi(0)}=\frac{403}{2008}=0.2007$  </p>
-<p> OR=0.095/0.2007=0.47</p>
-<p>也即　使用语音邮箱套餐的客户与没有使用语音邮箱套餐的客户相比，流失概率只有47%</p>
-<p>下图显示了语音套餐会员流失的逻辑回归结果<br><img src="/images/blog/loginregressionsample4.png"><br>可以得到 $b_0$＝-1.60596和 $b_1$=-0.747795。所以用于语音邮箱套餐（x=1）的客户或者没有语音套餐（x=0）的客户流失的估计值为：</p>
-<p>$$<br> \pi(x)=\frac{e^{g(x)}}{1+e^{g(x)}}=\frac{e^{-1.60596-0.747795}}{1+e^{-1.60596-0.747795}}<br>$$</p>
-<ul>
-<li><p>对于一个拥有此套餐的客户，估计他的流失概率为： $\pi(1)=0.0868$（也可以直接计算 P(流失|语音邮箱计划)=80/922=0.0868)，这一概率比数据集中给出的客户流失的总比例14.5%要小，说明开通语音邮箱套餐有利于减少客户流失。</p>
-</li>
-<li><p>对于一个没有拥有此套餐的客户，估计他的流失概率为：$\pi(0)=0.16715$ （也可以直接计算 P(流失\｜语音邮箱计划)=403/2411=0.16715，这一概率比数据集中给出的客户流失的总比例14.5%要高，说明没有开通语音邮箱套餐对于客户流失不大。</p>
-</li>
-<li><p>进一步地，可以利用Wald检验法检验语音邮箱套餐参数的显著性。这里, $b_1$ =-0.747795, $SE(b_1)$ =0.129101得 $Z_{wald}=-0.747795/0.129101=-5.79$ P值为P(|Z|&gt;-5.79)趋近于0</p>
-</li>
-</ul>
-<h3 id="2-2-多分预测变量模型"><a href="#2-2-多分预测变量模型" class="headerlink" title="2.2 多分预测变量模型"></a>2.2 多分预测变量模型</h3><p>假定将客户服务电话数（customers services calls)看做一个新的变量<font color="red">“-CSC”</font>，分类如下：</p>
-<ul>
-<li>0个或1个客户服务电话：CSC＝低</li>
-<li>2个或3个客户服务电话：CSC＝中</li>
-<li>4个以上客户服务电话：CSC＝高</li>
-</ul>
-<p>此时，分析人员需要用指示变量（虚拟变量）和参考单元编码法来给数据集编码，假定选择“ＣＳＣ＝低”作为参考单元，则可把指示变量值分配给另外两个变量。使用指示变量之后：</p>
-<p align="center">使用参考单元编码的客户电话指示变量</p>
-
-<table>
-<thead>
-<tr>
-<th></th>
-<th>CSC-中</th>
-<th>csc-高</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>低(0个或1个电话)</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>中(2个或3个电话)</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<td>高( $\ge4个电话$ )</td>
-<td>0</td>
-<td>1</td>
-</tr>
-</tbody></table>
-<p>使用CSC展示客户流失情况列表汇总如下：</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>CSC-低</th>
-<th>CSC-中</th>
-<th>CSC-高</th>
-<th>合计</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>流失=假(y=0)</td>
-<td>1664</td>
-<td>1057</td>
-<td>129</td>
-<td>2850</td>
-</tr>
-<tr>
-<td>流失=真(y=1)</td>
-<td>214</td>
-<td>131</td>
-<td>138</td>
-<td>483</td>
-</tr>
-<tr>
-<td>合计</td>
-<td>1878</td>
-<td>1188</td>
-<td>267</td>
-<td>3333</td>
-</tr>
-</tbody></table>
-<p>此时再对数据进行逻辑回归分析，得到的结果如下（<font color="blue">注意：没有CSC－低</font>）：<br><img src="/images/blog/loginregressionsample8.png"></p>
-<ul>
-<li>对于CSC－中：$\bar {OR}＝ｅ^{b1}＝ｅ^{-0.03698}=0.96$</li>
-<li>对于CSC－高：$\bar {OR}＝ｅ^{b2}＝ｅ^{2.11844}=8.32$</li>
-</ul>
-<p>这里， $b_0＝-2.501,b_1=-0.03698，b_2=2.11844$ 所以客户流失概率的估计量为：</p>
-<p>$$<br>  \pi(x)=\frac{e^{g(x)}}{1+e^{g(x)}}<br>  \ 其中g(x)=e^{-2.051-0.036989(csc-中)+2.11844(csc-高)}<br>$$</p>
-<p>有：</p>
-<ul>
-<li>对于那些很少拨打客服电话的客户：$g(x)=e^{-2.051-0.036989(0)+2.11844(0)}=e^{-2.501}$ 概率为：$\pi(x)=\frac{e^{-2.501}}{1+e^{-2.501}}=0.114$<br>。此概率比全部数据样本集中客户流失的概率14.5%要小。这表明这一类客户的流失率一定程度上比总体客　　户的流失率要小。</li>
-<li>对于拨打客服电话处于中等水平的客户，同上，此时<br>$g(x)=e^{-2.051-0.036989(1)+2.11844(0)}=e^{-2.088}$ <font color="blue">注意系数的差别,上一条中的系数是0，0，这个是1，0</li>
-<li>对于经常拨打客服电话的客户，同上，此时<br>$g(x)=e^{-2.051-0.036989(0)+2.11844(1)}=e^{-2.501}$ 注意系数的差别,上一条中的系数是1，0，这个是0，1</font></li>
-</ul>
-<h4 id="Wald检验"><a href="#Wald检验" class="headerlink" title="Wald检验"></a>Wald检验</h4><p>如下：</p>
-<ul>
-<li>对于<font color="blue">CSC－中</font> 的参数进行Wald检验，$b_1=-0.036989,SE(b_1)=0.11771$<br>　故而，<br>$$<br>Z_{wald}＝-0.036989/0.117701=-0.31426<br>$$</li>
-</ul>
-<p>此时，P值P(|Z|&gt;0.31426)=0.753，不显著，所以没有证据表明<font color="blue">CSC－中</font>与<font color="blue">CSC－低</font>的差异能有效预测客户流失。</p>
-<ul>
-<li>对于<font color="blue">CSC－高</font>的参数进行Wald检验，$b_1=2.11844,SE(b_1)=0.142380$故而<font align="center">$Z_{wald}=2.11844/0.142380=14.88$</font><br>此时，P值P(|Z|&gt;14.88)=0.000，显著，表明<font color="blue">CSC－高</font>与<font color="blue">CSC－低</font>的差异能有效预测客户流失。</li>
-</ul>
-<p><B>所以，对于多分预测变量模型，关键是指示变量和参照单元编码</B>   </p>
-<h3 id="2-3-解读连续预测变量模型"><a href="#2-3-解读连续预测变量模型" class="headerlink" title="2.3　解读连续预测变量模型"></a>2.3　解读连续预测变量模型</h3><p>假定我们考虑以客户日使用分钟数作为预测变量，则相应的逻辑回归分析结果如下：<br><img src="/images/blog/loginregressionsample14.png"><br>因此对于一个给定日使用分钟数的顾客，流失概率：</p>
-<p>$$<br>  \pi(x)=\frac{e^{g(x)}}{1+e^{g(x)}}=\frac{e^{-3.929-0.112717(日分钟数)}}{1+e^{-3.929-0.112717(日分钟数)}}<br>$$</p>
-<ul>
-<li>对于一个日使用分钟数为100的顾客流失的概率估计为：</li>
-</ul>
-<p>$$<br>ｇ(x)＝-3.9292+0.112717(100)=-2.80212<br>$$</p>
-<p>概率π(100)＝0.0572,比数据集中总比例14.5%要小，表明低的日使用分钟数会在一定程度上防止顾客流失</p>
-<ul>
-<li>对于一个日使用分钟数为300的顾客流失的概率估计为：</li>
-</ul>
-<p>$$<br>ｇ(x)=-3.9292+0.0112717(300)＝-0.054778<br>$$</p>
-<p>概率π(300)＝0.3664，比数据集中总比例14.5%要大，表明日使用分钟数越多顾客流失越多</p>
-<p>“日使用分钟数”，这一实例的<strong>偏差Ｇ</strong>为：</p>
-<p>$$<br>  G=偏差(没有预测变量的模型)-偏差(有预测变量的模型)<br>  \=-2ln\frac{没有预测变量的似然值}{有预测变量的似然值}<br>  \=2{-1307.129-[483ln(483)+2850ln(2850)-3333ln(3333)]}<br>  \=144.035<br>$$</p>
-<p>对Ｇ进行卡方检验，</p>
-<p>$$<br>  P(x^2)\gt G_{观测值}即P(x^2)\gt 144.035=0.0000<br>$$</p>
-<p>因此强有力的证据表明日使用分钟数有助于预测顾客的流失情况。</p>
-<p>对“日使用分钟数”进行Ｗａｌｄ检验，可以得到同样的结论。</p>
-<h2 id="三-多元逻辑回归"><a href="#三-多元逻辑回归" class="headerlink" title="三.多元逻辑回归"></a>三.多元逻辑回归</h2><p>多元逻辑回归与简单逻辑回归十分相似，需要注意的是选择恰当的预测变量，其方法主要有</p>
-<ul>
-<li>针对单个变量的挑选：Wald检验某个变量是否有助于预测</li>
-<li>针对多个变量总体挑选：总体显著性Ｇ</li>
-</ul>
-<p>下图一个简单示例：<br><img src="/images/blog/loginregressionsample18.png"><br><img src="/images/blog/loginregressionsample19.png"><br>由上面两幅图可以看出，其中的“账户时长”变量其Wald检验的Ｐ值没有拒绝零假设检验，因而需要从全体预测变量中剔除。最后的Ｇ偏差，卡方检验虽然两幅图中都能表明，多元预测变量能显著预测结果（Ｇ检验的Ｐ值＝０），但是剔除账户长度后更好。</p>
-<h2 id="四-逻辑回归中引入高阶项"><a href="#四-逻辑回归中引入高阶项" class="headerlink" title="四 逻辑回归中引入高阶项"></a>四 逻辑回归中引入高阶项</h2><h4 id="为何需要高阶项"><a href="#为何需要高阶项" class="headerlink" title="为何需要高阶项"></a>为何需要高阶项</h4><p>如果逻辑回归转换函数在连续变量中不是线性的，让步比的估计和置信区间的应用可能会有问题。原因在与估计的让步比在预测变量取值域上是一个常数。例如，不论是第23分钟还是第323分钟，日使用分钟数每增加1个单位，让步比都是1.01.这种让步比为常数的假设并不总是成立。<br><br>此时，分析人员需要做一些非线性的调整，如使用指示变量（见多分预测变量模型）和高阶项（如：$x^2，x^3．．$）。<br></p>
-<h4 id="高阶项的作用"><a href="#高阶项的作用" class="headerlink" title="高阶项的作用"></a>高阶项的作用</h4><p>高阶项的引入可以作为惩罚函数，减少该变量不正常的分布。使用高阶项（和起始变量一起运用）的优势在于，高阶项可以是连续的并且可以提供更严格的估计。</p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2013-05-16-datamining-logicregressionsample/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2013-05-16-datamining-logicregressionsample/" title="数据挖掘方法之六：解读逻辑回归">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2013-05-12-datamining-logicregression/">
-    		数据挖掘方法之五：逻辑回归
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.240Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h2 id="一-为何要有逻辑回归"><a href="#一-为何要有逻辑回归" class="headerlink" title="一 为何要有逻辑回归"></a>一 为何要有逻辑回归</h2><p>假设有如下关于患者年龄与患病情况的数据集：<br><img src="/images/blog/loginregression1.png"><br>我们查看数据：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&gt; edit(patient)  </span><br><span class="line">        patient_id age if_sick  </span><br><span class="line">   [1,]          1  25       0  </span><br><span class="line">   [2,]          2  29       0  </span><br><span class="line">   [3,]          3  30       0  </span><br><span class="line">   [4,]          4  31       0  </span><br><span class="line">   [5,]          5  32       0  </span><br><span class="line">   [6,]          6  41       0  </span><br><span class="line">   [7,]          7  41       0  </span><br><span class="line">   [8,]          8  42       0  </span><br><span class="line">   [9,]          9  44       1  </span><br><span class="line">   [10,]         10  49       1  </span><br><span class="line">   [11,]         11  50       0  </span><br><span class="line">   [12,]         12  59       1  </span><br><span class="line">   [13,]         13  60       0  </span><br><span class="line">   [14,]         14  62       0  </span><br><span class="line">   [15,]         15  68       1  </span><br><span class="line">   [16,]         16  72       0  </span><br><span class="line">   [17,]         17  79       1  </span><br><span class="line">   [18,]         18  80       0  </span><br><span class="line">   [19,]         19  81       1  </span><br><span class="line">   [20,]         20  84       1  </span><br><span class="line">   &gt; p&lt;-as.data.frame(patient)  </span><br><span class="line">   &gt; plot(p$if_sick~p$age,main&#x3D;&quot;20位患者年龄与患病情况&quot;,xlab&#x3D;&quot;年龄&quot;,ylab&#x3D;&quot;患病情况&quot;)</span><br></pre></td></tr></table></figure>
-
-<p>画出对照图看数据分布：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; plot(p$if_sick~p$age,main&#x3D;&quot;20位患者年龄与患病情况&quot;,xlab&#x3D;&quot;年龄&quot;,ylab&#x3D;&quot;患病情况&quot;)  </span><br><span class="line">&gt; lm&lt;-lm(if_sick~age,data&#x3D;p)  </span><br><span class="line">&gt; abline(lm)  </span><br><span class="line">&gt; legend(x&#x3D;65,y&#x3D;0.2,legend&#x3D;&quot;线性拟合&quot;,lty&#x3D;1)</span><br></pre></td></tr></table></figure>
-
-<p>结果图如下：<br><img src="/images/blog/loginregression2.png"><br>此时，我们发现线性拟合完全偏离了数据分布，即使使用如对数变换也难以取得理想结果，如上图所示数据分布（不是0就是1）提醒我们应该使用逻辑回归。</p>
-<h2 id="二-逻辑回归概念及认识"><a href="#二-逻辑回归概念及认识" class="headerlink" title="二 .  逻辑回归概念及认识"></a>二 .  逻辑回归概念及认识</h2><h3 id="2-1-对比线性回归"><a href="#2-1-对比线性回归" class="headerlink" title="2.1  对比线性回归"></a>2.1  对比线性回归</h3><p>线性回归是用来估计<font color="red">连续型</font>回应变量与一组预测变量之间关系的方法。<br><br>逻辑回归用来估计<font color="red">非连续型（分类型）</font>回应变量与一组预测变量之间关系的方法。</p>
-<h3 id="2-2-公式"><a href="#2-2-公式" class="headerlink" title="2.2 公式"></a>2.2 公式</h3><p>逻辑回归的条件均值（给定X=x的情况下Y的条件均值表示为：E(Y|x)，以下用π(x)表示）具体如下:</p>
-<p>$$<br>  \pi(x)= \frac{e^{b_0+b_1}}{1+e^{b_0+b_1}}<br>$$</p>
-<p>上式形成的图形成为反曲线，是非线性的S型。它的一种逻辑转换如下，它是一种有效的逻辑转换方法：</p>
-<p>$$<br>    g(x)=ln\frac{\pi(x)}{1-\pi(x)}=b_0+b_1x<br>$$</p>
-<p>转换函数g(x)表现了线性逻辑回归模型的几个很好的性质，如线性、连续性、取值范围无限性。</p>
-<p><strong>取值范围</strong>：$\pi(x)在 b_0+b_1x\backsim -\infty 时取最小值0，π(x)在 b_0+b_1x\backsim\infty时取最大值1$ 。</p>
-<p><strong>性质</strong>：π(x)可以看做一种概率形式，其取值范围为 (0,1).其中</p>
-<ul>
-<li>π(x) 可以看做X=x条件下的正效应（如疾病）发生的概率</li>
-<li>1-π(x) 可以看做是在这种条件下正效应没有发生的概率。</li>
-</ul>
-<h3 id="2-3-误差"><a href="#2-3-误差" class="headerlink" title="2.3 误差"></a>2.3 误差</h3><p>线性回归模型中，误差e服从均值为0、方差为常数的正态分布，而逻辑回归由于其回应变量的取值是二分的，其误差只有两种形式：</p>
-<ol>
-<li>X=x时，如果出现Y=1的情况，其概率为π(x)，误差为 e=1-π(x)</li>
-<li>X=x时， 如果Y=0，其概率为1-π(x),误差为 e=0-π(x)=-π(x)</li>
-</ol>
-因而，逻辑回归的误差服从二项分布，其方差为π(x)(1-π(x))，这样逻辑回归的回应变量Y=π(x)+e也服从概率为π(x)的二项分布。
-
-<h3 id="2-4-估值（最大似然估计）"><a href="#2-4-估值（最大似然估计）" class="headerlink" title="2.4 估值（最大似然估计）"></a>2.4 估值（最大似然估计）</h3><p>最大似然估计：在已经得到试验结果的情况下，我们应该寻找使这个结果出现 的可能性最大的那个  作为真的估计。</p>
-<p>线性回归中使用最小二乘法有可能得到回归系数最优值的闭合形式解，但在逻辑回归中不存在，我们采用的最大似然估计法，得到的观测数据的似然参数估计值是最大的。似然函数 $l(b|x)$ 是一个参数为 $b=b_0,b_1,….$ ，用来表示被观测数据x的概率的函数。在回应变量为正相关的情况下$(X=x_i,Y_i=1)$ ，观测值会影响概率π(x)的值，在回应变量为负相关的情况下 $(X=x_i,Y_i=0)$，观测值会影响概率1-π(x)的值。因此 $Y_i=0或1$，对第i个观测值概率的影响可以表示为 :$[\pi(x_i)]^{y_i}[1-\pi(x)^{1-y_i}]$</p>
-<p>假设观测值是独立的，可以把似然函数 $l(b|x)$ 表示为单个项的乘积：$(b|x)=\prod^n_{i=1}$<br>通过对 $l(b|x)$ 每个参数求微分，并令其微分等于零，可以得到最大似然估计。</p>
-<h3 id="2-5-衡量回归模型显著性"><a href="#2-5-衡量回归模型显著性" class="headerlink" title="2.5 衡量回归模型显著性"></a>2.5 衡量回归模型显著性</h3><p>先见下表,患病情况与年龄的逻辑回归分析结果<br><img src="/images/blog/loginregression7.png"></p>
-<h4 id="2-5-1-统计量G"><a href="#2-5-1-统计量G" class="headerlink" title="2.5.1 统计量G"></a>2.5.1 统计量G</h4><p>在简单线性回归模型中，检验统计量F=MSR/MSE 可以来判断回归模型的显著性。在逻辑回归模型中，检验的是带有某个预测变量的模型比不带该预测变量的模型是否能更好的回应变量匹配。</p>
-<ul>
-<li>饱和模型：包含了和数据点个数一样多的参数的模型（能完全正确估计回应变量，没有预测误差）</li>
-<li>拟合模型：带有少于数据点个数的参数</li>
-</ul>
-<p>偏差定义如下：</p>
-<p>$$<br>   偏差 D= -2ln[\frac{拟合模型似然值}{饱和模型似然值}]<br>$$</p>
-<p>上述检验称为似然比值检验，其中-2ln 部分是为了方便计算。将拟合模型中对π(x)的估计值表示为π(x)’，则偏差公式变为：</p>
-<p>$$<br>   偏差 D= -2ln\sum^n_{i=1}[y_iln\frac{\pi(x)’}{y_i}+(1-y_i)ln\frac{1-\pi(x)’}{1-y_i}]<br>$$</p>
-<p>该偏差表示考虑了预测变量后模型的误差，它类似于线性回归中的平方和误差。</p>
-<p>决定某个特定的预测变量是否重要的程序是计算出不带此预测变量模型的偏差，减去带有此预测变量模型的偏差，即:</p>
-<p>$$<br>   G= 偏差(非预测模型)-偏差(预测模型)= -ln[\frac{非预测似然值}{预测似然值}]<br>$$</p>
-<p><font color="blue">统计量G服从自由度为1的卡方分布</font><br><br>在患病情况例子中，从表格可以看到似然对数比是 -10.101，那么:</p>
-<p>G=2{-10.101-[7ln(7)+13ln(13)-20ln(20)]}=5.696</p>
-<h4 id="2-5-2-Wald检验"><a href="#2-5-2-Wald检验" class="headerlink" title="2.5.2 Wald检验"></a>2.5.2 Wald检验</h4><p>该比率为：</p>
-<p>$$<br>  Z_{wald}=\frac{b_1}{SE(b_1)}<br>$$<br>服从标准正态分布，由表1提供的系数估计值及标准差：b1=0.6696和 $SE(b_1)=0.03223$，于是有: $Z_{wald}=0.6696/0.3223=2.08$ <br><br>表中P值即为P(|Z|&gt;2.08)=0.038<br>通常可以为逻辑回归系数构建一个100(1-a)%的置信区间：</p>
-<p>$$<br>   [b_0-Z<em>SE(b_0),b_0</em>SE(b_0)]和[b_1-Z<em>SE(b_1),b_1+Z</em>SE(b_1)]<br>$$</p>
-<h4 id="2-5-3-发生比和让步比"><a href="#2-5-3-发生比和让步比" class="headerlink" title="2.5.3 发生比和让步比"></a>2.5.3 发生比和让步比</h4><ul>
-<li><strong>发生比</strong>：事件发生的概率与不发生的概率的比值。<ul>
-<li>发生比告诉我们一件事情发生或者不发生哪种情况更有可能.一件 事情发生的可能性大于不发生的可能性时，发生比大于1。</li>
-<li>一件事情发生的可能性小于不发生的可能性时，发生比大于1</li>
-<li>一件事情很有可能发生时，发生比等于1</li>
-</ul>
-</li>
-</ul>
-<p>例如，预测的一个72岁病人换用特定病例的概率为61%，不患此病的概率为39%。因此一个72岁病人患此病的发生比=0.61/0.39=1.56。</p>
-<p><strong>让步比</strong>：x=1时回应变量发生的发生比除以x=0时回应变量发生的发生比。它很简单的表达了让步比和斜率系数之间的关系<br><br>在二分预测变量的二元逻辑回归中，当x=1时，回应变量发生(y=1)的发生比为：$\frac{\pi(1)}{1-\pi(1)}=e^{b_0+b_1}$</p>
-<p>相应的，当x=0时，回应变量发生的发生比为：$\frac{\pi(0)}{1-\pi(0)}=e^{b_0}$</p>
-<p>则让步比公式如下：</p>
-<p>$$<br>  OR= \frac{\pi(1)/[1-\pi(1)]}{\pi(0)/[1-\pi(0)]}=e^{b_0+b_1}/e^{b_0}=e^{b_1}<br>$$</p>
-<p>例如：一个临床试验报告称，曾经使用过与从没有使用过雌性激素替换疗法的人中患子宫癌的让步比为5.0，这可以解释为使用雌性激素替换疗法的人得子宫癌的概率是未使用者的5倍。</p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2013-05-12-datamining-logicregression/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2013-05-12-datamining-logicregression/" title="数据挖掘方法之五：逻辑回归">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2013-05-04-datamining-mutillinerandselect/">
-    		数据挖掘方法之四：多重共线性及变量选择方法
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.238Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h2 id="一-概念"><a href="#一-概念" class="headerlink" title="一 概念"></a>一 概念</h2><p>  前多重共线性： 也即使用的多个预测变量之间存在线性相关。多重共线性会导致解的不稳定，进而可能导致意外的结果。在线性代数中，基坐标必须是相互正交的，也即不相关的，此处在做多元回归预测时，必须保证预测变量之间是不相关的。</p>
-<h3 id="避免不正交的方法"><a href="#避免不正交的方法" class="headerlink" title="避免不正交的方法"></a>避免不正交的方法</h3><h3 id="1分析之前"><a href="#1分析之前" class="headerlink" title="1分析之前"></a>1分析之前</h3><h4 id="a-逐个计算预测变量之间的相关系数"><a href="#a-逐个计算预测变量之间的相关系数" class="headerlink" title="a.逐个计算预测变量之间的相关系数"></a>a.逐个计算预测变量之间的相关系数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; cor(sugar$sugars,sugar$shelf)  </span><br><span class="line">[1] 0.1004379  </span><br><span class="line">&gt; cor(sugar$fiber,sugar$potass)  </span><br><span class="line">[1] 0.9033737</span><br></pre></td></tr></table></figure>
-
-<p>可以看到纤维和钾含量存在高度相关性，需要注意</p>
-<h4 id="b-为预测变量建立矩阵图"><a href="#b-为预测变量建立矩阵图" class="headerlink" title="b.为预测变量建立矩阵图"></a>b.为预测变量建立矩阵图</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt; #同时画多个变量的对照图需要使用 car包中的 scatterplotMatrix函数  </span><br><span class="line">&gt;install.packages(&quot;car&quot;)  </span><br><span class="line">&gt;library(car)  </span><br><span class="line">&gt;#使用谷物数据集的 “糖”，“纤维”，“钾”三列数据  </span><br><span class="line">&gt; sugar_frame&lt;-as.data.frame(sugar[,c(&quot;糖&quot;,&quot;纤维&quot;,&quot;钾&quot;)])  </span><br><span class="line">&gt;#画出对照图  </span><br><span class="line">&gt; scatterplotMatrix(sugar_frame,spread&#x3D;F,lty.smooth&#x3D;2,var.labels&#x3D;c(&quot;糖&quot;,&quot;纤维&quot;,&quot;钾&quot;))</span><br></pre></td></tr></table></figure>
-
-<p>结果如下图：<br><img src="/images/blog/muitllinerandselect1.png"><br>可以看到第四张和第六张是纤维和钾的相关图，可以看出他们之间有很强相关性。</p>
-<h3 id="1-2-分析之后：方差膨胀因子-variance-inflation-factors-VIFs"><a href="#1-2-分析之后：方差膨胀因子-variance-inflation-factors-VIFs" class="headerlink" title="1.2 分析之后：方差膨胀因子(variance inflation factors,VIFs)"></a>1.2 分析之后：方差膨胀因子(variance inflation factors,VIFs)</h3><p>$$<br>  VIF=\frac{1}{1-R^2_i}<br>$$</p>
-<p>其中 $R_i^2$ 表示 $R^2$ 的值是通过在其他预测变量上回归分析 $x_i$ 得到的。假设xi和其他变量没有任何关系,那么 $R_i^2=0$ ，于是可以得到 $VIFi=\frac{1}{1-0}=1$ 。也即VIF最小值为1，没有最大值.</p>
-<p> $VIF_i$ 的变化对第i个系数的变化率Sbi如何产生影响，有如下公式：</p>
-<p> $$<br>   Sb_i=Sc_i=S\sqrt{\frac{1}{(n-1)S^2_i}\frac{1}{1-R^2_i}}=S\sqrt{\frac{VIF_i}{(n-1)S^2_i}}<br> $$</p>
-<p>如果 $x_i$ 与其他预测变量不想管，那么 $VIF_i=1$ ，而且相关系数的标准差 $Sb_i$ 没有增大。然而如果xi与其他变量相关，那么较大的 $VIF_i$ 值会使得相关系数的标准差 $Sb_i$过度膨胀。因此，方差估计的膨胀会导致估计精度的下降。</p>
-<p>粗略的经验法则如下:</p>
-<ul>
-<li>VIF&gt;=5  模型有中度的多重共线性（相当于 $R^2=0.08$ ）</li>
-<li>VIF&gt;=10  模型中有严重多重共线性(相当于 $R^2=0.90$ )</li>
-</ul>
-<p>下面来查看谷物数据集中 糖、纤维、钾的膨胀因子</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&gt; #回归拟合  </span><br><span class="line">&gt; fit&lt;-lm(data&#x3D;sugar,rating~sugars+fiber+potass)  </span><br><span class="line">&gt;#注意，我们只是用了sugar数据集中包含“糖”，“纤维”，“钾”三列数据的sugar_frame  </span><br><span class="line">&gt;#进行膨胀因子计算时，需要使用gvlma包中的vif函数，因此需要先安装  </span><br><span class="line">&gt; install.packages(&quot;gvlma&quot;)  </span><br><span class="line">&gt; library(gvlma)  </span><br><span class="line">Warning message:  </span><br><span class="line">程辑包‘gvlma’是用R版本3.0.2 来建造的   </span><br><span class="line">&gt;#线性模型的综合验证  </span><br><span class="line">&gt; gvlma(fit)  </span><br><span class="line">  Call:  </span><br><span class="line">  lm(formula &#x3D; rating ~ sugars + fiber + potass, data &#x3D; sugar)  </span><br><span class="line"></span><br><span class="line">    Coefficients:  </span><br><span class="line">    (Intercept)       sugars        fiber       potass    </span><br><span class="line">        52.6762      -2.0510       4.3701      -0.0543    </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    ASSESSMENT OF THE LINEAR MODEL ASSUMPTIONS  </span><br><span class="line">    USING THE GLOBAL TEST ON 4 DEGREES-OF-FREEDOM:  </span><br><span class="line">    Level of Significance &#x3D;  0.05   </span><br><span class="line"></span><br><span class="line">    Call:  </span><br><span class="line">     gvlma(x &#x3D; fit)   </span><br><span class="line"></span><br><span class="line">                         Value p-value                   Decision  </span><br><span class="line">    Global Stat        7.24415 0.12353    Assumptions acceptable.  </span><br><span class="line">    Skewness           5.61716 0.01779 Assumptions NOT satisfied!  </span><br><span class="line">    Kurtsis           0.02125 0.88411    Assumptions acceptable.  </span><br><span class="line">    Link Function      0.40164 0.52624    Assumptions acceptable.  </span><br><span class="line">    Heteroscedasticity 1.20410 0.27250    Assumptions acceptable.  </span><br><span class="line">    &gt;#查看膨胀因子 vif  </span><br><span class="line">    &gt; vif(fit)  </span><br><span class="line">      sugars    fiber   potass   </span><br><span class="line">     1.164237 6.327286 6.204047</span><br></pre></td></tr></table></figure>
-
-<h2 id="二-变量选择方法"><a href="#二-变量选择方法" class="headerlink" title="二.  变量选择方法"></a>二.  变量选择方法</h2><p>为帮助数据分析人员确定在多元回归模型中应该包含哪些变量，下面是几种变量选择方法</p>
-<ul>
-<li>向前选择</li>
-<li>向后排除</li>
-<li>逐步选择</li>
-<li>最优子集</li>
-</ul>
-<p>注意四种选择方法所使用的数据集都是 “谷物数据集”。</p>
-<h3 id="2-1-向前选择程序"><a href="#2-1-向前选择程序" class="headerlink" title="2.1   向前选择程序"></a>2.1   向前选择程序</h3><p>1.对于第一个加入模型的变量，选择与回应变量相关度最高的预测变量（假设为 $x_1$ ）如果所有变量对模型都不重要，则停止,否则执行2<br>2. 对其余的每个变量，F统计序列式 $F(x_2|x_1),F(x_3|x_1),F(x_4|x_1)$ .第二次通过此算法时是, $F(x_3|x_1,x_2),F(x_4|x_1,x_2)$ 。选择具有最大F统计序列的变量<br>3. 对 2 选择出来的变量，进行F统计序列的显著性检验。如果结果模型没有重大意义，则停止，否咋将从 2 得到的变量加入到模型中，然后返回2</p>
-<p><strong>初始</strong>：模型中没有变量。</p>
-<p><strong>过程</strong>：把与回应变量（营养级别） 密切相关的变量选出来，如果是显著的就加入到模型中。变量糖在所有预测变量中与营养级别有最高的相关系数（r=0.762）。然后进行序列F检验，例如F(纤维|糖)和F(钠|糖)等，然后看到，F(纤维|糖)显著性检验具有最高的F统计序列值，这样变量纤维作为第二个变量加入到模型中。再进行一次序列F检验，比如F(钠|糖，纤维)和F(脂肪|糖，纤维)，等等。F(钠|糖，纤维)具有最高的序列F统计值。因而钠作为第三个变量加入到模型中。</p>
-<p><strong>结束</strong>：一次按照第二步进行，得到如下变量加入顺序：脂肪，蛋白质，碳水化合物，卡里路，维生素和钾。此时再也找不到其他显著的变量加入模型中才中断，此时的多元回归模型如下：<br><img src="/images/blog/muitllinerandselect4.png"><br>下图显示了一个顺序选择的模型概览:<br><img src="/images/blog/muitllinerandselect5.png"></p>
-<h3 id="2-2-向后排除程序"><a href="#2-2-向后排除程序" class="headerlink" title="2.2 向后排除程序"></a>2.2 向后排除程序</h3><p>向后排除程序是从模型中所有变量或者所有用户自定义变量集开始的。步骤如下:</p>
-<ol>
-<li>在全模型中执行向后排除，即使用所有变量的模型。例如，可能全模型中有4个变量 $x_1,x_2,x_3,x_4$</li>
-<li>对于当前模型中的每个变量，计算出它的偏F统计量。第一次是：$F(x_1,x_2,x_3,x_4)、F(x_2|x_1,x_3,x_4)、F(x_3|x_1,x_2,x_4)和F(x_4|x_1,x_2,x_3)$ 。选择具有最小偏F统计量的比那辆，其值用 $F_{min}$表示</li>
-<li>检验 $F_{min}$ 的显著性。如果 $F_{min}$ 不显著，从模型中删除与Fmin对应的变量，然后返回执行2，如果 $F_{min}$ 显著，停止这个过程。</li>
-</ol>
-<p><strong>实例</strong>：<br>起始时模型包含了所有变量，然后计算该模型中每个变量的偏F统计量。例如，这些统计量分别是F(重量|糖，纤维，….杯子)，F(杯子|糖，纤维,…..重量|)。找到最小偏F统计量（ $F_{min}$ ）对应的变量。第一次是重量，此时 $F_{min}$ 不显著，因而从模型中去掉，接下来变量具有最小偏F统计是杯子，也是不显著的，因而需要被剔除。第三次具有最小偏F统计量的是货架2的指标变量，但是Fmin对应的p值并没有大道可以从模型中剔除，因而保留并中断。得到的模型为：</p>
-<p>$$<br>  y =b_0+b_1(糖)+b_2(纤维)+b_3(钠)+b_4(脂肪)+b_5(蛋白质)+b_6(碳水化合物)+b_7(卡里路)+b_8(维生素)+b_9(钾)+b_10(货架2)+e<br>$$</p>
-<img src="/images/blog/muitllinerandselect7.png">
-模型1表示包含所有预测变量，模型2中剔除了重量之外所有预测变量，于是有：
-
-<p>$$<br>  SS_{重量|所有其他变量}=SS_{所有变量}-SS_{重量以外所有变量}=12980.078-14980.005=0.073<br>$$</p>
-<p>上表信息中显示，偏F统计量的结果为：</p>
-<p>$$<br>  F(重量|所有其他变量)= \frac{SS_{重量|所有其他变量}}{MSE_{所有变量}}=0.073/0.261=0.0280<br>$$</p>
-<p>F统计量的值0.28 落在 $F_{1,n-p-2}=F_{1,72}$ 分布的40%点处，对应的p值是0.60，因而重量不应该包含在模型中。</p>
-<h3 id="2-3-逐步选择程序"><a href="#2-3-逐步选择程序" class="headerlink" title="2.3 逐步选择程序"></a>2.3 逐步选择程序</h3><p> 逐步选择程序是向前选择方法的一种改进。在向前选择中会出现这种情况，当新加入的变量加入到模型时，向前选择过程中已经加入的变量可能就显得不重要了，这在向前选择方法中是没有考虑的。逐步选择过程可以检验这种情况，方法是每一步在现有变量的基础上计算每个变量的部分平方和，执行偏F检验。如果模型中有一个变量不再是显著的，这个含有最小偏F统计的变狼就会被移出模型。当不再有变量加入或者移出模型时，结束过程并得到最终模型。</p>
-<h3 id="2-4-最优子集程序"><a href="#2-4-最优子集程序" class="headerlink" title="2.4  最优子集程序"></a>2.4  最优子集程序</h3><p>对于预测变量集不是太大的数据集，最优子集是一种较好方法。但是如果预测变量超过30个，最优子集方法就会产生组合爆炸，难以控制。步骤如下：</p>
-<ol>
-<li>分析人员需要指定需要多少个（假设为m）供筛选的模型，以及在一个模型中含有最大预测变量个数（假设为n）</li>
-<li>对于含有一个预测变量的所有模型，例如：$y=b_0+b_1(糖),y=b_0+b_1(纤维)$,….等。计算对应的 $R^2$ ,修正 $R^2$ 和S值都计算出来，最优的m个模型是基于这些统计值得到。</li>
-<li>对于含有两个最优的m个模型是基于这些统计值得到。</li>
-<li>重复以上，直到达到最大的预测变量（n）个数，然后分析人员把预测变量个数为1,2,,..n的最优模型罗列，以选择最佳总体模型</li>
-</ol>
-<p><strong>实例，下图是最优子集程序用于谷物数据集的省略概览</strong></p>
-<p><font color="blue">[注意，整个过程比下图要复杂，例如变量数为1时，本应该有12行结果，下图中只简要用了两行，其他的也是]</font><br><img src="/images/blog/muitllinerandselect10.png"><br>图中，每一行代表一个不同的模型，某模型中包含了哪个变量，该变量对应的方格被涂成黑色。如，第一个模型（第一行）仅包含了变量糖；第四个模型（第四行）包含了糖和钾。其中的最优模型子集被红色覆盖的那个模型（也即那一行）。</p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2013-05-04-datamining-mutillinerandselect/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2013-05-04-datamining-mutillinerandselect/" title="数据挖掘方法之四：多重共线性及变量选择方法">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-
-    
-    <nav class="page-navigator">
-        <a class="extend prev" rel="prev" href="/categories/blog/page/9/">前一页</a><a class="page-number" href="/categories/blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/categories/blog/page/8/">8</a><a class="page-number" href="/categories/blog/page/9/">9</a><span class="page-number current">10</span>
-    </nav>
-    
-
-
-            </div>
-
-        </section>
-        <!-- 侧栏部分 -->
-<aside class="sidebar">
-    <section class="widget">
-        <h3 class="widget-hd"><strong>文章分类</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-    <li>
-        <a href="/categories/blog/">blog</a>
-        <span class="badge">(94)</span>
-    </li>
-    
-</ul>
-    </section>
-
-    
-    <section class="widget">
-        <h3 class="widget-hd"><strong>热门标签</strong></h3>
-        <!-- 文章标签 -->
-<div class="widget-bd tag-wrap">
+  <title>Category: blog | Hexo</title>
   
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
 </div>
-    </section>
-    
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
 
     
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
 
-    
-    <!-- 友情链接 -->
-    <section class="widget">
-        <h3 class="widget-hd"><strong>友情链接</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-        <li>
-            <a href="https://jelon.top" target="_blank" title="Jelon个人前端小站">前端博客小站</a>
-        </li>
-    
-        <li>
-            <a href="https://www.baidu.com" target="_blank" title="百度搜索">百度</a>
-        </li>
-    
-</ul>
-    </section>
-    
-</aside>
-<!-- / 侧栏部分 -->
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  
+  
+  
+  <div class="post-block">
+    <div class="posts-collapse">
+      <div class="collection-title">
+        <h1 class="collection-header">blog
+          <small>Category</small>
+        </h1>
+      </div>
+
+      
+    <div class="collection-year">
+      <h1 class="collection-header">2019</h1>
     </div>
 
-    <!-- 博客底部 -->
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2013-05-24-datamining-classfy-main/" itemprop="url">
+            <span itemprop="name">数据挖掘方法之分类</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2013-05-16-datamining-logicregressionsample/" itemprop="url">
+            <span itemprop="name">数据挖掘方法之六：解读逻辑回归</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2013-05-12-datamining-logicregression/" itemprop="url">
+            <span itemprop="name">数据挖掘方法之五：逻辑回归</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2013-05-04-datamining-mutillinerandselect/" itemprop="url">
+            <span itemprop="name">数据挖掘方法之四：多重共线性及变量选择方法</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+    </div>
+  </div>
+  
+  
+  
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/categories/blog/page/9/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/categories/blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/categories/blog/page/9/">9</a><span class="page-number current">10</span>
+  </nav>
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
     <footer class="footer">
-    &copy;
-    
-        2016-2019
-    
+      <div class="footer-inner">
+        
 
-    <a href="/">Jelon Loves You</a>
-</footer>
-<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
 
-    <!--博客js脚本 -->
-    <!-- 这里放网站js脚本 -->
+        
 
-<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
 
 </body>
 </html>

@@ -1,474 +1,553 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" >
-    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
-    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
-    
-    <title>2013-04-24-datamining-mutilregression | Hexo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
-    <meta name="keywords" content="Jelon, 前端, Web, 张德龙, 前端开发" >
-    <meta name="description" content="Jelon个人前端小站" >
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml" >
-    
-    
-    <link rel="shortcut icon" href="/favicon.ico" >
-    
-    
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/main.css">
 
-    <!--[if lt IE 9]>
-    
-<script src="/js/html5.js"></script>
 
-    <![endif]-->
-    
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "//hm.baidu.com/hm.js?fd459238242776d173cdc64918fb32f2";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://shartoo.github.com').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
 </script>
 
+  <meta name="description" content="title: 数据挖掘方法之三：多元回归模型 date: 2013-04-24 17:01:34 categories: - 数据挖掘 一 概念 前面介绍了一个预测变量和一个回应变量的回归，但数据挖掘通常对一个回应变量和多个预测变量之间的关系更感兴趣，数据中可能有很多变量都与目标（回应）变量有线性关系，多元回归模型可以更加精确的预测这些关联。 多元回归模型如下： \[ y&#x3D; b_0+b_1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2013-04-24-datamining-mutilregression">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2013-04-24-datamining-mutilregression/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="title: 数据挖掘方法之三：多元回归模型 date: 2013-04-24 17:01:34 categories: - 数据挖掘 一 概念 前面介绍了一个预测变量和一个回应变量的回归，但数据挖掘通常对一个回应变量和多个预测变量之间的关系更感兴趣，数据中可能有很多变量都与目标（回应）变量有线性关系，多元回归模型可以更加精确的预测这些关联。 多元回归模型如下： \[ y&#x3D; b_0+b_1">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-12-23T10:45:59.225Z">
+<meta property="article:modified_time" content="2019-12-23T12:54:36.787Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<link rel="canonical" href="http://shartoo.github.com/2019/12/23/2013-04-24-datamining-mutilregression/">
 
-<body class="home">
-    <!--[if lt IE 9]>
-    <div class="browsehappy">
-        当前网页 <strong>不支持</strong>
-        你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/" target="_blank" rel="noopener">升级你的浏览器</a>.
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>2013-04-24-datamining-mutilregression | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
     </div>
-    <![endif]-->
+  </div>
 
-    <!-- 博客头部 -->
-    <header class="header">
-    <section class="container header-main">
-        <div class="logo">
-            <a href="/">
-                <div class="cover">
-                    <span class="name">Hexo</span>
-                    <span class="description"></span>
-                </div>
-            </a>
-        </div>
-        <div class="dropnav icon-paragraph-justify" id="JELON__btnDropNav"></div>
-        <ul class="menu hidden" id="JELON__menu">
-            
-            <li rel="/2019/12/23/2013-04-24-datamining-mutilregression/index.html" class="item ">
-                <a href="/" title="首页" class="icon-home">&nbsp;首页</a>
-            </li>
-            
-            <li rel="/2019/12/23/2013-04-24-datamining-mutilregression/index.html" class="item ">
-                <a href="/lab/" title="实验室" class="icon-lab">&nbsp;实验室</a>
-            </li>
-            
-            <li rel="/2019/12/23/2013-04-24-datamining-mutilregression/index.html" class="item ">
-                <a href="/about/" title="关于" class="icon-about">&nbsp;关于</a>
-            </li>
-            
-            <li rel="/2019/12/23/2013-04-24-datamining-mutilregression/index.html" class="item ">
-                <a href="/comment/" title="留言" class="icon-comment">&nbsp;留言</a>
-            </li>
-            
-        </ul>
-        <div class="profile clearfix">
-            <div class="feeds fl">
-                
-                
-                <p class="links">
-                    
-                        <a href="https://github.com/jangdelong" target="_blank">Github</a>
-                        |
-                    
-                        <a href="https://pages.coding.me" target="_blank">Hosted by Coding Pages</a>
-                        
-                    
-                </p>
-                <p class="sns">
-                    
-                        <a href="http://weibo.com/jangdelong" class="sinaweibo" target="_blank"><b>■</b> 新浪微博</a>
-                    
-                        <a href="https://www.facebook.com/profile.php?id=100011855760219&amp;ref=bookmarks" class="qqweibo" target="_blank"><b>■</b> Facebook</a>
-                    
-                    <a href="javascript: void(0);" class="wechat">
-                        <b>■</b>
-                        公众号
-                        <span class="popover">
-                            <img src="/img/wechat_mp.jpg" width="120" height="120" alt="我的微信订阅号">
-                            <i class="arrow"></i>
-                        </span>
-                    </a>
-                </p>
-                
-            </div>
-            <div class="avatar fr">
-                <img src="/img/jelon.jpg" alt="avatar" title="Jelon" >
-            </div>
-        </div>
-    </section>
-</header>
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
 
 
-    <!-- 博客正文 -->
-    <div class="container body clearfix">
-        <section class="content">
-            <div class="content-main widget">
-                <!-- 文章页 -->
-<!-- 文章 -->
-<article class="post article">
-    <header class="text-center">
-        <h3 class="post-title"><span>2013-04-24-datamining-mutilregression</span></h3>
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
     </header>
-    <p class="post-meta text-center">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.225Z">2019-12-23</time>
-    </p>
-    <div class="post-content">
-        <p>title: 数据挖掘方法之三：多元回归模型<br>date: 2013-04-24 17:01:34<br>categories:</p>
-<ul>
-<li>数据挖掘</li>
-</ul>
-<h2 id="一-概念"><a href="#一-概念" class="headerlink" title="一 概念"></a>一 概念</h2><p>  前面介绍了一个预测变量和一个回应变量的回归，但数据挖掘通常对一个回应变量和多个预测变量之间的关系更感兴趣，数据中可能有很多变量都与目标（回应）变量有线性关系，多元回归模型可以更加精确的预测这些关联。<br><br>多元回归模型如下：</p>
-<p>$$<br>y= b_0+b_1x_1+b_2x_2+….+e<br>$$</p>
-<p>其中 $b0，b1，b2…..$ 是模型参数，为常数，可以通过最小二乘法估计。关于误差项e和回应变量y的假设与简单线性回归模型一样。</p>
-<h2 id="二-多元回归的推断"><a href="#二-多元回归的推断" class="headerlink" title="二 多元回归的推断"></a>二 多元回归的推断</h2><p>主要有：</p>
-<ol>
-<li><p>t检验，用来对预测变量xi和回应变量y之间的关系进行推断</p>
-</li>
-<li><p>F检验，用来对整个回归模型的显著性进行检验</p>
-</li>
-<li><p>$b_i$ ,第i个预测变量系数的置信区间</p>
-</li>
-<li><p>回应变量y的均值的置信区间，用于预测变量 $x1,x2,x3,..$ 取特定值时，对回应变量y的均值进行估计</p>
-</li>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://shartoo.github.com/2019/12/23/2013-04-24-datamining-mutilregression/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          2013-04-24-datamining-mutilregression
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2019-12-23 18:45:59 / Modified: 20:54:36" itemprop="dateCreated datePublished" datetime="2019-12-23T18:45:59+08:00">2019-12-23</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>title: 数据挖掘方法之三：多元回归模型 date: 2013-04-24 17:01:34 categories: - 数据挖掘</p>
+<h2 id="一-概念">一 概念</h2>
+<p>前面介绍了一个预测变量和一个回应变量的回归，但数据挖掘通常对一个回应变量和多个预测变量之间的关系更感兴趣，数据中可能有很多变量都与目标（回应）变量有线性关系，多元回归模型可以更加精确的预测这些关联。<br> 多元回归模型如下：</p>
+<p><span class="math display">\[
+y= b_0+b_1x_1+b_2x_2+....+e
+\]</span></p>
+<p>其中 <span class="math inline">\(b0，b1，b2.....\)</span> 是模型参数，为常数，可以通过最小二乘法估计。关于误差项e和回应变量y的假设与简单线性回归模型一样。</p>
+<h2 id="二-多元回归的推断">二 多元回归的推断</h2>
+<p>主要有： 1. t检验，用来对预测变量xi和回应变量y之间的关系进行推断</p>
+<ol start="2" type="1">
+<li><p>F检验，用来对整个回归模型的显著性进行检验</p></li>
+<li><p><span class="math inline">\(b_i\)</span> ,第i个预测变量系数的置信区间</p></li>
+<li><p>回应变量y的均值的置信区间，用于预测变量 <span class="math inline">\(x1,x2,x3,..\)</span> 取特定值时，对回应变量y的均值进行估计</p></li>
 </ol>
-<h3 id="2-1-y和-x-i-之间关系的t检验"><a href="#2-1-y和-x-i-之间关系的t检验" class="headerlink" title="2.1 y和 $x_i$之间关系的t检验"></a>2.1 y和 $x_i$之间关系的t检验</h3><p>假设检验如下：</p>
+<h3 id="y和-x_i之间关系的t检验">2.1 y和 <span class="math inline">\(x_i\)</span>之间关系的t检验</h3>
+<p>假设检验如下：</p>
 <ul>
 <li>H0: bi=0</li>
-<li>H1:  bi!=0</li>
+<li>H1: bi!=0</li>
 </ul>
 <p>这些假设的模型的唯一区别是第i项是否存在，其他项都是相同的。</p>
 <p><strong>实例</strong>： 营养级别和糖之间关系的t检验</p>
 <ul>
-<li>H0: b1=0;模型 $y=b_0+b_2(纤维)+e$</li>
-<li>H1:b1!=0;模型：$y=b_0+b_1(糖)+b_2(纤维)+e$</li>
+<li>H0: b1=0;模型 <span class="math inline">\(y=b_0+b_2(纤维)+e\)</span></li>
+<li>H1:b1!=0;模型：<span class="math inline">\(y=b_0+b_1(糖)+b_2(纤维)+e\)</span></li>
 </ul>
 <p>还是使用数据集：谷物(在本系列文章第二篇中有下载地址)</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">#数据集存储在sugar中  </span><br><span class="line">#线性拟合  </span><br><span class="line">&gt;mutil_regre&lt;-lm(data&#x3D;sugar,rating~sugars+fiber)  </span><br><span class="line">#查看  </span><br><span class="line">&gt;summary(mutil_regre)    </span><br><span class="line">Call:  </span><br><span class="line">  lm(formula &#x3D; rating ~ sugars + fiber, data &#x3D; sugar)  </span><br><span class="line">  Residuals:  </span><br><span class="line">        Min      1Q  Median      3Q     Max   </span><br><span class="line">    -12.133  -4.247  -1.031   2.620  16.398   </span><br><span class="line"></span><br><span class="line">    Coefficients:  </span><br><span class="line">                Estimate Std. Error t value  </span><br><span class="line">    (Intercept)  51.6097     1.5463  33.376  </span><br><span class="line">    sugars       -2.1837     0.1621 -13.470  </span><br><span class="line">    fiber         2.8679     0.3023   9.486  </span><br><span class="line">                Pr(&gt;|t|)      </span><br><span class="line">    (Intercept)  &lt; 2e-16 ***  </span><br><span class="line">    sugars       &lt; 2e-16 ***  </span><br><span class="line">    fiber       2.02e-14 ***  </span><br><span class="line">    ---  </span><br><span class="line">    Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1  </span><br><span class="line"></span><br><span class="line">    Residual standard error: 6.219 on 74 degrees of freedom  </span><br><span class="line">    Multiple R-squared:  0.8092,    Adjusted R-squared:  0.804   </span><br><span class="line">    F-statistic: 156.9 on 2 and 74 DF,  p-value: &lt; 2.2e-16</span><br></pre></td></tr></table></figure>
-
-<p>可以得到，糖对应的稀疏为 $b_1=-2.1837$ ,对应的标准差为 $S_{bi}=0.1621$</p>
-<p>T对应的t统计量，也即检验的统计量为:<br> $t=\frac{b_1}{S_{b1}}=\frac{-2.1837}{0.1621}=-13.4713$</p>
-<p>P值对应的是t统计量的p值。也即:  $p=P(|t|&gt;tobs)=P(|t|&gt;-13.4713)$ 约等于0. 使用p值来检验假设，当p值很小时就可以拒绝原假设。</p>
-<h3 id="2-2-整体回归模型的显著性水平检验：F检验"><a href="#2-2-整体回归模型的显著性水平检验：F检验" class="headerlink" title="2.2 整体回归模型的显著性水平检验：F检验"></a>2.2 整体回归模型的显著性水平检验：F检验</h3><p><strong>检验</strong> 是分别对每个变量，糖，纤维，….逐个检验与回应变量线性关系。即{营养级别|糖}，{营养级别|纤维}，….</p>
-<p><strong>F检验</strong> 是对所有变量一起检测与回应变量关系，即{营养级别|糖，纤维，……}</p>
+<p>可以得到，糖对应的稀疏为 <span class="math inline">\(b_1=-2.1837\)</span> ,对应的标准差为 <span class="math inline">\(S_{bi}=0.1621\)</span></p>
+<p>T对应的t统计量，也即检验的统计量为: <span class="math inline">\(t=\frac{b_1}{S_{b1}}=\frac{-2.1837}{0.1621}=-13.4713\)</span></p>
+<p>P值对应的是t统计量的p值。也即: <span class="math inline">\(p=P(\|t\|&gt;tobs)=P(\|t\|&gt;-13.4713)\)</span> 约等于0. 使用p值来检验假设，当p值很小时就可以拒绝原假设。</p>
+<h3 id="整体回归模型的显著性水平检验f检验">2.2 整体回归模型的显著性水平检验：F检验</h3>
+<p><strong>检验</strong> 是分别对每个变量，糖，纤维，....逐个检验与回应变量线性关系。即{营养级别|糖}，{营养级别|纤维}，....</p>
+<p><strong>F检验</strong> 是对所有变量一起检测与回应变量关系，即{营养级别|糖，纤维，......}</p>
 <p>F检验的前提是</p>
 <ul>
-<li><p>H0: b0=b1=……=0   也即模型为：$y=b_0+e$</p>
-</li>
-<li><p>H1:至少存在一个bi不等于零</p>
-</li>
+<li><p>H0: b0=b1=......=0 也即模型为：<span class="math inline">\(y=b_0+e\)</span></p></li>
+<li><p>H1:至少存在一个bi不等于零</p></li>
 </ul>
 <p>备选假设H1并不要求任何回归系数都不是零，而是当备选假设为真时，存在一个回归系数不是零。因此，F检验的备选假设并没有唯一确定一个模型，当一个、几个或者所有回归系数都不是零时，备选假设都是成立的。</p>
 <p>F统计量为：</p>
-<p>$$<br>    F= F_{obs}=\frac{MSR}{MSE} 服从F_{m,n-m-1}分布<br>$$</p>
-<p> <strong>如何理解</strong>：MSE（误差平方和均值）能很好的估计总体变异 $σ^2$（不论原假设是否为真），而MSR只有当原假设为真时才是 $σ^2$ 的优良统计量，因而只有在原假设为真的情况下MSR和MSE才会比较接近，也即F很小的时候，有足够的争取表明原假设为真。</p>
+<p><span class="math display">\[
+    F= F_{obs}=\frac{MSR}{MSE} 服从F_{m,n-m-1}分布
+\]</span></p>
+<p><strong>如何理解</strong>：MSE（误差平方和均值）能很好的估计总体变异 <span class="math inline">\(σ^2\)</span>（不论原假设是否为真），而MSR只有当原假设为真时才是 <span class="math inline">\(σ^2\)</span> 的优良统计量，因而只有在原假设为真的情况下MSR和MSE才会比较接近，也即F很小的时候，有足够的争取表明原假设为真。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&gt;#查看方差分析表  </span><br><span class="line">&gt;anova(mutil_regre)  </span><br><span class="line">Analysis of Variance Table  </span><br><span class="line"></span><br><span class="line">Response: rating  </span><br><span class="line">          Df Sum Sq Mean Sq F value    Pr(&gt;F)      </span><br><span class="line">sugars     1 8654.7  8654.7 223.774 &lt; 2.2e-16 ***  </span><br><span class="line">fiber      1 3480.0  3480.0  89.978 2.023e-14 ***  </span><br><span class="line">Residuals 74 2862.0    38.7                        </span><br><span class="line">---  </span><br><span class="line">Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span><br></pre></td></tr></table></figure>
-
 <p><font color="blue">注意：</font>方差分析表只给出了均方误差(MSE=Mean Sq=38.7) 而第一步中t检验中查看线性拟合时已经直接给出了F统计量：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">F-statistic: 156.9 on 2 and 74 DF,  p-value: &lt; 2.2e-16</span><br></pre></td></tr></table></figure>
-
 <p>其中的p值小于任何合理的显著性水平所要求的值，因而拒绝原假设。</p>
-<h3 id="2-3-特定回归系数的置信区间"><a href="#2-3-特定回归系数的置信区间" class="headerlink" title="2.3 特定回归系数的置信区间"></a>2.3 特定回归系数的置信区间</h3><p>可以为某个回归系数构造一个 100(1-a)%的置信区间，与简单线性回归无异。</p>
-<h3 id="2-4-给定x1-x2-x3-…-下，y均值的置信区间"><a href="#2-4-给定x1-x2-x3-…-下，y均值的置信区间" class="headerlink" title="2.4 给定x1,x2,x3,….下，y均值的置信区间"></a>2.4 给定x1,x2,x3,….下，y均值的置信区间</h3><p> 与简单线性回归类似，只不过变量增多。变为如：谷物为5.00克的糖和5.00克纤维时，营养级别的均值分布。</p>
-<h2 id="三-多元回归的三个重要参数"><a href="#三-多元回归的三个重要参数" class="headerlink" title="三 多元回归的三个重要参数"></a>三 多元回归的三个重要参数</h2><h3 id="3-1-调整-R-2-：对包含无用预测变量的惩罚模式"><a href="#3-1-调整-R-2-：对包含无用预测变量的惩罚模式" class="headerlink" title="3.1 调整 $R^2$ ：对包含无用预测变量的惩罚模式"></a>3.1 调整 $R^2$ ：对包含无用预测变量的惩罚模式</h3><p>往模型里增加一个变量会增加决定系数$R^2$ 的值，不管这个变量是否有用。为了模型的简洁性，需要找到某种方法来惩罚包含无用预测变量模型 $R^2$ 的值，此即通常所说的[调整 $R^2$ ],其表达式如下：</p>
-<p>$$<br>   R^2_{adj}= 1-(1-R^2)\frac{n-1}{n-m-1}<br>$$</p>
-<p>如果[<em>调整</em> $R^2$ ]比 $R^2$ 小很多，则表明模型中至少有一个变量是多余的，分析人员需要考虑剔除。</p>
-<h3 id="3-2-序贯的误差平方和-（sequential-sums-of-squares）"><a href="#3-2-序贯的误差平方和-（sequential-sums-of-squares）" class="headerlink" title="3.2 序贯的误差平方和 （sequential sums of squares）"></a>3.2 序贯的误差平方和 <em>（sequential sums of squares）</em></h3><p>序贯的误差平方和代表SSR中回归平方和的部分，SSR代表通过回应变量和一组预测变量的线性关系对总体变异解释的部分。序贯的误差平方和把SSR划分成各个唯一的SSR部分，分别由某个特定的预测变量来描述。因此，序贯的误差平方和的值取决于变量输入模型中的次序。下表是某种次序的序贯的武昌平方和，可以看出其实是对糖含量和营养级别的简单回归分析得到的SSR值。</p>
+<h3 id="特定回归系数的置信区间">2.3 特定回归系数的置信区间</h3>
+<p>可以为某个回归系数构造一个 100(1-a)%的置信区间，与简单线性回归无异。</p>
+<h3 id="给定x1x2x3....下y均值的置信区间">2.4 给定x1,x2,x3,....下，y均值的置信区间</h3>
+<p>与简单线性回归类似，只不过变量增多。变为如：谷物为5.00克的糖和5.00克纤维时，营养级别的均值分布。</p>
+<h2 id="三-多元回归的三个重要参数">三 多元回归的三个重要参数</h2>
+<h3 id="调整-r2-对包含无用预测变量的惩罚模式">3.1 调整 <span class="math inline">\(R^2\)</span> ：对包含无用预测变量的惩罚模式</h3>
+<p>往模型里增加一个变量会增加决定系数<span class="math inline">\(R^2\)</span> 的值，不管这个变量是否有用。为了模型的简洁性，需要找到某种方法来惩罚包含无用预测变量模型 <span class="math inline">\(R^2\)</span> 的值，此即通常所说的[调整 <span class="math inline">\(R^2\)</span> ],其表达式如下：</p>
+<p><span class="math display">\[
+   R^2_{adj}= 1-(1-R^2)\frac{n-1}{n-m-1}
+\]</span></p>
+<p>如果[<em>调整</em> <span class="math inline">\(R^2\)</span> ]比 <span class="math inline">\(R^2\)</span> 小很多，则表明模型中至少有一个变量是多余的，分析人员需要考虑剔除。</p>
+<h3 id="序贯的误差平方和-sequential-sums-of-squares">3.2 序贯的误差平方和 <em>（sequential sums of squares）</em></h3>
+<p>序贯的误差平方和代表SSR中回归平方和的部分，SSR代表通过回应变量和一组预测变量的线性关系对总体变异解释的部分。序贯的误差平方和把SSR划分成各个唯一的SSR部分，分别由某个特定的预测变量来描述。因此，序贯的误差平方和的值取决于变量输入模型中的次序。下表是某种次序的序贯的武昌平方和，可以看出其实是对糖含量和营养级别的简单回归分析得到的SSR值。</p>
 <p>模型：</p>
-<p>$$<br>    y = b_0+b_1(糖)+b_2(纤维)+b_3(货架1)+b_4(货架4)+e<br>$$</p>
+<p><span class="math display">\[
+    y = b_0+b_1(糖)+b_2(纤维)+b_3(货架1)+b_4(货架4)+e
+\]</span></p>
 <p>的序贯平方和</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>来源</th>
 <th>DF</th>
 <th>Seq SS</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr class="odd">
 <td>糖</td>
 <td>1</td>
 <td>8701.7</td>
 </tr>
-<tr>
+<tr class="even">
 <td>纤维</td>
 <td>1</td>
 <td>3416.1</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>货架1</td>
 <td>1</td>
 <td>0.3</td>
 </tr>
-<tr>
+<tr class="even">
 <td>货架2</td>
 <td>1</td>
 <td>152.4</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p>从表中可以看到第三个序贯误差平方和是对货架1的指示标量，值为0.3 ，它代表了营养级别中，在位置因素作用下货架1的变化率，这里糖和纤维的变化率已经被提取出来了，表示货架1的序贯平方和的值很小，表明这个变量很有可能是对估计营养级别是没有用的。</p>
-<h3 id="3-3-偏F检验"><a href="#3-3-偏F检验" class="headerlink" title="3.3 偏F检验"></a>3.3 偏F检验</h3><p>假设模型中已经有了p个变量， $x_1,x_2,x_3,….x_p,$ 一个新的变量x<em>是否应该包含在此模型中？应该计算将x*加入到给定含有p个变量的模型中所产生的额外序列平方和，这个值表示为:<br>$$<br> SS_{extra}=SS(x</em>|x_1,x_2,x_3,….x_p)。<br>$$</p>
-<p> 现在,额外序列平方和通过在全模型（包括 $x_1,x_2,x_3,….x_p$ 和x<em>）中的回归平方和计算得到，表示为 $SS_{full}=SS(x_1,x_2,x_3,….x_p,x</em>)$ ,从全模型的回归平方和中减速缩减模型（仅包含 $x_1,x_2,x_3,….x_p$）的回归平方和（表示为：$SS_{reduced}=SS(x_1,x_2,x_3,….x_p)$ ），也即：</p>
-<p> $$<br>      SS_{extra}=SS_{full}-SS_{reduced}<br> $$</p>
+<h3 id="偏f检验">3.3 偏F检验</h3>
+<p>假设模型中已经有了p个变量， <span class="math inline">\(x_1,x_2,x_3,....x_p,\)</span> 一个新的变量x<em>是否应该包含在此模型中？应该计算将x</em>加入到给定含有p个变量的模型中所产生的额外序列平方和，这个值表示为: <span class="math display">\[
+ SS_{extra}=SS(x*|x_1,x_2,x_3,....x_p)。
+\]</span></p>
+<p>现在,额外序列平方和通过在全模型（包括 <span class="math inline">\(x_1,x_2,x_3,....x_p\)</span> 和x*）中的回归平方和计算得到，表示为 <span class="math inline">\(SS_{full}=SS(x_1,x_2,x_3,....x_p,x*)\)</span> ,从全模型的回归平方和中减速缩减模型（仅包含 <span class="math inline">\(x_1,x_2,x_3,....x_p\)</span>）的回归平方和（表示为：<span class="math inline">\(SS_{reduced}=SS(x_1,x_2,x_3,....x_p)\)</span> ），也即：</p>
+<p><span class="math display">\[
+      SS_{extra}=SS_{full}-SS_{reduced}
+ \]</span></p>
 <p>即：</p>
-<p>$$<br>   SS(x<em>|x_1,x_2,….x_p)= SS(x_1,x_2,….x_p,x^</em>)-SS(x_1,x_2,..x_p)<br>$$</p>
+<p><span class="math display">\[
+   SS(x*|x_1,x_2,....x_p)= SS(x_1,x_2,....x_p,x^*)-SS(x_1,x_2,..x_p)
+\]</span></p>
 <p>偏F检验的原假设如下：</p>
 <ul>
-<li><p>H0:否定 $SS_{extra}$与 $x^<em>$ 是相关的，对已经包含 $x_1,x_2,x_3,….x_p$ 的模型的回归平方和没有显著的共享。因此，模型中不应该包含 $x^</em>$ 。</p>
-</li>
-<li><p>H1:肯定SSextra与x<em>是相关的，对已经包含x1,x2,x3,….xp的模型的回归平方和有显著的贡献。因此，模型中应该包含x</em></p>
-</li>
+<li><p>H0:否定 <span class="math inline">\(SS_{extra}\)</span>与 <span class="math inline">\(x^*\)</span> 是相关的，对已经包含 <span class="math inline">\(x_1,x_2,x_3,....x_p\)</span> 的模型的回归平方和没有显著的共享。因此，模型中不应该包含 <span class="math inline">\(x^*\)</span> 。</p></li>
+<li><p>H1:肯定SSextra与x<em>是相关的，对已经包含x1,x2,x3,....xp的模型的回归平方和有显著的贡献。因此，模型中应该包含x</em></p></li>
 </ul>
 <p>偏F检验的测试统计量是:</p>
-<p>$$<br>  F(x^*|x_1,x_2,…x_p)=\frac{SS_{extra}}{MSE_{full}}</p>
-<p>  MSE_{full}代表全模型的均方误差，包括x_1,x_2,…x_p和x^*<br>$$</p>
-<p>当假设为真时，这个统计量服从 $F_{1,n-p-2}$ 的分布。因此，当 $F(x^*|x_1,x_2,x_3,….x_p)$ 值太大或者它像对应的p值太小时，有理由拒绝原假设。而偏F检验的一个可替代的方法是t检验。一个自由度为1和n-p-2的F检验等价于一个自由度为n-p-2的t检验。这是由他们之间的概率分布关系 $(F_{1,n-p-2}=(t_{n-p-2})^2)$</p>
+<p>$$ F(x^*|x_1,x_2,...x_p)=</p>
+<p>MSE_{full}代表全模型的均方误差，包括x_1,x_2,...x_p和x^* $$</p>
+<p>当假设为真时，这个统计量服从 <span class="math inline">\(F_{1,n-p-2}\)</span> 的分布。因此，当 <span class="math inline">\(F(x^*\|x_1,x_2,x_3,....x_p)\)</span> 值太大或者它像对应的p值太小时，有理由拒绝原假设。而偏F检验的一个可替代的方法是t检验。一个自由度为1和n-p-2的F检验等价于一个自由度为n-p-2的t检验。这是由他们之间的概率分布关系 <span class="math inline">\((F_{1,n-p-2}=(t_{n-p-2})^2)\)</span></p>
 <p><font color="blue">注意：</font>序贯平方和与部分平方和的区别如下：</p>
 <table>
 <thead>
-<tr>
+<tr class="header">
 <th>变量</th>
 <th>序贯平方和</th>
 <th>部分平方和</th>
 </tr>
 </thead>
-<tbody><tr>
-<td>$x_1$</td>
-<td>$SS(x_1)$</td>
-<td>$SS(x_1|x_2,x_3,x_4)$</td>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(x_1\)</span></td>
+<td><span class="math inline">\(SS(x_1)\)</span></td>
+<td><span class="math inline">\(SS(x_1\|x_2,x_3,x_4)\)</span></td>
 </tr>
-<tr>
-<td>$x_2$</td>
-<td>$SS(x_2|x_1)$</td>
-<td>$SS(x_2|x_1,x_3,x_4)$</td>
+<tr class="even">
+<td><span class="math inline">\(x_2\)</span></td>
+<td><span class="math inline">\(SS(x_2\|x_1)\)</span></td>
+<td><span class="math inline">\(SS(x_2\|x_1,x_3,x_4)\)</span></td>
 </tr>
-<tr>
-<td>$x_3$</td>
-<td>$SS(x_3|x_1,x_2)$</td>
-<td>$SS(x_2|x_1,x_2,x_4)$</td>
+<tr class="odd">
+<td><span class="math inline">\(x_3\)</span></td>
+<td><span class="math inline">\(SS(x_3\|x_1,x_2)\)</span></td>
+<td><span class="math inline">\(SS(x_2\|x_1,x_2,x_4)\)</span></td>
 </tr>
-<tr>
-<td>$x_4$</td>
-<td>$SS(x_4|x_1,x_2,x_3)$</td>
-<td>$SS(x_2|x_1,x_2,x_3)$</td>
+<tr class="even">
+<td><span class="math inline">\(x_4\)</span></td>
+<td><span class="math inline">\(SS(x_4\|x_1,x_2,x_3)\)</span></td>
+<td><span class="math inline">\(SS(x_2\|x_1,x_2,x_3)\)</span></td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 
     </div>
-    <p class="post-meta">
-        <span class="post-cat">分类：
-            
-        </span>
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-</article>
-<!-- 分享按钮 -->
 
-  <div class="article-share clearfix text-center">
-    <div class="share-area">
-      <span class="share-txt">分享到：</span>
-      <a href="javascript: window.open('http://service.weibo.com/share/share.php?url=' + encodeURIComponent(location.href) + '&title=' + document.title + '&language=zh_cn');" class="share-icon weibo"></a>
-      <a href="javascript: alert('请复制链接到微信并发送');" class="share-icon wechat"></a>
-      <a href="javascript: window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + encodeURIComponent(location.href) + '&title=' + document.title);" class="share-icon qqzone"></a>
-      <a href="javascript: window.open('http://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(location.href) + '&desc=Jelon个人博客&title=' + document.title + '&callback=' + encodeURIComponent(location.href));" class="share-icon qq"></a>
-      <a href="javascript: window.open('http://shuo.douban.com/!service/share?href=' + encodeURIComponent(location.href) + '&name=' + document.title + '&text=' + document.title);" class="share-icon douban"></a>
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2013-04-20-datamining-regression/" rel="prev" title="2013-04-20-datamining-regression">
+      <i class="fa fa-chevron-left"></i> 2013-04-20-datamining-regression
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2013-05-04-datamining-mutillinerandselect/" rel="next" title="数据挖掘方法之四：多重共线性及变量选择方法">
+      数据挖掘方法之四：多重共线性及变量选择方法 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
   </div>
 
 
-<!-- 上一篇/下一篇 -->
+          </div>
+          
 
-<div class="article-nav clearfix">
-    
-    <span class="prev fl">
-        上一篇<br >
-        <a href="/2019/12/23/2013-05-04-datamining-mutillinerandselect/">
-            
-                数据挖掘方法之四：多重共线性及变量选择方法
-            
-        </a>
-    </span>
-    
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
 
-    
-    <span class="next fr">
-        下一篇<br >
-        <a href="/2019/12/23/2013-04-20-datamining-regression/">
-            
-                2013-04-20-datamining-regression
-            
-        </a>
-    </span>
-    
-</div>
-
-<!-- 文章评论 -->
-
+        </div>
+          
   
-<script src="/js/comment.js"></script>
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
 
-  <div id="comments" class="comment">
-    <!--
-    <div class="sign-bar">
-      GitHub 已登录!
-      <span class="sign-link">登出</span>
-    </div>
-    <section class="box">
-      <div class="com-avatar"><img src="/img/jelon.jpg" alt="avatar"></div>
-      <div class="com-text">
-        <div class="main">
-          <textarea class="text-area-edited show" placeholder="欢迎评论！"></textarea>
-          <div class="text-area-preview"></div>
-        </div>
-        <div class="switch">
-          <div class="switch-item on">编辑</div>
-          <div class="switch-item">预览</div>
-        </div>
-        <div class="button">提交</div>
-      </div>
-    </section>
-    <section class="tips">注：评论支持 markdown 语法！</section>
-    <section class="list-wrap">
-      <ul class="list">
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">张德龙</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like liked">已赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">333333</div>
-          </div>
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
         </li>
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">刘德华</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like">点赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">vvvvv</div>
-          </div>
+        <li class="sidebar-nav-overview">
+          Overview
         </li>
       </ul>
-      <div class="page-nav">
-        <a href="javascript: void(0);" class="item">1</a>
-        <a href="javascript: void(0);" class="item">2</a>
-        <a href="javascript: void(0);" class="item current">3</a>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-概念"><span class="nav-number">1.</span> <span class="nav-text">一 概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-多元回归的推断"><span class="nav-number">2.</span> <span class="nav-text">二 多元回归的推断</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#y和-x_i之间关系的t检验"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 y和 \(x_i\)之间关系的t检验</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#整体回归模型的显著性水平检验f检验"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 整体回归模型的显著性水平检验：F检验</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特定回归系数的置信区间"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 特定回归系数的置信区间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#给定x1x2x3....下y均值的置信区间"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 给定x1,x2,x3,....下，y均值的置信区间</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-多元回归的三个重要参数"><span class="nav-number">3.</span> <span class="nav-text">三 多元回归的三个重要参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#调整-r2-对包含无用预测变量的惩罚模式"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 调整 \(R^2\) ：对包含无用预测变量的惩罚模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#序贯的误差平方和-sequential-sums-of-squares"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 序贯的误差平方和 （sequential sums of squares）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#偏f检验"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 偏F检验</span></a></li></ol></li></ol></div>
       </div>
-    </section>
-    -->
-  </div>
-  <script>
-  JELON.Comment({
-    container: 'comments',
-    label: '2013-04-24-datamining-mutilregression' || '2019/12/23/2013-04-24-datamining-mutilregression/',
-    owner: 'your_github_id',
-    repo: 'your_blog_comments',
-    clientId: 'your_client_id',
-    clientSecret: 'your_client_secret'
-  });
-  </script>
+      <!--/noindex-->
 
-
-            </div>
-
-        </section>
-        <!-- 侧栏部分 -->
-<aside class="sidebar">
-    <section class="widget">
-        <h3 class="widget-hd"><strong>文章分类</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-    <li>
-        <a href="/categories/blog/">blog</a>
-        <span class="badge">(94)</span>
-    </li>
-    
-</ul>
-    </section>
-
-    
-    <section class="widget">
-        <h3 class="widget-hd"><strong>热门标签</strong></h3>
-        <!-- 文章标签 -->
-<div class="widget-bd tag-wrap">
-  
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
 </div>
-    </section>
-    
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
 
-    
 
-    
-    <!-- 友情链接 -->
-    <section class="widget">
-        <h3 class="widget-hd"><strong>友情链接</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-        <li>
-            <a href="https://jelon.top" target="_blank" title="Jelon个人前端小站">前端博客小站</a>
-        </li>
-    
-        <li>
-            <a href="https://www.baidu.com" target="_blank" title="百度搜索">百度</a>
-        </li>
-    
-</ul>
-    </section>
-    
-</aside>
-<!-- / 侧栏部分 -->
+
+      </div>
+
     </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
 
-    <!-- 博客底部 -->
+
+      </div>
+    </main>
+
     <footer class="footer">
-    &copy;
-    
-        2016-2019
-    
+      <div class="footer-inner">
+        
 
-    <a href="/">Jelon Loves You</a>
-</footer>
-<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
 
-    <!--博客js脚本 -->
-    <!-- 这里放网站js脚本 -->
+        
 
-<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
 
 </body>
 </html>

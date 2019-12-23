@@ -1,136 +1,226 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" >
-    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
-    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
-    
-    <title>darknet在nvidia tx2上的训练自己的数据 | Hexo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
-    <meta name="keywords" content="Jelon, 前端, Web, 张德龙, 前端开发" >
-    <meta name="description" content="Jelon个人前端小站" >
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml" >
-    
-    
-    <link rel="shortcut icon" href="/favicon.ico" >
-    
-    
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/main.css">
 
-    <!--[if lt IE 9]>
-    
-<script src="/js/html5.js"></script>
 
-    <![endif]-->
-    
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "//hm.baidu.com/hm.js?fd459238242776d173cdc64918fb32f2";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://shartoo.github.com').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
 </script>
 
+  <meta name="description" content="深度学习实战">
+<meta property="og:type" content="article">
+<meta property="og:title" content="darknet在nvidia tx2上的训练自己的数据">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2017-11-14-darknet_on_tx2/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="深度学习实战">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-12-23T10:45:59.532Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.218Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<link rel="canonical" href="http://shartoo.github.com/2019/12/23/2017-11-14-darknet_on_tx2/">
 
-<body class="home">
-    <!--[if lt IE 9]>
-    <div class="browsehappy">
-        当前网页 <strong>不支持</strong>
-        你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/" target="_blank" rel="noopener">升级你的浏览器</a>.
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>darknet在nvidia tx2上的训练自己的数据 | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
     </div>
-    <![endif]-->
+  </div>
 
-    <!-- 博客头部 -->
-    <header class="header">
-    <section class="container header-main">
-        <div class="logo">
-            <a href="/">
-                <div class="cover">
-                    <span class="name">Hexo</span>
-                    <span class="description"></span>
-                </div>
-            </a>
-        </div>
-        <div class="dropnav icon-paragraph-justify" id="JELON__btnDropNav"></div>
-        <ul class="menu hidden" id="JELON__menu">
-            
-            <li rel="/2019/12/23/2017-11-14-darknet_on_tx2/index.html" class="item ">
-                <a href="/" title="首页" class="icon-home">&nbsp;首页</a>
-            </li>
-            
-            <li rel="/2019/12/23/2017-11-14-darknet_on_tx2/index.html" class="item ">
-                <a href="/lab/" title="实验室" class="icon-lab">&nbsp;实验室</a>
-            </li>
-            
-            <li rel="/2019/12/23/2017-11-14-darknet_on_tx2/index.html" class="item ">
-                <a href="/about/" title="关于" class="icon-about">&nbsp;关于</a>
-            </li>
-            
-            <li rel="/2019/12/23/2017-11-14-darknet_on_tx2/index.html" class="item ">
-                <a href="/comment/" title="留言" class="icon-comment">&nbsp;留言</a>
-            </li>
-            
-        </ul>
-        <div class="profile clearfix">
-            <div class="feeds fl">
-                
-                
-                <p class="links">
-                    
-                        <a href="https://github.com/jangdelong" target="_blank">Github</a>
-                        |
-                    
-                        <a href="https://pages.coding.me" target="_blank">Hosted by Coding Pages</a>
-                        
-                    
-                </p>
-                <p class="sns">
-                    
-                        <a href="http://weibo.com/jangdelong" class="sinaweibo" target="_blank"><b>■</b> 新浪微博</a>
-                    
-                        <a href="https://www.facebook.com/profile.php?id=100011855760219&amp;ref=bookmarks" class="qqweibo" target="_blank"><b>■</b> Facebook</a>
-                    
-                    <a href="javascript: void(0);" class="wechat">
-                        <b>■</b>
-                        公众号
-                        <span class="popover">
-                            <img src="/img/wechat_mp.jpg" width="120" height="120" alt="我的微信订阅号">
-                            <i class="arrow"></i>
-                        </span>
-                    </a>
-                </p>
-                
-            </div>
-            <div class="avatar fr">
-                <img src="/img/jelon.jpg" alt="avatar" title="Jelon" >
-            </div>
-        </div>
-    </section>
-</header>
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
 
 
-    <!-- 博客正文 -->
-    <div class="container body clearfix">
-        <section class="content">
-            <div class="content-main widget">
-                <!-- 文章页 -->
-<!-- 文章 -->
-<article class="post article">
-    <header class="text-center">
-        <h3 class="post-title"><span>darknet在nvidia tx2上的训练自己的数据</span></h3>
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
     </header>
-    <p class="post-meta text-center">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.532Z">2019-12-23</time>
-    </p>
-    <div class="post-content">
-        <h2 id="一-准备数据"><a href="#一-准备数据" class="headerlink" title="一 准备数据"></a>一 准备数据</h2><p><strong>注意</strong>：所有的文件最好在linux下通过代码或者vi的方式来创建，如果从window下创建再拷贝过去的话，很容易出现各种找不到文件的错误。</p>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://shartoo.github.com/2019/12/23/2017-11-14-darknet_on_tx2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          darknet在nvidia tx2上的训练自己的数据
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2019-12-23 18:45:59 / Modified: 17:55:14" itemprop="dateCreated datePublished" datetime="2019-12-23T18:45:59+08:00">2019-12-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">深度学习实战</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="一-准备数据">一 准备数据</h2>
+<p><strong>注意</strong>：所有的文件最好在linux下通过代码或者vi的方式来创建，如果从window下创建再拷贝过去的话，很容易出现各种找不到文件的错误。</p>
 <p>首先知道yolo需要的几个数据</p>
 <ul>
 <li>cfg</li>
@@ -139,261 +229,248 @@
 <li>weights</li>
 </ul>
 <p>其中前三个内容分别可以为:</p>
-<h3 id="1-1-obj-cfg"><a href="#1-1-obj-cfg" class="headerlink" title="1.1 obj.cfg"></a>1.1 obj.cfg</h3><p>yolo的网络配置文件，一般可以从其官网 <a href="https://github.com/pjreddie/darknet/blob/master/cfg/yolo-voc.cfg" target="_blank" rel="noopener">darknet-yolo-cfg文件</a>下载一份，然后修改。不要自己手动创建，容易因为编码问题导致程序无法运行。</p>
+<h3 id="obj.cfg">1.1 obj.cfg</h3>
+<p>yolo的网络配置文件，一般可以从其官网 <a href="https://github.com/pjreddie/darknet/blob/master/cfg/yolo-voc.cfg" target="_blank" rel="noopener">darknet-yolo-cfg文件</a>下载一份，然后修改。不要自己手动创建，容易因为编码问题导致程序无法运行。</p>
 <p>内容为：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br></pre></td><td class="code"><pre><span class="line">[net]</span><br><span class="line"># Testing</span><br><span class="line">batch&#x3D;1</span><br><span class="line">subdivisions&#x3D;1</span><br><span class="line"># Training</span><br><span class="line"># batch&#x3D;64</span><br><span class="line"># subdivisions&#x3D;8</span><br><span class="line">height&#x3D;416</span><br><span class="line">width&#x3D;416</span><br><span class="line">channels&#x3D;3</span><br><span class="line">momentum&#x3D;0.9</span><br><span class="line">decay&#x3D;0.0005</span><br><span class="line">angle&#x3D;0</span><br><span class="line">saturation &#x3D; 1.5</span><br><span class="line">exposure &#x3D; 1.5</span><br><span class="line">hue&#x3D;.1</span><br><span class="line"></span><br><span class="line">learning_rate&#x3D;0.001</span><br><span class="line">burn_in&#x3D;1000</span><br><span class="line">max_batches &#x3D; 80200</span><br><span class="line">policy&#x3D;steps</span><br><span class="line">steps&#x3D;40000,60000</span><br><span class="line">scales&#x3D;.1,.1</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;32</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[maxpool]</span><br><span class="line">size&#x3D;2</span><br><span class="line">stride&#x3D;2</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;64</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[maxpool]</span><br><span class="line">size&#x3D;2</span><br><span class="line">stride&#x3D;2</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;128</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;64</span><br><span class="line">size&#x3D;1</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;128</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[maxpool]</span><br><span class="line">size&#x3D;2</span><br><span class="line">stride&#x3D;2</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;256</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;128</span><br><span class="line">size&#x3D;1</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;256</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[maxpool]</span><br><span class="line">size&#x3D;2</span><br><span class="line">stride&#x3D;2</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;512</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;256</span><br><span class="line">size&#x3D;1</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;512</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;256</span><br><span class="line">size&#x3D;1</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;512</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[maxpool]</span><br><span class="line">size&#x3D;2</span><br><span class="line">stride&#x3D;2</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;1024</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;512</span><br><span class="line">size&#x3D;1</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;1024</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;512</span><br><span class="line">size&#x3D;1</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;1024</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#######</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">filters&#x3D;1024</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">filters&#x3D;1024</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[route]</span><br><span class="line">layers&#x3D;-9</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">size&#x3D;1</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">filters&#x3D;64</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[reorg]</span><br><span class="line">stride&#x3D;2</span><br><span class="line"></span><br><span class="line">[route]</span><br><span class="line">layers&#x3D;-1,-4</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">filters&#x3D;1024</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">size&#x3D;1</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">filters&#x3D;125</span><br><span class="line">activation&#x3D;linear</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[region]</span><br><span class="line">anchors &#x3D;  1.3221, 1.73145, 3.19275, 4.00944, 5.05587, 8.09892, 9.47112, 4.84053, 11.2364, 10.0071</span><br><span class="line">bias_match&#x3D;1</span><br><span class="line">classes&#x3D;20</span><br><span class="line">coords&#x3D;4</span><br><span class="line">num&#x3D;5</span><br><span class="line">softmax&#x3D;1</span><br><span class="line">jitter&#x3D;.3</span><br><span class="line">rescore&#x3D;1</span><br><span class="line"></span><br><span class="line">object_scale&#x3D;5</span><br><span class="line">noobject_scale&#x3D;1</span><br><span class="line">class_scale&#x3D;1</span><br><span class="line">coord_scale&#x3D;1</span><br><span class="line"></span><br><span class="line">absolute&#x3D;1</span><br><span class="line">thresh &#x3D; .6</span><br><span class="line">random&#x3D;1</span><br></pre></td></tr></table></figure>
-
-<h3 id="1-2-obj-data"><a href="#1-2-obj-data" class="headerlink" title="1.2 obj.data"></a>1.2 obj.data</h3><p>个人的数据配置，内容如下:</p>
+<h3 id="obj.data">1.2 obj.data</h3>
+<p>个人的数据配置，内容如下:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">classes&#x3D; 1  </span><br><span class="line">train  &#x3D; train.txt  </span><br><span class="line">valid  &#x3D; test.txt  </span><br><span class="line">names &#x3D; obj.names  </span><br><span class="line">backup &#x3D; backup&#x2F;</span><br></pre></td></tr></table></figure>
-<p>其中 </p>
+<p>其中</p>
 <ul>
 <li>classes:为训练数据的类别数目，比如4分类模型，则为4</li>
 <li>train: 训练集图片路径。一般是相对于darknet根目录的路径。</li>
-<li>valid: 测试集图片路径。与train相同</li>
-<li>names: 图片类别对应的名称。比如：0代表狗，1代表猫，那么第一行就是dog，第二行就是cat。。下面会示例这个文件内容</li>
+<li>valid: 测试集图片路径。与train相同 +names: 图片类别对应的名称。比如：0代表狗，1代表猫，那么第一行就是dog，第二行就是cat。。下面会示例这个文件内容</li>
 <li>backup:训练模型过程中产生的权重文件保存路径。有点像tensorflow的checkpoint路径</li>
 </ul>
 <p>下面示例（<code>train</code>）train.txt所包含的内容：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;images&#x2F;ee0fb09cfb52bde5157debcdca252fc7.jpg</span><br><span class="line">.&#x2F;images&#x2F;98e053938a2113363003ebd1bf9f81fe.jpg</span><br><span class="line">.&#x2F;images&#x2F;33104814567100bbd1034ef68d0bd39a.jpg</span><br><span class="line">.&#x2F;images&#x2F;115ed44ee5f896674210900491085839.jpg</span><br></pre></td></tr></table></figure>
-
-<h3 id="1-3-obj-names"><a href="#1-3-obj-names" class="headerlink" title="1.3 obj.names"></a>1.3 obj.names</h3><p>注意这个文件里面的内容顺序代表了标注文件中的分类名称：</p>
-<h3 id="1-4-weights权重文件"><a href="#1-4-weights权重文件" class="headerlink" title="1.4 weights权重文件"></a>1.4 weights权重文件</h3><p>darknet可以基于其他预训练的权重文件再训练，重新训练时可能需要提供一个权重文件，可以比如<a href="https://pjreddie.com/media/files/darknet19_448.conv.23" target="_blank" rel="noopener">ImageNet</a>的预训练权重开始。</p>
-<h2 id="二-训练"><a href="#二-训练" class="headerlink" title="二 训练"></a>二 训练</h2><p>训练脚本为：</p>
+<h3 id="obj.names">1.3 obj.names</h3>
+<p>注意这个文件里面的内容顺序代表了标注文件中的分类名称：</p>
+<h3 id="weights权重文件">1.4 weights权重文件</h3>
+<p>darknet可以基于其他预训练的权重文件再训练，重新训练时可能需要提供一个权重文件，可以比如<a href="https://pjreddie.com/media/files/darknet19_448.conv.23" target="_blank" rel="noopener">ImageNet</a>的预训练权重开始。</p>
+<h2 id="二-训练">二 训练</h2>
+<p>训练脚本为：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;darknet detector train cfg&#x2F;obj.data cfg&#x2F;yolo-obj.cfg darknet19_448.conv.23</span><br></pre></td></tr></table></figure>
-
-<h2 id="三-错误排查"><a href="#三-错误排查" class="headerlink" title="三 错误排查"></a>三 错误排查</h2><h3 id="3-1-error-1"><a href="#3-1-error-1" class="headerlink" title="3.1 error 1:"></a>3.1 error 1:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">nvidia@tegra-ubuntu:~&#x2F;workspace&#x2F;cpp&#x2F;darknet$ sudo .&#x2F;darknet detector train ~&#x2F;data&#x2F;test_yolo_data&#x2F;cfg&#x2F;test.data ~&#x2F;data&#x2F;test_yolo_data&#x2F;cfg&#x2F;test.cfg .&#x2F;weights&#x2F;tiny-yolo-voc.weights </span><br><span class="line">[sudo] password for nvidia: </span><br><span class="line">test</span><br><span class="line">First section must be [net] or [network]: No such file or directory</span><br><span class="line">darknet: .&#x2F;src&#x2F;utils.c:253: error: Assertion &#96;0&#39; failed.</span><br><span class="line">Aborted (core dumped)</span><br></pre></td></tr></table></figure>
+<h2 id="三-错误排查">三 错误排查</h2>
+<h3 id="error-1">3.1 error 1:</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">nvidia@tegra-ubuntu:~&#x2F;workspace&#x2F;cpp&#x2F;darknet$ sudo .&#x2F;darknet detector train ~&#x2F;data&#x2F;test_yolo_data&#x2F;cfg&#x2F;test.data ~&#x2F;data&#x2F;test_yolo_data&#x2F;cfg&#x2F;test.cfg .&#x2F;weights&#x2F;tiny-yolo-voc.weights </span><br><span class="line">[sudo] password for nvidia: </span><br><span class="line">test</span><br><span class="line">First section must be [net] or [network]: No such file or directory</span><br><span class="line">darknet: .&#x2F;src&#x2F;utils.c:253: error: Assertion &#96;0&#39; failed.</span><br><span class="line">Aborted (core dumped)</span><br></pre></td></tr></table></figure>
 <p>将 darknet源代码 <code>cfg/voc-yolo.cfg</code>拷贝一份再修改参数。修改如下参数</p>
 <ul>
 <li>第三行修改为：</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">batch&#x3D;64</span><br></pre></td></tr></table></figure>
-
 <ul>
-<li>第四行修改为,注意这个地方可能会导致 <code>could&#39;t open file train.txt</code>问题，可以尝试修改为其他，比如16,32</li>
+<li>第四行修改为,注意这个地方可能会导致 <code>could't open file train.txt</code>问题，可以尝试修改为其他，比如16,32</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">subdivisions&#x3D;8</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li>第244行修改为</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">classes&#x3D;4</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li>237行修改为。修改规则为 (classes+5)<em>5，当前有4个分类，所以是 (4+5)</em>5=45</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">filters&#x3D;45</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="3-2-error-2"><a href="#3-2-error-2" class="headerlink" title="3.2 error 2"></a>3.2 error 2</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">nvidia@tegra-ubuntu:~&#x2F;workspace&#x2F;cpp&#x2F;darknet$ sudo .&#x2F;darknet detector train ~&#x2F;data&#x2F;test_yolo_data&#x2F;cfg&#x2F;test.data ~&#x2F;data&#x2F;test_yolo_data&#x2F;cfg&#x2F;yolo-test.cfg ~&#x2F;data&#x2F;test_yolo_data&#x2F;darknet19_448.conv.23 </span><br><span class="line">yolo-test</span><br><span class="line">layer     filters    size              input                output</span><br><span class="line">    0 conv     32  3 x 3 &#x2F; 1   416 x 416 x   3   -&gt;   416 x 416 x  32</span><br><span class="line">    1 max          2 x 2 &#x2F; 2   416 x 416 x  32   -&gt;   208 x 208 x  32</span><br><span class="line">    2 conv     64  3 x 3 &#x2F; 1   208 x 208 x  32   -&gt;   208 x 208 x  64</span><br><span class="line">    3 max          2 x 2 &#x2F; 2   208 x 208 x  64   -&gt;   104 x 104 x  64</span><br><span class="line">    4 conv    128  3 x 3 &#x2F; 1   104 x 104 x  64   -&gt;   104 x 104 x 128</span><br><span class="line">    5 conv     64  1 x 1 &#x2F; 1   104 x 104 x 128   -&gt;   104 x 104 x  64</span><br><span class="line">    6 conv    128  3 x 3 &#x2F; 1   104 x 104 x  64   -&gt;   104 x 104 x 128</span><br><span class="line">    7 max          2 x 2 &#x2F; 2   104 x 104 x 128   -&gt;    52 x  52 x 128</span><br><span class="line">    8 conv    256  3 x 3 &#x2F; 1    52 x  52 x 128   -&gt;    52 x  52 x 256</span><br><span class="line">    9 conv    128  1 x 1 &#x2F; 1    52 x  52 x 256   -&gt;    52 x  52 x 128</span><br><span class="line">   10 conv    256  3 x 3 &#x2F; 1    52 x  52 x 128   -&gt;    52 x  52 x 256</span><br><span class="line">   11 max          2 x 2 &#x2F; 2    52 x  52 x 256   -&gt;    26 x  26 x 256</span><br><span class="line">   12 conv    512  3 x 3 &#x2F; 1    26 x  26 x 256   -&gt;    26 x  26 x 512</span><br><span class="line">   13 conv    256  1 x 1 &#x2F; 1    26 x  26 x 512   -&gt;    26 x  26 x 256</span><br><span class="line">   14 conv    512  3 x 3 &#x2F; 1    26 x  26 x 256   -&gt;    26 x  26 x 512</span><br><span class="line">   15 conv    256  1 x 1 &#x2F; 1    26 x  26 x 512   -&gt;    26 x  26 x 256</span><br><span class="line">   16 conv    512  3 x 3 &#x2F; 1    26 x  26 x 256   -&gt;    26 x  26 x 512</span><br><span class="line">   17 max          2 x 2 &#x2F; 2    26 x  26 x 512   -&gt;    13 x  13 x 512</span><br><span class="line">   18 conv   1024  3 x 3 &#x2F; 1    13 x  13 x 512   -&gt;    13 x  13 x1024</span><br><span class="line">   19 conv    512  1 x 1 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x 512</span><br><span class="line">   20 conv   1024  3 x 3 &#x2F; 1    13 x  13 x 512   -&gt;    13 x  13 x1024</span><br><span class="line">   21 conv    512  1 x 1 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x 512</span><br><span class="line">   22 conv   1024  3 x 3 &#x2F; 1    13 x  13 x 512   -&gt;    13 x  13 x1024</span><br><span class="line">   23 conv   1024  3 x 3 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x1024</span><br><span class="line">   24 conv   1024  3 x 3 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x1024</span><br><span class="line">   25 route  16</span><br><span class="line">   26 conv     64  1 x 1 &#x2F; 1    26 x  26 x 512   -&gt;    26 x  26 x  64</span><br><span class="line">   27 reorg              &#x2F; 2    26 x  26 x  64   -&gt;    13 x  13 x 256</span><br><span class="line">   28 route  27 24</span><br><span class="line">   29 conv   1024  3 x 3 &#x2F; 1    13 x  13 x1280   -&gt;    13 x  13 x1024</span><br><span class="line">   30 conv    125  1 x 1 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x 125</span><br><span class="line">   31 detection</span><br><span class="line">darknet: .&#x2F;src&#x2F;parser.c:281: parse_region: Assertion &#96;l.outputs &#x3D;&#x3D; params.inputs&#39; failed.</span><br><span class="line">Aborted (core dumped)</span><br></pre></td></tr></table></figure>
-
-<p>参考:<a href="https://groups.google.com/forum/#!topic/darknet/4_RNBWVEOnQ" target="_blank" rel="noopener">https://groups.google.com/forum/#!topic/darknet/4_RNBWVEOnQ</a></p>
+<h3 id="error-2">3.2 error 2</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">nvidia@tegra-ubuntu:~&#x2F;workspace&#x2F;cpp&#x2F;darknet$ sudo .&#x2F;darknet detector train ~&#x2F;data&#x2F;test_yolo_data&#x2F;cfg&#x2F;test.data ~&#x2F;data&#x2F;test_yolo_data&#x2F;cfg&#x2F;yolo-test.cfg ~&#x2F;data&#x2F;test_yolo_data&#x2F;darknet19_448.conv.23 </span><br><span class="line">yolo-test</span><br><span class="line">layer     filters    size              input                output</span><br><span class="line">    0 conv     32  3 x 3 &#x2F; 1   416 x 416 x   3   -&gt;   416 x 416 x  32</span><br><span class="line">    1 max          2 x 2 &#x2F; 2   416 x 416 x  32   -&gt;   208 x 208 x  32</span><br><span class="line">    2 conv     64  3 x 3 &#x2F; 1   208 x 208 x  32   -&gt;   208 x 208 x  64</span><br><span class="line">    3 max          2 x 2 &#x2F; 2   208 x 208 x  64   -&gt;   104 x 104 x  64</span><br><span class="line">    4 conv    128  3 x 3 &#x2F; 1   104 x 104 x  64   -&gt;   104 x 104 x 128</span><br><span class="line">    5 conv     64  1 x 1 &#x2F; 1   104 x 104 x 128   -&gt;   104 x 104 x  64</span><br><span class="line">    6 conv    128  3 x 3 &#x2F; 1   104 x 104 x  64   -&gt;   104 x 104 x 128</span><br><span class="line">    7 max          2 x 2 &#x2F; 2   104 x 104 x 128   -&gt;    52 x  52 x 128</span><br><span class="line">    8 conv    256  3 x 3 &#x2F; 1    52 x  52 x 128   -&gt;    52 x  52 x 256</span><br><span class="line">    9 conv    128  1 x 1 &#x2F; 1    52 x  52 x 256   -&gt;    52 x  52 x 128</span><br><span class="line">   10 conv    256  3 x 3 &#x2F; 1    52 x  52 x 128   -&gt;    52 x  52 x 256</span><br><span class="line">   11 max          2 x 2 &#x2F; 2    52 x  52 x 256   -&gt;    26 x  26 x 256</span><br><span class="line">   12 conv    512  3 x 3 &#x2F; 1    26 x  26 x 256   -&gt;    26 x  26 x 512</span><br><span class="line">   13 conv    256  1 x 1 &#x2F; 1    26 x  26 x 512   -&gt;    26 x  26 x 256</span><br><span class="line">   14 conv    512  3 x 3 &#x2F; 1    26 x  26 x 256   -&gt;    26 x  26 x 512</span><br><span class="line">   15 conv    256  1 x 1 &#x2F; 1    26 x  26 x 512   -&gt;    26 x  26 x 256</span><br><span class="line">   16 conv    512  3 x 3 &#x2F; 1    26 x  26 x 256   -&gt;    26 x  26 x 512</span><br><span class="line">   17 max          2 x 2 &#x2F; 2    26 x  26 x 512   -&gt;    13 x  13 x 512</span><br><span class="line">   18 conv   1024  3 x 3 &#x2F; 1    13 x  13 x 512   -&gt;    13 x  13 x1024</span><br><span class="line">   19 conv    512  1 x 1 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x 512</span><br><span class="line">   20 conv   1024  3 x 3 &#x2F; 1    13 x  13 x 512   -&gt;    13 x  13 x1024</span><br><span class="line">   21 conv    512  1 x 1 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x 512</span><br><span class="line">   22 conv   1024  3 x 3 &#x2F; 1    13 x  13 x 512   -&gt;    13 x  13 x1024</span><br><span class="line">   23 conv   1024  3 x 3 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x1024</span><br><span class="line">   24 conv   1024  3 x 3 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x1024</span><br><span class="line">   25 route  16</span><br><span class="line">   26 conv     64  1 x 1 &#x2F; 1    26 x  26 x 512   -&gt;    26 x  26 x  64</span><br><span class="line">   27 reorg              &#x2F; 2    26 x  26 x  64   -&gt;    13 x  13 x 256</span><br><span class="line">   28 route  27 24</span><br><span class="line">   29 conv   1024  3 x 3 &#x2F; 1    13 x  13 x1280   -&gt;    13 x  13 x1024</span><br><span class="line">   30 conv    125  1 x 1 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x 125</span><br><span class="line">   31 detection</span><br><span class="line">darknet: .&#x2F;src&#x2F;parser.c:281: parse_region: Assertion &#96;l.outputs &#x3D;&#x3D; params.inputs&#39; failed.</span><br><span class="line">Aborted (core dumped)</span><br></pre></td></tr></table></figure>
+<p>参考:https://groups.google.com/forum/#!topic/darknet/4_RNBWVEOnQ</p>
 <p>解决方案就是修改上一步的 <code>filters=45</code>。</p>
-<h3 id="3-3-error-3"><a href="#3-3-error-3" class="headerlink" title="3.3 error 3"></a>3.3 error 3</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">nvidia@tegra-ubuntu:~&#x2F;workspace&#x2F;cpp&#x2F;darknet$ sudo .&#x2F;darknet detector train ~&#x2F;data&#x2F;test_yolo_data&#x2F;cfg&#x2F;test.data ~&#x2F;data&#x2F;test_yolo_data&#x2F;cfg&#x2F;yolo-test.cfg ~&#x2F;data&#x2F;test_yolo_data&#x2F;darknet19_448.conv.23 </span><br><span class="line">yolo-test</span><br><span class="line">layer     filters    size              input                output</span><br><span class="line">    0 conv     32  3 x 3 &#x2F; 1   416 x 416 x   3   -&gt;   416 x 416 x  32</span><br><span class="line">    1 max          2 x 2 &#x2F; 2   416 x 416 x  32   -&gt;   208 x 208 x  32</span><br><span class="line">    2 conv     64  3 x 3 &#x2F; 1   208 x 208 x  32   -&gt;   208 x 208 x  64</span><br><span class="line">    3 max          2 x 2 &#x2F; 2   208 x 208 x  64   -&gt;   104 x 104 x  64</span><br><span class="line">    4 conv    128  3 x 3 &#x2F; 1   104 x 104 x  64   -&gt;   104 x 104 x 128</span><br><span class="line">    5 conv     64  1 x 1 &#x2F; 1   104 x 104 x 128   -&gt;   104 x 104 x  64</span><br><span class="line">    6 conv    128  3 x 3 &#x2F; 1   104 x 104 x  64   -&gt;   104 x 104 x 128</span><br><span class="line">    7 max          2 x 2 &#x2F; 2   104 x 104 x 128   -&gt;    52 x  52 x 128</span><br><span class="line">    8 conv    256  3 x 3 &#x2F; 1    52 x  52 x 128   -&gt;    52 x  52 x 256</span><br><span class="line">    9 conv    128  1 x 1 &#x2F; 1    52 x  52 x 256   -&gt;    52 x  52 x 128</span><br><span class="line">   10 conv    256  3 x 3 &#x2F; 1    52 x  52 x 128   -&gt;    52 x  52 x 256</span><br><span class="line">   11 max          2 x 2 &#x2F; 2    52 x  52 x 256   -&gt;    26 x  26 x 256</span><br><span class="line">   12 conv    512  3 x 3 &#x2F; 1    26 x  26 x 256   -&gt;    26 x  26 x 512</span><br><span class="line">   13 conv    256  1 x 1 &#x2F; 1    26 x  26 x 512   -&gt;    26 x  26 x 256</span><br><span class="line">   14 conv    512  3 x 3 &#x2F; 1    26 x  26 x 256   -&gt;    26 x  26 x 512</span><br><span class="line">   15 conv    256  1 x 1 &#x2F; 1    26 x  26 x 512   -&gt;    26 x  26 x 256</span><br><span class="line">   16 conv    512  3 x 3 &#x2F; 1    26 x  26 x 256   -&gt;    26 x  26 x 512</span><br><span class="line">   17 max          2 x 2 &#x2F; 2    26 x  26 x 512   -&gt;    13 x  13 x 512</span><br><span class="line">   18 conv   1024  3 x 3 &#x2F; 1    13 x  13 x 512   -&gt;    13 x  13 x1024</span><br><span class="line">   19 conv    512  1 x 1 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x 512</span><br><span class="line">   20 conv   1024  3 x 3 &#x2F; 1    13 x  13 x 512   -&gt;    13 x  13 x1024</span><br><span class="line">   21 conv    512  1 x 1 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x 512</span><br><span class="line">   22 conv   1024  3 x 3 &#x2F; 1    13 x  13 x 512   -&gt;    13 x  13 x1024</span><br><span class="line">   23 conv   1024  3 x 3 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x1024</span><br><span class="line">   24 conv   1024  3 x 3 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x1024</span><br><span class="line">   25 route  16</span><br><span class="line">   26 conv     64  1 x 1 &#x2F; 1    26 x  26 x 512   -&gt;    26 x  26 x  64</span><br><span class="line">   27 reorg              &#x2F; 2    26 x  26 x  64   -&gt;    13 x  13 x 256</span><br><span class="line">   28 route  27 24</span><br><span class="line">   29 conv   1024  3 x 3 &#x2F; 1    13 x  13 x1280   -&gt;    13 x  13 x1024</span><br><span class="line">   30 conv     45  1 x 1 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x  45</span><br><span class="line">   31 detection</span><br><span class="line">mask_scale: Using default &#39;1.000000&#39;</span><br><span class="line">Loading weights from &#x2F;home&#x2F;nvidia&#x2F;data&#x2F;test_yolo_data&#x2F;darknet19_448.conv.23...Done!</span><br><span class="line">Learning Rate: 0.001, Momentum: 0.9, Decay: 0.0005</span><br><span class="line">Couldn&#39;t open file: train.txt</span><br></pre></td></tr></table></figure>
-
-<p>参考： <a href="https://groups.google.com/forum/#!msg/darknet/7JgHFfTyFHM/kPzfynNnAQAJ" target="_blank" rel="noopener">https://groups.google.com/forum/#!msg/darknet/7JgHFfTyFHM/kPzfynNnAQAJ</a><br>这个解决办法是将 <code>test.cfg</code>文件中的 <code>subdivisions=8</code>修改为 <code>subdivisions=16</code>或者其他32,64等。但是这个解决办法对我无效，我后来发现需要在linux下重新 编辑一个新的文件<code>test.data</code>(voc.data)。是由于之前的文件是在windows下生成的，与ubuntu系统的编码格式不同。</p>
-<p>参考 </p>
-<p><a href="https://timebutt.github.io/static/how-to-train-yolov2-to-detect-custom-objects/" target="_blank" rel="noopener">https://timebutt.github.io/static/how-to-train-yolov2-to-detect-custom-objects/</a></p>
-<p><a href="https://pjreddie.com/darknet/yolo/" target="_blank" rel="noopener">https://pjreddie.com/darknet/yolo/</a></p>
+<h3 id="error-3">3.3 error 3</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">nvidia@tegra-ubuntu:~&#x2F;workspace&#x2F;cpp&#x2F;darknet$ sudo .&#x2F;darknet detector train ~&#x2F;data&#x2F;test_yolo_data&#x2F;cfg&#x2F;test.data ~&#x2F;data&#x2F;test_yolo_data&#x2F;cfg&#x2F;yolo-test.cfg ~&#x2F;data&#x2F;test_yolo_data&#x2F;darknet19_448.conv.23 </span><br><span class="line">yolo-test</span><br><span class="line">layer     filters    size              input                output</span><br><span class="line">    0 conv     32  3 x 3 &#x2F; 1   416 x 416 x   3   -&gt;   416 x 416 x  32</span><br><span class="line">    1 max          2 x 2 &#x2F; 2   416 x 416 x  32   -&gt;   208 x 208 x  32</span><br><span class="line">    2 conv     64  3 x 3 &#x2F; 1   208 x 208 x  32   -&gt;   208 x 208 x  64</span><br><span class="line">    3 max          2 x 2 &#x2F; 2   208 x 208 x  64   -&gt;   104 x 104 x  64</span><br><span class="line">    4 conv    128  3 x 3 &#x2F; 1   104 x 104 x  64   -&gt;   104 x 104 x 128</span><br><span class="line">    5 conv     64  1 x 1 &#x2F; 1   104 x 104 x 128   -&gt;   104 x 104 x  64</span><br><span class="line">    6 conv    128  3 x 3 &#x2F; 1   104 x 104 x  64   -&gt;   104 x 104 x 128</span><br><span class="line">    7 max          2 x 2 &#x2F; 2   104 x 104 x 128   -&gt;    52 x  52 x 128</span><br><span class="line">    8 conv    256  3 x 3 &#x2F; 1    52 x  52 x 128   -&gt;    52 x  52 x 256</span><br><span class="line">    9 conv    128  1 x 1 &#x2F; 1    52 x  52 x 256   -&gt;    52 x  52 x 128</span><br><span class="line">   10 conv    256  3 x 3 &#x2F; 1    52 x  52 x 128   -&gt;    52 x  52 x 256</span><br><span class="line">   11 max          2 x 2 &#x2F; 2    52 x  52 x 256   -&gt;    26 x  26 x 256</span><br><span class="line">   12 conv    512  3 x 3 &#x2F; 1    26 x  26 x 256   -&gt;    26 x  26 x 512</span><br><span class="line">   13 conv    256  1 x 1 &#x2F; 1    26 x  26 x 512   -&gt;    26 x  26 x 256</span><br><span class="line">   14 conv    512  3 x 3 &#x2F; 1    26 x  26 x 256   -&gt;    26 x  26 x 512</span><br><span class="line">   15 conv    256  1 x 1 &#x2F; 1    26 x  26 x 512   -&gt;    26 x  26 x 256</span><br><span class="line">   16 conv    512  3 x 3 &#x2F; 1    26 x  26 x 256   -&gt;    26 x  26 x 512</span><br><span class="line">   17 max          2 x 2 &#x2F; 2    26 x  26 x 512   -&gt;    13 x  13 x 512</span><br><span class="line">   18 conv   1024  3 x 3 &#x2F; 1    13 x  13 x 512   -&gt;    13 x  13 x1024</span><br><span class="line">   19 conv    512  1 x 1 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x 512</span><br><span class="line">   20 conv   1024  3 x 3 &#x2F; 1    13 x  13 x 512   -&gt;    13 x  13 x1024</span><br><span class="line">   21 conv    512  1 x 1 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x 512</span><br><span class="line">   22 conv   1024  3 x 3 &#x2F; 1    13 x  13 x 512   -&gt;    13 x  13 x1024</span><br><span class="line">   23 conv   1024  3 x 3 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x1024</span><br><span class="line">   24 conv   1024  3 x 3 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x1024</span><br><span class="line">   25 route  16</span><br><span class="line">   26 conv     64  1 x 1 &#x2F; 1    26 x  26 x 512   -&gt;    26 x  26 x  64</span><br><span class="line">   27 reorg              &#x2F; 2    26 x  26 x  64   -&gt;    13 x  13 x 256</span><br><span class="line">   28 route  27 24</span><br><span class="line">   29 conv   1024  3 x 3 &#x2F; 1    13 x  13 x1280   -&gt;    13 x  13 x1024</span><br><span class="line">   30 conv     45  1 x 1 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x  45</span><br><span class="line">   31 detection</span><br><span class="line">mask_scale: Using default &#39;1.000000&#39;</span><br><span class="line">Loading weights from &#x2F;home&#x2F;nvidia&#x2F;data&#x2F;test_yolo_data&#x2F;darknet19_448.conv.23...Done!</span><br><span class="line">Learning Rate: 0.001, Momentum: 0.9, Decay: 0.0005</span><br><span class="line">Couldn&#39;t open file: train.txt</span><br></pre></td></tr></table></figure>
+<p>参考： https://groups.google.com/forum/#!msg/darknet/7JgHFfTyFHM/kPzfynNnAQAJ 这个解决办法是将 <code>test.cfg</code>文件中的 <code>subdivisions=8</code>修改为 <code>subdivisions=16</code>或者其他32,64等。但是这个解决办法对我无效，我后来发现需要在linux下重新 编辑一个新的文件<code>test.data</code>(voc.data)。是由于之前的文件是在windows下生成的，与ubuntu系统的编码格式不同。</p>
+<p>参考</p>
+<p>https://timebutt.github.io/static/how-to-train-yolov2-to-detect-custom-objects/</p>
+<p>https://pjreddie.com/darknet/yolo/</p>
 
     </div>
-    <p class="post-meta">
-        <span class="post-cat">分类：
-            <a class="cat-link" href="/categories/blog/">blog</a>
-        </span>
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-</article>
-<!-- 分享按钮 -->
 
-  <div class="article-share clearfix text-center">
-    <div class="share-area">
-      <span class="share-txt">分享到：</span>
-      <a href="javascript: window.open('http://service.weibo.com/share/share.php?url=' + encodeURIComponent(location.href) + '&title=' + document.title + '&language=zh_cn');" class="share-icon weibo"></a>
-      <a href="javascript: alert('请复制链接到微信并发送');" class="share-icon wechat"></a>
-      <a href="javascript: window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + encodeURIComponent(location.href) + '&title=' + document.title);" class="share-icon qqzone"></a>
-      <a href="javascript: window.open('http://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(location.href) + '&desc=Jelon个人博客&title=' + document.title + '&callback=' + encodeURIComponent(location.href));" class="share-icon qq"></a>
-      <a href="javascript: window.open('http://shuo.douban.com/!service/share?href=' + encodeURIComponent(location.href) + '&name=' + document.title + '&text=' + document.title);" class="share-icon douban"></a>
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2017-10-22-CNN+RNN_Audio/" rel="prev" title="CNN+RNN来做口语识别">
+      <i class="fa fa-chevron-left"></i> CNN+RNN来做口语识别
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2018-02-03-LHYDeepLearning_highway/" rel="next" title="李宏毅深度学习-六-HighwayNetwork和LSTM">
+      李宏毅深度学习-六-HighwayNetwork和LSTM <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
   </div>
 
 
-<!-- 上一篇/下一篇 -->
+          </div>
+          
 
-<div class="article-nav clearfix">
-    
-    <span class="prev fl">
-        上一篇<br >
-        <a href="/2019/12/23/2018-02-03-LHYDeepLearning_highway/">
-            
-                李宏毅深度学习-六-HighwayNetwork和LSTM
-            
-        </a>
-    </span>
-    
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
 
-    
-    <span class="next fr">
-        下一篇<br >
-        <a href="/2019/12/23/2017-10-22-CNN+RNN_Audio/">
-            
-                CNN+RNN来做口语识别
-            
-        </a>
-    </span>
-    
-</div>
-
-<!-- 文章评论 -->
-
+        </div>
+          
   
-<script src="/js/comment.js"></script>
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
 
-  <div id="comments" class="comment">
-    <!--
-    <div class="sign-bar">
-      GitHub 已登录!
-      <span class="sign-link">登出</span>
-    </div>
-    <section class="box">
-      <div class="com-avatar"><img src="/img/jelon.jpg" alt="avatar"></div>
-      <div class="com-text">
-        <div class="main">
-          <textarea class="text-area-edited show" placeholder="欢迎评论！"></textarea>
-          <div class="text-area-preview"></div>
-        </div>
-        <div class="switch">
-          <div class="switch-item on">编辑</div>
-          <div class="switch-item">预览</div>
-        </div>
-        <div class="button">提交</div>
-      </div>
-    </section>
-    <section class="tips">注：评论支持 markdown 语法！</section>
-    <section class="list-wrap">
-      <ul class="list">
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">张德龙</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like liked">已赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">333333</div>
-          </div>
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
         </li>
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">刘德华</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like">点赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">vvvvv</div>
-          </div>
+        <li class="sidebar-nav-overview">
+          Overview
         </li>
       </ul>
-      <div class="page-nav">
-        <a href="javascript: void(0);" class="item">1</a>
-        <a href="javascript: void(0);" class="item">2</a>
-        <a href="javascript: void(0);" class="item current">3</a>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-准备数据"><span class="nav-number">1.</span> <span class="nav-text">一 准备数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#obj.cfg"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 obj.cfg</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#obj.data"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 obj.data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#obj.names"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 obj.names</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#weights权重文件"><span class="nav-number">1.4.</span> <span class="nav-text">1.4 weights权重文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-训练"><span class="nav-number">2.</span> <span class="nav-text">二 训练</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-错误排查"><span class="nav-number">3.</span> <span class="nav-text">三 错误排查</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#error-1"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 error 1:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#error-2"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 error 2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#error-3"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 error 3</span></a></li></ol></li></ol></div>
       </div>
-    </section>
-    -->
-  </div>
-  <script>
-  JELON.Comment({
-    container: 'comments',
-    label: '2017-11-14-darknet_on_tx2' || '2019/12/23/2017-11-14-darknet_on_tx2/',
-    owner: 'your_github_id',
-    repo: 'your_blog_comments',
-    clientId: 'your_client_id',
-    clientSecret: 'your_client_secret'
-  });
-  </script>
+      <!--/noindex-->
 
-
-            </div>
-
-        </section>
-        <!-- 侧栏部分 -->
-<aside class="sidebar">
-    <section class="widget">
-        <h3 class="widget-hd"><strong>文章分类</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-    <li>
-        <a href="/categories/blog/">blog</a>
-        <span class="badge">(94)</span>
-    </li>
-    
-</ul>
-    </section>
-
-    
-    <section class="widget">
-        <h3 class="widget-hd"><strong>热门标签</strong></h3>
-        <!-- 文章标签 -->
-<div class="widget-bd tag-wrap">
-  
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
 </div>
-    </section>
-    
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
 
-    
 
-    
-    <!-- 友情链接 -->
-    <section class="widget">
-        <h3 class="widget-hd"><strong>友情链接</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-        <li>
-            <a href="https://jelon.top" target="_blank" title="Jelon个人前端小站">前端博客小站</a>
-        </li>
-    
-        <li>
-            <a href="https://www.baidu.com" target="_blank" title="百度搜索">百度</a>
-        </li>
-    
-</ul>
-    </section>
-    
-</aside>
-<!-- / 侧栏部分 -->
+
+      </div>
+
     </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
 
-    <!-- 博客底部 -->
+
+      </div>
+    </main>
+
     <footer class="footer">
-    &copy;
-    
-        2016-2019
-    
+      <div class="footer-inner">
+        
 
-    <a href="/">Jelon Loves You</a>
-</footer>
-<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
 
-    <!--博客js脚本 -->
-    <!-- 这里放网站js脚本 -->
+        
 
-<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
 
 </body>
 </html>

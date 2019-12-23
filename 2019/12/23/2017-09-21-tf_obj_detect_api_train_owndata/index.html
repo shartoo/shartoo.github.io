@@ -1,159 +1,267 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" >
-    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
-    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
-    
-    <title>使用tensorflow object detection api训练自己的数据 | Hexo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
-    <meta name="keywords" content="Jelon, 前端, Web, 张德龙, 前端开发" >
-    <meta name="description" content="Jelon个人前端小站" >
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml" >
-    
-    
-    <link rel="shortcut icon" href="/favicon.ico" >
-    
-    
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/main.css">
 
-    <!--[if lt IE 9]>
-    
-<script src="/js/html5.js"></script>
 
-    <![endif]-->
-    
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "//hm.baidu.com/hm.js?fd459238242776d173cdc64918fb32f2";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://shartoo.github.com').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
 </script>
 
+  <meta name="description" content="深度学习实战">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用tensorflow object detection api训练自己的数据">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2017-09-21-tf_obj_detect_api_train_owndata/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="深度学习实战">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/tf_obj_detect_own_iamges.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/tf_obj_detect_own_xml.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/tf_obj_detect_own_dict.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/tf_obj_detect_own_main.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/tf_obj_detect_own_trainval.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/tf_obj_detect_own_train_result.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/tf_obj_detect_own_tensorboard_cmd.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/tf_obj_detect_own_tensorboard2.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/tf_obj_detect_own_ckpt.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/tf_obj_detect_own_graph.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.520Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.217Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/tf_obj_detect_own_iamges.jpg">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<link rel="canonical" href="http://shartoo.github.com/2019/12/23/2017-09-21-tf_obj_detect_api_train_owndata/">
 
-<body class="home">
-    <!--[if lt IE 9]>
-    <div class="browsehappy">
-        当前网页 <strong>不支持</strong>
-        你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/" target="_blank" rel="noopener">升级你的浏览器</a>.
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>使用tensorflow object detection api训练自己的数据 | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
     </div>
-    <![endif]-->
+  </div>
 
-    <!-- 博客头部 -->
-    <header class="header">
-    <section class="container header-main">
-        <div class="logo">
-            <a href="/">
-                <div class="cover">
-                    <span class="name">Hexo</span>
-                    <span class="description"></span>
-                </div>
-            </a>
-        </div>
-        <div class="dropnav icon-paragraph-justify" id="JELON__btnDropNav"></div>
-        <ul class="menu hidden" id="JELON__menu">
-            
-            <li rel="/2019/12/23/2017-09-21-tf_obj_detect_api_train_owndata/index.html" class="item ">
-                <a href="/" title="首页" class="icon-home">&nbsp;首页</a>
-            </li>
-            
-            <li rel="/2019/12/23/2017-09-21-tf_obj_detect_api_train_owndata/index.html" class="item ">
-                <a href="/lab/" title="实验室" class="icon-lab">&nbsp;实验室</a>
-            </li>
-            
-            <li rel="/2019/12/23/2017-09-21-tf_obj_detect_api_train_owndata/index.html" class="item ">
-                <a href="/about/" title="关于" class="icon-about">&nbsp;关于</a>
-            </li>
-            
-            <li rel="/2019/12/23/2017-09-21-tf_obj_detect_api_train_owndata/index.html" class="item ">
-                <a href="/comment/" title="留言" class="icon-comment">&nbsp;留言</a>
-            </li>
-            
-        </ul>
-        <div class="profile clearfix">
-            <div class="feeds fl">
-                
-                
-                <p class="links">
-                    
-                        <a href="https://github.com/jangdelong" target="_blank">Github</a>
-                        |
-                    
-                        <a href="https://pages.coding.me" target="_blank">Hosted by Coding Pages</a>
-                        
-                    
-                </p>
-                <p class="sns">
-                    
-                        <a href="http://weibo.com/jangdelong" class="sinaweibo" target="_blank"><b>■</b> 新浪微博</a>
-                    
-                        <a href="https://www.facebook.com/profile.php?id=100011855760219&amp;ref=bookmarks" class="qqweibo" target="_blank"><b>■</b> Facebook</a>
-                    
-                    <a href="javascript: void(0);" class="wechat">
-                        <b>■</b>
-                        公众号
-                        <span class="popover">
-                            <img src="/img/wechat_mp.jpg" width="120" height="120" alt="我的微信订阅号">
-                            <i class="arrow"></i>
-                        </span>
-                    </a>
-                </p>
-                
-            </div>
-            <div class="avatar fr">
-                <img src="/img/jelon.jpg" alt="avatar" title="Jelon" >
-            </div>
-        </div>
-    </section>
-</header>
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
 
 
-    <!-- 博客正文 -->
-    <div class="container body clearfix">
-        <section class="content">
-            <div class="content-main widget">
-                <!-- 文章页 -->
-<!-- 文章 -->
-<article class="post article">
-    <header class="text-center">
-        <h3 class="post-title"><span>使用tensorflow object detection api训练自己的数据</span></h3>
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
     </header>
-    <p class="post-meta text-center">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.520Z">2019-12-23</time>
-    </p>
-    <div class="post-content">
-        <h2 id="一-数据准备"><a href="#一-数据准备" class="headerlink" title="一  数据准备"></a>一  数据准备</h2><p>首先，我们有如下数据结构如下：</p>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://shartoo.github.com/2019/12/23/2017-09-21-tf_obj_detect_api_train_owndata/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用tensorflow object detection api训练自己的数据
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2019-12-23 18:45:59 / Modified: 17:55:14" itemprop="dateCreated datePublished" datetime="2019-12-23T18:45:59+08:00">2019-12-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">深度学习实战</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="一-数据准备">一 数据准备</h2>
+<p>首先，我们有如下数据结构如下：</p>
 <ul>
-<li>data<ul>
-<li>annotations:标注文件<ul>
+<li>data
+<ul>
+<li>annotations:标注文件
+<ul>
 <li>txt：txt文本标注文件</li>
 <li>xmls：xml格式标注文件</li>
-</ul>
-</li>
+</ul></li>
 <li>images：图像文件</li>
 <li>config: 配置文件目录，下面有个当前数据集的 <code>.config</code> 配置文件。</li>
 <li>tf_records：需要创建的一个目录，用于存储tensorflow将images转换为tf_records。</li>
 <li>xx_label_map.pbtxt:分类名称对应的整型分类</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h3 id="1-1-images文件"><a href="#1-1-images文件" class="headerlink" title="1.1 images文件"></a>1.1 images文件</h3><p>images目录下的文件为：</p>
-<p><img src="/images/blog/tf_obj_detect_own_iamges.jpg" alt="images目录"></p>
-<h3 id="1-2-标注文件"><a href="#1-2-标注文件" class="headerlink" title="1.2  标注文件"></a>1.2  标注文件</h3><p>xml标注文件类似：</p>
-<p><img src="/images/blog/tf_obj_detect_own_xml.jpg" alt="xml标注文件"></p>
-<p> txt标注文件可以不需要。</p>
-<h3 id="1-3-label-map-pbtxt文件"><a href="#1-3-label-map-pbtxt文件" class="headerlink" title="1.3  label_map.pbtxt文件"></a>1.3  label_map.pbtxt文件</h3><p><code>xx_label_map.pbtxt</code>文件中的内容如下：</p>
+<h3 id="images文件">1.1 images文件</h3>
+<p>images目录下的文件为：</p>
+<figure>
+<img src="/images/blog/tf_obj_detect_own_iamges.jpg" alt="images目录" /><figcaption>images目录</figcaption>
+</figure>
+<p>### 1.2 标注文件</p>
+<p>xml标注文件类似：</p>
+<figure>
+<img src="/images/blog/tf_obj_detect_own_xml.jpg" alt="xml标注文件" /><figcaption>xml标注文件</figcaption>
+</figure>
+<p>txt标注文件可以不需要。</p>
+<h3 id="label_map.pbtxt文件">1.3 label_map.pbtxt文件</h3>
+<p><code>xx_label_map.pbtxt</code>文件中的内容如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">item &#123;</span><br><span class="line">  id: 1</span><br><span class="line">  name: &#39;Abyssinian&#39;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">item &#123;</span><br><span class="line">  id: 2</span><br><span class="line">  name: &#39;american_bulldog&#39;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">item &#123;</span><br><span class="line">  id: 3</span><br><span class="line">  name: &#39;american_pit_bull_terrier&#39;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="1-4-创建tf-record文件"><a href="#1-4-创建tf-record文件" class="headerlink" title="1.4  创建tf_record文件"></a>1.4  创建tf_record文件</h3><p>先创建一个<code>create_xx_tf_record.py</code>文件，单独用来处理训练数据。可以直接从object_detection工程下的<code>create_pacal_tf_record.py</code>（如果是每个图片只有一个分类，可以使用<code>create_pet_tf_record.py</code>）复制而来。</p>
+<h3 id="创建tf_record文件">1.4 创建tf_record文件</h3>
+<p>先创建一个<code>create_xx_tf_record.py</code>文件，单独用来处理训练数据。可以直接从object_detection工程下的<code>create_pacal_tf_record.py</code>（如果是每个图片只有一个分类，可以使用<code>create_pet_tf_record.py</code>）复制而来。</p>
 <p>修改起始参数配置：</p>
 <ul>
 <li>data_dir: 数据目录，包含了图片和标注的目录</li>
@@ -161,14 +269,21 @@
 <li>label_map_path:上面提到的xx_label_map.pbtxt</li>
 </ul>
 <p>修改<code>dict_to_tf_example</code></p>
-<p> 参考你的标准xml文件，有些地方需要修改。</p>
-<p> <img src="/images/blog/tf_obj_detect_own_dict.jpg" alt="dict_to_tf"></p>
+<p>参考你的标准xml文件，有些地方需要修改。</p>
+<figure>
+<img src="/images/blog/tf_obj_detect_own_dict.jpg" alt="dict_to_tf" /><figcaption>dict_to_tf</figcaption>
+</figure>
 <p>修改<code>main</code></p>
-<p><img src="/images/blog/tf_obj_detect_own_main.jpg" alt="修改main"></p>
-<p> 确保你的标注文件，图片目录对应的目录。标注文件目录下是否存在 <code>trainval.txt</code>文件是否存在，这个需要<strong>自己生成</strong>。我生成的列表（注意：没有带后缀）为：</p>
-<p><img src="/images/blog/tf_obj_detect_own_trainval.jpg" alt="trainval文件"></p>
+<figure>
+<img src="/images/blog/tf_obj_detect_own_main.jpg" alt="修改main" /><figcaption>修改main</figcaption>
+</figure>
+<p>确保你的标注文件，图片目录对应的目录。标注文件目录下是否存在 <code>trainval.txt</code>文件是否存在，这个需要<strong>自己生成</strong>。我生成的列表（注意：没有带后缀）为：</p>
+<figure>
+<img src="/images/blog/tf_obj_detect_own_trainval.jpg" alt="trainval文件" /><figcaption>trainval文件</figcaption>
+</figure>
 <p>执行完之后会在对应目录下生成 tf_record文件。</p>
-<h3 id="1-5-创建-config-配置文件"><a href="#1-5-创建-config-配置文件" class="headerlink" title="1.5 创建 .config 配置文件"></a>1.5 创建 <code>.config</code> 配置文件</h3><p>目录<code>tensorflow\models\object_detection\samples\configs</code>下有各种配置文件，当前工程使用的是  <code>faster_rcnn_inception_resnet_v2_robot.config</code>，将其修改为适应当前数据的配置。</p>
+<h3 id="创建-.config-配置文件">1.5 创建 <code>.config</code> 配置文件</h3>
+<p>目录<code>tensorflow\models\object_detection\samples\configs</code>下有各种配置文件，当前工程使用的是 <code>faster_rcnn_inception_resnet_v2_robot.config</code>，将其修改为适应当前数据的配置。</p>
 <p>主要修改了这些参数：</p>
 <ul>
 <li>num_classes： 分类数目。视数据分类数目而定，当前数据集只有3个分类，修改为3</li>
@@ -176,7 +291,8 @@
 <li>from_detection_checkpoint： 设置为true</li>
 <li>num_steps: 训练步数。如果数据集较小，可以修改为较小。<code>pets</code>数据集包含7393张图片设置为20万次，当前数据集只有500张，设置为一万次应该差不多。可以在训练的时候查看loss增减情况来修改步数。</li>
 </ul>
-<h2 id="2-训练"><a href="#2-训练" class="headerlink" title="2 训练"></a>2 训练</h2><p>训练时执行<code>train.py</code>即可。不过需要传入一些参数，可以使用官网的指定方式：</p>
+<h2 id="训练">2 训练</h2>
+<p>训练时执行<code>train.py</code>即可。不过需要传入一些参数，可以使用官网的指定方式：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">python object_detection&#x2F;train.py \</span><br><span class="line">    --logtostderr \</span><br><span class="line">    --pipeline_config_path&#x3D;$&#123;PATH_TO_YOUR_PIPELINE_CONFIG&#125; \</span><br><span class="line">    --train_dir&#x3D;$&#123;PATH_TO_TRAIN_DIR&#125;</span><br></pre></td></tr></table></figure>
 <p>我在pycharm下运行，所以在Run-&gt;configigure里面加入参数即可。需要指定的参数是：</p>
 <ul>
@@ -184,24 +300,31 @@
 <li>train_dir: 训练模型过程中保存的ckpt文件（tensorflow的权重文件）</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--logtostderr --pipeline_config_path&#x3D;D:&#x2F;data&#x2F;robot_auto_seller&#x2F;config&#x2F;faster_rcnn_inception_resnet_v2_robot.config --train_dir&#x3D;D:&#x2F;data&#x2F;robot_auto_seller&#x2F;tf_ckpt</span><br></pre></td></tr></table></figure>
-
 <p>训练完成之后，大概的效果如下：</p>
-<p><img src="/images/blog/tf_obj_detect_own_train_result.jpg" alt="训练效果"></p>
+<figure>
+<img src="/images/blog/tf_obj_detect_own_train_result.jpg" alt="训练效果" /><figcaption>训练效果</figcaption>
+</figure>
 <p>如果训练得当，应该可以用tensorboard查看训练参数变化：</p>
-<p><img src="/images/blog/tf_obj_detect_own_tensorboard_cmd.jpg" alt="tensorboard"></p>
-<p>打开浏览器中的： <a href="http://localhost:6006/#scalars" target="_blank" rel="noopener">http://localhost:6006/#scalars</a></p>
-<p><img src="/images/blog/tf_obj_detect_own_tensorboard2.jpg" alt="tensorboard2"></p>
-<h2 id="3-转换权重文件"><a href="#3-转换权重文件" class="headerlink" title="3 转换权重文件"></a>3 转换权重文件</h2><p>训练完成之后的权重文件大概是会包含如下文件:</p>
+<figure>
+<img src="/images/blog/tf_obj_detect_own_tensorboard_cmd.jpg" alt="tensorboard" /><figcaption>tensorboard</figcaption>
+</figure>
+<p>打开浏览器中的： http://localhost:6006/#scalars</p>
+<figure>
+<img src="/images/blog/tf_obj_detect_own_tensorboard2.jpg" alt="tensorboard2" /><figcaption>tensorboard2</figcaption>
+</figure>
+<h2 id="转换权重文件">3 转换权重文件</h2>
+<p>训练完成之后的权重文件大概是会包含如下文件:</p>
 <ul>
 <li>model.ckpt-${CHECKPOINT_NUMBER}.data-00000-of-00001,</li>
 <li>model.ckpt-${CHECKPOINT_NUMBER}.index</li>
 <li>model.ckpt-${CHECKPOINT_NUMBER}.meta</li>
 </ul>
 <p>我生成的大概为：</p>
-<p><img src="/images/blog/tf_obj_detect_own_ckpt.jpg" alt="ckpt文件"></p>
-<p> 这些文件无法直接使用，<code>eval.py</code> 所使用的权重文件是<code>.pb</code>。需要做一步转换，object_detection工程中已经包含了该工具<code>export_inference_graph.py</code>，运行指令为：</p>
+<figure>
+<img src="/images/blog/tf_obj_detect_own_ckpt.jpg" alt="ckpt文件" /><figcaption>ckpt文件</figcaption>
+</figure>
+<p>这些文件无法直接使用，<code>eval.py</code> 所使用的权重文件是<code>.pb</code>。需要做一步转换，object_detection工程中已经包含了该工具<code>export_inference_graph.py</code>，运行指令为：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python object_detection&#x2F;export_inference_graph.py \</span><br><span class="line">    --input_type image_tensor \</span><br><span class="line">    --pipeline_config_path $&#123;PIPELINE_CONFIG_PATH&#125; \</span><br><span class="line">    --trained_checkpoint_prefix $&#123;TRAIN_PATH&#125; \</span><br><span class="line">    --output_directory output_inference_graph.pb</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li>pipeline_config_path :pipeline的配置路径，使用的是上面训练所使用的<code>.config</code>文件</li>
 <li>trained_checkpoint_prefix :上一步保存tensorflow的权重文件ckpt的。精确到step数目，比如为<code>xxx/model.ckpt-8876</code></li>
@@ -209,224 +332,211 @@
 </ul>
 <p>我的脚本为：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--input_type image_tensor --pipeline_config_path D:&#x2F;data&#x2F;aa&#x2F;config&#x2F;faster_rcnn_inception_resnet_v2_robot.config --trained_checkpoint_prefix D:&#x2F;data&#x2F;aa&#x2F;tf_ckpt&#x2F;model.ckpt-6359  --output_directory  D:&#x2F;data&#x2F;aa&#x2F;robot_inference_graph</span><br></pre></td></tr></table></figure>
-
 <p>生成的效果为：</p>
-<p><img src="/images/blog/tf_obj_detect_own_graph.png" alt="pb文件"></p>
-<h2 id="4-预测"><a href="#4-预测" class="headerlink" title="4  预测"></a>4  预测</h2><p>预测代码为：</p>
+<figure>
+<img src="/images/blog/tf_obj_detect_own_graph.png" alt="pb文件" /><figcaption>pb文件</figcaption>
+</figure>
+<p>## 4 预测</p>
+<p>预测代码为：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"># coding: utf-8</span><br><span class="line">import numpy as np</span><br><span class="line">import os</span><br><span class="line">import six.moves.urllib as urllib</span><br><span class="line">import sys</span><br><span class="line">import tarfile</span><br><span class="line">import tensorflow as tf</span><br><span class="line">import zipfile</span><br><span class="line"></span><br><span class="line">from collections import defaultdict</span><br><span class="line">from io import StringIO</span><br><span class="line">from matplotlib import pyplot as plt</span><br><span class="line">from PIL import Image</span><br><span class="line">import cv2  </span><br><span class="line">from object_detection.utils import label_map_util</span><br><span class="line">from object_detection.utils import visualization_utils as vis_util</span><br><span class="line"></span><br><span class="line">cap &#x3D; cv2.VideoCapture(0)</span><br><span class="line">PATH_TO_CKPT &#x3D; &#39;D:&#x2F;data&#x2F;aa&#x2F;robot_inference_graph&#x2F;frozen_inference_graph.pb&#39;</span><br><span class="line">PATH_TO_LABELS &#x3D; os.path.join(&#39;D:&#x2F;data&#x2F;aa&#39;, &#39;robot_label_map.pbtxt&#39;)</span><br><span class="line">NUM_CLASSES &#x3D; 3</span><br><span class="line"></span><br><span class="line"># Load a (frozen) Tensorflow model into memory.</span><br><span class="line">detection_graph &#x3D; tf.Graph()</span><br><span class="line">with detection_graph.as_default():</span><br><span class="line">    od_graph_def &#x3D; tf.GraphDef()</span><br><span class="line">    with tf.gfile.GFile(PATH_TO_CKPT, &#39;rb&#39;) as fid:</span><br><span class="line">        serialized_graph &#x3D; fid.read()</span><br><span class="line">        od_graph_def.ParseFromString(serialized_graph)</span><br><span class="line">        tf.import_graph_def(od_graph_def, name&#x3D;&#39;&#39;)</span><br><span class="line"></span><br><span class="line">label_map &#x3D; label_map_util.load_labelmap(PATH_TO_LABELS)</span><br><span class="line">categories &#x3D; label_map_util.convert_label_map_to_categories(label_map, max_num_classes&#x3D;NUM_CLASSES,</span><br><span class="line">                                                            use_display_name&#x3D;True)</span><br><span class="line">category_index &#x3D; label_map_util.create_category_index(categories)</span><br><span class="line"></span><br><span class="line">def load_image_into_numpy_array(image):</span><br><span class="line">    (im_width, im_height) &#x3D; image.size</span><br><span class="line">    return np.array(image.getdata()).reshape(</span><br><span class="line">        (im_height, im_width, 3)).astype(np.uint8)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># # Detection</span><br><span class="line">PATH_TO_TEST_IMAGES_DIR &#x3D; &#39;D:&#x2F;data&#x2F;aa&#x2F;images&#39;</span><br><span class="line">TEST_IMAGE_PATHS &#x3D; [os.path.join(PATH_TO_TEST_IMAGES_DIR, &#39;000&#123;&#125;.jpg&#39;.format(i)) for i in range(109, 115)]</span><br><span class="line"># Size, in inches, of the output images.</span><br><span class="line">IMAGE_SIZE &#x3D; (12, 8)</span><br><span class="line"></span><br><span class="line">with detection_graph.as_default():</span><br><span class="line">    with tf.Session(graph&#x3D;detection_graph) as sess:</span><br><span class="line">        #while True:  # for image_path in TEST_IMAGE_PATHS:    #changed 20170825</span><br><span class="line">        # Definite input and output Tensors for detection_graph</span><br><span class="line">        image_tensor &#x3D; detection_graph.get_tensor_by_name(&#39;image_tensor:0&#39;)</span><br><span class="line">        # Each box represents a part of the image where a particular object was detected.</span><br><span class="line">        detection_boxes &#x3D; detection_graph.get_tensor_by_name(&#39;detection_boxes:0&#39;)</span><br><span class="line">        # Each score represent how level of confidence for each of the objects.</span><br><span class="line">        # Score is shown on the result image, together with the class label.</span><br><span class="line">        detection_scores &#x3D; detection_graph.get_tensor_by_name(&#39;detection_scores:0&#39;)</span><br><span class="line">        detection_classes &#x3D; detection_graph.get_tensor_by_name(&#39;detection_classes:0&#39;)</span><br><span class="line">        num_detections &#x3D; detection_graph.get_tensor_by_name(&#39;num_detections:0&#39;)</span><br><span class="line">        for image_path in TEST_IMAGE_PATHS:</span><br><span class="line">            image &#x3D; Image.open(image_path)</span><br><span class="line">            # the array based representation of the image will be used later in order to prepare the</span><br><span class="line">            # result image with boxes and labels on it.</span><br><span class="line">            image_np &#x3D; load_image_into_numpy_array(image)</span><br><span class="line">            # Expand dimensions since the model expects images to have shape: [1, None, None, 3]</span><br><span class="line">            image_np_expanded &#x3D; np.expand_dims(image_np, axis&#x3D;0)</span><br><span class="line">            # Actual detection.</span><br><span class="line">            (boxes, scores, classes, num) &#x3D; sess.run(</span><br><span class="line">                [detection_boxes, detection_scores, detection_classes, num_detections],</span><br><span class="line">                feed_dict&#x3D;&#123;image_tensor: image_np_expanded&#125;)</span><br><span class="line">            # Visualization of the results of a detection.</span><br><span class="line">            print(boxes)</span><br><span class="line">            vis_util.visualize_boxes_and_labels_on_image_array(</span><br><span class="line">                image_np,</span><br><span class="line">                np.squeeze(boxes),</span><br><span class="line">                np.squeeze(classes).astype(np.int32),</span><br><span class="line">                np.squeeze(scores),</span><br><span class="line">                category_index,</span><br><span class="line">                use_normalized_coordinates&#x3D;True,</span><br><span class="line">                line_thickness&#x3D;8)</span><br><span class="line">            plt.figure(figsize&#x3D;IMAGE_SIZE)</span><br><span class="line">            cv2.imwrite(&#39;D:&#x2F;data&#x2F;robot_auto_seller&#x2F;&#39;+os.path.basename(image_path),image_np)</span><br><span class="line">            plt.imshow(image_np)</span><br></pre></td></tr></table></figure>
 <p>此检测过程有两个版本。一个版本是开启摄像头检测，一个版本是直接检测图片。上面这部分代码是检测图片的。修改部分为</p>
 <ul>
-<li><p>PATH_TO_CKPT ： 训练生成的<code>.pb</code>权重文件（上一步转换之后的结果）</p>
-</li>
-<li><p>PATH_TO_LABELS ：标签和分类(int)对应关系配置文件。第一步中设置的。</p>
-</li>
-<li><p>NUM_CLASSES ： 分类数。当前数据集是3个分类</p>
-</li>
-<li><p>PATH_TO_TEST_IMAGES_DIR ：需要检测的图片的路径。<br>TEST_IMAGE_PATHS ： 需要检测的图片列表。</p>
-<p>使用摄像头检测的例子放在附件中了。</p>
-</li>
+<li>PATH_TO_CKPT ： 训练生成的<code>.pb</code>权重文件（上一步转换之后的结果）</li>
+<li>PATH_TO_LABELS ：标签和分类(int)对应关系配置文件。第一步中设置的。</li>
+<li>NUM_CLASSES ： 分类数。当前数据集是3个分类</li>
+<li>PATH_TO_TEST_IMAGES_DIR ：需要检测的图片的路径。 TEST_IMAGE_PATHS ： 需要检测的图片列表。</li>
 </ul>
-<p>参考：<br><a href="https://github.com/tensorflow/models/blob/master/object_detection/object_detection_tutorial.ipynb" target="_blank" rel="noopener">tensorflow 官方教程</a><br><a href="https://medium.com/towards-data-science/how-to-train-your-own-object-detector-with-tensorflows-object-detector-api-bec72ecfe1d9" target="_blank" rel="noopener">浣熊检测（英文）</a><br><a href="http://blog.csdn.net/qq_20373723/article/details/77838545" target="_blank" rel="noopener">tensorflow 生成pb文件</a></p>
+<p>使用摄像头检测的例子放在附件中了。</p>
+<p>参考： <a href="https://github.com/tensorflow/models/blob/master/object_detection/object_detection_tutorial.ipynb" target="_blank" rel="noopener">tensorflow 官方教程</a> <a href="https://medium.com/towards-data-science/how-to-train-your-own-object-detector-with-tensorflows-object-detector-api-bec72ecfe1d9" target="_blank" rel="noopener">浣熊检测（英文）</a> <a href="http://blog.csdn.net/qq_20373723/article/details/77838545" target="_blank" rel="noopener">tensorflow 生成pb文件</a></p>
 
     </div>
-    <p class="post-meta">
-        <span class="post-cat">分类：
-            <a class="cat-link" href="/categories/blog/">blog</a>
-        </span>
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-</article>
-<!-- 分享按钮 -->
 
-  <div class="article-share clearfix text-center">
-    <div class="share-area">
-      <span class="share-txt">分享到：</span>
-      <a href="javascript: window.open('http://service.weibo.com/share/share.php?url=' + encodeURIComponent(location.href) + '&title=' + document.title + '&language=zh_cn');" class="share-icon weibo"></a>
-      <a href="javascript: alert('请复制链接到微信并发送');" class="share-icon wechat"></a>
-      <a href="javascript: window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + encodeURIComponent(location.href) + '&title=' + document.title);" class="share-icon qqzone"></a>
-      <a href="javascript: window.open('http://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(location.href) + '&desc=Jelon个人博客&title=' + document.title + '&callback=' + encodeURIComponent(location.href));" class="share-icon qq"></a>
-      <a href="javascript: window.open('http://shuo.douban.com/!service/share?href=' + encodeURIComponent(location.href) + '&name=' + document.title + '&text=' + document.title);" class="share-icon douban"></a>
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2017-09-20-tensorflow_object_detection_api/" rel="prev" title="window测试tensorflow object detection api">
+      <i class="fa fa-chevron-left"></i> window测试tensorflow object detection api
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2017-10-22-CNN+RNN_Audio/" rel="next" title="CNN+RNN来做口语识别">
+      CNN+RNN来做口语识别 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
   </div>
 
 
-<!-- 上一篇/下一篇 -->
+          </div>
+          
 
-<div class="article-nav clearfix">
-    
-    <span class="prev fl">
-        上一篇<br >
-        <a href="/2019/12/23/2017-10-22-CNN+RNN_Audio/">
-            
-                CNN+RNN来做口语识别
-            
-        </a>
-    </span>
-    
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
 
-    
-    <span class="next fr">
-        下一篇<br >
-        <a href="/2019/12/23/2017-09-20-tensorflow_object_detection_api/">
-            
-                window测试tensorflow object detection api
-            
-        </a>
-    </span>
-    
-</div>
-
-<!-- 文章评论 -->
-
+        </div>
+          
   
-<script src="/js/comment.js"></script>
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
 
-  <div id="comments" class="comment">
-    <!--
-    <div class="sign-bar">
-      GitHub 已登录!
-      <span class="sign-link">登出</span>
-    </div>
-    <section class="box">
-      <div class="com-avatar"><img src="/img/jelon.jpg" alt="avatar"></div>
-      <div class="com-text">
-        <div class="main">
-          <textarea class="text-area-edited show" placeholder="欢迎评论！"></textarea>
-          <div class="text-area-preview"></div>
-        </div>
-        <div class="switch">
-          <div class="switch-item on">编辑</div>
-          <div class="switch-item">预览</div>
-        </div>
-        <div class="button">提交</div>
-      </div>
-    </section>
-    <section class="tips">注：评论支持 markdown 语法！</section>
-    <section class="list-wrap">
-      <ul class="list">
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">张德龙</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like liked">已赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">333333</div>
-          </div>
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
         </li>
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">刘德华</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like">点赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">vvvvv</div>
-          </div>
+        <li class="sidebar-nav-overview">
+          Overview
         </li>
       </ul>
-      <div class="page-nav">
-        <a href="javascript: void(0);" class="item">1</a>
-        <a href="javascript: void(0);" class="item">2</a>
-        <a href="javascript: void(0);" class="item current">3</a>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-数据准备"><span class="nav-number">1.</span> <span class="nav-text">一 数据准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#images文件"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 images文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#label_map.pbtxt文件"><span class="nav-number">1.2.</span> <span class="nav-text">1.3 label_map.pbtxt文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建tf_record文件"><span class="nav-number">1.3.</span> <span class="nav-text">1.4 创建tf_record文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建-.config-配置文件"><span class="nav-number">1.4.</span> <span class="nav-text">1.5 创建 .config 配置文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#训练"><span class="nav-number">2.</span> <span class="nav-text">2 训练</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#转换权重文件"><span class="nav-number">3.</span> <span class="nav-text">3 转换权重文件</span></a></li></ol></div>
       </div>
-    </section>
-    -->
-  </div>
-  <script>
-  JELON.Comment({
-    container: 'comments',
-    label: '2017-09-21-tf_obj_detect_api_train_owndata' || '2019/12/23/2017-09-21-tf_obj_detect_api_train_owndata/',
-    owner: 'your_github_id',
-    repo: 'your_blog_comments',
-    clientId: 'your_client_id',
-    clientSecret: 'your_client_secret'
-  });
-  </script>
+      <!--/noindex-->
 
-
-            </div>
-
-        </section>
-        <!-- 侧栏部分 -->
-<aside class="sidebar">
-    <section class="widget">
-        <h3 class="widget-hd"><strong>文章分类</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-    <li>
-        <a href="/categories/blog/">blog</a>
-        <span class="badge">(94)</span>
-    </li>
-    
-</ul>
-    </section>
-
-    
-    <section class="widget">
-        <h3 class="widget-hd"><strong>热门标签</strong></h3>
-        <!-- 文章标签 -->
-<div class="widget-bd tag-wrap">
-  
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
 </div>
-    </section>
-    
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
 
-    
 
-    
-    <!-- 友情链接 -->
-    <section class="widget">
-        <h3 class="widget-hd"><strong>友情链接</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-        <li>
-            <a href="https://jelon.top" target="_blank" title="Jelon个人前端小站">前端博客小站</a>
-        </li>
-    
-        <li>
-            <a href="https://www.baidu.com" target="_blank" title="百度搜索">百度</a>
-        </li>
-    
-</ul>
-    </section>
-    
-</aside>
-<!-- / 侧栏部分 -->
+
+      </div>
+
     </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
 
-    <!-- 博客底部 -->
+
+      </div>
+    </main>
+
     <footer class="footer">
-    &copy;
-    
-        2016-2019
-    
+      <div class="footer-inner">
+        
 
-    <a href="/">Jelon Loves You</a>
-</footer>
-<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
 
-    <!--博客js脚本 -->
-    <!-- 这里放网站js脚本 -->
+        
 
-<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
 
 </body>
 </html>

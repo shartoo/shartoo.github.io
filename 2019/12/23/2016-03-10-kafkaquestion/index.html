@@ -1,382 +1,476 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" >
-    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
-    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
-    
-    <title>大数据：kafka常见问题 | Hexo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
-    <meta name="keywords" content="Jelon, 前端, Web, 张德龙, 前端开发" >
-    <meta name="description" content="Jelon个人前端小站" >
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml" >
-    
-    
-    <link rel="shortcut icon" href="/favicon.ico" >
-    
-    
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/main.css">
 
-    <!--[if lt IE 9]>
-    
-<script src="/js/html5.js"></script>
 
-    <![endif]-->
-    
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "//hm.baidu.com/hm.js?fd459238242776d173cdc64918fb32f2";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://shartoo.github.com').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
 </script>
 
+  <meta name="description" content="大数据专题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大数据：kafka常见问题">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2016-03-10-kafkaquestion/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="大数据专题">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/kafka-question1.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/kafka-question2.jpg">
+<meta property="article:published_time" content="2019-12-23T10:45:59.292Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.195Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/kafka-question1.jpg">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
-
-<body class="home">
-    <!--[if lt IE 9]>
-    <div class="browsehappy">
-        当前网页 <strong>不支持</strong>
-        你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/" target="_blank" rel="noopener">升级你的浏览器</a>.
-    </div>
-    <![endif]-->
-
-    <!-- 博客头部 -->
-    <header class="header">
-    <section class="container header-main">
-        <div class="logo">
-            <a href="/">
-                <div class="cover">
-                    <span class="name">Hexo</span>
-                    <span class="description"></span>
-                </div>
-            </a>
-        </div>
-        <div class="dropnav icon-paragraph-justify" id="JELON__btnDropNav"></div>
-        <ul class="menu hidden" id="JELON__menu">
-            
-            <li rel="/2019/12/23/2016-03-10-kafkaquestion/index.html" class="item ">
-                <a href="/" title="首页" class="icon-home">&nbsp;首页</a>
-            </li>
-            
-            <li rel="/2019/12/23/2016-03-10-kafkaquestion/index.html" class="item ">
-                <a href="/lab/" title="实验室" class="icon-lab">&nbsp;实验室</a>
-            </li>
-            
-            <li rel="/2019/12/23/2016-03-10-kafkaquestion/index.html" class="item ">
-                <a href="/about/" title="关于" class="icon-about">&nbsp;关于</a>
-            </li>
-            
-            <li rel="/2019/12/23/2016-03-10-kafkaquestion/index.html" class="item ">
-                <a href="/comment/" title="留言" class="icon-comment">&nbsp;留言</a>
-            </li>
-            
-        </ul>
-        <div class="profile clearfix">
-            <div class="feeds fl">
-                
-                
-                <p class="links">
-                    
-                        <a href="https://github.com/jangdelong" target="_blank">Github</a>
-                        |
-                    
-                        <a href="https://pages.coding.me" target="_blank">Hosted by Coding Pages</a>
-                        
-                    
-                </p>
-                <p class="sns">
-                    
-                        <a href="http://weibo.com/jangdelong" class="sinaweibo" target="_blank"><b>■</b> 新浪微博</a>
-                    
-                        <a href="https://www.facebook.com/profile.php?id=100011855760219&amp;ref=bookmarks" class="qqweibo" target="_blank"><b>■</b> Facebook</a>
-                    
-                    <a href="javascript: void(0);" class="wechat">
-                        <b>■</b>
-                        公众号
-                        <span class="popover">
-                            <img src="/img/wechat_mp.jpg" width="120" height="120" alt="我的微信订阅号">
-                            <i class="arrow"></i>
-                        </span>
-                    </a>
-                </p>
-                
-            </div>
-            <div class="avatar fr">
-                <img src="/img/jelon.jpg" alt="avatar" title="Jelon" >
-            </div>
-        </div>
-    </section>
-</header>
+<link rel="canonical" href="http://shartoo.github.com/2019/12/23/2016-03-10-kafkaquestion/">
 
 
-    <!-- 博客正文 -->
-    <div class="container body clearfix">
-        <section class="content">
-            <div class="content-main widget">
-                <!-- 文章页 -->
-<!-- 文章 -->
-<article class="post article">
-    <header class="text-center">
-        <h3 class="post-title"><span>大数据：kafka常见问题</span></h3>
-    </header>
-    <p class="post-meta text-center">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.292Z">2019-12-23</time>
-    </p>
-    <div class="post-content">
-        <h1 id="一-kafka如何处理消费过的数据"><a href="#一-kafka如何处理消费过的数据" class="headerlink" title="一 kafka如何处理消费过的数据"></a>一 kafka如何处理消费过的数据</h1><h2 id="1-1-如果想消费已经被消费过的数据"><a href="#1-1-如果想消费已经被消费过的数据" class="headerlink" title="1.1     如果想消费已经被消费过的数据"></a>1.1     如果想消费已经被消费过的数据</h2><ul>
-<li><p>consumer是底层采用的是一个阻塞队列，只要一有producer生产数据，那consumer就会将数据消费。当然这里会产生一个很严重的问题，如果你重启一消费者程序，那你连一条数据都抓不到，但是log文件中明明可以看到所有数据都好好的存在。换句话说，一旦你消费过这些数据，那你就无法再次用同一个groupid消费同一组数据了。    </p>
-</li>
-<li><p><strong>原因:</strong> 消费者消费了数据并不从队列中移除，只是记录了offset偏移量。同一个consumer group的所有consumer合起来消费一个topic，并且他们每次消费的时候都会保存一个offset参数在zookeeper的root上。如果此时某个consumer挂了或者新增一个consumer进程，将会触发kafka的负载均衡，暂时性的重启所有consumer，重新分配哪个consumer去消费哪个partition，然后再继续通过保存在zookeeper上的offset参数继续读取数据。注意:offset保存的是consumer 组消费的消息偏移。    </p>
-</li>
-<li><p>如何消费同一组数据：</p>
-<ol>
-<li>采用不同的group</li>
-<li>通过一些配置，就可以将线上产生的数据同步到镜像中去，然后再由特定的集群区处理大批量的数据。详见<a href="http://my.oschina.net/ielts0909/blog/110280" target="_blank" rel="noopener">详细</a><br><img src="/images/blog/kafka-question1.jpg" alt="图片"></li>
-</ol>
-</li>
-</ul>
-<h2 id="1-2-如何自定义去消费已经消费过的数据"><a href="#1-2-如何自定义去消费已经消费过的数据" class="headerlink" title="1.2    如何自定义去消费已经消费过的数据"></a>1.2    如何自定义去消费已经消费过的数据</h2><h3 id="1-2-1-Conosumer-properties配置文件中有两个重要参数"><a href="#1-2-1-Conosumer-properties配置文件中有两个重要参数" class="headerlink" title="1.2.1 Conosumer.properties配置文件中有两个重要参数:"></a>1.2.1 Conosumer.properties配置文件中有两个重要参数:</h3><ul>
-<li><strong>auto.commit.enable</strong>:如果为true，则consumer的消费偏移offset会被记录到zookeeper。下次consumer启动时会从此位置继续消费。</li>
-<li><strong>auto.offset.reset</strong>: 该参数只接受两个常量largest和Smallest,分别表示将当前offset指到日志文件的最开始位置和最近的位置。<br>如果进一步想控制时间，则需要调用Simple Consumer，自己去设置相关参数。比较重要的参数是 kafka.api.OffsetRequest.EarliestTime()和kafka.api.OffsetRequest.LatestTime()分别表示从日志（数据）的开始位置读取和只读取最新日志。    </li>
-</ul>
-<h3 id="1-2-2-如何使用SimpleConsumer"><a href="#1-2-2-如何使用SimpleConsumer" class="headerlink" title="1.2.2 如何使用SimpleConsumer"></a>1.2.2 如何使用SimpleConsumer</h3><ul>
-<li><p>首先，你必须知道读哪个topic的哪个partition<br>然后，找到负责该partition的broker leader，从而找到存有该partition副本的那个broker    </p>
-</li>
-<li><p>再者，自己去写request并fetch数据.      </p>
-</li>
-<li><p>最终，还要注意需要识别和处理broker leader的改变.    </p>
-<p><a href="http://stackoverflow.com/questions/14935755/how-to-get-data-from-old-offset-point-in-kafka" target="_blank" rel="noopener">参考1</a><br><a href="https://cwiki.apache.org/confluence/display/KAFKA/Committing+and+fetching+consumer+offsets+in+Kafka" target="_blank" rel="noopener">参考2</a><br><a href="https://cwiki.apache.org/confluence/display/KAFKA/0.8.0+SimpleConsumer+Example" target="_blank" rel="noopener">完整代码</a>        </p>
-</li>
-</ul>
-<h2 id="2-kafka-partition和consumer数目关系"><a href="#2-kafka-partition和consumer数目关系" class="headerlink" title="2    kafka partition和consumer数目关系"></a>2    kafka partition和consumer数目关系</h2><ol>
-<li><p>如果consumer比partition多，是浪费，因为kafka的设计是在一个partition上是不允许并发的，所以consumer数不要大于partition数 。</p>
-</li>
-<li><p>如果consumer比partition少，一个consumer会对应于多个partitions，这里主要合理分配consumer数和partition数，否则会导致partition里面的数据被取的不均匀 。最好partiton数目是consumer数目的整数倍，所以partition数目很重要，比如取24，就很容易设定consumer数目 。</p>
-</li>
-<li><p>如果consumer从多个partition读到数据，不保证数据间的顺序性，kafka只保证在一个partition上数据是有序的，但多个partition，根据你读的顺序会有不同 </p>
-</li>
-<li><p>增减consumer，broker，partition会导致rebalance，所以rebalance后consumer对应的partition会发生变化    </p>
-<p><a href="http://www.cnblogs.com/fxjwind/p/3794255.html" target="_blank" rel="noopener">详见</a>     </p>
-</li>
-</ol>
-<h2 id="3-kafka副本问题"><a href="#3-kafka副本问题" class="headerlink" title="3    kafka副本问题"></a>3    kafka副本问题</h2><p>   kafka尽量将所有的Partition均匀分配到整个集群上。一个典型的部署方式是一个Topic的Partition数量大于Broker的数量。    </p>
-<h2 id="3-1-如何分配副本"><a href="#3-1-如何分配副本" class="headerlink" title="3.1     如何分配副本"></a>3.1     如何分配副本</h2><p>   Producer在发布消息到某个Partition时，先通过ZooKeeper找到该Partition的Leader，然后无论该Topic的Replication Factor为多少（也即该Partition有多少个Replica），Producer只将该消息发送到该Partition的Leader。Leader会将该消息写入其本地Log。每个Follower都从Leader pull数据。这种方式上，Follower存储的数据顺序与Leader保持一致.    </p>
-<h2 id="3-2-Kafka分配Replica的算法如下"><a href="#3-2-Kafka分配Replica的算法如下" class="headerlink" title="3.2 Kafka分配Replica的算法如下"></a>3.2 Kafka分配Replica的算法如下</h2><p>   1.将所有Broker（假设共n个Broker）和待分配的Partition排序.<br>   2. 将第i个Partition分配到第（i mod n）个Broker上.<br>   3. 将第i个Partition的第j个Replica分配到第（(i + j) mode n）个Broker上.</p>
-<p>   <a href="http://www.haokoo.com/internet/2877400.html" target="_blank" rel="noopener">算法详细</a>    </p>
-<h2 id="4-kafka如何设置生存周期与清理数据"><a href="#4-kafka如何设置生存周期与清理数据" class="headerlink" title="4    kafka如何设置生存周期与清理数据"></a>4    kafka如何设置生存周期与清理数据</h2><p>   日志文件的删除策略非常简单:启动一个后台线程定期扫描log file列表,把保存时间超过阀值的文件直接删除(根据文件的创建时间).清理参数在server.properties文件中：<br>  <img src="/images/blog/kafka-question2.jpg" alt=""><br>  <a href="http://blog.csdn.net/lizhitao/article/details/25667831" target="_blank" rel="noopener">详见</a>或<a href="http://kafka.apache.org/documentation.html" target="_blank" rel="noopener">官网说明</a>    </p>
-<h2 id="5-zookeeper如何管理kafka"><a href="#5-zookeeper如何管理kafka" class="headerlink" title="5    zookeeper如何管理kafka"></a>5    zookeeper如何管理kafka</h2><ol>
-<li>Producer端使用zookeeper用来”发现”broker列表,以及和Topic下每个partition leader建立socket连接并发送消息.</li>
-<li>Broker端使用zookeeper用来注册broker信息,以及监测partition leader存活性.</li>
-<li>Consumer端使用zookeeper用来注册consumer信息,其中包括consumer消费的partition列表等,同时也用来发现broker列表,并和partition leader建立socket连接,并获取消息.    </li>
-</ol>
-<h2 id="6-补充问题，kafka能否自动创建topics"><a href="#6-补充问题，kafka能否自动创建topics" class="headerlink" title="6    补充问题，kafka能否自动创建topics"></a>6    补充问题，kafka能否自动创建topics</h2><p>  producer.properties配置文件中的一个参数:<strong><em>auto.create.topics.enable=true</em></strong><br>  是否自动创建<br>  如果broker中没有topic的信息,当producer/consumer操作topic时,是否自动创建.<br>  如果为false,则只能通过API或者command创建topic  </p>
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
 
-    </div>
-    <p class="post-meta">
-        <span class="post-cat">分类：
-            <a class="cat-link" href="/categories/blog/">blog</a>
-        </span>
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-</article>
-<!-- 分享按钮 -->
+  <title>大数据：kafka常见问题 | Hexo</title>
+  
 
-  <div class="article-share clearfix text-center">
-    <div class="share-area">
-      <span class="share-txt">分享到：</span>
-      <a href="javascript: window.open('http://service.weibo.com/share/share.php?url=' + encodeURIComponent(location.href) + '&title=' + document.title + '&language=zh_cn');" class="share-icon weibo"></a>
-      <a href="javascript: alert('请复制链接到微信并发送');" class="share-icon wechat"></a>
-      <a href="javascript: window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + encodeURIComponent(location.href) + '&title=' + document.title);" class="share-icon qqzone"></a>
-      <a href="javascript: window.open('http://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(location.href) + '&desc=Jelon个人博客&title=' + document.title + '&callback=' + encodeURIComponent(location.href));" class="share-icon qq"></a>
-      <a href="javascript: window.open('http://shuo.douban.com/!service/share?href=' + encodeURIComponent(location.href) + '&name=' + document.title + '&text=' + document.title);" class="share-icon douban"></a>
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
     </div>
   </div>
 
-
-<!-- 上一篇/下一篇 -->
-
-<div class="article-nav clearfix">
-    
-    <span class="prev fl">
-        上一篇<br >
-        <a href="/2019/12/23/2016-03-12-spark-envirnoment/">
-            
-                spark环境部署
-            
-        </a>
-    </span>
-    
-
-    
-    <span class="next fr">
-        下一篇<br >
-        <a href="/2019/12/23/2016-03-09-bigdata-cluster-opt/">
-            
-                大数据：集群优化
-            
-        </a>
-    </span>
-    
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
 </div>
 
-<!-- 文章评论 -->
 
+<nav class="site-nav">
   
-<script src="/js/comment.js"></script>
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
 
-  <div id="comments" class="comment">
-    <!--
-    <div class="sign-bar">
-      GitHub 已登录!
-      <span class="sign-link">登出</span>
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://shartoo.github.com/2019/12/23/2016-03-10-kafkaquestion/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          大数据：kafka常见问题
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2019-12-23 18:45:59 / Modified: 17:55:14" itemprop="dateCreated datePublished" datetime="2019-12-23T18:45:59+08:00">2019-12-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">大数据专题</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="一-kafka如何处理消费过的数据">一 kafka如何处理消费过的数据</h1>
+<h2 id="如果想消费已经被消费过的数据">1.1 如果想消费已经被消费过的数据</h2>
+<ul>
+<li><p>consumer是底层采用的是一个阻塞队列，只要一有producer生产数据，那consumer就会将数据消费。当然这里会产生一个很严重的问题，如果你重启一消费者程序，那你连一条数据都抓不到，但是log文件中明明可以看到所有数据都好好的存在。换句话说，一旦你消费过这些数据，那你就无法再次用同一个groupid消费同一组数据了。</p></li>
+<li><strong>原因:</strong> 消费者消费了数据并不从队列中移除，只是记录了offset偏移量。同一个consumer group的所有consumer合起来消费一个topic，并且他们每次消费的时候都会保存一个offset参数在zookeeper的root上。如果此时某个consumer挂了或者新增一个consumer进程，将会触发kafka的负载均衡，暂时性的重启所有consumer，重新分配哪个consumer去消费哪个partition，然后再继续通过保存在zookeeper上的offset参数继续读取数据。注意:offset保存的是consumer 组消费的消息偏移。<br />
+</li>
+<li>如何消费同一组数据：
+<ol type="1">
+<li>采用不同的group</li>
+<li>通过一些配置，就可以将线上产生的数据同步到镜像中去，然后再由特定的集群区处理大批量的数据。详见<a href="http://my.oschina.net/ielts0909/blog/110280" target="_blank" rel="noopener">详细</a> <img src="/images/blog/kafka-question1.jpg" alt="图片" /></li>
+</ol></li>
+</ul>
+<h2 id="如何自定义去消费已经消费过的数据">1.2 如何自定义去消费已经消费过的数据</h2>
+<h3 id="conosumer.properties配置文件中有两个重要参数">1.2.1 Conosumer.properties配置文件中有两个重要参数:</h3>
+<ul>
+<li><strong>auto.commit.enable</strong>:如果为true，则consumer的消费偏移offset会被记录到zookeeper。下次consumer启动时会从此位置继续消费。</li>
+<li><strong>auto.offset.reset</strong>: 该参数只接受两个常量largest和Smallest,分别表示将当前offset指到日志文件的最开始位置和最近的位置。<br />
+如果进一步想控制时间，则需要调用Simple Consumer，自己去设置相关参数。比较重要的参数是 kafka.api.OffsetRequest.EarliestTime()和kafka.api.OffsetRequest.LatestTime()分别表示从日志（数据）的开始位置读取和只读取最新日志。</li>
+</ul>
+<h3 id="如何使用simpleconsumer">1.2.2 如何使用SimpleConsumer</h3>
+<ul>
+<li>首先，你必须知道读哪个topic的哪个partition 然后，找到负责该partition的broker leader，从而找到存有该partition副本的那个broker<br />
+</li>
+<li>再者，自己去写request并fetch数据.<br />
+</li>
+<li>最终，还要注意需要识别和处理broker leader的改变.</li>
+</ul>
+<p><a href="http://stackoverflow.com/questions/14935755/how-to-get-data-from-old-offset-point-in-kafka" target="_blank" rel="noopener">参考1</a><br />
+<a href="https://cwiki.apache.org/confluence/display/KAFKA/Committing+and+fetching+consumer+offsets+in+Kafka" target="_blank" rel="noopener">参考2</a><br />
+<a href="https://cwiki.apache.org/confluence/display/KAFKA/0.8.0+SimpleConsumer+Example" target="_blank" rel="noopener">完整代码</a></p>
+<h2 id="kafka-partition和consumer数目关系">2 kafka partition和consumer数目关系</h2>
+<ol type="1">
+<li>如果consumer比partition多，是浪费，因为kafka的设计是在一个partition上是不允许并发的，所以consumer数不要大于partition数 。</li>
+<li>如果consumer比partition少，一个consumer会对应于多个partitions，这里主要合理分配consumer数和partition数，否则会导致partition里面的数据被取的不均匀 。最好partiton数目是consumer数目的整数倍，所以partition数目很重要，比如取24，就很容易设定consumer数目 。</li>
+<li>如果consumer从多个partition读到数据，不保证数据间的顺序性，kafka只保证在一个partition上数据是有序的，但多个partition，根据你读的顺序会有不同</li>
+<li>增减consumer，broker，partition会导致rebalance，所以rebalance后consumer对应的partition会发生变化</li>
+</ol>
+<p><a href="http://www.cnblogs.com/fxjwind/p/3794255.html" target="_blank" rel="noopener">详见</a></p>
+<h2 id="kafka副本问题">3 kafka副本问题</h2>
+<p>kafka尽量将所有的Partition均匀分配到整个集群上。一个典型的部署方式是一个Topic的Partition数量大于Broker的数量。</p>
+<h2 id="如何分配副本">3.1 如何分配副本</h2>
+<p>Producer在发布消息到某个Partition时，先通过ZooKeeper找到该Partition的Leader，然后无论该Topic的Replication Factor为多少（也即该Partition有多少个Replica），Producer只将该消息发送到该Partition的Leader。Leader会将该消息写入其本地Log。每个Follower都从Leader pull数据。这种方式上，Follower存储的数据顺序与Leader保持一致.</p>
+<h2 id="kafka分配replica的算法如下">3.2 Kafka分配Replica的算法如下</h2>
+<p>1.将所有Broker（假设共n个Broker）和待分配的Partition排序.<br />
+2. 将第i个Partition分配到第（i mod n）个Broker上. 3. 将第i个Partition的第j个Replica分配到第（(i + j) mode n）个Broker上.</p>
+<p><a href="http://www.haokoo.com/internet/2877400.html" target="_blank" rel="noopener">算法详细</a></p>
+<h2 id="kafka如何设置生存周期与清理数据">4 kafka如何设置生存周期与清理数据</h2>
+<p>日志文件的删除策略非常简单:启动一个后台线程定期扫描log file列表,把保存时间超过阀值的文件直接删除(根据文件的创建时间).清理参数在server.properties文件中： <img src="/images/blog/kafka-question2.jpg" /><br />
+<a href="http://blog.csdn.net/lizhitao/article/details/25667831" target="_blank" rel="noopener">详见</a>或<a href="http://kafka.apache.org/documentation.html" target="_blank" rel="noopener">官网说明</a></p>
+<h2 id="zookeeper如何管理kafka">5 zookeeper如何管理kafka</h2>
+<ol type="1">
+<li>Producer端使用zookeeper用来&quot;发现&quot;broker列表,以及和Topic下每个partition leader建立socket连接并发送消息.</li>
+<li>Broker端使用zookeeper用来注册broker信息,以及监测partition leader存活性.</li>
+<li>Consumer端使用zookeeper用来注册consumer信息,其中包括consumer消费的partition列表等,同时也用来发现broker列表,并和partition leader建立socket连接,并获取消息.</li>
+</ol>
+<h2 id="补充问题kafka能否自动创建topics">6 补充问题，kafka能否自动创建topics</h2>
+<p>producer.properties配置文件中的一个参数:<strong><em>auto.create.topics.enable=true</em></strong><br />
+是否自动创建<br />
+如果broker中没有topic的信息,当producer/consumer操作topic时,是否自动创建.<br />
+如果为false,则只能通过API或者command创建topic</p>
+
     </div>
-    <section class="box">
-      <div class="com-avatar"><img src="/img/jelon.jpg" alt="avatar"></div>
-      <div class="com-text">
-        <div class="main">
-          <textarea class="text-area-edited show" placeholder="欢迎评论！"></textarea>
-          <div class="text-area-preview"></div>
-        </div>
-        <div class="switch">
-          <div class="switch-item on">编辑</div>
-          <div class="switch-item">预览</div>
-        </div>
-        <div class="button">提交</div>
-      </div>
-    </section>
-    <section class="tips">注：评论支持 markdown 语法！</section>
-    <section class="list-wrap">
-      <ul class="list">
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2016-03-09-bigdata-cluster-opt/" rel="prev" title="大数据：集群优化">
+      <i class="fa fa-chevron-left"></i> 大数据：集群优化
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2016-03-12-spark-envirnoment/" rel="next" title="spark环境部署">
+      spark环境部署 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
           </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">张德龙</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like liked">已赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">333333</div>
-          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
         </li>
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">刘德华</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like">点赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">vvvvv</div>
-          </div>
+        <li class="sidebar-nav-overview">
+          Overview
         </li>
       </ul>
-      <div class="page-nav">
-        <a href="javascript: void(0);" class="item">1</a>
-        <a href="javascript: void(0);" class="item">2</a>
-        <a href="javascript: void(0);" class="item current">3</a>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一-kafka如何处理消费过的数据"><span class="nav-number">1.</span> <span class="nav-text">一 kafka如何处理消费过的数据</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#如果想消费已经被消费过的数据"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 如果想消费已经被消费过的数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何自定义去消费已经消费过的数据"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 如何自定义去消费已经消费过的数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#conosumer.properties配置文件中有两个重要参数"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.2.1 Conosumer.properties配置文件中有两个重要参数:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何使用simpleconsumer"><span class="nav-number">1.2.2.</span> <span class="nav-text">1.2.2 如何使用SimpleConsumer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kafka-partition和consumer数目关系"><span class="nav-number">1.3.</span> <span class="nav-text">2 kafka partition和consumer数目关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kafka副本问题"><span class="nav-number">1.4.</span> <span class="nav-text">3 kafka副本问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何分配副本"><span class="nav-number">1.5.</span> <span class="nav-text">3.1 如何分配副本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kafka分配replica的算法如下"><span class="nav-number">1.6.</span> <span class="nav-text">3.2 Kafka分配Replica的算法如下</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kafka如何设置生存周期与清理数据"><span class="nav-number">1.7.</span> <span class="nav-text">4 kafka如何设置生存周期与清理数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zookeeper如何管理kafka"><span class="nav-number">1.8.</span> <span class="nav-text">5 zookeeper如何管理kafka</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#补充问题kafka能否自动创建topics"><span class="nav-number">1.9.</span> <span class="nav-text">6 补充问题，kafka能否自动创建topics</span></a></li></ol></li></ol></div>
       </div>
-    </section>
-    -->
-  </div>
-  <script>
-  JELON.Comment({
-    container: 'comments',
-    label: '2016-03-10-kafkaquestion' || '2019/12/23/2016-03-10-kafkaquestion/',
-    owner: 'your_github_id',
-    repo: 'your_blog_comments',
-    clientId: 'your_client_id',
-    clientSecret: 'your_client_secret'
-  });
-  </script>
+      <!--/noindex-->
 
-
-            </div>
-
-        </section>
-        <!-- 侧栏部分 -->
-<aside class="sidebar">
-    <section class="widget">
-        <h3 class="widget-hd"><strong>文章分类</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-    <li>
-        <a href="/categories/blog/">blog</a>
-        <span class="badge">(94)</span>
-    </li>
-    
-</ul>
-    </section>
-
-    
-    <section class="widget">
-        <h3 class="widget-hd"><strong>热门标签</strong></h3>
-        <!-- 文章标签 -->
-<div class="widget-bd tag-wrap">
-  
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
 </div>
-    </section>
-    
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
 
-    
 
-    
-    <!-- 友情链接 -->
-    <section class="widget">
-        <h3 class="widget-hd"><strong>友情链接</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-        <li>
-            <a href="https://jelon.top" target="_blank" title="Jelon个人前端小站">前端博客小站</a>
-        </li>
-    
-        <li>
-            <a href="https://www.baidu.com" target="_blank" title="百度搜索">百度</a>
-        </li>
-    
-</ul>
-    </section>
-    
-</aside>
-<!-- / 侧栏部分 -->
+
+      </div>
+
     </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
 
-    <!-- 博客底部 -->
+
+      </div>
+    </main>
+
     <footer class="footer">
-    &copy;
-    
-        2016-2019
-    
+      <div class="footer-inner">
+        
 
-    <a href="/">Jelon Loves You</a>
-</footer>
-<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
 
-    <!--博客js脚本 -->
-    <!-- 这里放网站js脚本 -->
+        
 
-<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
 
 </body>
 </html>

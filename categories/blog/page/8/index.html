@@ -1,1585 +1,549 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" >
-    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
-    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
-    
-    <title>`blog`分类下的文章 | Hexo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
-    <meta name="keywords" content="Jelon, 前端, Web, 张德龙, 前端开发" >
-    <meta name="description" content="Jelon个人前端小站" >
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml" >
-    
-    
-    <link rel="shortcut icon" href="/favicon.ico" >
-    
-    
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/main.css">
 
-    <!--[if lt IE 9]>
-    
-<script src="/js/html5.js"></script>
 
-    <![endif]-->
-    
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "//hm.baidu.com/hm.js?fd459238242776d173cdc64918fb32f2";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://shartoo.github.com').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
 </script>
 
-
-<meta name="generator" content="Hexo 4.2.0"></head>
-
-<body class="home">
-    <!--[if lt IE 9]>
-    <div class="browsehappy">
-        当前网页 <strong>不支持</strong>
-        你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/" target="_blank" rel="noopener">升级你的浏览器</a>.
-    </div>
-    <![endif]-->
-
-    <!-- 博客头部 -->
-    <header class="header">
-    <section class="container header-main">
-        <div class="logo">
-            <a href="/">
-                <div class="cover">
-                    <span class="name">Hexo</span>
-                    <span class="description"></span>
-                </div>
-            </a>
-        </div>
-        <div class="dropnav icon-paragraph-justify" id="JELON__btnDropNav"></div>
-        <ul class="menu hidden" id="JELON__menu">
-            
-            <li rel="/categories/blog/page/8/index.html" class="item ">
-                <a href="/" title="首页" class="icon-home">&nbsp;首页</a>
-            </li>
-            
-            <li rel="/categories/blog/page/8/index.html" class="item ">
-                <a href="/lab/" title="实验室" class="icon-lab">&nbsp;实验室</a>
-            </li>
-            
-            <li rel="/categories/blog/page/8/index.html" class="item ">
-                <a href="/about/" title="关于" class="icon-about">&nbsp;关于</a>
-            </li>
-            
-            <li rel="/categories/blog/page/8/index.html" class="item ">
-                <a href="/comment/" title="留言" class="icon-comment">&nbsp;留言</a>
-            </li>
-            
-        </ul>
-        <div class="profile clearfix">
-            <div class="feeds fl">
-                
-                
-                <p class="links">
-                    
-                        <a href="https://github.com/jangdelong" target="_blank">Github</a>
-                        |
-                    
-                        <a href="https://pages.coding.me" target="_blank">Hosted by Coding Pages</a>
-                        
-                    
-                </p>
-                <p class="sns">
-                    
-                        <a href="http://weibo.com/jangdelong" class="sinaweibo" target="_blank"><b>■</b> 新浪微博</a>
-                    
-                        <a href="https://www.facebook.com/profile.php?id=100011855760219&amp;ref=bookmarks" class="qqweibo" target="_blank"><b>■</b> Facebook</a>
-                    
-                    <a href="javascript: void(0);" class="wechat">
-                        <b>■</b>
-                        公众号
-                        <span class="popover">
-                            <img src="/img/wechat_mp.jpg" width="120" height="120" alt="我的微信订阅号">
-                            <i class="arrow"></i>
-                        </span>
-                    </a>
-                </p>
-                
-            </div>
-            <div class="avatar fr">
-                <img src="/img/jelon.jpg" alt="avatar" title="Jelon" >
-            </div>
-        </div>
-    </section>
-</header>
-
-
-    <!-- 博客正文 -->
-    <div class="container body clearfix">
-        <section class="content">
-            <div class="content-main widget">
-                <!-- 文章分类 -->
-
-    <h3 class="widget-hd">
-        <strong>
-            
-                `blog`分类下的文章
-            
-        </strong>
-    </h3>
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2016-09-20-pyspark-mllibuse/">
-    		pyspark机器学习库使用
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.335Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h2 id="示例：垃圾邮件分类器"><a href="#示例：垃圾邮件分类器" class="headerlink" title="示例：垃圾邮件分类器"></a>示例：垃圾邮件分类器</h2><p> 以下代码使用两个 MLlib算法，HashingTF（从文本中构建词频特征向量的）和 LogisticRegressionWithSGD（使用随机梯度下降法来执行逻辑回归的算法）。</p>
-<h2 id="数据："><a href="#数据：" class="headerlink" title="数据："></a>数据：</h2><p>  spam.txt和normal.txt。都包含了垃圾邮箱和非垃圾邮箱，每行一封邮箱。将两篇文档转换为词频向量模型，然后训练逻辑回归模型来区分垃圾和非垃圾邮箱。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding:UTF-8 -*-</span><br><span class="line">#以下代码使用两个 MLlib算法，HashingTF（从文本中构建词频特征向量的）和 LogisticRegressionWithSGD（使用随机梯度</span><br><span class="line"># 下降法来执行逻辑回归的算法）。</span><br><span class="line"># 数据：</span><br><span class="line">#spam.txt和normal.txt。都包含了垃圾邮箱和非垃圾邮箱，每行一封邮箱。将两篇文档转换为词频向量模型，</span><br><span class="line"># 然后训练逻辑回归模型来区分垃圾和非垃圾邮箱。</span><br><span class="line"> </span><br><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line"> </span><br><span class="line">from pyspark.mllib.regression import LabeledPoint</span><br><span class="line">from pyspark.mllib.feature import HashingTF</span><br><span class="line">from pyspark.mllib.classification import LogisticRegressionWithSGD</span><br><span class="line">from pyspark import SparkContext</span><br><span class="line">from pyspark import SparkConf</span><br><span class="line"> </span><br><span class="line"># Path for spark source folder</span><br><span class="line">os.environ[&#39;SPARK_HOME&#39;]&#x3D;&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6&quot;</span><br><span class="line"># Append pyspark  to Python Path</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python&quot;)</span><br><span class="line"> </span><br><span class="line">if __name__ &#x3D;&#x3D; &quot;__main__&quot;:</span><br><span class="line">    print &quot;Program lanuch!&quot;</span><br><span class="line">    conf &#x3D; SparkConf()</span><br><span class="line">    conf.set(&quot;YARN_CONF_DIR &quot;, &quot;D:\javaPackages\hadoop_conf_dir\yarn-conf&quot;)</span><br><span class="line">    conf.set(&quot;spark.driver.memory&quot;, &quot;1gb&quot;)</span><br><span class="line">    conf.setMaster(&quot;local&quot;)</span><br><span class="line">    conf.setAppName(&quot;First_Remote_Spark_Program&quot;)</span><br><span class="line">    sc &#x3D; SparkContext(conf&#x3D;conf)</span><br><span class="line"> </span><br><span class="line">    spam &#x3D; sc.textFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;spam.txt&quot;)</span><br><span class="line">    normal &#x3D; sc.textFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;normal.txt&quot;)</span><br><span class="line"> </span><br><span class="line">    print &quot;读取文件结束了&quot;</span><br><span class="line">    #创建一个 HashingTF实例将邮件文本映射到包含了10000个features的向量</span><br><span class="line">    tf &#x3D; HashingTF(numFeatures&#x3D;10000)</span><br><span class="line">    # 将每封邮件都切成单词，每个词映射到一个 features</span><br><span class="line">    spamFeatures &#x3D; spam.map(lambda email:tf.transform(email.split(&quot; &quot;)))</span><br><span class="line">    normalFeatures &#x3D; spam.map(lambda email: tf.transform(email.split(&quot; &quot;)))</span><br><span class="line">    #分别给 正特征（垃圾邮件）和负特征（非垃圾邮件）创建 LabelPoint数据集</span><br><span class="line">    positiveExamples &#x3D; spamFeatures.map(lambda features:LabeledPoint(1,features))</span><br><span class="line">    negativeExamples &#x3D; normalFeatures . map(lambda features:LabeledPoint(0,features))</span><br><span class="line">    trainingData &#x3D; positiveExamples.union(negativeExamples)</span><br><span class="line">    # 由于逻辑回归是个迭代算法，，最好缓存下</span><br><span class="line">    trainingData.cache()</span><br><span class="line">    # 使用SGD算法 运行逻辑回归</span><br><span class="line">    print trainingData</span><br><span class="line">    print &quot;逻辑回归之前&quot;</span><br><span class="line">    model &#x3D; LogisticRegressionWithSGD.train(trainingData)</span><br><span class="line">    print &quot;使用逻辑回归算法之前&quot;</span><br><span class="line">    #  测试一个 正特征数据 和 负特征数据，我们首先 应用HashingTF特征转换来获得向量，然后应用到模型中</span><br><span class="line">    posTest &#x3D; tf.transform(&quot;O M G GET cheap stuff by sending money to ....&quot;.split(&quot; &quot;))</span><br><span class="line">    negTest &#x3D; tf .transform(&quot;Hi Dad,i am studing Spark now...&quot;.split(&quot; &quot;))</span><br><span class="line">    print &quot;预测结果是:%g&quot;%model.predict(posTest)</span><br><span class="line">    print &quot;预测结果是:%g&quot;%model.predict(negTest)</span><br><span class="line">    print &quot;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;end&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&quot;</span><br></pre></td></tr></table></figure>
-
-<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>MLlib包含了一些特殊的数据类型，位于 <code>org.apache.spark.mllib.package(Java 或者Scala)</code> 或者 <code>pyspark.mllib(Python)</code></p>
-<ul>
-<li><p><strong>向量：</strong>     一种数学向量，Spark支持稠密向量（每个位置都存储了值）和稀疏向量(只存储了非0值) 。可以通过 <code>mllib.linalg.Vector</code>类来创建向量</p>
-</li>
-<li><p><strong>LabeledPoint：</strong> 一个标签化的数据点用在监督学习的算法中，比如分类和回归算法。包括一个特征向量和标签（值类型时float）位于 <code>mllib.regression</code>包里面</p>
-</li>
-<li><p><strong>Rating：</strong> 用户产品评分，在 <code>mllib.recommendation</code>包中，用于产品推荐</p>
-</li>
-<li><p><strong>各种Model类：</strong>每个Model都是一个训练算法的结果，并且基本上都有一个 predict()方法用来将模型应用新的数据点或者新数据点的RDD<br>大部分算法可以直接在 向量、LabeledPoint或者Rating的RDD上运行。</p>
-</li>
-</ul>
-<h2 id="使用向量"><a href="#使用向量" class="headerlink" title="使用向量"></a>使用向量</h2><p>首先：向量分两种，稀疏和稠密。对于10%左右元素非零的向量，推荐使用稀疏向量。既节省存储空间又提升速度。</p>
-<p>其次：不同的语言构建向量时不同，在python可以简单的传入一个 NumPy数组到MLlib中创建一个稠密向量，或者使用<code>pyspark.mllib.linalg.Vectors</code>类来创建其他类型的向量。以下是python代码示例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">from numpy import array</span><br><span class="line">from pyspark.mllib.linalg import Vectors</span><br><span class="line"> </span><br><span class="line">#创建一个稠密向量 &lt;1.0,2.0,3.0&gt;</span><br><span class="line"># numpy可以直接传入到MLlib</span><br><span class="line">denseVec1 &#x3D; array([1.0,2.0,3.0]) </span><br><span class="line">#或者使用 Vectors类</span><br><span class="line">denseVec2 &#x3D; Vectors.dense([1.0,2.0,3.0])</span><br><span class="line">#创建稀疏向量 &lt;1.0,0.0,2.0,0.0&gt;,其中(4)为向量元素个数，其他的是非零元素位置</span><br><span class="line">#可以传入词典类型，也可以使用两个列表，分别是位置和值</span><br><span class="line">sparseVec1 &#x3D; Vectors.sparse(4,&#123;0:1.0,2:2.0&#125;)</span><br><span class="line">sparseVec2 &#x3D; Vectors.sparse(4,[0,2],[1.0,2.0])</span><br></pre></td></tr></table></figure>
-
-<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><p>如何调用和配置算法</p>
-<h2 id="特征抽取"><a href="#特征抽取" class="headerlink" title="特征抽取"></a>特征抽取</h2><p><code>mllib.feature</code> 包包含 了几个常用的特征转换类，其中有将文本转换为特征向量的算法以及规划化和尺度的路径。</p>
-<h2 id="TF-IDF"><a href="#TF-IDF" class="headerlink" title="TF-IDF"></a>TF-IDF</h2><p>词频-逆向文档模型，是从文本中生成特征向量的最简单的办法。MLlib有两个计算 TF-IDF的算法：HashingTF和IDF都在mllib.feature 包中。HashingTF从文本中根据给定大小计算出词频向量。为了将词频映射到向量序位，HashingTF将每个单词对向量大小取模的哈希码，因而每个单词都会被映射到 0到 (size-1)(向量大小)。尽管多个词可能会被映射到相同的哈希码。MLlib开发者建议的向量大小为 2^18到2^20。</p>
-<p>在python中使用 HashingTF</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from pyspark.mllib.feature import HashingTF</span><br><span class="line"> </span><br><span class="line">sentence &#x3D; &quot;Hello world,Hello&quot;</span><br><span class="line">words &#x3D; sentence.split(&quot; &quot;) #将语句切成词项列表</span><br><span class="line">tf &#x3D; HashingTF(10000)       #创建大小为10000的向量</span><br><span class="line">tf.transform(words)</span><br></pre></td></tr></table></figure>
-
-<p>输出结果为:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SparseVector(10000,&#123;3065:1.0,6861:2.0&#125;)</span><br></pre></td></tr></table></figure>
-
-<h2 id="将整个RDD转换"><a href="#将整个RDD转换" class="headerlink" title="将整个RDD转换"></a>将整个RDD转换</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rdd &#x3D; sc.wholeTextFiles(&quot;data&quot;).map(lambda (name,text):text.split())</span><br><span class="line">tfVectors &#x3D; tf.transform(rdd)   #转换整个RDD</span><br></pre></td></tr></table></figure>
-<p>一旦创建了词频向量，就可以使用 IDF来计算逆向文档词频，然后乘以词频来计算TF-IDF。首先在一个 IDF对象上使用 fit()来获得 IDFModel，该模型代表了语料库中的逆向文档频率，然后调用 transform()来转换 TF向量为一个 IDF向量。</p>
-<p><strong>在python中使用 TF-IDF</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from pyspark.mllib.feature import HashingTF,IDF</span><br><span class="line"> </span><br><span class="line"># 读取一些文档作为 TF向量</span><br><span class="line">rdd &#x3D; sc.wholeTextFiles(&quot;data&quot;).map(lambda (name,text):text.split(&quot; &quot;))</span><br><span class="line">tf &#x3D; HashingTF()</span><br><span class="line">tfVectors &#x3D; tf.transform(rdd).cache()</span><br><span class="line"> </span><br><span class="line">#计算 IDF，然后计算 TF-IDF</span><br><span class="line">idf &#x3D; IDF()</span><br><span class="line">idfModel &#x3D; idf.fit(tfVectors)</span><br><span class="line">tfidfVectors &#x3D; idfModel.transform(tfVectors)</span><br></pre></td></tr></table></figure>
-
-<h2 id="Scaling"><a href="#Scaling" class="headerlink" title="Scaling"></a>Scaling</h2><p>大部分机器学习算法会考虑特征向量中的每个元素的大小(尺度)，因而当特征都均衡时（比如都在范围 0-1之间）时算法表现最好。一旦建立好特征向量，可以使用 MLlib中的 StandardScaler类来解决尺度问题。先创建一个 StandardScaler，然后在数据集上调用 fit() 方法来获得一个 StandardScalerModel，然后在模型上调用 transform() 来均衡(尺度平衡)数据集。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from pyspark.mllib.feature import StandardScaler</span><br><span class="line"> </span><br><span class="line">vectors &#x3D; [Vectors.dense([-2.0,5.0,1.0]),Vectors.dense([2.0,0.0,1.0])]</span><br><span class="line">dataset &#x3D; sc.parallize(vectors)</span><br><span class="line">scaler &#x3D;  StandardScaler(withMean &#x3D; True,withStd &#x3D; True)</span><br><span class="line">model &#x3D; scaler.fit(dataset)</span><br><span class="line">result &#x3D;model.transform(dataset)</span><br></pre></td></tr></table></figure>
-
-<h2 id="规范化"><a href="#规范化" class="headerlink" title="规范化"></a>规范化</h2><p>Normalizer类允许用户将向量规范化到长度为1的空间内，使用 <code>Normalizer().transform(rdd)</code>即可。默认情况下是将数据按照欧几里得距离规范化，可以向Normalizer()中传入参数改变，如果传入的是3，将会被规范化到 L^3的空间上。</p>
-<h2 id="统计"><a href="#统计" class="headerlink" title="统计"></a>统计</h2><p> Spark提供了一些直接应用到RDD上的统计函数，位于<code>mllib.stat.Statistics</code>类。</p>
-<ul>
-<li><p><strong>Statistics.colStats(rdd) :</strong>计算一个RDD向量的统计概要，保存向量集合每一列的最小值、最大值、平均值以及方差。</p>
-</li>
-<li><p><strong>Statistics.corr(rdd,method)：</strong>计算RDD向量列之间的相关性，使用Pearson 或者Spearman（方法必须是这两者中的一个）</p>
-</li>
-<li><p><strong>Statistics.corr(rdd1,rdd2,method)：</strong>计算两个RDD向量浮点值之间的相关性。method同上</p>
-</li>
-<li><p><strong>Statistics.chiSqTest(rdd)：</strong>计算有label标签的LabeledPoint对象的RDD的每个特征的皮埃尔独立性检测。</p>
-</li>
-</ul>
-<p>##分类和回归</p>
-<p>分类和回归两个常见的监督学习形式，算法尝试从打过标签的训练数据对象中预测变量。不同之处在于预测变量的类型：分类中所有分类是限定（离散）的，回归中变量预测是连续的。<br> 在MLlib中分类和回归都是用 LabeledPoint类，也即“数据类型”。一个LabeledPoint由标签(一般是double，但是也可以被设置成离散的)和特征向量组成。</p>
-<p>##线性回归</p>
-<pre><code>线性回归是是回归算法中最简单的回归算法，预测特征的线性组合变量输出。MLlib支持Lasso回归和ridge回归。通过 `mllib.regression.LineRegressionWithSGD`,`LassonWithSGD`和`RidgeRegressionWithSGD`类可以使用，在MLlib中遵从一致的命名模式，当问题牵扯到多个算法时，类名中&quot;With&quot;部分所使用的算法。此处SGD即 Stochastic Gradient Descent(随机梯度下降)。这些类都有几个参数来调整算法:</code></pre><ul>
-<li><strong>numIterations:</strong>算法迭代次数，默认是100</li>
-<li><strong>stepSize：</strong> 梯度下降步长（默认是1.0）</li>
-<li><strong>intercept:</strong> (截距)是否向数据中加入截距或者 偏置特征，也即特征值始终为1的。默认是不添加的</li>
-<li><strong>regPram：</strong>Lasso和ridge回归的正则参数</li>
-</ul>
-<p>python中线性回归算法示例:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from pyspark.mllib.regression import LabeledPoint</span><br><span class="line">from pyspark.mllib.regression import LinearRegressionWithSGD</span><br><span class="line"> </span><br><span class="line">points &#x3D; #创建一个 LabeledPoint的RDD</span><br><span class="line">model &#x3D; LinearRegressionWithSGD.train(point,iterations &#x3D; 200,intercept&#x3D;True)</span><br><span class="line">print &quot;weight:%s,intercept: %s&quot;%(model.weights,model.intercept)</span><br></pre></td></tr></table></figure>
-
-<h2 id="逻辑回归"><a href="#逻辑回归" class="headerlink" title="逻辑回归"></a>逻辑回归</h2><pre><code>逻辑回归是一个将数据样例分为正、负的二分类平面。在MLlib中使用LabeledPoint 标签0 和标签1并返回LogisticRegressionModel来预测新的数据点。</code></pre><p>逻辑回归有着与线性回归十分相似的API，不同之处在于逻辑回归使用的算法时SGD和LBFGS。通常选择LBFGS。可以在<code>mllib.classification.LogisticRegressionWithLBFGS</code> 和<code>WithSGD</code>类中找到。</p>
-<pre><code>这些逻辑回归算法中的`LogstisticRegressionModel`给每个点计算一个0到1之间的分值。然后给予给定的阈值返回0或1，可以通过设置 setThreshold来改变阈值，也可以通过 clearThreshold()方法清除阈值设置，清除之后 predict()将返回原始的分值。</code></pre><h2 id="SVM支持向量机"><a href="#SVM支持向量机" class="headerlink" title="SVM支持向量机"></a>SVM支持向量机</h2><p>   SVM也是一个返回线性分类平面的二分类方法，</p>
-<ul>
-<li><p><strong>协同过滤和推荐算法</strong> </p>
-<pre><code>协同过滤是一种根据用户与物品的交互评分数据来推荐新物品的技术。仅需要一张 用户/产品 交互清单即可：可以是确定交互（直接在网站上给产品评分）或者隐式交互（用户浏览了某个产品，但是没有评分）。根据这些，协同过滤就知道哪些产品之间有相似性，以及哪些用户之间存在相似。</code></pre></li>
-<li><p><strong>交替最小二乘法</strong></p>
-<pre><code>产品和用户构成的M*N矩阵(产品有M个，用户有N个)，但这个矩阵是稀疏的，只有部分评分，ALS就是填满矩阵中缺失值得，填满的过程就是推荐过程。MLlib包含了一个ALS的实现，一个易于在集群中拓展的协同过滤算法，位于 mllib.recommendation.ALS</code></pre><p>使用以下参数：</p>
-</li>
-<li><p><strong>rank：</strong>特征向量秩大小，越大的秩会得到更好的模型，但是计算消耗也相应增加。默认是 10</p>
-</li>
-<li><p><strong>iteration：</strong> 算法迭代次数（默认是10）</p>
-</li>
-<li><p><strong>lambda：</strong>正则参数，默认是 0.01。详细解释参考 <a href="https://www.zhihu.com/question/31509438" target="_blank" rel="noopener">https://www.zhihu.com/question/31509438</a></p>
-</li>
-<li><p><strong>alpha：</strong>在隐式ALS中用于计算置信度的常量，默认为1.0</p>
-</li>
-<li><p><strong>numUserBlocks,numProductBlocks：</strong>将用户和产品数据分解的块数目，用来控制并行度；你可以传入-1来让MLlib自动决定。</p>
-</li>
-</ul>
-<p>要使用ALS，你需要给定一个 <code>mllib.recommendation.Rating</code>对象的RDD，每个都包含 用户ID，产品ID和评分。注意：每个ID都必须是是一个32位整型数据，如果你的ID是字符串或者比较大的数据，推荐使用哈希之后的数据。</p>
-<p>ALS返回一个 <code>MatrixFactorizationModel</code>来代表结果，此结果可以用来给键值对RDD(userID,productID)使用predict()预测评分。另外，你可以使用 model.recommendProducts(userID,numProducts) 找到 top numProducts的产品给指定用户。切记，不像MLlib中其他模型，MatrixFactorizationModel是较大的，为每个用户和产品持有一个向量。这表明它不能存储在磁盘上然后再载入并用在另外部分代码，但是你可以存储它产生的特征向量RDD，比如<code>model.userFeatures</code>和<code>model.productFeatures</code>到分布式文件系统中。</p>
-<p>最后，有两种类型的ALS：对于确定评分（默认，使用 ALS.train()）和隐式评分（使用 ALS.trainImplicit()）。对于确定评分，每个用户对产品的评分必须是分值（比如说1-5星），然后预测评分也是分值。对于隐式评分，评分代表了用户与给定产品项的交互置信度，然后预测项也是置信度。</p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2016-09-20-pyspark-mllibuse/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2016-09-20-pyspark-mllibuse/" title="pyspark机器学习库使用">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2016-09-20-batch_sizesetup/">
-    		深度学习：batch_size的设置与影响
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.334Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <p>注意：本文根据知乎<strong>程引</strong>的<a href="https://www.zhihu.com/question/32673260" target="_blank" rel="noopener">回答</a>整理</p>
-<h2 id="为何需要batch-size参数"><a href="#为何需要batch-size参数" class="headerlink" title="为何需要batch_size参数"></a>为何需要batch_size参数</h2><p> Batch的选择，<strong>首先决定的是下降的方向</strong>。如果数据集比较小，完全可以采用 <strong>全数据集(Full Batch Learning)</strong> 的形式。这样做有如下好处：</p>
-<ul>
-<li><p>全数据集确定的方向能够更好的代表样本总体，从而更准确的朝着极值所在方向。</p>
-</li>
-<li><p>由于不同权值的梯度值差别较大，因此选取一个全局的学习率很困难。</p>
-<p>Full Batch Learning可以使用Rprop只基于梯度符号并且针对性单独更新各权值。<br>但是对于非常大的数据集，上述两个好处变成了两个坏处：</p>
-</li>
-<li><p>随着数据集的海量增加和内存限制，一次载入所有数据不现实。</p>
-</li>
-<li><p>以Rprop的方式迭代，会由于各个batch之间的采样差异性，各此梯度修正值相互抵消，无法修正。这才有了后来的<strong>RMSprop</strong>的妥协方案。</p>
-</li>
-</ul>
-<h2 id="Full-Batch-Learning的另一个极端-Online-Learning"><a href="#Full-Batch-Learning的另一个极端-Online-Learning" class="headerlink" title="Full Batch Learning的另一个极端 Online Learning"></a>Full Batch Learning的另一个极端 Online Learning</h2><p> 既然 Full Batch Learning 并不适用大数据集，那么走向另一个极端怎么样？所谓另一个极端，就是每次只训练一个样本，即 Batch_Size = 1。这就是<strong>在线学习(Online Learning)</strong> 。线性神经元在均方误差代价函数的错误面是一个抛物面，横截面是椭圆。对于多层神经元、非线性网络，在局部依然近似是抛物面。使用在线学习，每次修正方向以各自样本的梯度方向修正，横冲直撞各自为政，<strong>难以达到收敛</strong></p>
-<p> <img src="/images/blog/batch_size1.png" alt="batch_size"></p>
-<h2 id="选取适中的batch-size"><a href="#选取适中的batch-size" class="headerlink" title="选取适中的batch_size"></a>选取适中的batch_size</h2><p>  可不可以选择一个适中的 Batch_Size 值呢？当然可以，这就是<strong>批梯度下降法（Mini-batches Learning）</strong>。因为如果数据集足够充分，那么用一半（<em>甚至少得多</em>）的数据训练算出来的梯度与用全部数据训练出来的梯度是<strong>几乎一样</strong>的。<br>  在合理范围内，增大 Batch_Size 有何好处？</p>
-<ul>
-<li><p>内存利用率提高了，大矩阵乘法的并行化效率提高。</p>
-</li>
-<li><p>跑完一次 epoch（全数据集）所需的迭代次数减少，对于相同数据量的处理速度进一步加快。</p>
-</li>
-<li><p>在一定范围内，一般来说 Batch_Size 越大，其确定的下降方向越准，引起训练震荡越小。</p>
-<p>盲目增大 Batch_Size 有何<u>坏处</p>
-</li>
-<li><p>内存利用率提高了，但是内存容量可能撑不住了。</p>
-</li>
-<li><p>跑完一次 epoch（全数据集）所需的迭代次数减少，要想达到相同的精度，其所花费的时间大大增加了，从而对参数的修正也就显得更加缓慢。</p>
-</li>
-<li><p>Batch_Size 增大到一定程度，其确定的下降方向已经基本不再变化。</p>
-</li>
-</ul>
-<h2 id="调节-Batch-Size-对训练效果影响到底如何？"><a href="#调节-Batch-Size-对训练效果影响到底如何？" class="headerlink" title="调节 Batch_Size 对训练效果影响到底如何？"></a>调节 Batch_Size 对训练效果影响到底如何？</h2><p>  这里跑一个 LeNet 在 MNIST 数据集上的效果。MNIST 是一个手写体标准库</p>
-<p>   <img src="/images/blog/batch_size2.png" alt="batch_size"></p>
-<p>  运行结果如上图所示，其中绝对时间做了标准化处理。运行结果与上文分析相印证：</p>
-<ul>
-<li>Batch_Size 太小，算法在 200 epoches 内不收敛。</li>
-<li>随着 Batch_Size 增大，处理相同数据量的速度越快。</li>
-<li>随着 Batch_Size 增大，达到相同精度所需要的 epoch 数量越来越多。</li>
-<li>由于上述两种因素的矛盾， Batch_Size 增大到<u>某个</u>时候，达到<b>时间上</b>的最优。</li>
-<li>由于最终收敛精度会陷入不同的局部极值，因此 Batch_Size 增大到<u>某些</u>时候，达到最终收敛<strong>精度上</strong>的最优。</li>
-</ul>
-<h2 id="caffe中batch-size影响"><a href="#caffe中batch-size影响" class="headerlink" title="caffe中batch size影响"></a>caffe中batch size影响</h2><p> caffe的代码实现上选取一个batch的时候似乎是按着数据库的图片顺序选取输入图片的，所以在生成数据库的时候切记要shuffle一下图片顺序。caffe中完成这一步的代码为</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$caffe_root&#x2F;build&#x2F;tools&#x2F;convert_imageset -shuffle -resize_height&#x3D;256 -resize_width&#x3D;256</span><br></pre></td></tr></table></figure>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2016-09-20-batch_sizesetup/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2016-09-20-batch_sizesetup/" title="深度学习：batch_size的设置与影响">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2016-09-09-tensorflow-retainmodel/">
-    		tensorflow：如何重新训练Inception模型的最后一层，以应对新分类
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.329Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <p>本文整理自 <a href="https://www.tensorflow.org/versions/r0.10/how_tos/image_retraining/index.html" target="_blank" rel="noopener">retrain network</a></p>
-<h2 id="在Flowers数据集上重新训练"><a href="#在Flowers数据集上重新训练" class="headerlink" title="在Flowers数据集上重新训练"></a>在Flowers数据集上重新训练</h2><p><img src="/images/blog/retain_flowers.jpg" alt="flowers数据集"></p>
-<p>训练开始之前你需要一些数据集，以告诉网络，你有哪些新分类需要学习。后面的部分会道明如何准备自己的数据，首先按照如下操作下载一些数据集</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd ~</span><br><span class="line">curl -O http:&#x2F;&#x2F;download.tensorflow.org&#x2F;example_images&#x2F;flower_photos.tgz</span><br><span class="line">tar xzf flower_photos.tgz</span><br></pre></td></tr></table></figure>
-<p>等图片下载好，可以按照如下方式重新训练，在tensorflow源码的根目录下执行:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bazel build tensorflow&#x2F;examples&#x2F;image_retraining:retrain</span><br></pre></td></tr></table></figure>
-<p>然后继续执行如下操作</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bazel-bin&#x2F;tensorflow&#x2F;examples&#x2F;image_retraining&#x2F;retrain --image_dir ~&#x2F;flower_photos</span><br></pre></td></tr></table></figure>
-<p>注意：<code>image_dir</code>参数需要指定你的flowers数据下载目录。<br>此脚本会载入预训练的Inception v3模型，移除原先模型中的最后一层，然后在flowers数据集上重新训练。flowers数据集的分类信息在原始的ImageNet网络中并不存在 ，转换学习的神奇之处在于网络的前几层用来训练识别物体之间的差别，这可以在做任何更新的情况下重用于新的分类任务。</p>
-<h2 id="Bottlenecks"><a href="#Bottlenecks" class="headerlink" title="Bottlenecks"></a>Bottlenecks</h2><p>  脚本运行可能消耗半小时或者更多，这取决于你的硬件。脚本的第一阶段会分析所有图像并计算每张图像的Bottleneck.<code>bottleneck</code>是我们经常用于描述网络最后一层之前的那些实际完成分类任务的网络层的一种非正式称谓。倒数第二层的输出结果对于描述区分需要分类的类别已经足够.这意味着它必须有信息丰富并且关于图像信息也足够紧凑，因为它必须包含足够的信息来在一小撮数值（标签值）中完成分类。重新训练最后一层就可以完成新的分类任务，为何？因为在ImageNet数据上完成1000个分类任务的信息通常也可用于区分新的物体。</p>
-<p>  由于每张图像在训练和计算bottleneck值的过程中重复使用多次，这极为耗时，将这些数据缓存在磁盘上有助于加速整个过程以避免重复计算。</p>
-<h2 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h2><p> 一旦bottleneck完成，网络最后一层的训练就开始了。你将会看到训练步骤的一系列的输出，每一个会输出训练准确率，验证准确率和交叉熵。训练准确率显示的当前批次的图像中正确分类的准确率。验证准确率显示的是从一组不同数据中随机选择的一组图像的精度。这其中的关键区别在于，训练的准确率是基于网络已经能够学习的图像集，因为网络</p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2016-09-09-tensorflow-retainmodel/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2016-09-09-tensorflow-retainmodel/" title="tensorflow：如何重新训练Inception模型的最后一层，以应对新分类">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2016-09-02-tensorflow-inputpipeline/">
-    		tensorflow：理解tensorflow中的输入管道
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.327Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <p>原文翻译整理自： <a href="https://ischlag.github.io/2016/06/19/tensorflow-input-pipeline-example/" target="_blank" rel="noopener">理解tensorflow中输入管道</a></p>
-<h2 id="主要内容"><a href="#主要内容" class="headerlink" title="主要内容"></a>主要内容</h2><p>  本文旨在根据mnist数据集构建一个简单而有效的输入管道。</p>
-<h2 id="使用tensorflow加载数据"><a href="#使用tensorflow加载数据" class="headerlink" title="使用tensorflow加载数据"></a>使用tensorflow加载数据</h2><p> 有两种方式来加载数据，其一是使用<strong>feeding</strong>方法并在每一步提供<strong>data</strong>和<strong>label</strong>给<strong>feed_dict</strong>对象。这种方式在数据集太大而无法在内存中存放时将无能为力，因此tensorflow的作者提出了使用 <em>input pipelines</em>。下一步将描述 <em>pipelines</em>，但是，注意：只有在session操作之前启动队列runners才能激活pipelines并载入数据。<br> <em>input pipeline</em>将会处理读取csv文件，解析文件格式，重构数据，混洗数据，数据增强以及其他数据处理，然后在批处理中使用线程载入数据。</p>
-<h2 id="载入标签数据"><a href="#载入标签数据" class="headerlink" title="载入标签数据"></a>载入标签数据</h2><p> 假定我们有如下数据集：</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> dataset_path      &#x3D; &quot;&#x2F;path&#x2F;to&#x2F;out&#x2F;dataset&#x2F;mnist&#x2F;&quot;</span><br><span class="line">test_labels_file  &#x3D; &quot;test-labels.csv&quot;</span><br><span class="line">train_labels_file &#x3D; &quot;train-labels.csv&quot;</span><br></pre></td></tr></table></figure>
-
-<p>首先要做的事情就是从生成的文本文件中载入图像和标签信息。<strong>注意，我们并不是要训练模型,所以不需要进行one-hot编码</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">def encode_label(label):</span><br><span class="line">  return int(label)</span><br><span class="line"></span><br><span class="line">def read_label_file(file):</span><br><span class="line">  f &#x3D; open(file, &quot;r&quot;)</span><br><span class="line">  filepaths &#x3D; []</span><br><span class="line">  labels &#x3D; []</span><br><span class="line">  for line in f:</span><br><span class="line">    filepath, label &#x3D; line.split(&quot;,&quot;)</span><br><span class="line">    filepaths.append(filepath)</span><br><span class="line">    labels.append(encode_label(label))</span><br><span class="line">  return filepaths, labels</span><br><span class="line"></span><br><span class="line"># reading labels and file path</span><br><span class="line">train_filepaths, train_labels &#x3D; read_label_file(dataset_path + train_labels_file)</span><br><span class="line">test_filepaths, test_labels &#x3D; read_label_file(dataset_path + test_labels_file)</span><br></pre></td></tr></table></figure>
-
-<h2 id="在字符串列表上选择性地做一些处理"><a href="#在字符串列表上选择性地做一些处理" class="headerlink" title="在字符串列表上选择性地做一些处理"></a>在字符串列表上选择性地做一些处理</h2><p>接下来，我们将图像数据的相对路径转换为绝对路径，同时将训练数据和测试数据拼接在一起。然后混洗数据并创建我们自己的训练和测试集合。为使脚本输出结果易于理解，我们将只从数据集中抽样20个样本。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># transform relative path into full path</span><br><span class="line">train_filepaths &#x3D; [ dataset_path + fp for fp in train_filepaths]</span><br><span class="line">test_filepaths &#x3D; [ dataset_path + fp for fp in test_filepaths]</span><br><span class="line"></span><br><span class="line"># for this example we will create or own test partition</span><br><span class="line">all_filepaths &#x3D; train_filepaths + test_filepaths</span><br><span class="line">all_labels &#x3D; train_labels + test_labels</span><br><span class="line"></span><br><span class="line"># we limit the number of files to 20 to make the output more clear!</span><br><span class="line">all_filepaths &#x3D; all_filepaths[:20]</span><br><span class="line">all_labels &#x3D; all_labels[:20]</span><br></pre></td></tr></table></figure>
-
-<h2 id="开始构建pipelines"><a href="#开始构建pipelines" class="headerlink" title="开始构建pipelines"></a>开始构建pipelines</h2><p>确保我们所使用 <em>tensor</em>的数据类型<em>dtype</em>与列表中的已有的数据是一致的。载入以下包可以创建我们的tensorflow对象</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from tensorflow.python.framework import ops</span><br><span class="line">from tensorflow.python.framework import dtypes</span><br><span class="line"># convert string into tensors</span><br><span class="line">all_images &#x3D; ops.convert_to_tensor(all_filepaths, dtype&#x3D;dtypes.string)</span><br><span class="line">all_labels &#x3D; ops.convert_to_tensor(all_labels, dtype&#x3D;dtypes.int32)</span><br></pre></td></tr></table></figure>
-
-<h2 id="开始对数据分区"><a href="#开始对数据分区" class="headerlink" title="开始对数据分区"></a>开始对数据分区</h2><p>这一步是可选的。鉴于我们已经将我们的20个样本置于一个大集合之中，我们需要执行一些<em>partition</em>操作来构建测试机和训练集。tensorflow可以在tensors上即时完成，所以不必预先做。如果对 partition操作感到困惑，可以参考<a href="https://www.tensorflow.org/versions/r0.9/api_docs/python/array_ops.html#dynamic_partition" target="_blank" rel="noopener">tensorflow partition</a>.我们将 <em>test_set_size</em>设置为5个样本。下图显示了如何从数据集中随机选出训练集和测试集</p>
-<p>   <img src="/images/blog/tensorflow_partition.png" alt="tensorflow partition操作示例图"></p>
-<p>注意<em>partition</em>类似于位置因子或标签，数据某个位置上的不同标签将会将数据分成不同部分。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># create a partition vector</span><br><span class="line">partitions &#x3D; [0] * len(all_filepaths)</span><br><span class="line">partitions[:test_set_size] &#x3D; [1] * test_set_size</span><br><span class="line">random.shuffle(partitions)</span><br><span class="line"></span><br><span class="line"># partition our data into a test and train set according to our partition vector</span><br><span class="line">train_images, test_images &#x3D; tf.dynamic_partition(all_images, partitions, 2)</span><br><span class="line">train_labels, test_labels &#x3D; tf.dynamic_partition(all_labels, partitions, 2)</span><br></pre></td></tr></table></figure>
-
-<h2 id="构建输入队列并定义如何载入图像"><a href="#构建输入队列并定义如何载入图像" class="headerlink" title="构建输入队列并定义如何载入图像"></a>构建输入队列并定义如何载入图像</h2><p> <em>slice_input_producer</em>将tensors切分成许许多多的单个实例，并使用多线程将它们入队列。关于进一步的参数，比如线程数和队列容量等需要参考API文档。然后，我们使用路径信息将文件读入到 <em>pipelines</em>，然后使用<em>jpg decoder</em>解码（也可以使用其他解码器）。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"> # create input queues</span><br><span class="line">train_input_queue &#x3D; tf.train.slice_input_producer(</span><br><span class="line">                                    [train_images, train_labels],</span><br><span class="line">                                    shuffle&#x3D;False)</span><br><span class="line">test_input_queue &#x3D; tf.train.slice_input_producer(</span><br><span class="line">                                    [test_images, test_labels],</span><br><span class="line">                                    shuffle&#x3D;False)</span><br><span class="line"></span><br><span class="line"># process path and string tensor into an image and a label</span><br><span class="line">file_content &#x3D; tf.read_file(train_input_queue[0])</span><br><span class="line">train_image &#x3D; tf.image.decode_jpeg(file_content, channels&#x3D;NUM_CHANNELS)</span><br><span class="line">train_label &#x3D; train_input_queue[1]</span><br><span class="line"></span><br><span class="line">file_content &#x3D; tf.read_file(test_input_queue[0])</span><br><span class="line">test_image &#x3D; tf.image.decode_jpeg(file_content, channels&#x3D;NUM_CHANNELS)</span><br><span class="line">test_label &#x3D; test_input_queue[1]</span><br></pre></td></tr></table></figure>
-
-<h2 id="分组抽样并汇成一批批"><a href="#分组抽样并汇成一批批" class="headerlink" title="分组抽样并汇成一批批"></a>分组抽样并汇成一批批</h2><p> 如果在<em>session</em>中执行<em>train_image</em>，你将会得到一张图片信息（比如,(28,28,1)），这是我们的mnist图像的维度。在一张图片上训练模型是十分低效的，因此我们将图像汇入队列中称为一批，并在这一批批的数据上训练。目前为止，我们没有开始 <em>runners</em>来载入图像，只是描述了 <em>pipelines</em>初步形象，此时tensorflow 尚不了解图像的形状。使用<strong>tf.train_batch</strong>之前，需要先定义图像张量的<em>shape</em>，以便于将图像汇成一批批数据。此示例中，我们使用的是5个样本作为一批数据。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"> # define tensor shape</span><br><span class="line">train_image.set_shape([IMAGE_HEIGHT, IMAGE_WIDTH, NUM_CHANNELS])</span><br><span class="line">test_image.set_shape([IMAGE_HEIGHT, IMAGE_WIDTH, NUM_CHANNELS])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># collect batches of images before processing</span><br><span class="line">train_image_batch, train_label_batch &#x3D; tf.train.batch(</span><br><span class="line">                                    [train_image, train_label],</span><br><span class="line">                                    batch_size&#x3D;BATCH_SIZE</span><br><span class="line">                                    #,num_threads&#x3D;1</span><br><span class="line">                                    )</span><br><span class="line">test_image_batch, test_label_batch &#x3D; tf.train.batch(</span><br><span class="line">                                    [test_image, test_label],</span><br><span class="line">                                    batch_size&#x3D;BATCH_SIZE</span><br><span class="line">                                    #,num_threads&#x3D;1</span><br><span class="line">                                    )</span><br></pre></td></tr></table></figure>
-
-<h2 id="运行-Queue-Runners并启动session"><a href="#运行-Queue-Runners并启动session" class="headerlink" title="运行 Queue Runners并启动session"></a>运行 Queue Runners并启动session</h2><p> 上面的步骤已经完成 <em>input pipelines</em>的构建。但是若此时去访问比如<em>test_image_batch</em>，将不会有任何数据，因为我们并没有启动载入队列并将数据注入到 tensorflowd对象中的线程。完成这一步之后，接下来是两个循环，其一是处理训练数据，其二是吹测试数据。<br> 你可能留意到循环次数比每个数据的抽样数据大</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">with tf.Session() as sess:</span><br><span class="line"></span><br><span class="line"> # initialize the variables</span><br><span class="line"> sess.run(tf.initialize_all_variables())</span><br><span class="line"></span><br><span class="line"> # initialize the queue threads to start to shovel data</span><br><span class="line"> coord &#x3D; tf.train.Coordinator()</span><br><span class="line"> threads &#x3D; tf.train.start_queue_runners(coord&#x3D;coord)</span><br><span class="line"></span><br><span class="line"> print &quot;from the train set:&quot;</span><br><span class="line"> for i in range(20):</span><br><span class="line">   print sess.run(train_label_batch)</span><br><span class="line"></span><br><span class="line"> print &quot;from the test set:&quot;</span><br><span class="line"> for i in range(10):</span><br><span class="line">   print sess.run(test_label_batch)</span><br><span class="line"></span><br><span class="line"> # stop our queue threads and properly close the session</span><br><span class="line"> coord.request_stop()</span><br><span class="line"> coord.join(threads)</span><br><span class="line"> sess.close()</span><br></pre></td></tr></table></figure>
-
-<p>但是从下面的输出结果看，你就会知道tensorflow不关心回合数(epochs)。我们不会混洗数据（查看input slicer的参数），同时 input pipelines只是在训练集上按照既定频率循环。你自己应该确保回合数(epochs)的准确性。尝试着调节 <em>batch size</em>和 <em>shuffle</em>并预测这将如何改变输出结果。你能预测到如果 <em>batch_size</em>改成4而不是5将会改变什么吗？</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">  tf-env)worker1:~$ python mnist_feed.py</span><br><span class="line">I tensorflow&#x2F;stream_executor&#x2F;dso_loader.cc:105] successfully opened CUDA library libcublas.so locally</span><br><span class="line">I tensorflow&#x2F;stream_executor&#x2F;dso_loader.cc:105] successfully opened CUDA library libcudnn.so locally</span><br><span class="line">I tensorflow&#x2F;stream_executor&#x2F;dso_loader.cc:105] successfully opened CUDA library libcufft.so locally</span><br><span class="line">I tensorflow&#x2F;stream_executor&#x2F;dso_loader.cc:105] successfully opened CUDA library libcuda.so.1 locally</span><br><span class="line">I tensorflow&#x2F;stream_executor&#x2F;dso_loader.cc:105] successfully opened CUDA library libcurand.so locally</span><br><span class="line">input pipeline ready</span><br><span class="line">I tensorflow&#x2F;stream_executor&#x2F;cuda&#x2F;cuda_gpu_executor.cc:900] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero</span><br><span class="line">I tensorflow&#x2F;core&#x2F;common_runtime&#x2F;gpu&#x2F;gpu_init.cc:102] Found device 0 with properties:</span><br><span class="line">name: GeForce GTX 960</span><br><span class="line">major: 5 minor: 2 memoryClockRate (GHz) 1.253</span><br><span class="line">pciBusID 0000:01:00.0</span><br><span class="line">Total memory: 2.00GiB</span><br><span class="line">Free memory: 1.77GiB</span><br><span class="line">I tensorflow&#x2F;core&#x2F;common_runtime&#x2F;gpu&#x2F;gpu_init.cc:126] DMA: 0</span><br><span class="line">I tensorflow&#x2F;core&#x2F;common_runtime&#x2F;gpu&#x2F;gpu_init.cc:136] 0:   Y</span><br><span class="line">I tensorflow&#x2F;core&#x2F;common_runtime&#x2F;gpu&#x2F;gpu_device.cc:755] Creating TensorFlow device (&#x2F;gpu:0) -&gt; (device: 0, name: GeForce GTX 960, pci bus id: 0000:01:00.0)</span><br><span class="line">from the train set:</span><br><span class="line">[5 4 1 9 2]</span><br><span class="line">[1 3 1 3 6]</span><br><span class="line">[1 7 2 6 9]</span><br><span class="line">[5 4 1 9 2]</span><br><span class="line">[1 3 1 3 6]</span><br><span class="line">[1 7 2 6 9]</span><br><span class="line">[5 4 1 9 2]</span><br><span class="line">[1 3 1 3 6]</span><br><span class="line">[1 7 2 6 9]</span><br><span class="line">[5 4 1 9 2]</span><br><span class="line">[1 3 1 3 6]</span><br><span class="line">[1 7 2 6 9]</span><br><span class="line">[5 4 1 9 2]</span><br><span class="line">[1 3 1 3 6]</span><br><span class="line">[1 7 2 6 9]</span><br><span class="line">[5 4 1 9 2]</span><br><span class="line">[1 3 1 3 6]</span><br><span class="line">[1 7 2 6 9]</span><br><span class="line">[5 4 1 9 2]</span><br><span class="line">[1 3 1 3 6]</span><br><span class="line"></span><br><span class="line">from the test set:</span><br><span class="line"></span><br><span class="line">[0 4 5 3 8]</span><br><span class="line">[0 4 5 3 8]</span><br><span class="line">[0 4 5 3 8]</span><br><span class="line">[0 4 5 3 8]</span><br><span class="line">[0 4 5 3 8]</span><br><span class="line">[0 4 5 3 8]</span><br><span class="line">[0 4 5 3 8]</span><br><span class="line">[0 4 5 3 8]</span><br><span class="line">[0 4 5 3 8]</span><br><span class="line">[0 4 5 3 8]</span><br></pre></td></tr></table></figure>
-
-<p>由于我们混洗了 partition 向量，很显然你会得到不同的标签。但是注意，此处重点是理解tensorflow的载入机制是如何工作的。因为每我们的 <em>batch size</em>与测试集合的一样大。</p>
-<h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><p>完整代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># Example on how to use the tensorflow input pipelines. The explanation can be found here ischlag.github.io.</span><br><span class="line">import tensorflow as tf</span><br><span class="line">import random</span><br><span class="line">from tensorflow.python.framework import ops</span><br><span class="line">from tensorflow.python.framework import dtypes</span><br><span class="line"></span><br><span class="line">dataset_path      &#x3D; &quot;&#x2F;path&#x2F;to&#x2F;your&#x2F;dataset&#x2F;mnist&#x2F;&quot;</span><br><span class="line">test_labels_file  &#x3D; &quot;test-labels.csv&quot;</span><br><span class="line">train_labels_file &#x3D; &quot;train-labels.csv&quot;</span><br><span class="line"></span><br><span class="line">test_set_size &#x3D; 5</span><br><span class="line"></span><br><span class="line">IMAGE_HEIGHT  &#x3D; 28</span><br><span class="line">IMAGE_WIDTH   &#x3D; 28</span><br><span class="line">NUM_CHANNELS  &#x3D; 3</span><br><span class="line">BATCH_SIZE    &#x3D; 5</span><br><span class="line"></span><br><span class="line">def encode_label(label):</span><br><span class="line">  return int(label)</span><br><span class="line"></span><br><span class="line">def read_label_file(file):</span><br><span class="line">  f &#x3D; open(file, &quot;r&quot;)</span><br><span class="line">  filepaths &#x3D; []</span><br><span class="line">  labels &#x3D; []</span><br><span class="line">  for line in f:</span><br><span class="line">    filepath, label &#x3D; line.split(&quot;,&quot;)</span><br><span class="line">    filepaths.append(filepath)</span><br><span class="line">    labels.append(encode_label(label))</span><br><span class="line">  return filepaths, labels</span><br><span class="line"></span><br><span class="line"># reading labels and file path</span><br><span class="line">train_filepaths, train_labels &#x3D; read_label_file(dataset_path + train_labels_file)</span><br><span class="line">test_filepaths, test_labels &#x3D; read_label_file(dataset_path + test_labels_file)</span><br><span class="line"></span><br><span class="line"># transform relative path into full path</span><br><span class="line">train_filepaths &#x3D; [ dataset_path + fp for fp in train_filepaths]</span><br><span class="line">test_filepaths &#x3D; [ dataset_path + fp for fp in test_filepaths]</span><br><span class="line"></span><br><span class="line"># for this example we will create or own test partition</span><br><span class="line">all_filepaths &#x3D; train_filepaths + test_filepaths</span><br><span class="line">all_labels &#x3D; train_labels + test_labels</span><br><span class="line"></span><br><span class="line">all_filepaths &#x3D; all_filepaths[:20]</span><br><span class="line">all_labels &#x3D; all_labels[:20]</span><br><span class="line"></span><br><span class="line"># convert string into tensors</span><br><span class="line">all_images &#x3D; ops.convert_to_tensor(all_filepaths, dtype&#x3D;dtypes.string)</span><br><span class="line">all_labels &#x3D; ops.convert_to_tensor(all_labels, dtype&#x3D;dtypes.int32)</span><br><span class="line"></span><br><span class="line"># create a partition vector</span><br><span class="line">partitions &#x3D; [0] * len(all_filepaths)</span><br><span class="line">partitions[:test_set_size] &#x3D; [1] * test_set_size</span><br><span class="line">random.shuffle(partitions)</span><br><span class="line"></span><br><span class="line"># partition our data into a test and train set according to our partition vector</span><br><span class="line">train_images, test_images &#x3D; tf.dynamic_partition(all_images, partitions, 2)</span><br><span class="line">train_labels, test_labels &#x3D; tf.dynamic_partition(all_labels, partitions, 2)</span><br><span class="line"></span><br><span class="line"># create input queues</span><br><span class="line">train_input_queue &#x3D; tf.train.slice_input_producer(</span><br><span class="line">                                    [train_images, train_labels],</span><br><span class="line">                                    shuffle&#x3D;False)</span><br><span class="line">test_input_queue &#x3D; tf.train.slice_input_producer(</span><br><span class="line">                                    [test_images, test_labels],</span><br><span class="line">                                    shuffle&#x3D;False)</span><br><span class="line"></span><br><span class="line"># process path and string tensor into an image and a label</span><br><span class="line">file_content &#x3D; tf.read_file(train_input_queue[0])</span><br><span class="line">train_image &#x3D; tf.image.decode_jpeg(file_content, channels&#x3D;NUM_CHANNELS)</span><br><span class="line">train_label &#x3D; train_input_queue[1]</span><br><span class="line"></span><br><span class="line">file_content &#x3D; tf.read_file(test_input_queue[0])</span><br><span class="line">test_image &#x3D; tf.image.decode_jpeg(file_content, channels&#x3D;NUM_CHANNELS)</span><br><span class="line">test_label &#x3D; test_input_queue[1]</span><br><span class="line"></span><br><span class="line"># define tensor shape</span><br><span class="line">train_image.set_shape([IMAGE_HEIGHT, IMAGE_WIDTH, NUM_CHANNELS])</span><br><span class="line">test_image.set_shape([IMAGE_HEIGHT, IMAGE_WIDTH, NUM_CHANNELS])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># collect batches of images before processing</span><br><span class="line">train_image_batch, train_label_batch &#x3D; tf.train.batch(</span><br><span class="line">                                    [train_image, train_label],</span><br><span class="line">                                    batch_size&#x3D;BATCH_SIZE</span><br><span class="line">                                    #,num_threads&#x3D;1</span><br><span class="line">                                    )</span><br><span class="line">test_image_batch, test_label_batch &#x3D; tf.train.batch(</span><br><span class="line">                                    [test_image, test_label],</span><br><span class="line">                                    batch_size&#x3D;BATCH_SIZE</span><br><span class="line">                                    #,num_threads&#x3D;1</span><br><span class="line">                                    )</span><br><span class="line"></span><br><span class="line">print &quot;input pipeline ready&quot;</span><br><span class="line"></span><br><span class="line">with tf.Session() as sess:</span><br><span class="line"></span><br><span class="line">  # initialize the variables</span><br><span class="line">  sess.run(tf.initialize_all_variables())</span><br><span class="line"></span><br><span class="line">  # initialize the queue threads to start to shovel data</span><br><span class="line">  coord &#x3D; tf.train.Coordinator()</span><br><span class="line">  threads &#x3D; tf.train.start_queue_runners(coord&#x3D;coord)</span><br><span class="line"></span><br><span class="line">  print &quot;from the train set:&quot;</span><br><span class="line">  for i in range(20):</span><br><span class="line">    print sess.run(train_label_batch)</span><br><span class="line"></span><br><span class="line">  print &quot;from the test set:&quot;</span><br><span class="line">  for i in range(10):</span><br><span class="line">    print sess.run(test_label_batch)</span><br><span class="line"></span><br><span class="line">  # stop our queue threads and properly close the session</span><br><span class="line">  coord.request_stop()</span><br><span class="line">  coord.join(threads)</span><br><span class="line">  sess.close()</span><br></pre></td></tr></table></figure>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2016-09-02-tensorflow-inputpipeline/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2016-09-02-tensorflow-inputpipeline/" title="tensorflow：理解tensorflow中的输入管道">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2016-08-24-network-imageclassify/">
-    		深度学习：卷积神经网络与图像识别基本概念
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.322Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h2 id="一-卷积神经网络的组成"><a href="#一-卷积神经网络的组成" class="headerlink" title="一 卷积神经网络的组成"></a>一 卷积神经网络的组成</h2><p> 图像分类可以认为是给定一副测试图片作为输入 $I \epsilon R^{W×H×C}$，输出该图片<br>属于哪一类。参数 W 是图像的宽度，H 是高度，C 是通道的个数；彩色图像中 C = 3，灰度图像<br>中 C = 1。一般的会设定总共类别的个数，例如在ImageNet竞赛中总共有 1000 个类别；在CIFAR10 中有 10 个类别。卷积神经网络则可以看成这样的黑匣子。输入是原始图片 I，输出是 L 维的向量 $v \epsilon R^L$。L表示预先设定的类别个数。向量 v 的每一个维度代表图像属于对应类别的可能性的大小。如果是<br>单类别识别问题，也就是说每一幅图像只分配 L 个标签中的一个标签，那么可以对 v 中的元素进行比较，选取最大的值对应的标签作为分类的结果。v 可以是一个概率分布的形式，即每一个元素$0 ≤ vi ≤ 1$，并且 $\sum_iv_i=1$ 。其中 $v_i$ 表示 v 的第 i 个元素。也可以是从负无穷大到正无穷大的实数，越大代表属于对应类别的可能性越大。在卷积神经网络的内部，是由很多的层构成。每一个层可以认为是一个函数，输入是信号 x，输出是信号 $y = f(x)$ 。输出的 y 又可以作为其他层的输入。以下从网络的前段，中端，末端的角度调研常用的层的定义。前端主要考虑对于图像的处理过程，中端是各种神经元，末端主要考虑与训练网络有关的损失函数。</p>
-<h2 id="二-网络的前段"><a href="#二-网络的前段" class="headerlink" title="二 网络的前段"></a>二 网络的前段</h2><p>  前段指 的是对图像数据的处理，可以称之为数据层。</p>
-<h3 id="2-1-数据裁减"><a href="#2-1-数据裁减" class="headerlink" title="2.1 数据裁减"></a>2.1 数据裁减</h3><p> 输入的图像的大小可能各不相同，有一些图像的分辨率较大，有一些比较小。而且长宽比也不一定会一样。对于这样的不一致性，理论上而言，可以不予处理，但是这要求网络中其他的层次支持这样的输入。目前大部分情况下采用的是通过裁剪的方法使得输出的图像是固定分辨率的。<br> 在网络训练的阶段，裁剪的位置从原始的图像上随机选择，只需要满足裁剪<br>的子图完全落在图像中即可。通过随机的方式，是因为相当于增加了额外的数据，能够缓解过拟合的问题。</p>
-<h3 id="2-2-颜色干扰"><a href="#2-2-颜色干扰" class="headerlink" title="2.2 颜色干扰"></a>2.2 颜色干扰</h3><p> 裁剪之后的原图，每一个像素的是 0 到 255 的固定的数值。进一步的处理，包括减去均值，以及等比例缩放像素值使得像素值的分部基本在 [−1, 1] 之间。除了这些常规的操作之外，也会对图像进行归一化，相当于图像增强，比如 [9, 18, 17] 中对 CIFAR10 的数据预处理中。比如，对于每一个像素，随机选择 RGB 三个通道中的一个，然后在原像素值的基础上，随机添加一个从 [-20,20] 之间的数值。</p>
-<h2 id="三-网络的中段"><a href="#三-网络的中段" class="headerlink" title="三 网络的中段"></a>三 网络的中段</h2><p>  以下介绍在卷及神经网络中常用的层的定义，即输入的数据 x 是什么维度，输出 y 是什么维度以及如何从输入得到输出。</p>
-<h3 id="3-1-卷积神经网络的基本组成"><a href="#3-1-卷积神经网络的基本组成" class="headerlink" title="3.1 卷积神经网络的基本组成"></a>3.1 卷积神经网络的基本组成</h3><p> 如下图：</p>
-<p>  <img src="/images/blog/cnn_consist.png" alt="卷积神经网络基本组成"></p>
-<h3 id="3-2-卷积层"><a href="#3-2-卷积层" class="headerlink" title="3.2 卷积层"></a>3.2 卷积层</h3><p>  卷积层输入表示为 $x \epsilon R^{W\times H\times C}$,是一个三维的数据。表示有C个矩阵,每个矩阵这里表示为 $x^c \epsilon R^{W\times H}$,也称之为特征图。输出 $y \epsilon R^{W_0\times H_0\times C_0}$，也是一个三维数据。特征图分辨率从$W\times H$变为$W_0\times H_0$,特征图的个数也从C变为$C_0$。<br>    从输入到输出的一般公式为：<br>  $$<br>     y^{c_1}=\sum_cX^c*W^{c,c_1}<br>  $$</p>
-<p>  矩阵 $w_{c,c_1}\epsilon R_{w\times h}$ 称之为卷积核。属于卷积层的参数，一般通过随机梯度下降更新。$x^c$ 为输入数据的第 c 个特征图，但在一些情况下，也会在图像的周围补白。符号 ∗ 表示二维数据的卷积运算。卷积定义为<br>  $$<br>    (X^c*W^{c,c_1})=\sum_{m,n}x^c_{m,n}w^{c,c_1}<em>{u-m,v-n}<br>  $$<br>符号 $()</em>{u,v}$ 表示对应矩阵的 u 行 v 列的元素值。在有一些的网络结构中，并不是选择所有的 (u, v)，而是每隔一定数量选择一个。<br>直观而言，卷积层相当于对图像进行滤波，希望能够抽象出来局部信息。局部信息通过较小的卷积核在图像不同的局部位置上扫描而得。<br><img src="/images/blog/cnn_compute.png" alt="卷积层计算"></p>
-<p>下图是是一个动态示例，来源于 <a href="https://cs231n.github.io/convolutional-networks/#conv" target="_blank" rel="noopener">convolutional-networks</a></p>
-<h3 id="3-3-池化层"><a href="#3-3-池化层" class="headerlink" title="3.3 池化层"></a>3.3 池化层</h3><p>输入的信号表示为 $x\epsilon R^{W\times H\times C}$，具有 C 个通道，每一个通道是一个特征图。输出 $y\epsilon R^{W_0\times H_0\times C}$ 具有的通道个数与输入相同，但是特征图的分辨率一般是降低。</p>
-<p>池化层是对每一个特征图单独进行操作并且输出一个对应的特征图。假设池化范围是 $w \times h$，那么输入的特征图提取出来 $w \times h$ 的小图，然后寻找子图的最大值，或者计算子图的均值，作为一个输出。签证一般称之为最大化池化，后者是均值池化。从图像中提出小图的方式可以是任意一个子图，也可以是每隔多个像素值得到一个子图。池化层的作用包括降低特征图的分辨率，从而减少计算量，以及增强网络的鲁棒性。比如对于最大化池化的方式，对于图像的平移具有一定的鲁棒性。</p>
-<p>池化层的作用包括降低特征图的分辨率，从而减少计算量，以及增强网络的鲁棒性。比如对于最大化池化的方式，对于图像的平移具有一定的鲁棒性。</p>
-<p>实例，对于如下特征图 4x4，使用最大池化效果如下：<br><img src="/images/blog/cnn_maxpool.png" alt="池化"><br>图中每个像素点的值是上面各个格子的数值，然后要对这张 4<em>4的图片进行池化；那么采用最大池化也就是对上面 4</em>4的图片分块，每块大小为2*2，然后统计每个块的最大值，作为下采样后图片的像素值。</p>
-<h3 id="3-4-CCCP"><a href="#3-4-CCCP" class="headerlink" title="3.4 CCCP"></a>3.4 CCCP</h3><p>CCCP层的输入是$x\epsilon R^{W\times H\times C}$，输出是$y\epsilon W\times H\times C$。特征层的分辨率保持不变，但是通道数有所改变。其定义为：<br>$$<br>   y^{c_0}<em>{u,v}=\sum_cx^c</em>{u,v}w^{c,c_0}<br>$$<br>等效于卷积核为 1x1的卷积层。<br>CCCP 层相当于在多个全连接层，每一个全连接将信号从 C 维度映射为$C_0$维度。</p>
-<h3 id="3-5-ReLU-层及相关变体"><a href="#3-5-ReLU-层及相关变体" class="headerlink" title="3.5 ReLU 层及相关变体"></a>3.5 ReLU 层及相关变体</h3><p>该层的输入认识是一个信号 x。ReLU 并不要求输入信号的维度必须是一维或者几维的，因为该层的操作是对输出的每一个元素单独操作。但依然可以认为输入的 $x\epsilon R^{W\times H\times C}$。输出是一个和输入维度一样的信号y。<br>   假设从输入到输出的一个示例为:<br>   $$<br> y_i =<br>\begin{cases}<br>    x_i,  &amp; \text{if $x_i\ge 0$ } \<br>    0, &amp; \text{if $x_i&lt;0$ }  \<br>\end{cases}<br>$$</p>
-<p>显然这是一个非线性操作，ReLU 的存在使得网络的表达更加丰富。同时从定义中容易得出，该操作非常简单，并且在不同的输入点之间进行并行。ReLU 在一定程度上也是 S 行函数的近似。<br>$$<br>   y_i=\frac{1}{1+e^{-x_i}}<br>$$<br>进一步将ReLU改进为：<br>$$<br>y_i =<br>\begin{cases}<br>x_i,  &amp; \text{if $x_i\ge 0$ } \<br>0.01x_i, &amp; \text{if $x_i&lt;0$ }  \<br>\end{cases}<br>$$<br>当元素值为负数的时候，通过 $y_i = 0.01x_i$ 的方式，避免了导数为 0，无法传播的情况。<br> 进一步使用修正的ReLu为：<br> $$<br>   y_i=<br>   \begin{cases}<br>   x_i,  &amp; \text{if $x_i\ge 0$ } \<br>   \alpha x_i, &amp; \text{if $x_i&lt;0$ }  \<br>   \end{cases}<br> $$<br> 其中斜率 $\alpha$ 不再是一个固定的数值，而是通过梯度下降的方式就行优化</p>
-<h3 id="3-6-Dropout层"><a href="#3-6-Dropout层" class="headerlink" title="3.6 Dropout层"></a>3.6 Dropout层</h3><p> Dropout层的输入为$x\epsilon R^{W\times H\times C}$。这里并不要求输入是三维的信号，任意可能的维度都是可以。Dropout 同样是针对每一个数据进行操作。输出 y 与输入的大小一致。在网路进行训练的时候，对于输入的每一个数值 $x_i$，按照概率 p 设置为 0，否则保留。数学形式可以写为:<br>   $$y_i=\epsilon x_i$$<br>   其中 $\epsilon$ 是随机变量，并且满足 $\epsilon = 0$的概率为 p，$\epsilon = 1$ 的概率为 1 − p。实际中，概率 p 往往设置<br>为 1。</p>
-<p>然而在进行测试的时候，计算公式更正为 $y_i=(1-p)x_i$相当于一个期望。</p>
-<p>Dropout层的引入主要是为了减少过拟合的问题，减少不同参数的耦合性。</p>
-<h3 id="3-7-全连接层"><a href="#3-7-全连接层" class="headerlink" title="3.7 全连接层"></a>3.7 全连接层</h3><p>输入时$x\epsilon R^D$。这里要求将输入认识是一个列向量。输出为 $y\epsilon R^P$。从输入到输出的关系是:<br>$$<br>   y= Wx+b<br>$$<br>其中$W\epsilon R^{P\times D},b\epsilon R^P$,是投影矩阵阵以及阈值，是该层的参数，通过随机梯度下降的方式更新优化。</p>
-<p>全连接层是一个非常常用的层，然而该层在一定程度上会损失图像的空间信息，故而在有一些网络中，抛弃了全连接层。</p>
-<h3 id="3-8-局部响应归一化-LRN"><a href="#3-8-局部响应归一化-LRN" class="headerlink" title="3.8 局部响应归一化(LRN)"></a>3.8 局部响应归一化(LRN)</h3><p>  LRN层做的事是对当前层的输出结果做平滑处理。下图是示例:</p>
-<p>  <img src="/images/blog/lrn.jpg" alt="LRN示例"><br> 前后几层（对应位置的点）对中间这一层做一下平滑约束。</p>
-<p>  输入时一个三维信号$x\epsilon R^{W\times H\times C}$，输出也是一个三维信号$y\epsilon R^{W\times H\times C}$ 局部响应一体化层（Local Response Normalization）通过如下公式计算：</p>
-<p>  $$<br>   y^c_{u,v}=x^c_{u,v}/(k+\alpha\sum^{C-1,i+n/2}<em>{j=max(0,i-n/2)}(x^c</em>{u,v})^2)^\beta<br>  $$</p>
-<p>  其中$x^c_{,v}$ 代表第 $c$ 个通道上位置是$(u,v)$的信号值。示例参数设置为: $k=2,n=5,\alpha =10^{-4},\beta =0.75$</p>
-<h3 id="3-9-批归一化层-Batch-Normalization"><a href="#3-9-批归一化层-Batch-Normalization" class="headerlink" title="3.9 批归一化层(Batch Normalization)"></a>3.9 批归一化层(Batch Normalization)</h3><p>  详细理解参考:<a href="http://blog.csdn.net/hjimce/article/details/50866313" target="_blank" rel="noopener">Batch Normalization</a></p>
-<p>  批归一化层的输入依然是三维的信号 $x\epsilon R^{W\times H\times C}$，输<br>  出 y 与输入具有相同的大小。其归一化的基本思路是对输入的每一个元素按照如下方式归一化:<br>  $$<br>     y_i=\alpha x_i+b<br>  $$<br>  使得输出的 $y_i$ 均值尽量的为 0，以及方差尽量为 1。通过这样的方式，每一层的数据分布基本上一致。该方法能够提升优化的速度。</p>
-<p> 其优点如下：</p>
-<ul>
-<li>可以选择比较大的初始学习率,此算法有快速训练收敛的特性。</li>
-<li>可以不用考虑过拟合中的 Dropout ,L2正则项选择问题，采用BN之后可以移除这两个参数，或者可以选择更小的L2正则约束参数了，因为BN具有提高网络泛化能力的特性。</li>
-<li>不再需要局部响应归一化层，因为BN本身就是一个归一化网络层。</li>
-<li>可以完全打乱训练数据，防止每批训练时某些样本经常被挑选到。</li>
-</ul>
-<h2 id="四-网络的末端"><a href="#四-网络的末端" class="headerlink" title="四  网络的末端"></a>四  网络的末端</h2><p>  从网络训练的角度，末端主要是损失函数。也就是将数据映射为一个标量。通过随机梯度下降的方式，使得损失函数逐渐的降低。目前使用比较广泛的是 Softmax 回归和 Hinge 损失函数。</p>
-<h3 id="4-1-Softmax回归"><a href="#4-1-Softmax回归" class="headerlink" title="4.1  Softmax回归"></a>4.1  Softmax回归</h3><p>较通俗易懂的理解Softmax回归的一篇博客是 <a href="http://www.cnblogs.com/BYRans/p/4905420.html" target="_blank" rel="noopener">Softmax回归</a></p>
-<p>输入时 $v \epsilon R^L$，表示输入图像在各个类别上的可能性；同时需要输入图像的标签 k。输出是损失值。首先将输入归一化到 [0, 1] 之间，通过 Softmax 函数：</p>
-<p>$$<br>   Z_i =\frac{exp{v_i}}{\sum_j exp{v_j}}<br>$$<br>然后通过交叉熵定义损失值，也就是：<br>$$<br>   y = -log(Z_k)<br>$$<br>该损失函数主要应用与单类别分类问题中。<br>下图是$softmax$函数的坐标轴图像:<br><img src="/images/blog/softmax_function.png" alt="softmax_function"><br>从数学上来看，非线性的Sigmoid函数对中央区的信号增益较大，对两侧区的信号增益小，在信号的特征空间映射上，有很好的效果。<br>从神经科学上来看，中央区酷似神经元的兴奋态，两侧区酷似神经元的抑制态，因而在神经网络学习方面，可以将重点特征推向中央区，将非重点特征推向两侧区。</p>
-<h3 id="4-2-近似神经激活函数-Softplus-amp-ReLu"><a href="#4-2-近似神经激活函数-Softplus-amp-ReLu" class="headerlink" title="4.2   近似神经激活函数:Softplus&amp;ReLu"></a>4.2   近似神经激活函数:Softplus&amp;ReLu</h3><p>2001年，神经科学家Dayan、Abott从生物学角度，模拟出了脑神经元接受信号更精确的激活模型，该模型如下图所示:<br><img src="/images/blog/Softplus_function1.png" alt="softplus"></p>
-<hr>
-
-<p>参考文章:</p>
-<ul>
-<li><a href="http://www.voidcn.com/blog/xbinworld/article/p-4966477.html" target="_blank" rel="noopener">卷积神经网络CNN经典模型整理</a></li>
-<li><a href="http://blog.csdn.net/hjimce/article/details/50866313" target="_blank" rel="noopener">Batch Normalization 学习笔记</a></li>
-<li><a href="http://blog.csdn.net/hjimce/article/details/51761865" target="_blank" rel="noopener">卷积神经网络入门学习2.0</a></li>
-</ul>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2016-08-24-network-imageclassify/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2016-08-24-network-imageclassify/" title="深度学习：卷积神经网络与图像识别基本概念">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2016-08-22-tensorflow-sourcecode-input/">
-    		tensorflow:CIFAR-10 图像处理源码.input.py
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.320Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h1 id="源码解读"><a href="#源码解读" class="headerlink" title="源码解读"></a>源码解读</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">from __future__ import absolute_import</span><br><span class="line">from __future__ import division</span><br><span class="line">from __future__ import print_function</span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line">from six.moves import xrange  # pylint: disable&#x3D;redefined-builtin</span><br><span class="line">import tensorflow as tf</span><br><span class="line"></span><br><span class="line"># 处理当前尺寸大小的图像，注意这与CIFAR-10图像的32x32尺寸不同。如果更新了这个数，那么整个模型架构都需要改变，并且模型需要重新训练</span><br><span class="line">IMAGE_SIZE &#x3D; 24</span><br><span class="line"></span><br><span class="line"># 描述 CIFAR-10 数据集的全局常量</span><br><span class="line">NUM_CLASSES &#x3D; 10</span><br><span class="line">NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN &#x3D; 50000</span><br><span class="line">NUM_EXAMPLES_PER_EPOCH_FOR_EVAL &#x3D; 10000</span><br></pre></td></tr></table></figure>
-
-<p>  ‘’’<br>   作用： 读取并解析CIFAR10数据文件抽样数据。<br>   注意:  如果需要N路并行读取，N次调用此函数即可。它会返回N个读取不同文件和位置的独立的reader</p>
-<pre><code>@param  filename_queue  要读取的文件名队列
-@return 某个对象，具有以下字段:
-        height: 结果中的行数 (32)
-        width:  结果中的列数 (32)
-        depth:  结果中颜色通道数(3)
-        key:    一个描述当前抽样数据的文件名和记录数的标量字符串
-        label:  一个 int32类型的标签，取值范围 0..9.
-        uint8image: 一个[height, width, depth]维度的图像数据</code></pre><p>  ‘’’</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">def read_cifar10(filename_queue):</span><br><span class="line">  class CIFAR10Record(object):</span><br><span class="line">    pass</span><br><span class="line">  result &#x3D; CIFAR10Record()</span><br><span class="line"></span><br><span class="line">  # CIFAR-10图像数据集维度</span><br><span class="line">  # 输入格式详见 http:&#x2F;&#x2F;www.cs.toronto.edu&#x2F;~kriz&#x2F;cifar.html</span><br><span class="line">  label_bytes &#x3D; 1  # 2 for CIFAR-100</span><br><span class="line">  result.height &#x3D; 32</span><br><span class="line">  result.width &#x3D; 32</span><br><span class="line">  result.depth &#x3D; 3</span><br><span class="line">  image_bytes &#x3D; result.height * result.width * result.depth</span><br><span class="line">  # 每行记录由 图像+标签组成 ，并且每行的长度固定</span><br><span class="line">  record_bytes &#x3D; label_bytes + image_bytes</span><br><span class="line">  # 读取一行记录，从filename_queue队列中获取文件名。CIFAR-10格式没有header和footer。默认设置为0</span><br><span class="line">  reader &#x3D; tf.FixedLengthRecordReader(record_bytes&#x3D;record_bytes)</span><br><span class="line">  result.key, value &#x3D; reader.read(filename_queue)</span><br><span class="line"></span><br><span class="line">  # 将一个长度为record_bytes的字符串转换为uint8的向量</span><br><span class="line">  record_bytes &#x3D; tf.decode_raw(value, tf.uint8)</span><br><span class="line">  # 第一个字节代表了标签，将其类型由 uint8转换为 int32</span><br><span class="line">  result.label &#x3D; tf.cast(tf.slice(record_bytes, [0], [label_bytes]), tf.int32)</span><br><span class="line">  # 标签之后的字节代表了图像数据，并且将其维度从[depth * height * width]转换为 [depth, height, width].</span><br><span class="line">  depth_major &#x3D; tf.reshape(tf.slice(record_bytes, [label_bytes], [image_bytes]),</span><br><span class="line">                           [result.depth, result.height, result.width])</span><br><span class="line">  # 将 [depth, height, width] 转换为[height, width, depth].</span><br><span class="line">  result.uint8image &#x3D; tf.transpose(depth_major, [1, 2, 0])</span><br><span class="line">  return result</span><br></pre></td></tr></table></figure>
-
-
-<p>   作用： 构建一队列的批量图像和标签</p>
-<p>   @param  image :             维度为[height, width, 3]的3D张量<br>   @param  label :             图像标签<br>   @param  min_queue_examples: int32类型,从提供批量样本的队列中最小抽样数量.<br>   @param  batch_size:         每一批量的图像数量Number of images per batch.<br>   @param  shuffle:            boolean类型，决定是否使用混排队列</p>
-<p>   @return<br>          images:              图像. 维度为 [batch_size, height, width, 3] 的4D张量<br>          labels:              一维标签，尺寸为 [batch_size]</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br></pre></td><td class="code"><pre><span class="line">  def _generate_image_and_label_batch(image, label, min_queue_examples,</span><br><span class="line">                                    batch_size, shuffle):</span><br><span class="line"></span><br><span class="line">  # 创建一个混排样本的队列，然后从样本队列中读取 &#39;batch_size&#39;数量的 images + labels数据（每个样本都是由images + labels组成）</span><br><span class="line">  num_preprocess_threads &#x3D; 16</span><br><span class="line">  if shuffle:</span><br><span class="line">    images, label_batch &#x3D; tf.train.shuffle_batch(</span><br><span class="line">        [image, label],</span><br><span class="line">        batch_size&#x3D;batch_size,</span><br><span class="line">        num_threads&#x3D;num_preprocess_threads,</span><br><span class="line">        capacity&#x3D;min_queue_examples + 3 * batch_size,</span><br><span class="line">        min_after_dequeue&#x3D;min_queue_examples)</span><br><span class="line">  else:</span><br><span class="line">    images, label_batch &#x3D; tf.train.batch(</span><br><span class="line">        [image, label],</span><br><span class="line">        batch_size&#x3D;batch_size,</span><br><span class="line">        num_threads&#x3D;num_preprocess_threads,</span><br><span class="line">        capacity&#x3D;min_queue_examples + 3 * batch_size)</span><br><span class="line"></span><br><span class="line">  # Display the training images in the visualizer.</span><br><span class="line">  tf.image_summary(&#39;images&#39;, images)</span><br><span class="line"></span><br><span class="line">  return images, tf.reshape(label_batch, [batch_size])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#39;&#39;&#39;</span><br><span class="line">作用： 使用Reader操作构建扭曲的输入(图像)用作CIFAR训练</span><br><span class="line"></span><br><span class="line">@param  data_dir:   CIFAR-10数据目录</span><br><span class="line">        batch_size: 每一批量的图像数</span><br><span class="line">@Returns:</span><br><span class="line">      images: Images. 尺寸为 [batch_size, IMAGE_SIZE, IMAGE_SIZE, 3] 的4D张量</span><br><span class="line">      labels: Labels. 大小为[batch_size] 的一维张量</span><br><span class="line">&#39;&#39;&#39;</span><br><span class="line">def distorted_inputs(data_dir, batch_size):</span><br><span class="line"></span><br><span class="line">  filenames &#x3D; [os.path.join(data_dir, &#39;data_batch_%d.bin&#39; % i)</span><br><span class="line">               for i in xrange(1, 6)]</span><br><span class="line">  for f in filenames:</span><br><span class="line">    if not tf.gfile.Exists(f):</span><br><span class="line">      raise ValueError(&#39;Failed to find file: &#39; + f)</span><br><span class="line"></span><br><span class="line">  #创建一个先进先出的文件名队列，文件阅读器需要它来读取数据</span><br><span class="line">  filename_queue &#x3D; tf.train.string_input_producer(filenames)</span><br><span class="line">  # 从文件名队列中读取样本</span><br><span class="line">  read_input &#x3D; read_cifar10(filename_queue)</span><br><span class="line">  reshaped_image &#x3D; tf.cast(read_input.uint8image, tf.float32)</span><br><span class="line"></span><br><span class="line">  height &#x3D; IMAGE_SIZE</span><br><span class="line">  width &#x3D; IMAGE_SIZE</span><br><span class="line">  # 用于训练神经网络的图像处理，注意对图像进行了很多随机扭曲处理</span><br><span class="line">  # 随机修建图像的某一块[height, width]区域</span><br><span class="line">  distorted_image &#x3D; tf.random_crop(reshaped_image, [height, width, 3])</span><br><span class="line">  #随机水平翻转图像</span><br><span class="line">  distorted_image &#x3D; tf.image.random_flip_left_right(distorted_image)</span><br><span class="line">  # 由于这些操作都是不可累积的，考虑随机这些操作的顺序</span><br><span class="line">  distorted_image &#x3D; tf.image.random_brightness(distorted_image,</span><br><span class="line">                                               max_delta&#x3D;63)</span><br><span class="line">  distorted_image &#x3D; tf.image.random_contrast(distorted_image,</span><br><span class="line">                                             lower&#x3D;0.2, upper&#x3D;1.8)</span><br><span class="line"></span><br><span class="line">  # 减去均值并处以像素的方差 (标准化)</span><br><span class="line">  float_image &#x3D; tf.image.per_image_whitening(distorted_image)</span><br><span class="line"></span><br><span class="line">  # 确保随机混排有很好的混合性</span><br><span class="line">  min_fraction_of_examples_in_queue &#x3D; 0.4</span><br><span class="line">  min_queue_examples &#x3D; int(NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN *</span><br><span class="line">                           min_fraction_of_examples_in_queue)</span><br><span class="line">  print (&#39;Filling queue with %d CIFAR images before starting to train. &#39;</span><br><span class="line">         &#39;This will take a few minutes.&#39; % min_queue_examples)</span><br><span class="line"></span><br><span class="line">  # 通过构建一个样本队列来生成一批量的图像和标签</span><br><span class="line">  return _generate_image_and_label_batch(float_image, read_input.label,</span><br><span class="line">                                         min_queue_examples, batch_size,</span><br><span class="line">                                         shuffle&#x3D;True)</span><br><span class="line"></span><br><span class="line">&#39;&#39;&#39;</span><br><span class="line">  作用： 使用Reader ops操作构建CIFAR评估的输入</span><br><span class="line"></span><br><span class="line">  @param:</span><br><span class="line">         eval_data: boolean类型, 是否使用训练或评估数据集</span><br><span class="line">         data_dir: CIFAR-10数据目录.</span><br><span class="line">    batch_size: 每一批的图像数量</span><br><span class="line">  Returns:</span><br><span class="line">        images: Images. 尺寸为[batch_size, IMAGE_SIZE, IMAGE_SIZE, 3]的4D张量.</span><br><span class="line">        labels: Labels. 大小为[batch_size]的一维张量.</span><br><span class="line">&#39;&#39;&#39;</span><br><span class="line">def inputs(eval_data, data_dir, batch_size):</span><br><span class="line"></span><br><span class="line">  if not eval_data:</span><br><span class="line">    filenames &#x3D; [os.path.join(data_dir, &#39;data_batch_%d.bin&#39; % i)</span><br><span class="line">                 for i in xrange(1, 6)]</span><br><span class="line">    num_examples_per_epoch &#x3D; NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN</span><br><span class="line">  else:</span><br><span class="line">    filenames &#x3D; [os.path.join(data_dir, &#39;test_batch.bin&#39;)]</span><br><span class="line">    num_examples_per_epoch &#x3D; NUM_EXAMPLES_PER_EPOCH_FOR_EVAL</span><br><span class="line"></span><br><span class="line">  for f in filenames:</span><br><span class="line">    if not tf.gfile.Exists(f):</span><br><span class="line">      raise ValueError(&#39;Failed to find file: &#39; + f)</span><br><span class="line"></span><br><span class="line">  #创建一个先进先出的文件名队列，文件阅读器需要它来读取数据</span><br><span class="line">  filename_queue &#x3D; tf.train.string_input_producer(filenames)</span><br><span class="line"></span><br><span class="line">  # 从文件名队列中读取抽样</span><br><span class="line">  read_input &#x3D; read_cifar10(filename_queue)</span><br><span class="line">  reshaped_image &#x3D; tf.cast(read_input.uint8image, tf.float32)</span><br><span class="line"></span><br><span class="line">  height &#x3D; IMAGE_SIZE</span><br><span class="line">  width &#x3D; IMAGE_SIZE</span><br><span class="line"></span><br><span class="line">  # 用于做评估的图像处理</span><br><span class="line">  # 裁减图像的中心 [height, width] Crop the central [height, width] of the image.</span><br><span class="line">  resized_image &#x3D; tf.image.resize_image_with_crop_or_pad(reshaped_image,</span><br><span class="line">                                                         width, height)</span><br><span class="line"></span><br><span class="line">  # 减去均值并处以像素的方差（标准化）</span><br><span class="line">  float_image &#x3D; tf.image.per_image_whitening(resized_image)</span><br><span class="line"></span><br><span class="line">  # 确保良好的随机性</span><br><span class="line">  min_fraction_of_examples_in_queue &#x3D; 0.4</span><br><span class="line">  min_queue_examples &#x3D; int(num_examples_per_epoch *</span><br><span class="line">                           min_fraction_of_examples_in_queue)</span><br><span class="line"></span><br><span class="line">  # Generate a batch of images and labels by building up a queue of examples.</span><br><span class="line">  return _generate_image_and_label_batch(float_image, read_input.label,</span><br><span class="line">                                         min_queue_examples, batch_size,</span><br><span class="line">                                         shuffle&#x3D;False)</span><br></pre></td></tr></table></figure>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2016-08-22-tensorflow-sourcecode-input/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2016-08-22-tensorflow-sourcecode-input/" title="tensorflow:CIFAR-10 图像处理源码.input.py">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2016-08-22-tensorflow-cnn/">
-    		tensorflow：卷积神经网络的理解
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.318Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h1 id="基本概念理解"><a href="#基本概念理解" class="headerlink" title="基本概念理解"></a>基本概念理解</h1><ul>
-<li><p>图像中每个像素都想象成一个神经元</p>
-</li>
-<li><p>padding: 填充的意思。使用卷积对图像某部分做运算时，总会有部分没有覆盖到，需要决定是否填充以及使用什么填充方式。</p>
-</li>
-<li><p>stride： 移动切片的步长，影响取样的数量。每次将卷积核（矩阵）在图像上移动时，一次移动的位置量。</p>
-</li>
-<li><p>局部感知：图像的空间联系也是局部的像素联系较为紧密，而距离较远的像素相关性则较弱。因而，每个神经元其实没有必要对全局图像进行感知，只需要对局部进行感知，然后在更高层将局部的信息综合起来就得到了全局的信息。</p>
-</li>
-<li><p>其他理解：</p>
-<ul>
-<li>卷积核心。一个卷积是一个二维矩阵，卷积核心就是矩阵中心</li>
-<li>Patch/Kernel：一个局部切片</li>
-<li>Depth: 数据的深度(通道数)，图像数据是三维的，长宽和RGB，神经网络的预测输出也属于一维</li>
-<li>池化：就是在图像上采样，抽取部分数据。</li>
-</ul>
-<h2 id="误差函数"><a href="#误差函数" class="headerlink" title="误差函数"></a>误差函数</h2><p>  令$y_j(n)$记为在输出层第$j$个神经元输出产生的函数信号。相应的，神经元$j$输出所产生的误差信号定义为：</p>
-<p>  $$</p>
-<pre><code>e_j(n)=d_j(n)-y_j(n)</code></pre><p>  $$</p>
-<p>  其中$d_j(n)$是响应向量$d(n)$的第$j$个元素。那么<strong>瞬时误差能量</strong>(<em>instaneous error energy</em>)定义为:</p>
-<p>  $$</p>
-<pre><code>\Im _j(n)=\frac{1}{2}e^2_j(n)</code></pre><p>  $$</p>
-<p>  将所有输出层误差能量相加，得到整个网络的全部瞬时误差能量:</p>
-<p>  $$</p>
-<pre><code>\Im (n)=\sum _{j\epsilon C}\Im(n)=\frac{1}{2}\sum_{i\epsilon C}e^2_j(n)</code></pre><p>  $$</p>
-<p>其中集合C包括输出层的所有神经元。设训练样本中包含N个样例，训练样本上的<strong>平均误差能量(error energy averaged over the training sample)</strong>或者说经验风险(empirical risk)定义为:</p>
-<p>$$</p>
-<pre><code>\Im_{av}(N) = \frac{1}{N}\sum^N_{n=1}\Im (n)=\frac{1}{2N}\sum^N_{n=1}\sum_{j\epsilon C}e^2_j(n)</code></pre><p>$$</p>
-<h2 id="epoch-回合"><a href="#epoch-回合" class="headerlink" title="epoch 回合"></a>epoch 回合</h2><p>   epoch可以理解为回合，一回合代表全部输入数据都走了一遍训练过程，神经网络的训练可能需要经历m个回合。注意：虽然每个回合都是全部输入数据，但是每次输入的组合(即batch组合)是随机的，因为每个batch都是随机从输入样本中抽取固定数量的样本，因而每次的组合各不相同。</p>
-</li>
-</ul>
-<h2 id="padding的类别"><a href="#padding的类别" class="headerlink" title="padding的类别"></a>padding的类别</h2><p><img src="/images/blog/padding-example.png" alt="padding"></p>
-<p>用一个3x3的网格在一个28x28的图像上做切片并移动,移动到边缘上的时候，如果不超出边缘，3x3的中心就到不了边界，因此得到的内容就会缺乏边界的一圈像素点，只能得到26x26的结果。而可以越过边界的情况下，就可以让3x3的中心到达边界的像素点，超出部分的矩阵补零就行</p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2016-08-22-tensorflow-cnn/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2016-08-22-tensorflow-cnn/" title="tensorflow：卷积神经网络的理解">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2016-08-18-tensorflow-CIFAR10/">
-    		tensorflow:使用tensorflow构建简单卷积神经网络
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.317Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <p>本文翻译自: <a href="https://www.tensorflow.org/versions/r0.10/tutorials/deep_cnn/index.html" target="_blank" rel="noopener">使用tensorflow构建简单卷积神经网络</a></p>
-<h2 id="一-概要"><a href="#一-概要" class="headerlink" title="一 概要"></a>一 概要</h2><p>CIFAR-10分类问题是机器学习领域的一个通用基准，其问题是将32X32像素的RGB图像分类成10种类别:<code>飞机</code>，<code>手机</code>，<code>鸟</code>，<code>猫</code>，<code>鹿</code>，<code>狗</code>，<code>青蛙</code>，<code>马</code>，<code>船</code>和<code>卡车</code>。<br>更多信息请移步<a href="http://www.cs.toronto.edu/~kriz/cifar.html" target="_blank" rel="noopener">CIFAR-10</a>和<a href="http://www.cs.toronto.edu/~kriz/learning-features-2009-TR.pdf" target="_blank" rel="noopener">Alex Krizhevsky的演讲报告</a></p>
-<h2 id="二-目标"><a href="#二-目标" class="headerlink" title="二 目标"></a>二 目标</h2><p>本教程的目标是建立一个相对简单的CNN卷积神经网络用以识别图像。在此过程中，本教程:</p>
-<ol>
-<li>高亮网络架构，训练和验证的典型组织。</li>
-<li>为构建更大更复杂的模型提供模板。</li>
-</ol>
-<p>选择 CIFAR-10的原因是其复杂程度足以训练tensorFlow拓展成超大模型能力的大部分。同时，于训练而言，此模型也足够小，这对于想实现新想法和尝试新技术堪称完美。</p>
-<h2 id="三-教程的高亮部分"><a href="#三-教程的高亮部分" class="headerlink" title="三 教程的高亮部分"></a>三 教程的高亮部分</h2><p>  CIFAR-10教程演示了使用TensorFlow构建更大更复杂模型几个重要结构：</p>
-<ul>
-<li><p>核心数学组件包括<code>卷积</code>,<code>修正的线性激活</code>,<code>最大池化</code>,<code>LRN即局部响应一体化</code>（AlexNet的论文3.3章）</p>
-</li>
-<li><p>训练期间网络活动的可视化，包括输入图像、损失函数值、激活函数值和梯度的分布。</p>
-</li>
-<li><p>计算学习参数的均线（moving average）的惯常做法，以及在评估期间使用这些均线来促进预测性能。</p>
-</li>
-<li><p>随时间系统递减的学习速率清单的实现</p>
-</li>
-<li><p>为消除从磁盘读取模型的延迟和代价极大的图像预处理的预取队列。</p>
-<p>我们同时提供了一个<a href="https://www.tensorflow.org/versions/r0.10/tutorials/deep_cnn/index.html#training-a-model-using-multiple-gpu-cards" target="_blank" rel="noopener">多GPU版本</a>的模型演示：</p>
-<ul>
-<li>配置并行环境下跨多个GPU的训练的单个模型</li>
-<li>在多GPU中共享和更新变量<br>我们期望此教程能为基于TensorFlow的可视化任务创建更大CNNs模型提供起点。</li>
-</ul>
-</li>
-</ul>
-<h2 id="四-模型架构"><a href="#四-模型架构" class="headerlink" title="四 模型架构"></a>四 模型架构</h2><p>  CIFAR-10教程中的模型是一个由可选的卷积和非线性层组成的多层架构。这些网络层之后是连接到一个softmax分类器的全连接的网络层。模型遵照Alxe Krizhevsky所描述的模型架设，只是最前面的几层有细微差别。<br>   此模型获得了一个极致的表现，在一个GPU上训练几个小时可以达到约86%的准确率。下文和代码部分有详细说明。模型由1068298个可学习的参数并且单张图片需要195000000个加乘操作以计算推理。</p>
-<h2 id="五-代码组织"><a href="#五-代码组织" class="headerlink" title="五 代码组织"></a>五 代码组织</h2><p> 此教程的代码位于 <a href="https://www.tensorflow.org/code/tensorflow/models/image/cifar10/" target="_blank" rel="noopener">tensorflow/models/image/cifar10</a></p>
-<table>
-<thead>
-<tr>
-<th>文件</th>
-<th>目标</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>cifar10_input.py</td>
-<td>读取本地的CIFAR-10二进制文件</td>
-</tr>
-<tr>
-<td>cifar10.py</td>
-<td>创建CIFAR-10模型</td>
-</tr>
-<tr>
-<td>cifar10_train.py</td>
-<td>在CPU或者GPU上训练CIFAR-10模型</td>
-</tr>
-<tr>
-<td>cifar10_multi_gpu_train.py</td>
-<td>在多个GPU上训练CIFAR-10模型</td>
-</tr>
-<tr>
-<td>cifar10_eval.py</td>
-<td>评估CIFAR-10模型的预测性能</td>
-</tr>
-</tbody></table>
-<h2 id="六-CIFAR-10-模型"><a href="#六-CIFAR-10-模型" class="headerlink" title="六 CIFAR-10 模型"></a>六 CIFAR-10 模型</h2><p>  CIFAR-10网络大部分代码在 <code>cifar10.py</code>。完整的训练图包括大概765个操作，我们发现通过使用以下模块来构建计算图，我们可以最大限度的重用代码:</p>
-<ol>
-<li><strong>模型输入</strong>: inputs() 和 distorted_inputs() 分别是评估和训练的读取并预处理CIFAR图像的加法操作</li>
-<li><strong>模型预测</strong>: inference()是推理加法操作，即在提供的图像中进行分类。</li>
-<li><strong>模型训练</strong>： loss() 和 train() 的加法操作是用来计算损失函数，梯度，变量更新和可视化摘要。</li>
-</ol>
-<h2 id="七-模型输入"><a href="#七-模型输入" class="headerlink" title="七 模型输入"></a>七 模型输入</h2><p>  模型的输入部分由从CIFAR-10的二进制文件读取函数 inputs()和distorted_inputs() 完成。这些文件包括固定字节长度的记录，因此我们使用<code>tf.FixedLengthRecordReader</code> 。查看<strong>读取数据</strong>来学习<em>Reader class</em>如何实现。<br>  图像将按照以下步骤进行处理：</p>
-<ul>
-<li><p>它们被裁减成24x24的像素，中央部分用来做评估或随机地用以训练。</p>
-</li>
-<li><p>它们是<a href="https://www.tensorflow.org/versions/r0.10/api_docs/python/image.html#per_image_whitening" target="_blank" rel="noopener"> approximately whitened</a> 用以使模型对动态变化不敏感。</p>
-<p>对于训练部分，我们会额外应用一系列随机扭曲来人为增加数据集：</p>
-</li>
-<li><p>将图像随机的左右翻转<a href="https://www.tensorflow.org/versions/r0.10/api_docs/python/image.html#random_flip_left_right" target="_blank" rel="noopener">随机翻转</a></p>
-</li>
-<li><p>随机扰乱图像亮度<a href="https://www.tensorflow.org/versions/r0.10/api_docs/python/image.html#random_brightness" target="_blank" rel="noopener">随机亮度</a></p>
-</li>
-<li><p>随机扰乱图像对比度<a href="https://www.tensorflow.org/versions/r0.10/api_docs/python/image.html#random_contrast" target="_blank" rel="noopener">随机对比度</a></p>
-</li>
-</ul>
-<p>在<a href="https://www.tensorflow.org/versions/r0.10/api_docs/python/image.html" target="_blank" rel="noopener">图像页</a>可以查看可用的扭曲方法列表。为了在TensorBoard中可视化，我们也在图像中增加了一个 <a href="https://www.tensorflow.org/versions/r0.10/api_docs/python/image.html" target="_blank" rel="noopener">缩略图</a>。这对于校验输入是否构建正确是个良好举措。<br><img src="/images/blog/cifar_image_summary.png" alt=""><br>从磁盘中读取图像并扰乱，可能会消耗不确定的时间。为防止这些操作拖慢训练过程，我们使用16个独立线程不断地从一个TensorFlow队列。</p>
-<h2 id="八-模型预测"><a href="#八-模型预测" class="headerlink" title="八 模型预测"></a>八 模型预测</h2><p> 模型的预测部分由<em>inference()</em>函数构建，该操作会添加其他操作以计算预测逻辑。模型的此部分组织如下：</p>
-<table>
-<thead>
-<tr>
-<th>网络层名称</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>conv1</td>
-<td>卷积和修正线性激活层</td>
-</tr>
-<tr>
-<td>pool1</td>
-<td>最大池化</td>
-</tr>
-<tr>
-<td>norm1</td>
-<td>局部响应一体化</td>
-</tr>
-<tr>
-<td>conv2</td>
-<td>卷积和修正线性激活层</td>
-</tr>
-<tr>
-<td>norm2</td>
-<td>局部响应一体化</td>
-</tr>
-<tr>
-<td>pool2</td>
-<td>最大池化</td>
-</tr>
-<tr>
-<td>local3</td>
-<td>使用修正线性激活的全连接层</td>
-</tr>
-<tr>
-<td>local4</td>
-<td>使用修正线性激活的全连接层</td>
-</tr>
-<tr>
-<td>softmax_linear</td>
-<td>线性转换以产生logits</td>
-</tr>
-</tbody></table>
-<p> 下图由<strong>TensorBoard</strong>生成用以描述推理操作<br> <img src="/images/blog/cifar_graph.png" alt="推理操作"></p>
-<p> <em>input()<em>和</em>inference()</em> 函数提供了在模型上进行评估的全部所需组件。我们先将注意力移到训练模型。</p>
-<h2 id="九-模型训练"><a href="#九-模型训练" class="headerlink" title="九 模型训练"></a>九 模型训练</h2><p>  训练一个完成N类分类的网络的常用方法是多项式logstic回归,aka.softmax回归。softmax回归在网络输出上应用一个 <a href="https://www.tensorflow.org/versions/r0.10/api_docs/python/nn.html#softmax" target="_blank" rel="noopener">softmax</a>非线性函数并计算标准预测和标签的<strong>1-hot</strong>编码的交叉熵。我们也将通常使用的权值衰减损益应用到所有学习变量上来完成正则化。  模型的目标函数是交叉熵损失之和，以及由 <em>loss()</em>函数返回的权值衰减项。<br>  我们在<em>TensorBoard</em>使用<strong>scalar_summary</strong>对其可视化：<br>  <img src="/images/blog/cifar_loss.png" alt=""><br>  我们使用标准的梯度下降算法（见对其他算法的<a href="https://www.tensorflow.org/versions/r0.10/api_docs/python/train.html" target="_blank" rel="noopener">训练</a>方法），其学习速率随时间指数递减。<br>  <img src="/images/blog/cifar_lr_decay.png" alt=""></p>
-<p>  <strong>train()</strong>函数添加必要的操作通过计算梯度和更新学习变量（详见<a href="https://www.tensorflow.org/versions/r0.10/api_docs/python/train.html#GradientDescentOptimizer" target="_blank" rel="noopener">GradientDescentOptimizer</a>）以最小化目标变量。<br>  该函数返回一个执行所有的训练和更新一批图像所需的计算操作。</p>
-<h2 id="十-运行和训练模型"><a href="#十-运行和训练模型" class="headerlink" title="十 运行和训练模型"></a>十 运行和训练模型</h2><p>   通过运行脚本<em>cifar10_train.py</em>训练操作<br>   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python cifar10_train.py</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>注意：首次运行该脚本时，CIFAR-10数据集会被自动下载。数据集大小为 160MB</p>
-</blockquote>
-<p>  如果成功，你将会看到如下输出:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Filling queue with 20000 CIFAR images before starting to train. This will take a few minutes.</span><br><span class="line">2015-11-04 11:45:45.927302: step 0, loss &#x3D; 4.68 (2.0 examples&#x2F;sec; 64.221 sec&#x2F;batch)</span><br><span class="line">2015-11-04 11:45:49.133065: step 10, loss &#x3D; 4.66 (533.8 examples&#x2F;sec; 0.240 sec&#x2F;batch)</span><br><span class="line">2015-11-04 11:45:51.397710: step 20, loss &#x3D; 4.64 (597.4 examples&#x2F;sec; 0.214 sec&#x2F;batch)</span><br><span class="line">2015-11-04 11:45:54.446850: step 30, loss &#x3D; 4.62 (391.0 examples&#x2F;sec; 0.327 sec&#x2F;batch)</span><br><span class="line">2015-11-04 11:45:57.152676: step 40, loss &#x3D; 4.61 (430.2 examples&#x2F;sec; 0.298 sec&#x2F;batch)</span><br><span class="line">2015-11-04 11:46:00.437717: step 50, loss &#x3D; 4.59 (406.4 examples&#x2F;sec; 0.315 sec&#x2F;batch)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-
-<p> 脚本每运行10次输出一次总的损失函数值。注意：</p>
-<ul>
-<li>第一批数据可能会相当慢（例如：几分钟），因为预处理线程会将20万张处理过的图像数据填充混洗队列。</li>
-<li>输出的损失函数值是最近一批数据的均值，要记得损失函数值是 交叉熵和权值递减项的总和。</li>
-<li>密切关注批处理速度，以上数据由 <em>Tesla K40c</em>机器上输出，如果在CPU上运行可能会输出比这个更低的速率。</li>
-</ul>
-<p> <em>cifar10_train</em>会定期保存所有的模型参数到<em>checkpoint files</em>，但是它并不评估模型。checkpoint files将会被用于<em>cifar10_eval.py</em>来衡量预测性能。见下文的<strong>评估模型</strong></p>
-<p> 脚本<em>cifar10_train.py</em>的终端输出的文本只提供了模型如何训练的最小视角。我们可能需要更多的信息：</p>
-<ul>
-<li><p>损失函数值真的在递减吗？还是说只是噪声</p>
-</li>
-<li><p>模型的输入训练图像是否合适？</p>
-</li>
-<li><p>其梯度，激活函数，权值是否合理？</p>
-</li>
-<li><p>当前的学习速率？</p>
-<p><a href="https://www.tensorflow.org/versions/r0.10/how_tos/summaries_and_tensorboard/index.html" target="_blank" rel="noopener">TensorBoard </a>提供了此类函数，展示了脚本<em>cifar10_train.py</em>通过<a href="https://www.tensorflow.org/versions/r0.10/api_docs/python/train.html#SummaryWriter" target="_blank" rel="noopener">SummaryWriter</a>阶段性输出的数据。<br>比如说，我们可以查看激活函数分布和训练过程中<em>local3</em>特性的稀疏度。<br><img src="/images/blog/cifar_sparsity.png" alt=""></p>
-<p>损失函数值会随着时间呈现，但是由于训练过程中某些批量数据量过小而出现一些噪音数据。实际情况中，我们发现可视化原生数据之外的均线(moving averages)很有用。可以通过脚本<a href="https://www.tensorflow.org/versions/r0.10/api_docs/python/train.html#ExponentialMovingAverage" target="_blank" rel="noopener">ExponentialMovingAverage</a>查看。</p>
-</li>
-</ul>
-<h2 id="十一-评估模型"><a href="#十一-评估模型" class="headerlink" title="十一 评估模型"></a>十一 评估模型</h2><p>接下来，我们需要评估我们的训练模型在hold-out数据集上的性能。模型由脚本<em>cifar10_eval.py</em>评估。它由<em>inference()</em>函数构建模型，并使用cifar-10数据集中的10000张图像。它会计算图像的真实标签的最高预测匹配的频率。<br> 为观察模型如何逐步在训练过程提高，评估脚本会阶段性地运行由<em>cifar10_train.py</em>脚本创建的checkpoint files。</p>
-<pre><code>python cifar10_eval.py</code></pre><p><strong>注意:不要在相同的GPU上运行训练和评估，否则会出现内存不足错误。可以考虑在分开的GPU上运行，或者在运行评估程序时挂起训练程序</strong></p>
-<p>你将会看到如下输出：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2015-11-06 08:30:44.391206: precision @ 1 &#x3D; 0.860</span><br><span class="line">...</span><br></pre></td></tr></table></figure><br>   脚本极少情况下会返回精确度为precision @ 1 ，当前这个例子返回的是86%的准确率。<em>cifar10_eval.py</em>也会导出一些可以在<em>TensorBoard</em>里可视化的概要信息。<br>  训练脚本计算所有的学习参数的变动均值(moving average version)。评估脚本则用变动均值(moving average version)替换所有的学习的模型参数，这些替换将有益于模型评估时的性能。</p>
-<h2 id="十二-使用多GPU训练模型"><a href="#十二-使用多GPU训练模型" class="headerlink" title="十二 使用多GPU训练模型"></a>十二 使用多GPU训练模型</h2><p>   在分布式并行环境下训练模型需要一致的训练过程。接下来，我们将模型副本分配到训练数据集的每个子集上。<br>   简单地运行异步更新模型参数将导致局部最优化，这是因为单个模型的副本可能会在过时的模型参数上进行训练了。反过来说，完全的同步更新将会使整个过程与最慢的模型副本一样慢。<br>   工作站中的多GPU一般有相似的速度和内存。因此，我们按照如下步骤设计训练系统:</p>
-<ul>
-<li><p>每个GPU上放一份独立的模型副本。</p>
-</li>
-<li><p>通过等待所有的GPU完成某一批数据的处理来同步更新模型参数。</p>
-<p>如下是模型的数据图:<br><img src="/images/blog/Parallelism.png" alt=""><br>注意到，每个GPU都会计算一份独一无二的数据的<em>inference</em>和梯度。这样的设置将极有效地在多GPU之间划分一个大批量数据。<br>这样的设置需要所有的GPU共享模型参数。众所周知，从GPU传输数据或者传输数据到GPU都相当慢。因此，我们决定在<strong>CPU</strong>上存储和更新所有的模型参数(见绿色盒图)。只有当一批数据已经被所有GPU处理之后，一份新的模型参数才会被传输到GPU。<br>GPU在操作上是同步的，所有的来自各个GPU的梯度都会被累加和均值化。模型参数会被所有模型的梯度均值更新。</p>
-</li>
-</ul>
-<h2 id="十三-在设备上放置变量和操作"><a href="#十三-在设备上放置变量和操作" class="headerlink" title="十三 在设备上放置变量和操作"></a>十三 在设备上放置变量和操作</h2><p>在设备上放置操作和变量需要一些特殊抽象。<br>第一个抽象是我们需要一个函数来计算模型的单个副本的<em>inference</em>和梯度。在代码中，我们将这种抽象标为<strong>tower</strong>。我们必须为每个<strong>tower</strong>设置两个参数。</p>
-<ul>
-<li><p>一个<em>tower</em>内所有的操作都需要一个独一无二的名字。<em>tf.name_scope()</em>通过前置范围的形式提供了方法。比如说，第一个tower,tower_0内的所有操作都会有一个前置 <em>tower_0/conv1/Conv2D</em>。</p>
-</li>
-<li><p>某个tower的首选硬件设备。<em>tf.device()*可以来指定。比如说，第一个tower的所有的操作使用范围 *device(‘/gpu:0’)</em> 指明其应当在第一颗GPU上运行。</p>
-<p>所有的变量都会被固定到<strong>CPU</strong>，并且可以通过<em>tf.get_variable()</em>在多GPU之间共享。关于如何<a href="https://www.tensorflow.org/versions/r0.10/how_tos/variable_scope/index.html" target="_blank" rel="noopener">共享变量</a>请见下文。</p>
-</li>
-</ul>
-<h2 id="十四-在多GPU上运行和训练模型"><a href="#十四-在多GPU上运行和训练模型" class="headerlink" title="十四 在多GPU上运行和训练模型"></a>十四 在多GPU上运行和训练模型</h2><p>对于有多颗GPU的机器，使用<em>cifar10_multi_gpu_train.py</em>脚本将会更快的训练模型。次代码在多颗GPU之间并行训练模型。</p>
-<pre><code>python cifar10_multi_gpu_train.py --num_gpus=2</code></pre><p>GPU数量默认为1.</p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2016-08-18-tensorflow-CIFAR10/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2016-08-18-tensorflow-CIFAR10/" title="tensorflow:使用tensorflow构建简单卷积神经网络">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2016-06-30-ElasticSearchTest/">
-    		elastic search 性能测试
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.309Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h1 id="ElasticSearch性能测试"><a href="#ElasticSearch性能测试" class="headerlink" title="ElasticSearch性能测试"></a>ElasticSearch性能测试</h1><p>原文翻译自:<a href="https://benchmarks.elastic.co/index.html" target="_blank" rel="noopener">ElasticSearch官方性能测试</a></p>
-<hr>
-
-<h1 id="基准测试场景"><a href="#基准测试场景" class="headerlink" title="基准测试场景"></a>基准测试场景</h1><p>注：ES中的文档类似一条记录。<br><strong>数据</strong></p>
-<p> 测试使用了860万份文档，取自Geonames的POI数据。</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>文档数</td>
-<td>860万</td>
-</tr>
-<tr>
-<td>数据大小</td>
-<td>2.8GB(JSON)</td>
-</tr>
-<tr>
-<td>客户端线程数</td>
-<td>8</td>
-</tr>
-<tr>
-<td>每个bulk请求</td>
-<td>5000份文档</td>
-</tr>
-<tr>
-<td>服务器数目</td>
-<td>1个或2个</td>
-</tr>
-</tbody></table>
-<p><strong>服务器配置</strong></p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>核心数</td>
-<td>36个real cores,使用超线程可达72个</td>
-</tr>
-<tr>
-<td>RAM</td>
-<td>256</td>
-</tr>
-<tr>
-<td>SSD</td>
-<td>Intel 750 PCIe/NVMe</td>
-</tr>
-</tbody></table>
-<p><strong>默认设置</strong></p>
-<ul>
-<li>默认，2个节点都是追加，使用全部默认配置，2个节点运行在一个沙盒中（5个shards,1份拷贝）</li>
-<li>4GB heap(ES_HEAP_SIZE)</li>
-<li>refresh_interval: 30s</li>
-<li>index.number_of_shards: 6</li>
-<li>index.number_of_replicas:0</li>
-<li>index.translog.flush_threshold_size: 4g</li>
-</ul>
-<h2 id="索引性能"><a href="#索引性能" class="headerlink" title="索引性能"></a>索引性能</h2><p>以下图片展示的是ElasticSearch每晚基于master分支代码的性能测试结果。<br> <img src="/images/blog/%E7%B4%A2%E5%BC%95%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95.png" alt="索引性能测试"></p>
-<hr>
-## 时间消耗
-下图显示的是与索引性能使用相同数据时，索引时间（分钟），合并时间（分钟），刷新时间（分钟），Flush时间（分钟），Merge throttle 时间（分钟）。
-![时间消耗](/images/blog/时间消耗.png)
-<hr>
-## 合并时间，部分
-![合并时间，部分](/images/blog/合并时间部分.png)
-<hr>
-## 堆使用的总段数
-![栈使用](/images/blog/栈使用.png)
-<hr>
-## Indexing CPU utilization（默认）
-![索引CPU](/images/blog/索引CPU.png)
-<hr>
-## 索引磁盘使用
-![索引磁盘使用](/images/blog/索引磁盘使用.png)
-<hr>
-## 索引段数
-![索引段数](/images/blog/索引段数.png)
-<hr>
-## gradle测试时间
-gradle是一个基于Apache Ant和Apache Maven概念的项目自动化建构工具。它使用一种基于Groovy的特定领域语言(DSL)来声明项目设置。[gradle](http://baike.baidu.com/link?url=DTDzrjTMJX-D4eNPwemJ0RSqD1kmDvKmBVQc3x5WSYs0qEPTBni-rwmTugMtyAG1ukQlXC_m3BC0DkIbA0Uf6q)
-![gradle测试时间](/images/blog/gradle测试时间.png)
-<hr>
-<hr>
-## Search QPS(脚本)
-![Search QPS 脚本](/images/blog/SearchQPS.png)
-<hr>
-## Search QPS
-![search qps](/images/blog/SearchQPS1.png)
-<hr>
-## 请求时间统计
-![请求时间统计](/images/blog/请求时间统计.png)
-<hr>
-
-<h2 id="垃圾回收时间"><a href="#垃圾回收时间" class="headerlink" title="垃圾回收时间"></a>垃圾回收时间</h2><p><img src="/images/blog/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%97%B6%E9%97%B4.png" alt="垃圾回收时间"></p>
-<hr>
-
-<h2 id=""><a href="#" class="headerlink" title=""></a></h2>
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2016-06-30-ElasticSearchTest/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2016-06-30-ElasticSearchTest/" title="elastic search 性能测试">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2016-06-13-GoogleTensorFlowBasicConcept/">
-    		谷歌TensorFlow基本概念
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.306Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h1 id="start-up"><a href="#start-up" class="headerlink" title="start up"></a>start up</h1><h2 id="1-1-谷歌深度学习工具历史"><a href="#1-1-谷歌深度学习工具历史" class="headerlink" title="1.1 谷歌深度学习工具历史:"></a>1.1 谷歌深度学习工具历史:</h2><ol>
-<li>第一代：<strong>DistBelief</strong> 由 Dean于2011年发起，主要产品有：<ul>
-<li>Inception (图像识别领域)</li>
-<li>谷歌Search</li>
-<li>谷歌翻译</li>
-<li>谷歌照片</li>
-</ul>
-</li>
-<li>第二代：<strong>TensorFlow</strong> 由Dean于2015年11月发起，大部分DistBelief都转向了TensorFlow</li>
-</ol>
-<h2 id="1-2-产品特性"><a href="#1-2-产品特性" class="headerlink" title="1.2 产品特性"></a>1.2 产品特性</h2><table>
-<thead>
-<tr>
-<th>概念</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>编程模型</td>
-<td>类数据流的模型</td>
-</tr>
-<tr>
-<td>语言</td>
-<td>Python C++</td>
-</tr>
-<tr>
-<td>部署</td>
-<td>code once,run ererywhere</td>
-</tr>
-<tr>
-<td>计算资源</td>
-<td>cpu,gpu</td>
-</tr>
-<tr>
-<td>分布式处理</td>
-<td>本地实现，分布式实现</td>
-</tr>
-<tr>
-<td>数学表达式</td>
-<td>数学图表达式，自动分化</td>
-</tr>
-<tr>
-<td>优化</td>
-<td>自动消除，kernel 优化，通信优化，支持模式，数据并行</td>
-</tr>
-</tbody></table>
-<h2 id="1-3-计算图"><a href="#1-3-计算图" class="headerlink" title="1.3 计算图"></a>1.3 计算图</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line">b &#x3D; tf.Variable(tf.zeros([100]))                   # 100维的向量，都初始化为0</span><br><span class="line">w &#x3D; tf.Variable(tf.random_uniform([784,100],-1,1)) # 784x100的矩阵</span><br><span class="line">x &#x3D; tf.placeholder(name&#x3D;&quot;x&quot;)                       # 输入的占位符placeholder</span><br><span class="line">relu &#x3D; tf.nn.relu(tf.matmul(w,x)+b)                # Relu(Wx+b)</span><br><span class="line">C &#x3D;[...]                                           # 使用relu的一个函数计算代价</span><br></pre></td></tr></table></figure>
-<p>对应的计算图如下:<br><img src="/images/blog/tensorflow_basicconcept.png" alt="计算图"></p>
-<h2 id="1-4-Tensorflow的代码样例"><a href="#1-4-Tensorflow的代码样例" class="headerlink" title="1.4 Tensorflow的代码样例"></a>1.4 Tensorflow的代码样例</h2><ol>
-<li>构建数据流图的第一部分代码</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line">import numpy as np</span><br><span class="line"># 创建100个numpy的 x,y 假数据点，y &#x3D; x*0.1+0.3</span><br><span class="line">x_data &#x3D; np.random.rand(100).astype(&quot;float32&quot;)</span><br><span class="line">y_data &#x3D; x_data*0.1+0.3</span><br><span class="line"># 找出计算 y_data &#x3D;W*x_data+b的w和b的值，虽然我们知道w&#x3D;0.1,b&#x3D;0.3,但是tensorflow会找到并计算出来</span><br><span class="line">w &#x3D; tf.Variable(tf.random_uniform)</span><br></pre></td></tr></table></figure>
-
-<h1 id="2-tensorflow概览"><a href="#2-tensorflow概览" class="headerlink" title="2 tensorflow概览"></a>2 tensorflow概览</h1><p>要使用tensorflow的话，你需要理解以下概念:</p>
-<ul>
-<li>图代表了计算</li>
-<li>图需要在会话(Sessions)中执行</li>
-<li>张量(tensor)代表数据</li>
-<li>使用Variables来持有状态</li>
-<li>使用<strong>feeds</strong> 和 <strong>fetches</strong>来获得任何操作的输入输出数据</li>
-</ul>
-<p>tensorflow的概览</p>
-<ul>
-<li>一个将计算转化为图的编程系统</li>
-<li>图中的节点是：<ul>
-<li>操作(op):执行某些计算</li>
-<li>输入(input):一个或多个张量(tensorflow)</li>
-<li>Tensor张量：一个有类型的多维数组</li>
-</ul>
-</li>
-</ul>
-<h1 id="3-两个计算阶段"><a href="#3-两个计算阶段" class="headerlink" title="3 两个计算阶段"></a>3 两个计算阶段</h1><h2 id="3-1-在图中计算"><a href="#3-1-在图中计算" class="headerlink" title="3.1 在图中计算"></a>3.1 在图中计算</h2><ul>
-<li>图必须在Session中运行</li>
-<li>会话(Session)<ul>
-<li>将图操作放入到设备上，比如CPUs和GPUs</li>
-<li>提供执行方法</li>
-<li>返回操作产生的张量，比如python中的<strong>numpy ndarray对象</strong>，以及C和C++<strong>tensorflow::Tensor</strong>实例。</li>
-</ul>
-</li>
-</ul>
-<h2 id="3-2-图中的两个计算阶段"><a href="#3-2-图中的两个计算阶段" class="headerlink" title="3.2 图中的两个计算阶段"></a>3.2 图中的两个计算阶段</h2><ol>
-<li><p>构建阶段</p>
-<ul>
-<li>形成图</li>
-<li>创建图来代表神经网络并训练这个神经网络</li>
-</ul>
-</li>
-<li><p>执行阶段</p>
-<ul>
-<li>使用会话执行途中的操作</li>
-<li>重复执行图中训练操作集合</li>
-</ul>
-</li>
-<li><p>构建图</p>
-</li>
-</ol>
-<ul>
-<li>开始那些不需要任何输入(source ops)的操作(op)，常量</li>
-<li>将它们的输出传入到其他做计算的操作</li>
-<li>操作构建者返回对象<ul>
-<li>代表了结构化操作的输出</li>
-<li>将这些输出传入其他操作构建者作为输入</li>
-</ul>
-</li>
-</ul>
-<ol start="4">
-<li><p>默认图</p>
-<p>将节点加入此图的操作构建者</p>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line"># 创建一个产生1x2的矩阵的常量操作，操作被作为节点加入到默认图</span><br><span class="line"># 构建者的返回值代表了常量操作的输出</span><br><span class="line">matrix1 &#x3D; tf.constant([[3,3.]])</span><br><span class="line"># 创建另外一个产生 2x1矩阵的常量操作</span><br><span class="line">matrix2 &#x3D; tf.constant([[2.0],[2.]])</span><br></pre></td></tr></table></figure>
-<p>   有三个节点：两个<strong>constant</strong>操作(ops)以及一个<strong>matmul</strong>操作</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 创建一个Matmul操作，将 matrix1和matrix2作为输入</span><br><span class="line"># 返回值，‘product’，代表了矩阵相乘的结果</span><br><span class="line">product &#x3D; tf.matmul(matrix1,matrix2)</span><br></pre></td></tr></table></figure>
-
-<ol start="5">
-<li>在会话Session中运行图</li>
-</ol>
-<ul>
-<li>创建一个Session对象：应该在被关闭以释放资源</li>
-<li>没有参数，session构建者运行默认图</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 运行默认图</span><br><span class="line">sess &#x3D; tf.Session()</span><br><span class="line"># 要运行matmul操作，我们调用了session的‘run()’方法，传入&#39;producr&#39;代表了matmul操作的输出。这即回调了matmul操作的输出结果</span><br><span class="line"># 操作的输出以一个numpy的&#39;ndarray&#39;对象返回&#39;result&#39;</span><br><span class="line">result &#x3D; sess.run(product)</span><br><span class="line">print result</span><br><span class="line"># &#x3D;&#x3D;&gt;[[12.]]</span><br><span class="line">#关闭会话</span><br><span class="line">sess.close()</span><br></pre></td></tr></table></figure>
-<ol start="6">
-<li>Session运行图，Session.run()方法执行操作</li>
-<li>一个Session块(block)<ul>
-<li>在块的结尾自动关闭<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">with tf.Session() as sess:</span><br><span class="line">    result &#x3D; sess.run([product])</span><br><span class="line">    print result</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li>GPU的使用</li>
-</ol>
-<ul>
-<li>将图定义转换为分布在各种计算资源，比如CPU和GPU之间的可执行操作</li>
-<li>如果有GPU，tensorflow会有限使用GPU</li>
-</ul>
-<p>#4 交互使用</p>
-<ul>
-<li>在python环境中，比如Ipython,<strong>InteractiveSession</strong>类会被使用</li>
-<li><strong>Tensor.eval()</strong>和<strong>Operation.run()</strong></li>
-<li>这可以避免必须用一个变量来保持一个session</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># 进入一个交互的Tensorflow Session</span><br><span class="line">import tensorflow as tf</span><br><span class="line">sess &#x3D; tf.InteractiveSession()</span><br><span class="line"></span><br><span class="line">x &#x3D; tf.Variable([1.0,2.0])</span><br><span class="line">y &#x3D; tf.constant([3.0,3.0])</span><br><span class="line">#使用&#39;x&#39;的initializer的 run() 方法初始化</span><br><span class="line">x.initializer.run()</span><br><span class="line"></span><br><span class="line"># 添加一个操作从&#39;x&#39;中抽取&#39;a&#39;，执行并打印结果</span><br><span class="line">sub &#x3D; tf.sub(x,a)</span><br><span class="line">print sub.eval()</span><br><span class="line"># &#x3D;&#x3D;&gt;[-2,-1.]</span><br><span class="line"></span><br><span class="line"># 关闭session</span><br><span class="line">sess.close()</span><br></pre></td></tr></table></figure>
-
-<h1 id="5-张量-Tensors"><a href="#5-张量-Tensors" class="headerlink" title="5 张量(Tensors)"></a>5 张量(Tensors)</h1><ul>
-<li>Tensor(张量)数据结构代表了所有数据</li>
-<li>在计算图中只有张量在操作之间传递</li>
-<li>n维数组或者列表<ul>
-<li>静态类型，秩，或者 shape</li>
-</ul>
-</li>
-</ul>
-<p><strong>rank(秩)</strong></p>
-<table>
-<thead>
-<tr>
-<th>rank</th>
-<th>数学实体</th>
-<th>python示例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>0</td>
-<td>Scalar(大小)</td>
-<td>s =483</td>
-</tr>
-<tr>
-<td>1</td>
-<td>Vector(大小和方向)</td>
-<td>v=[1.1,2.2,3.3]</td>
-</tr>
-<tr>
-<td>2</td>
-<td>Matrix(数据表)</td>
-<td>m=[[1,2,3],[4,5,6],[7,8,9]]</td>
-</tr>
-<tr>
-<td>3</td>
-<td>3-Tensor(立方(cube)的数量)</td>
-<td>t=[[[2],[4],[6],[8]],[[10],[12]]]</td>
-</tr>
-<tr>
-<td>n</td>
-<td>n-Tensor</td>
-<td>同上</td>
-</tr>
-</tbody></table>
-<p><strong>shape</strong></p>
-<p>|Rank| Shape|维数|示例|<br>|—|—|—|<br>|0|[]|0-D|一个0-D张量，一个标量|<br>|1|[D0]|1-D|一个1-D张量，shape是[5]|<br>|2|[D0,D1]|2-D|一个2-D张量，shape是[3,4]|<br>|3|[D0,D1,D2]|3-D|一个3-D张量，shape[1,4,3]|<br>|n|[D0,D1,D2,…Dn]|n-D|一个n-D张量，shape是[D0,D1,…Dn]|</p>
-<p><strong>数据类型</strong></p>
-<table>
-<thead>
-<tr>
-<th>Data type</th>
-<th>python类型</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>DT_FLOAT</td>
-<td>tf.float32</td>
-<td>32位浮点类型</td>
-</tr>
-<tr>
-<td>DT_DOUBLE</td>
-<td>tf.float64</td>
-<td>64位浮点类型</td>
-</tr>
-<tr>
-<td>DT_INT64</td>
-<td>tf.int64</td>
-<td>64位有符号整型</td>
-</tr>
-<tr>
-<td>DT_INT32</td>
-<td>tf.int32</td>
-<td>32位有符号整型</td>
-</tr>
-<tr>
-<td>DT_INT16</td>
-<td>tf.int16</td>
-<td>16位有符号整型</td>
-</tr>
-<tr>
-<td>DT_INt8</td>
-<td>tf.int8</td>
-<td>8位有符号整型</td>
-</tr>
-<tr>
-<td>DT_UINT</td>
-<td>tf.unit8</td>
-<td>8位无符号整型</td>
-</tr>
-<tr>
-<td>DT_STRING</td>
-<td>tf.string</td>
-<td>变量长度的字节数组，Tensor每个元素是一个字节数组</td>
-</tr>
-<tr>
-<td>DT_BOOL</td>
-<td>tf.bool</td>
-<td>Boolean</td>
-</tr>
-<tr>
-<td>DT_COMPLEX64</td>
-<td>tf.complex64</td>
-<td>由两个32位浮点数组成的复数，实数和大小部分</td>
-</tr>
-<tr>
-<td>DT_QINT32</td>
-<td>tf.qint32</td>
-<td>量化操作中32位有符号整型</td>
-</tr>
-<tr>
-<td>DT_QINT8</td>
-<td>tf.qint8</td>
-<td>量化操作中8位有符号整型</td>
-</tr>
-<tr>
-<td>DT_QUINT8</td>
-<td>tf.quint8</td>
-<td>量化操作中8位无符号整型</td>
-</tr>
-</tbody></table>
-<p>#6 变量<br>变量的创建、初始化、存储和载入</p>
-<ul>
-<li>为了持有和更新参数，在图中保持状态可以通过调用 <strong>run()</strong>方法</li>
-<li>内存buffer包含张量</li>
-<li>必须是明确初始化并且在训练期间和训练之后存储到磁盘上的</li>
-<li>类 <strong>tf.Variable</strong><ul>
-<li>构造器：变量的初始化值，一个任意类型和shape的张量</li>
-<li>构造之后，类型和shape都会固定</li>
-<li>使用<strong>assign</strong>操作op， validate_shape = False<h2 id="6-1-创建"><a href="#6-1-创建" class="headerlink" title="6.1 创建"></a>6.1 创建</h2></li>
-</ul>
-</li>
-<li>传入一个张量作为初始值到 Variable构造方法中</li>
-<li>初始值：常量constants,序列化和随机值<ul>
-<li>tf.zeros(),tf.linspace(),tf.random_normal()</li>
-</ul>
-</li>
-<li>固定shape：与操作的shape相同</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 创建两个变量</span><br><span class="line">weight &#x3D; tf.Variable(tf.random_normal([784,200],stddev&#x3D;0.35),name &#x3D;&quot;weights&quot;)</span><br><span class="line">biases &#x3D; tf.Variable(tf.zeros([200]),name &#x3D;&quot;biases&quot;)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>调用 tf.Variable() 加入操作到图中</li>
-</ul>
-<h2 id="6-2-初始化"><a href="#6-2-初始化" class="headerlink" title="6.2 初始化"></a>6.2 初始化</h2><ul>
-<li>添加一个操作并执行</li>
-<li>tf.initialize_all_variables()</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 添加一个操作来初始化变量</span><br><span class="line">init_op &#x3D; tf.initialize_all_variables()</span><br><span class="line"># 过后，执行model</span><br><span class="line">with tf.Session() as sess:</span><br><span class="line">    #运行初始化操作</span><br><span class="line">    sess.run（init_op）</span><br></pre></td></tr></table></figure>
-<h2 id="6-3-存储和恢复"><a href="#6-3-存储和恢复" class="headerlink" title="6.3 存储和恢复"></a>6.3 存储和恢复</h2><ul>
-<li><strong>tf.saver</strong></li>
-<li>检查点文件：Variables都存储在二进制文件中，该文件包含了一个变量名到张量值得map</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># 创建一些变量</span><br><span class="line">v1 &#x3D; tf.Variables(...,name &#x3D;&quot;v1&quot;)</span><br><span class="line">v2 &#x3D; tf.Variables(...,name&#x3D;&quot;v2&quot;)</span><br><span class="line">...</span><br><span class="line">#添加一个操作来初始化变量</span><br><span class="line">init_op &#x3D; tf.initialize_all_variables()</span><br><span class="line"></span><br><span class="line"># 添加操作来保存和恢复所有变量</span><br><span class="line">saver &#x3D; tf.train.Saver()</span><br><span class="line"># 然后，运行模型，初始化变量，做一些操作，保存变量到磁盘中</span><br><span class="line">with tf.Session() as sess:</span><br><span class="line">     sess.run(init_op)</span><br><span class="line">     # 对模型做一些操作</span><br><span class="line">    .....</span><br><span class="line">    #存储变量到磁盘中</span><br><span class="line">    save_path &#x3D; saver.save(sess,&quot;&#x2F;tmp&#x2F;model.ckpt&quot;)</span><br><span class="line">    print (&quot;Model saved in file: %s&quot;%save_path)</span><br></pre></td></tr></table></figure>
-<p>** 恢复**</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">with tf.Session() as sess:</span><br><span class="line">    # 从磁盘中恢复变量</span><br><span class="line">    saver.restore(sess,&quot;&#x2F;tmp&#x2F;model.ckpt&quot;)</span><br><span class="line">    print (&quot;Model restored&quot;)</span><br><span class="line">    # 做一些操作</span><br></pre></td></tr></table></figure>
-
-<h2 id="6-4-选择哪些变量来存储和恢复"><a href="#6-4-选择哪些变量来存储和恢复" class="headerlink" title="6.4 选择哪些变量来存储和恢复"></a>6.4 选择哪些变量来存储和恢复</h2><ul>
-<li><p>在 ** tf.train.Saver()**中没有参数</p>
-<ul>
-<li>处理图中所有变量，每个变量都会被保存在该名字之下</li>
-</ul>
-</li>
-<li><p>存储和恢复变量的子集</p>
-<ul>
-<li>训练5层神经网络，想训练一个新的6层神经网络，从5层圣经网络中恢复参数</li>
-</ul>
-</li>
-<li><p>向<strong>tf.train.Saver()</strong>构造方法中传入一个Python词典:keys</p>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># 创建一些变量</span><br><span class="line">v1 &#x3D; tf.Variables(...,name &#x3D;&quot;v1&quot;)</span><br><span class="line">v2 &#x3D; tf.Variables(...,name &#x3D;&quot;v2&quot;)</span><br><span class="line"># 添加操作存储和恢复变量 v2,使用名字 &quot;my_v2&quot;</span><br><span class="line">saver &#x3D; tf.train.Saver(&#123;&quot;my_v2&quot;:v2&#125;)</span><br><span class="line"># 使用saver对象</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-<h2 id="6-5-简单计数器的示例代码"><a href="#6-5-简单计数器的示例代码" class="headerlink" title="6.5 简单计数器的示例代码"></a>6.5 简单计数器的示例代码</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"># 创建一个变量，初始化为标量0</span><br><span class="line">state &#x3D; tf.Variables(0,name&#x3D;&quot;Counter&quot;)</span><br><span class="line"># 创建一个操作来给&quot;state&quot;加1</span><br><span class="line">one &#x3D; tf.constant(1)</span><br><span class="line">new_value &#x3D; tf.add(state,one)</span><br><span class="line">update &#x3D; tf.assign(state,new_value)</span><br><span class="line"></span><br><span class="line"># 在图被运行，变量必须是通过运行一个&quot;init&quot;操作被初始化。</span><br><span class="line"># 我们首先要将&quot;init&quot;操作加入到图中</span><br><span class="line">init_op &#x3D; tf.initialize_all_variables()</span><br><span class="line"></span><br><span class="line"># 运行图，和操作</span><br><span class="line">with tf.Session() as sess:</span><br><span class="line">    #运行 &#39;init&#39;操作</span><br><span class="line">    sess.run(init_op)</span><br><span class="line">    # 打印&#39;state&#39;的初始化值</span><br><span class="line">    print (sess.run(state))</span><br><span class="line">    # 运行更新&#39;state&#39;的操作，并打印&#39;state&#39;</span><br><span class="line">    for _ in range(3):</span><br><span class="line">        sess.run(update)</span><br><span class="line">        print (sess.run(state))</span><br><span class="line"># 输出</span><br><span class="line">#0</span><br><span class="line">#1</span><br><span class="line">#2</span><br><span class="line">#3</span><br></pre></td></tr></table></figure>
-
-<h2 id="6-6-取数据Fetches"><a href="#6-6-取数据Fetches" class="headerlink" title="6.6 取数据Fetches"></a>6.6 取数据Fetches</h2><ul>
-<li>在Session对象中调用<strong>run()</strong>方法来执行图，并传入张量来取回数据</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">input1 &#x3D; tf.constant(3.0)</span><br><span class="line">input2 &#x3D; tf.constant(2.0)</span><br><span class="line">input3 &#x3D; tf.constant(5.0)</span><br><span class="line">intermed &#x3D; tf.add(input2,input3)</span><br><span class="line">mul &#x3D; tf.mul(input1,intermed)</span><br><span class="line"></span><br><span class="line">with tf.Session() as sess:</span><br><span class="line">     result &#x3D; sess.run([mul,intermed])</span><br><span class="line">     print (result)</span><br><span class="line"># 输出</span><br><span class="line"># [array([21.],dtype &#x3D; float32),array([7.],dtype &#x3D; float32)]</span><br></pre></td></tr></table></figure>
-
-<h2 id="6-7-Feeds"><a href="#6-7-Feeds" class="headerlink" title="6.7 Feeds"></a>6.7 Feeds</h2><ul>
-<li>直接打包一个张量到图中的任何操作</li>
-<li>使用一个张量值临时替换一个操作的输出值</li>
-<li>feed数据作为<strong>run()</strong>方法的一个参数</li>
-<li>仅仅用来运行调用被传入值</li>
-<li><strong>tf.placeholder()</strong></li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">input1 &#x3D; tf.placeholder(tf.float32)</span><br><span class="line">input2 &#x3D;tf.placeholder(tf.float32)</span><br><span class="line">output &#x3D; tf.mul(input1,input2)</span><br><span class="line"></span><br><span class="line">with tf.Session() as sess:</span><br><span class="line">    print (sess.run([output],feed_dict &#x3D; &#123;input1:[7.],input2:[2.]&#125;))</span><br><span class="line"></span><br><span class="line">#输出</span><br><span class="line">#[array([14.],dtype&#x3D;float32)]</span><br></pre></td></tr></table></figure>
-
-<h1 id="7-操作"><a href="#7-操作" class="headerlink" title="7 操作"></a>7 操作</h1><table>
-<thead>
-<tr>
-<th>类别</th>
-<th>示例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>逐元素数学运算</td>
-<td>Add,Sub,Mul,Div,Exp,Log,Greater,Less,Equal…</td>
-</tr>
-<tr>
-<td>数组操作</td>
-<td>Concat,Slice,Split,Constant,Rank,Shape,Shuffle..</td>
-</tr>
-<tr>
-<td>矩阵运算</td>
-<td>MatMul,MatrixInverse,MatrixDeterminant…</td>
-</tr>
-<tr>
-<td>状态操作</td>
-<td>Variable,Assign,AssignAdd…</td>
-</tr>
-<tr>
-<td>神经元构建块</td>
-<td>SoftMax,Sigmoid,ReLU,Convolution2D,MaxPool…</td>
-</tr>
-<tr>
-<td>检查点操作</td>
-<td>Save,Restore</td>
-</tr>
-<tr>
-<td>队列和同步操作</td>
-<td>Enqueue,Dequeue,MutexAcquire,MutexRelease,…</td>
-</tr>
-<tr>
-<td>控制流操作</td>
-<td>Merge,Switch,Enter,Leave,NextIteration</td>
-</tr>
-</tbody></table>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2016-06-13-GoogleTensorFlowBasicConcept/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2016-06-13-GoogleTensorFlowBasicConcept/" title="谷歌TensorFlow基本概念">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-
-    
-    <nav class="page-navigator">
-        <a class="extend prev" rel="prev" href="/categories/blog/page/7/">前一页</a><a class="page-number" href="/categories/blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/categories/blog/page/6/">6</a><a class="page-number" href="/categories/blog/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/categories/blog/page/9/">9</a><a class="page-number" href="/categories/blog/page/10/">10</a><a class="extend next" rel="next" href="/categories/blog/page/9/">后一页</a>
-    </nav>
-    
-
-
-            </div>
-
-        </section>
-        <!-- 侧栏部分 -->
-<aside class="sidebar">
-    <section class="widget">
-        <h3 class="widget-hd"><strong>文章分类</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-    <li>
-        <a href="/categories/blog/">blog</a>
-        <span class="badge">(94)</span>
-    </li>
-    
-</ul>
-    </section>
-
-    
-    <section class="widget">
-        <h3 class="widget-hd"><strong>热门标签</strong></h3>
-        <!-- 文章标签 -->
-<div class="widget-bd tag-wrap">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://shartoo.github.com/categories/blog/page/8/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://shartoo.github.com/categories/blog/page/8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: false
+  };
+</script>
+
+  <title>Category: blog | Hexo</title>
   
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
 </div>
-    </section>
-    
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
 
     
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
 
-    
-    <!-- 友情链接 -->
-    <section class="widget">
-        <h3 class="widget-hd"><strong>友情链接</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-        <li>
-            <a href="https://jelon.top" target="_blank" title="Jelon个人前端小站">前端博客小站</a>
-        </li>
-    
-        <li>
-            <a href="https://www.baidu.com" target="_blank" title="百度搜索">百度</a>
-        </li>
-    
-</ul>
-    </section>
-    
-</aside>
-<!-- / 侧栏部分 -->
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  
+  
+  
+  <div class="post-block">
+    <div class="posts-collapse">
+      <div class="collection-title">
+        <h1 class="collection-header">blog
+          <small>Category</small>
+        </h1>
+      </div>
+
+      
+    <div class="collection-year">
+      <h1 class="collection-header">2019</h1>
     </div>
 
-    <!-- 博客底部 -->
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2016-09-20-pyspark-mllibuse/" itemprop="url">
+            <span itemprop="name">pyspark机器学习库使用</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2016-09-20-batch_sizesetup/" itemprop="url">
+            <span itemprop="name">深度学习：batch_size的设置与影响</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2016-09-09-tensorflow-retainmodel/" itemprop="url">
+            <span itemprop="name">tensorflow：如何重新训练Inception模型的最后一层，以应对新分类</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2016-09-02-tensorflow-inputpipeline/" itemprop="url">
+            <span itemprop="name">tensorflow：理解tensorflow中的输入管道</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2016-08-24-network-imageclassify/" itemprop="url">
+            <span itemprop="name">深度学习：卷积神经网络与图像识别基本概念</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2016-08-22-tensorflow-sourcecode-input/" itemprop="url">
+            <span itemprop="name">tensorflow:CIFAR-10 图像处理源码.input.py</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2016-08-22-tensorflow-cnn/" itemprop="url">
+            <span itemprop="name">tensorflow：卷积神经网络的理解</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2016-08-18-tensorflow-CIFAR10/" itemprop="url">
+            <span itemprop="name">tensorflow:使用tensorflow构建简单卷积神经网络</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2016-06-30-ElasticSearchTest/" itemprop="url">
+            <span itemprop="name">elastic search 性能测试</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2016-06-13-GoogleTensorFlowBasicConcept/" itemprop="url">
+            <span itemprop="name">谷歌TensorFlow基本概念</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+    </div>
+  </div>
+  
+  
+  
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/categories/blog/page/7/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/categories/blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/categories/blog/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/categories/blog/page/9/">9</a><a class="page-number" href="/categories/blog/page/10/">10</a><a class="extend next" rel="next" href="/categories/blog/page/9/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+  </nav>
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
     <footer class="footer">
-    &copy;
-    
-        2016-2019
-    
+      <div class="footer-inner">
+        
 
-    <a href="/">Jelon Loves You</a>
-</footer>
-<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
 
-    <!--博客js脚本 -->
-    <!-- 这里放网站js脚本 -->
+        
 
-<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
 
 </body>
 </html>

@@ -1,1909 +1,549 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" >
-    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
-    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
-    
-    <title>文章归档: 2019/12 | Hexo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
-    <meta name="keywords" content="Jelon, 前端, Web, 张德龙, 前端开发" >
-    <meta name="description" content="Jelon个人前端小站" >
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml" >
-    
-    
-    <link rel="shortcut icon" href="/favicon.ico" >
-    
-    
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/main.css">
 
-    <!--[if lt IE 9]>
-    
-<script src="/js/html5.js"></script>
 
-    <![endif]-->
-    
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "//hm.baidu.com/hm.js?fd459238242776d173cdc64918fb32f2";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://shartoo.github.com').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
 </script>
 
-
-<meta name="generator" content="Hexo 4.2.0"></head>
-
-<body class="home">
-    <!--[if lt IE 9]>
-    <div class="browsehappy">
-        当前网页 <strong>不支持</strong>
-        你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/" target="_blank" rel="noopener">升级你的浏览器</a>.
-    </div>
-    <![endif]-->
-
-    <!-- 博客头部 -->
-    <header class="header">
-    <section class="container header-main">
-        <div class="logo">
-            <a href="/">
-                <div class="cover">
-                    <span class="name">Hexo</span>
-                    <span class="description"></span>
-                </div>
-            </a>
-        </div>
-        <div class="dropnav icon-paragraph-justify" id="JELON__btnDropNav"></div>
-        <ul class="menu hidden" id="JELON__menu">
-            
-            <li rel="/archives/2019/12/page/6/index.html" class="item ">
-                <a href="/" title="首页" class="icon-home">&nbsp;首页</a>
-            </li>
-            
-            <li rel="/archives/2019/12/page/6/index.html" class="item ">
-                <a href="/lab/" title="实验室" class="icon-lab">&nbsp;实验室</a>
-            </li>
-            
-            <li rel="/archives/2019/12/page/6/index.html" class="item ">
-                <a href="/about/" title="关于" class="icon-about">&nbsp;关于</a>
-            </li>
-            
-            <li rel="/archives/2019/12/page/6/index.html" class="item ">
-                <a href="/comment/" title="留言" class="icon-comment">&nbsp;留言</a>
-            </li>
-            
-        </ul>
-        <div class="profile clearfix">
-            <div class="feeds fl">
-                
-                
-                <p class="links">
-                    
-                        <a href="https://github.com/jangdelong" target="_blank">Github</a>
-                        |
-                    
-                        <a href="https://pages.coding.me" target="_blank">Hosted by Coding Pages</a>
-                        
-                    
-                </p>
-                <p class="sns">
-                    
-                        <a href="http://weibo.com/jangdelong" class="sinaweibo" target="_blank"><b>■</b> 新浪微博</a>
-                    
-                        <a href="https://www.facebook.com/profile.php?id=100011855760219&amp;ref=bookmarks" class="qqweibo" target="_blank"><b>■</b> Facebook</a>
-                    
-                    <a href="javascript: void(0);" class="wechat">
-                        <b>■</b>
-                        公众号
-                        <span class="popover">
-                            <img src="/img/wechat_mp.jpg" width="120" height="120" alt="我的微信订阅号">
-                            <i class="arrow"></i>
-                        </span>
-                    </a>
-                </p>
-                
-            </div>
-            <div class="avatar fr">
-                <img src="/img/jelon.jpg" alt="avatar" title="Jelon" >
-            </div>
-        </div>
-    </section>
-</header>
-
-
-    <!-- 博客正文 -->
-    <div class="container body clearfix">
-        <section class="content">
-            <div class="content-main widget">
-                <!-- 文章归档 -->
-
-    <h3 class="widget-hd">
-        <strong>
-            
-                文章归档
-                <!-- 文章归档，可以根据日期分类 -->
-            
-        </strong>
-    </h3>
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2017-02-27-lungseg-subsolid/">
-    		从胸椎中自动subsolid 病变结节检测方法【论文笔记】
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.467Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h2 id="0-摘要"><a href="#0-摘要" class="headerlink" title="0 摘要"></a>0 摘要</h2><p>病变结节被描述为不透明圆形，半径大约为3cm。病变结节可以分为subsolid)或solid结节。solid结节在CT Scan上有均匀的软组织衰减。subsolid结节可以进一步分为non-solid结节(即ground glass 结节)和part-solid结节(即semi-solid结节)。non-solid结节表现出没有消除支气管或者血管的焦点区域模糊衰减幅度的增加。模糊区域衰减幅度的增加称为ground 玻璃不透明度，因此这些结节称为ground玻璃结节。part-solid或者semi-solid结节既包含了ground玻璃部分也包含了solid部分。在Early Lung  Cancer Action Project(<strong>ELCAP</strong>)中，基准线上81%的正样本发现为solid结节和19%的subsolid结节。</p>
-<h2 id="一-数据"><a href="#一-数据" class="headerlink" title="一  数据"></a>一  数据</h2><p>本文使用的数据来源于NELSON实验，一个大的多中心肺癌筛选实验。NELSON实验是一个正在进行的随机对照试验建立，以测试 在高风险吸烟者之间进行的低剂量CT检测是否会导致肺癌死亡率25%的降低。</p>
-<p>实验中7557个志愿者接受了多轮低剂量CT筛选。所有在CT scan看图检测期间发现的肺结节都会被记入数据库。放射剂师会记录所有检测到的结节的位置、半径和结节类型。数据集总共从4500个对象里挑选了大概20000个scans。我们收集的thin-slices，低剂量的CT检测数据来源于两个 NELSON实验的网站，至少一个subsolid(part-solid或non-solid)被标注了的。所有subsolid 结节标注半径小于5mm的都会被丢弃，因为彼时的临床指南说明这些结节不需要后续的CT。需要注意的是solid结节标注并没有被包含入分析中。</p>
-<p>两个网站的所有的CT检测需要在螺旋模式下 16x0.75mm的准值。轴(Axial)状位1.0mm厚度的图像将会以0.7mm的增量重构为512x512的矩阵，平面体素大小变化范围为0.53mm到0.89mm。</p>
-<p>移除小于5mm的subsolid 结节的标注之后，第一个网站中收集了103个病人 的209个scans。这些病人中，发现了122个subsolid结节(63个part-solid，59个non-solid)。注意到，肺结节可能会在多个scan中被标注，因为每个病人可能还有后续的检测。后面的检测中，209个scans中有了225个标注。这个数据仅用于CAD系统欧冠的训练和优化。</p>
-<p>第二个网站中，移除小结节之后，得到56个病人的109个scans。这些病人中，发现了60个subsolid(32个part-solid，28个non-solid)，最后获得了109个病人的114个标注。此数据集由于是来源于不同的扫描仪，所以用于CAD系统的独立评估。</p>
-<p>两份数据集的有效半径设置为5-34mm，中值为10.7mm。</p>
-<h2 id="二-方法"><a href="#二-方法" class="headerlink" title="二 方法"></a>二 方法</h2><p>在检测流程之前，使用之前已经发布的肺、气道和血管的分割算法(van Rikxoort et al., 2009; van Ginneken et al., 2008; Dongen and Ginneken,2010)需要先走一遍。初始的检测阶段包括结节分割生成候选。为subsolid 结节候选定义了丰富的特征集合。先前发布的论文中(es (Kim et al., 2005; Zhou et al., 2006; Ye et al., 2007; Tao et al., 2009)的关于subsolid 结节CAD系统使用了密度，形状和上下文特征。本文中我们通过加入上下文特征添加了另外一种类别的特征。我们进行一种添加或剔除上下文特征来展示这些特征的额外的价值。我们试验了不同的分类器方案和不同的分类器以探索他们在分类性能上的影响。本文提出了一个泛化的结构化的评估方法来选取最佳分类方案。基于这些实验结果，CAD系统的最优配置会被选出，同时这个最终系统会被在独立的测试集上测试。</p>
-<h3 id="2-1-候选检测"><a href="#2-1-候选检测" class="headerlink" title="2.1 候选检测"></a>2.1 候选检测</h3><h4 id="2-1-1-粗粒度候选检测"><a href="#2-1-1-粗粒度候选检测" class="headerlink" title="2.1.1 粗粒度候选检测"></a>2.1.1 粗粒度候选检测</h4><p>候选检测过程是在肺腔内使用一个双阈值密度mask来获得一个体素mask，其衰减值是从通常从磨砂玻璃不透明度中观察到的。使用的是-750到-300的HU。肺部边缘、血管和器官的部分容积的影响可以提升在定义的区间范围内衰减值。为移除这些体素，使用了一个球形半径为3体素的形态学腐蚀操作。在此之后，聚合所有体素为候选的连通组件分析。由于<strong>半径</strong>小于5mm的subsolid不需要进一步的CT检测，所有<strong>体积</strong>小于 $35mm^3$的候选(对应的是一个被移除的半径为4mm的完美球形)。然后再做一个使用相同结构元素的形态学扩张操作来撤销这种由腐蚀操作导致的收缩。最终，所有候选的容积和质心都被计算，并且质心相距小于5mm的都被合并了。此合并过程用来确保结节只会存在于一个候选中。</p>
-<h4 id="2-1-2-结节分割"><a href="#2-1-2-结节分割" class="headerlink" title="2.1.2 结节分割"></a>2.1.2 结节分割</h4><p>上述的候选检测过程生成的是聚合的区域，并不是subsolid结节的精确分割。因此使用算法来进一步分割，算法作用于立方块的VOI(Volumn of Interest)并使用一些形态学操作来获取鲁棒性的结节分割。算法分为自动胸壁移除和从附着脉管系统分离。此方法用于solid结节性能表现优异(Kuhnigk et al 2006)，我们做了稍微调整来适应subsolid结节。Kuhnigk的算法使用的是一个全局下限阈值为 -450HU,为了在subsolid结节分割上获得较好的结果，我们将阈值下限改变为-750HU。分割算法的VOI在候选质心周围创建，并且VOI半径设为初始候选的等同的1.5倍。使用了这种方法，所有候选的精确分割被创建，这也形成了进入分类处理的最终候选集。</p>
-<h3 id="2-2-特征"><a href="#2-2-特征" class="headerlink" title="2.2 特征"></a>2.2 特征</h3><p>描述候选的丰富的特征的计算可以分为四类：密度，上下文，形状特征和上下文特征和质地。</p>
-<h3 id="2-2-1-密度特征"><a href="#2-2-1-密度特征" class="headerlink" title="2.2.1 密度特征"></a>2.2.1 密度特征</h3><p>密度特征在四个不同的体素集合上计算</p>
-<ul>
-<li><p>分割(segmentation)：候选分割内的体素</p>
-</li>
-<li><p>边框(boundingbox)：边框内的体素定义在候选分割的周围</p>
-</li>
-<li><p>surrounding3:候选分割的周围内的体素，通过扩张候选分割为3x3x3体素的长方形结构元素。</p>
-</li>
-<li><p>surrounding5:候选分割的周围内的体素，通过扩张候选分割为5x5x5体素的长方形结构元素。</p>
-</li>
-</ul>
-<p>下图展示了这四种特征的样例。下图从左到右分别是<code>segmentation</code>,<code>boundingbox</code>,<code>surrounding3</code>,<code>surrounding5</code></p>
-<p><img src="/images/blog/subsolid1.png" alt="5种特征"></p>
-<p>这四种区域是定义的用来从候选的内部和周围的强度分布抽取特征的。对每个体素集合，计算了一个归一化直方图，每个bin size为50HU。每个直方图统计如下信息：熵，均值， 平均bin的高度，mode(极值点的位置)，mode bin的高度，5%，25%，50%，75%和95%分位的bin值。进一步的，计算体素分割集的方差，最大值，最小值和先前的7个Hu moment(来自一篇论文 Hu,1962)。Hu moment是指转换、尺寸、旋转不变性，通常用来描述潜在的强度分布。最后，计算多尺寸(1.0,1.77,3.16,5.62和10体素)上的最大血管，segmentation(此处的应该指前面提到的四个特征之一)体素集合的最大血管性的最小值、最大值、均值和方差都作为了特征。部分容积效应可以创建靠近血管或在血管壁上的的磨砂玻璃不透明度的区域，通过这些特征可以知道候选是在血管壁附近或者在血管壁上。</p>
-<p>总共有54个强度特征被收集到。</p>
-<h4 id="2-2-2-质地特征"><a href="#2-2-2-质地特征" class="headerlink" title="2.2.2 质地特征"></a>2.2.2 质地特征</h4><p>质地分析中，使用了local binary patterns(LBP)和2D Haar小波。它们都是很常见的质地分析来表述局部空间信息。样本的这些特征可以从来去除运动伪影造成的磨砂玻璃不透明度区域的假阳性。从候选segmetation周围的boundingbox     创建的VOI，同时这个VOI的容积被重新取样(Lanczos 重新抽样,$\alpha =3$)为两个尺寸为 16x16x16体素和 32x32x32体素的立方块。然后对每个重新抽样之后的每个slices(两个立方块)使用一个邻居为<strong>3x3(P=8,R=1)</strong>的2D的LBP计算。然后，对每个容积的LBP输出计算 bin size为1的归一化直方图，同时计算2.2.1节提到的一些其他统计量，除了分位值，这些都用作质地描述。</p>
-<p>进一步的，对重新取样之后的尺寸为32x32x32的容积2D做 Haar小波计算。每个重新取样的容积slices(两个立方块)分为4个频带。每个slice的四个频带创建四个容积。计算高频带的三个容积的三个归一化直方图。从低频带创建的容积没有使用。同时计算与质地描述相同的直方图统计量。</p>
-<p>总共有40个质地特征。</p>
-<h4 id="2-2-3-形状特征"><a href="#2-2-3-形状特征" class="headerlink" title="2.2.3 形状特征"></a>2.2.3 形状特征</h4><p>第三图特征由形状特征组成，这些都是从候选segmentation中计算得来。其他结构而不是结节上的segmentation会得到怪异的形状，因此形状是个区分假阳性和真阳性的重要特征。首先计算如下特征：<code>球状性(sphericity
-)</code>,<code>紧凑性1(compactness1)</code>,<code>紧凑性2(compactness2)</code>,<code>猜想半径(guessRadius)</code>。为了计算球状性，一个球形S被定义为候选区域的质心，它与候选segmentation有着相同的容积。然后<code>球状性sphericity</code>被定义为候选segmentation在球形S内的体素与全部球形S的容积的比例。然后为了计算紧凑性1，紧凑性2和猜想半径，候选segmentation的boundingbox被使用，并且维度称为<code>dimx</code>,<code>dimy</code>,<code>dimz</code>。为了计算紧凑性1，使用boundingbox内的体素的数目除以候选cluster的体素的数目。紧凑性2的计算为，使用bounding box的最大维度($max(dimx,dimy,dimz)$) 构建的立方块的体素除以候选cluster内的体素的数目。猜想半径的计算方法为，将bounding box的容积除以6即可得到。如果是一个完美球形，将会计算得到球形的真正半径。第二步，计算体素的数目和cluster size($mm^3$)可以用来描述候选的尺寸。这些两个特征几乎似乎相同的，但是cluster的size将CT scan的分辨率也考虑进来了。最后，从候选mask体素中计算相同集合的7个Hu moments来描述其形状。注意：与前面为了强度特征计算的Hu moments相反，此处在segmentation内部的体素设为1，之外的设为0。</p>
-<p>总共计算13个形状特征。</p>
-<h4 id="2-2-2-4-纹理特征"><a href="#2-2-2-4-纹理特征" class="headerlink" title="2.2.2.4  纹理特征"></a>2.2.2.4  纹理特征</h4><p>最后定义了一组新的纹理特征，用于描述相对于肺边界、气道树和其他subsolid 结节候选的的候选区域的位置。例如，稍大点的磨砂玻璃不透明度可以被看做由于微观选择的原因造成的肺的重力依赖部分。这会导致候选沿着肺边界有着细长的形状。结合上下文和形状信息可以获悉这一点。另外一种情况是，气道被填满了粘液，在密度强度上可能表现得像磨砂玻璃不透明。这些候选将表现出与气道segmentation重叠，这个可以用来将他们分为假阳性。更进一步说，候选之间的关联也是相关的上下文信息。例如，被其他候选包围的候选更可能是微观选择区域的源头，而不是subsolid结节。</p>
-<p>首先，需要计算肺部区域内的两个距离转换；第一个使用肺部segmentation，第二个使用气道树。到肺边界的距离和到气道最近的距离来自对所有候选segmentation内的体素距离转换。这意味着，到肺边界的距离和到气道的距离的方差、最大值、最小值也被用作纹理特征。</p>
-<p>其次，bounding box被定义在肺周围，它被用来计算相对位置特征；相对的X，Y，Z位置，以及到bounding box左下角的距离也被计算。甚至会计算两个肺的质心的距离。</p>
-<p>再者，计算绝对和相对的气道和血管重叠。为了计算这个，我们会算入 bounding box内的体素，这些体素是气道segmentation或者血管segmentation的部分。相对重叠和绝对重叠的精确体素数目的计算为，bounding box内的体素除以segmentation内的体素。</p>
-<p>最后，描述的是候选与其他候选的关系。首先，一个scan内的候选的数目作为一种特征。这提供了肺内部磨砂玻璃区域的数目。其次，计算了候选距离为30mm以内的候选和50mm以内的候选，以及与其他候选最近的候选。</p>
-<p>总共有21个这样的纹理特征。</p>
-<h3 id="2-3-分类"><a href="#2-3-分类" class="headerlink" title="2.3 分类"></a>2.3 分类</h3><p>这部分描述的是优化分类器的性能。然后描述的是CAD系统在独立测试集上的评估。系统评估期间，若候选的质心与结节中心的距离为R之内时结节标记为<code>检测到</code>。为确保CAD系统的标记在CT scan上的结节之中，我们将R设置为结节的半径。</p>
-<h4 id="2-3-1-分类模式优化"><a href="#2-3-1-分类模式优化" class="headerlink" title="2.3.1 分类模式优化"></a>2.3.1 分类模式优化</h4><p>为选择最佳的分类器模式，做了如下实验。在训练集上做10折交叉验证。因为的病人的同一个结节可能会出现在多个scan中，所以每一折都是以病人级别划分以避免偏差。候选被分类为结节或假阳性(FP)，然后CAD系统的最终性能评估使用的是自由响应操作特性(FROC)分析。</p>
-<p>候选分类器的测试分为两个阶段。一阶段分类器是计算所有候选的完整特征集，然后使用一个监督学习的分类器将所有候选分为两类。相反的，二阶段分类器的分类器模式是仅仅使用第一阶段的5个特征来做第一阶段的分类。第一阶段的分类器主要是移除尽可能多的假阳性候选。。然后，仅计算剩下余下候选的特征集。这种二阶段的方法有两个优点，第一是计算时间消耗要少，因为第二阶段不用计算所有候选，第二个是第一阶段的分类器会使得数据更加均衡，因为第二阶段做了分类。两种方法都用来测试以评估那种分类模式在分类性能中更优。</p>
-<p>二阶段分类的第一阶段的分类器使用的是线性判别分类器(Linear Discriminant Classifier)(LDC Fukunaga 1990)，因为其简单性和速度。第一阶段分类器的5个特征的最优集由3种方法获得的。前两种方法是，一种sequential forward floating selectoin(SFFS)。SFFS步骤将训练集中随机取50%作为训练集，剩余的50%作为测试集。第一种方法中，准确率用作SFFS步骤的优化标准。</p>
-<p>第二个方法中，FROC曲线下的0-3FP/scan的部分区域用作优化标准。最后第三种方法中，计算所有特征的Fisher’s linear discriminant 比例，其中比例最高的5个特征会被选出。注意这种方法不考虑特征组合。三种不同的LDC分类器使用三种不同的5个特征集合，并为每个分类的所有候选算出一个似然度。第一阶段的每个分类器的似然度通过对所有正样本的似然度排序并选出<strong>最低的似然度</strong>。紧接着，移除训练集中的非正样本。所有低于此似然度的都被移除。这种方法中，我们获得5个移除了大部分假阳性候选同时没有移除正样本的特征集合。</p>
-<p>对于一阶段分类器和二分阶段分类器的第二个阶段，测试了KNN分类器、随机森林分类器、GentleBoost 分类器，最近均值分类器(nearest mean classifier NM)，使用径向偏置核函数的支持向量机SVM-RBF和LDC。不同分类器的参数在训练集交叉验证上优化过。<br>KNN分类器中，K设置为正样本数的均方根。随机森林分类器使用100颗树来训练，最大深度为20. GentleBoost分类器，回归stumps用作若分类器，使用了250个若分类器。分类器之后，一个10GentleBoost的分类器，记为GB10。这100个 GentleBoost分类器都是独立的在训练集上随机去75%作为训练集来训练。GB10分类器的最终输出是10个分类器的输出概率的中位数。对于GB10，每个分类器都是用了250个回归stumps。SVM-RBF分类器的C和伽马参数是从一个10折交叉验证循环的数据集上的内部的5折交叉验证循环优化得到的。是用FROC曲线下方0-3FP/scans的部分区域作为优化标准。所有的特征都被归一化为均值为0和单位方差。</p>
-<h4 id="2-3-2-评估上下文特征的收益"><a href="#2-3-2-评估上下文特征的收益" class="headerlink" title="2.3.2 评估上下文特征的收益"></a>2.3.2 评估上下文特征的收益</h4><p>我们假设上下文特征有助于更好的分类器性能。是用最终的CAD系统在训练集上对比包含了和不包含上下文特征来测试这个假设。使用Bootstrap方法来测试统计显著性。从交叉验证集中抽样5000次来获得scan。每个bootstrap样本有着原始数据集一样多的scans。FROC曲线下的0-8FPs/scan的区域作为分类器性能的衡量标准。</p>
-<h4 id="2-3-3-独立测试集上的最优分类器模式的评估"><a href="#2-3-3-独立测试集上的最优分类器模式的评估" class="headerlink" title="2.3.3 独立测试集上的最优分类器模式的评估"></a>2.3.3 独立测试集上的最优分类器模式的评估</h4><p>最优分类器模式，一阶段分类器和二阶段分类器，最优分类器基于训练集上的交叉验证FROC分析。CAD系统的最优分类器模式使用的是完整训练集，并在独立的测试集上评估性能。注意，测试集在分类器模式优化期间并没有使用。</p>
-<h3 id="2-4-结合solid-nodule-CAD"><a href="#2-4-结合solid-nodule-CAD" class="headerlink" title="2.4 结合solid nodule CAD"></a>2.4 结合solid nodule CAD</h3><p>临床实践中，subsolid 结节CAD系统通常与solid结节CAD系统结合使用。尽管solid 结节CAD算法并没有对subsolid结节检测做优化或训练，它们可能检测所有subsolid结节的部分。尤其是，它们可能对检测part-solid结节的solid core十分敏感。</p>
-<h2 id="三-结果"><a href="#三-结果" class="headerlink" title="三 结果"></a>三 结果</h2><h3 id="3-1-候选检测"><a href="#3-1-候选检测" class="headerlink" title="3.1 候选检测"></a>3.1 候选检测</h3><p>训练集中每个scan在候选检测步骤生成 $237\pm267$ 个候选区域，测试集中每个scan生成 $109\pm127$ 个候选区域。训练集中，所有subsolid 结节的候选检测灵敏度为84%，同时part-solid结节和non-solid结节的灵敏度分别为81%和87%。测试集中所有subsolid结节的灵敏度为88%，part-solid和non-solid的灵敏度分别为85%和90%。</p>
-<h4 id="3-2-分类器"><a href="#3-2-分类器" class="headerlink" title="3.2 分类器"></a>3.2 分类器</h4><h4 id="3-2-1-分类器模式的优化"><a href="#3-2-1-分类器模式的优化" class="headerlink" title="3.2.1 分类器模式的优化"></a>3.2.1 分类器模式的优化</h4><p>一阶段分类器模式的训练集上的10折交叉验证的不同分类器的FROC曲线如下图</p>
-<p><img src="/images/blog/subsolid2.png" alt=""></p>
-<p>可以看到GB10分类器性能最好，1FPs/scan时达到了69%的灵敏度，2FPs/scan时达到了74%。注意到候选检测灵敏度为84%，这意味着分类器灵敏度不可能高于这个值。</p>
-<p>分类器的第一阶段旨在减少候选区域的FPs数量。使用的是2.3.1节的三种方法，构建第一阶段的分类器的三种不同集合的5特征，其性能在10折交叉验证中测试，结果如下表。下表显示的是阈值使用先验概率设置为T不移除训练集中正样本时的样本移除数量。此表显示，基于Fisher’s linear discriminant比例的特征集移除最多的样本，因此这个特征集被选为CAD系统第一阶段的特征集。</p>
-<table>
-<thead>
-<tr>
-<th>Feature set</th>
-<th>Reduction ratio(%)</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>SFFS-accuracy</td>
-<td>68</td>
-</tr>
-<tr>
-<td>SFFS-partial area under FROC curve</td>
-<td>79</td>
-</tr>
-<tr>
-<td>Fisher’s linear discriminant ratio</td>
-<td>59</td>
-</tr>
-</tbody></table>
-<p>第二阶段的不同分类器的性能如下图。与上图相比，GB10分类器表现最好。同时注意，候选检测灵敏度为84%，分类器的灵敏度不可能超过这个值。</p>
-<p><img src="/images/blog/subsolid3.png" alt=""></p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2017-02-27-lungseg-subsolid/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2017-02-27-lungseg-subsolid/" title="从胸椎中自动subsolid 病变结节检测方法【论文笔记】">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2017-02-26-mutliview-falseremove-usingcnn/">
-    		CT图像中肺结节自动检测:使用CNN移除假阳性【论文笔记】
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.466Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h2 id="0-综述"><a href="#0-综述" class="headerlink" title="0 综述"></a>0 综述</h2><p>本文做出以下共享:</p>
-<ol>
-<li><p>我们提出了一种用于肺结节检测的<strong>多角度</strong>卷积网络ConvNet用以剔除假阳性的步骤。候选样本是由三种现存的检测算法结合计算出来的，这也可用于增强候选检测步骤的灵敏性。</p>
-</li>
-<li><p>评估不同的多角度卷积网络的架构以及它们对检测性能的影响。同时也评估了增加更多角度和应用一种确定的融合技术对于每种架构的性能</p>
-</li>
-<li><p>提出一种性能基准和在完全独立的筛选实验的数据集上的外部验证。</p>
-</li>
-</ol>
-<h2 id="1-数据材料"><a href="#1-数据材料" class="headerlink" title="1 数据材料"></a>1 数据材料</h2><h3 id="1-1-LIDC-IDRI"><a href="#1-1-LIDC-IDRI" class="headerlink" title="1.1 LIDC-IDRI"></a>1.1 LIDC-IDRI</h3><p>使用大的公开数据集<code>Lung Image Database Consortium(LIDC-IDRI)</code>训练和验证了CAD系统。该数据集包含了来自7个机构的<code>1018</code>个异质病例。CT图像的切片(slices)厚度从<code>0.6mm-5.0mm</code>之间,中值为2.0mm。数据的引用标准由人工标注，来自四位放射医师，对每个scan进行两轮评审。第一轮的盲审阶段，可疑病变是独立标注的并且每个都被分类 为<code>非结节</code>,<code>结节&lt;3mm</code>,<code>结节&gt;3mm</code>。人工的3D切割只针对<code>结节&gt;3mm</code>的。第二轮中，来自全部四位的放射医师的标注被评审（非盲审），同时每个放射医师决定接受或反对此标注。</p>
-<p>我们抛弃了结节<strong>厚度大于2.5mm</strong>的样本(它们已经不被推荐使用)，以及包含了不相连切片(slices)空间的scans，最后获得<code>888</code>个scans。最后挑选的scans列表我们公开在 <a href="http://luna.grand-challenge.org/" target="_blank" rel="noopener">公开的scans列表</a> 。我们仅考虑标注中结节半径大于等于3mm的，小于3mm的被丢弃。最后选择了结节半径大于等于3mm的，并且被大部分放射医师 （4个中有3个）。最后选出了1186个结节。</p>
-<h3 id="1-2-ANODE09"><a href="#1-2-ANODE09" class="headerlink" title="1.2 ANODE09"></a>1.2 ANODE09</h3><p>为了进一步验证系统的性能，使用完全独立于训练集的数据集 <strong>ANODE09竞赛</strong>, 该数据集由55个CT scans组成。每个CT由2个观察者盲审标注。5个scans作为训练集，剩余的50个作为测试集。这些引用没法公开获取。</p>
-<p>所有的样本由 University Medical Center Utrecht 收集。图像被重构为 1.0mm厚度。</p>
-<h3 id="1-3-DLCST"><a href="#1-3-DLCST" class="headerlink" title="1.3  DLCST"></a>1.3  DLCST</h3><p>为了进一步验证系统的性能，使用了Danish Lung Cancer Screening Trial的数据集。该评测基于612个baseline的scans，这些scans是最近公开在临床研究上的。两个观测者的半径被平均，然后正样本被定义为结节半径大于等于3mm。这个结果产生了898个结节。</p>
-<h2 id="二-方法"><a href="#二-方法" class="headerlink" title="二 方法"></a>二 方法</h2><p>我们提出的CAD系统架构图如下，由两个主要部分组成：<strong>(1)</strong>候选检测<strong>(2)</strong>假阳性剔除。</p>
-<p> <img src="/images/blog/multiview1.png" alt="总流程"></p>
-<p>我们分别为<code>solid</code>,<code>subsolid</code>,<code>large solid</code>结节使用了三个定制候选检测器。这些检测器的结合用以增加结节灵敏度。注意到结节尺寸和形态特征变化很大，每个候选从固定平面抽取多个2-D视角。每个2-D视角被一个ConvNets流处理。ConvNets特征被用于计算最终分数。</p>
-<h3 id="2-1-候选检测"><a href="#2-1-候选检测" class="headerlink" title="2.1 候选检测"></a>2.1 候选检测</h3><p>候选检测关系到后续阶段的最大检测灵敏度，候选检测算法应该完美的识别所有可疑的病变。</p>
-<p>为了检测更广泛的结节，我们应用了多种候选检测算法的结合。结合已有的三种用以检测结节候选的CAD系统。每个算法关注于一种类别的结节，即<code>solid</code>,<code>subsolid</code>,<code>large solid</code> 结节。对于每一个候选，其位置 $p= (x,y,z)$ 和它为结节的概率被给出。三个集合的结节候选被计算，并合并以最大化检测器的灵敏度。候选位置密集度小于5mm的结节被合并，这些合并的结节的位置和为结节的概率以均值表示。</p>
-<p>候选检测阶段的方法，获取每个VOI(volume of interest)的位置。</p>
-<p><strong>对于solid结节</strong>，实现了论文3中的方法。计算肺部的每个体素，shape index和轮廓，并在两种方法使用了阈值用以定义seedpoint。一种自动切割方法会在seedpoint执行，这可获得 cluster of interest。然后cluster位置相邻的被合并。最后丢弃体积小于 $40mm^3$ 的cluster。</p>
-<p><strong>对于subsolid结节</strong>，论文5(<em>Automatic detection of subsolid pulmonary nodules in thoracic computed tomography images *)中的一种方法是。一种双阈值密度mask (-750,-350 HU)首次用来获得 voxel of interest的mask。形态open运算（一种图形学的操作）用来移除相连的cluster，紧接着做3D相连组件分析。最后精确的候选切割是通过一种先前提出的结节算法（论文</em>Morphological segmentation and partial volume analysis for volumetry of solid pulmonary lesions in thoracic CT scans *）获得。</p>
-<p><strong>对于Large solid结节(大于等于10mm</strong>，它有着与小结节病变不同的surface/shape index值，并且有着不同的密度分布，solid和subsolid结节检测算法无法检测到。除此之外，粘附于胸膜壁的large solid结节可能被肺部切割算法排除在外，因为它与胸部的对比度很低。基于这些原因，论文27提出第三种检测器算法，并由以下三步组成：</p>
-<ol>
-<li><p>肺部切割后处理：通过对切割mask应用一个滚球算法，这会在肺切割时包含粘附于胸腔的large solid结节。</p>
-</li>
-<li><p>密度阈值(-300HU)，为了获取 voxels of interest的mask</p>
-</li>
-<li><p>多阶段获取候选cluster的形态开运算(opening)(论文29)，我们以大的结构元素来抽取更大的结节，然后渐渐的继续使用小结构元素来抽取小的结节。</p>
-</li>
-</ol>
-<p>有个重要问题是，训练算法时使用高度不均衡的数据会导致学习到的参数会向最常见的候选的特征(比如 vessels(血管))倾斜，并忽略更稀有的结节的重要特征。为防止对最普遍的假阳性结节的过拟合，我们丢弃了概率较低的结节候选。这些概率都是由后续的分类阶段的算法给出，并且阈值都是基于经验值设定用以减少大量的假阳性，同时保留高检测灵敏性。</p>
-<h3 id="2-2-patches-抽取"><a href="#2-2-patches-抽取" class="headerlink" title="2.2 patches 抽取"></a>2.2 patches 抽取</h3><p>对于每个候选，我们抽取了多个2-D patches，尺寸为$50\times 50mm$，中心坐标位置为 $p$ 。选择此大小的尺寸是为了让所有的结节($\le 30mm$)在2D视角的完全可见，并包含充分的上下文信息，这有助于在候选分类阶段。我们将尺寸为 $50\times 50 mm$的patches转换为 $64\times 64 px$（注意单位），分辨率为0.78mm，这对应于典型的CT数据切片分辨率。像素密度范围从(-1000,400HU)转换为(0,1)，不在此范围的被切除。</p>
-<p>为了抽取patches，我们首先考虑了立方块尺寸为 $50\times 50\times 50 mm$,完全包含候选。在立方块的9个对称轴面抽取9个patches。上图中的图a展示了9个对称轴面的pathes方法。</p>
-<h3 id="2-3-假阳性剔除-2-D-ConvNets配置"><a href="#2-3-假阳性剔除-2-D-ConvNets配置" class="headerlink" title="2.3 假阳性剔除:2-D ConvNets配置"></a>2.3 假阳性剔除:2-D ConvNets配置</h3><p> 假阳性剔除阶段结合了不同流式的ConvNets，可被看做一种多视角架构。每种流处理一个候选的特定种角度的patches。</p>
-<p>2-D卷积网络的架构由一个小数据集决定的。这个数据集上，几个超参数(比如，层数，kernel size，学习速率，视角数目，融合方法)在此优化。这些超参数中，我们规定了两个最重要的参数需要微调，即<strong>(1)视角数目(2)融合方法</strong>。其他参数被设置为最佳配置（从那个小数据集上获得的最优值）。</p>
-<p>2-D ConvNets由3个连续卷积层和一个最大池化层组成。网络的输入是 $64\times 64 $的patches。具体如下</p>
-<table>
-<thead>
-<tr>
-<th>网络层数</th>
-<th>类型</th>
-<th>kernel 数目</th>
-<th>kernel size</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>1</td>
-<td>conv</td>
-<td>24</td>
-<td>5x5x1</td>
-</tr>
-<tr>
-<td>2</td>
-<td>conv</td>
-<td>32</td>
-<td>3x3x24</td>
-</tr>
-<tr>
-<td>3</td>
-<td>conv</td>
-<td>48</td>
-<td>3x3x32</td>
-</tr>
-<tr>
-<td>4</td>
-<td>maxpool</td>
-<td>1</td>
-<td>2x2(stride 2) non-overlap</td>
-</tr>
-</tbody></table>
-<p>每个kernel产生一个2-D图像输出(比如第一层卷积之后，输出24个60x60的图像)。Kernel的值都是随机初始化的，并且在训练过程优化。最大池化层，使用非重叠窗口kernel size是2x2，步长为2，这会将patches suze减小为一半(例如，从24@60x60减小为24@30x30)。最后一层是全连接层，输出16个神经元。<strong>Relu激活函数</strong>用于<strong>卷积层和全连接层</strong></p>
-<h3 id="2-4-假阳性剔除：ConvNets融合"><a href="#2-4-假阳性剔除：ConvNets融合" class="headerlink" title="2.4 假阳性剔除：ConvNets融合"></a>2.4 假阳性剔除：ConvNets融合</h3><p>有三种方式对多个2-D ConvNets网络的融合，做了如下调查：</p>
-<p><strong>(1)committee-fusion</strong>:最常见的融合方法，它对多个卷积网络的输出预测做一个基于委员会的融合。我们连接每个流的全连接层的输出到一个分类层，该分类层由一个使用softmax激活函数的全连接层组成。每个ConvNets流使用不同视角的patches独立训练，并且输出预测使用一种product-rule来组合输出概率，上图图c所示。</p>
-<p><strong>(2)late-fusion</strong>:该方法拼接第一个全连接层的输出，并直接将此拼接输出与分类层相连（上图图C）。此种方法，分类层可以通过对比多个ConvNets的输出学习3-D特征。这种配置中，不同流的卷积层参数是共享的。</p>
-<p><strong>(3)mixed-fusion</strong>:上面两种方法的结合。多个<strong>late-fusion</strong> ConvNets用固定数量的正交平面实现。利用更多的视角，系统的预测准确率可以通过在委员会中结合多个late-fusion ConvNets来提高。我们将9个patches分为3个独立的集合，每个集合包含了三个不同的pacthes。</p>
-<h3 id="2-5-训练"><a href="#2-5-训练" class="headerlink" title="2.5 训练"></a>2.5 训练</h3><p>评估方法是在888个<strong>LIDC-IDRI</strong>使用的是5-折交叉验证。我们将888个样本切分为5个子集，并每个子集的候选数目相近。每一折中，使用3个子集作为训练，一个子集为验证，一个子集为测试。使用ConvNets的一大挑战是在给定的训练集有效的优化ConvNets的权重。损失函数使用交叉熵误差，权重更新使用128样本的mini-batches。</p>
-<ul>
-<li><p>权重初始化：由Glorot and Bengio提出的一种正态随机初始化。</p>
-</li>
-<li><p>偏置初始化：偏置初始化为0</p>
-</li>
-<li><p>学习速率：RMSProp是一种学习算法，它会自动将学习速率除以最近梯度大小的平均值，常用语优化模型。</p>
-</li>
-<li><p>Dropout：用在第一个全连接层的输出，概率为0.5.</p>
-</li>
-<li><p>停止条件：验证数据集上的准确率3个epoches之后不再提高</p>
-</li>
-</ul>
-<h3 id="2-6-数据增强"><a href="#2-6-数据增强" class="headerlink" title="2.6 数据增强"></a>2.6 数据增强</h3><p>ConvNets上使用不均衡的数据集会导致算法陷入局部最优，其预测结果会偏向出现频率最高的特征，并导致过拟合。</p>
-<p>(1) 训练数据集增强：由于结节数远小于非结节数，因此数据增强仅用于结节。此步骤仅用于训练和验证。将候选坐标每个轴转换为1mm，并将patches的尺寸变换为40，45,50，和55mm。此类转换设置为1mm是为了保证结节(&gt;3mm)可以被patches捕获到。可以通过在结节上随机上采样候选 来进一步均衡数据集。</p>
-<p>(2)测试数据集增强：测试集数据增强可能有助于提高系统的鲁棒性，因为候选早在非常多的不同条件下评估，比如分析不同尺寸的输入图像。测试数据增强在每个候选(结节和非结节上都有)，通过缩放patches尺寸为40，45,50,55mm，每个都是被ConvNets-CAD系统独立地处理。每个候选的预测是平均所有的增强的数据得来的。最终预测结果是预测的集合，它被用来作为补充信息，因此使得最终的预测结果更加准确和稳定。</p>
-<h3 id="2-7-评估"><a href="#2-7-评估" class="headerlink" title="2.7 评估"></a>2.7 评估</h3><p>评测了两种性能指标。(1)ROC曲线下区域(2)竞赛性能指标CPM，即衡量FROC曲线7个操作点(1/8,1/4,1/2,1,2,4,8Fps/scan)的平均灵敏度。AUC显示ConvNets在是否为结节时分类候选的性能，CPM显示的CAD系统在操作点的性能。注意，系统有更好AUC分数并不一定会有更高的CPM。我们同时计算95%内部置信度和p值，使用1000个boostrapping。</p>
-<h2 id="三-实验结果"><a href="#三-实验结果" class="headerlink" title="三 实验结果"></a>三 实验结果</h2><p>候选检测算法的检测灵敏度</p>
-<ul>
-<li><p><strong>total number of CT scans</strong>: 888</p>
-</li>
-<li><p><strong>Total number of nodules</strong>:1186</p>
-</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>Candidate detection</th>
-<th>Detected nodules</th>
-<th>Sensitivity(%)</th>
-<th>False Positives(FPs)</th>
-<th>FPs per scan</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>solid</td>
-<td>1016</td>
-<td>85.7</td>
-<td>292413</td>
-<td>329.3</td>
-</tr>
-<tr>
-<td>subsolid</td>
-<td>428</td>
-<td>36.1</td>
-<td>255027</td>
-<td>287.2</td>
-</tr>
-<tr>
-<td>Large solid</td>
-<td>377</td>
-<td>31.8</td>
-<td>41816</td>
-<td>47.1</td>
-</tr>
-<tr>
-<td>combines set</td>
-<td>1120</td>
-<td>94.4</td>
-<td>543160</td>
-<td>611.7</td>
-</tr>
-<tr>
-<td>Reduced set</td>
-<td>1106</td>
-<td>93.3</td>
-<td>239041</td>
-<td>269.2</td>
-</tr>
-</tbody></table>
-<p>训练集中结节和非结节数据统计。为了平衡数据集，数据增强(aug)和上采样(up)在结节上的表现</p>
-<table>
-<thead>
-<tr>
-<th>Training dataset</th>
-<th>Fold 0</th>
-<th>Fold 1</th>
-<th>Fold 2</th>
-<th>Fold 3</th>
-<th>Fold 4</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>scans</td>
-<td>428</td>
-<td>522</td>
-<td>574</td>
-<td>629</td>
-<td>511</td>
-</tr>
-<tr>
-<td>nodule</td>
-<td>528</td>
-<td>669</td>
-<td>713</td>
-<td>773</td>
-<td>635</td>
-</tr>
-<tr>
-<td>-aug</td>
-<td>57552</td>
-<td>72921</td>
-<td>77717</td>
-<td>84257</td>
-<td>69215</td>
-</tr>
-<tr>
-<td>-agu+up</td>
-<td>143838</td>
-<td>143796</td>
-<td>143796</td>
-<td>142823</td>
-<td>142927</td>
-</tr>
-<tr>
-<td>non-nodule</td>
-<td>143838</td>
-<td>143796</td>
-<td>143739</td>
-<td>142823</td>
-<td>142927</td>
-</tr>
-</tbody></table>
-<p> Performance benchmark of ConvNets configurations on LIDC-IDRI dataset.</p>
-<table>
-<thead>
-<tr>
-<th>Configuration</th>
-<th>Number of views</th>
-<th>AUC</th>
-<th>CPM</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>combines algorithms</td>
-<td>-</td>
-<td>0.969</td>
-<td>0.573</td>
-</tr>
-<tr>
-<td>single-view</td>
-<td>1</td>
-<td>0.969</td>
-<td>0.481</td>
-</tr>
-<tr>
-<td>committee-fusion</td>
-<td>3</td>
-<td>0.981</td>
-<td>0.696</td>
-</tr>
-<tr>
-<td></td>
-<td>9</td>
-<td>0.987</td>
-<td>0.780</td>
-</tr>
-<tr>
-<td>late-fusion</td>
-<td>3</td>
-<td>0.987</td>
-<td>0.742</td>
-</tr>
-<tr>
-<td></td>
-<td>9</td>
-<td>0.993</td>
-<td>0.827</td>
-</tr>
-<tr>
-<td>mixed-fusion</td>
-<td>3*3</td>
-<td>0.996</td>
-<td>0.824</td>
-</tr>
-</tbody></table>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2017-02-26-mutliview-falseremove-usingcnn/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2017-02-26-mutliview-falseremove-usingcnn/" title="CT图像中肺结节自动检测:使用CNN移除假阳性【论文笔记】">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2017-02-10-LUNA2016-3DCNN/">
-    		医疗图像处理：LUNA2016 3DCNN 网络论文详解
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.464Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h2 id="0-背景知识"><a href="#0-背景知识" class="headerlink" title="0 背景知识"></a>0 背景知识</h2><p> 自动肺结节检测系统由以下两步组成(代码部分，参考 <a href="https://github.com/shartoo/luna16_multi_size_3dcnn" target="_blank" rel="noopener">luna16_3DCNN</a>):</p>
-<ol>
-<li>候选screen</li>
-<li>假阳性剔除</li>
-</ol>
-<p>在候选screen中，大量粗粒度的候选经由多种标准，如放射密度阈值、数学形态操作、外形，筛选之后被喂入系统。为获得对候选screen敏感度高的分类器，这一步阈值标准都较宽泛、直接，这就导致大量的候选被送入第二步。这样一来，第二步的剔除假阳性成了整个系统的关键。</p>
-<p>肺部恶性肿瘤结节的挑战主要来源于以下两方面。一：肺结节尺寸、形状和位置千变万化。而且，不同的周遭环境使得不同种类的肺结节更加多元化。其二：一些假阳性候选携带了与真的恶性肿瘤结节相似的形态。</p>
-<p>目前已有方法</p>
-<table>
-<thead>
-<tr>
-<th>论文标题</th>
-<th>方法</th>
-<th>准确率</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>A new computationally efficient cad system for pulmonary nodule detection in ct imagery</td>
-<td>形状、位置、密度和梯度特征集合</td>
-<td>82.66%灵敏性，平均每个scan 3个假阳性</td>
-</tr>
-<tr>
-<td>Automatic detection of subsolid pulmonary nodules in thoracic computed tomography images</td>
-<td>密度、形状、纹理特征和并入的周遭信息</td>
-<td>80% 灵敏性，平均每个scan 1个假阳性</td>
-</tr>
-<tr>
-<td>Pulmonary nodule detection in ct images:false positive reduction using multi-view convolutional networks</td>
-<td>多角度2D CNN方法</td>
-<td>85.4%l灵敏度，平均每个scan 1个假阳性</td>
-</tr>
-</tbody></table>
-<h2 id="一-本文方法"><a href="#一-本文方法" class="headerlink" title="一  本文方法"></a>一  本文方法</h2><p> 为应对肿瘤结节千变万化，以及提高分辨器的鲁棒性，我们提出了一个<strong>多层次</strong>肿瘤语境信息预测模型</p>
-<h3 id="1-1-方法详细"><a href="#1-1-方法详细" class="headerlink" title="1.1 方法详细"></a>1.1 方法详细</h3><p>架构图</p>
-<p> <img src="/images/blog/3DCNN_ALL.png" alt="架构图"></p>
-<p>模型中每个网络的详细结构如下表</p>
-<p><img src="/images/blog/3DCNN_detail.png" alt="模型每个网络结构"></p>
-<h3 id="1-2-3D-卷积层"><a href="#1-2-3D-卷积层" class="headerlink" title="1.2  3D 卷积层"></a>1.2  3D 卷积层</h3><p>为构建3D卷积层，首先需要定义一系列小的3D特征抽取器(kernel)，抽取堆叠的高层次表征。为了生成新的特征空间，使用了不同的3D kernel抽取输入空间上不同的特征。然后添加偏置项，使用非线性激活函数。公式如下</p>
-<p>$$<br> h^l_i (x,y,z )= \sigma (b^l_i+\sum <em>k \sum _{u,v,w}h^{l-1} _k(x-u,y-v,z-w)W^l</em>{ki}(u,v,w) )<br>$$</p>
-<p>其中</p>
-<ul>
-<li><p>$h^l_i$ 代表第<code>l</code>层的第<code>i</code>个3D特征空间</p>
-</li>
-<li><p>$h^l _{k-1}$ 代表前一层的第<code>k</code>个3D特征空间</p>
-</li>
-<li><p>$W^l_{ki}$ 连接 $h^l_i$ 和 $h^{l-1}_{k}$ 的卷积核</p>
-</li>
-<li><p>$h^l_i(x,y,z)$,$h^{l-1} <em>k(x-u,y-v,z-w)$,$,W^l _{ki}(u,v,w)$分别代表值(x,y,z)在坐标轴空间 $h^l_i$中的值，$(u,v,w)$代表3D kernel空间 $W^l</em>{ki}$ 中的坐标。</p>
-</li>
-<li><p>$\sigma$ 为非线性激活函数</p>
-</li>
-</ul>
-<p>注意到，不同的3D kernel的激活函数值应该在偏置之前累加。</p>
-<h3 id="1-3-3D-最大池化层"><a href="#1-3-3D-最大池化层" class="headerlink" title="1.3 3D 最大池化层"></a>1.3 3D 最大池化层</h3><p> 假设 $l$ 层为卷积层，$l+1$ 为紧随其后的3D池化层。最大池化层接受一个4D输入tensor $T=[h^l_1,h^l_2,h^l_3,…h^l_k]\epsilon R^{X\times Y\times Z\times K}$ 。</p>
-<p>对于最大池化操作，它选取立方体内最大值，并生成抽象输出 $T’\epsilon R^{X’\times Y’\times Z’\times K}$ ，其中$(X,Y,Z)$ 和$(X’,Y’,Z’)$ 分别是最大池化特征抽取前后的尺寸。$K$为特征空间数目。</p>
-<p>给定池化 kernel 尺寸M 和步长S，池化之后，特征空间减小到 $X’=(X-M/S+1)$</p>
-<h3 id="1-4-全连接层"><a href="#1-4-全连接层" class="headerlink" title="1.4 全连接层"></a>1.4 全连接层</h3><p> 全连接层中，每个神经元与邻接层所有神经元相连。全连接层之前，<strong>首先需要将特征空间压平(flatten)到一个神经元向量</strong>，接下来再执行向量-矩阵乘法，再加上偏置项以及应用非线性激励函数。</p>
-<p>$$<br>   h^f = \sigma (b^f+W^fh^{f-1})<br>$$</p>
-<ul>
-<li><p>$h^{f-1}$ 是输入特征向量，从第 $f-1$ 层的3D特征空间压平(flatten)而来。</p>
-</li>
-<li><p>$h^f$ 是第 $f$ 层的输出特征向量（是一个全连接层）。</p>
-</li>
-<li><p>$W^f$ 是权重矩阵</p>
-</li>
-<li><p>$b^f$代表偏置项</p>
-</li>
-<li><p>$\sigma$ 是激活函数 ReLU</p>
-</li>
-</ul>
-<h3 id="1-5-softmax层"><a href="#1-5-softmax层" class="headerlink" title="1.5 softmax层"></a>1.5 softmax层</h3><p> 3D CNN的输出层就是softmax层。 $h^l$ 代表最后一层的神经元向量，C是目标分类数。通过softmax回归 $p_c(h^L)=exp(h^L_c)/\sum^{C-1}_{c=0}exp(h^L_c)$计算每个分类 $c$ 的概率，其中 $h_c^L$ 是神经元向量的第 $c$ 个元素。softmax层的激励函数输出都是(0,1)之间的正值，并且和为1。</p>
-<h3 id="1-6-损失函数"><a href="#1-6-损失函数" class="headerlink" title="1.6 损失函数"></a>1.6 损失函数</h3><p> 对于给定N对3D训练样本集合 ${(I^{(1)},y^{(1)}),….(I^{(N)},y^{(N)})}$ ，其中$I^{(j)}$ 是输入立方块，$y^j$ 是对应的真实标签，$\hat y^{(j)}$ 为预测标签，$\theta$ 代表所有参数。损失函数如下:</p>
-<p>$$<br>  loss = -\frac{1}{N}\sum^N_{j=1}\sum^{C-1}_{c=0}indicator{y^{(j)}=c}P(\hat y^{(j)}=c| I^{(j)};\theta)<br>$$</p>
-<p>其中 $indicator$ 代表指示函数，$P(\hat y^{(i)}=c|I^{(j)};\theta)$ 为样本 $I^{(j)}$ 属于类别$c$的预估概率(即softmax回归层的输出值 $p_c(h^L)$)。通过调整参数使得 $loss(\theta)$ 最小。</p>
-<h2 id="二-接收域"><a href="#二-接收域" class="headerlink" title="二 接收域"></a>二 接收域</h2><p>肺部结节的多样性十分广泛，半径从3mm到30mm，形状和其他特性比如毛玻璃、固体、内部结构、刺孔等。除此之外，肺结节还与周遭环境十分相关。人工设计的判别规则辨别能力十分有限，无法从这一类别迁移到另外一类。</p>
-<p>3D CNN肺结节检测，立方体样本以候选位置坐标为中心切割，并被输入到网络。<strong>立方体的样本的尺寸，即目标位置的环绕范围成为网络的接受域</strong>。接收域的大小对网络辨识准确率至关重要，接收域太小，只有有限的环境信息被包含入网络，会导致预测能力下降以及难以处理大量变化的目标；接收域太大，会包含太多噪音数据。</p>
-<p>论文设计了一种多层次3D CNN来应对这一问题，并综合不同层次的判别结果。</p>
-<h2 id="三-多层次语境网络和模型混合"><a href="#三-多层次语境网络和模型混合" class="headerlink" title="三 多层次语境网络和模型混合"></a>三 多层次语境网络和模型混合</h2><p><img src="/images/blog/radium.png" alt="结节半径尺寸分布"></p>
-<p>上图为肺结节尺寸大小分布统计，小结节的半径大小分布，X和Y维度集中在9体素，Z维集中在4mm体素。</p>
-<p>鉴于此，设计得第一个网络即<code>Archi-1</code> 接收域为 $20\times 20\times 6$ ，主要是处理小结节，覆盖了数据集中58%的结节。</p>
-<p>第二个网络即<code>Archi-2</code> 的接收域为$30\times 30\times 10$ ，处理中等尺寸的结节，覆盖了数据集中85%的结节。</p>
-<p>第三个网络即<code>Archi-3</code> 的接收域为$40\times 40\times 26$ ，处理中等尺寸的结节，覆盖了数据集中99%的结节。</p>
-<p>使用softmax回归来综合三个模型的最后预测结果。模型 <code>Archi-1</code>预测 $I_j$属于分类 $c$ 的概率为 $P_1(\hat h_j=c|I_j;\theta _1)$ (不同的 $\theta$ )，<code>Archi-2</code>和<code>Archi-3</code> 类似。</p>
-<p>混合概率由权重的线性组合评估 </p>
-<p>$$<br>P_{fusion}(\hat y_j)=c|I_j=\sum <em>{\phi \epsilon{1,2,3}}\gamma _{\phi} P</em>{\phi}(\hat y_j=c|I_j;\theta _\phi)</p>
-<p>$$ </p>
-<p>其中 $P_{fusion}(\hat y_j=c|I_j)$ 是接收域 $I_j$ 属于分类 $c$ 的整个框架的混合预测概率。常量权重$\gamma _phi$ 是在实验数据集中经过网格搜索得到的 $\gamma _1=0.3,\gamma _2=0.4,\gamma _3=0.3$</p>
-<h2 id="四-训练过程"><a href="#四-训练过程" class="headerlink" title="四 训练过程"></a>四 训练过程</h2><p> 权重 $\theta$ 基于随机梯度下降来学习，即每次迭代中参数更新都是基于mini-batch的训练样本。比赛提供了正负样本，我们根据结节候选位置抽取了 $20\times 20\times 6,30\times 30\times 10,40\times 40\times 26$ 尺寸的立方块。</p>
-<ul>
-<li><p><strong>数据增强：</strong>由于数据集中正负样本比例为 <code>490:1</code>,我们对正样本(真的肺结节)进行转换、扭曲增强。转换过程中，对质心坐标每个体素，每个轴在横向平面做90,180，270度扭曲。最后获得了650个训练样本。</p>
-</li>
-<li><p><strong>归一化处理:</strong>我们将放射密度强度剪切（类似截断的正态分布之类）到(-1000，400)HU单位之间，并将它们归一化到(0,1),然后减去平均灰度值，来适应网络。</p>
-<ul>
-<li><strong>参数设置:</strong> 权重使用高斯分布 $N(0,0.001^2)$  的随机初始化，并使用标准后向传播更新。学习率初始为0.3，每5000次迭代衰减5%（较大的学习率，因为网络是从头开始训练）。mini-batch为200，冲量系数设置为0.9，dropout应用到卷积层和全连接层，比例为0.2。</li>
-</ul>
-</li>
-<li><p><strong>网络:</strong> 三个网络独立的训练和验证，每个网络训练消耗6小时(GPU Nvidia TITAN Z)</p>
-</li>
-</ul>
-<h2 id="五-实验-LUNA2016"><a href="#五-实验-LUNA2016" class="headerlink" title="五 实验(LUNA2016)"></a>五 实验(LUNA2016)</h2><h3 id="5-1-数据集和候选生成"><a href="#5-1-数据集和候选生成" class="headerlink" title="5.1 数据集和候选生成"></a>5.1 数据集和候选生成</h3><p>  本文是用于处理假阳性剔除任务，即给定一个候选位置集合，预测每个候选是肺结节的概率。</p>
-<p> 比赛数据从 <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3041807/" target="_blank" rel="noopener">publicly available Lung Image Database Consortium (LIDC)</a>过滤掉888张CT。体积在水平面以 $515\times 512$ 分辨率，元素空间为 $0.74 \times 0.74 mm^2$ ,同时slices厚度小于2.5mm。 肺结节数据由经验丰富的外科医生标注位置，只保留了 1186个半径大于3mm的候选（4个外科医生中至少有3个标注了的）</p>
-<h3 id="5-2-评估指标"><a href="#5-2-评估指标" class="headerlink" title="5.2 评估指标"></a>5.2 评估指标</h3><p>比赛评估检测结果，通过灵敏度和每个scan中出现假阳性的数目。</p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2017-02-10-LUNA2016-3DCNN/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2017-02-10-LUNA2016-3DCNN/" title="医疗图像处理：LUNA2016 3DCNN 网络论文详解">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2017-01-20-medical_image_process/">
-    		常见医疗扫描图像处理步骤
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.455Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h2 id="一-数据格式"><a href="#一-数据格式" class="headerlink" title="一 数据格式"></a>一 数据格式</h2><h3 id="1-1-dicom"><a href="#1-1-dicom" class="headerlink" title="1.1  dicom"></a>1.1  dicom</h3><p>DICOM是医学图像中标准文件，这些文件包含了诸多的元数据信息（比如像素尺寸，每个维度的一像素代表真实世界里的长度）。此处以<strong>kaggle Data Science Bowl</strong> 数据集为例。</p>
-<p> <a href="https://www.kaggle.com/c/data-science-bowl-2017/data" target="_blank" rel="noopener">data-science-bowl-2017</a>。数据列表如下:</p>
-<p><img src="/images/blog/dicom_data_format.png" alt="dicom格式的图像"></p>
-<p>后缀为 <code>.dcm</code>。</p>
-<p>每个病人的一次扫描CT(scan)可能有<strong>几十到一百多</strong>个dcm数据文件(slices)。可以使用 python的<code>dicom</code>包读取，读取示例代码如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dicom.read_file(&#39;&#x2F;data&#x2F;lung_competition&#x2F;stage1&#x2F;7050f8141e92fa42fd9c471a8b2f50ce&#x2F;498d16aa2222d76cae1da144ddc59a13.dcm&#39;)</span><br></pre></td></tr></table></figure>
-<p>其pixl_array包含了真实数据。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">slices &#x3D; [dicom.read_file(os.path.join(folder_name,filename)) for filename in os.listdir(folder_name)]</span><br><span class="line">slices &#x3D; np.stack([s.pixel_array for s in slices])</span><br></pre></td></tr></table></figure>
-<h3 id="1-2-mhd格式"><a href="#1-2-mhd格式" class="headerlink" title="1.2 mhd格式"></a>1.2 mhd格式</h3><p>mhd格式是另外一种数据格式，来源于(LUNA2016)[<a href="https://luna16.grand-challenge.org/data/]。每个病人**一个mhd文件和一个同名的raw**文件。如下" target="_blank" rel="noopener">https://luna16.grand-challenge.org/data/]。每个病人**一个mhd文件和一个同名的raw**文件。如下</a>:</p>
-<p><img src="/images/blog/mhd_2.png" alt="dicom格式的图像"></p>
-<p>一个<code>mhd</code>通常有几百兆，对应的<code>raw</code>文件只有1kb。<code>mhd</code>文件需要借助python的<code>SimpleITK</code>包来处理。<a href="http://www.simpleitk.org/SimpleITK/help/documentation.html" target="_blank" rel="noopener">SimpleITK</a><br>示例代码如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import SimpleITK as sitk</span><br><span class="line">itk_img &#x3D; sitk.ReadImage(img_file)</span><br><span class="line">img_array &#x3D; sitk.GetArrayFromImage(itk_img) # indexes are z,y,x (notice the ordering)</span><br><span class="line">num_z, height, width &#x3D; img_array.shape        #heightXwidth constitute the transverse plane</span><br><span class="line">origin &#x3D; np.array(itk_img.GetOrigin())      # x,y,z  Origin in world coordinates (mm)</span><br><span class="line">spacing &#x3D; np.array(itk_img.GetSpacing())    # spacing of voxels in world coor. (mm)</span><br></pre></td></tr></table></figure>
-
-<p>需要注意的是，SimpleITK的<code>img_array</code>的数组不是直接的像素值，而是相对于CT扫描中原点位置的差值，需要做进一步转换。转换步骤参考 <a href="https://chsasank.github.io/sitk-docs/user_guide/image.html" target="_blank" rel="noopener">SimpleITK图像转换</a></p>
-<h3 id="1-3-查看CT扫描文件软件"><a href="#1-3-查看CT扫描文件软件" class="headerlink" title="1.3 查看CT扫描文件软件"></a>1.3 查看CT扫描文件软件</h3><p>一个开源免费的查看软件 <a href="http://ric.uthscsa.edu/mango/" target="_blank" rel="noopener">mango</a></p>
-<p><img src="/images/blog/image_soft.png" alt="dicom格式的图像"></p>
-<h2 id="二-dicom格式数据处理过程"><a href="#二-dicom格式数据处理过程" class="headerlink" title="二   dicom格式数据处理过程"></a>二   dicom格式数据处理过程</h2><h3 id="2-1-处理思路"><a href="#2-1-处理思路" class="headerlink" title="2.1  处理思路"></a>2.1  处理思路</h3><p> 首先，需要明白的是医学扫描图像(scan)其实是三维图像，使用代码读取之后开源查看不同的切面的切片(slices)，可以从不同轴切割</p>
-<p><img src="/images/blog/3dscan.png" alt="dicom格式的图像"></p>
-<p>如下图展示了一个病人CT扫描图中，其中部分切片slices</p>
-<p><img src="/images/blog/lung_slices.png" alt="dicom格式的图像"></p>
-<p>其次，CT扫描图是包含了所有组织的，如果直接去看，看不到任何有用信息。需要做一些预处理,预处理中一个重要的概念是放射剂量，衡量单位为<code>HU</code>(<strong>Hounsfield Unit</strong>)，下表是不同放射剂量对应的组织器官</p>
-<table>
-<thead>
-<tr>
-<th>substance</th>
-<th>HU</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>空气</td>
-<td>-1000</td>
-</tr>
-<tr>
-<td>肺</td>
-<td>-500</td>
-</tr>
-<tr>
-<td>脂肪</td>
-<td>-100到-50</td>
-</tr>
-<tr>
-<td>水</td>
-<td>0</td>
-</tr>
-<tr>
-<td>CSF</td>
-<td>15</td>
-</tr>
-<tr>
-<td>肾</td>
-<td>30</td>
-</tr>
-<tr>
-<td>血液</td>
-<td>+30到+45</td>
-</tr>
-<tr>
-<td>肌肉</td>
-<td>+10到+40</td>
-</tr>
-<tr>
-<td>灰质</td>
-<td>+37到+45</td>
-</tr>
-<tr>
-<td>白质</td>
-<td>+20到+30</td>
-</tr>
-<tr>
-<td>Liver</td>
-<td>+40到+60</td>
-</tr>
-<tr>
-<td>软组织,constrast</td>
-<td>+100到+300</td>
-</tr>
-<tr>
-<td>骨头</td>
-<td>+700(软质骨)到+3000(皮质骨)</td>
-</tr>
-</tbody></table>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hounsfield Unit &#x3D; pixel_value * rescale_slope + rescale_intercept</span><br></pre></td></tr></table></figure>
-<p>一般情况rescale slope = 1, intercept = -1024。</p>
-<p>上表中肺部组织的HU数值为-500,但通常是大于这个值，比如-320、-400。挑选出这些区域，然后做其他变换抽取出肺部像素点。</p>
-<h3 id="2-2-先载入必要的包"><a href="#2-2-先载入必要的包" class="headerlink" title="2.2  先载入必要的包"></a>2.2  先载入必要的包</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line">&#39;&#39;&#39;</span><br><span class="line">this script is used for basic process of lung 2017 in Data Science Bowl</span><br><span class="line">&#39;&#39;&#39;</span><br><span class="line"></span><br><span class="line">import glob</span><br><span class="line">import os</span><br><span class="line">import pandas as pd</span><br><span class="line">import SimpleITK as sitk</span><br><span class="line"></span><br><span class="line">import numpy as np # linear algebra</span><br><span class="line">import pandas as pd # data processing, CSV file I&#x2F;O (e.g. pd.read_csv)</span><br><span class="line">import skimage, os</span><br><span class="line">from skimage.morphology import ball, disk, dilation, binary_erosion, remove_small_objects, erosion, closing, reconstruction, binary_closing</span><br><span class="line">from skimage.measure import label,regionprops, perimeter</span><br><span class="line">from skimage.morphology import binary_dilation, binary_opening</span><br><span class="line">from skimage.filters import roberts, sobel</span><br><span class="line">from skimage import measure, feature</span><br><span class="line">from skimage.segmentation import clear_border</span><br><span class="line">from skimage import data</span><br><span class="line">from scipy import ndimage as ndi</span><br><span class="line">import matplotlib</span><br><span class="line">#matplotlib.use(&#39;Agg&#39;)</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">from mpl_toolkits.mplot3d.art3d import Poly3DCollection</span><br><span class="line">import dicom</span><br><span class="line">import scipy.misc</span><br><span class="line">import numpy as np</span><br></pre></td></tr></table></figure>
-
-<p>如下代码是载入一个扫描面，包含了多个切片(slices)，我们仅简化的将其存储为python列表。<strong>数据集中每个目录都是一个扫描面集（一个病人）</strong>。有个元数据域丢失，即Z轴方向上的像素尺寸，也即切片的厚度 。所幸，我们可以用其他值推测出来，并加入到元数据中。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># Load the scans in given folder path</span><br><span class="line">def load_scan(path):</span><br><span class="line">    slices &#x3D; [dicom.read_file(path + &#39;&#x2F;&#39; + s) for s in os.listdir(path)]</span><br><span class="line">    slices.sort(key &#x3D; lambda x: int(x.ImagePositionPatient[2]))</span><br><span class="line">    try:</span><br><span class="line">        slice_thickness &#x3D; np.abs(slices[0].ImagePositionPatient[2] - slices[1].ImagePositionPatient[2])</span><br><span class="line">    except:</span><br><span class="line">        slice_thickness &#x3D; np.abs(slices[0].SliceLocation - slices[1].SliceLocation)</span><br><span class="line"></span><br><span class="line">    for s in slices:</span><br><span class="line">        s.SliceThickness &#x3D; slice_thickness</span><br><span class="line"></span><br><span class="line">    return slices</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-3-灰度值转换为HU单元"><a href="#2-3-灰度值转换为HU单元" class="headerlink" title="2.3 灰度值转换为HU单元"></a>2.3 灰度值转换为HU单元</h3><p>首先去除灰度值为 -2000的pixl_array，CT扫描边界之外的灰度值固定为-2000(<strong>dicom和mhd都是这个值</strong>)。第一步是设定这些值为0，当前对应为空气（值为0）</p>
-<p>回到HU单元，乘以rescale比率并加上intercept(存储在扫描面的元数据中)。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">def get_pixels_hu(slices):</span><br><span class="line">    image &#x3D; np.stack([s.pixel_array for s in slices])</span><br><span class="line">    # Convert to int16 (from sometimes int16),</span><br><span class="line">    # should be possible as values should always be low enough (&lt;32k)</span><br><span class="line">    image &#x3D; image.astype(np.int16)</span><br><span class="line">    # Set outside-of-scan pixels to 0</span><br><span class="line">    # The intercept is usually -1024, so air is approximately 0</span><br><span class="line">    image[image &#x3D;&#x3D; -2000] &#x3D; 0</span><br><span class="line"></span><br><span class="line">    # Convert to Hounsfield units (HU)</span><br><span class="line">    for slice_number in range(len(slices)):</span><br><span class="line"></span><br><span class="line">        intercept &#x3D; slices[slice_number].RescaleIntercept</span><br><span class="line">        slope &#x3D; slices[slice_number].RescaleSlope</span><br><span class="line"></span><br><span class="line">        if slope !&#x3D; 1:</span><br><span class="line">            image[slice_number] &#x3D; slope * image[slice_number].astype(np.float64)</span><br><span class="line">            image[slice_number] &#x3D; image[slice_number].astype(np.int16)</span><br><span class="line"></span><br><span class="line">        image[slice_number] +&#x3D; np.int16(intercept)</span><br><span class="line"></span><br><span class="line">    return np.array(image, dtype&#x3D;np.int16)</span><br></pre></td></tr></table></figure>
-<p>可以查看病人的扫描HU值分布情况</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">first_patient &#x3D; load_scan(INPUT_FOLDER + patients[0])</span><br><span class="line">first_patient_pixels &#x3D; get_pixels_hu(first_patient)</span><br><span class="line">plt.hist(first_patient_pixels.flatten(), bins&#x3D;80, color&#x3D;&#39;c&#39;)</span><br><span class="line">plt.xlabel(&quot;Hounsfield Units (HU)&quot;)</span><br><span class="line">plt.ylabel(&quot;Frequency&quot;)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/blog/HU_histograph.png" alt="dicom格式的图像"></p>
-<h3 id="2-4-重采样"><a href="#2-4-重采样" class="headerlink" title="2.4  重采样"></a>2.4  重采样</h3><p>不同扫描面的像素尺寸、粗细粒度是不同的。这不利于我们进行CNN任务，我们可以使用同构采样。</p>
-<p>一个扫描面的像素区间可能是[2.5,0.5,0.5],即切片之间的距离为2.5mm。可能另外一个扫描面的范围是[1.5,0.725,0.725]。这可能不利于自动分析。</p>
-<p>常见的处理方法是从全数据集中以固定的同构分辨率重新采样，将所有的东西采样为1mmx1mmx1mm像素。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">def resample(image, scan, new_spacing&#x3D;[1,1,1]):</span><br><span class="line">    # Determine current pixel spacing</span><br><span class="line">    spacing &#x3D; map(float, ([scan[0].SliceThickness] + scan[0].PixelSpacing))</span><br><span class="line">    spacing &#x3D; np.array(list(spacing))</span><br><span class="line">    resize_factor &#x3D; spacing &#x2F; new_spacing</span><br><span class="line">    new_real_shape &#x3D; image.shape * resize_factor</span><br><span class="line">    new_shape &#x3D; np.round(new_real_shape)</span><br><span class="line">    real_resize_factor &#x3D; new_shape &#x2F; image.shape</span><br><span class="line">    new_spacing &#x3D; spacing &#x2F; real_resize_factor</span><br><span class="line"></span><br><span class="line">    image &#x3D; scipy.ndimage.interpolation.zoom(image, real_resize_factor, mode&#x3D;&#39;nearest&#39;)</span><br><span class="line"></span><br><span class="line">    return image, new_spacing</span><br></pre></td></tr></table></figure>
-
-<p>现在重新取样病人的像素，将其映射到一个同构分辨率 1mm x1mm x1mm。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pix_resampled, spacing &#x3D; resample(first_patient_pixels, first_patient, [1,1,1])</span><br></pre></td></tr></table></figure>
-
-<p>使用matplotlib输出肺部扫描的3D图像方法。可能需要一两分钟。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">def plot_3d(image, threshold&#x3D;-300):</span><br><span class="line"></span><br><span class="line">    # Position the scan upright,</span><br><span class="line">    # so the head of the patient would be at the top facing the camera</span><br><span class="line">    p &#x3D; image.transpose(2,1,0)</span><br><span class="line"></span><br><span class="line">    verts, faces &#x3D; measure.marching_cubes(p, threshold)</span><br><span class="line">    fig &#x3D; plt.figure(figsize&#x3D;(10, 10))</span><br><span class="line">    ax &#x3D; fig.add_subplot(111, projection&#x3D;&#39;3d&#39;)</span><br><span class="line">    # Fancy indexing: &#96;verts[faces]&#96; to generate a collection of triangles</span><br><span class="line">    mesh &#x3D; Poly3DCollection(verts[faces], alpha&#x3D;0.1)</span><br><span class="line">    face_color &#x3D; [0.5, 0.5, 1]</span><br><span class="line">    mesh.set_facecolor(face_color)</span><br><span class="line">    ax.add_collection3d(mesh)</span><br><span class="line">    ax.set_xlim(0, p.shape[0])</span><br><span class="line">    ax.set_ylim(0, p.shape[1])</span><br><span class="line">    ax.set_zlim(0, p.shape[2])</span><br><span class="line">    plt.show()</span><br></pre></td></tr></table></figure>
-
-
-<p>打印函数有个阈值参数，来打印特定的结构，比如tissue或者骨头。400是一个仅仅打印骨头的阈值(HU对照表)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">plot_3d(pix_resampled, 400)</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/blog/lung3d_bone.jpg" alt="dicom格式的图像"></p>
-<h3 id="2-5-输出一个病人scans中所有切面slices"><a href="#2-5-输出一个病人scans中所有切面slices" class="headerlink" title="2.5 输出一个病人scans中所有切面slices"></a>2.5 输出一个病人scans中所有切面slices</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">def plot_ct_scan(scan):</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">            plot a few more images of the slices</span><br><span class="line">    :param scan:</span><br><span class="line">    :return:</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    f, plots &#x3D; plt.subplots(int(scan.shape[0] &#x2F; 20) + 1, 4, figsize&#x3D;(50, 50))</span><br><span class="line">    for i in range(0, scan.shape[0], 5):</span><br><span class="line">        plots[int(i &#x2F; 20), int((i % 20) &#x2F; 5)].axis(&#39;off&#39;)</span><br><span class="line">        plots[int(i &#x2F; 20), int((i % 20) &#x2F; 5)].imshow(scan[i], cmap&#x3D;plt.cm.bone)</span><br></pre></td></tr></table></figure>
-
-<p>此方法的效果示例如下:</p>
-<p><img src="/images/blog/lung_slices_2.png" alt="dicom格式的图像"></p>
-<h3 id="2-6-定义分割出CT切面里面肺部组织的函数"><a href="#2-6-定义分割出CT切面里面肺部组织的函数" class="headerlink" title="2.6 定义分割出CT切面里面肺部组织的函数"></a>2.6 定义分割出CT切面里面肺部组织的函数</h3><p>下面的代码使用了pythonde 的图像形态学操作。具体可以参考<a href="http://www.cnblogs.com/denny402/p/5166258.html" target="_blank" rel="noopener">python高级形态学操作</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line">def get_segmented_lungs(im, plot&#x3D;False):</span><br><span class="line"></span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    This funtion segments the lungs from the given 2D slice.</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    if plot &#x3D;&#x3D; True:</span><br><span class="line">        f, plots &#x3D; plt.subplots(8, 1, figsize&#x3D;(5, 40))</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    Step 1: Convert into a binary image.</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    binary &#x3D; im &lt; 604</span><br><span class="line">    if plot &#x3D;&#x3D; True:</span><br><span class="line">        plots[0].axis(&#39;off&#39;)</span><br><span class="line">        plots[0].set_title(&#39;binary image&#39;)</span><br><span class="line">        plots[0].imshow(binary, cmap&#x3D;plt.cm.bone)</span><br><span class="line"></span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    Step 2: Remove the blobs connected to the border of the image.</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    cleared &#x3D; clear_border(binary)</span><br><span class="line">    if plot &#x3D;&#x3D; True:</span><br><span class="line">        plots[1].axis(&#39;off&#39;)</span><br><span class="line">        plots[1].set_title(&#39;after clear border&#39;)</span><br><span class="line">        plots[1].imshow(cleared, cmap&#x3D;plt.cm.bone)</span><br><span class="line"></span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    Step 3: Label the image.</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    label_image &#x3D; label(cleared)</span><br><span class="line">    if plot &#x3D;&#x3D; True:</span><br><span class="line">        plots[2].axis(&#39;off&#39;)</span><br><span class="line">        plots[2].set_title(&#39;found all connective graph&#39;)</span><br><span class="line">        plots[2].imshow(label_image, cmap&#x3D;plt.cm.bone)</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    Step 4: Keep the labels with 2 largest areas.</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    areas &#x3D; [r.area for r in regionprops(label_image)]</span><br><span class="line">    areas.sort()</span><br><span class="line">    if len(areas) &gt; 2:</span><br><span class="line">        for region in regionprops(label_image):</span><br><span class="line">            if region.area &lt; areas[-2]:</span><br><span class="line">                for coordinates in region.coords:</span><br><span class="line">                       label_image[coordinates[0], coordinates[1]] &#x3D; 0</span><br><span class="line">    binary &#x3D; label_image &gt; 0</span><br><span class="line">    if plot &#x3D;&#x3D; True:</span><br><span class="line">        plots[3].axis(&#39;off&#39;)</span><br><span class="line">        plots[3].set_title(&#39; Keep the labels with 2 largest areas&#39;)</span><br><span class="line">        plots[3].imshow(binary, cmap&#x3D;plt.cm.bone)</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    Step 5: Erosion operation with a disk of radius 2. This operation is</span><br><span class="line">    seperate the lung nodules attached to the blood vessels.</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    selem &#x3D; disk(2)</span><br><span class="line">    binary &#x3D; binary_erosion(binary, selem)</span><br><span class="line">    if plot &#x3D;&#x3D; True:</span><br><span class="line">        plots[4].axis(&#39;off&#39;)</span><br><span class="line">        plots[4].set_title(&#39;seperate the lung nodules attached to the blood vessels&#39;)</span><br><span class="line">        plots[4].imshow(binary, cmap&#x3D;plt.cm.bone)</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    Step 6: Closure operation with a disk of radius 10. This operation is</span><br><span class="line">    to keep nodules attached to the lung wall.</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    selem &#x3D; disk(10)</span><br><span class="line">    binary &#x3D; binary_closing(binary, selem)</span><br><span class="line">    if plot &#x3D;&#x3D; True:</span><br><span class="line">        plots[5].axis(&#39;off&#39;)</span><br><span class="line">        plots[5].set_title(&#39;keep nodules attached to the lung wall&#39;)</span><br><span class="line">        plots[5].imshow(binary, cmap&#x3D;plt.cm.bone)</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    Step 7: Fill in the small holes inside the binary mask of lungs.</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    edges &#x3D; roberts(binary)</span><br><span class="line">    binary &#x3D; ndi.binary_fill_holes(edges)</span><br><span class="line">    if plot &#x3D;&#x3D; True:</span><br><span class="line">        plots[6].axis(&#39;off&#39;)</span><br><span class="line">        plots[6].set_title(&#39;Fill in the small holes inside the binary mask of lungs&#39;)</span><br><span class="line">        plots[6].imshow(binary, cmap&#x3D;plt.cm.bone)</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    Step 8: Superimpose the binary mask on the input image.</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    get_high_vals &#x3D; binary &#x3D;&#x3D; 0</span><br><span class="line">    im[get_high_vals] &#x3D; 0</span><br><span class="line">    if plot &#x3D;&#x3D; True:</span><br><span class="line">        plots[7].axis(&#39;off&#39;)</span><br><span class="line">        plots[7].set_title(&#39;Superimpose the binary mask on the input image&#39;)</span><br><span class="line">        plots[7].imshow(im, cmap&#x3D;plt.cm.bone)</span><br><span class="line"></span><br><span class="line">    return im</span><br></pre></td></tr></table></figure>
-<p>此方法每个步骤对图像做不同的处理，依次为二值化、清除边界、连通区域标记、腐蚀操作、闭合运算、孔洞填充、效果如下:</p>
-<p><img src="/images/blog/lung_seg_example.png" alt="dicom格式的图像"></p>
-<h3 id="2-7-肺部图像分割"><a href="#2-7-肺部图像分割" class="headerlink" title="2.7 肺部图像分割"></a>2.7 肺部图像分割</h3><p>为了减少有问题的空间，我们可以分割肺部图像（有时候是附近的组织）。这包含一些步骤，包括区域增长和形态运算，此时，我们只分析相连组件。</p>
-<p>步骤如下：</p>
-<ul>
-<li><p>阈值图像（-320HU是个极佳的阈值，但是此方法中不是必要）</p>
-</li>
-<li><p>处理相连的组件，以决定当前患者的空气的标签，以1填充这些二值图像</p>
-</li>
-<li><p>可选：当前扫描的每个轴上的切片，选定最大固态连接的组织（当前患者的肉体和空气），并且其他的为0。以掩码的方式填充肺部结构。</p>
-</li>
-<li><p>只保留最大的气袋（人类躯体内到处都有气袋）</p>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">def largest_label_volume(im, bg&#x3D;-1):</span><br><span class="line">    vals, counts &#x3D; np.unique(im, return_counts&#x3D;True)</span><br><span class="line">    counts &#x3D; counts[vals !&#x3D; bg]</span><br><span class="line">    vals &#x3D; vals[vals !&#x3D; bg]</span><br><span class="line">    if len(counts) &gt; 0:</span><br><span class="line">        return vals[np.argmax(counts)]</span><br><span class="line">    else:</span><br><span class="line">        return None</span><br><span class="line">def segment_lung_mask(image, fill_lung_structures&#x3D;True):</span><br><span class="line"></span><br><span class="line">    # not actually binary, but 1 and 2.</span><br><span class="line">    # 0 is treated as background, which we do not want</span><br><span class="line">    binary_image &#x3D; np.array(image &gt; -320, dtype&#x3D;np.int8)+1</span><br><span class="line">    labels &#x3D; measure.label(binary_image)</span><br><span class="line"></span><br><span class="line">    # Pick the pixel in the very corner to determine which label is air.</span><br><span class="line">    #   Improvement: Pick multiple background labels from around the patient</span><br><span class="line">    #   More resistant to &quot;trays&quot; on which the patient lays cutting the air</span><br><span class="line">    #   around the person in half</span><br><span class="line">    background_label &#x3D; labels[0,0,0]</span><br><span class="line"></span><br><span class="line">    #Fill the air around the person</span><br><span class="line">    binary_image[background_label &#x3D;&#x3D; labels] &#x3D; 2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    # Method of filling the lung structures (that is superior to something like</span><br><span class="line">    # morphological closing)</span><br><span class="line">    if fill_lung_structures:</span><br><span class="line">        # For every slice we determine the largest solid structure</span><br><span class="line">        for i, axial_slice in enumerate(binary_image):</span><br><span class="line">            axial_slice &#x3D; axial_slice - 1</span><br><span class="line">            labeling &#x3D; measure.label(axial_slice)</span><br><span class="line">            l_max &#x3D; largest_label_volume(labeling, bg&#x3D;0)</span><br><span class="line"></span><br><span class="line">            if l_max is not None: #This slice contains some lung</span><br><span class="line">                binary_image[i][labeling !&#x3D; l_max] &#x3D; 1</span><br><span class="line"></span><br><span class="line">    binary_image -&#x3D; 1 #Make the image actual binary</span><br><span class="line">    binary_image &#x3D; 1-binary_image # Invert it, lungs are now 1</span><br><span class="line"></span><br><span class="line">    # Remove other air pockets insided body</span><br><span class="line">    labels &#x3D; measure.label(binary_image, background&#x3D;0)</span><br><span class="line">    l_max &#x3D; largest_label_volume(labels, bg&#x3D;0)</span><br><span class="line">    if l_max is not None: # There are air pockets</span><br><span class="line">        binary_image[labels !&#x3D; l_max] &#x3D; 0</span><br><span class="line"></span><br><span class="line">    return binary_image</span><br></pre></td></tr></table></figure>
-
-<p>查看切割效果</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">segmented_lungs &#x3D; segment_lung_mask(pix_resampled, False)</span><br><span class="line">segmented_lungs_fill &#x3D; segment_lung_mask(pix_resampled, True)</span><br><span class="line">plot_3d(segmented_lungs, 0)</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/blog/lung3d_bone2.jpg" alt="dicom格式的图像"></p>
-<p>我们可以将肺内的结构也包含进来（结节是固体），不仅仅只是肺部内的空气</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">plot_3d(segmented_lungs_fill, 0)</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/blog/lung3d_bone3.jpg" alt="dicom格式的图像"></p>
-<p>使用mask时，要注意首先进行形态扩充(python的<code>skimage</code>的skimage.morphology)操作（即使用圆形kernel，结节是球体），参考 <a href="http://www.cnblogs.com/denny402/p/5166258.html" target="_blank" rel="noopener">python形态操作</a>。这会在所有方向（维度）上扩充mask。仅仅肺部的空气+结构将不会包含所有结节，事实上有可能遗漏黏在肺部一侧的结节（这会经常出现，所以建议最好是扩充mask）。</p>
-<h3 id="2-8-数据标准化处理"><a href="#2-8-数据标准化处理" class="headerlink" title="2.8 数据标准化处理"></a>2.8 数据标准化处理</h3><p>归一化处理</p>
-<p>当前的值范围是[-1024,2000]。而任意大于400的值并不是处理肺结节需要考虑，因为它们都是不同反射密度下的骨头。LUNA16竞赛中常用来做归一化处理的阈值集是-1000和400.以下代码</p>
-<p><strong>归一化</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">MIN_BOUND &#x3D; -1000.0</span><br><span class="line">MAX_BOUND &#x3D; 400.0</span><br><span class="line"></span><br><span class="line">def normalize(image):</span><br><span class="line">    image &#x3D; (image - MIN_BOUND) &#x2F; (MAX_BOUND - MIN_BOUND)</span><br><span class="line">    image[image&gt;1] &#x3D; 1.</span><br><span class="line">    image[image&lt;0] &#x3D; 0.</span><br><span class="line">    return image</span><br></pre></td></tr></table></figure>
-
-<p><strong>0值中心化</strong></p>
-<p>简单来说就是所有像素值减去均值。LUNA16竞赛中的均值大约是0.25.</p>
-<p><strong>不要对每一张图像做零值中心化（此处像是在kernel中完成的）CT扫描器返回的是校准后的精确HU计量。不会出现普通图像中会出现某些图像低对比度和明亮度的情况</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">PIXEL_MEAN &#x3D; 0.25</span><br><span class="line"></span><br><span class="line">def zero_center(image):</span><br><span class="line">    image &#x3D; image - PIXEL_MEAN</span><br><span class="line">    return image</span><br></pre></td></tr></table></figure>
-
-<p>归一化和零值中心化的操作主要是为了后续训练网络，零值中心化是网络收敛的关键。</p>
-<h2 id="三-mhd格式数据处理过程"><a href="#三-mhd格式数据处理过程" class="headerlink" title="三 mhd格式数据处理过程"></a>三 mhd格式数据处理过程</h2><h3 id="3-1-处理思路"><a href="#3-1-处理思路" class="headerlink" title="3.1 处理思路"></a>3.1 处理思路</h3><p>mhd的数据只是格式与dicom不一样，其实质包含的都是病人扫描。处理MHD需要借助<code>SimpleIKT</code>这个包，处理思路详情可以参考Data Science Bowl2017的toturail <a href="https://www.kaggle.com/c/data-science-bowl-2017#tutorial" target="_blank" rel="noopener">Data Science Bowl 2017</a>。需要注意的是MHD格式的数据没有HU值，它的值域范围与dicom很不同。</p>
-<p>我们以LUNA2016年的数据处理流程为例。参考代码为 <a href="https://github.com/booz-allen-hamilton/DSB3Tutorial/tree/master/tutorial_code" target="_blank" rel="noopener">LUNA2016数据切割</a></p>
-<h3 id="3-2-载入必要的包"><a href="#3-2-载入必要的包" class="headerlink" title="3.2 载入必要的包"></a>3.2 载入必要的包</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">import SimpleITK as sitk</span><br><span class="line">import numpy as np</span><br><span class="line">import csv</span><br><span class="line">from glob import glob</span><br><span class="line">import pandas as pd</span><br><span class="line">file_list&#x3D;glob(luna_subset_path+&quot;*.mhd&quot;)</span><br><span class="line">#####################</span><br><span class="line">#</span><br><span class="line"># Helper function to get rows in data frame associated</span><br><span class="line"># with each file</span><br><span class="line">def get_filename(case):</span><br><span class="line">    global file_list</span><br><span class="line">    for f in file_list:</span><br><span class="line">        if case in f:</span><br><span class="line">            return(f)</span><br><span class="line">#</span><br><span class="line"># The locations of the nodes</span><br><span class="line">df_node &#x3D; pd.read_csv(luna_path+&quot;annotations.csv&quot;)</span><br><span class="line">df_node[&quot;file&quot;] &#x3D; df_node[&quot;seriesuid&quot;].apply(get_filename)</span><br><span class="line">df_node &#x3D; df_node.dropna()</span><br><span class="line">#####</span><br><span class="line">#</span><br><span class="line"># Looping over the image files</span><br><span class="line">#</span><br><span class="line">fcount &#x3D; 0</span><br><span class="line">for img_file in file_list:</span><br><span class="line">    print &quot;Getting mask for image file %s&quot; % img_file.replace(luna_subset_path,&quot;&quot;)</span><br><span class="line">    mini_df &#x3D; df_node[df_node[&quot;file&quot;]&#x3D;&#x3D;img_file] #get all nodules associate with file</span><br><span class="line">    if len(mini_df)&gt;0:       # some files may not have a nodule--skipping those</span><br><span class="line">        biggest_node &#x3D; np.argsort(mini_df[&quot;diameter_mm&quot;].values)[-1]   # just using the biggest node</span><br><span class="line">        node_x &#x3D; mini_df[&quot;coordX&quot;].values[biggest_node]</span><br><span class="line">        node_y &#x3D; mini_df[&quot;coordY&quot;].values[biggest_node]</span><br><span class="line">        node_z &#x3D; mini_df[&quot;coordZ&quot;].values[biggest_node]</span><br><span class="line">        diam &#x3D; mini_df[&quot;diameter_mm&quot;].values[biggest_node]</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-3-LUNA16的MHD格式数据的值"><a href="#3-3-LUNA16的MHD格式数据的值" class="headerlink" title="3.3 LUNA16的MHD格式数据的值"></a>3.3 LUNA16的MHD格式数据的值</h3><p>一直在寻找MHD格式数据的处理方法，对于dicom格式的CT有很多论文根据其HU值域可以轻易地分割肺、骨头、血液等，但是对于MHD没有这样的参考。从<a href="https://grand-challenge.org/site/luna16/forum/" target="_blank" rel="noopener">LUNA16论坛</a>得到的解释是，LUNA16的MHD数据已经转换为HU值了，不需要再使用slope和intercept来做rescale变换了。此论坛主题下，有人提出MHD格式没有提供pixel spacing(mm) 和 slice thickness(mm) ，而标准文件annotation.csv文件中结节的半径和坐标都是mm单位，最后确认的是MHD格式文件中只保留了体素尺寸以及坐标原点位置，没有保存slice thickness。即，dicom才是原始数据格式。</p>
-<h3 id="3-4-坐标体系变换"><a href="#3-4-坐标体系变换" class="headerlink" title="3.4 坐标体系变换"></a>3.4 坐标体系变换</h3><p>MHD值的坐标体系是体素，以mm为单位（dicom的值是GV灰度值）。结节的位置是CT scanner坐标轴里面相对原点的mm值，需要将其转换到真实坐标轴位置，可以使用<code>SimpleITK</code>包中的 <code>GetOrigin()</code> <code>GetSpacing()</code>。图像数据是以512x512数组的形式给出的。</p>
-<p>坐标变换如下：</p>
-<p><img src="/images/blog/mhd_coordinate_transfer.png" alt="dicom格式的图像"></p>
-<p>相应的代码处理如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">itk_img &#x3D; sitk.ReadImage(img_file)</span><br><span class="line">img_array &#x3D; sitk.GetArrayFromImage(itk_img) # indexes are z,y,x (notice the ordering)</span><br><span class="line">center &#x3D; np.array([node_x,node_y,node_z])   # nodule center</span><br><span class="line">origin &#x3D; np.array(itk_img.GetOrigin())      # x,y,z  Origin in world coordinates (mm)</span><br><span class="line">spacing &#x3D; np.array(itk_img.GetSpacing())    # spacing of voxels in world coor. (mm)</span><br><span class="line">v_center &#x3D;np.rint((center-origin)&#x2F;spacing)  # nodule center in voxel space (still x,y,z ordering)</span><br></pre></td></tr></table></figure>
-
-<p><strong>在LUNA16的标注CSV文件中标注了结节中心的X,Y,Z轴坐标，但是实际取值的时候取的是Z轴最后三层的数组(img_array)</strong>。</p>
-<p>下述代码只提取了包含结节的最后三个slice的数据，代码参考自<code>LUNA_mask_extraction.py</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">i &#x3D; 0</span><br><span class="line">for i_z in range(int(v_center[2])-1,int(v_center[2])+2):</span><br><span class="line">    mask &#x3D; make_mask(center,diam,i_z*spacing[2]+origin[2],width,height,spacing,origin)</span><br><span class="line">    masks[i] &#x3D; mask</span><br><span class="line">    imgs[i] &#x3D; matrix2int16(img_array[i_z])</span><br><span class="line">    i+&#x3D;1</span><br><span class="line">np.save(output_path+&quot;images_%d.npy&quot; % (fcount) ,imgs)</span><br><span class="line">np.save(output_path+&quot;masks_%d.npy&quot; % (fcount) ,masks)</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-5-查看结节"><a href="#3-5-查看结节" class="headerlink" title="3.5 查看结节"></a>3.5 查看结节</h3><p>以下代码用于查看原始CT和结节mask。其实就是用matplotlib打印上一步存储的npy文件。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">imgs &#x3D; np.load(output_path+&#39;images_0.npy&#39;)</span><br><span class="line">masks &#x3D; np.load(output_path+&#39;masks_0.npy&#39;)</span><br><span class="line">for i in range(len(imgs)):</span><br><span class="line">    print &quot;image %d&quot; % i</span><br><span class="line">    fig,ax &#x3D; plt.subplots(2,2,figsize&#x3D;[8,8])</span><br><span class="line">    ax[0,0].imshow(imgs[i],cmap&#x3D;&#39;gray&#39;)</span><br><span class="line">    ax[0,1].imshow(masks[i],cmap&#x3D;&#39;gray&#39;)</span><br><span class="line">    ax[1,0].imshow(imgs[i]*masks[i],cmap&#x3D;&#39;gray&#39;)</span><br><span class="line">    plt.show()</span><br><span class="line">    raw_input(&quot;hit enter to cont : &quot;)</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/blog/nodule_mask1.png" alt="示例结节和mask"></p>
-<p>接下来的处理和DICOM格式数据差不多，腐蚀膨胀、连通区域标记等。</p>
-<p>参考信息：</p>
-<blockquote>
-<p>灰度值是pixel value经过重重LUT转换得到的用来进行显示的值，而这个转换过程是不可逆的，也就是说，灰度值无法转换为ct值。只能根据窗宽窗位得到一个大概的范围。<br> pixel value经过modality lut得到Hu，但是怀疑pixelvalue的读取出了问题。dicom文件中存在（0028，0106）（0028，0107）两个tag，分别是最大最小pixel value，可以用来检验你读取的pixel value 矩阵是否正确。</p>
-</blockquote>
-<blockquote>
-<p>LUT全称look up table，实际上就是一张像素灰度值的映射表，它将实际采样到的像素灰度值经过一定的变换如阈值、反转、二值化、对比度调整、线性变换等，变成了另外一 个与之对应的灰度值，这样可以起到突出图像的有用信息，增强图像的光对比度的作用。</p>
-</blockquote>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2017-01-20-medical_image_process/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2017-01-20-medical_image_process/" title="常见医疗扫描图像处理步骤">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2017-01-13-RCNN-series/">
-    		RCNN,Fast RCNN,Faster RCNN 总结
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.442Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h2 id="一-背景知识"><a href="#一-背景知识" class="headerlink" title="一 背景知识"></a>一 背景知识</h2><h3 id="1-1-IOU的定义"><a href="#1-1-IOU的定义" class="headerlink" title="1.1  IOU的定义"></a>1.1  IOU的定义</h3><p>物体检测需要定位出物体的bounding box，就像下面的图片一样，我们不仅要定位出车辆的bounding box 我们还要识别出bounding box 里面的物体就是车辆。对于bounding box的定位精度，有一个很重要的概念，因为我们算法不可能百分百跟人工标注的数据完全匹配，因此就存在一个定位精度评价公式：IOU。</p>
-<p><img src="/images/blog/rcnn1.jpg" alt="iou1"></p>
-<p>IOU定义了两个bounding box的重叠度，如下图所示:</p>
-<p><img src="/images/blog/rcnn2.jpg" alt="iou1"></p>
-<p>矩形框A、B的一个重合度IOU计算公式为：</p>
-<p>IOU=(A∩B)/(A∪B)</p>
-<p>就是矩形框A、B的重叠面积占A、B并集的面积比例:</p>
-<p>IOU=SI/(SA+SB-SI)</p>
-<h3 id="1-2-非极大值抑制"><a href="#1-2-非极大值抑制" class="headerlink" title="1.2 非极大值抑制"></a>1.2 非极大值抑制</h3><p> RCNN算法，会从一张图片中找出n多个可能是物体的矩形框，然后为每个矩形框为做类别分类概率：</p>
-<p><img src="/images/blog/rcnn3.jpg" alt="iou1"></p>
-<p>就像上面的图片一样，定位一个车辆，最后算法就找出了一堆的方框，我们需要判别哪些矩形框是没用的。非极大值抑制：先假设有6个矩形框，根据分类器类别分类概率做排序，从小到大分别属于车辆的概率分别为A、B、C、D、E、F。</p>
-<ol>
-<li><p>从最大概率矩形框F开始，分别判断A~E与F的重叠度IOU是否大于某个设定的阈值;</p>
-</li>
-<li><p>假设B、D与F的重叠度超过阈值，那么就扔掉B、D；并标记第一个矩形框F，是我们保留下来的。</p>
-</li>
-<li><p>从剩下的矩形框A、C、E中，选择概率最大的E，然后判断E与A、C的重叠度，重叠度大于一定的阈值，那么就扔掉；并标记E是我们保留下来的第二个矩形框。</p>
-</li>
-</ol>
-<p>就这样一直重复，找到所有被保留下来的矩形框。</p>
-<h3 id="1-3-一张图概览RCNN"><a href="#1-3-一张图概览RCNN" class="headerlink" title="1.3 一张图概览RCNN"></a>1.3 一张图概览RCNN</h3><p><img src="/images/blog/rcnn11.png" alt="RCNN相关方法对比"></p>
-<h2 id="二-RCNN"><a href="#二-RCNN" class="headerlink" title="二 RCNN"></a>二 RCNN</h2><p> 算法概要：首先输入一张图片，我们先定位出2000个物体候选框，然后采用CNN提取每个候选框中图片的特征向量，特征向量的维度为4096维，接着采用svm算法对各个候选框中的物体进行分类识别。也就是总个过程分为三个程序：a、找出候选框；b、利用CNN提取特征向量；c、利用SVM进行特征向量分类。具体的流程如下图片所示：</p>
-<p><img src="/images/blog/rcnn4.png" alt="iou1"></p>
-<p>下面分别讲解各个步骤。</p>
-<h3 id="2-1-候选框搜索"><a href="#2-1-候选框搜索" class="headerlink" title="2.1 候选框搜索"></a>2.1 候选框搜索</h3><p> 当我们输入一张图片时，我们要搜索出所有可能是物体的区域，这个采用的方法是传统文献的算法selective search (github上有源码)，通过这个算法我们搜索出2000个候选框。然后从上面的总流程图中可以看到，搜出的候选框是矩形的，而且是大小各不相同。然而CNN对输入图片的大小是有固定的，如果把搜索到的矩形选框不做处理，就扔进CNN中，肯定不行。因此对于每个输入的候选框都需要缩放到固定的大小。下面我们讲解要怎么进行缩放处理，为了简单起见我们假设下一阶段CNN所需要的输入图片大小是个正方形图片227*227。因为我们经过selective search 得到的是矩形框，paper试验了两种不同的处理方法：</p>
-<p><strong>(1)各向异性缩放</strong></p>
-<p>这种方法很简单，就是不管图片的长宽比例，管它是否扭曲，进行缩放就是了，全部缩放到CNN输入的大小227*227，如下图(D)所示；</p>
-<p><strong>(2)各向同性缩放</strong></p>
-<p>因为图片扭曲后，估计会对后续CNN的训练精度有影响，于是作者也测试了“各向同性缩放”方案。这个有两种办法</p>
-<p><strong>A.</strong> 直接在原始图片中，把bounding box的边界进行扩展延伸成正方形，然后再进行裁剪；如果已经延伸到了原始图片的外边界，那么就用bounding box中的颜色均值填充；如下图(B)所示;</p>
-<p><strong>B.</strong> 先把bounding box图片裁剪出来，然后用固定的背景颜色填充成正方形图片(背景颜色也是采用bounding box的像素颜色均值),如下图(C)所示;</p>
-<p><img src="/images/blog/rcnn5.png" alt="iou1"></p>
-<p>对于上面的异性、同性缩放，文献还有个padding处理，上面的示意图中第1、3行就是结合了padding=0,第2、4行结果图采用padding=16的结果。经过最后的试验，作者发现采用各向异性缩放、padding=16的精度最高。</p>
-<p>上面处理完后，可以得到指定大小的图片，因为我们后面还要继续用这2000个候选框图片，继续训练CNN、SVM。然而人工标注的数据一张图片中就只标注了正确的bounding box，我们搜索出来的2000个矩形框也不可能会出现一个与人工标注完全匹配的候选框。因此我们需要用IOU为2000个bounding box打标签，以便下一步CNN训练使用。在CNN阶段，如果用selective search挑选出来的候选框与物体的人工标注矩形框的重叠区域IoU大于0.5，那么我们就把这个候选框标注成物体类别，否则我们就把它当做背景类别。</p>
-<h3 id="2-2-网络设计"><a href="#2-2-网络设计" class="headerlink" title="2.2 网络设计"></a>2.2 网络设计</h3><p> 网络架构我们有两个可选方案：第一选择经典的Alexnet；第二选择VGG16。经过测试Alexnet精度为58.5%，VGG16精度为66%。VGG这个模型的特点是选择比较小的卷积核、选择较小的跨步，这个网络的精度高，不过计算量是Alexnet的7倍。后面为了简单起见，我们就直接选用Alexnet，并进行讲解；Alexnet特征提取部分包含了5个卷积层、2个全连接层，在Alexnet中p5层神经元个数为9216、 f6、f7的神经元个数都是4096，通过这个网络训练完毕后，最后提取特征每个输入候选框图片都能得到一个4096维的特征向量。</p>
-<h4 id="2-2-1-网络初始化"><a href="#2-2-1-网络初始化" class="headerlink" title="2.2.1 网络初始化"></a>2.2.1 网络初始化</h4><p> 直接用Alexnet的网络，然后连参数也是直接采用它的参数，作为初始的参数值，然后再fine-tuning训练。</p>
-<p> 网络优化求解：采用随机梯度下降法，学习速率大小为0.001；</p>
-<h4 id="2-2-2-fine-tuning阶段"><a href="#2-2-2-fine-tuning阶段" class="headerlink" title="2.2.2 fine-tuning阶段"></a>2.2.2 fine-tuning阶段</h4><p>  我们接着采用selective search 搜索出来的候选框，然后处理到指定大小图片，继续对上面预训练的cnn模型进行fine-tuning训练。假设要检测的物体类别有N类，那么我们就需要把上面预训练阶段的CNN模型的最后一层给替换掉，替换成N+1个输出的神经元(加1，表示还有一个背景)，然后这一层直接采用参数随机初始化的方法，其它网络层的参数不变；接着就可以开始继续SGD训练了。开始的时候，SGD学习率选择0.001，在每次训练的时候，我们batch size大小选择128，其中32个正样本、96个负样本。</p>
-<h2 id="三-Fast-RCNN"><a href="#三-Fast-RCNN" class="headerlink" title="三 Fast RCNN"></a>三 Fast RCNN</h2><h3 id="3-1-引入原因"><a href="#3-1-引入原因" class="headerlink" title="3.1 引入原因"></a>3.1 引入原因</h3><p> FRCNN针对RCNN在训练时是multi-stage pipeline和训练的过程中很耗费时间空间的问题进行改进。它主要是将深度网络和后面的SVM分类两个阶段整合到一起，使用一个新的网络直接做分类和回归。主要做以下改进:</p>
-<ol>
-<li><p>最后一个卷积层后加了一个ROI pooling layer。ROI pooling layer首先可以将image中的ROI定位到feature map，然后是用一个单层的SPP layer将这个feature map patch池化为固定大小的feature之后再传入全连接层。</p>
-</li>
-<li><p>损失函数使用了多任务损失函数(multi-task loss)，将边框回归直接加入到CNN网络中训练。</p>
-</li>
-</ol>
-<h3 id="3-2-模型"><a href="#3-2-模型" class="headerlink" title="3.2 模型"></a>3.2 模型</h3><p>fast rcnn 的结构如下</p>
-<p><img src="/images/blog/rcnn7.png" alt="fast rcnn结构"></p>
-<p>图中省略了通过ss获得proposal的过程，第一张图中红框里的内容即为通过ss提取到的proposal，中间的一块是经过深度卷积之后得到的conv feature map，图中灰色的部分就是我们红框中的proposal对应于conv feature map中的位置，之后对这个特征经过ROI pooling layer处理，之后进行全连接。在这里得到的ROI feature vector最终被分享，一个进行全连接之后用来做softmax回归，用来进行分类，另一个经过全连接之后用来做bbox回归。</p>
-<p><strong>注意：</strong> 对中间的Conv feature map进行特征提取。每一个区域经过RoI pooling layer和FC layers得到一个 <strong>固定长度</strong> 的feature vector(这里需要注意的是，输入到后面RoI pooling layer的feature map是在Conv feature map上提取的，故整个特征提取过程，只计算了一次卷积。虽然在最开始也提取出了大量的RoI，但他们还是作为整体输入进卷积网络的，最开始提取出的RoI区域只是为了最后的Bounding box 回归时使用，用来输出原图中的位置)。</p>
-<h3 id="3-3-SPP网络"><a href="#3-3-SPP网络" class="headerlink" title="3.3 SPP网络"></a>3.3 SPP网络</h3><p>何恺明研究员于14年撰写的论文，主要是把经典的Spatial Pyramid Pooling结构引入CNN中，从而使CNN可以处理任意size和scale的图片；这中方法不仅提升了分类的准确率，而且还非常适合Detection，比经典的RNN快速准确。</p>
-<p>本文不打算详细解释SPP网络，只介绍其中的SPP-layer，由于fast rcnn会使用到SPP-layer。</p>
-<p><strong>SPP layer</strong></p>
-<p>根据pooling规则，每个pooling   bin（window）对应一个输出，所以最终pooling后特征输出由bin的个数来决定。本文就是分级固定bin的个数，调整bin的尺寸来实现多级pooling固定输出。</p>
-<p>如图所示，layer-5的unpooled FM维数为16*24，按照图中所示分为3级，</p>
-<p><img src="/images/blog/rcnn8.png" alt="fast rcnn结构"></p>
-<p>第一级bin个数为1，最终对应的window大小为16*24；</p>
-<p>第二级bin个数为4个，最终对应的window大小为4*8</p>
-<p>第三级bin个数为16个，最终对应的window大小为1*1.5（小数需要舍入处理）</p>
-<p>通过融合各级bin的输出，最终每一个unpooled FM经过SPP处理后，得到了1+4+16维的SPPed FM输出特征，经过融合后输入分类器。</p>
-<p>这样就可以在任意输入size和scale下获得固定的输出；不同scale下网络可以提取不同尺度的特征，有利于分类。</p>
-<h3 id="3-4-RoI-pooling-layer"><a href="#3-4-RoI-pooling-layer" class="headerlink" title="3.4  RoI pooling layer"></a>3.4  RoI pooling layer</h3><p>每一个RoI都有一个四元组（r,c,h,w）表示，其中（r，c）表示左上角，而（h，w）则代表高度和宽度。这一层使用最大池化（max pooling）来将RoI区域转化成固定大小的H<em>W的特征图。假设一个RoI的窗口大小为h</em>w,则转换成H<em>W之后，每一个网格都是一个h/H * w/W大小的子网，利用最大池化将这个子网中的值映射到H</em>W窗口即可。Pooling对每一个特征图通道都是独立的，这是SPP layer的特例，即只有一层的空间金字塔。</p>
-<h3 id="3-5-从预训练的网络中初始化数据"><a href="#3-5-从预训练的网络中初始化数据" class="headerlink" title="3.5 从预训练的网络中初始化数据"></a>3.5 从预训练的网络中初始化数据</h3><p>有三种预训练的网络：CaffeNet，VGG_CNN_M_1024，VGG-16，他们都有5个最大池化层和5到13个不等的卷积层。用他们来初始化Fast R-CNN时，需要修改三处：</p>
-<p>①最后一个池化层被RoI pooling layer取代</p>
-<p>②最后一个全连接层和softmax被替换成之前介绍过的两个兄弟并列层</p>
-<p>③网络输入两组数据：一组图片和那些图片的一组RoIs</p>
-<h3 id="3-6-检测中的微调"><a href="#3-6-检测中的微调" class="headerlink" title="3.6 检测中的微调"></a>3.6 检测中的微调</h3><p>使用BP算法训练网络是Fast R-CNN的重要能力，前面已经说过，SPP-net不能微调spp层之前的层，主要是因为当每一个训练样本来自于不同的图片时，经过SPP层的BP算法是很低效的（感受野太大）. Fast R-CNN提出SGD mini_batch分层取样的方法：首先随机取样N张图片，然后每张图片取样R/N个RoIs  e.g.  N=2 and R=128<br>除了分层取样，还有一个就是FRCN在一次微调中联合优化softmax分类器和bbox回归，看似一步，实际包含了多任务损失（multi-task loss）、小批量取样（mini-batch sampling）、RoI pooling层的反向传播（backpropagation through RoI pooling layers）、SGD超参数（SGD hyperparameters）。</p>
-<h2 id="4-Faster-RCNN"><a href="#4-Faster-RCNN" class="headerlink" title="4 Faster RCNN"></a>4 Faster RCNN</h2><p>Faster R-CNN统一的网络结构如下图所示，可以简单看作RPN网络+Fast R-CNN网络。</p>
-<p><img src="/images/blog/rcnn9.png" alt="fast rcnn结构"></p>
-<p>原理步骤如下:</p>
-<ol>
-<li><p>首先向CNN网络【ZF或VGG-16】输入任意大小图片；</p>
-</li>
-<li><p>经过CNN网络前向传播至最后共享的卷积层，一方面得到供RPN网络输入的特征图，另一方面继续前向传播至特有卷积层，产生更高维特征图；</p>
-</li>
-<li><p>供RPN网络输入的特征图经过RPN网络得到区域建议和区域得分，并对区域得分采用非极大值抑制【阈值为0.7】，输出其Top-N【文中为300】得分的区域建议给RoI池化层；</p>
-</li>
-<li><p>第2步得到的高维特征图和第3步输出的区域建议同时输入RoI池化层，提取对应区域建议的特征；</p>
-</li>
-<li><p>第4步得到的区域建议特征通过全连接层后，输出该区域的分类得分以及回归后的bounding-box。</p>
-</li>
-</ol>
-<h3 id="4-1-单个RPN网络结构"><a href="#4-1-单个RPN网络结构" class="headerlink" title="4.1 单个RPN网络结构"></a>4.1 单个RPN网络结构</h3><p>单个RPN网络结构如下:</p>
-<p><img src="/images/blog/rcnn10.png" alt="fast rcnn结构"></p>
-<p><strong>注意：</strong> 上图中卷积层/全连接层表示卷积层或者全连接层，作者在论文中表示这两层实际上是全连接层，但是网络在所有滑窗位置共享全连接层，可以很自然地用n×n卷积核【论文中设计为3×3】跟随两个并行的1×1卷积核实现</p>
-<p><strong>RPN的作用</strong>：RPN在CNN卷积层后增加滑动窗口操作以及两个卷积层完成区域建议功能，第一个卷积层将特征图每个滑窗位置编码成一个特征向量，第二个卷积层对应每个滑窗位置输出k个区域得分和k个回归后的区域建议，并对得分区域进行非极大值抑制后输出得分Top-N【文中为300】区域，告诉检测网络应该注意哪些区域，本质上实现了Selective Search、EdgeBoxes等方法的功能。</p>
-<h3 id="4-2-RPN层的具体流程"><a href="#4-2-RPN层的具体流程" class="headerlink" title="4.2 RPN层的具体流程"></a>4.2 RPN层的具体流程</h3><ol>
-<li><p>首先套用ImageNet上常用的图像分类网络，本文中试验了两种网络：ZF或VGG-16，利用这两种网络的部分卷积层产生原始图像的特征图；</p>
-</li>
-<li><p>对于1中特征图，用n×n【<strong>论文中设计为3×3，n=3看起来很小，但是要考虑到这是非常高层的feature map，其size本身也没有多大，因此9个矩形中，每个矩形窗框都是可以感知到很大范围的】的滑动窗口在特征图上滑动扫描【代替了从原始图滑窗获取特征</strong>】，每个滑窗位置通过卷积层1映射到一个低维的特征向量【<strong>ZF网络：256维；VGG-16网络：512维，低维是相对于特征图大小W×H，typically~60×40=2400</strong>】后采用ReLU，并为每个滑窗位置考虑k种【<strong>论文中k=9</strong>】可能的参考窗口【<strong>论文中称为anchors，见下解释</strong>】，这就意味着每个滑窗位置会同时预测最多9个区域建议【<strong>超出边界的不考虑</strong>】，对于一个W×H的特征图，就会产生W×H×k个区域建议；</p>
-</li>
-<li><p>步骤2中的低维特征向量输入两个并行连接的卷积层2：reg窗口回归层【<strong>位置精修</strong>】和cls窗口分类层，分别用于回归区域建议产生bounding-box【<strong>超出图像边界的裁剪到图像边缘位置</strong>】和对区域建议是否为前景或背景打分，这里由于每个滑窗位置产生k个区域建议，所以reg层有4k个输出来编码【平移缩放参数】k个区域建议的坐标，cls层有2k个得分估计k个区域建议为前景或者背景的概率。</p>
-</li>
-</ol>
-<h3 id="4-3-Anchor"><a href="#4-3-Anchor" class="headerlink" title="4.3 Anchor"></a>4.3 Anchor</h3><p>Anchors是一组大小固定的参考窗口：三种尺度{ $128^2，256^2，512^2$ }×三种长宽比{1:1，1:2，2:1}，如下图所示，表示RPN网络中对特征图滑窗时每个滑窗位置所对应的原图区域中9种可能的大小，相当于模板，对任意图像任意滑窗位置都是这9中模板。继而根据图像大小计算滑窗中心点对应原图区域的中心点，通过中心点和size就可以得到滑窗位置和原图位置的映射关系，由此原图位置并根据与Ground Truth重复率贴上正负标签，让RPN学习该Anchors是否有物体即可。对于每个滑窗位置，产生k=9个anchor对于一个大小为W*H的卷积feature map，总共会产生WHk个anchor。</p>
-<p><img src="/images/blog/rcnn12.png" alt="fast rcnn结构"></p>
-<p><strong>平移不变性</strong></p>
-<p>Anchors这种方法具有平移不变性，就是说在图像中平移了物体，窗口建议也会跟着平移。同时这种方式也减少了整个模型的size，输出层 $512×(4+2)×9=2.8×10^4$ 个参数【512是前一层特征维度，(4+2)×9是9个Anchors的前景背景得分和平移缩放参数】，而MultiBox有 $1536×（4+1）×800=6.1×10^6个$ 参数，而较小的参数可以在小数据集上减少过拟合风险。</p>
-<p>当然，在RPN网络中我们只需要找到大致的地方，无论是位置还是尺寸，后面的工作都可以完成，这样的话采用小网络进行简单的学习【估计和猜差不多，反正有50%概率】，还不如用深度网络【还可以实现卷积共享】，固定尺度变化，固定长宽比变化，固定采样方式来大致判断是否是物体以及所对应的位置并降低任务复杂度。</p>
-<h3 id="4-4-多尺度多长宽比率"><a href="#4-4-多尺度多长宽比率" class="headerlink" title="4.4 多尺度多长宽比率"></a>4.4 多尺度多长宽比率</h3><p>有两种方法解决多尺度多长宽比问题:</p>
-<ol>
-<li><p><strong>图像金字塔</strong>:对伸缩到不同size的输入图像进行特征提取，虽然有效但是费时.</p>
-</li>
-<li><p><strong>feature map上使用多尺度（和/或长宽比）的滑窗</strong>:例如，DPM分别使用不同大小的filter来训练不同长宽比的模型。若这种方法用来解决多尺度问题，可以认为是“filter金字塔(pyramid of filters)”</p>
-</li>
-</ol>
-<h3 id="4-5-训练过程"><a href="#4-5-训练过程" class="headerlink" title="4.5 训练过程"></a>4.5 训练过程</h3><h4 id="4-5-1-RPN网络训练过程"><a href="#4-5-1-RPN网络训练过程" class="headerlink" title="4.5.1 RPN网络训练过程"></a>4.5.1 RPN网络训练过程</h4><p>RPN网络被ImageNet网络【ZF或VGG-16】进行了有监督预训练，利用其训练好的网络参数初始化；<br>用标准差0.01均值为0的高斯分布对新增的层随机初始化。</p>
-<h4 id="4-5-2-Fast-R-CNN网络预训练"><a href="#4-5-2-Fast-R-CNN网络预训练" class="headerlink" title="4.5.2 Fast R-CNN网络预训练"></a>4.5.2 Fast R-CNN网络预训练</h4><p>同样使用mageNet网络【ZF或VGG-16】进行了有监督预训练，利用其训练好的网络参数初始化。</p>
-<h4 id="4-5-3-RPN网络微调训练"><a href="#4-5-3-RPN网络微调训练" class="headerlink" title="4.5.3 RPN网络微调训练"></a>4.5.3 RPN网络微调训练</h4><p>PASCAL VOC 数据集中既有物体类别标签，也有物体位置标签；<br>正样本仅表示前景，负样本仅表示背景；<br>回归操作仅针对正样本进行；<br>训练时弃用所有超出图像边界的anchors，否则在训练过程中会产生较大难以处理的修正误差项，导致训练过程无法收敛；<br>对去掉超出边界后的anchors集采用非极大值抑制，最终一张图有2000个anchors用于训练【详细见下】；<br>对于ZF网络微调所有层，对VGG-16网络仅微调conv3_1及conv3_1以上的层，以便节省内存。</p>
-<p><strong>SGD mini-batch采样方式：</strong> 同Fast R-CNN网络，采取 <code>image-centric</code> 方式采样，即采用层次采样，先对图像取样，再对anchors取样，同一图像的anchors共享计算和内存。每个mini-batch包含从一张图中随机提取的256个anchors，正负样本比例为1:1【当然可以对一张图所有anchors进行优化，但由于负样本过多最终模型会对正样本预测准确率很低】来计算一个mini-batch的损失函数，如果一张图中不够128个正样本，拿负样本补凑齐。</p>
-<p><strong>训练超参数选择：</strong> 在PASCAL VOC数据集上前60k次迭代学习率为0.001，后20k次迭代学习率为0.0001；动量设置为0.9，权重衰减设置为0.0005。</p>
-<p>多任务目标函数【<code>分类损失+回归损失</code>】具体如下：</p>
-<p>$$</p>
-<p> L({p_i},{t_i})=\frac{1}{N_{cls}}\sum <em>i L</em>{cls}(p_i,p_i^<em>)+\lambda \frac{1}{N_{reg}}\sum _i p_i ^</em> L_{reg}(t_i,t_i^*)</p>
-<p>$$</p>
-<ul>
-<li><p><code>i</code> 为一个anchor在一个mini-batch中的下标</p>
-</li>
-<li><p>$p_i$ 是anchor i为一个object的预测可能性</p>
-</li>
-<li><p>$p_i^\star$ 为ground-truth标签。如果这个anchor是positive的，则ground-truth标签 $p_i^\star$ 为1，否则为0。</p>
-</li>
-<li><p>$t_i$ 表示表示正样本anchor到预测区域bounding box的4个参数化坐标，【<strong>以anchor为基准的变换</strong>】</p>
-</li>
-<li><p>$t_i^\star$ 是这个positive anchor对应的ground-truth  box。【<strong>以anchor为基准的变换</strong>】</p>
-</li>
-<li><p>$L_{cls}$  分类的损失（classification loss），是一个二值分类器（是object或者不是）的softmax loss。其公式为 $L_{cls}(p_i,p_i^\star)=-log[p_i*p_i^\star+(1-p_i^\star)(1-p_i)]$</p>
-</li>
-<li><p>$L_{reg}$ 回归损失（regression loss），$L_{reg}(t_i,t_i^\star)=R(t_i-t_i^\star)$ 【两种变换之差越小越好】，其中R是Fast R-CNN中定义的robust ross function (smooth L1)。$p_i^\star L_{reg}$ 表示回归损失只有在positive anchor（ $p_i^\star=1$ )的时候才会被激活。cls与reg层的输出分别包含{$p_i$}和{ $t_i$ }。R函数的定义为:<br>$smooth_{L1}(x)= 0.5x^2 \quad if \mid x\mid &lt;1 \quad otherwise \quad \mid x \mid-0.5$</p>
-</li>
-<li><p>λ参数用来权衡分类损失 $L_{cls}$ 和回归损失 $L_reg$ ，默认值λ=10【文中实验表明 λ从1变化到100对mAP影响不超过1%】；</p>
-</li>
-<li><p>$N_{cls}$ 和 $N_{reg}$ 分别用来标准化分类损失项 $L_{cls}$ 和回归损失项 $L_{reg}$，默认用mini-batch size=256设置 $N_{cls}$，用anchor位置数目~2400初始化 $N_{reg}$，文中也说明标准化操作并不是必须的，可以简化省略。</p>
-</li>
-</ul>
-<h4 id="4-5-4-RPN网络、Fast-R-CNN网络联合训练"><a href="#4-5-4-RPN网络、Fast-R-CNN网络联合训练" class="headerlink" title="4.5.4 RPN网络、Fast R-CNN网络联合训练"></a>4.5.4 RPN网络、Fast R-CNN网络联合训练</h4><p>训练网络结构示意图如下所示：</p>
-<p><img src="/images/blog/rcnn13.png" alt="fast rcnn结构"></p>
-<p>如上图所示，<strong>RPN网络、Fast R-CNN网络联合训练是为了让两个网络共享卷积层，降低计算量</strong>。</p>
-<p>文中通过4步训练算法，交替优化学习至共享特征：</p>
-<ol>
-<li><p>进行上面RPN网络预训练，和以区域建议为目的的RPN网络end-to-end微调训练。</p>
-</li>
-<li><p>进行上面Fast R-CNN网络预训练，用第①步中得到的区域建议进行以检测为目的的Fast R-CNN网络end-to-end微调训练【此时无共享卷积层】。</p>
-</li>
-<li><p>使用第2步中微调后的Fast R-CNN网络重新初始化RPN网络，固定共享卷积层【即设置学习率为0，不更新】，仅微调RPN网络独有的层【此时共享卷积层】。</p>
-</li>
-<li><p>固定第3步中共享卷积层，利用第③步中得到的区域建议，仅微调Fast R-CNN独有的层，至此形成统一网络如上图所示。</p>
-</li>
-</ol>
-<h3 id="4-6-相关解释"><a href="#4-6-相关解释" class="headerlink" title="4.6 相关解释"></a>4.6 相关解释</h3><p>*<em>RPN网络中bounding-box回归怎么理解？同Fast R-CNN中的bounding-box回归相比有什么区别？ *</em></p>
-<p>对于bounding-box回归，采用以下公式：</p>
-<ul>
-<li>t</li>
-</ul>
-<p>$$<br>t_x = \frac{(x-x_a)}{w_a}\<br>t_y = \frac{(y-y_a)}{h_a}\<br>t_w =log\frac{w}{w_a}\<br>t_h = log\frac{h}{h_a}<br>$$</p>
-<ul>
-<li>$t^*$</li>
-</ul>
-<p>$$</p>
-<p>t_x^* = \frac{(x^<em>-x_a)}{w_a}\<br>t_y^</em> = \frac{(y^<em>-y_a)}{h_a}\<br>t_w^</em> =log\frac{w^<em>}{w_a}\<br>t_h^</em> = log\frac{h^*}{h_a}</p>
-<p>$$</p>
-<p>其中，x，y，w，h表示窗口中心坐标和窗口的宽度和高度，变量x，$x_a$ 和 $x^∗$ 分别表示预测窗口、anchor窗口和Ground Truth的坐标【y，w，h同理】，因此这可以被认为是一个从anchor窗口到附近Ground Truth的bounding-box 回归；</p>
-<p>RPN网络中bounding-box回归的实质其实就是计算出预测窗口。这里以anchor窗口为基准，计算Ground Truth对其的平移缩放变化参数，以及预测窗口【可能第一次迭代就是anchor】对其的平移缩放参数，因为是以anchor窗口为基准，所以只要使这两组参数越接近，以此构建目标函数求最小值，那预测窗口就越接近Ground Truth，达到回归的目的；</p>
-<p>文中提到， Fast R-CNN中基于RoI的bounding-box回归所输入的特征是在特征图上对任意size的RoIs进行Pool操作提取的，所有size RoI共享回归参数，而在Faster R-CNN中，用来bounding-box回归所输入的特征是在特征图上相同的空间size【3×3】上提取的，为了解决不同尺度变化的问题，同时训练和学习了k个不同的回归器，依次对应为上述9种anchors，这k个回归量并不分享权重。因此尽管特征提取上空间是固定的【3×3】，但由于anchors的设计，仍能够预测不同size的窗口。</p>
-<p><strong>文中提到了三种共享特征网络的训练方式？</strong></p>
-<ol>
-<li><p><strong>交替训练</strong>,训练RPN，得到的区域建议来训练Fast R-CNN网络进行微调；此时网络用来初始化RPN网络，迭代此过程【文中所有实验采用】；</p>
-</li>
-<li><p><strong>近似联合训练:</strong> 如上图所示，合并两个网络进行训练，前向计算产生的区域建议被固定以训练Fast R-CNN；反向计算到共享卷积层时RPN网络损失和Fast R-CNN网络损失叠加进行优化，但此时把区域建议【Fast R-CNN输入，需要计算梯度并更新】当成固定值看待，忽视了Fast R-CNN一个输入：区域建议的导数，则无法更新训练，所以称之为近似联合训练。实验发现，这种方法得到和交替训练相近的结果，还能减少20%~25%的训练时间，公开的python代码中使用这种方法；</p>
-</li>
-<li><p><strong>联合训练</strong> 需要RoI池化层对区域建议可微，需要RoI变形层实现，具体请参考这片paper：Instance-aware Semantic Segmentation via Multi-task Network Cascades。</p>
-</li>
-</ol>
-<p><strong>图像Scale细节问题？</strong></p>
-<p>文中提到训练和检测RPN、Fast R-CNN都使用单一尺度，统一缩放图像短边至600像素；<br>在缩放的图像上，对于ZF网络和VGG-16网络的最后卷积层总共的步长是16像素，因此在缩放前典型的PASCAL图像上大约是10像素【~500×375；600/16=375/10】。</p>
-<p><strong>Faster R-CNN中三种尺度怎么解释：</strong></p>
-<ul>
-<li><p><strong>原始尺度</strong>：原始输入的大小，不受任何限制，不影响性能；</p>
-</li>
-<li><p><strong>归一化尺度</strong>：输入特征提取网络的大小，在测试时设置，源码中opts.test_scale=600。anchor在这个尺度上设定，这个参数和anchor的相对大小决定了想要检测的目标范围；</p>
-</li>
-<li><p><strong>网络输入尺度</strong>：输入特征检测网络的大小，在训练时设置，源码中为224×224。</p>
-</li>
-</ul>
-<p><strong>理清文中anchors的数目</strong></p>
-<p>文中提到对于1000×600的一张图像，大约有20000(~60×40×9)个anchors，忽略超出边界的anchors剩下6000个anchors，利用非极大值抑制去掉重叠区域，剩2000个区域建议用于训练；<br>测试时在2000个区域建议中选择Top-N【文中为300】个区域建议用于Fast R-CNN检测。</p>
-<h2 id="参考博客"><a href="#参考博客" class="headerlink" title="参考博客"></a>参考博客</h2><p><a href="http://blog.csdn.net/hjimce/article/details/50187029" target="_blank" rel="noopener">RCNN 介绍</a></p>
-<p><a href="http://blog.csdn.net/shenxiaolu1984/article/details/51036677" target="_blank" rel="noopener">Fast RCNN介绍</a></p>
-<p><a href="http://blog.csdn.net/qq_17448289/article/details/52871461" target="_blank" rel="noopener">Faster RCNN论文笔记</a></p>
-<p><a href="http://www.cnblogs.com/RayShea/p/5568841.html" target="_blank" rel="noopener">Fast RCNN简要笔记</a></p>
-<p><a href="http://www.itdadao.com/articles/c15a296465p0.html" target="_blank" rel="noopener">SPP网络</a></p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2017-01-13-RCNN-series/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2017-01-13-RCNN-series/" title="RCNN,Fast RCNN,Faster RCNN 总结">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2016-12-27-gan-paper/">
-    		GAN：论文笔记
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.431Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h2 id="一-GAN网络"><a href="#一-GAN网络" class="headerlink" title="一 GAN网络"></a>一 GAN网络</h2><p>与一般的被用于Supervised Learning任务的深度神经网络不同，GAN同时要训练一个生成网络(Generator)和一个判别网络(Discriminator)，前者输入一个noise变量 z ，输出一个伪图片数据 $G(z;θ_g)$ ，后者输入一个图片(real image)／伪图片(fake image)数据 x ，输出一个表示该输入是自然图片或者伪造图片的二分类置信度 $D(x;θ_d)$ ，理想情况下，判别器 D 需要尽可能准确的判断输入数据到底是一个真实的图片还是某种伪造的图片，而生成器G又需要尽最大可能去欺骗D，让D把自己产生的伪造图片全部判断成真实的图片。</p>
-<p>根据上述训练过程的描述，我们可以定义一个损失函数：</p>
-<p>$$<br>  Loss = \frac{1}{m}\sum[logD(x^i)+log(1-D(G(z^i)))]<br>$$</p>
-<h2 id="二-DCGAN网络"><a href="#二-DCGAN网络" class="headerlink" title="二 DCGAN网络"></a>二 DCGAN网络</h2><h3 id="2-0-介绍"><a href="#2-0-介绍" class="headerlink" title="2.0 介绍"></a>2.0 介绍</h3><p>本论文做了以下贡献。</p>
-<ul>
-<li><p>提出并评估了一系列的加在卷积GAN网络拓扑结构的约束，使得卷积GAN网络在大部分设置中稳定的用于训练。给这种架构取名为深度卷积GAN(DCGAN)</p>
-</li>
-<li><p>对图像分类任务使用训练好的分类器，结合其他无监督学习算法，性能较好。</p>
-</li>
-<li><p>可视化了GAN学习到的过滤器(filter)，并且实验表明特定的过滤器已经学习到画特定的物体。</p>
-</li>
-<li><p>表明，生成器有些有趣的矢量算数性质，它可以很容易地完成生成模型的语义质量的操作。</p>
-</li>
-</ul>
-<h3 id="2-1-无标签数据中的表征学习"><a href="#2-1-无标签数据中的表征学习" class="headerlink" title="2.1 无标签数据中的表征学习"></a>2.1 无标签数据中的表征学习</h3><ul>
-<li><p>经典的无标签表征学习是在数据上做聚类（K均值聚类）。图像领域，可以在图像patches上做层次聚类，以此来学习表征</p>
-</li>
-<li><p>另外一个方法是训练自动编码器（卷积，堆叠），它可以分离编码的组件是什么以及组件位置。梯形结构将图像编码成压缩编码，然后解码编码来重构图像。</p>
-</li>
-</ul>
-<h3 id="2-2-生成自然图像"><a href="#2-2-生成自然图像" class="headerlink" title="2.2 生成自然图像"></a>2.2 生成自然图像</h3><p>  生成自然图像模型主要有两种：参数化和非参数化。</p>
-<ul>
-<li><p>非参数化模型一般是从已存在的数据库中做匹配，通常是匹配图像块(patches)。这种方法已经用在了<code>纹理合成</code>,<code>超分辨率</code>,<code>绘画</code>。</p>
-</li>
-<li><p>参数模型目前已经被研究得较充分（例如MNIST数据集或者纹理合成）。但是生成真实世界的自然图像还没有取得成功。一种<code>变分抽样方法</code>生成图像，生成的图像中容易有模糊干扰。另外一种方法是，使用迭代前向扩散方法生成图像。GAN生成网络生成的图像有噪音，并且可能产生无法理解的图像。一种拉普拉斯金字塔拓展方法的方法生成质量更高的图像，但是依然摆脱不了噪音。一种RNN和反卷积网络可以生成一些较好的自然图片。</p>
-</li>
-</ul>
-<h3 id="2-3-CNN内部的可视化"><a href="#2-3-CNN内部的可视化" class="headerlink" title="2.3 CNN内部的可视化"></a>2.3 CNN内部的可视化</h3><p> 使用反卷过滤最大激励，可以知道CNN中每个卷积过滤器（卷积核）的效果。</p>
-<h3 id="2-4-方法和模型架构"><a href="#2-4-方法和模型架构" class="headerlink" title="2.4 方法和模型架构"></a>2.4 方法和模型架构</h3><p> 经验表明：使用CNN来增大GAN的方法来给图像建模的方法是失败的。我们定义了一组架构，它可以在多个不同数据集上稳定训练，并且可以训练更高的分辨率和更深的生成模型。</p>
-<p> 方法的核心在于，采用并修改了CNN架构中三个方面。</p>
-<ol>
-<li><p>所有的用stride卷积替换确定性空间池化函数（例如最大池化）卷积网络，这允许网络学习它自己的空间下采样。我们在生成器中使用了这种方法，这使得它能够学习自己的空间下采样和分类器。</p>
-</li>
-<li><p>去掉顶层卷积特征上的全连接层。最好的例子是全局均值池化用在艺术图像分类模型。我们发现，全局均值池化增加了模型的稳定性，但是拖累了其收敛速度。一个中间层的生成器和分类器，分别直接将顶层的卷积特征链接到输入和输出，其结果较好。GAN的第一层，以正态噪音分布Z作为输入，可以称为全连接，因为它只是矩阵操作，但是结果被reshaped成一个4维tensor，并用作卷积堆叠的起始。对于分类器，最后的卷积层被平铺(flatten)并喂入单个sigmoid输出。</p>
-</li>
-<li><p>第三个是Batch Normalization，通过对每个输入神经元进行归一化（均值为0，方差是单位方差（1））来稳定学习。它可以避免由于poor initialization和深层模型中的梯度扩散问题。直接将batchnorm应用到所有层，将会导致抽样震荡和模型不稳定。因此，不要将batchnorm用在输出层的生成器和输入层的分类器。</p>
-<p>Relu激活函数用在生成器中，输出层使用Tanh激活函数的除外。我们发现使用收敛的激活函数可以让模型更快的饱和并覆盖训练分布的颜色空间。在分类器中，我们发现，使用leaky Retified 激活函数表现较好，尤其是高分辨率模型。这与原始的GAN模型相反，它用的是maxout激励函数。</p>
-</li>
-</ol>
-<p> <strong>总结</strong></p>
-<ul>
-<li><p>使用strided 卷积（分类器）和fractional-strided卷积（生成器）替换所有池化层。</p>
-</li>
-<li><p>分类器和生成器中都是用batchnorm</p>
-</li>
-<li><p>深层架构，移除全连接层</p>
-</li>
-<li><p>除了输出层使用Tanh激活函数，其他层都使用Relu</p>
-</li>
-<li><p>所有层的分类器都使用 LeakyRelu</p>
-</li>
-</ul>
-<h3 id="2-5-模型细节"><a href="#2-5-模型细节" class="headerlink" title="2.5 模型细节"></a>2.5 模型细节</h3><ul>
-<li><p>数据集：, Large-scale Scene Understanding (LSUN) (Yu et al., 2015),Imagenet-1k and a newly assembled Faces dataset</p>
-</li>
-<li><p>预处理：图像不做预处理，激活函数tanh范围拓展到[-1,1]</p>
-</li>
-<li><p>所有模型预训练都是使用mini-batch SGD，mini-batch 是128。</p>
-</li>
-<li><p>所有权重初始化是，均值为0，方差为0.02</p>
-</li>
-<li><p>LeakyRelu：the slope of the leak was set to 0.2 in all models</p>
-</li>
-<li><p>之前的GAN使用动量来加速训练，此文使用带超参数的Adam 优化器</p>
-</li>
-<li><p>学习率为 0.0002</p>
-</li>
-<li><p>动量项 $\beta _1 =0.5$ 更稳定（原始的是0.9）</p>
-<p><img src="/images/blog/gan1.png" alt="网络细节"></p>
-<p>一个100维的正态分布Z被投影到一个小的空间范围，许多特征maps的卷积表征。一系列的四fractionally-strided卷积（有些论文误称为反卷积），然后将这个高度表征表示为64x64像素的图像。注意：没有使用全连接层或池化层。</p>
-</li>
-</ul>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2016-12-27-gan-paper/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2016-12-27-gan-paper/" title="GAN：论文笔记">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2016-12-22-theano-deeplearning/">
-    		theano 深度学习数据准备
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.418Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h2 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h2><p> 使用的是MNIST手写字识别,<a href="http://deeplearning.net/data/mnist/mnist.pkl.gz" target="_blank" rel="noopener">下载</a>。数据由60000个样本，50000个训练样本和10000个测试样本，每个样本被统一为28x28像素。原始数据集中每个样本的像素值区间是[0,255]，其中0代表黑色，255为白色，中间的是灰色。</p>
-<p> <img src="/images/blog/theano1.png" alt="样本">)<img src="/images/blog/theano2.png" alt="样本">)<img src="/images/blog/theano3.png" alt="样本">)<img src="/images/blog/theano4.png" alt="样本"></p>
-<h2 id="卷积神经网络"><a href="#卷积神经网络" class="headerlink" title="卷积神经网络"></a>卷积神经网络</h2><p> CNN每层都是由多个特征map组成，( $h^{()k},k=0…k$ )。隐藏层的权重可以用一个四维的Tensor表示，分别代表<strong>目标特征map</strong>，<strong>源特征map</strong>，<strong>原始图像中竖轴坐标</strong>，<strong>原始图像中横轴坐标</strong>。偏置b可以用一个向量表示，向量中每个元素是目标特征map中的一个元素。下图演示了这个过程:</p>
-<p> <img src="/images/blog/theano5.png" alt="CNN"></p>
-<p>上图展示了两层CNN网络，<code>m-1</code>层包含了4个特征map，隐藏层<code>m</code>包含了两个特征map ( $h^0和h^1$ )。 输出神经元中的像素，$h^0$ 和 $h^1$ (途中蓝色( $W^1$ 旁边)和红色矩形框( $W^2$ 旁边))，是从 <code>m-1</code> 层的2x2的接收域的像素中计算得来的。注意看，接受域是如何覆盖全部的四个输入特征map的。特征 $h^0$ 和 $h^1$ 的权重 $W^0$ 和 $W^1$ 都是3维Tensor,第一个维度代表的是第几个输入特征maps的，其他两个是像素坐标。</p>
-<p>结合起来看 $W^{kl} _{ij}$ 代表第 <code>m</code>层的第 <code>k</code> 个特征的每个像素与第 <code>m-1</code>层的第 <code>l</code> 个特征的坐标点为 <code>i,j</code> 像素的权重。所以，在上图由4个通道卷积得到2个通道的过程中，参数的数目为4×2×2×2个，其中4表示4个通道，第一个2表示生成2个通道，最后的2×2表示卷积核大小。</p>
-<p>下面演示 theano的代码和详细数据过程：</p>
-<p><strong>导入基本包</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import theano</span><br><span class="line">from theano import tensor as T</span><br><span class="line">from theano.tensor.nnet import conv2d</span><br><span class="line"></span><br><span class="line">import numpy</span><br></pre></td></tr></table></figure>
-
-<p><strong>初始化一个随机数生成器</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rng &#x3D; numpy.random.RandomState(23455)</span><br></pre></td></tr></table></figure>
-
-<p><strong>初始化输入</strong></p>
-<p>注意，深度学习框架中，一般会先构架计算图（即，把计算过程定义好），然后再输入数据。所以，此时的初始化时一个空的占位变量。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># instantiate 4D tensor for input</span><br><span class="line">input &#x3D; T.tensor4(name&#x3D;&#39;input&#39;)</span><br></pre></td></tr></table></figure>
-
-<p>通过调试，查看变量的初始化<br><img src="/images/blog/theano6.png" alt="CNN"></p>
-<p><strong>初始化权重矩阵</strong></p>
-<p>注意：权重的数据类型是 <code>theano.shared</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># initialize shared variable for weights.</span><br><span class="line">w_shp &#x3D; (2, 3, 9, 9)</span><br><span class="line">w_bound &#x3D; numpy.sqrt(3 * 9 * 9)</span><br><span class="line">W &#x3D; theano.shared( numpy.asarray(</span><br><span class="line">            rng.uniform(</span><br><span class="line">                low&#x3D;-1.0 &#x2F; w_bound,</span><br><span class="line">                high&#x3D;1.0 &#x2F; w_bound,</span><br><span class="line">                size&#x3D;w_shp),</span><br><span class="line">            dtype&#x3D;input.dtype), name &#x3D;&#39;W&#39;)</span><br></pre></td></tr></table></figure>
-<p>观察权重的数据结构和内部的值。</p>
-<p><img src="/images/blog/theano7.png" alt="CNN"></p>
-<p><strong>初始化偏置</strong></p>
-<p>偏置只有2个，因为此处只使用了 2个特征抽取map。</p>
-<p>此时的偏置的数据类型也是 <code>theano.shared</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">b_shp &#x3D; (2,)</span><br><span class="line">b &#x3D; theano.shared(numpy.asarray(</span><br><span class="line">           rng.uniform(low&#x3D;-.5, high&#x3D;.5, size&#x3D;b_shp),</span><br><span class="line">           dtype&#x3D;input.dtype), name &#x3D;&#39;b&#39;)</span><br></pre></td></tr></table></figure>
-
-<p><strong>计算卷积</strong></p>
-<p>构建符号表达的计算图，此时是个空架子</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># build symbolic expression that computes the convolution of input with filters in w</span><br><span class="line">conv_out &#x3D; conv2d(input, W)</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/blog/theano8.png" alt="CNN"></p>
-<p><strong>卷积网络的激活输出</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">output &#x3D; T.nnet.sigmoid(conv_out + b.dimshuffle(&#39;x&#39;, 0, &#39;x&#39;, &#39;x&#39;))</span><br><span class="line"></span><br><span class="line"># create theano function to compute filtered images</span><br><span class="line">f &#x3D; theano.function([input], output)</span><br></pre></td></tr></table></figure>
-
-<p>** 给卷积网络灌入图像数据**</p>
-<p>下面的代码直接使用了CNN网络中的函数 <code>f</code>，注意下面代码中的 <code>filtered_img = f(img_)</code>，其他部分是普通的图像处理。此处往图像中灌入图像数据，并返回卷积之后的结果。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import numpy</span><br><span class="line">import pylab</span><br><span class="line">from PIL import Image</span><br><span class="line"></span><br><span class="line"># open random image of dimensions 639x516</span><br><span class="line">img &#x3D; Image.open(open(&#39;doc&#x2F;images&#x2F;3wolfmoon.jpg&#39;))</span><br><span class="line"># dimensions are (height, width, channel)</span><br><span class="line">img &#x3D; numpy.asarray(img, dtype&#x3D;&#39;float64&#39;) &#x2F; 256.</span><br><span class="line"></span><br><span class="line"># put image in 4D tensor of shape (1, 3, height, width)</span><br><span class="line">img_ &#x3D; img.transpose(2, 0, 1).reshape(1, 3, 639, 516)</span><br><span class="line">filtered_img &#x3D; f(img_)</span><br><span class="line"></span><br><span class="line"># plot original image and first and second components of output</span><br><span class="line">pylab.subplot(1, 3, 1); pylab.axis(&#39;off&#39;); pylab.imshow(img)</span><br><span class="line">pylab.gray();</span><br><span class="line"># recall that the convOp output (filtered image) is actually a &quot;minibatch&quot;,</span><br><span class="line"># of size 1 here, so we take index 0 in the first dimension:</span><br><span class="line">pylab.subplot(1, 3, 2); pylab.axis(&#39;off&#39;); pylab.imshow(filtered_img[0, 0, :, :])</span><br><span class="line">pylab.subplot(1, 3, 3); pylab.axis(&#39;off&#39;); pylab.imshow(filtered_img[0, 1, :, :])</span><br><span class="line">pylab.show()</span><br></pre></td></tr></table></figure>
-
-<p>下图演示了图片被输入到图像中的结构:</p>
-<p>图片被处理为<code>ndarray</code>类型，并保留了RGB通道的结构。</p>
-<p><img src="/images/blog/theano9.png" alt="CNN"></p>
-<p><strong>详细的卷积过程</strong></p>
-<p>查看函数 <code>conv_out=conv2d(input,w)</code> 在<code>theano</code>中如何定义：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">def conv2d(input, filters, input_shape&#x3D;None, filter_shape&#x3D;None,</span><br><span class="line">           border_mode&#x3D;&#39;valid&#39;, subsample&#x3D;(1, 1), filter_flip&#x3D;True,</span><br><span class="line">           image_shape&#x3D;None, filter_dilation&#x3D;(1, 1), **kwargs):</span><br><span class="line"></span><br><span class="line">    if &#39;imshp_logical&#39; in kwargs or &#39;kshp_logical&#39; in kwargs:</span><br><span class="line">        raise ValueError(</span><br><span class="line">            &quot;Keyword arguments &#39;imshp_logical&#39; and &#39;kshp_logical&#39; for conv2d &quot;</span><br><span class="line">            &quot;are not supported anymore (and have not been a reliable way to &quot;</span><br><span class="line">            &quot;perform upsampling). That feature is still available by calling &quot;</span><br><span class="line">            &quot;theano.tensor.nnet.conv.conv2d() for the time being.&quot;)</span><br><span class="line">    if len(kwargs.keys()) &gt; 0:</span><br><span class="line">        warnings.warn(str(kwargs.keys()) +</span><br><span class="line">                      &quot; are now deprecated in &quot;</span><br><span class="line">                      &quot;&#96;tensor.nnet.abstract_conv.conv2d&#96; interface&quot;</span><br><span class="line">                      &quot; and will be ignored.&quot;,</span><br><span class="line">                      stacklevel&#x3D;2)</span><br><span class="line"></span><br><span class="line">    if image_shape is not None:</span><br><span class="line">        warnings.warn(&quot;The &#96;image_shape&#96; keyword argument to &quot;</span><br><span class="line">                      &quot;&#96;tensor.nnet.conv2d&#96; is deprecated, it has been &quot;</span><br><span class="line">                      &quot;renamed to &#96;input_shape&#96;.&quot;,</span><br><span class="line">                      stacklevel&#x3D;2)</span><br><span class="line">        if input_shape is None:</span><br><span class="line">            input_shape &#x3D; image_shape</span><br><span class="line">        else:</span><br><span class="line">            raise ValueError(&quot;input_shape and image_shape should not&quot;</span><br><span class="line">                             &quot; be provided at the same time.&quot;)</span><br><span class="line"></span><br><span class="line">    return abstract_conv2d(input, filters, input_shape, filter_shape,</span><br><span class="line">                           border_mode, subsample, filter_flip,</span><br><span class="line">                           filter_dilation)</span><br></pre></td></tr></table></figure>
-
-<p>看代码可知，此函数只是个外壳，最后的<code>abstract_conv2d</code>才是实际的处理方法。继续进入到 <code>abstract_conv2d</code>函数内部：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">def conv2d(input,</span><br><span class="line">          filters,</span><br><span class="line">          input_shape&#x3D;None,</span><br><span class="line">          filter_shape&#x3D;None,</span><br><span class="line">          border_mode&#x3D;&#39;valid&#39;,</span><br><span class="line">          subsample&#x3D;(1, 1),</span><br><span class="line">          filter_flip&#x3D;True,</span><br><span class="line">          filter_dilation&#x3D;(1, 1)):</span><br><span class="line">   &quot;&quot;&quot;This function will build the symbolic graph for convolving a mini-batch of a</span><br><span class="line">   stack of 2D inputs with a set of 2D filters. The implementation is modelled</span><br><span class="line">   after Convolutional Neural Networks (CNN).</span><br><span class="line"></span><br><span class="line">   Refer to :func:&#96;nnet.conv2d &lt;theano.tensor.nnet.conv2d&gt;&#96; for a more detailed documentation.</span><br><span class="line">   &quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">   input &#x3D; as_tensor_variable(input)</span><br><span class="line">   filters &#x3D; as_tensor_variable(filters)</span><br><span class="line">   conv_op &#x3D; AbstractConv2d(imshp&#x3D;input_shape,</span><br><span class="line">                            kshp&#x3D;filter_shape,</span><br><span class="line">                            border_mode&#x3D;border_mode,</span><br><span class="line">                            subsample&#x3D;subsample,</span><br><span class="line">                            filter_flip&#x3D;filter_flip,</span><br><span class="line">                            filter_dilation&#x3D;filter_dilation)</span><br><span class="line">   return conv_op(input, filters)</span><br></pre></td></tr></table></figure>
-
-<p>此函数，也只将python中的<code>input</code>变量和<code>filters</code>变量转换为<code>theano</code> 中的张量Tensor。之后将初始化了一个<code>AbstractConv2d</code>对象</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">input &#x3D; as_tensor_variable(input)</span><br><span class="line">filters &#x3D; as_tensor_variable(filters)</span><br><span class="line">conv_op &#x3D; AbstractConv2d(imshp&#x3D;input_shape,</span><br><span class="line">                          kshp&#x3D;filter_shape,</span><br><span class="line">                          border_mode&#x3D;border_mode,</span><br><span class="line">                          subsample&#x3D;subsample,</span><br><span class="line">                          filter_flip&#x3D;filter_flip,</span><br><span class="line">                          filter_dilation&#x3D;filter_dilation)</span><br><span class="line"> return conv_op(input, filters)</span><br></pre></td></tr></table></figure>
-
-<p>继续深入 <code>AbstractConv2d</code>这个构造方法内部</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">class AbstractConv2d(AbstractConv):</span><br><span class="line">    &quot;&quot;&quot; Abstract Op for the forward convolution.</span><br><span class="line">    Refer to :func:&#96;BaseAbstractConv &lt;theano.tensor.nnet.abstract_conv.BaseAbstractConv&gt;&#96;</span><br><span class="line">    for a more detailed documentation.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">    def __init__(self,</span><br><span class="line">                 imshp&#x3D;None,</span><br><span class="line">                 kshp&#x3D;None,</span><br><span class="line">                 border_mode&#x3D;&quot;valid&quot;,</span><br><span class="line">                 subsample&#x3D;(1, 1),</span><br><span class="line">                 filter_flip&#x3D;True,</span><br><span class="line">                 filter_dilation&#x3D;(1, 1)):</span><br><span class="line">        super(AbstractConv2d, self).__init__(convdim&#x3D;2,</span><br><span class="line">                                             imshp&#x3D;imshp, kshp&#x3D;kshp,</span><br><span class="line">                                             border_mode&#x3D;border_mode,</span><br><span class="line">                                             subsample&#x3D;subsample,</span><br><span class="line">                                             filter_flip&#x3D;filter_flip,</span><br><span class="line">                                             filter_dilation&#x3D;filter_dilation)</span><br></pre></td></tr></table></figure>
-
-<p>从代码中可以看到，它实际是<code>super(AbstractConv2d, self)</code>继续调用父类<code>AbstractConv</code>的<code>super(AbstractConv2d, self)</code>的构造方法。但是<code>theano</code>中此处的父类是个抽象类，它在执行<code>super(AbstractConv2d, self)</code>时，实际是调用了自己的构造方法。</p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2016-12-22-theano-deeplearning/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2016-12-22-theano-deeplearning/" title="theano 深度学习数据准备">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2016-11-24-represationlearning/">
-    		深度学习：表征学习
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.406Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <p><strong>概述</strong>：本章，我们首先讨论了表征学习的概念以及深度学习中表述学习的可用之处。我们讨论了学习算法在不同任务之间共享统计特性，包括使用无监督学习的信息来作监督学习任务。共享的表征可用于处理多领域问题，或者将已学习的知识转换到只有几个或者完全没有样本的但是包含表征的任务中。最后会回头讨论表述学习的成功的原因，起于分布式表述和深度表述的优势，终于数据处理的隐性假设，也即观测数据的隐藏促因。</p>
-<p>机器学习中，一个好的表述方法可以使得后续的 学习任务更简单。因而，表述方法的选择通常依赖于后续学习任务的选择。</p>
-<p>我们可以将使用监督学习方法的前馈网络看做一种学习表征的方法。一般网络最后一层是线性分类器，比如softmax线性回归分类，网络其他部分其实可以看做在给此分类器提供表征。比如，输入的特征可能是线性不可分，但是到最后隐藏层时变得线性可分了。</p>
-<p>其他学习算法一般会细致地被设计为以某种特殊的方式具化其表征。比如，假若我们想学习使得密度评估方法更简单的表征，越多独立变量的表征越易于建模，所以我们的目标函数被设计成使表征向量V的元素尽可能独立。如同监督学习网络，非监督学习算法除了有个主要的训练目标，还会学习表述方法这个副产品。这个副产品用在多任务学习中，可以使其在各个任务之间共享。</p>
-<p>表述学习的亮点在于，它可以提供一种执行半监督和无监督学习的方法。我们通常有大量无标签数据集和少量有标签的作为训练样本。<strong>在标签数据集中做的监督学习容易导致过拟合，半监督学习由于可以从无标签数据集中学习，可以有一定概率化解这种情况。</strong></p>
-<h2 id="1-逐层贪婪的无监督预训练"><a href="#1-逐层贪婪的无监督预训练" class="headerlink" title="1 逐层贪婪的无监督预训练"></a>1 逐层贪婪的无监督预训练</h2><p> 无监督学习在深度神经网络历史中扮演重要角色，但是如今（2014年往后）广泛使用的CNN模型已<strong>不再</strong>使用逐层训练方式进行初始化。但是无监督学习仍然是今后深度学习领域的“圣杯”，是解决大量无标签数据集问题的利器。关于无监督学习的一段小变迁参考 <a href="http://www.caffecn.cn/?/question/53" target="_blank" rel="noopener">无监督逐层预训练目前是否还广泛应用于CNN的训练</a>。</p>
-<p> 逐层贪婪的无监督预训练依赖于一个单层表述学习算法如RBM（关于RBM 可以参考<a href="http://www.cnblogs.com/zhangchaoyang/articles/5537643.html" target="_blank" rel="noopener">基于RBM的推荐算法</a>），一个单层自动编码器， 一个稀疏编码模型，或者其他学习潜在表征的模型。每一层使用无监督学习来预训练，以上一层的输出作为输入，并输出数据的另外一种表征，整个分布朝着更简单的方向。</p>
-<p>更详细的无监督方法可以参考国内的一篇 <a href="http://www.c-s-a.org.cn/ch/reader/create_pdf.aspx?file_no=20160801&flag=1&journal_id=cas&year_id=2016" target="_blank" rel="noopener">无监督学习综述论文</a></p>
-<p>特点：</p>
-<ul>
-<li><p><strong>贪婪</strong>：它基于贪婪算法，它独立地优化问题的解的方方面面，每次一个方面，而不是同时优化全局</p>
-</li>
-<li><p><strong>逐层</strong>：这些独立的方面都是网络的每一层，每次只训练其中一层，并且训练第 $i$ 层时会固定前面的网络层。</p>
-</li>
-<li><p><strong>无监督</strong>：每一层的训练都是使用无监督表述学习算法。</p>
-</li>
-<li><p><strong>预训练</strong>：它只是训练其他所有网络层之前的一小步。</p>
-</li>
-</ul>
-<h3 id="1-1-无监督预训练何时以及为何有用"><a href="#1-1-无监督预训练何时以及为何有用" class="headerlink" title="1.1 无监督预训练何时以及为何有用"></a>1.1 无监督预训练何时以及为何有用</h3><p>许多任务中，逐层贪婪的无监督预训练可以在分类任务中减小测试误差。</p>
-  <hr>
-  **逐层贪婪无监督预训练算法**
-
-<p>  假若：无监督学习算法 <strong>L</strong> ,接收训练样本集并返回一个编码器或者特征函数 $f$ 。</p>
-<p>  原始输入数据是 $X$ ，每个样本为一行， $f^{(1)}(X)$ 是第一阶段的在数据 $X$ 上的输出编码器，它同时作为第二阶段无监督特征学习的输入。</p>
-<p>  在微调阶段，我们使用一个学习函数 $T$ ，以一个初始函数 $f$ 作为输入，输入样本 $X$ ，然后返回调整后的函数。<br>  <hr></p>
-<p>  无监督预训练方法结合两个不同的论据。<strong>首先，初始化参数的选择会对模型产生非常显著的正则化影响（往近一点说，它可以提高优化效果），其次，学习输入的分布可有助于学习如何将输入映射到输出</strong>。</p>
-<p>第一个观点，初始化参数的选择对网络的正则化效果是很难理解。在预训练流行时，它被理解为局部性地初始化了一个模型，而这会导致网络陷入局部最优。现在我们认为网络不会被局部最小问题困扰。但是仍然有这种可能的情况，某些预训练初始化的网络在某些位置变得不可接近（进一步优化）。例如，某些区域minibatch的不同样本点的轻微变动会导致损失函数极大变动，或者某些区域Hessian矩阵几近无力，此时的梯度下降算法必须使用非常小的步长。然而，我们通过监督学习阶段预训练参数获得的特征难以精确控制，现在的办法都是使用一种近似无监督学习和监督学习的方法，而不是分开使用两种方法。如果想知道监督学习如何从无监督学习阶段如何保存优化信息而不太麻烦的话，可以将特征抽取的参数固定并只在学习的参数的顶层的分类器上使用监督学习。</p>
-<p>另外一个观点，学习算法可以将无监督阶段学习到的信息用于监督学习阶段来提高算法。这个好理解，即无监督任务中的某些有用特征同时可用于监督学习任务。</p>
-<p>以无监督预训练学习特征表述的观点来看，我们认为无监督预训练在初始特征表述十分贫乏时尤为有效。一个突出实例是词袋模型。以one-hot向量词表述并没有很丰富的信息，因为任意两个不同的one-hot词向量都是相同的距离(欧氏距离 $L^2$ 都是2)。学习的词袋表征天然的可以编码词之间的相似度。但是这一点对于图像没有太大用处。</p>
-<p>考虑下其他因素。例如，无监督预训练在要学习的函数极端复杂时十分有用。无监督学习与正则化处理的不同之处在于，它不会偏移（正则化方法会在目标函数上做变动）学习器去挖掘简单的表述函数，而是挖掘无监督学习所需的特征表述函数。</p>
-<p> 撇开以上，我们分析下无监督预训练能带来提供的实例，并解释其中原因。无监督预训练通常用于提升分类器性能，并能减小测试误差。但是，无监督预训练不止是作用于分类，它能提升优化性能，而不是仅仅正则化。比如，它能同时提升训练和测试深度自编码网络的重构误差。神经网络训练过程，每次都会拟合成不同函数。<strong>经过无监督预训练的神经网络会在解空间的相同区域收敛，但是普通网络可能会停留在不同区域</strong>。下图演示了这种现象:</p>
-<p> <img src="/images/blog/representation1.png" alt="无监督预训练与普通网络的对照"></p>
-<p>图中预训练网络达到更小的区域，说明预训练可以减小评估过程的方差（更稳定）。</p>
-<p>那么，无监督预训练是如何起正则化作用呢？我们的假设是它可以使得学习算法挖掘观测数据背后的相关特征方向。</p>
-<p><strong>缺点一</strong>：无监督预训练的缺点是，它需要两个独立训练阶段，即需要更多的参数，其结果便是很难在事前预知训练效果。同时（与分两阶段进行的无监督预训练对比）使用有监督和无监督学习时，通常只需要一个超参数，即在无监督学习的代价函数上添加一个额外项。该额外项用以衡量无监督目标函数对有监督模型的正则化影响。可确信的是，额外项系数减小，正则化效果也会相应减弱。</p>
-<p><strong>缺点二</strong>：第二个不足之处是，分成两个独立阶段时，每个阶段都会有其独立的超参数。通常无法从第一阶段来预测第二阶段的性能，因此从第二阶段的反馈来更新第一阶段的超参数时存在很长的滞后。<strong>其中的一个基本原则是，使用监督学习阶段的验证数据集的误差去选择预训练阶段的超参数。</strong><br>现实之中，一些超参数，比如预训练迭代次数，使用在无监督目标函数上的使用提前终止的方法，虽不完美，但是用于监督目标函数上易于计算。</p>
-<p>如今，无监督预训练基本被遗忘，除了自然语言处理领域。其中的词的one-hot向量表征没有承载任何相似信息，并且会存在大量的无标签数据集。此时，预训练的优势是，可以在海量无标签数据集上预训练一次，学习到一个较好的表征（通常是词语，也可以是句子），然后使用这个表征或者微调之后的，用于训练集样本较少的监督学习任务。</p>
-<h3 id="1-2-无监督学习的四种实现模型"><a href="#1-2-无监督学习的四种实现模型" class="headerlink" title="1.2 无监督学习的四种实现模型"></a>1.2 无监督学习的四种实现模型</h3><p> <strong>自动编码器（auto-encoders）</strong></p>
-<p> 一个典型的自编码例子如下图所示, 从可见层到第一个隐含层的转换相当于是一个编码过程(encoder), 从第一个隐含层到输出层相当于一个解码过程(decoder)。 自编码过程使用的一般都是无标签数据, 输入据(input data)经过第一层变换(encoder), 就会被进行一定程度的抽象, 得到一个更深层的编码(code), 然后可以通过第二层变换(decoder)得到一个近似于输入数据(input data)的输出数据(output data)。</p>
-<p> <img src="/images/blog/representation15.png" alt=""></p>
-<p> 优点：</p>
-<ul>
-<li><p>简单技术：重建输入</p>
-</li>
-<li><p>可堆栈多层</p>
-</li>
-<li><p>直觉型，且基于神经科学研究</p>
-<p>缺点：</p>
-</li>
-<li><p>贪婪训练每一层</p>
-</li>
-<li><p>没有全局优化</p>
-</li>
-<li><p>比不上监督学习的表现</p>
-</li>
-<li><p>层一多会失效</p>
-</li>
-<li><p>输入的重建可能不是学习通用表征的理想度量（metric）</p>
-</li>
-</ul>
-<p> <strong>聚类学习（Clustering Learning）</strong></p>
-<p> 所周知，受限玻尔兹曼机（RBMs）、深度玻尔兹曼机（DBMs）、深度信念网络（DBNs）难以训练，因为解决其配分函数（partition function）的数值难题。因此它们还未被普遍用来解决问题。</p>
-<p>优点：</p>
-<ul>
-<li><p>简单技术：聚类相似输出</p>
-</li>
-<li><p>可被多层堆栈</p>
-</li>
-<li><p>直觉型，且基于神经科学研究</p>
-</li>
-</ul>
-<p>缺点：</p>
-<ul>
-<li><p>贪婪训练每一层</p>
-</li>
-<li><p>没有全局优化</p>
-</li>
-<li><p>在一些情况下，比不上监督学习的表现</p>
-</li>
-<li><p>层数增加时会失效，收益递减</p>
-</li>
-</ul>
-<p><strong>生成模型（generative models）</strong></p>
-<p>生成模型，尝试在同一时间创建一个分类（识别器或编码器）网络和一个生成图像（生成模型）模型。这种方法起源于 Ian Goodfellow 和 Yoshua Bengio（参见论文：Generative Adversarial Networks）的开创性工作。</p>
-<p>下面是系统框架图：</p>
-<p> <img src="/images/blog/representation16.png" alt=""></p>
-<p> 优点：</p>
-<ul>
-<li><p>整个网络的全局训练（global training）</p>
-</li>
-<li><p>代码和应用简单明了</p>
-</li>
-</ul>
-<p>缺点：</p>
-<ul>
-<li><p>难以训练和转化（conversion）</p>
-</li>
-<li><p>在某些情况下，与有监督学习的表现相似</p>
-</li>
-<li><p>需论证展示方法（representation）的可用性（这是所有无监督算法面临的问题）</p>
-</li>
-</ul>
-<h2 id="2-迁移学习和领域自适应"><a href="#2-迁移学习和领域自适应" class="headerlink" title="2 迁移学习和领域自适应"></a>2 迁移学习和领域自适应</h2><h3 id="2-1-概念"><a href="#2-1-概念" class="headerlink" title="2.1 概念"></a>2.1 概念</h3><p> <strong>迁移学习和领域自适应：</strong>指的是在某种情况下学习到的设置(比如概率分布 $P_1$ )迁移到另外一种情形下(概率分布 $P_2$ )。这其实是前面部分的思想推广，前面将无监督学习任务和监督学习任务之间的表征做了迁移。考虑到大部分数据或任务是存在相关性的，所以通过transfer learning我们可以将已经学到的parameter 分享给新模型从而加快并优化模型的学习不用像之前那样learn from zero.</p>
-<p> 在迁移学习中，学习者必须同时进行两个或多个不同任务，但是我们假设其中用于解释变量 $P_1$ 的许多因子与另外一个学习参数 $P_2$ 的许多变量相关。这可以理解为，在监督学习上下文中，输入是相同的，但是实质目标可能不同。比如，我们可能在第一步的参数设置时学习了一些视觉领域集合，比如猫和狗，然后在第二步的参数设置中学习了另外一个视觉领域，比如蚂蚁和黄蜂。如果第一步的学习设置（从 $P_1$ 抽样）时有非常多的数据，那么这可能有助于从包含很少样本的 $P_2$ 中学习表征。许多视觉类别共享了低层次的比如边和形状这些概念，几何上的改变，其效果较小。 一般来说，如果存在可以被被不同设置或任务共同使用的特征，这对应了在多种设置中的潜在因子，那么通过表征学习可以完成迁移学习，多任务学习和领域自适应。</p>
-<p> 但有的时候，不同任务之间共享的不是输入的语义而是输出的语义。比如，语音识别系统需要在输出层产生合法的句子，但是靠近输入层的浅层网络可能需要识别相同意音素的不同版本或者取决于讲话人的亚音素发声。此时，共享靠近输出层的高层网络并有一些特定任务预处理显得更有意义。如下图:</p>
-<p> <img src="/images/blog/representation2.png" alt="迁移学习"></p>
-<p> 【多任务学习或迁移学习架构，对所有任务输出变量y是相同语义，而输入变量x有不同意义】</p>
-<p>在领域自适应的相关实例中，每种设置的任务相同（包括从输入映射到输出的优化过程），但是输入分布可能不同。比如，语音分析任务中，需要分析情感倾向（正面或负面）。如果情感预测器的训练集用的是媒体预料，比如书籍、视频和音乐，但是用于分析的却是用户对电子产品，如电视和手机，领域适应问题就会出现。可以想象，存在一个隐藏函数，它能区分评论的情感倾向，积极、消极、中立，但是不同领域之间表达情感倾向的词汇和样式却不相同，这使得跨领域的泛化有难度。不过一些应用在情感分析中的简单的无监督预训练（领域适应）被证明很有效。</p>
-<p>一个相关问题是概念错位，我们可以看成一种随时间变迁，其数据分布逐步变动的迁移学习。概念错位和迁移学习都可以看做一种特殊形式的多任务学习。其中“多任务学习”特指监督学习任务，迁移学习更多的时候用于描述无监督学习和增强学习。</p>
-<p>以上所有，目标都是利用第一步配置来抽取信息，这些信息可能有用在第二步的配置（参数）或者直接预测了第二步的配置。<strong>表征学习的核心观点是，相同的表征可同时用于两步的配置</strong>。</p>
-<p>前面提到过，用于迁移学习的无监督深度学习在机器学习竞赛中很有效。竞赛中的第一步，每位选手会被给予根据第一步配置（分布 $P_1$ ）的数据集，某些分类的数据样例。选手必须根据这些来学习较好的特征空间（从原始数据输入映射到其他表征），这样，当将这些学习到的转换</p>
-<p><strong>迁移学习的两个极端</strong> 是：<strong><em>one-shot</em></strong> 学习和 <strong><em>zero-shot</em></strong> 学习(也称为<strong><em>zero-data</em></strong> 学习)。对于 <em>one-shot</em> ,迁移学习中只有一个标签样本，而 <em>zero-shot</em> 则所有样本都是无标签的。</p>
-<p>one-shot学习是可能的，因为表征学习可以在第一阶段干净地区分隐藏的分类。在迁移学习阶段，只需要有一个有标签的样本，用以推测许多测试样本的可能标签，围绕在表征空间的某点聚类簇中心的其他数据点可能是同一标签。从某种程度上说，对应于这些不变特性的变异因素已经在表征空间被彻底与其他因素分离，并且已经学习到哪些因素是决定样本隶属某个分类的重要特性。关于<code>one-shot</code>学习的，可以参考源码 <a href="https://github.com/tristandeleu/ntm-one-shot" target="_blank" rel="noopener">源码</a>,论文<a href="https://arxiv.org/pdf/1605.06065v1.pdf" target="_blank" rel="noopener">论文</a>,数据<a href="https://github.com/brendenlake/omniglot" target="_blank" rel="noopener">数据</a></p>
-<p>在zero-shot 学习配置的实例中，考虑以下场景，某位学者已经阅读了大量的文本，然后去解决物体识别问题。倘若物体被足够充分的数据描述，识别一个不曾见过的该物体图像也是可能的（人类的学习）。比如，阅读了一只猫有四只腿和尖耳朵，学习者可能会猜出一幅猫的图像，而不需要见过猫。</p>
-<p><strong>只有其他（额外）信息足够充分时，zero-shot和one-shot才有可能。</strong> 考虑一种zero-shot场景，包含了三个变量，正常的输入 $x$ ，正常的输出或者目标 $y$，以及一个描述任务的随机变量 $T$。模型被训练为评估条件分布 $p(y\mid x,T)$ ，其中T是一个描述模型该如何起作用的描述。在识别猫的例子中，是已经阅读了猫，输出是一个二分变量y,其中 $y=1$ 表示yes, $y=0$ 代表no。任务变量T 表示要回答的问题，例如‘‘这个图像中是否有猫？” 如果训练集包含和T 在相同空间的无监督对象样本，我们也许能够推断未知的T 实例的含义。在我们的例子中，没有提前看到猫的图像而去识别<br>猫，拥有一些未标记的文本数据包含句子诸如‘‘猫有四条腿’’ 或‘‘猫有尖耳朵’’ 是很重要的。</p>
-<p>zero-shot学习要求T被表示为某种泛化的形式。例如，T不仅仅是指示对象类别的one-shot。通过使用关于每个类别的词，学习到的词嵌入表征，论文提出了对象类别的分布式表示。</p>
-<p>一种类似的现象出现在机器翻译中。我们已知一种语言中的单词，和从非语言语料库中学习到的关系；另一方面，我们已经翻译了一种语言中的单词与另一种语言中的单词相关的句子。即使我们可能没有将语言X中的单词A翻译成语言Y中的单词B的标记样本，那么我们可以泛化并猜出单词A的翻译，这是由于我们已经学习了语言X和Y的分布式表示，并且通过两种语言相匹配句子组成的训练样本，产生了关联于两个空间的链接（可能是双向的）。如果所有的三种成分（两种表述形式和他们之间的关系）是联合学习的，那么这种迁移学习将是成功的。</p>
-<p>zero-shot是一种特殊形式的迁移学习。同样的原理可以解释如何能执行多模态学习(multimodal learning)，学习两种模态的表示，和一种模态中的观察x 和另一种模态中的观察y 组成的对(x; y) 之间的关系（通常是一个联合分）(Srivastavaand Salakhutdinov, 2012)。通过学习所有的三组参数（从x 到它的表示，从y 到它的表示，以及两个表示之间的关系），一个表示中的概念被锚定在另一个表示中，反之亦然，从而可以有意义地推广到新的对组。这个过程如图15.3所示。</p>
-<p><img src="/images/blog/representation3.png" alt="迁移学习"><br>关于迁移学习应用到机器翻译中，我们可以参考谷歌翻译的得 <a href="http://www.im2maker.com/news/20161123/f0995a12c3328fc8.html" target="_blank" rel="noopener">谷歌发布 Zero-Shot 神经机器翻译系统：AI 巴别塔有望成真</a>                                </p>
-<h3 id="2-2-实例"><a href="#2-2-实例" class="headerlink" title="2.2 实例"></a>2.2 实例</h3><p> <strong>1.游戏之间的参数迁移</strong></p>
-<p>   Deepmind的作品 progressive neural network. <a href="https://link.zhihu.com/?target=https%3A//arxiv.org/pdf/1606.04671v3.pdf"> progressive neural network</a> 文章里将三个小游戏Pong, Labyrinth, Atari 通过将已学其一的游戏的parameter 通过一个 lateral connection feed 到一个新游戏。有一个视频展示了其结果 <a href="https://www.youtube.com/watch?v=aWAP_CWEtSI" target="_blank" rel="noopener">游戏之间迁移学习参数</a> 。迁移学习的一个简单框架如下图</p>
-<p>  <img src="/images/blog/representation11.png" alt="迁移学习"></p>
-<p> 迁移学习的一篇博客介绍参考 <a href="https://zhuanlan.zhihu.com/p/21470871" target="_blank" rel="noopener">从虚拟到现实，迁移深度增强学习让机器人革命成为可能！</a></p>
-<p><strong>2. 图像之间迁移学习</strong></p>
-<p> 最近比较火的风格图像生成，<code>tensorflow</code>,<code>caffe</code>,<code>torch</code>都出了对应的开源代码。比如 tensorflow的 <a href="https://github.com/anishathalye/neural-style" target="_blank" rel="noopener">eural-style</a>。<br>  该代码的原理论文来自 <a href="http://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Gatys_Image_Style_Transfer_CVPR_2016_paper.pdf" target="_blank" rel="noopener">图像风格迁移学习</a></p>
-<p>   <img src="/images/blog/repretation12.jpg" alt="迁移学习"></p>
-<p>上图中，输入图像被表示为CNN不同阶段地的被过滤后的图像集合,处理层次越深，过滤器的数量越多，尺寸越小（CNN中使用了最大池化），这导致了每一层的神经元总数减少。</p>
-<ul>
-<li><p><strong>内容重构：</strong>上图中，仅仅使用已知的输入图像在每一层的网络得响应来可视化了CNN不同阶段处理，上图重构的是输入图像在原始<strong>VGG网络</strong>在<code>conv1 2</code> (a),<code>1conv2 2</code> (b), <code>conv3 2</code> (c), <code>conv4 2</code> (d) 和 <code>conv5 2</code> (e)上的重构信息。</p>
-</li>
-<li><p><strong>风格重构：</strong>在原始CNN网络的顶层激活函数，使用的是输入图像的质地信息作为特征。风格表征计算不同CNN网络层之间的不同特征的相关性。这可以构建图像，其风格与输入图像上不断增长的特征尺寸相仿，同时丢弃场景中全局布局信息。</p>
-</li>
-</ul>
-<p>关于风格的计算参考该论文。</p>
-<h2 id="3-半监督解释因果关系"><a href="#3-半监督解释因果关系" class="headerlink" title="3 半监督解释因果关系"></a>3 半监督解释因果关系</h2><p> 如何确定一种表征比另外一种更好？我们假设，最理想的表征的特征能够追溯到观测数据分布的本质。特征空间中不同的特征或方向源于不同的促因，从而使得表征有能力将这些促因区分。如果y是产生x的重要原因之一，那么 $p(x)$ 可能是计算 $p(y\mid x)$ 的一种良好表征形式。</p>
-<p> 在表征学习的其他方法中，我们通常会考虑易于建模的表征，比如全部实体是稀疏的或者相互独立的。完全独立不相关的并不一定易于建模。但是，更进一步看，目前的AI任务都是用无监督表征来促进半监督学习。其实两者是相通的，一旦我们获知观测数据的潜在促因，通常很容易分离样本的独立属性。</p>
-<p> 首先，我们看看如果半监督学习 $p(x)$ 无益于于学习 $p(y\mid x)$  。 如果样本 $p(x)$ 是正态分布的，我们想学习  $f(x)=E[y\mid x]$ 。很显然，仅仅从观测训练集x，无法提供给我们任何有用信息。</p>
-<p> 接下来，对照看下半监督学习如何变得有用。假若x是由不同部件混合，不同的y部件会构成不同的x值，如下图所示。如果构成x的部件y是完全独立的，那么对 $p(x)$ 建模即精确调和每个部件，每种分类的单标签样本将足以学习 $p(y\mid x)$ 。如果更进一步思考，是什么将 $p(y\mid x)$ 和 $p(x)$ 搭上联系。</p>
-<p><img src="/images/blog/representation4.png" alt="迁移学习"></p>
-<p>【此图展示的是由三个构件混合构成的x的密度，部件标识了潜在的解释因子y。由于混合构件都是统计显著的，以不使用标签样本的无监督方式建模p(x)已经能够获取因子y了】</p>
-<p>如果y与x的某个促因紧密相关， 那么 $p(y)$ 和 $p(y\mid x)$ 也会是强相关的，并且作为一种半监督学习策略，与变量潜在因子相关的无监督表征学习也会是十分有用的。</p>
-<p>考虑到我们的假设是y是x的促因之一，现在让h代表所有的促因。真实的生成过程可以通过以下有向图模型获得，h作为x的祖先（在图中的关系是h–&gt;x）</p>
-<p>$$<br>   p(h,x) =p(x\mid h)p(h)<br>$$</p>
-<p>其结果是，数据具有边际概率</p>
-<p>$$<br>   p(x)=E_hp(x\mid h)<br>$$</p>
-<p>从以上直观的观察，我们可以得出，表述x的最好的模型是可以揭示真正结构的一个，其中h是解释x中观测变量的潜在变量。以上讨论的完美的表征学习应该重现这些潜在因子。如果y是其中之一（或者与其中之一紧密相关），那么将很容易从这种表述中学习预测y。我们也可以看到，给定x，y的条件分布是由贝叶斯法则约束的（上述等式）。</p>
-<p>因此边缘概率 $p(x)$ 是与条件概率 $p(y\mid x)$和前者的结构信息紧密相关的。因而，基于不同情形对应的假设，半监督学习有助于提升性能。</p>
-<p>一个重要的研究问题是，大部分观测数据是由极其多的潜在促因形成的。假设 $y=h_i$ ,但是无监督学习器并不知道是哪个  $h_i$ 。学习表征时学习器的暴力解决方案是尝试所有的生成因子 $h_i$ ，并将它们组合，因而为了易于从 <code>h</code> 预测 <code>y</code> 时，我们应该不考虑哪个 $h_i$ 与 <code>y</code> 有关联。</p>
-<p>暴力解并不可取，因为不可能穷尽所有或者大部分的变量促因在观测数据上面的影响。例如，在图像处理中，表征应该对背景中所有物体编码吗？这是个有记录的心理学现象，人类无法感知与他们手头任务不直接相关的变化。半监督学习的一个比较前沿的研究是，决定在不同情形下对什么进行编码。当前，处理大量潜在促因的两种策略是同时使用<strong>监督学习</strong>信号和<strong>无监督学习</strong>信号，这样模型就会选择捕捉与变量最相关的促因，或者，如果只有纯粹的无监督学习就会使用更大的表征。</p>
-<p>无监督学习中的一种应急策略是修改最显著潜在促因的定义。以经验来说，自动编码和生成模型被训练成优化一个固定的标准，通常是类似均方误差。这种固定的标准决定了那种促因会被当做最显著的。例如，均方误差应用到图像像素时，隐含地指定了只有当大量像素的亮度发生改变时潜在促因才是显著的。如果我们要解决的问题是与小物体交互，将会出问题。下图演示的是一个机器人任务，机器人的自动编码器无法学习对小乒乓球编码。但是，对于大一点的物体，比如棒球，却是可以的，这是因为根据军方误差，棒球更显著。</p>
-<p><strong>其他关于显著的定义</strong>。例如，一组以高度可识别的模式组合起来的像素组，即便组合模式不是与亮度或暗度相关的，这种模式也被认为是极度显著的。其中一中重新定义显著的实现方法是使用最近提出的称为<strong>生成对抗网络</strong>。此方法中，生成模型被训练成欺骗前馈分类器。前馈分类器尝试将所有来自生成模型的所有样本识别为负样本，而所有来自训练集的为正样本 。这种组织架构中，任何前馈网络能够识别的结构模式都被认为是高度显著的。论文(Lotter et al. (2015)表明使用均方误差训练成生模型，生成人类头部图像的网络生成的人头经常会忽略掉耳朵，但是如果使用对抗网络架构的话则可以成功生成耳朵。因为耳朵与面部其他地方比起来并不是特别明亮或者暗，对于均方误差来说它们并不显著，但是它们的高度可识别形状和连续的坐标位置对于前馈网络来说易于学习和识别，这对于生成对抗网路来说是足够显著的。</p>
-<p><img src="/images/blog/representation5.png" alt="对抗网络生成人的头部图像"></p>
-<p>学习潜在促因的一个好处是，如果真实的生成过程中<strong>x</strong>是效果，而<strong>y</strong>是促因，那么模型 $p(x\mid y)$ 对于 $p(y)$ 上的改变是健壮的。如果因果关系逆转，可能就不是真实的，因为根据贝叶斯法则， $p(x\mid y)$ 对于 $p(y)$ 的变化是敏感的。对抗网络另外一个生成人类语音的例子是 <a href="https://deepmind.com/blog/wavenet-generative-model-raw-audio/" target="_blank" rel="noopener">GoogleDeepMind模拟人语音读文本</a></p>
-<h2 id="4-分布式表征"><a href="#4-分布式表征" class="headerlink" title="4 分布式表征"></a>4 分布式表征</h2><p> 分布式表征的概念是，表征由许多元素组成，每个元素都是独立的，这是表征学习中最重要的工具。分布式表征可以用 $n$ 个特征的 $k$ 个不同值来描述 $k^n$ 个不同概念。如我们所见，有多个隐藏神经元的神经网络以及有多个显著变量的概率模型都使用了分布式表征策略。再引入一个额外的观测。许多深度学习算法都是假设隐藏神经元可以学习表征潜在促因，那些潜在促因解释 了样本数据。分布式表征天然适用于这种方法，因为表征空间的每个方向可以对应到不同潜在配置变量的值。</p>
-<p> 一个分布式表征的样本是一个有 $n$ 个二分特征的向量，它可以有 $2^n$ 个配置，每个配置潜在的对应了输入空间的不同区域。如下图：</p>
-<p> <img src="/images/blog/representation13.png" alt="表征学习"></p>
-<p> 可以与符号表示对比来开，输入是与单个符号或分类相关。如果词典中有n个符号，我们可以想象n个特征检测器，每个检测器只负责其 相关领域的分类。此时的表征空间只有n个不同配置，刻画了输入空间的n个不同区域，如下图。</p>
-<p> <img src="/images/blog/representation7.png" alt="表征学习"></p>
-<p>这种符号表述也称为 one-hot表征，它可以被一个n个字节的互斥的0(1)向量（n个字节中只有一个是1）描述。符号表征是非分布式表征的一种特殊例子，非分布式表征是指其表述可能会包含许多实体，但是对每个实体并没有有意义的实质独立控制。</p>
-<p>基于非分布式表征学习的算法有以下：</p>
-<ul>
-<li><p><strong>聚类方法</strong>：包括K均值聚类，每个输入点被当做一个聚类</p>
-</li>
-<li><p><strong>KNN算法</strong>：对于某个输入会有相关的一个或几个模板或原型。</p>
-</li>
-<li><p><strong>决策树</strong>：给定输入，只有一个叶子节点是激活的。</p>
-</li>
-<li><p><strong>高斯混合和专家混合</strong>：模板（聚类中心）或者专家现在与一个激活度相关。如同KNN，每个输入表述了多个值，但是这些值不能很好的与其他值区分开。</p>
-</li>
-<li><p><strong>基于n-grams的语言或翻译模型</strong>：上下文集合（符号序列）按照一个树形结构的前缀区分。叶节点可能对应的是最后两个单词为 $w_1$ 和 $w_2$ 的，例如，参数会独立的为树种每个叶子评估（可能有些是共享的）。</p>
-</li>
-</ul>
-<p>对于这些非分布式表征算法，其输出不是恒定的，而是会比临接区域影响的。参数数量（或者样本）和区域数量之间的关系是可以线性定义的。</p>
-<p>一个区分分布式表征与符号表征的重要概念是，不同概念之间由于需要共享属性而需要泛化。对于纯粹的符号”cat” 和”dog” 是两个完全不同的符号。但是，如果将其中之一以某种形式的分布式表征表示，那么许多关于猫的事情可能被泛化为狗(都是动物？四条腿？)。例如，我们的分布式表征可能包含实体，如“有毛”或者“腿的数量”，这样猫和狗的这两个实体的值是一样的。基于词的分布式表征的神经语言模型，比直接在词的one-hot表征的模型要生成的更好。分布式表征引发了丰富的相似空间，这种语义相近概念与距离的概念很像，这是符号表征所不具备的属性。</p>
-<p>何时使用分布式表征作为学习算法的一部分有概率优势？—当看起来很复杂的结构可以用很少的参数表述的时候。一些传统的非分布式表征学习算法，只是因为平滑假设而泛化，该假设认为如果 $u \approx v$ ,那么要学习的目标函数 $f$ 也会有属性 $f(u)\approx f(v)$  。有多种方式来公式化这种假设，但结果是如果我们有样本 $(x,y)$  其中 $f(x)\approx y$ ,那么我们会选择一个评估器 $\hat f$ 可以近似满足在输入 $x+\epsilon $ 处移动时，函数 $\hat f$ 结果不变这一受限条件。这种假设是有用的，但是会引入维度问题：为了在许多不同区间增加或减小的目标函数，若有N个不同区间，我们可能至少需要N样本。我们可以将每个区域看成一个分类或者符号，我们可以学习任意从符号到值的解码。 然而，这样我们就没法泛化来学习新的符号或分类了。</p>
-<p>幸运的话，目标函数中除了平滑之外，可能会有些规律。例如，最大池化的卷积神经网络可以无视物体坐标位置去识别，甚至即使物体的空间变换与输入空间的平滑转换对应不上。</p>
-<p>我们来检验一个分布式表征学习的特殊例子，即通过对输入值的线性函数的阈值做二分特征抽取（达到某个阈值为1，否则该特征为0）。此表征中的每个二分特征将空间 $R^d$ 划分为一对半空间，如上上一张图（ $h_1,h_2,h_3$ 那张）。大到指数级的n个交叉点对应了的半空间决定了分布式表征学习器可以分辨的区域。空间 $R^d$ 中的n个超平面可以生成多少个区域？论文 (Pascanu et al., 2014b)证明此二分特征表征可以分辨得区域数量为</p>
-<p>$$<br> \sum _{j=1}^d(_j ^d)=O(n^d)<br>$$</p>
-<p>我们可以看到区域数是输入数量的指数级增长，隐藏神经元数量以多项式级增长。</p>
-<p>这为分布式表征的泛化能力提供了一种几何参数上的解释：$O(nd)$ 个参数（空间 $R^d$ 中n个线性阈值特征）可以代表输入空间的 $O(n^d)$ 的不同区域。如果我们不对任何数据做任何假设，并使用一种表征，每个区域只有一个唯一的符号标识，并且每个符号标识都有独立的参数来识别空间 $R^d$ 中对应的那部分，然后识别 $O(n^d)$ 个区域需要 $O(n^d)$ 个样本。更一般的说，倾向于使用分布式表征的论据在于可以拓展到使用非线性阈值单元（二分0-1函数）。此时的参数处于这种情形，如果k个参数的参数转换可以学习输入空间中r个区域，其中 $k&lt;&lt;r$ 。使用更少参数可以表述模型意味着，我们有更少的参数去拟合，这样就需要极少训练样本就可以泛化得很好。关于模型基于分布式表征可以泛化得很好的更深远的论据是，尽管它可以唯一的编码非常多的不同区域，它所能表征的容量是有限的。例如，神经网络的线性阈值神经元的VC维度仅有 $O(wlogw)$，其中 $w$ 是权重数。这种限制产生的原因是，尽管我们可以给表征空间分配非常多唯一的符号标识，我们也无法绝对的全部使用所有的标识空间，同时也不能用线性分类器任意学习从表征空间 $h$ 到输出 $y$ 的函数。（线性分类器的组成的神经元只能拟合线性函数）。结合线性分类器的分布式表征只能识别线性可分的分类。我们要学习的分类只能是类似，所有图像集中的全部绿色物体，图像中所有的汽车集合，而不是那种需要非线性XOR逻辑的分类。比如，我们不能将数据集分为，所有的红色汽车和绿色卡车作为一类，所有的绿色汽车和红色卡车作为一类。</p>
-<p>我们可以考想象，学习某种特征时不必看见所有其他特征的配置。论文Radfordet al. (2015)展示了一个生成模型，该模型学习人的面部表征，表征空间中不同方向可以捕获变量不同的潜在促因。下图演示了，表征空间中一个方向对应了某个人是男人或女人，另一个方向对应的是此人是否有戴眼镜。</p>
-<p><img src="/images/blog/representation14.png" alt="表征学习8"></p>
-<p>这些特征都是自动发现的，没有任何先验知识。隐藏神经元分类器没必要有标签：如果任务需要类似的特征，所求的目标函数上的梯度下降算法会自然而然地从语义上去学习感兴趣特征。我们可以学习男性和女性的差异，也可以学习是否有戴眼镜，而不必对所有其他n-1个其他特征上所有的值的组合做抽样来进行符号化。（类似VSM模型，但是不需要事先知道整个词典）。这种形式的概率独立性允许我们生成训练期间没有出现的人的新的特征配置（新的特征）。</p>
-<h2 id="5-源于深度的指数增益"><a href="#5-源于深度的指数增益" class="headerlink" title="5 源于深度的指数增益"></a>5 源于深度的指数增益</h2><p> 多层感知机都是广义近似，一些函数的表述使用深层网络可以比浅层网络要指数级减少。这种模型尺寸上的较少可以提高统计效率。此处，我们会陈述，将分布式表征应用到其他类型的模型会获得的类似的效果。</p>
-<p> 上一节看到的一个生成模型的例子，可以学习人脸图像的描述性隐藏因子，包括人脸的性别和是否有戴眼镜。生成模型完成此类任务是基于深度神经网络。浅层网络是没法学习这种图像像素到抽象的描述性因子之间的复杂关系的。在这个以及其他AI任务中，为了生成与高度非线性的输入高度相关的数据，这类因子可以被几乎完全独立的选取。我们认为，这需要<strong>深度</strong>分布式表征，更高层次的特征（看做输入的函数）或者因子（看做生成促因）都是通过许多非线性组合获得的。</p>
-<p> 在许多不同的设置中已经证明，通过许多非线性和一种层次的特征的二次使用组成的组织计算，可以在统计效率上得到指数级的增长。许多不同网络（比如，饱和的非线性，Boolean门，Sum/product，或者RBF神经元）使用一层隐藏层的可以被广义近似呈现。给予足够多的隐藏神经元，一个广义近似模型族可以拟合非常多类别的函数（包括所有的连续函数）。但是隐藏神经元的数量需要非常多。关于深度架构的表述能力的理论结果表明，存在可以被深度为 $k$ 的深层架构有效地表述的函数族，但是会需要输入数量的指数倍的隐藏神经元和完全的深度（2到k-1的深度）。</p>
-<h2 id="6-提供线索以挖掘潜在促因"><a href="#6-提供线索以挖掘潜在促因" class="headerlink" title="6 提供线索以挖掘潜在促因"></a>6 提供线索以挖掘潜在促因</h2><p>再回头看看我们的原始问题，什么样的表征比另一个更好？第三小节提出了一种答案，完美的表征应该是不扭曲生成数据的变量的潜在促因（变量由促因组合，变量一般是数据的某一种特征），特别是与我们的应用相关的促因。表征学习的大部分策略是基于引入线索来帮助学习找到变量的潜在促因。<br>监督学习提供的是很强的线索：对于每个 $x$ 都有个对应标签 $y$ ，这通常直接指定了变量的至少一个促因的值。更一般的说，为了利用大量无标签数据，表征学习利用了其他的，非直接的，与潜在促因相关的提示。这种提示以隐含的学习算法设计者的先验知识的形式，指导学习器。一般认为正则化策略有助于获得很好的泛化。尽管无法获得通用的监督正则策略，深度学习的目标是找到一个相对通用的正则化策略，可以应用于相对广泛的AI任务。</p>
-<p>下面提供了一些通用的正则化策略。以下列表虽不不是详尽无遗，但也给出了一些集中的例子。</p>
-<ul>
-<li><strong>平滑：</strong>这是对神经元 $d$ 和某个非常小的数 $\epsilon$,有 $f(x+\epsilon d)\approx f(x)$ 。这种假设允许学习器从训练样本泛化到输入空间附近的某些点。许多机器学习算法继承 了这种思路，但不足以克服维度灾难。</li>
-</ul>
-<p><strong>线性性：</strong>许多学习算法假设一些变量间的关系是线性的。这允许算法做远超观测数据的预测，但是有时候会导致极限预测。<strong>大部分简单的机器学习算法不做平滑假设，而作线性假设。</strong>这些其实是不同的假设：有很多权重的线性函数应用到高维空间可能并不平滑。</p>
-<p><strong>多解释因子：</strong>许多表征学习算法基于一种假设：数据是被多个解释因子生成的，并且在给定每个这些因子的状态时大部分任务可以轻易地解决。</p>
-<p><strong>促因：</strong>模型以这种方式构建：它将变量的经学习好的表征 $h$ 描述的因子看做观测数据 $x$ 的促成原因，但反之则不成立。如第三小节讨论的，这是半监督学习的优势，并且使得学习好的模型在潜在促因的分布产生变动或应用到新任务时更健壮。</p>
-<p><strong>深度或解释因子的层次组织：</strong>高层次的抽样概念可以被一些简单的概念组合来定义，以形成一种层次。以另外一种观点来看，用深度架构表述我们的思想可以通过多步程序完成，其中每一步都是回头处理前一步输出结果。</p>
-<p><strong>任务间共享（促因）因子：</strong>许多任务中的上下文，对应不同 $y_i$ 的变量共享了相同的输入 $x$ 或者每个任务都是与全局输入 $x$ 的一个子集或者函数 $f^{(i)}(x)$ 相关，假设是每个 $y_i$ 与某个源于相同相关因子 $h$ 的共同池的不同的子集相关。因为这些子集之间的重叠，借助共享的中间表征 $P(h\mid x)$ 学习所有的 $P(y_i\mid x)$ 可以在多个任务之间共享统计特性（比较抽象，应该是学习到的表征有共同的统计特性）。</p>
-<p><strong>歧管：</strong>（要理解<strong>歧管</strong>可以参考排气歧管，它是与发动机气缸体相连的，将各缸的排气集中起来导人排气总管的，带有分歧的管路。对它的要求主要是，尽量减少排气阻力，并避免各缸之间相互干扰）概率大量浓缩（集中），集中的区域都是局部相连的并且只占用很小的容量。在连续变量场景，这些区域可以用比原始数据少得多的维度的低维复用</p>
-<p><strong>天然聚类簇：</strong>许多机器学习算法假设输入空间中的每个相连的歧管可以被分配到单个类别。数据可能位于许多不相连的歧管，但是每个歧管里面的类别数依然是常量。这种假设促使各种各样的机器学习算法产生，包括切线传播，双反向传播，歧管切线分类器和对抗训练。</p>
-<p><strong>时间和空间的相干性：</strong>慢特征分析和相关算法做的假设是，大部分重要的描述因子会随时间缓慢变动，或者，与预测原始观测数据如像素值相比，真正的潜在的描述因子更容易被预测。</p>
-<p><strong>稀疏性：</strong>大部分特征想必与大部分输入描述不相关，没必要使用全量的输入特征，当表征一只猫时不必检测大象和卡车。因此，任意特征大多情况下可以被描述为“出现”或“没出现”。</p>
-<p><strong>简化因子依赖：</strong>在好的高层次表征中，特征之间是通过简单的依赖来彼此相关的。最简单的可能是边缘独立，$P(h)=\prod _iP(h_i)$ ，但是被浅层自动编码器捕获的线性依赖也是可信的假设。这可以在许多物理定律中看到，在学习到的表征上插入线性预测器或因子分解的先验知识就是一种假设。</p>
-<br>
- [知乎 刘诗昆 关于迁移学习的回答](https://www.zhihu.com/question/41979241)
- [机器之心 一篇文章入门无监督学习](http://it.sohu.com/20161030/n471784836.shtml)
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2016-11-24-represationlearning/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2016-11-24-represationlearning/" title="深度学习：表征学习">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2016-11-18-facedetecet_LB/">
-    		LAB特征和特征中心级联的快速、准确的人脸检测方法
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.397Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h2 id="预备知识"><a href="#预备知识" class="headerlink" title="预备知识"></a>预备知识</h2><p><a href="http://blog.csdn.net/iracer/article/details/49029239" target="_blank" rel="noopener">积分图像统计像素</a></p>
-<p>进一步提取LAB特征时，如何提取其中的Haar特征。<a href="http://ju.outofmemory.cn/entry/260301" target="_blank" rel="noopener">中文博客</a></p>
-<p>如果想知道具体的Haar特征，<a href="http://ju.outofmemory.cn/entry/260301" target="_blank" rel="noopener">参考下文（英文论文原文）</a></p>
-<h2 id="二-LAB-特征"><a href="#二-LAB-特征" class="headerlink" title="二 LAB 特征"></a>二 LAB 特征</h2><h3 id="2-1-二分Haar特征"><a href="#2-1-二分Haar特征" class="headerlink" title="2.1 二分Haar特征"></a>2.1 二分Haar特征</h3><p> Haar特征是几个邻接矩形区域的强度差异。下图是Haar特征中矩形的一种经典出现方式，特征值即为填充矩形和非填充矩形之间的差异。更进一步说 ，矩形的布局方式是任意的。矩形区域的累积强度是可以用一种称为积分图的方式高效计算。Haar特征的计算包括增加和抽取相关矩形的累积强度。例如，对于一个2-矩形的Haar特征（图1.a和图1.b）可以如下计算:</p>
-<p><img src="/images/blog/haar1.jpg" alt="计算"></p>
-<p>$$<br> f_j(x)=(s_1)_j-(s_2)_j<br>$$</p>
-<p>其中 $(s_1)_j$ 和 $(s_2)_j$ 分别代表了输入图像 $x$ 的Haar特征 $j$ 填充矩形和非填充矩形的强度和。</p>
-<h3 id="2-2-ABH特征"><a href="#2-2-ABH特征" class="headerlink" title="2.2 ABH特征"></a>2.2 ABH特征</h3><p> 为提高二分Haar特征的区分能力，我们提出 了一种多二分Haar特征，并使用它们的共现性作为新的特征，成为ABH(Asseming Binary Haar)特征。下图演示了ABH特征的一个例子：</p>
-<p><img src="/images/blog/haar2.jpg" alt="计算"></p>
-<p>上图中ABH特征集成了三个二分Haar特征，当三个二分Haar特征值分别为1,1,0时，ABH特征为<br>$$<br> a(b_1,b_2,b_3)=(110)_2=6<br>$$</p>
-<p>其中 <strong>a</strong>为三个二分Haar特征 $b_1,b_2,b_3$ 的ABH特征计算函数， $(.)_2$ 是一个从二进制转十进制的操作。特征值说明了对 $2^F$个不同结合的index，其中<strong>F</strong>是结合的二分特征数。</p>
-<h3 id="2-3-LAB-Locally-Assembing-Binary-特征"><a href="#2-3-LAB-Locally-Assembing-Binary-特征" class="headerlink" title="2.3 LAB(Locally Assembing Binary)特征"></a>2.3 LAB(Locally Assembing Binary)特征</h3><p>ABH特征的数目巨大。为了枚举所有的特征，需要几个自由参数，比如二分Haar特征的集合数目，每个二分Haar特征的大小，每个二分Haar特征的坐标位置。从如此巨大的特征池中学习是不可逆的。我们发现了一种对应的用于人脸检测的缩减集合，称为LAB Haar特征。</p>
-<p>ABH特征之中，LAB特征是那些结合8个局部邻接2-矩形的二分Haar特征，它们大小相同并且共享同一个中心矩形。下图展示了一个8个二分Haar特征用以集合为一个LAB特征。</p>
-<p><img src="/images/blog/haar3.jpg" alt="计算"></p>
-<p>下图是一个2个LAB特征的示例</p>
-<p><img src="/images/blog/haar4.jpg" alt="计算"></p>
-<p> 图中展示了两个不同的LAB特征，中心的黑色矩形被8个相邻的二分Haar特征共享，所有9个矩形都是相同的大小。</p>
-<p>从公式上看，一个LAB特征可以用一个四元组表示 $l(x,y,w,h)$ ，其中 $x,y$ 分别代表了左上角的x和y轴坐标，$(w,h)$ 代表了矩形的宽和高。</p>
-<p>LAB特征保留了所有二分Haar特征的优势，同时又很强的区分能力，大小也很小。LAB特征抓取了图像的局部强度。计算LAB特征需要计算8个2-矩形Haar特征。LAB特征值区间为 {0,…255}，每个值对应了特别的局部结构。</p>
-<h2 id="三-使用LAB特征做人脸检测"><a href="#三-使用LAB特征做人脸检测" class="headerlink" title="三 使用LAB特征做人脸检测"></a>三 使用LAB特征做人脸检测</h2><p><strong>什么是级联</strong></p>
-<p>级联分类器就是如下图所示的一种退化了的决策树。为什么说是退化了的决策树呢？是因为一般决策树中，判断后的两个分支都会有新的分支出现，而级联分类器中，图像被拒绝后就直接被抛弃，不会再有判断了。</p>
-<p><img src="/images/blog/cascade_classfier_tempt.jpg" alt="级联分类器示意图"></p>
-<p>级联强分类器的策略是，将若干个强分类器由简单到复杂排列，希望经过训练使每个强分类器都有较高检测率，而误识率可以放低，比如几乎99%的人脸可以通过，但50%的非人脸也可以通过，这样如果有20个强分类器级联，那么他们的总识别率为 $0.99^20$ 约等于98%，错误接受率也仅为 $0.5^20$ 约等于0.0001%。</p>
-<p> 级联结构用于检测方法中。下图展示了人脸检测器的级联结构‘，可以分为两个很直观的部分。第一部分是一些子分类器，总称为特征中心级联。第二部分是其他的子分类器，成为窗口中心级联。</p>
-<p> <img src="/images/blog/haar5.jpg" alt="计算"></p>
-<h3 id="3-1-特征中心检测方法"><a href="#3-1-特征中心检测方法" class="headerlink" title="3.1 特征中心检测方法"></a>3.1 特征中心检测方法</h3><p> 为了搜索一张人脸，我们需要在图像中做“穷尽搜索”。这就牵扯到构造一个分类器以区分目标和非目标，却只需要在目标位置和大小上容忍有限的偏差。查找目标的方法是，扫描所有的分类器，这些分类器会在图像上搜索所有可能的位置和大小。下图展示了这一过程，所有的分类器计算了图像中所有可能的窗口，并以矩形的方式展示。</p>
-<p> <img src="/images/blog/haar6.jpg" alt="计算"></p>
-<p>大部分级联，使用窗口中心方法。这些方法计算对每个窗口分开的计算亮度矫正和特征计算。分类器的每个可能窗口的扫描，会计算图像中每个坐标的每个特征。这说明包含在某些窗口的特征可能同时被其他分类器计算了，但是并没有被当前分类器用来分类。特征中心方法旨在使用每个窗口的更多的被计算过的特征。</p>
-<p>如果上图不详细的话，请参考我个人绘制的示意图</p>
-<p><img src="/images/blog/feature_center_my_sample.jpg" alt="窗口中心的方法示意图"></p>
-<p>如何理解两种（窗口中心和特征中心）方法呢？下图是一个窗口中心方法的示例</p>
-<p><img src="/images/blog/haar7.jpg" alt="计算"></p>
-<p><strong>窗口中心方法：</strong>对于窗口中心方法，我们假设分类器只包含了一个LAB特征。，特征为上图a中的矩形。检测时图像中每个窗口被分类。因此属于该分类器的特征同时在图像中每个位置都会被计算，这会产生一个副产品：特征值图像（上图总图b）。此示例中，对于每个窗口，只使用了一个特征来做分类，包含在窗口中的其他特征被其他临接窗口分类器计算。这存在一种计算浪费。因此，特种中心的方法被提出，用以提高计算特征的使用率。</p>
-<p><strong>特征中心方法：</strong>对于特征中心方法，特征值图像（下图中中间那幅，与上图中图b一样），可以通过扫描图像中所有坐标的upper特征来计算。然后特征中心的分类器会运行在特征值图像中，并不再需要特征计算操作。在学习过程中，特征中心分类器从所有属于当前窗口的所有特征中学习。实际上，所有的特征都是相同大小，因为他们都是通过在图像平移了一个特殊特征来搜集的。当然，任意大小窗口都可以用来构建特征中心分类器。但是最好是选择最有效率的一个。可以使用一种贪心所有的方法来找到最优大小。</p>
-<p><img src="/images/blog/haar8.jpg" alt="计算"></p>
-<p>理论上说，任意学习算法都可以用来构建窗口中心和特征中心的分类器，我们使用 <strong>RealBoost</strong>学习算法来学习线性分类函数，如下：</p>
-<p>$$<br> c(x) =\sum_{i=1}^Th(l_i(x))<br>$$<br>其中 $c$ 是分类函数，$x$ 是样本窗口，$h$ 是弱分类函数，$l_i$ 是第 $i$ 个特征的特征计算函数， $T$ 是总的特征数。其中分类操作 $h$ 包含了一个特征值查阅表，一个置信度和额外查阅表。上面的Figure8和Figure9分别表示的是窗口中心和特征中心的线性分类器。Figure9中，对于所有特征中心的检测方法，分类器包含所有的窗口中的所有特征。分类函数中的特征数为 $N$ 。</p>
-<h2 id="3-2-特征中心级联"><a href="#3-2-特征中心级联" class="headerlink" title="3.2 特征中心级联"></a>3.2 特征中心级联</h2><p> 考虑到计算效率，我们将特征中心分类器修改为一个级联。在特征中心方法中，所有包含在窗口内的特征都被用来构建一整个的分类器。将输入图像的每个坐标点作为一个整体扫描并非明智之举。因而，我们考虑将其分解为一个级联。</p>
-<p><strong>两种方法的计算差异：</strong>假若分类窗口尺寸为24<em>24,特征为3</em>3的LAB特征，因此一个窗口中会有256（（24-9+1）*（24-9+1））个特征。因为对于特征中心方法和特征中心级联方法，其他过程都是相同的，因此这两种方法在各自窗口的平均分类操作代表了计算差异。对于特征中心方法，所有的256个分类操作将导致这256个特征在每个候选窗口中被操作一次。所以，每个窗口的平均分类操作数是256。但是对于特征中心级联方法，由于随着过程的推进某些窗口会被抛弃，每个窗口的平均分类操作是小于256的。</p>
-<p>下图演示了特征中心分类器的特征和特征中心级联。图中 $l_i$ 是由RealBoost挑选出来的第 $i$ 个LAB特征， $N$ 是特征中心分类器的总特征数。圆弧箭头数代表过程的阶段数。由弧形箭头覆盖的特征是属于对应阶段地特征。</p>
-<p><img src="/images/blog/haar9.jpg" alt="计算"></p>
-<h2 id="3-3-多角度人脸检测"><a href="#3-3-多角度人脸检测" class="headerlink" title="3.3  多角度人脸检测"></a>3.3  多角度人脸检测</h2><p>为了构建 一个多角度人脸检测器，我们首先根据从左到右的平面旋转将所有的脸分为5个类别，然后继续将每个类别分为三个角度，每个代表了从平面30度旋转。除此之外，每个角度覆盖了[-30°,+30°]从上至下的平面旋转。下图展示了这15个不同角度。</p>
-<p><img src="/images/blog/haar10.jpg" alt="计算"></p>
-<p> 对每个角度，我们构建了一个特征中心级联和窗口中心级联。为了检测，下图展示了其过程</p>
-<p> <img src="/images/blog/haar11.jpg" alt="计算"></p>
-<p> 对于给定输入图像，我们首先计算特征值图像。对每个角度，特征中心级联首先基于计算特征图运行，然后窗口中心级联在原始图像上运行。<strong>注意：</strong>对于多角度人脸检测，特征值图像被所有的15个角度的特征中心级联共享。这会极大加速检测器速度。</p>
-<h2 id="4-实时人脸校准"><a href="#4-实时人脸校准" class="headerlink" title="4 实时人脸校准"></a>4 实时人脸校准</h2><h3 id="4-1-CFAN简介"><a href="#4-1-CFAN简介" class="headerlink" title="4.1 CFAN简介"></a>4.1 CFAN简介</h3><p><strong>CFAN</strong>由4个级连的SAN网络构成，每个都是四层网络，三个隐层，用sigmoid激活，最后一层为线性激活。每一个SAN的输出图像分辨率逐渐变大，定位逐渐逼近精准</p>
-<p>第一个全局SAN用于粗定位68个形状特征点，输入为 50x50 的低分辨率图像，即2500个输入单元，最终输出为68个形状特征点的位置，即 68x2=136个输出元素。中间层分别为1600,900,400个单元。<br>三个局部SAN的输入为68个特征点在高分辨率图中从周围区域提取出来的形状索引特征(SIFT)。输出仍然为逐步校正后的136个特征位置。原始输入应该是从每个形状特征点周围提取了128个SIFT特征，即共 68x128=8704个特征，太大，采用PCA的方法，分别降维到了1695、2418、2440输入元素。中间层分别为1296,784,400个单元。</p>
-<h3 id="4-2-训练过程"><a href="#4-2-训练过程" class="headerlink" title="4.2 训练过程"></a>4.2 训练过程</h3><p>SAN的训练采用先用无监督的预训练进行分层训练，粗调参数（可采用sparse autoencoder的方法来预训练），然后用有监督的训练方法进行全局训练，精调参数。<br>训练样本要进行一些随机的平移、旋转、放缩，可有效防止过拟合和增加不同场合的稳定性。<br>全局SAN训练目标函数：</p>
-<p>$$<br> F^{*}=arg\quad min_F \mid \mid S_g(x)-f_k(f_{k-1}…(f_1(x)) \mid \mid _2 ^2+\alpha \sum _{i=1}^k \mid \mid W_i\mid \mid _F^2<br>$$</p>
-<p>局部SAN训练目标函数：</p>
-<p>$$<br>  H^*<em>1= arg\quad min</em>{H_1}\mid\mid \triangle S_1(x)-h_k^1(h_{k-1}^1(…h_1(\phi (S_0))))\mid \mid ^2_2+\alpha \sum_{i=1}^k\mid\mid W^1_i\mid\mid _F^2<br>$$</p>
-<p>测试结果：</p>
-<h2 id="5-人脸对齐算法"><a href="#5-人脸对齐算法" class="headerlink" title="5 人脸对齐算法"></a>5 人脸对齐算法</h2><h3 id="5-1-问题"><a href="#5-1-问题" class="headerlink" title="5.1 问题"></a>5.1 问题</h3><p> 最小二乘问题中，用牛顿法求解是常用的办法，但用在求解计算机视觉的问题的时候，会遇到一些问题，比如1）、Hessian矩阵最优在局部最优的时候才是正定的，其他地方可能就不是正定的了，这就意味着求解出来的梯度方向未必是下降的方向；2）、牛顿法要求目标函数是二次可微的，但实际中未必就一定能达到要求的了；3）、Hessian矩阵会特别的大，比如人脸对其中有66个特征点，每个特征点有128维度，那么展成的向量就能达到66x128= 8448，从而Hessian矩阵就能达到8448x8448，如此大维度的逆矩阵求解，是计算量特别大的（O(p^3)次的操作和O(p^2)的存储空间）。因此避免掉Hessian矩阵的计算，Hessian不正定问题，大存储空间和计算量，寻找这样一种方法是这篇论文要解决的问题。</p>
-<h3 id="5-2-原理"><a href="#5-2-原理" class="headerlink" title="5.2  原理"></a>5.2  原理</h3><p> 大家都知道，梯度下降法的关键是找到梯度方向和步长，对于计算机视觉问题，牛顿法求解未必能常常达到好的下降方向和步长，如下图所示</p>
-<p> <img src="/images/blog/face_detection_2.png" alt=""></p>
-<p>（a）为牛顿法的下降量，收敛不能达到最理想的步长和方向。而（b）本文的SDM算法，对于不同的正面侧面等情况都能得到很好的收敛方向和步长。既然Hessian矩阵的计算那么可恶，我们就直接计算梯度下降方向和步长嘛。开始讨论之前，为方便讨论，我们需要问题形式化，假设给定一张要测试的图片（这里把图像自左向右自上而下地展成了一维的向量，具有m个像素），表示图像中的p个标记点，这篇文章里面有66个标记点，如下图黑人肖像所示。表示一个非线性特征提取函数，例如 SIFT，那么。<br>    在训练阶段，已经知道了每张训练图片的真实的66个标记点，把这些点看做了是GroundTrue即参考点，如下图（a）所示。在测试的场景中，会用一个检测器把人脸检测出来，然后给一个初始化的平均标记点，如下图（b）所示：</p>
-<p><img src="/images/blog/face_detection_4.png" alt=""></p>
-<p>那么人脸对齐问题是需要寻找一个梯度方向步长，使得下面的目标函数误差最小：<br>$$<br> f(x_0+\triangle x)=\mid\mid h (d(x_0+\triangle x))-\phi _0\mid\mid ^2_2<br>$$</p>
-<p>其中 $\phi <em>*=h(d(x</em><em>))$ 是人工标定的66个标记点的SIFT特征向量，在训练阶段 $\phi _</em>$ 和 $\triangle x$ 都是知道的。</p>
-<p>好了，用牛顿法求解上述问题，其迭代的公式为：</p>
-<p>$$<br> x_k=x_{k-1}-2H^{-1}J_h^T(\phi _{k-1}-\phi _*)<br>$$</p>
-<p>其中，H和J分别表示Hessian矩阵和雅克比矩阵。它可以被进一步的拆分为下面的迭代公式：</p>
-<p>$$<br> x_k=x_{k-1}+R_{k-1}\phi <em>{k-1}+2H^{-1}J_h^T\phi</em>*<br>$$</p>
-<p>注意到，既然H和J难求，那就直接求它们的乘积，即可，于是上述的迭代公式又可以变为：</p>
-<p>$$<br> x_k=x_{k-1}+R_{k-1} \phi_{k-1}+b_{k-1}<br>$$</p>
-<p>其中 $R_{k-1}=-2H^{-1}J_h^T$ 和 $b_{k-1}=2H^{-1}J_h^T$ ，这样就转化为了之求解 $R_{k-1}$ 和 $b_{k-1}$ 的问题。接下来就是怎么求解这两个参数的问题了。</p>
-<p>思路很简单，就是用训练数据告诉算法下一步该往哪里走，即用当前（及之前）的迭代误差之和最小化，该问题也是一个最优化问题。如下公式所示：</p>
-<p>$$<br> arg <em>{R_k} \quad min</em>{b_k} \sum_{d^i}\sum_{x_k^i} \mid\mid \triangle x_*^{ki}-R_k\phi _k^i-b_k\mid \mid ^2<br>$$</p>
-<p>$d_i$ 表示第i张训练图片，$x_ki$ 表示第 $i$ 张图片在第 $k$ 次迭代后的标记点的位置。实际中这样的迭代4-5次即可得到最优解，用贪心法求解。</p>
-<p>至此，根据以上描述的迭代步骤，即可不断地寻找到最优的人脸对齐拟合位置。SDM的流程图如下所示：</p>
-<p><img src="/images/blog/face_detection_3.png" alt=""></p>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="http://blog.csdn.net/stdcoutzyx/article/details/34842233" target="_blank" rel="noopener">基于Haar特征的Adaboost级联人脸检测分类器</a></p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2016-11-18-facedetecet_LB/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2016-11-18-facedetecet_LB/" title="LAB特征和特征中心级联的快速、准确的人脸检测方法">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2016-11-16-facedetect-paper-note/">
-    		《漏斗形级联结构的多角度人脸检测算法》论文阅读笔记
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.395Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h2 id="一-简介"><a href="#一-简介" class="headerlink" title="一 简介"></a>一 简介</h2><p>  目前主流的三类人脸识别方法。</p>
-<ul>
-<li>最经典的是增强级联框架（boosted cascade framework）。这些检测器(detector)计算高效，可快速抽取特征。</li>
-<li>为了处理精确处理面部变化较大，DPM（deformable part models可变形部件模型）：用以同时抽取图像的全局和局部特征。它基于一种覆盖分类内部变化的启发式方法，因此对于图像中人物表情姿势的变化有较好鲁棒性。但是非常耗时。</li>
-<li>最新的是使用CNN卷积神经网络的方法。缺点是计算代价高，因为网络得复杂性和许多复杂的非线性操作。</li>
-</ul>
-<p>以上工作都没有考虑特殊场景，比如<strong>多角度人脸识别</strong>。为了多角度识别人脸，一种直接的方法就是并行使用多个人脸检测器(detector)。并行架构需要所有候选窗口被所有模型分类，这导致计算成本和误报率的飙升。为缓解此类问题，所有模型需要精心地训练，使模型具有较好的区分能力去辨别人脸和非人脸。</p>
-<p><img src="/images/blog/facedetect_model.jpg" alt="人脸识别模型"></p>
-<p>多视角的多模型可以如上图这样组织成树形或金字塔形。这些结构中，根分类器都是区分是否为人脸，接下来的其他分类模型将人脸按照不同的精细粒度分为不同子分类，这里的每个模型都是独立的。金字塔模型实际是将共享了某些高层节点的模型压缩了，因此金字塔模型与并行模型有一样的问题。树形结构分类器不同之处在于，分支的动机是避免在同一层评估所有的分类器，但是这会导致检测错误分类分支。</p>
-<p>为此我们提出了一种漏斗形级联的多视角人脸检测结构，获得较高准确率和较快速度。该结构上宽下窄，模型如下图。</p>
-<p><img src="/images/blog/facedetect_model2.jpg" alt="人脸识别模型"></p>
-<p>模型的顶层是一些并行运行的，快速而粗粒度的分类器，用来快速地移除非人脸窗口。每个模型都是针对性地使用一小段区间范围的视角的人脸，因而可以保证多角度人脸的较高召回率。越往下，模型的区分能力越强，但是也越耗时，它们被用来筛选符合条件的窗口候选。模型的底部收集最后通过的窗口，最后一阶段是一个统一的多层干感知机。</p>
-<h2 id="二-漏斗结构级联的多视角人脸检测器"><a href="#二-漏斗结构级联的多视角人脸检测器" class="headerlink" title="二 漏斗结构级联的多视角人脸检测器"></a>二 漏斗结构级联的多视角人脸检测器</h2><p> 输入图像根据滑动窗口树状图扫描，然后每个窗口依次分阶段地穿过探测器。</p>
-<p> <strong>Fast LAB接连分类器</strong>用来快速移除大部分非人脸窗口，（LAB（Locally Assembled Binary））同时保证人脸窗口的较高召回率。<strong>Coarse MLP Cascade</strong>分类器以较低代价来进一步调整候选窗口。最后，统一<strong>Fine MLP Cascade</strong>分类器使用形状索引特征精确地区分人脸。</p>
-<h3 id="2-1-Fast-LAB-cascade"><a href="#2-1-Fast-LAB-cascade" class="headerlink" title="2.1 Fast LAB cascade"></a>2.1 Fast LAB cascade</h3><p> 实时人脸识别时，最大的障碍在于需要检验的滑动窗口树状图的候选窗口太多。在一个640x480的图像上，要检测脸特征尺寸超过20x20的人脸，需要检查超过一百万个窗口。使用增强级联分类器，由Yan et al提出了一种有效的LAB((Locally Assembled Binary)，只需要考虑Haar 特征的相对关系，并使用look-up（查阅表）加速。一个窗口中抽取一个LAB特征仅需要访问内存一次。我们可以使用LAB 特征，可以在程序开始时快速地移除占比非常大的非人脸特征。</p>
-<p> 尽管LAB 特征方法有速度，但是对于多角度人脸窗口的复杂变换表现较差。因此我们采取了一种分而治之的思路，将较难的多视角人脸问题分解为容易的单视角人脸检测问题。多个LAB 级联分类器，每个角度一个分类器，并行处理，然后最终的候选人脸窗口是所有经分类器筛选过后的结果合集。</p>
-<p> <strong>公式：</strong>定义整个包含了多角度人脸的训练集为 <strong><em>S</em></strong>，根据角度划分为 <strong><em>v</em></strong> 个子集，<br> 定义为 $S_i,i=1,2,…v$ 。对每个训练集 $S_i$ ,一个LAB级联分类器 $c_i$ 被训练，它用于检测第 $i$ 个角度的人脸。对于输入图像中的窗口 $x$ ，它是否为人脸取决于如下所有的LAB 级联分类器：</p>
-<p> $$<br>  y=c_i(x)\vee c_2(x)…\vee c_v(x)<br> $$</p>
-<p> 其中 $y \epsilon \lbrace0,1\rbrace$ ，$c_i(x)\epsilon \lbrace0,1\rbrace$ 表明 $x$ 是否为人脸。使用多模型消耗更多时间，但是所有模型共享相同的LAB特征映射（用来特征抽取）。</p>
-<h3 id="2-2-Coarse-MLP-cascade-粗粒度多层感知机级联"><a href="#2-2-Coarse-MLP-cascade-粗粒度多层感知机级联" class="headerlink" title="2.2  Coarse MLP cascade 粗粒度多层感知机级联"></a>2.2  Coarse MLP cascade 粗粒度多层感知机级联</h3><p>  LAB级联阶段之后，大部分非人脸窗口被抛弃，剩下的部分对于单个LAB 特征难以处理。因此，接下来，候选窗口将交给更复杂的分类器来处理，比如带 <strong>SURF（Speeded-up Robust Feature）</strong> 的MLP。为避免增加太多计算，小型网络被开发为更好，但是依旧粗粒度的校验。</p>
-<p>  此外，使用SURF特征的MLP用于窗口分类，可以更好的建模非线性多角度人脸和带有等同的非线性激活函数的非人脸模式。</p>
-<p>  MLP由输入层，输出层和一个或多个隐藏层组成。公式化n层的MLP如下:</p>
-<p>$$<br>  F(x)=f_{n-1}(f_{n-2}(…f_1(x)))\quad tag 2\<br>  f_i(z)=\sigma(W_iz+b_i)<br>$$</p>
-<p>其中 $x$   是输入，比如候选窗口的SURF特征； $W_i$ 和 $b_i$ 分别为链接第 $i$ 层和第 $i+1$ 层的权重和偏置。激活函数 $\sigma$ 形如： $\sigma (x)=\frac{1}{1+e^{-x}}$ ，从上式可以看出，隐藏层和输出都做了非线性变换。MLP的训练目标是最小化预测值和实际值之间的均方误差</p>
-<p>$$<br> min_F\sum_{i=1}^n \mid \mid F(x_i)-y_i \mid \mid ^2<br>$$</p>
-<p>其中 $x_i$ 是第 $i$ 个训练样本， $y_i$ 是对应的标签(0或1)。</p>
-<p>由于MLP级联分类器有足够能力建模人脸和非人脸变换，穿过多个LAB级联分类器之间的窗口可以由同一个模型处理，也即MLP级联可以连接多个LAB级联分类器。</p>
-<h3 id="2-3-带形状索引特征的细粒度MLP级联"><a href="#2-3-带形状索引特征的细粒度MLP级联" class="headerlink" title="2.3 带形状索引特征的细粒度MLP级联"></a>2.3 带形状索引特征的细粒度MLP级联</h3><p> 多视角人脸外貌之间存在一些冲突，主要源于非对齐特征，比如基于坐标抽取的特征存在语义不一致问题。比如，一个面向前方的人脸的中央区域包含了鼻子，但是面部外形也是脖子的一部分。为解决这个问题，我们采取了一种基于形状索引的方法在语义相同的位置上抽取特征作为细粒度MLP级联分类器的输入。如下图所示，选择了四个语义位置，分别对应的面部坐标是左、右眼中心，鼻尖和嘴中心。对于侧脸，不可见的眼部被视为与另外一只眼睛处于相同坐标。</p>
-<p><img src="/images/blog/facedetect_model3.jpg" alt="人脸识别模型"></p>
-<p>对于表情更丰富的基于形状索引的特征，更大、性能更强的非线性变换用来实现面部和非面部微调。与之前的不同的是，更大的MLPs同时预测标签，推测一个候选窗口是否为一张脸，推测其形状。一个额外的形状预测误差项加入到目标函数，新的优化问题变为如下：</p>
-<p>$$<br>min_F \sum_{i=1}^n \mid \mid F_c(\phi (x_i,\hat S_i))-y_i \mid \mid ^2+\lambda \sum_{i=1}^n \mid\mid F_s(\phi (x_i-\hat S_i))-s_i \mid\mid ^2_2<br>$$</p>
-<p>其中 $F_c$ 是面部分类输出， $F_s$ 是预测形状输出。 $\phi (x_i,\hat s_i)$ 代表的是基于形状索引的特征（比如SIFT），它是按照平均形状或预测形状为 $\hat s_i$ 从第 $i$ 个训练样本抽取的，其中 $s_i$ 是实际形状。 $\lambda$ 是平衡两类误差的权重因子，一般设置为 $\frac{1}{d}$，其中d为形状的维度。从上面的等式可以看出，可以获得一个比输入 $\hat s_i$更精确地外形 $F_s(\phi(x_i,\hat s_i))$ （注意看下标）。因此，多个级联的MLPs，用于特征抽取的形状越来越精确，这会获得更加有区分力的基于形状索引的特征，并且最后让多角度人脸与非人脸区域差异更大。下图展示了这一过程：</p>
-<p><img src="/images/blog/facedetect_model4.jpg" alt="人脸识别模型"></p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2016-11-16-facedetect-paper-note/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2016-11-16-facedetect-paper-note/" title="《漏斗形级联结构的多角度人脸检测算法》论文阅读笔记">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-
-    
-    <nav class="page-navigator">
-        <a class="extend prev" rel="prev" href="/archives/2019/12/page/5/">前一页</a><a class="page-number" href="/archives/2019/12/">1</a><span class="space">&hellip;</span><a class="page-number" href="/archives/2019/12/page/4/">4</a><a class="page-number" href="/archives/2019/12/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/archives/2019/12/page/7/">7</a><a class="page-number" href="/archives/2019/12/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/archives/2019/12/page/10/">10</a><a class="extend next" rel="next" href="/archives/2019/12/page/7/">后一页</a>
-    </nav>
-    
-
-
-            </div>
-
-        </section>
-        <!-- 侧栏部分 -->
-<aside class="sidebar">
-    <section class="widget">
-        <h3 class="widget-hd"><strong>文章分类</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-    <li>
-        <a href="/categories/blog/">blog</a>
-        <span class="badge">(94)</span>
-    </li>
-    
-</ul>
-    </section>
-
-    
-    <section class="widget">
-        <h3 class="widget-hd"><strong>热门标签</strong></h3>
-        <!-- 文章标签 -->
-<div class="widget-bd tag-wrap">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://shartoo.github.com/archives/2019/12/page/6/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://shartoo.github.com/archives/2019/12/page/6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: false
+  };
+</script>
+
+  <title>Archive | Hexo</title>
   
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
 </div>
-    </section>
-    
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
 
     
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
 
-    
-    <!-- 友情链接 -->
-    <section class="widget">
-        <h3 class="widget-hd"><strong>友情链接</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-        <li>
-            <a href="https://jelon.top" target="_blank" title="Jelon个人前端小站">前端博客小站</a>
-        </li>
-    
-        <li>
-            <a href="https://www.baidu.com" target="_blank" title="百度搜索">百度</a>
-        </li>
-    
-</ul>
-    </section>
-    
-</aside>
-<!-- / 侧栏部分 -->
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  
+  
+  
+  <div class="post-block">
+    <div class="posts-collapse">
+      <div class="collection-title">
+        
+        <span class="collection-header">Good! 98 posts in total. Keep on posting.</span>
+      </div>
+
+      
+    <div class="collection-year">
+      <h1 class="collection-header">2019</h1>
     </div>
 
-    <!-- 博客底部 -->
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2017-02-27-lungseg-subsolid/" itemprop="url">
+            <span itemprop="name">从胸椎中自动subsolid 病变结节检测方法【论文笔记】</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2017-02-26-mutliview-falseremove-usingcnn/" itemprop="url">
+            <span itemprop="name">CT图像中肺结节自动检测:使用CNN移除假阳性【论文笔记】</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2017-02-10-LUNA2016-3DCNN/" itemprop="url">
+            <span itemprop="name">医疗图像处理：LUNA2016 3DCNN 网络论文详解</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2017-01-20-medical_image_process/" itemprop="url">
+            <span itemprop="name">常见医疗扫描图像处理步骤</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2017-01-13-RCNN-series/" itemprop="url">
+            <span itemprop="name">RCNN,Fast RCNN,Faster RCNN 总结</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2016-12-27-gan-paper/" itemprop="url">
+            <span itemprop="name">GAN：论文笔记</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2016-12-22-theano-deeplearning/" itemprop="url">
+            <span itemprop="name">theano 深度学习数据准备</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2016-11-24-represationlearning/" itemprop="url">
+            <span itemprop="name">深度学习：表征学习</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2016-11-18-facedetecet_LB/" itemprop="url">
+            <span itemprop="name">LAB特征和特征中心级联的快速、准确的人脸检测方法</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2016-11-16-facedetect-paper-note/" itemprop="url">
+            <span itemprop="name">《漏斗形级联结构的多角度人脸检测算法》论文阅读笔记</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+
+    </div>
+  </div>
+  
+  
+  
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/archives/2019/12/page/5/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/archives/2019/12/">1</a><span class="space">&hellip;</span><a class="page-number" href="/archives/2019/12/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/archives/2019/12/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/archives/2019/12/page/10/">10</a><a class="extend next" rel="next" href="/archives/2019/12/page/7/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+  </nav>
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
     <footer class="footer">
-    &copy;
-    
-        2016-2019
-    
+      <div class="footer-inner">
+        
 
-    <a href="/">Jelon Loves You</a>
-</footer>
-<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
 
-    <!--博客js脚本 -->
-    <!-- 这里放网站js脚本 -->
+        
 
-<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
 
 </body>
 </html>

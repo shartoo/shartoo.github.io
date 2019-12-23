@@ -1,1389 +1,549 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" >
-    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
-    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
-    
-    <title>文章归档 | Hexo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
-    <meta name="keywords" content="Jelon, 前端, Web, 张德龙, 前端开发" >
-    <meta name="description" content="Jelon个人前端小站" >
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml" >
-    
-    
-    <link rel="shortcut icon" href="/favicon.ico" >
-    
-    
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/main.css">
 
-    <!--[if lt IE 9]>
-    
-<script src="/js/html5.js"></script>
 
-    <![endif]-->
-    
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "//hm.baidu.com/hm.js?fd459238242776d173cdc64918fb32f2";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://shartoo.github.com').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
 </script>
 
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://shartoo.github.com/archives/page/2/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
-
-<body class="home">
-    <!--[if lt IE 9]>
-    <div class="browsehappy">
-        当前网页 <strong>不支持</strong>
-        你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/" target="_blank" rel="noopener">升级你的浏览器</a>.
-    </div>
-    <![endif]-->
-
-    <!-- 博客头部 -->
-    <header class="header">
-    <section class="container header-main">
-        <div class="logo">
-            <a href="/">
-                <div class="cover">
-                    <span class="name">Hexo</span>
-                    <span class="description"></span>
-                </div>
-            </a>
-        </div>
-        <div class="dropnav icon-paragraph-justify" id="JELON__btnDropNav"></div>
-        <ul class="menu hidden" id="JELON__menu">
-            
-            <li rel="/archives/page/2/index.html" class="item ">
-                <a href="/" title="首页" class="icon-home">&nbsp;首页</a>
-            </li>
-            
-            <li rel="/archives/page/2/index.html" class="item ">
-                <a href="/lab/" title="实验室" class="icon-lab">&nbsp;实验室</a>
-            </li>
-            
-            <li rel="/archives/page/2/index.html" class="item ">
-                <a href="/about/" title="关于" class="icon-about">&nbsp;关于</a>
-            </li>
-            
-            <li rel="/archives/page/2/index.html" class="item ">
-                <a href="/comment/" title="留言" class="icon-comment">&nbsp;留言</a>
-            </li>
-            
-        </ul>
-        <div class="profile clearfix">
-            <div class="feeds fl">
-                
-                
-                <p class="links">
-                    
-                        <a href="https://github.com/jangdelong" target="_blank">Github</a>
-                        |
-                    
-                        <a href="https://pages.coding.me" target="_blank">Hosted by Coding Pages</a>
-                        
-                    
-                </p>
-                <p class="sns">
-                    
-                        <a href="http://weibo.com/jangdelong" class="sinaweibo" target="_blank"><b>■</b> 新浪微博</a>
-                    
-                        <a href="https://www.facebook.com/profile.php?id=100011855760219&amp;ref=bookmarks" class="qqweibo" target="_blank"><b>■</b> Facebook</a>
-                    
-                    <a href="javascript: void(0);" class="wechat">
-                        <b>■</b>
-                        公众号
-                        <span class="popover">
-                            <img src="/img/wechat_mp.jpg" width="120" height="120" alt="我的微信订阅号">
-                            <i class="arrow"></i>
-                        </span>
-                    </a>
-                </p>
-                
-            </div>
-            <div class="avatar fr">
-                <img src="/img/jelon.jpg" alt="avatar" title="Jelon" >
-            </div>
-        </div>
-    </section>
-</header>
+<link rel="canonical" href="http://shartoo.github.com/archives/page/2/">
 
 
-    <!-- 博客正文 -->
-    <div class="container body clearfix">
-        <section class="content">
-            <div class="content-main widget">
-                <!-- 文章归档 -->
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: false
+  };
+</script>
 
-    <h3 class="widget-hd">
-        <strong>
-            
-                文章归档
-                <!-- 文章归档，可以根据日期分类 -->
-            
-        </strong>
-    </h3>
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2019-03-05-SIFT-feature/">
-    		SIFT特征详解
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.716Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h2 id="1-概览"><a href="#1-概览" class="headerlink" title="1 概览"></a>1 概览</h2><p>SIFT特征即Scale-Invariant Feature Transform，是一种用于检测和描述数字图像中的局部特征的算法。它定位关键点并以量化信息呈现（所以称之为描述器），可以用来做目标检测。此特征可以被认为可以对抗不同变换（即同一个特征在不同变换下可能看起来不同）而保持不变。</p>
-<p>可以通过这个<a href="http://weitz.de/sift/index.html?size=large" target="_blank" rel="noopener">网站 SIFT特征在线计算</a>，直接查看一张图片中的SIFT特征，你需要准备一张小图片，然后上传到网站，就会自动计算出该图像的SITF特征。如果对SIFT特征计算步骤缺乏形象的认识，可以去这个网站互动下，它可以可视化每个步骤。</p>
-<p>SIFT特征的提取步骤</p>
-<ol>
-<li>生成高斯差分金字塔（DOG金字塔），尺度空间构建</li>
-<li>空间极值点检测（关键点的初步查探）</li>
-<li>稳定关键点的精确定位</li>
-<li>稳定关键点方向信息分配</li>
-<li>关键点描述</li>
-<li>特征点匹配</li>
-</ol>
-<h2 id="2-生成差分高斯金字塔"><a href="#2-生成差分高斯金字塔" class="headerlink" title="2 生成差分高斯金字塔"></a>2 生成差分高斯金字塔</h2><p>参考 <a href="https://shartoo.github.io/image-pramid/" target="_blank" rel="noopener">图像处理中各种金字塔</a> 得到一组如下图</p>
-<p><img src="/images/blog/sift_feature1.png" alt="sift1"> </p>
-<h2 id="3-空间极值点检测"><a href="#3-空间极值点检测" class="headerlink" title="3 空间极值点检测"></a>3 空间极值点检测</h2><p>从第2步的差分高斯金字塔(DOG)中可以得到不同层级不同尺度的金字塔，<strong>所谓的特征就是一些强的、有区分力的点</strong>。DOG中这些有区分力的点就是极值点，即每个像素都要和相邻点(<strong>此处的相邻不仅仅是水平面的前后左右，还有上下尺度的前后左右</strong>)比较，看其是否比它的图像域(水平方向上)和尺度空间域(垂直方向上)的相邻点大或者小，下图是示意图：</p>
-<p><img src="/images/blog/sift_feature2.png" alt="sift1"> </p>
-<p>在二维图像空间，中心点与它3<em>3邻域内的8个点做比较，在同一组内的尺度空间上，中心点和上下相邻的两层图像的2</em>9个点作比较，如此可以保证检测到的关键点在尺度空间和二维图像空间上都是局部极值点。所以确定极值点，需要$3\times 3-1(当前像素点，上图中中间黑色X)+2\times 9=26个点$。<br>从第2小节中，我们计算得到的极值点由如下黄色和红色标记（其中黄色圆圈的标记表明，它虽然是极值点，但是由于绝对值过小，在后续处理时会被丢弃）</p>
-<p><img src="/images/blog/sift_feature3.png" alt="sift1"> </p>
-<p>我们选取图中间用蓝色矩形框标记的红色点，查看其灰度值(下图正中间红色点)，可以看到它在当前差分金字塔取得了极小值。</p>
-<p><img src="/images/blog/sift_feature4.png" alt="sift1"> </p>
-<h2 id="4-稳定关键点的精确定位"><a href="#4-稳定关键点的精确定位" class="headerlink" title="4 稳定关键点的精确定位"></a>4 稳定关键点的精确定位</h2><p>上面步骤得到的极值点中存在大量不稳定地点，有些可能是噪音导致的，比如第3节中黄色圆圈标记的点。我们需要去除这些不稳定地像素点。即去除DOG局部曲率非常不对称的像素。此步骤，需要计算空间尺度函数的二次泰勒展开式的极值来完成。同时去除低对比度的关键点和不稳定的边缘响应点(因为DoG算子会产生较强的边缘响应)，以增强匹配稳定性、提高抗噪声能力。</p>
-<p>具体步骤如下：</p>
-<ol>
-<li><p>空间尺度函数泰勒展开式如下：<br>$$<br>D(x)=D+\frac{\partial D^T}{\partial x}x+\frac{1}{2}x^T\frac{\partial ^2D}{\partial x^2}x \<br>对上式求导，令其为0，得到精确地位置，有\<br>\hat x=-\frac{\partial ^2D^{-1}}{\partial x^2}\frac{\partial D}{\partial x}<br>$$</p>
-</li>
-<li><p>在已经检测到的特征点中，要去掉低对比度的特征点和不稳定地边缘响应点。去除低对比度的点：把$\hat x$的值代回，即在Dog 空间的极值点$D(x)$处取值，<strong>只取前两项</strong>可得：<br>$$<br>D(\hat x)=D+\frac{1}{2}\frac{\partial D^T}{\partial x}\hat x<br>$$<br>若 $|D(\hat x)\ge 0.003$，该特征点就保留下来，否则丢弃</p>
-</li>
-</ol>
-<p>3.边缘响应的去除。一个定义不好的高斯差分算子的极值在横跨边缘的地方有较大的曲率，而在垂直边缘的方向有较小的曲率。主曲率通过一个$2\times 2$的Hessian矩阵H去求出：<br>$$<br>H=[ \begin{array} D_{xx} \quad D_{xy} &amp; \<br>  D_{xy}\quad D_{yy}  &amp;<br> \end{array} ]<br>$$<br>使用python计算hessian矩阵的代码可以参考</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line"></span><br><span class="line">def hessian(x):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    Calculate the hessian matrix with finite differences</span><br><span class="line">    Parameters:</span><br><span class="line">       - x : ndarray</span><br><span class="line">    Returns:</span><br><span class="line">       an array of shape (x.dim, x.ndim) + x.shape</span><br><span class="line">       where the array[i, j, ...] corresponds to the second derivative x_ij</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    x_grad &#x3D; np.gradient(x) </span><br><span class="line">    hessian &#x3D; np.empty((x.ndim, x.ndim) + x.shape, dtype&#x3D;x.dtype) </span><br><span class="line">    for k, grad_k in enumerate(x_grad):</span><br><span class="line">        # 遍历每个维度，在一阶导数的所有项再次使用梯度</span><br><span class="line">        tmp_grad &#x3D; np.gradient(grad_k) </span><br><span class="line">        for l, grad_kl in enumerate(tmp_grad):</span><br><span class="line">            hessian[k, l, :, :] &#x3D; grad_kl</span><br><span class="line">    return hessian</span><br><span class="line"></span><br><span class="line">x &#x3D; np.random.randn(100, 100, 100)</span><br><span class="line">hessian(x)</span><br></pre></td></tr></table></figure>
-<p>导数由采样点相邻差估计得到。D的主曲率和H的特征值成正比，令α为较大特征值，β为较小的特征值，则<br>$$<br>Tr(H)=D_{xx}+D_{yy}=\alpha +\beta \<br>Det(H)=D_{xx}D_{yy}-(D_{xy})^2 = \alpha\beta \<br>令\alpha=\gamma \beta则 \<br>\frac{Tr(H)^2}{Det(H)} =\frac{(\alpha+\beta)^2}{\alpha \beta}=\frac{(\gamma\beta +\beta)^2}{\gamma \beta ^2}=\frac{(1+\gamma)^2}{\gamma}<br>$$<br>而$\frac{(1+\gamma)^2}{\gamma}$的值在两个特征值相等的时候最小，随着$\gamma$的增大而增大，因此，为了检测主曲率是否在某阈值$\gamma$下，只需检测<br>$$<br>\frac{Tr(H)^2}{Det(H)}&lt;\frac{(\gamma+1)^2}{\gamma}<br>$$<br>在SIFT特征提取的原论文中，提到<strong>如果$\frac{\alpha +\beta}{\alpha \beta}&gt;\frac{(\gamma +1)^2}{\gamma}$，则丢弃此像素点</strong>，论文中$\gamma=10$</p>
-<h2 id="5-给特征点赋值一个128维方向参数"><a href="#5-给特征点赋值一个128维方向参数" class="headerlink" title="5 给特征点赋值一个128维方向参数"></a>5 给特征点赋值一个128维方向参数</h2><p>经过上面的步骤，我们已经确定了一些灰度值极值点。接下来，我们需要确定这些极值点的方向。为关键点分配方向信息所要解决的问题是使得关键点对图像角度和旋转具有不变性。方向的分配是通过求每个极值点的梯度来实现的。<br>对于任一关键点</p>
-<ul>
-<li>其梯度<strong>幅值</strong>表述为：</li>
-</ul>
-<p>$$<br>m(x,y) = \sqrt{((L(x+1,y)-L(x-1,y))^2+(L(x,y+1)-L(x,y-1))^2}<br>$$</p>
-<ul>
-<li>梯度<strong>方向</strong>为：<br>$$<br>\theta (x,y) = tan ^{-1}[\frac{L(x,y+1)-L(x,y-1)}{L(x+1,y)-L(x-1,y)}]<br>$$</li>
-</ul>
-<p><strong>分配给关键点的并不直接是关键点的梯度方向，而是按照一种梯度方向直方图方式给出的</strong><br>计算方法</p>
-<ol>
-<li>计算关键点为中心邻域内所有点的梯度方向。0-360度</li>
-<li>每个方向10度，共36个方向。</li>
-<li>统计累计落在每个方向点的关键点个数，依次生成梯度直方图</li>
-</ol>
-<p><img src="/images/blog/sift_feature5.png" alt="sift1"> </p>
-<p>具体在图像实例中，某个极值点的梯度方向直方图如下：</p>
-<p><img src="/images/blog/sift_feature6.png" alt="sift1"> </p>
-<p>上图中，左图矩形框内的红色小圆圈代表点击的极值点，中间图案代表最终得到的极值点的主方向，右图为对应的梯度方向直方图。</p>
-<p>除此之外，原论文中还包含了<strong>辅方向</strong>，辅方向定义为：若在梯度直方图中存在一个相当于主峰值80%能量的峰值，则认为是关键点的辅方向。辅方向的设计可以增强匹配的鲁棒性，Lowe指出，大概有15%的关键点具有辅方向，而恰恰是这15%的关键点对稳定匹配起到关键作用。</p>
-<h2 id="6-计算SIFT特征描述子"><a href="#6-计算SIFT特征描述子" class="headerlink" title="6 计算SIFT特征描述子"></a>6 计算SIFT特征描述子</h2><p>此步骤与步骤5基本一样，也是计算每个关键点周围的梯度方向的直方图分布。不同之处在于，此时的邻居为一个圆，并且坐标体系被扭曲以匹配相关梯度方向。<br>具体思路是：对关键点周围像素区域分块，计算块内梯度直方图，生成具有独特性的向量，这个向量是该区域图像信息的一种抽象表述。<br>如下图，对于2<em>2块，每块的所有像素点的梯度做高斯加权，每块最终取8个方向，即可以生成2</em>2<em>8维度的向量，以这2</em>2*8维向量作为中心关键点的数学描述</p>
-<p><img src="/images/blog/sift_feature7.png" alt="sift1"> </p>
-<p>但是实际上，在原论文中证明，对每个关键点周围采用$4\times 4$块(每个块内依然是8个方向)的邻域描述子效果最佳</p>
-<p><img src="/images/blog/sift_feature8.png" alt="sift1"> </p>
-<p>所以，<strong>此时我们计算的不是一个梯度方向直方图，而是16个</strong>。每个梯度直方图对应的是新坐标系统的中心点附近的点以及圆形周围邻居梯度的分量。</p>
-<p>下图是某个极值点用于生成的描述子的邻居以及坐标系统，即直方图（被归一化并以$4\times 4\times 8=128$个整型数字）。仔细看下图，会发现有16个直方图(16个块)，每个直方图有8个bins(代表每个块的8个主方向)。</p>
-<p><img src="/images/blog/sift_feature9.png" alt="sift1"> </p>
-<p><a href="https://blog.csdn.net/dcrmg/article/details/52577555" target="_blank" rel="noopener">CSDN SIFT特征</a><br><a href="https://blog.csdn.net/abcjennifer/article/details/7639681" target="_blank" rel="noopener">Rachel-Zhang SIFT</a><br><a href="https://stackoverflow.com/questions/31206443/numpy-second-derivative-of-a-ndimensional-array" target="_blank" rel="noopener">stackoverflow 计算hessian矩阵</a></p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2019-03-05-SIFT-feature/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2019-03-05-SIFT-feature/" title="SIFT特征详解">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2019-03-04-HOG-feature/">
-    		HOG特征详解
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.694Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h2 id="0-简介"><a href="#0-简介" class="headerlink" title="0 简介"></a>0 简介</h2><p>HOG特征即 Histogram of oriented gradients，源于2005年一篇<a href="https://hal.inria.fr/file/index/docid/548512/filename/hog_cvpr2005.pdf" target="_blank" rel="noopener">CVPR论文</a>，使用HOG+SVM做行人检测，由于效果良好而被广泛应用。大体效果如下，具体使用HOG+SVM做行人检测时再讨论详细代码。</p>
-<p><img src="/images/blog/hog_feature_1.jpg" alt="sift1"> </p>
-<p>算法计算步骤概览</p>
-<ol>
-<li>图像预处理。<code>伽马矫正</code>(减少光度影响)和<code>灰度化</code>(也可以在RGB图上做，只不过对三通道颜色值计算，取梯度值最大的)【可选步骤】</li>
-<li>计算图像像素点梯度值，得到梯度图(尺寸和原图同等大小)</li>
-<li>图像划分多个cell，统计cell内梯度直方向方图</li>
-<li>将$2\times 2$个cell联合成一个block,对每个block做块内梯度归一化</li>
-</ol>
-<h2 id="1-图像预处理"><a href="#1-图像预处理" class="headerlink" title="1 图像预处理"></a>1 图像预处理</h2><h3 id="1-1-gamma矫正和灰度化"><a href="#1-1-gamma矫正和灰度化" class="headerlink" title="1.1 gamma矫正和灰度化"></a>1.1 gamma矫正和灰度化</h3><p><strong>作用</strong>：gamma矫正通常用于电视和监视器系统中重现摄像机拍摄的画面．在图像处理中也可用于调节图像的对比度，减少图像的光照不均和局部阴影．<br><strong>原理</strong>： 通过非线性变换，让图像从暴光强度的线性响应变得更接近人眼感受的响应，即将漂白（相机曝光）或过暗（曝光不足）的图片，进行矫正</p>
-<p>gamma矫正公式：<br>$$<br>f(x) =x^{\gamma}<br>$$<br>即输出是输入的幂函数，指数为$\gamma$</p>
-<p>代码实现如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import cv2</span><br><span class="line">import numpy as np</span><br><span class="line"></span><br><span class="line">img &#x3D; cv2.imread(&#39;gamma0.jpg&#39;,0)</span><br><span class="line">img1 &#x3D; np.power(img&#x2F;float(np.max(img)), 1&#x2F;1.5)</span><br><span class="line">img2 &#x3D; np.power(img&#x2F;float(np.max(img)), 1.5)</span><br><span class="line"></span><br><span class="line">cv2.imshow(&#39;src&#39;,img)</span><br><span class="line">cv2.imshow(&#39;gamma&#x3D;1&#x2F;1.5&#39;,img1)</span><br><span class="line">cv2.imshow(&#39;gamma&#x3D;1.5&#39;,img2)</span><br><span class="line">cv2.waitKey(0)</span><br></pre></td></tr></table></figure>
-<p>下图分别代表了处理之后的<code>原图</code>,<code>灰度图</code>，<code>gamma=1/1.5矫正</code>,<code>gamma=1.5矫正</code></p>
-<p><img src="/images/blog/hog_feature_2.jpg" alt="sift1"> </p>
-<h2 id="2-计算图像像素梯度图"><a href="#2-计算图像像素梯度图" class="headerlink" title="2 计算图像像素梯度图"></a>2 计算图像像素梯度图</h2><p>我们需要同时计算图像的<code>水平梯度图</code>和<code>垂直梯度图</code> 。如下图，假设我们要计算下图中像素点A的梯度值，</p>
-<p><img src="/images/blog/hog_feature_3.jpg" alt="sift1"> </p>
-<p>计算方法为</p>
-<p><strong>梯度大小</strong></p>
-<ul>
-<li>水平梯度： $g_x=\sqrt {(L(x-1,y)-L(x+1,y))^2}=\sqrt{(30-20)^2}=\sqrt{10^2}=10$</li>
-<li>垂直梯度： $g_y=\sqrt {(L(,y+1)-L(x,y-1))^2}=\sqrt{(32-64)^2}=\sqrt{32^2}=32$</li>
-</ul>
-<p><strong>梯度方向</strong></p>
-<ul>
-<li>$$<br>\theta (x,y) = arctan [\frac{g_x}{g_y}] =arctan\frac{10}{32}<br>$$</li>
-</ul>
-<p>梯度方向会取绝对值，因此得到的角度范围是 $[0,180°]$</p>
-<p>上面这些计算过程，在opencv中有对应的算子，称为Sobel算子，分别计算水平和垂直方向梯度的。</p>
-<p><img src="/images/blog/hog_feature_4.jpg" alt="sift1"> </p>
-<p>使用的python opencv代码为</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">im &#x3D; cv2.imread(&#39;bolt.png&#39;)</span><br><span class="line">im &#x3D; np.float32(im) &#x2F; 255.0</span><br><span class="line"> </span><br><span class="line"># 计算梯度</span><br><span class="line">img &#x3D; cv2.G</span><br><span class="line">gx &#x3D; cv2.Sobel(img, cv2.CV_32F, 1, 0, ksize&#x3D;1)</span><br><span class="line">gy &#x3D; cv2.Sobel(img, cv2.CV_32F, 0, 1, ksize&#x3D;1)</span><br><span class="line"># 计算梯度幅度和方向</span><br><span class="line">mag, angle &#x3D; cv2.cartToPolar(gx, gy, angleInDegrees&#x3D;True)</span><br><span class="line">cv2.imshow(&quot;absolute x-gradient&quot;,gx)</span><br><span class="line">cv2.imshow(&quot;absolute y-gradient&quot;,gy)</span><br><span class="line">cv2.imshow(&quot;gradient magnitude&quot;,mag)</span><br><span class="line">cv2.imshow(&quot;gradient direction&quot;,angle)</span><br><span class="line">cv2.waitKey(0)</span><br></pre></td></tr></table></figure>
-<p>效果如下，分别为<code>原图</code>,<code>x方向梯度绝对值</code>,<code>y方向梯度绝对值图</code>,<code>梯度幅度图</code>,<code>梯度方向图</code><br><strong>下图是没有使用归一化效果</strong></p>
-<p><img src="/images/blog/hog_feature_5.jpg" alt="sift1"> </p>
-<p><strong>使用归一化之后的效果</strong></p>
-<p><img src="/images/blog/hog_feature_6.jpg" alt="sift1"> </p>
-<p>可以看到</p>
-<ul>
-<li>x方向梯度图会强化垂直方向的特征，可以观察到左侧白色斜线更加明显，但是底部一些水平线没有了。</li>
-<li>y方向梯度图会强化水平方向特征，底部水平线强化了，左侧垂直线不是那么明显了。</li>
-</ul>
-<p>梯度图移除了大量非显著性特征，并加强了显著特征。三通道的彩色图中，每个像素的梯度幅度是三个通道中最大的那个，而梯度方向是梯度幅度最大的那个通道上的方向。</p>
-<h2 id="3-计算梯度直方图"><a href="#3-计算梯度直方图" class="headerlink" title="3 计算梯度直方图"></a>3 计算梯度直方图</h2><p>经过上一步计算之后，每个像素点都会有两个值：<strong>梯度方向和梯度幅度</strong>。</p>
-<p>但是，也看到了，梯度幅度和梯度方向图与原图等同大小，实际如果使用这些特征，会存在两个问题</p>
-<ul>
-<li>计算量很大，基本就是原图</li>
-<li>特征稀疏。图中其实只有少量稀疏的显著特征，大部分可能是0</li>
-</ul>
-<p>以上是个人理解。</p>
-<p>HOG特征在此步骤选择联合一个$8\times 8$的小格子内部一些像素，计算其梯度幅度和梯度方向的统计直方图，这样一来就可以以这个梯度直方图来代替原本庞大的矩阵。每个像素有一个梯度幅度和梯度方向两个取值，那么一个$8\times 8$的小格子一共有$8\times 8\times 2=128$个取值。</p>
-<p>上面提到，梯度方向取值范围是$[0,180]$，以每20°为一个单元，所有的梯度方向可以划分为9组，这就是统计直方图的分组数目。如下图，我们选取划分格子之后的第二行第二列一个小单元，计算得到右边的<code>梯度方向图</code>和<code>梯度幅度图</code>，同时以以梯度方向为index，统计分组数量。</p>
-<p><img src="/images/blog/hog_feature_7.jpg" alt="sift1"> </p>
-<p>得到的统计频率直方图如下</p>
-<p><img src="/images/blog/hog_feature_8.jpg" alt="sift1"> </p>
-<p>从上图可以看到，更多的点的梯度方向是倾向于0度和160度，也就是说这些点的梯度方向是向上或者向下，表明图像这个位置存在比较明显的横向边缘。因此HOG是对边角敏感的，由于这样的统计方法，也是对部分像素值变化不敏感的，所以能够适应不同的环境。</p>
-<p>至于为什么选取$8\times 8$为一个单元格，是因为HOG特征当初设计时是用来做行人检测的。在行人图片中$8\times8$的矩阵被缩放成$64\times 128$的网格时，足以捕获一些特征，比如脸部或者头部特征等。</p>
-<h2 id="4-block归一化"><a href="#4-block归一化" class="headerlink" title="4 block归一化"></a>4 block归一化</h2><p>目的：降低光照的影响<br>方法：向量的每一个值除以向量的模长</p>
-<p>比如对于一个$(128,64,32)$的三维向量来说，模长是$ \sqrt{128^2+64^2+32^2}=146.64$,那么归一化后的向量变成了$(0.87,0.43,0.22)$。</p>
-<p>HOG在选取$8\times 8$为一个单元格的基础之上，再以$2\times 2$个单元格为一组，称为block。作者提出要对block进行归一化，由于每个单元格cell有9个向量，$2\times 2$个单元格则有36个向量，需要对这36个向量进行归一化。下图演示了如何在图像中抽取block</p>
-<p><img src="/images/blog/hog_feature_9.gif" alt="sift1"> </p>
-<h2 id="5-HOG特征描述"><a href="#5-HOG特征描述" class="headerlink" title="5  HOG特征描述"></a>5  HOG特征描述</h2><p>每一个$16\times 16$大小的block将会得到36大小的vector。那么对于一个$64\times128$大小的图像，按照上图的方式提取block，将会有7个水平位置和15个竖直位可以取得，所以一共有$7\times15=105$个block，所以我们整合所有block的vector，形成一个大的一维vector的大小将会是$36\times105=3780$。</p>
-<h2 id="6-参考代码"><a href="#6-参考代码" class="headerlink" title="6 参考代码"></a>6 参考代码</h2><p>计算图像HOG特征时，我们使用如下代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">from skimage.feature import hog</span><br><span class="line">from skimage import data, exposure</span><br><span class="line">image &#x3D; cv2.imread(&#39;C:&#x2F;Users&#x2F;dell&#x2F;Desktop&#x2F;123.png&#39;)</span><br><span class="line"></span><br><span class="line">fd, hog_image &#x3D; hog(image, orientations&#x3D;8, pixels_per_cell&#x3D;(16, 16),</span><br><span class="line">                    cells_per_block&#x3D;(1, 1), visualize&#x3D;True, multichannel&#x3D;True)</span><br><span class="line">fig, (ax1, ax2) &#x3D; plt.subplots(1, 2, figsize&#x3D;(8, 4), sharex&#x3D;True, sharey&#x3D;True)</span><br><span class="line">ax1.axis(&#39;off&#39;)</span><br><span class="line">ax1.imshow(image, cmap&#x3D;plt.cm.gray)</span><br><span class="line">ax1.set_title(&#39;Input image&#39;)</span><br><span class="line"># Rescale histogram for better display</span><br><span class="line">hog_image_rescaled &#x3D; exposure.rescale_intensity(hog_image, in_range&#x3D;(0, 10))</span><br><span class="line">ax2.axis(&#39;off&#39;)</span><br><span class="line">ax2.imshow(hog_image_rescaled, cmap&#x3D;plt.cm.gray)</span><br><span class="line">ax2.set_title(&#39;Histogram of Oriented Gradients&#39;)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<p>效果如下</p>
-<p><img src="/images/blog/hog_feature_10.jpg" alt="sift1"></p>
-<h2 id="7-参考"><a href="#7-参考" class="headerlink" title="7 参考"></a>7 参考</h2><p><a href="https://zhuanlan.zhihu.com/p/40960756" target="_blank" rel="noopener">知乎 图像HOG特征计算</a><br><a href="https://blog.csdn.net/akadiao/article/details/79679306" target="_blank" rel="noopener">图像gamma矫正</a><br><a href="https://www.learnopencv.com/histogram-of-oriented-gradients/" target="_blank" rel="noopener">梯度计算</a><br><a href="https://scikit-image.org/docs/dev/auto_examples/features_detection/plot_hog.html" target="_blank" rel="noopener">skimage 计算图像HOG特征</a></p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2019-03-04-HOG-feature/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2019-03-04-HOG-feature/" title="HOG特征详解">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2019-03-02-img-haar-feature/">
-    		图像处理基础Haar特征
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.693Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h2 id="1-Haar特征"><a href="#1-Haar特征" class="headerlink" title="1 Haar特征"></a>1 Haar特征</h2><p>Haar特征最早是由应用于人脸特征表示时提出的，此特征反映的是图像部分区域内灰度变化情况，如：眼睛要比脸颊颜色要深，鼻梁两侧比鼻梁颜色要深，嘴巴比周围颜色要深等。<br>Haar特征有4类: <code>边缘特征</code>,<code>线性特征</code>,<code>中心特征</code>,<code>对角线特征</code>，如下图示例，这些，组合成特征模板。特征模板内有白色和黑色两种矩形，并定义该模板的特征值为白色矩形像素和减去黑色矩形像素和。</p>
-<p><img src="/images/blog/haar_1.jpg" alt="haar特征"></p>
-<p><strong>如何计算上面特征</strong></p>
-<ul>
-<li>对于A和B ：$特征值=sum _白-sum_黑$</li>
-<li>对于C：$特征值=sum _白-2\times sum_黑$,白色乘以2的原因是，保持与黑色区域一样的像素数目。</li>
-</ul>
-<p>通过改变特征模板的大小和位置，可在图像子窗口中穷举出大量的特征。上图的特征模板称为“特征原型”。而特征类别、大小和位置的变化，使得很小的检测窗口含有非常多的矩形特征。这就带来了两个问题</p>
-<ol>
-<li>如何快速计算那么多的特征： <strong>积分图</strong></li>
-<li>哪些矩形特征才是对分类器分类最有效的：<strong>训练分类算法</strong>，如AdaBoost</li>
-</ol>
-<h2 id="2-积分图"><a href="#2-积分图" class="headerlink" title="2 积分图"></a>2 积分图</h2><p>积分图就是只遍历一次图像就可以求出图像中所有区域像素和的快速算法。核心思想是：将图像从起点开始到各个点所形成的矩形区域像素之和作为一个数组的元素保存在内存中，当要计算某个区域的像素和时可以直接索引数组的元素，不用重新计算这个区域的像素和，从而加快了计算。</p>
-<p>积分图是一种能够描述全局信息的<strong>矩阵表示</strong>方法。<strong>积分图的构造方式是位置（i,j）处的值ii(i,j)是原图像(i,j)左上角方向所有像素的和</strong>。</p>
-<p>积分图的构建算法</p>
-<ol>
-<li>用$s(i,j)$表示行方向的累加和，初始化$s(i,-1)=0$</li>
-<li>用$ii(i,j)$表示一个积分图像，初始化$ii(-1,i)=0$</li>
-<li>逐行扫描图像，递归计算每个像素$(i,j)$行方向的累加和$s(i,j)$和积分图像$ii(i,j)$的值。<br>$$<br>s(i,j)=s(i,j-1)+f(i,j) \<br>ii(i,j)=ii(i-1,j)+s(i,j)<br>$$</li>
-<li>扫描图像一遍，当到达图像右下角像素时，积分图像ii就构造好了。</li>
-</ol>
-<p><strong>计算方块内的像素和</strong><br>计算好了积分图，我们接下来就可以利用积分图来加速计算某个方块内部的像素的和</p>
-<p><img src="/images/blog/haar_2.jpg" alt="haar特征"></p>
-<p>如上图，假设我们想计算区域D的像素和。上图中D的四个顶点分别是1,2,3,4。令$rectsum_n$代表顶点$n$左上角的所有像素和，那么区域D内的像素和为: $rectsum_4-rectsum_2-rectsum_3+rectsum_1，注意顶点1的坐上所有像素和被减了2次，所以要加一次$</p>
-<h2 id="3-Adaboost-算法"><a href="#3-Adaboost-算法" class="headerlink" title="3 Adaboost 算法"></a>3 Adaboost 算法</h2><p>opencv中关于adaboost训练过程参考 <a href="https://docs.opencv.org/3.3.0/dc/d88/tutorial_traincascade.html" target="_blank" rel="noopener">opencv tutorial_traincascade</a><br>后面再讲到 Adaboost算法时，再详细说明。</p>
-<h2 id="4-opencv-中使用haar特征检测人脸"><a href="#4-opencv-中使用haar特征检测人脸" class="headerlink" title="4 opencv 中使用haar特征检测人脸"></a>4 opencv 中使用haar特征检测人脸</h2><p>opencv已经预先包含了多种训练好的<code>人脸分类器</code>，<code>眼睛分类器</code>，<code>微笑分类器</code>等。可以自己定义和训练一个，此处直接使用opencv已经训练好的人脸级联分类器，它的算法原理就是使用了Haar特征+Adaboost算法训练出的级联分类器。</p>
-<p>首先，载入xml定义的分类器，载入的图像必须是灰度图</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">import cv2 as cv</span><br><span class="line">face_cascade &#x3D; cv.CascadeClassifier(&#39;haarcascade_frontalface_default.xml&#39;)</span><br><span class="line">eye_cascade &#x3D; cv.CascadeClassifier(&#39;haarcascade_eye.xml&#39;)</span><br><span class="line">img &#x3D; cv.imread(&#39;sachin.jpg&#39;)</span><br><span class="line">gray &#x3D; cv.cvtColor(img, cv.COLOR_BGR2GRAY)</span><br></pre></td></tr></table></figure>
-<p>接着开始检测人脸，如果有检测到则画出矩形框，下图是检测结果(同时包含了眼睛检测)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">faces &#x3D; face_cascade.detectMultiScale(gray, 1.3, 5)</span><br><span class="line">for (x,y,w,h) in faces:</span><br><span class="line">    cv.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)</span><br><span class="line">    roi_gray &#x3D; gray[y:y+h, x:x+w]</span><br><span class="line">    roi_color &#x3D; img[y:y+h, x:x+w]</span><br><span class="line">    eyes &#x3D; eye_cascade.detectMultiScale(roi_gray)</span><br><span class="line">    for (ex,ey,ew,eh) in eyes:</span><br><span class="line">        cv.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)</span><br><span class="line">cv.imshow(&#39;img&#39;,img)</span><br><span class="line">cv.waitKey(0)</span><br><span class="line">cv.destroyAllWindows()</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/blog/haar_3.jpg" alt="haar特征"></p>
-<h2 id="5-Haar特征拓展"><a href="#5-Haar特征拓展" class="headerlink" title="5 Haar特征拓展"></a>5 Haar特征拓展</h2><h3 id="5-1-ABH特征"><a href="#5-1-ABH特征" class="headerlink" title="5.1 ABH特征"></a>5.1 ABH特征</h3><p>为提高二分Haar特征的区分能力，我们提出 了一种多二分Haar特征，并使用它们的共现性作为新的特征，成为ABH(Asseming Binary Haar)特征。</p>
-<p>下图演示了ABH特征的一个例子。</p>
-<p><img src="/images/blog/haar_4.jpg" alt="haar特征"></p>
-<p>上图中ABH特征集成了三个二分Haar特征，当三个二分Haar特征值分别为1,1,0时，ABH特征为 a(b1,b2,b3)=(110)2=6<br>其中 a为三个二分Haar特征 b1,b2,b3 的ABH特征计算函数， (.)2 是一个从二进制转十进制的操作。特征值说明了对 2F个不同结合的index，其中F是结合的二分特征数。</p>
-<h3 id="5-2-LAB-Locally-Assembing-Binary-特征"><a href="#5-2-LAB-Locally-Assembing-Binary-特征" class="headerlink" title="5.2 LAB(Locally Assembing Binary)特征"></a>5.2 LAB(Locally Assembing Binary)特征</h3><p>ABH特征的数目巨大。为了枚举所有的特征，需要几个自由参数，比如二分Haar特征的集合数目，每个二分Haar特征的大小，每个二分Haar特征的坐标位置。从如此巨大的特征池中学习是不可逆的。我们发现了一种对应的用于人脸检测的缩减集合，称为LAB Haar特征。</p>
-<p>ABH特征之中，LAB特征是那些结合8个局部邻接2-矩形的二分Haar特征，它们大小相同并且共享同一个中心矩形。下图展示了一个8个二分Haar特征用以集合为一个LAB特征。</p>
-<p><img src="/images/blog/haar_5.jpg" alt="haar特征"></p>
-<p>下图是一个2个LAB特征的示例</p>
-<p><img src="/images/blog/haar_6.jpg" alt="haar特征"></p>
-<p>图中展示了两个不同的LAB特征，中心的黑色矩形被8个相邻的二分Haar特征共享，所有9个矩形都是相同的大小。</p>
-<p>从公式上看，一个LAB特征可以用一个四元组表示 l(x,y,w,h) ，其中 x,y 分别代表了左上角的x和y轴坐标，(w,h) 代表了矩形的宽和高。</p>
-<p>LAB特征保留了所有二分Haar特征的优势，同时又很强的区分能力，大小也很小。LAB特征抓取了图像的局部强度。计算LAB特征需要计算8个2-矩形Haar特征。LAB特征值区间为 {0,…255}，每个值对应了特别的局部结构。</p>
-<p><a href="https://docs.opencv.org/3.4.3/d7/d8b/tutorial_py_face_detection.html" target="_blank" rel="noopener">opencv haar特征进行人脸检测</a></p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2019-03-02-img-haar-feature/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2019-03-02-img-haar-feature/" title="图像处理基础Haar特征">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2019-02-24-image-pramid/">
-    		图像中的各种金字塔
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.687Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h2 id="0-定义"><a href="#0-定义" class="headerlink" title="0 定义"></a>0 定义</h2><p>问题：假设要进行人脸识别，但是人脸与摄像头之间距离忽远忽近，单一分辨率的识别算法无法识别所有距离下的人脸特征。</p>
-<p>图像金字塔是一种以多分辨率来解释图像的结构，通过对原始图像进行多尺度像素采样的方式，生成N个不同分辨率的图像。<br>把具有最高级别分辨率的图像放在底部，以金字塔形状排列，往上是一系列像素（尺寸）逐渐降低的图像，一直到金字塔的顶部只包含一个像素点的图像，这就构成了传统意义上的图像金字塔。</p>
-<p><strong>示例图形金字塔</strong></p>
-<p><img src="/images/blog/image_praid_example.png" alt="图像金字塔"></p>
-<p><strong>获取金字塔步骤</strong></p>
-<ol>
-<li>利用低通滤波器平滑图像</li>
-<li>对平滑图像进行采样。有两种采样方式：<code>上采样</code>（分辨率逐渐升高）,<code>下采样</code>(分辨率直接按降低)</li>
-</ol>
-<p><strong>图像金字塔层数与图像大小关系</strong></p>
-<p>以$512\times512$为例</p>
-<table>
-<thead>
-<tr>
-<th>金字塔层数</th>
-<th>1</th>
-<th>2</th>
-<th>3</th>
-<th>4</th>
-<th>5</th>
-<th>6</th>
-<th>7</th>
-<th>8</th>
-<th>9</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>图像大小</td>
-<td>512</td>
-<td>216</td>
-<td>128</td>
-<td>64</td>
-<td>16</td>
-<td>8</td>
-<td>4</td>
-<td>2</td>
-<td>1</td>
-</tr>
-</tbody></table>
-<p>尺寸变化时不够除的会进行四舍五入。</p>
-<p><strong>上采样和下采样</strong></p>
-<ul>
-<li><strong>上采样</strong>:如果想放大图像，则需要通过向上取样操作得到，具体做法如下<ol>
-<li>将图像在每个方向扩大为原来的俩倍，新增的行和列以0填充</li>
-<li>使用先前同样的内核（乘以4）与放大后的图像卷积，获得新增像素的近似值</li>
-</ol>
-</li>
-</ul>
-<p>在opencv中的代码很简单</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">src &#x3D; cv.pyrUp(src, dstsize&#x3D;(2 * cols, 2 * rows))</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>下采样</strong>:为了获取层级为 $G_i+1$ 的金字塔图像，我们采用如下方法:<ol>
-<li>对图像G_i进行高斯内核卷积</li>
-<li>将所有偶数行和列去除</li>
-</ol>
-</li>
-</ul>
-<p>在opencv中的代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">src &#x3D; cv.pyrDown(src, dstsize&#x3D;(cols &#x2F; 2, rows &#x2F; 2))</span><br></pre></td></tr></table></figure>
-<p>显而易见，结果图像只有原图的四分之一。通过对输入图像$G_i$(原始图像)不停迭代以上步骤就会得到整个金字塔。同时我们也可以看到，向下取样会逐渐丢失图像的信息。 以上就是对图像的向下取样操作，即缩小图像</p>
-<p><strong>两种图像金字塔</strong></p>
-<ul>
-<li>高斯金字塔</li>
-<li>Laplace金字塔</li>
-</ul>
-<h2 id="2-SIFT中的高斯金字塔"><a href="#2-SIFT中的高斯金字塔" class="headerlink" title="2 SIFT中的高斯金字塔"></a>2 SIFT中的高斯金字塔</h2><p>高斯金字塔不是一个金字塔，而<strong>是很多组(Octave)金字塔,而且每组金字塔包含若干层</strong>。在opencv官方文档中的高斯金字塔看起来只是一上下采样，而且每一组只有一层。</p>
-<p>构建过程</p>
-<ol>
-<li>先将原图像扩大一倍之后作为高斯金字塔的第1组第1层，将第1组第1层图像经高斯卷积（其实就是高斯平滑或称高斯滤波）之后作为第1组金字塔的第2层，高斯卷积函数为：</li>
-</ol>
-<p>$$<br>G(x,y)=\frac{1}{2\pi \sigma ^2}e^{-\frac{(x-x_0)^2+(y-y_0)^2}{2\sigma ^2}}<br>$$</p>
-<p>对于参数σ，在Sift算子中取的是固定值1.6。</p>
-<ol start="2">
-<li><p>将σ乘以一个比例系数k,等到一个新的平滑因子σ=k*σ，用它来平滑第1组第2层图像，结果图像作为第3层。</p>
-</li>
-<li><p>如此这般重复，最后得到L层图像，在同一组中，每一层图像的尺寸都是一样的，只是平滑系数不一样。它们对应的平滑系数分别为：$0，σ，kσ，k^2σ,k^3σ……k^{L-2}σ$。</p>
-</li>
-<li><p>将第1组倒数第三层图像作比例因子为2的降采样，得到的图像作为第2组的第1层，然后对第2组的第1层图像做平滑因子为σ的高斯平滑，得到第2组的第2层，就像步骤2中一样，如此得到第2组的L层图像，同组内它们的尺寸是一样的，对应的平滑系数分别为：$0，σ，kσ，k^2σ,k^3σ……k^{(L-2)}σ$。但是在尺寸方面第2组是第1组图像的一半。</p>
-</li>
-</ol>
-<p>这样反复执行，就可以得到一共O组，每组L层，共计O*L个图像，这些图像一起就构成了高斯金字塔，结构如下：</p>
-<p><img src="/images/blog/gauss_image_praid.png" alt="图像金字塔"></p>
-<p>上图第一行的单独一副图像是原图经过了双线性插值做了上采样使得图像尺寸扩充了4倍(高度和宽度各扩充一倍)。图像一共4行6列，代表了图像金字塔有4层，6组(也称之为八度)。同一列，从上至下是降采样过程，可以看到图像尺寸不断缩小；同一行，从左往右是使用不同平滑系数进行高斯模糊过程，可以看到图像越来越模糊。【注意此图是灰度图演示过程，下面的图是在原图基础上做的，所以效果不一样】</p>
-<p><strong>代码示例</strong><br>我们以下图的lnea.jpg为例<br><img src="/images/blog/lnea.jpg" alt="图像金字塔"><br>得到的图像金字塔结果如下<br><img src="/images/blog/image_pyramid_result.png" alt="图像金字塔"></p>
-<p>代码位于 <a href="https://github.com/shartoo/BeADataScientist/blob/master/codes/4_4-image/image_pyramid.py" target="_blank" rel="noopener">python实现图像金字塔</a></p>
-<h2 id="3-差分金字塔DOG"><a href="#3-差分金字塔DOG" class="headerlink" title="3 差分金字塔DOG"></a>3 差分金字塔DOG</h2><p>DOG（差分金字塔）金字塔是在高斯金字塔的基础上构建起来的，其实生成高斯金字塔的目的就是为了构建DOG差分金字塔。</p>
-<p><strong>构建过程</strong></p>
-<p>差分金字塔的第1组第1层是由高斯金字塔的第1组第2层减第1组第1层得到的。以此类推，逐组逐层生成每一个差分图像，所有差分图像构成差分金字塔。</p>
-<p>概括为差分金字塔的第o组第l层图像是有高斯金字塔的第o组第l+1层减第o组第l层得到的。图示如下</p>
-<p><img src="/images/blog/image_dog_result.png" alt="图像金字塔"> </p>
-<p>可以看到结果都是黑的，人眼看不到效果。实际计算结果包含了大量信息点。<br>我们对结果进行归一化操作，此时就变成了laplace金字塔了。</p>
-<h2 id="4-laplace金字塔"><a href="#4-laplace金字塔" class="headerlink" title="4 laplace金字塔"></a>4 laplace金字塔</h2><p>之前一直没弄清楚，差分金字塔和laplace金字塔之间的关系。直到看到这个<a href="http://www.cse.yorku.ca/~kosta/CompVis_Notes/DoG_vs_LoG.pdf" target="_blank" rel="noopener">文档</a> </p>
-<p>我们先看差分金字塔的公式定义：</p>
-<p>$$<br>Dog(x,y,\sigma)=(G(x,y,k\sigma)-G(x,y,\sigma))<em>I(x,y) =L(x,y,k\sigma)-L(x,y,\sigma) \<br>其中 G(x,y,\sigma)代表了高斯核，G(x,y,\sigma)=\frac{1}{\sqrt{2\pi}}e^{\frac{x^2+y^2}{2\sigma ^2}},而L(x,y,\sigma)=G(x,y,\sigma)</em>I(x,y)<br>$$</p>
-<p>缩放之后的LoG表达式为：</p>
-<p>$$<br>LoG(x,y,\sigma)=\sigma ^2\bigtriangledown ^2 L(x,y,\sigma) \<br>= \sigma ^2(L_{xx}+L_{yy})<br>$$</p>
-<p>最终推导结果如下：<br>$$<br>(k-1)\sigma ^2LoG \approx =DoG<br>$$</p>
-<p>可以看到，DoG近似等于将LoG尺度缩放到一个常量$k-1$.</p>
-<p>我们来看实际效果，借助opencv的api</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cv2.normalize(im, None, alpha&#x3D;0, beta&#x3D;1, norm_type&#x3D;cv2.NORM_MINMAX, dtype&#x3D;cv2.CV_32F)</span><br></pre></td></tr></table></figure>
-<p>得到结果如下，可以看到清晰地特征。</p>
-<p><img src="/images/blog/image_dog_norm_result.png" alt="图像金字塔"> </p>
-<p>代码位于 <a href="https://github.com/shartoo/BeADataScientist/blob/master/codes/4_4-image/image_pyramid.py" target="_blank" rel="noopener">python实现图像金字塔</a></p>
-<p>此特征可以等价理解成Laplace特征。</p>
-<p><strong>参考</strong></p>
-<p><a href="https://blog.csdn.net/qq_27806947/article/details/80769339" target="_blank" rel="noopener">OpenCV(Python3)_16(图像金字塔)</a></p>
-<p><a href="http://www.10tiao.com/html/295/201609/2651988200/3.html" target="_blank" rel="noopener">IO头条 图像金字塔算法</a></p>
-<p><a href="https://blog.csdn.net/dcrmg/article/details/52561656" target="_blank" rel="noopener">csdn Sift中尺度空间、高斯金字塔、差分金字塔（DOG金字塔）、图像金字塔</a></p>
-<p><a href="https://docs.opencv.org/3.4/d4/d1f/tutorial_pyramids.html" target="_blank" rel="noopener">opencv 官方文档</a></p>
-<p><a href="https://www.uio.no/studier/emner/matnat/its/UNIK4690/v16/forelesninger/lecture_2_3_blending.pdf" target="_blank" rel="noopener">图像金字塔的算法构建图示(强烈推荐)</a></p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2019-02-24-image-pramid/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2019-02-24-image-pramid/" title="图像中的各种金字塔">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2019-01-08-merlin_mandarin_summary/">
-    		merlin中文语音合成概览
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.686Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <p><img src="/images/blog/merlin-mandarin1.png" alt="merlin中文语音合成"><br><img src="/images/blog/merlin-mandarin2.png" alt="merlin中文语音合成"><br><img src="/images/blog/merlin-mandarin3.png" alt="merlin中文语音合成"><br><img src="/images/blog/merlin-mandarin4.png" alt="merlin中文语音合成"><br><img src="/images/blog/merlin-mandarin5.png" alt="merlin中文语音合成"><br><img src="/images/blog/merlin-mandarin6.png" alt="merlin中文语音合成"></p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2019-01-08-merlin_mandarin_summary/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2019-01-08-merlin_mandarin_summary/" title="merlin中文语音合成概览">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2019-01-07-merlin_summary/">
-    		语音合成：merlin使用概览
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.685Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h3 id="0-概览"><a href="#0-概览" class="headerlink" title="0 概览"></a>0 概览</h3><p>本文详细解释Merlin Mandarin_voice下脚本一步一步所做的事。</p>
-<h3 id="01-setup"><a href="#01-setup" class="headerlink" title="01_setup"></a>01_setup</h3><p>脚本<code>merlin/egs/mandarin_voice/s1/01_setup.sh</code></p>
-<p>主要工作是创建一个目录，做好准备工作。主要创建了如下文件夹:</p>
-<ul>
-<li>experiments<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">─ mandarin_voice(voice name)</span><br><span class="line">    ├── acoustic_model</span><br><span class="line">    │ ├── data</span><br><span class="line">    │ ├── gen</span><br><span class="line">    │ ├── inter_module</span><br><span class="line">    │ ├── log</span><br><span class="line">    │ └── nnets_model</span><br><span class="line">    ├── duration_model</span><br><span class="line">    │ ├── data</span><br><span class="line">    │ ├── gen</span><br><span class="line">    │ ├── inter_module</span><br><span class="line">    │ ├── log</span><br><span class="line">    │ └── nnets_model</span><br><span class="line">    └── test_synthesis</span><br><span class="line">        ├── gen-lab</span><br><span class="line">        ├── prompt-lab</span><br><span class="line">        ├── test_id_list.scp</span><br><span class="line">        └── wav</span><br></pre></td></tr></table></figure></li>
-<li>database<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"> feats</span><br><span class="line">│ ├── bap</span><br><span class="line">│ ├── lf0</span><br><span class="line">│ └── mgc</span><br><span class="line">├── labels</span><br><span class="line">│ └── label_phone_align</span><br><span class="line">├── prompt-lab</span><br><span class="line">│ ├── A11_0.lab</span><br><span class="line">│ ├── A11_1.lab</span><br><span class="line">│ ├── A11_2.lab</span><br><span class="line">...</span><br><span class="line">└── wav</span><br><span class="line">    ├── A11_0.wav</span><br><span class="line">    ├── A11_100.wav</span><br><span class="line">    ├── A11_101.wav</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<p>将一些基本参数写入到<code>conf/global_setting.cfg</code>文件中</p>
-<h3 id="02-prepare-lab"><a href="#02-prepare-lab" class="headerlink" title="02_prepare_lab"></a>02_prepare_lab</h3><p>需要两个参数：</p>
-<ul>
-<li>lab_dir: 第一步中的标注目录 <code>database/labels</code></li>
-<li>prompt_lab_dir :第一步中生成的<code>database/prompt-lab</code></li>
-</ul>
-<h4 id="2-1-准备文件夹"><a href="#2-1-准备文件夹" class="headerlink" title="2.1 准备文件夹"></a>2.1 准备文件夹</h4><ul>
-<li>将 <code>database/labels</code>目录下的<code>lab_phone_align</code>下的lab文件分别复制到<code>experiments/mandarin_voice/duration_model/data</code>（时域模型）和<code>experiments/mandarin_voice/acoustic_model/data</code>（声学模型）下。【用于训练】</li>
-<li>将<code>database/prompt-lab</code>下的lab文件复制到<code>experiments/mandarin_voice/test_synthesis</code>下【用于测试（合成）】</li>
-</ul>
-<h4 id="2-2-生成文件列表"><a href="#2-2-生成文件列表" class="headerlink" title="2.2 生成文件列表"></a>2.2 生成文件列表</h4><ul>
-<li>将<code>database/labels</code>目录下的<code>lab_phone_align</code>下的lab文件列表写入到<code>experiments/mandarin_voice/duration_model/FileIdList&#39;和</code>experiments/mandarin_voice/acoustic_model/FileIdList’。并移除文件后缀【训练集文件列表】</li>
-<li>将<code>database/prompt-lab</code>下的lab文件列表写入到<code>experiments/mandarin_voice/test_synthesis/test_id_list.scp</code>文件中，并移除文件后缀【用于合成语音的文本列表】</li>
-</ul>
-<h3 id="03-prepare-acoustic-feature"><a href="#03-prepare-acoustic-feature" class="headerlink" title="03_prepare_acoustic_feature"></a>03_prepare_acoustic_feature</h3><p>需要两个参数</p>
-<ul>
-<li><strong>wav_dir</strong>: 使用的是第一步中的<code>database/wav</code>，下面存放的是所有的wav音频文件</li>
-<li><strong>feat_dir</strong>:输出文件目录<code>database/feats</code>，是当前脚本输出的特征存放文件目录<h4 id="3-1-使用声码器抽取声学特征"><a href="#3-1-使用声码器抽取声学特征" class="headerlink" title="3.1 使用声码器抽取声学特征"></a>3.1 使用声码器抽取声学特征</h4></li>
-</ul>
-<p>使用<code>merlin/misc/scripts/vocoder/world/extract_features_for_merlin.py</code>脚本抽取，注意，其中的声码器可以是<code>WORLD</code>也可以是其他的，比如<code>straight</code>,<code>WORLD_2</code>。其实依然是在python中调用以下脚本：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">world &#x3D; os.path.join(merlin_dir, &quot;tools&#x2F;bin&#x2F;WORLD&quot;)</span><br><span class="line">sptk &#x3D; os.path.join(merlin_dir, &quot;tools&#x2F;bin&#x2F;SPTK-3.9&quot;)</span><br><span class="line">reaper &#x3D; os.path.join(merlin_dir, &quot;tools&#x2F;bin&#x2F;REAPER&quot;)</span><br></pre></td></tr></table></figure>
-<p>生成的特征目录如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sp_dir &#x3D; os.path.join(feat_dir, &#39;sp&#39; )</span><br><span class="line">mgc_dir &#x3D; os.path.join(feat_dir, &#39;mgc&#39;)</span><br><span class="line">ap_dir &#x3D; os.path.join(feat_dir, &#39;ap&#39; )</span><br><span class="line">bap_dir &#x3D; os.path.join(feat_dir, &#39;bap&#39;)</span><br><span class="line">f0_dir &#x3D; os.path.join(feat_dir, &#39;f0&#39; )</span><br><span class="line">lf0_dir &#x3D; os.path.join(feat_dir, &#39;lf0&#39;)</span><br></pre></td></tr></table></figure>
-<p>如果我们使用world作为vocoder的话，会使用<code>misc/scripts/vocoder/world/extract_features_for_merlin.py</code>脚本，生成步骤其实是：</p>
-<ol>
-<li>直接从原始wav文件，使用<code>world analysis</code>抽取 <code>sp</code>,<code>bapd</code>特征。<code>straight</code>vocoder 会产生 <code>ap</code>,如果使用reaper会产生<code>f0</code>特征。</li>
-<li><code>f0</code>$\rightarrow$ <code>lf0</code>,<code>bapd</code>$\rightarrow$ <code>bap</code>,<code>sp</code>$\rightarrow$ <code>mgc</code></li>
-</ol>
-<h4 id="3-2-复制特征到声学特征目录下"><a href="#3-2-复制特征到声学特征目录下" class="headerlink" title="3.2 复制特征到声学特征目录下"></a>3.2 复制特征到声学特征目录下</h4><p>将所有<code>feat_dir</code>下的所有文件,包括<code>sp</code>,<code>mgc</code>,<code>ap</code>,<code>bap</code>,<code>f0</code>,<code>lf0</code>复制到<code>experiments/mandarin_voice/acoustic_model/data</code>下。</p>
-<h2 id="04-prepare-conf-files"><a href="#04-prepare-conf-files" class="headerlink" title="04_prepare_conf_files"></a>04_prepare_conf_files</h2><p>执行<code>./scripts/prepare_config_files.sh</code></p>
-<p><strong>duration相关配置</strong></p>
-<ul>
-<li><p>先从<code>merlin/misc/recipes/duration_demo.conf</code>复制一份到<code>conf/duration_mandarin_voice.conf</code>，并修改<code>conf/duration_mandarin_voice.conf</code>中的一些目录</p>
-<ul>
-<li>MerlinDir</li>
-<li>WorkDir</li>
-<li>TOPLEVEL</li>
-<li>FileIdList</li>
-</ul>
-</li>
-<li><p>修改Label相关的配置项【Labels】</p>
-<ul>
-<li>silence_pattern：修改为 <code>[&#39;*-sil+*&#39;]</code></li>
-<li>label_type:<code>state_align</code> 或 <code>phone_align</code>，修改之后为<code>phone_align</code></li>
-<li>label_align: 即配置音素对齐文件的目录<code>/experiments/mandarin_voice/duration_model/data/label_phone_align</code></li>
-<li>question_file_name:<code>/misc/questions/questions-mandarin.hed</code>问题集</li>
-</ul>
-</li>
-<li><p>修改输出配置【Outputs】，label_type有<code>state_align</code> 或 <code>phone_align</code>，如果是<code>state_align</code>会在【outputs】处指定<code>dur=5</code>,如果是<code>phone_align</code>则指定<code>dur=1</code></p>
-</li>
-<li><p>神经网络的架构配置，如果当前声音文件是<code>demo</code>则修改<code>hidden_layer_size</code> 【architechture】</p>
-</li>
-<li><p>修改训练、验证、测试数据数量。【data】</p>
-<ul>
-<li>train_file_number: 200</li>
-<li>valid_file_number: 25</li>
-<li>test_file_number: 25</li>
-</ul>
-</li>
-</ul>
-<p><strong>acoustic相关配置</strong></p>
-<ul>
-<li>复制文件<code>conf/acoustic_mandarin_voice.conf</code>，修改变量，label配置都和duration相关配置一样。</li>
-<li>修改输出配置【outputs】<ul>
-<li>mgc</li>
-<li>dmgc</li>
-<li>bap</li>
-<li>dbap</li>
-<li>lf0</li>
-<li>dlf0</li>
-</ul>
-</li>
-<li>波形文件设置【waveform】<ul>
-<li>framelength</li>
-<li>minimum_phase_order</li>
-<li>fw_alpha</li>
-</ul>
-</li>
-<li>其他的【architechture】和【data】都和duration相关配置一样。</li>
-</ul>
-<p>执行<code>./scripts/prepare_config_files_for_synthesis.sh</code>配置测试（或合成）语音相关的参数。基本和上面的<code>./scripts/prepare_config_files.sh</code>一样，需要配置<code>duration</code>和<code>ascoustic</code>参数。新增了【Processes】</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">DurationModel: True</span><br><span class="line">GenTestList: True</span><br><span class="line"># sub-processes</span><br><span class="line">NORMLAB: True</span><br><span class="line">MAKEDUR: False</span><br><span class="line">MAKECMP: False</span><br><span class="line">NORMCMP: False</span><br><span class="line">TRAINDNN: False</span><br><span class="line">DNNGEN: True</span><br><span class="line">CALMCD: False</span><br></pre></td></tr></table></figure>
-
-<h3 id="05-train-duration-model"><a href="#05-train-duration-model" class="headerlink" title="05_train_duration_model"></a>05_train_duration_model</h3><p>实际执行的是<code>./scripts/submit.sh   merlin/src/run_merlin.py   conf/duration_mandarin_voice.conf</code></p>
-<p>其中<code>./scripts/submit.sh</code>是theano相关参数的配置。</p>
-<h3 id="06-train-acoustic-model"><a href="#06-train-acoustic-model" class="headerlink" title="06_train_acoustic_model"></a>06_train_acoustic_model</h3><p>训练声学模型，实际执行的是<code>./scripts/submit.sh   merlin/src/run_merlin.py   conf/acoustic_mandarin_voice.conf</code></p>
-<h3 id="07-run-merlin"><a href="#07-run-merlin" class="headerlink" title="07_run_merlin"></a>07_run_merlin</h3><p>需要两个参数</p>
-<ul>
-<li>test_dur_config_file: 语音合成的时域配置文件</li>
-<li>test_synth_config_file:语音合成的</li>
-</ul>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2019-01-07-merlin_summary/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2019-01-07-merlin_summary/" title="语音合成：merlin使用概览">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2019-01-03-obj_detect_summary/">
-    		深度学习目标检测网络汇总对比
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.680Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <p>参考 ：<a href="https://medium.com/@jonathan_hui/object-detection-speed-and-accuracy-comparison-faster-r-cnn-r-fcn-ssd-and-yolo-5425656ae359" target="_blank" rel="noopener">https://medium.com/@jonathan_hui/object-detection-speed-and-accuracy-comparison-faster-r-cnn-r-fcn-ssd-and-yolo-5425656ae359</a></p>
-<p><strong>概览图</strong></p>
-<p><img src="/images/blog/obj_detect_summary-1.png" alt="目标检测概览"></p>
-<h3 id="0-说明"><a href="#0-说明" class="headerlink" title="0 说明"></a>0 说明</h3><p>关于目标检测的好坏，很难有一个统一明确的比较。我们一般都是在速度和准确率之间妥协，除此之外，我们还需要注意，以下因素会影响性能</p>
-<ul>
-<li>特征抽取网络(<code>VGG16</code>,<code>ResNet</code>,<code>Inception</code>,<code>MobileNet</code>)</li>
-<li>特征抽取网络的输出strides</li>
-<li>输入图像的分辨率</li>
-<li>匹配策略和IOU阈值（在预测时计算损失的方法）</li>
-<li>NMS IOU阈值</li>
-<li>难样本挖掘比率(即正负样本anchor比例)</li>
-<li>候选或者预测的数目</li>
-<li>bounding box的编码</li>
-<li>数据增强</li>
-<li>训练集</li>
-<li>训练或测试时是否使用多尺度图像(图像裁剪)</li>
-<li>哪个特征map层用来做目标检测</li>
-<li>定位损失函数</li>
-<li>所使用的深度学习平台</li>
-<li>训练配置包括batch_size,输入图像的resize，学习率，以及学习率的递减</li>
-</ul>
-<h2 id="1性能评测结果"><a href="#1性能评测结果" class="headerlink" title="1性能评测结果"></a>1性能评测结果</h2><h3 id="1-1-FasterRCNN"><a href="#1-1-FasterRCNN" class="headerlink" title="1.1 FasterRCNN"></a>1.1 FasterRCNN</h3><p>在PASCAL VOC 2012测试集上的表现</p>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>生成的区域候选数目</th>
-<th>测试数据</th>
-<th>mAP(%)</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>SelectiveSearch</td>
-<td>2000</td>
-<td>voc2012</td>
-<td>65.7</td>
-</tr>
-<tr>
-<td>SelectiveSearch</td>
-<td>2000</td>
-<td>voc2007+voc2012</td>
-<td>68.4</td>
-</tr>
-<tr>
-<td>RPN+VGG,shared</td>
-<td>300</td>
-<td>voc2012</td>
-<td>67.0</td>
-</tr>
-<tr>
-<td>RPN+VGG,shared</td>
-<td>300</td>
-<td>voc2007+voc2012</td>
-<td>70.4</td>
-</tr>
-<tr>
-<td>RPN+VGG,shared</td>
-<td>300</td>
-<td>voc2007+voc2012+coco</td>
-<td>75.9</td>
-</tr>
-</tbody></table>
-<p><strong>coco数据集</strong></p>
-<p><img src="/images/blog/obj_detect_summary-2.png" alt="目标检测概览"></p>
-<h3 id="1-2-R-FCN"><a href="#1-2-R-FCN" class="headerlink" title="1.2 R-FCN"></a>1.2 R-FCN</h3><p><strong>voc数据集</strong></p>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>训练集</th>
-<th>mAP(%)</th>
-<th>测试时间(sec/image)</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>FasterRCNN</td>
-<td>voc 2007+voc2012</td>
-<td>73.8</td>
-<td>0.42</td>
-</tr>
-<tr>
-<td>FasterRCNN++</td>
-<td>voc 2007+voc2012+coco</td>
-<td>83.8</td>
-<td>3.36</td>
-</tr>
-<tr>
-<td>F-FCN多尺度训练</td>
-<td>voc2007+voc2012</td>
-<td>77.6</td>
-<td>0.17</td>
-</tr>
-<tr>
-<td>F-FCN多尺度训练</td>
-<td>voc2007+voc2012+coco</td>
-<td>82.0</td>
-<td>0.17</td>
-</tr>
-</tbody></table>
-<p><strong>coco数据集</strong></p>
-<p><img src="/images/blog/obj_detect_summary-3.png" alt="目标检测概览"></p>
-<h3 id="1-3-SSD"><a href="#1-3-SSD" class="headerlink" title="1.3 SSD"></a>1.3 SSD</h3><p><strong>voc数据集</strong></p>
-<p><img src="/images/blog/obj_detect_summary-4.png" alt="目标检测概览"></p>
-<p>性能</p>
-<p><img src="/images/blog/obj_detect_summary-5.png" alt="目标检测概览"></p>
-<p><strong>coco数据集</strong></p>
-<p><img src="/images/blog/obj_detect_summary-6.png" alt="目标检测概览"></p>
-<h3 id="1-4-YOLO"><a href="#1-4-YOLO" class="headerlink" title="1.4 YOLO"></a>1.4 YOLO</h3><p><strong>voc2007</strong></p>
-<p><img src="/images/blog/obj_detect_summary-7.png" alt="目标检测概览"></p>
-<p><strong>coco数据集</strong></p>
-<p><img src="/images/blog/obj_detect_summary-8.png" alt="目标检测概览"></p>
-<h3 id="1-5-yolov3"><a href="#1-5-yolov3" class="headerlink" title="1.5 yolov3"></a>1.5 yolov3</h3><p><strong>coco数据集</strong></p>
-<p><img src="/images/blog/obj_detect_summary-9.png" alt="目标检测概览"></p>
-<p><strong>性能</strong></p>
-<p><img src="/images/blog/obj_detect_summary-10.png" alt="目标检测概览"></p>
-<h3 id="1-6-FPN"><a href="#1-6-FPN" class="headerlink" title="1.6 FPN"></a>1.6 FPN</h3><p><strong>coco数据集</strong></p>
-<p><img src="/images/blog/obj_detect_summary-11.png" alt="目标检测概览"></p>
-<h3 id="1-7-RetinaNet"><a href="#1-7-RetinaNet" class="headerlink" title="1.7 RetinaNet"></a>1.7 RetinaNet</h3><p><strong>coco数据集</strong></p>
-<p><img src="/images/blog/obj_detect_summary-12.png" alt="目标检测概览"></p>
-<p><strong>性能</strong></p>
-<p><img src="/images/blog/obj_detect_summary-13.png" alt="目标检测概览"></p>
-<h2 id="2-论文结果比较"><a href="#2-论文结果比较" class="headerlink" title="2 论文结果比较"></a>2 论文结果比较</h2><p>下图是用VOC2007+voc2012的数据集训练的，mAP的计算方式是VOC2012。</p>
-<ul>
-<li>对于SSD，输入图像尺寸有300x300和512x512</li>
-<li>对于yolo，输入图像尺寸有288x288,416x416,544x544<br>更高的分辨率可以得到更好的准确率，但是速度会相应下降。</li>
-</ul>
-<p><img src="/images/blog/obj_detect_summary-13.png" alt="目标检测概览"></p>
-<p>输入图像的分辨率和特征抽取对速度有极大影响。下面是最高和最低的FPS，当然下图可能在使用不同mAP时结果有较大出入</p>
-<p><img src="/images/blog/obj_detect_summary-14.png" alt="目标检测概览"></p>
-<p><strong>coco数据集的表现</strong></p>
-<p><img src="/images/blog/obj_detect_summary-15.png" alt="目标检测概览"></p>
-<p>可以看到，FPN和FasterRCNN有很高的准确率，但是RetinaNet最高。取得最高准确率的RetinaNet是借助了</p>
-<ul>
-<li>金字塔特征</li>
-<li>特征抽取器的复杂</li>
-<li>Focal Loss</li>
-</ul>
-<h2 id="3-google的研究结果"><a href="#3-google的研究结果" class="headerlink" title="3 google的研究结果"></a>3 google的研究结果</h2><h3 id="3-1-特征抽取器"><a href="#3-1-特征抽取器" class="headerlink" title="3.1 特征抽取器"></a>3.1 特征抽取器</h3><p>研究了特征抽取器对准确率的影响，其中FasterRCNN和R-FCN可以利用一个更好的特征抽取器，但是对SSD效果提升程度不大。</p>
-<p><img src="/images/blog/obj_detect_summary-16.png" alt="目标检测概览"></p>
-<p>上图中x轴 是每个特征抽取器在分类上的top1的准确率。</p>
-<h3 id="3-2-物体尺寸"><a href="#3-2-物体尺寸" class="headerlink" title="3.2 物体尺寸"></a>3.2 物体尺寸</h3><p>对于大目标SSD即使使用很简单的抽取器也可以表现很好，如果使用更好的抽取其，SSD甚至可以达到其他分类器的准确率。但是<strong>SSD在小目标上表现很差</strong></p>
-<p><img src="/images/blog/obj_detect_summary-17.png" alt="目标检测概览"></p>
-<h3 id="3-3-输入图像的分辨率"><a href="#3-3-输入图像的分辨率" class="headerlink" title="3.3 输入图像的分辨率"></a>3.3 输入图像的分辨率</h3><p>更高的分辨率有利于提升小目标的检测准确率，对大目标也有帮助。对分辨率在长宽维度上以因子2递减，准确率平均降低15.88%，但是对应的inference时间也会平均以因子 27.4%下降。</p>
-<p><img src="/images/blog/obj_detect_summary-18.png" alt="目标检测概览"></p>
-<h3 id="3-4-区域候选的数目"><a href="#3-4-区域候选的数目" class="headerlink" title="3.4 区域候选的数目"></a>3.4 区域候选的数目</h3><p>区域候选的数目可以极大地影响FasterRCNN(FRCNN)，而对准确率不会有太大降低。例如，Inception ResNet,FasterRCNN可以提升三倍速度，如果使用50个区域候选而不是300个的话，对应的准确率只降低了4%。但是R-FCN对每个ROI只有少得多的操作需要做，所以减少区域候选，对它的速度的提升并不显著。</p>
-<p><img src="/images/blog/obj_detect_summary-19.png" alt="目标检测概览"></p>
-<h3 id="3-5-GPU时间"><a href="#3-5-GPU时间" class="headerlink" title="3.5 GPU时间"></a>3.5 GPU时间</h3><p>下面是不同模型使用不同特征抽取器的GPU时间</p>
-<p><img src="/images/blog/obj_detect_summary-20.png" alt="目标检测概览"></p>
-<p>大部分论文使用FLOPS(浮点运算)来衡量模型复杂度，但是这个没法反映准确的速度。模型密度(稀疏和稠密模型)影响的是所耗费的时间。讽刺的是，欠稠密模型通常平均需要更长的时间来完成一个浮点运算。</p>
-<h3 id="3-6-内存"><a href="#3-6-内存" class="headerlink" title="3.6 内存"></a>3.6 内存</h3><p>MobileNet有最少的参数，它需要不到1GB的内存。</p>
-<p><img src="/images/blog/obj_detect_summary-21.png" alt="目标检测概览"></p>
-<h2 id="4-结论"><a href="#4-结论" class="headerlink" title="4 结论"></a>4 结论</h2><ul>
-<li>R-FCN和SSD模型平均速度更快，但是如果不考虑速度，它们准确率不如FasterRCNN</li>
-<li>FasterRCNN每张图需要至少100ms</li>
-<li>只使用低分辨率的feature map会极大地损伤检测准确率</li>
-<li>输入分辨率极大的影响准确率。减少一半的图像尺寸(长和宽都减少一半)会导致准确率下降15.88%，对应的inference时间减少27.4%</li>
-<li>特征抽取器的选取对FasterRCNN和R-FCN有较大影响，但是对SSD没太大影响。</li>
-<li>后续处理，包括NMS(只能在CPU上运行)，对最快的模型耗费了最多的时间，大概有40ms，这也导致了其速度降到25FPS</li>
-<li>如果mAP的计算只使用了单一IoU，那么使用mAP@IoU=0.75</li>
-<li>在使用InceptionResNet网络作为特征抽取器时，stride=8比stride=16会将mAP提升5%，但是运行时间增加了63%。</li>
-</ul>
-<p><strong>最准确的模型</strong></p>
-<ul>
-<li>最准确的单一模型，使用FasterRCNN，使用InceptionResNet，和300个候选。一张图片的检测需要1秒钟。</li>
-<li>最准确的模型是一个多次裁剪inference的模型集合。它使用平均准确率向量来选取5个最不同的模型</li>
-</ul>
-<p><strong>最快的模型</strong></p>
-<ul>
-<li>使用mobilenet的SSD是在最快速度和最佳准确率之间一个最好的均衡</li>
-<li>SSD表现卓越，但是对小目标较差</li>
-<li>对于大目标，SSD可以达到与FasterRCNN和R-FCN一样的准确率，但是用的是更小更轻的特征抽取器。</li>
-</ul>
-<p><strong>速度与准确率之间的均衡</strong></p>
-<ul>
-<li>FasterRCNN如果只使用50个区域候选的话，它可以达到与R-FCN和SSD一样的速度，准确率为32mAP</li>
-</ul>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2019-01-03-obj_detect_summary/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2019-01-03-obj_detect_summary/" title="深度学习目标检测网络汇总对比">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2019-01-02-efficient_tinynet/">
-    		Mobilenet以及其变种网络高效的原因
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.665Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <p>本文翻译自： <a href="https://medium.com/@yu4u/why-mobilenet-and-its-variants-e-g-shufflenet-are-fast-1c7048b9618d" target="_blank" rel="noopener">https://medium.com/@yu4u/why-mobilenet-and-its-variants-e-g-shufflenet-are-fast-1c7048b9618d</a></p>
-<h2 id="1-高效网络中所使用的Block模块"><a href="#1-高效网络中所使用的Block模块" class="headerlink" title="1 高效网络中所使用的Block模块"></a>1 高效网络中所使用的Block模块</h2><p>假设我们有如下的卷积过程：</p>
-<p><img src="/images/blog/effient-smallnet-1.png" alt="iou1"></p>
-<p>假设$H\times W$代表了上一层的输出<strong>空间尺寸</strong>，即当前卷积的特征输入尺寸，其中的N代表了输入通道，$K\times K$代表了卷积核的尺寸,M代表了输出的特征通道数。这样一来，标准卷积的计算量是$H\times W\times N\times K\times K\times M$。</p>
-<p>此处需要注意的是标准卷积的计算消耗与下面三点是成比例的：</p>
-<ul>
-<li>前一层的输出特征的空间尺寸$H\times W$，即当前卷积的输入尺寸。</li>
-<li>卷积核尺寸$K\times K$</li>
-<li>输入特征通道数N、输出的特征通道数M。</li>
-</ul>
-<p>当卷积同时在空间(宽度)以及通道(深度)上做卷积操作时，上述计算消耗都是必须的。CNN可以被以下的卷积分解方法来加速卷积。</p>
-<h3 id="1-2-卷积"><a href="#1-2-卷积" class="headerlink" title="1.2 卷积"></a>1.2 卷积</h3><p>我们在输入输出之间连线来可视化输入输出之间的依赖，连线的数量大概地展示卷积分别在空间和通道域上的计算消耗。</p>
-<p><img src="/images/blog/effient-smallnet-2.png" alt="iou1"></p>
-<p>例如，常见的$3\times3$卷积可以向上图展示所示。我们可以看到<strong>输入和输出在空间尺度上是局部连接的(上图左)，而在通道尺度上是全连接(上图右)</strong>。接下来我们看$1\times1$卷积，也即点卷积，用来改变通道数，如下图。其卷积计算消耗是$H\times W\times N\times M$，因为卷积核是$1\times1$，导致计算量只有$3\times3$的1/9。此卷积用来混杂通道之间的信息。</p>
-<p><img src="/images/blog/effient-smallnet-3.png" alt="iou1"></p>
-<h3 id="1-2-1-1x1卷积的效果"><a href="#1-2-1-1x1卷积的效果" class="headerlink" title="1.2.1 1x1卷积的效果"></a>1.2.1 1x1卷积的效果</h3><ul>
-<li>先看看$3\times 3$卷积效果</li>
-</ul>
-<p><img src="/images/blog/small_effient_3x3.gif" alt="卷积1"></p>
-<ul>
-<li>再看$1\times 1$卷积效果<br><img src="/images/blog/small_effient_1x1.gif" alt="卷积2"></li>
-</ul>
-<h3 id="1-3-分组卷积"><a href="#1-3-分组卷积" class="headerlink" title="1.3 分组卷积"></a>1.3 分组卷积</h3><p>分组卷积为卷积的变种，特点是<strong>输入特征的通道数被分组，并且每个分组独立地进行卷积操作</strong>（标准卷积相当于只有一个分组，所有通道之间信息会互通）。</p>
-<p>以G代表分组数，分组卷积的计算消耗是$H\times W\times N\times K\times K\times M/G$,其计算消耗只有标准卷积的$\frac{1}{G}$。下图是一个示例，$3\times3$卷积，分组$G=2$。我们可以看到通道域的连接数变小了，也就是计算消耗变小。</p>
-<p><img src="/images/blog/effient-smallnet-4.png" alt="iou1"></p>
-<p>进一步，分组数变为$G=3$时的连接示意图，更加稀疏。</p>
-<p><img src="/images/blog/effient-smallnet-5.png" alt="iou1"></p>
-<p>卷积$1\times1$分组数为$G=2$时的示意图如下，卷积$1\times 1$也可以被分组，即ShuffleNet所使用的卷积。</p>
-<p><img src="/images/blog/effient-smallnet-6.png" alt="iou1"></p>
-<p>进一步的，分组变成$G=3$时的示例</p>
-<p><img src="/images/blog/effient-smallnet-7.png" alt="iou1"></p>
-<h3 id="1-4-depthwise卷积"><a href="#1-4-depthwise卷积" class="headerlink" title="1.4 depthwise卷积"></a>1.4 depthwise卷积</h3><p>depthwise卷积其实是在<strong>输入通道上独立地做卷积操作</strong>，也可以认为是分组卷积的一种极端情况，<strong>即输入输出通道数目相同，分组G等于通道数</strong></p>
-<p><img src="/images/blog/effient-smallnet-8.png" alt="iou1"></p>
-<p>depthwise卷积通过略去通道域上的卷积极大的减小了计算消耗。</p>
-<h3 id="1-5-通道混排"><a href="#1-5-通道混排" class="headerlink" title="1.5 通道混排"></a>1.5 通道混排</h3><p>通道混排是一个改变了通道的顺序操作(层)，被用在ShuffleNet中。可以使用tensor reshape和transpose操作实现。</p>
-<p>假设$GN’(=N)$表示输入通道数目，输入通道维度首先reshape成$(G,N’)$，然后将$(G,N’)$转置（transpose）到$(N’,G)$最终faltten到与输入维度一致。此处G代表了分组卷积的分组数，它同样被用到ShuffleNet中。</p>
-<p>通道混排的计算消耗<strong>无法用乘-加(multiply-add)操作来定义</strong>。如下图，通道混排，分组G=2，没有执行卷积，只是改变了通道的顺序。</p>
-<p><img src="/images/blog/effient-smallnet-9.png" alt="iou1"></p>
-<p>G=3的通道混排</p>
-<p><img src="/images/blog/effient-smallnet-10.png" alt="iou1"></p>
-<h2 id="2-高效网络"><a href="#2-高效网络" class="headerlink" title="2 高效网络"></a>2 高效网络</h2><h3 id="2-1-ResNet-Bottleneck-版本"><a href="#2-1-ResNet-Bottleneck-版本" class="headerlink" title="2.1 ResNet(Bottleneck 版本)"></a>2.1 ResNet(Bottleneck 版本)</h3><p>ResNet中的bottleneck架构的残差单元如下：</p>
-<p><img src="/images/blog/effient-smallnet-11.png" alt="iou1"></p>
-<p>可以看到残差单元都是由 $1\times1$和$3\times3$组成的。</p>
-<ul>
-<li>第一个$1\times1$卷积减小了输入通道的维度，减小了接下来的相对耗费计算资源的$3\times3$卷积</li>
-<li>最后一个$1\times1$卷积恢复了输出通道的维度</li>
-</ul>
-<h3 id="2-2-ResNeXt"><a href="#2-2-ResNeXt" class="headerlink" title="2.2 ResNeXt"></a>2.2 ResNeXt</h3><p>ResNeXt可以看做是ResNet的特殊版本，其$3\times3$卷积部分被替换为分组的$3\times3$卷积。使用分组卷积之后，$1\times1$所造成的通道缩减率变得比ResNet温和一些，这也导致其比ResNet在同等计算消耗情况下更好的准确率。</p>
-<p><img src="/images/blog/effient-smallnet-12.png" alt="iou1"></p>
-<h3 id="2-3-MobileNet（分离卷积）"><a href="#2-3-MobileNet（分离卷积）" class="headerlink" title="2.3 MobileNet（分离卷积）"></a>2.3 MobileNet（分离卷积）</h3><p>MobileNet是一个分离卷积的堆，由depthwise卷积和$1\times1$卷积组成。</p>
-<p><img src="/images/blog/effient-smallnet-13.png" alt="iou1"></p>
-<p>分离卷积在空间尺度和通道域执行卷积。卷积因子显著地将计算消耗从$H\times W\times N\times K\times K\times M$减小到$H\times W\times N\times K\times K$（depthwise）+$H\times W\times N\times M$（$1\times1$卷积），即总共计算消耗为$(H\times W\times N)\times(K^2+M)$.由于$M&gt;&gt;K(例如 K=3并且M\ge 32)$，计算量缩减到1/8至1/9.</p>
-<p>最重要的点，此时的计算瓶颈在$1\times1$卷积。</p>
-<h3 id="2-4-ShuffleNet"><a href="#2-4-ShuffleNet" class="headerlink" title="2.4 ShuffleNet"></a>2.4 ShuffleNet</h3><p>ShuffleNet的动机是上面提到的计算瓶颈变成了$1\times1$卷积。但是$1\times1$卷积已经高效了，似乎已经没有优化空间，但是此时可以<strong>用分组的$1\times1$卷积</strong>。</p>
-<p><img src="/images/blog/effient-smallnet-14.png" alt="iou1"></p>
-<p>上图展示了ShuffleNet的模块，此处的重要block是通道混排层，它会混排分组卷积的不同组之间的通道顺序。如果没有通道混排，分组卷积之间的输出都不会发生联系，这会导致准确率的衰弱。</p>
-<h3 id="2-5-MobileNetv2"><a href="#2-5-MobileNetv2" class="headerlink" title="2.5 MobileNetv2"></a>2.5 MobileNetv2</h3><p>MobileNetv2使用了一个类似ResNet的残差单元的网络架构，修改版本的残差单元中$3\times3$卷积被depthwise卷积替代。</p>
-<p><img src="/images/blog/effient-smallnet-15.png" alt="iou1"></p>
-<p>从上图可以看到，与标准bottleneck架构相比，第一个$1\times1$卷积增加了通道维度，然后执行depthwise卷积，最后再减少通道维度。通过如下图这样重排building block，我们可以看到这个架构是如何起作用的（此重排序过程没有改变网络架构，因为mobilenetv2架构就是此模块的堆叠）。</p>
-<p><img src="/images/blog/effient-smallnet-16.png" alt="iou1"></p>
-<p>也即此模块被当做修改版本的分离卷积，其中的分离卷积中的单个$1\times1$卷积被扩充到2个$1\times1$卷积。将T作为通道方向上的扩充因子，两个$1\times1$卷积的计算消耗是 $2\times W\times H\times N^2/T$，而分离卷积中的$1\times1$卷积的计算消耗是$H\times W\times T^2$</p>
-<h3 id="2-6-FD-Mobilenet"><a href="#2-6-FD-Mobilenet" class="headerlink" title="2.6 FD-Mobilenet"></a>2.6 FD-Mobilenet</h3><p> Fast-Downsampling MobileNet (FD-MobileNet),此网络架构与MobileNet相比其下采样在网络的更早的层就开始了，这个简单的trick可以减小计算消耗。原因在于传统的下采样策略和可分离卷积的计算消耗。</p>
-<p>从VGGnet开始大部分的网络都 采取相同的下采样策略：执行下采样然后在接下来的网络层将通道数翻倍。对于标准卷积，其计算消耗并没有并没有在下采样之后减小，因为是由公式$H\times W\times N\times K^2\times M$定义的。然而，对于分离卷积，其计算消耗在下采样之后变小了，从$H\times W\times N\times(K^2+M)$到$H/2\times W/2\times 2\times N\times(K^2+2M)=H\times W\times N(K^2/2+M)$。当M不是很大（比如网络的前面的层）时是有一些比较优势的。</p>
-<p><img src="/images/blog/effient-smallnet-17.png" alt="iou1"></p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2019-01-02-efficient_tinynet/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2019-01-02-efficient_tinynet/" title="Mobilenet以及其变种网络高效的原因">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2019-01-01-conv_sepatiable/">
-    		卷积,深度分离卷积,空间分离卷积
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.663Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h2 id="1-常规卷积"><a href="#1-常规卷积" class="headerlink" title="1 常规卷积"></a>1 常规卷积</h2><p>不知道常规卷积计算的，可以去<a href="http://setosa.io/ev/image-kernels/" target="_blank" rel="noopener">各种卷积的在线演示</a>看看。假设我们有个尺寸为$12\times 12\times 3$的图像，其中的3位RGB三通道。需要执行一个$5\times 5$的卷积，$stride=1,padding=valid$，所以卷积之后的feature map尺寸为$8\times 8(12-5+1=8)$。</p>
-<p>由于图像是三通道，所以我们的卷积核也必须是三通道的。所以每次卷积核在图像上移动一次的时候的计算的不是简单的$5\times 5=25$，实际上是$5\times 5\times 3=75$次乘法操作。即，实际是每次对25个像素矩阵做乘法计算，然后输出一个数值。经过$5\times 5\times 5\times 3$的卷积核之后，$12\times 12\times 3$的图像变成了$$8\times 8\times 1$的特征图。</p>
-<p><img src="/images/blog/sepatiable_cnn_1.png" alt="cnn"></p>
-<p>如果想增加输出特征图的通道数，比如说增加到256，使用256个卷积核，然后把所有结果堆叠起来即可。</p>
-<p><img src="/images/blog/sepatiable_cnn_2.png" alt="cnn"></p>
-<p>很显然，这并非矩阵乘法（不是用一整张图与卷积核相乘），而是每次单独地与图像的一部分相乘。</p>
-<h2 id="2-深度分离卷积"><a href="#2-深度分离卷积" class="headerlink" title="2 深度分离卷积"></a>2 深度分离卷积</h2><p>深度分离卷积分为两部分</p>
-<ul>
-<li>深度卷积</li>
-<li>逐点卷积</li>
-</ul>
-<h3 id="2-1-逐通道卷积"><a href="#2-1-逐通道卷积" class="headerlink" title="2.1 逐通道卷积"></a>2.1 逐通道卷积</h3><p>假设图像依然是$12\times 12\times 3$，这次使用的是3个$5\times 5\times 1$的卷积。</p>
-<p><img src="/images/blog/sepatiable_cnn_3.png" alt="cnn"></p>
-<p>每个$5\times 5\times 1$卷积迭代图像的<strong>一个通道</strong>，即每次都是25个像素的点乘，然后输出一个$8\times 8\times 1$的图像</p>
-<h3 id="2-2-逐点卷积"><a href="#2-2-逐点卷积" class="headerlink" title="2.2 逐点卷积"></a>2.2 逐点卷积</h3><p>前面，我们把$12\times 12\times 3$的图像卷积变成了$8\times 8\times 3$的图像，现在我们需要增加每个图像的通道数。</p>
-<p>逐点卷积这个叫法源于它使用的是$1\times 1$的卷积核，你可以看做它迭代的计算图像上每个像素点。它有与输入图像同样多的通道数，当前示例中的通道数为3。因此，在$8\times 8\times 3$的图像上迭代$1\times 1\times 3$，可以得到一个$8\times 8\times 1$的特征图像。</p>
-<p><img src="/images/blog/sepatiable_cnn_4.png" alt="cnn"></p>
-<p>我们也可以使用256个$1\times 1\times 3$的卷积核，每个卷积之后输出输出一个$8\times 8\times 1$图像，堆叠起来就有$8\times 8\times 256$的特征图</p>
-<p><img src="/images/blog/sepatiable_cnn_5.png" alt="cnn"></p>
-<p>我们将一个卷积操作分离成了逐通道卷积和逐点卷积。更直观的说明：</p>
-<ul>
-<li>原始的卷积的计算步骤： $12\times 12\times 3–5\times 5\times 3\times 256\rightarrow 12\times 12\times 256$</li>
-<li>深度分离卷积计算步骤: $12\times 12\times 3–5\times 5\times 1\times 1\rightarrow 1\times 1\times 3\times 256\rightarrow 12\times 12\times 256$</li>
-</ul>
-<h3 id="2-3-深度分离卷积的意义是什么呢"><a href="#2-3-深度分离卷积的意义是什么呢" class="headerlink" title="2.3 深度分离卷积的意义是什么呢"></a>2.3 深度分离卷积的意义是什么呢</h3><p>主要是减少计算量，加快计算过程。</p>
-<ul>
-<li>原始的卷积的计算过程。256个$5\times 5\times 3$的卷积，移动$8\times 8$次。总计算量是 $256\times 3\times 5\times 5\times 8\times 8=1228800$次乘法操作</li>
-<li>分离卷积之后。使用3个$5\times 5\times 1$的卷积，移动$8\times 8$次，是$3\times 5\times 5\times 8\times 8=4800$次乘法。在逐像素卷积步骤，有256个$1\times 1$移动$8\times 8$次，总共$256\times 1\times 1\times 3\times 8\times 8=49512$次乘法。加起来总共$53952$次乘法。</li>
-</ul>
-<h2 id="3-总结"><a href="#3-总结" class="headerlink" title="3 总结"></a>3 总结</h2><p>主要区别是什么？<strong>常规卷积中，我们对图像进行了245次转换，每次转换使用$5\times 5\times 3 \times 8\times 8=4800$次乘法。在分离卷积中，我们真正转换操作只进行在逐通道卷积上了一次，然后仅仅将其拉长到256个通道上。此时已经没有对图像做转换。</strong></p>
-<h2 id="4-空间分离卷积"><a href="#4-空间分离卷积" class="headerlink" title="4 空间分离卷积"></a>4 空间分离卷积</h2><p>空间分离卷积的思想很简单，<strong>就是把一个二维卷积分解成2个一维卷积</strong>，比如说一个$3\times 3$的卷积分离成一个$3\times 1$和一个$1\times 3$的卷积。如下</p>
-<p><img src="/images/blog/sepatiable_cnn_6.png" alt="cnn"></p>
-<p>对应在图像上的计算步骤，与常规卷积相比多了一个中间图像</p>
-<p><img src="/images/blog/sepatiable_cnn_7.png" alt="cnn"></p>
-<p>最有名的空间分离卷积是Sobel卷积算子，</p>
-<p><img src="/images/blog/sepatiable_cnn_8.png" alt="cnn"></p>
-<p>空间分离卷积的局限性在于，不是所有的卷积都可以这么分解。影响了其普适性。</p>
-<ul>
-<li><a href="https://towardsdatascience.com/a-basic-introduction-to-separable-convolutions-b99ec3102728" target="_blank" rel="noopener">A Basic Introduction to Separable Convolutions</a></li>
-</ul>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2019-01-01-conv_sepatiable/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2019-01-01-conv_sepatiable/" title="卷积,深度分离卷积,空间分离卷积">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2018-12-06-opencv_obj_track/">
-    		图像处理：opencv的目标追踪方法总结
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.662Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <p>参考自： <a href="https://www.learnopencv.com/object-tracking-using-opencv-cpp-python/" target="_blank" rel="noopener">https://www.learnopencv.com/object-tracking-using-opencv-cpp-python/</a> 和 <a href="https://www.pyimagesearch.com/2018/07/30/opencv-object-tracking/" target="_blank" rel="noopener">https://www.pyimagesearch.com/2018/07/30/opencv-object-tracking/</a></p>
-<h2 id="什么是目标追踪"><a href="#什么是目标追踪" class="headerlink" title="什么是目标追踪"></a>什么是目标追踪</h2><p>在视频后续帧中定位一个物体，称为追踪。虽然定义简单，但是目标追踪是一个相对广义的定义，比如以下问题 也属于目标追踪问题：</p>
-<ol>
-<li><strong>稠密光流</strong>：此类算法用来评估一个视频帧中的<strong>每个像素的运动向量</strong></li>
-<li><strong>稀疏光流</strong>：此类算法，像Kanade-Lucas-Tomashi(KLT)特征追踪，追踪一张图片中<strong>几个特征点</strong>的位置</li>
-<li><strong>Kalman Filtering</strong>：一个非常出名的<strong>信号处理算法</strong>基于先前的运动信息用来预测运动目标的位置。早期用于导弹的导航</li>
-<li><strong>MeanShift和Camshift</strong>：这些算法是用来<strong>定位密度函数的最大值</strong>，也用于追踪</li>
-<li><strong>单一目标追踪</strong>：此类追踪器中，第一帧中的用矩形标识目标的位置。然后在接下来的帧中用追踪算法。日常生活中，此类追踪器用于与目标检测混合使用。</li>
-<li><strong>多目标追踪查找算法</strong>：如果我们有一个非常快的目标检测器，在每一帧中检测多个目标，然后运行一个追踪查找算法，来识别当前帧中某个矩形对应下一帧中的某个矩形。</li>
-</ol>
-<h2 id="追踪-VS-检测"><a href="#追踪-VS-检测" class="headerlink" title="追踪 VS 检测"></a>追踪 VS 检测</h2><p>如果你使用过opencv 的人脸检测算法，你就知道算法可以实时，并且很准确的检测到每一帧中的人脸。那么，为什么首先要追踪呢？我们首先考虑几个问题：</p>
-<ol>
-<li><p><strong>跟踪比检测更快</strong>：通常<strong>跟踪算法比检测算法更快</strong>。原因很简单，当你跟踪前一帧中的某个物体时，你已经知道了此物体的外观信息。同时你也知道前一帧的位置，以及运行的速度和方向。因而，在下一帧你可以用所有的信息来预测下一帧中物体的位置，以及在一个很小范围内搜索即可得到目标的位置。好的追踪算法会利用所有已知信息来追踪点，但是检测算法每次都要重头开始。<br>所以，通常，如果我们在第n帧开始检测，那么我们需要在第n-1帧开始跟踪。那么为什么不简单地第一帧开始检测，并从后续所有帧开始跟踪。因为跟踪会利用其已知信息，但是也可能会丢失目标，因为目标可能被障碍物遮挡，甚至于目标移动速度太快，算法跟不上。通常，跟踪算法会累计误差，而且bbox 会慢慢偏离目标。为了修复这些问题，需要不断运行检测算法。检测算法用大量样本训练之后，更清楚目标类别的大体特征。另一方面，跟踪算法更清楚它所跟踪的类别中某一个特定实例。</p>
-</li>
-<li><p><strong>检测失败的话，跟踪可以帮忙</strong>：如果你在视频中检测人脸，然后人脸被某个物体遮挡了，人脸检测算法大概率会失败。好的跟踪算法，另一方面可以处理一定程度的遮挡</p>
-</li>
-<li><p><strong>跟踪会保存实体</strong>：目标检测算法的输出是包含物体的一个矩形的数组，。但是没有此物体的个体信息，</p>
-</li>
-</ol>
-<h2 id="Opencv-3-的跟踪API"><a href="#Opencv-3-的跟踪API" class="headerlink" title="Opencv 3 的跟踪API"></a>Opencv 3 的跟踪API</h2><p>opencv实现了7中跟踪算法，但是3.4.1以及以上版本才有完整的7种。<code>BOOSTING</code>, <code>MIL</code>, <code>KCF</code>, <code>TLD</code>, <code>MEDIANFLOW</code>, <code>GOTURN</code>, <code>MOSSE</code>,<code>CSRT</code>。</p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p>C++代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;opencv2&#x2F;opencv.hpp&gt;</span><br><span class="line">#include &lt;opencv2&#x2F;tracking.hpp&gt;</span><br><span class="line">#include &lt;opencv2&#x2F;core&#x2F;ocl.hpp&gt;</span><br><span class="line"> </span><br><span class="line">using namespace cv;</span><br><span class="line">using namespace std;</span><br><span class="line"> </span><br><span class="line">&#x2F;&#x2F; Convert to string</span><br><span class="line">#define SSTR( x ) static_cast&lt; std::ostringstream &amp; &gt;( \</span><br><span class="line">( std::ostringstream() &lt;&lt; std::dec &lt;&lt; x ) ).str()</span><br><span class="line"> </span><br><span class="line">int main(int argc, char **argv)</span><br><span class="line">&#123;</span><br><span class="line">    &#x2F;&#x2F; List of tracker types in OpenCV 3.4.1</span><br><span class="line">    string trackerTypes[8] &#x3D; &#123;&quot;BOOSTING&quot;, &quot;MIL&quot;, &quot;KCF&quot;, &quot;TLD&quot;,&quot;MEDIANFLOW&quot;, &quot;GOTURN&quot;, &quot;MOSSE&quot;, &quot;CSRT&quot;&#125;;</span><br><span class="line">    &#x2F;&#x2F; vector &lt;string&gt; trackerTypes(types, std::end(types));</span><br><span class="line"> </span><br><span class="line">    &#x2F;&#x2F; Create a tracker</span><br><span class="line">    string trackerType &#x3D; trackerTypes[2];</span><br><span class="line"> </span><br><span class="line">    Ptr&lt;Tracker&gt; tracker;</span><br><span class="line"> </span><br><span class="line">    #if (CV_MINOR_VERSION &lt; 3)</span><br><span class="line">    &#123;</span><br><span class="line">        tracker &#x3D; Tracker::create(trackerType);</span><br><span class="line">    &#125;</span><br><span class="line">    #else</span><br><span class="line">    &#123;</span><br><span class="line">        if (trackerType &#x3D;&#x3D; &quot;BOOSTING&quot;)</span><br><span class="line">            tracker &#x3D; TrackerBoosting::create();</span><br><span class="line">        if (trackerType &#x3D;&#x3D; &quot;MIL&quot;)</span><br><span class="line">            tracker &#x3D; TrackerMIL::create();</span><br><span class="line">        if (trackerType &#x3D;&#x3D; &quot;KCF&quot;)</span><br><span class="line">            tracker &#x3D; TrackerKCF::create();</span><br><span class="line">        if (trackerType &#x3D;&#x3D; &quot;TLD&quot;)</span><br><span class="line">            tracker &#x3D; TrackerTLD::create();</span><br><span class="line">        if (trackerType &#x3D;&#x3D; &quot;MEDIANFLOW&quot;)</span><br><span class="line">            tracker &#x3D; TrackerMedianFlow::create();</span><br><span class="line">        if (trackerType &#x3D;&#x3D; &quot;GOTURN&quot;)</span><br><span class="line">            tracker &#x3D; TrackerGOTURN::create();</span><br><span class="line">        if (trackerType &#x3D;&#x3D; &quot;MOSSE&quot;)</span><br><span class="line">            tracker &#x3D; TrackerMOSSE::create();</span><br><span class="line">        if (trackerType &#x3D;&#x3D; &quot;CSRT&quot;)</span><br><span class="line">            tracker &#x3D; TrackerCSRT::create();</span><br><span class="line">    &#125;</span><br><span class="line">    #endif</span><br><span class="line">    &#x2F;&#x2F; Read video</span><br><span class="line">    VideoCapture video(&quot;videos&#x2F;chaplin.mp4&quot;);</span><br><span class="line">     </span><br><span class="line">    &#x2F;&#x2F; Exit if video is not opened</span><br><span class="line">    if(!video.isOpened())</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Could not read video file&quot; &lt;&lt; endl; </span><br><span class="line">        return 1; </span><br><span class="line">    &#125; </span><br><span class="line"> </span><br><span class="line">    &#x2F;&#x2F; Read first frame </span><br><span class="line">    Mat frame; </span><br><span class="line">    bool ok &#x3D; video.read(frame); </span><br><span class="line"> </span><br><span class="line">    &#x2F;&#x2F; Define initial bounding box </span><br><span class="line">    Rect2d bbox(287, 23, 86, 320); </span><br><span class="line"> </span><br><span class="line">    &#x2F;&#x2F; Uncomment the line below to select a different bounding box </span><br><span class="line">    &#x2F;&#x2F; bbox &#x3D; selectROI(frame, false); </span><br><span class="line">    &#x2F;&#x2F; Display bounding box. </span><br><span class="line">    rectangle(frame, bbox, Scalar( 255, 0, 0 ), 2, 1 ); </span><br><span class="line"> </span><br><span class="line">    imshow(&quot;Tracking&quot;, frame); </span><br><span class="line">    tracker-&gt;init(frame, bbox);</span><br><span class="line">     </span><br><span class="line">    while(video.read(frame))</span><br><span class="line">    &#123;     </span><br><span class="line">        &#x2F;&#x2F; Start timer</span><br><span class="line">        double timer &#x3D; (double)getTickCount();</span><br><span class="line">         </span><br><span class="line">        &#x2F;&#x2F; Update the tracking result</span><br><span class="line">        bool ok &#x3D; tracker-&gt;update(frame, bbox);</span><br><span class="line">         </span><br><span class="line">        &#x2F;&#x2F; Calculate Frames per second (FPS)</span><br><span class="line">        float fps &#x3D; getTickFrequency() &#x2F; ((double)getTickCount() - timer);</span><br><span class="line">         </span><br><span class="line">        if (ok)</span><br><span class="line">        &#123;</span><br><span class="line">            &#x2F;&#x2F; Tracking success : Draw the tracked object</span><br><span class="line">            rectangle(frame, bbox, Scalar( 255, 0, 0 ), 2, 1 );</span><br><span class="line">        &#125;</span><br><span class="line">        else</span><br><span class="line">        &#123;</span><br><span class="line">            &#x2F;&#x2F; Tracking failure detected.</span><br><span class="line">            putText(frame, &quot;Tracking failure detected&quot;, Point(100,80), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(0,0,255),2);</span><br><span class="line">        &#125;</span><br><span class="line">         </span><br><span class="line">        &#x2F;&#x2F; Display tracker type on frame</span><br><span class="line">        putText(frame, trackerType + &quot; Tracker&quot;, Point(100,20), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(50,170,50),2);</span><br><span class="line">         </span><br><span class="line">        &#x2F;&#x2F; Display FPS on frame</span><br><span class="line">        putText(frame, &quot;FPS : &quot; + SSTR(int(fps)), Point(100,50), FONT_HERSHEY_SIMPLEX, 0.75, Scalar(50,170,50), 2);</span><br><span class="line"> </span><br><span class="line">        &#x2F;&#x2F; Display frame.</span><br><span class="line">        imshow(&quot;Tracking&quot;, frame);</span><br><span class="line">         </span><br><span class="line">        &#x2F;&#x2F; Exit if ESC pressed.</span><br><span class="line">        int k &#x3D; waitKey(1);</span><br><span class="line">        if(k &#x3D;&#x3D; 27)</span><br><span class="line">        &#123;</span><br><span class="line">            break;</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>Python代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">import cv2</span><br><span class="line">import sys</span><br><span class="line">(major_ver, minor_ver, subminor_ver) &#x3D; (cv2.__version__).split(&#39;.&#39;)￼</span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39; :</span><br><span class="line">    # Set up tracker.</span><br><span class="line">    # Instead of MIL, you can also use</span><br><span class="line">    tracker_types &#x3D; [&#39;BOOSTING&#39;, &#39;MIL&#39;,&#39;KCF&#39;, &#39;TLD&#39;, &#39;MEDIANFLOW&#39;, &#39;GOTURN&#39;, &#39;MOSSE&#39;, &#39;CSRT&#39;]</span><br><span class="line">    tracker_type &#x3D; tracker_types[2]</span><br><span class="line">    if int(minor_ver) &lt; 3:</span><br><span class="line">        tracker &#x3D; cv2.Tracker_create(tracker_type)</span><br><span class="line">    else:</span><br><span class="line">        if tracker_type &#x3D;&#x3D; &#39;BOOSTING&#39;:</span><br><span class="line">            tracker &#x3D; cv2.TrackerBoosting_create()</span><br><span class="line">        if tracker_type &#x3D;&#x3D; &#39;MIL&#39;:</span><br><span class="line">            tracker &#x3D; cv2.TrackerMIL_create()</span><br><span class="line">        if tracker_type &#x3D;&#x3D; &#39;KCF&#39;:</span><br><span class="line">            tracker &#x3D; cv2.TrackerKCF_create()</span><br><span class="line">        if tracker_type &#x3D;&#x3D; &#39;TLD&#39;:</span><br><span class="line">            tracker &#x3D; cv2.TrackerTLD_create()</span><br><span class="line">        if tracker_type &#x3D;&#x3D; &#39;MEDIANFLOW&#39;:</span><br><span class="line">            tracker &#x3D; cv2.TrackerMedianFlow_create()</span><br><span class="line">        if tracker_type &#x3D;&#x3D; &#39;GOTURN&#39;:</span><br><span class="line">            tracker &#x3D; cv2.TrackerGOTURN_create()</span><br><span class="line">        if tracker_type &#x3D;&#x3D; &#39;MOSSE&#39;:</span><br><span class="line">            tracker &#x3D; cv2.TrackerMOSSE_create()</span><br><span class="line">        if tracker_type &#x3D;&#x3D; &quot;CSRT&quot;:</span><br><span class="line">            tracker &#x3D; cv2.TrackerCSRT_create()</span><br><span class="line">    # Read video</span><br><span class="line">    video &#x3D; cv2.VideoCapture(&quot;videos&#x2F;chaplin.mp4&quot;)</span><br><span class="line">    # Exit if video not opened.</span><br><span class="line">    if not video.isOpened():</span><br><span class="line">        print &quot;Could not open video&quot;</span><br><span class="line">        sys.exit()</span><br><span class="line">    # Read first frame.</span><br><span class="line">    ok, frame &#x3D; video.read()</span><br><span class="line">    if not ok:</span><br><span class="line">        print &#39;Cannot read video file&#39;</span><br><span class="line">        sys.exit()</span><br><span class="line">     </span><br><span class="line">    # Define an initial bounding box</span><br><span class="line">    bbox &#x3D; (287, 23, 86, 320)</span><br><span class="line">    # Uncomment the line below to select a different bounding box</span><br><span class="line">    bbox &#x3D; cv2.selectROI(frame, False)</span><br><span class="line">    # Initialize tracker with first frame and bounding box</span><br><span class="line">    ok &#x3D; tracker.init(frame, bbox)</span><br><span class="line">    while True:</span><br><span class="line">        # Read a new frame</span><br><span class="line">        ok, frame &#x3D; video.read()</span><br><span class="line">        if not ok:</span><br><span class="line">            break</span><br><span class="line">        # Start timer</span><br><span class="line">        timer &#x3D; cv2.getTickCount()</span><br><span class="line">        # Update tracker</span><br><span class="line">        ok, bbox &#x3D; tracker.update(frame)</span><br><span class="line">        # Calculate Frames per second (FPS)</span><br><span class="line">        fps &#x3D; cv2.getTickFrequency() &#x2F; (cv2.getTickCount() - timer);</span><br><span class="line">        # Draw bounding box</span><br><span class="line">        if ok:</span><br><span class="line">            # Tracking success</span><br><span class="line">            p1 &#x3D; (int(bbox[0]), int(bbox[1]))</span><br><span class="line">            p2 &#x3D; (int(bbox[0] + bbox[2]), int(bbox[1] + bbox[3]))</span><br><span class="line">            cv2.rectangle(frame, p1, p2, (255,0,0), 2, 1)</span><br><span class="line">        else :</span><br><span class="line">            # Tracking failure</span><br><span class="line">            cv2.putText(frame, &quot;Tracking failure detected&quot;, (100,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75,(0,0,255),2)</span><br><span class="line"> </span><br><span class="line">        # Display tracker type on frame</span><br><span class="line">        cv2.putText(frame, tracker_type + &quot; Tracker&quot;, (100,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50),2);</span><br><span class="line">     </span><br><span class="line">        # Display FPS on frame</span><br><span class="line">        cv2.putText(frame, &quot;FPS : &quot; + str(int(fps)), (100,50), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2);</span><br><span class="line"> </span><br><span class="line">        # Display result</span><br><span class="line">        cv2.imshow(&quot;Tracking&quot;, frame)</span><br><span class="line"> </span><br><span class="line">        # Exit if ESC pressed</span><br><span class="line">        k &#x3D; cv2.waitKey(1) &amp; 0xff</span><br><span class="line">        if k &#x3D;&#x3D; 27 : break</span><br></pre></td></tr></table></figure>
-
-<h2 id="追踪算法详细"><a href="#追踪算法详细" class="headerlink" title="追踪算法详细"></a>追踪算法详细</h2><p>首先，思考下跟踪时我们的目标是在当前帧找到在前面的所有或绝大部分帧中正确跟踪的目标。由于我们追踪目标到当前帧，所以我们已知它是如何运动的，也即我们知道运行模型的参数。所谓运行模型，就是我们知道前面帧中的目标的位置和速度。即便你对目标一无所知，但是根据当前运行模型也可以预测目标的可能位置，并且这个预测可能会很准确。</p>
-<p>但是，我们有更多的信息，比如我们可以对目标进行编码来代表目标的外观，这样的外观模型。此模型可以用来搜索，由运动模型预测的临近范围内的目标来获得更加准确的预测。</p>
-<p><strong><em>运动模型预测目标的大概位置，外观模型微调此预估，来获得一个更准确的预测</em></strong></p>
-<p>如果说目标很简单，并且外观改变不大的话，可以简单地使用一个模板作为外观模型并在图像中搜索模板就可以。<br>分类器的任务就是简单地判别一个矩形框是目标还是背景。分类器的输入是一个图像patch，返回一个0到1之间的分值。分值为0代表是背景，1则为目标。<br>在机器学习中，我们通常用<strong>在线学习</strong>代表算法可以在运行时飞快地训练完，而离线分类器需要几千个样本来训练一个分类器，而在线算法仅需要几个样本就可以。</p>
-<p>分类器由正样本(目标)和负样本(非目标)来训练得到，以此分类器学习到目标与非目标之间的差异。在训练在线分类器时，我们没有数量众多的正负样本。</p>
-<h3 id="Boost-追踪器"><a href="#Boost-追踪器" class="headerlink" title="Boost 追踪器"></a>Boost 追踪器</h3><p>此跟踪器基于<strong>在线版本的AdaBoost</strong>，这个是以Haar特征级联的人脸检测器内部使用。此分类器需要在运行时以正负样本来训练。</p>
-<ol>
-<li>其初始框由用户指定，作为追踪的正样本，而在框范围之外许多其他patch都作为背景。</li>
-<li>在新的一帧图像中，分类器在前一帧框的周围的每个像素上分类，并给出得分。</li>
-<li>目标的新位置即得分最高的</li>
-<li>这样一来有新的正样本来重新训练分类器。依次类推。</li>
-</ol>
-<p><strong>优点</strong>：几乎没有，几十年前的技术。<br><strong>缺点</strong>：追踪性能一般，它无法感知追踪什么时候会失败。</p>
-<h3 id="MIL追踪"><a href="#MIL追踪" class="headerlink" title="MIL追踪"></a>MIL追踪</h3><p>算法与Boost很像，唯一的区别是，它会考虑当前标定框周围小部分框同时作为正样本，你可能认为这个想法比较烂，因为大部分的这些<code>正样本</code>其实目标并不在中心。</p>
-<p>这就是MIL(Multiple Instance Learning)的独特之处，在MIL中你不需要指定正负样本，而是<strong>正负样包(bags)</strong>。在正样本包中的并不全是正样本，而是仅需要一个样本是正样本即可。当前示例中，正样本包里面的样本包含的是处于中心位置的框，以及中心位置周围的像素所形成的框。即便当前位置的跟踪目标不准确，从以当前位置为中心在周围像素抽取的样本框所构成的正样本包中，仍然有很大概率命中一个恰好处于中心位置的框。</p>
-<p><strong>优点</strong>：性能很好，不会像Boost那样会偏移，即便出现部分遮挡依然表现不错。 <strong>在Opencv3.0中效果最好的追踪器，如果在更高版本里，选择KCF</strong><br><strong>缺点</strong>：没法应对全遮挡，追踪失败也较难的得到反馈。</p>
-<h3 id="KCF-追踪"><a href="#KCF-追踪" class="headerlink" title="KCF 追踪"></a>KCF 追踪</h3><p>KCF即Kernelized Correlation Filters,思路借鉴了前面两个。注意到MIL所使用的多个正样本之间存在交大的重叠区域。这些重叠数据可以引出一些较好的数学特性，这些特性同时可以用来构造更快更准确的分类器。</p>
-<p><strong>优点</strong>：速度和精度都比MIL效果好，并且追踪失败反馈比Boost和MIL好。Opencv 3.1以上版本最好的分类器。<br><strong>缺点</strong>：完全遮挡之后没法恢复。</p>
-<h3 id="TLD追踪"><a href="#TLD追踪" class="headerlink" title="TLD追踪"></a>TLD追踪</h3><p>TLD即Tracking, learning and detection，如其名此算法由三部分组成<code>追踪</code>,<code>学习</code>,<code>检测</code>。追踪器逐帧追踪目标，检测器定位所有到当前为止观察到的外观，如果有必要则纠正追踪器。<code>学习</code>会评估检测器的错误并更新，以避免进一步出错。<br>此追踪器可能会产生跳跃，比如你正在追踪一个人，但是场景中存在多个人，此追踪器可能会突然跳到另外一个行人进行追踪。<br>优势是：此追踪器可以应对大尺度变换，运行以及遮挡问题。如果说你的视频序列中，某个物体隐藏在另外一个物体之后，此追踪器可能是个好选择。 </p>
-<p><strong>优势</strong>：多帧中被遮挡依然可以被检测到，目标尺度变换也可以被处理。<br><strong>缺点</strong>：容易误跟踪导致基本不可用。</p>
-<h3 id="MedianFlow-追踪"><a href="#MedianFlow-追踪" class="headerlink" title="MedianFlow 追踪"></a>MedianFlow 追踪</h3><p>此追踪器在视频的前向时间和后向时间同时追踪目标，然后评估两个方向的轨迹的误差。最小化前后向误差，使得其可以有效地检测追踪失败的清情形，并在视频中选择相对可靠的轨迹。 </p>
-<p>实测时发现，<strong>此追踪器在运动可预测以及运动速度较小时性能最好。而不像其他追踪器那样，即便追踪失败继续追踪，此追踪器很快就知道追踪失败</strong></p>
-<p><strong>优点</strong>：对追踪失败反馈敏锐，当场景中运动可预测以及没有遮挡时，较好<br><strong>缺点</strong>：急速运动场景下会失败。</p>
-<h3 id="GoTurn-追踪"><a href="#GoTurn-追踪" class="headerlink" title="GoTurn 追踪"></a>GoTurn 追踪</h3><p>这个是唯一使用CNN方法的追踪器，此算法对视点变化，光照变换以及形变等问题的鲁棒性较好。但是无法处理遮挡问题。</p>
-<p><strong>注意</strong>：它使用caffe模型来追踪，需要下载caffe模型以及proto txt文件。</p>
-<p>参考<a href="https://www.learnopencv.com/goturn-deep-learning-based-object-tracking/" target="_blank" rel="noopener">这篇文章</a>详细介绍如何使用 GoTurn</p>
-<h3 id="MOSSE-追踪"><a href="#MOSSE-追踪" class="headerlink" title="MOSSE 追踪"></a>MOSSE 追踪</h3><p>MOSSE即Minimum Output Sum of Squared Error，使用一个自适应协相关来追踪，产生稳定的协相关过滤器，并使用单帧来初始化。MOSSE鲁棒性较好，可以应对光线变换，尺度变换，姿势变动以及非网格化的变形。它也能基于峰值与旁瓣比例来检测遮挡，这使得追踪可以在目标消失时暂停并在目标出现时重启。MOSSE可以在高FPS(高达450以上)的场景下运行。易于实现，并且与其他复杂追踪器一样精确，并且可以更快。但是，在性能尺度上看，大幅度落后于基于深度学习的追踪器。</p>
-<h3 id="CSRT-追踪"><a href="#CSRT-追踪" class="headerlink" title="CSRT 追踪"></a>CSRT 追踪</h3><p>在 Discriminative Correlation Filter with Channel and Spatial Reliability （DCF-CSR）中，我们使用空间依赖图来调整过滤器支持</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
-<li>如果需要更高的准确率，并且可以容忍延迟的话，使用CSRT</li>
-<li>如果需要更快的FPS，并且可以容许稍低一点的准确率的话，使用KCF</li>
-<li>如果纯粹的需要速度的话，用MOSSE</li>
-</ul>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2018-12-06-opencv_obj_track/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2018-12-06-opencv_obj_track/" title="图像处理：opencv的目标追踪方法总结">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-
-    
-    <nav class="page-navigator">
-        <a class="extend prev" rel="prev" href="/archives/">前一页</a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/page/3/">3</a><a class="page-number" href="/archives/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/archives/page/10/">10</a><a class="extend next" rel="next" href="/archives/page/3/">后一页</a>
-    </nav>
-    
-
-
-            </div>
-
-        </section>
-        <!-- 侧栏部分 -->
-<aside class="sidebar">
-    <section class="widget">
-        <h3 class="widget-hd"><strong>文章分类</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-    <li>
-        <a href="/categories/blog/">blog</a>
-        <span class="badge">(94)</span>
-    </li>
-    
-</ul>
-    </section>
-
-    
-    <section class="widget">
-        <h3 class="widget-hd"><strong>热门标签</strong></h3>
-        <!-- 文章标签 -->
-<div class="widget-bd tag-wrap">
+  <title>Archive | Hexo</title>
   
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
 </div>
-    </section>
-    
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
 
     
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
 
-    
-    <!-- 友情链接 -->
-    <section class="widget">
-        <h3 class="widget-hd"><strong>友情链接</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-        <li>
-            <a href="https://jelon.top" target="_blank" title="Jelon个人前端小站">前端博客小站</a>
-        </li>
-    
-        <li>
-            <a href="https://www.baidu.com" target="_blank" title="百度搜索">百度</a>
-        </li>
-    
-</ul>
-    </section>
-    
-</aside>
-<!-- / 侧栏部分 -->
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  
+  
+  
+  <div class="post-block">
+    <div class="posts-collapse">
+      <div class="collection-title">
+        
+        <span class="collection-header">Good! 98 posts in total. Keep on posting.</span>
+      </div>
+
+      
+    <div class="collection-year">
+      <h1 class="collection-header">2019</h1>
     </div>
 
-    <!-- 博客底部 -->
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2019-03-05-SIFT-feature/" itemprop="url">
+            <span itemprop="name">SIFT特征详解</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2019-03-04-HOG-feature/" itemprop="url">
+            <span itemprop="name">HOG特征详解</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2019-03-02-img-haar-feature/" itemprop="url">
+            <span itemprop="name">图像处理基础Haar特征</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2019-02-24-image-pramid/" itemprop="url">
+            <span itemprop="name">图像中的各种金字塔</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2019-01-08-merlin_mandarin_summary/" itemprop="url">
+            <span itemprop="name">merlin中文语音合成概览</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2019-01-07-merlin_summary/" itemprop="url">
+            <span itemprop="name">语音合成：merlin使用概览</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2019-01-03-obj_detect_summary/" itemprop="url">
+            <span itemprop="name">深度学习目标检测网络汇总对比</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2019-01-02-efficient_tinynet/" itemprop="url">
+            <span itemprop="name">Mobilenet以及其变种网络高效的原因</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2019-01-01-conv_sepatiable/" itemprop="url">
+            <span itemprop="name">卷积,深度分离卷积,空间分离卷积</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2018-12-06-opencv_obj_track/" itemprop="url">
+            <span itemprop="name">图像处理：opencv的目标追踪方法总结</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+
+    </div>
+  </div>
+  
+  
+  
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/archives/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/archives/page/10/">10</a><a class="extend next" rel="next" href="/archives/page/3/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+  </nav>
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
     <footer class="footer">
-    &copy;
-    
-        2016-2019
-    
+      <div class="footer-inner">
+        
 
-    <a href="/">Jelon Loves You</a>
-</footer>
-<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
 
-    <!--博客js脚本 -->
-    <!-- 这里放网站js脚本 -->
+        
 
-<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
 
 </body>
 </html>

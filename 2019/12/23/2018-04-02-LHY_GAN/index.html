@@ -1,544 +1,690 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" >
-    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
-    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
-    
-    <title>李宏毅深度学习-15-生成网络 | Hexo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
-    <meta name="keywords" content="Jelon, 前端, Web, 张德龙, 前端开发" >
-    <meta name="description" content="Jelon个人前端小站" >
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml" >
-    
-    
-    <link rel="shortcut icon" href="/favicon.ico" >
-    
-    
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/main.css">
 
-    <!--[if lt IE 9]>
-    
-<script src="/js/html5.js"></script>
 
-    <![endif]-->
-    
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "//hm.baidu.com/hm.js?fd459238242776d173cdc64918fb32f2";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://shartoo.github.com').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
 </script>
 
+  <meta name="description" content="李宏毅深度学习笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="李宏毅深度学习-15-生成网络">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2018-04-02-LHY_GAN/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="李宏毅深度学习笔记">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan1.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan2.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan3.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan4.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan5.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan6.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan7.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan8.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan9.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan10.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan11.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan12.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan13.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan14.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan15.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan16.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan17.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan18.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan19.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan20.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan21.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan22.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan23.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan24.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan25.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan26.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan27.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan28.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan29.jpg">
+<meta property="article:published_time" content="2019-12-23T10:45:59.566Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.220Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/gan1.jpg">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<link rel="canonical" href="http://shartoo.github.com/2019/12/23/2018-04-02-LHY_GAN/">
 
-<body class="home">
-    <!--[if lt IE 9]>
-    <div class="browsehappy">
-        当前网页 <strong>不支持</strong>
-        你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/" target="_blank" rel="noopener">升级你的浏览器</a>.
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>李宏毅深度学习-15-生成网络 | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
     </div>
-    <![endif]-->
+  </div>
 
-    <!-- 博客头部 -->
-    <header class="header">
-    <section class="container header-main">
-        <div class="logo">
-            <a href="/">
-                <div class="cover">
-                    <span class="name">Hexo</span>
-                    <span class="description"></span>
-                </div>
-            </a>
-        </div>
-        <div class="dropnav icon-paragraph-justify" id="JELON__btnDropNav"></div>
-        <ul class="menu hidden" id="JELON__menu">
-            
-            <li rel="/2019/12/23/2018-04-02-LHY_GAN/index.html" class="item ">
-                <a href="/" title="首页" class="icon-home">&nbsp;首页</a>
-            </li>
-            
-            <li rel="/2019/12/23/2018-04-02-LHY_GAN/index.html" class="item ">
-                <a href="/lab/" title="实验室" class="icon-lab">&nbsp;实验室</a>
-            </li>
-            
-            <li rel="/2019/12/23/2018-04-02-LHY_GAN/index.html" class="item ">
-                <a href="/about/" title="关于" class="icon-about">&nbsp;关于</a>
-            </li>
-            
-            <li rel="/2019/12/23/2018-04-02-LHY_GAN/index.html" class="item ">
-                <a href="/comment/" title="留言" class="icon-comment">&nbsp;留言</a>
-            </li>
-            
-        </ul>
-        <div class="profile clearfix">
-            <div class="feeds fl">
-                
-                
-                <p class="links">
-                    
-                        <a href="https://github.com/jangdelong" target="_blank">Github</a>
-                        |
-                    
-                        <a href="https://pages.coding.me" target="_blank">Hosted by Coding Pages</a>
-                        
-                    
-                </p>
-                <p class="sns">
-                    
-                        <a href="http://weibo.com/jangdelong" class="sinaweibo" target="_blank"><b>■</b> 新浪微博</a>
-                    
-                        <a href="https://www.facebook.com/profile.php?id=100011855760219&amp;ref=bookmarks" class="qqweibo" target="_blank"><b>■</b> Facebook</a>
-                    
-                    <a href="javascript: void(0);" class="wechat">
-                        <b>■</b>
-                        公众号
-                        <span class="popover">
-                            <img src="/img/wechat_mp.jpg" width="120" height="120" alt="我的微信订阅号">
-                            <i class="arrow"></i>
-                        </span>
-                    </a>
-                </p>
-                
-            </div>
-            <div class="avatar fr">
-                <img src="/img/jelon.jpg" alt="avatar" title="Jelon" >
-            </div>
-        </div>
-    </section>
-</header>
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
 
 
-    <!-- 博客正文 -->
-    <div class="container body clearfix">
-        <section class="content">
-            <div class="content-main widget">
-                <!-- 文章页 -->
-<!-- 文章 -->
-<article class="post article">
-    <header class="text-center">
-        <h3 class="post-title"><span>李宏毅深度学习-15-生成网络</span></h3>
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
     </header>
-    <p class="post-meta text-center">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.566Z">2019-12-23</time>
-    </p>
-    <div class="post-content">
-        <p>视频来源：<a href="https://www.bilibili.com/video/av9770302/?p=15" target="_blank" rel="noopener">https://www.bilibili.com/video/av9770302/?p=15</a></p>
-<h2 id="1-前提概览"><a href="#1-前提概览" class="headerlink" title="1 前提概览"></a>1 前提概览</h2><p>生成网络可以做什么？ 写诗，画动漫头像。</p>
-<h3 id="1-1-Auto-encoder"><a href="#1-1-Auto-encoder" class="headerlink" title="1.1 Auto-encoder"></a>1.1 Auto-encoder</h3><p><img src="/images/blog/gan1.jpg" alt=""></p>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://shartoo.github.com/2019/12/23/2018-04-02-LHY_GAN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          李宏毅深度学习-15-生成网络
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2019-12-23 18:45:59 / Modified: 17:55:14" itemprop="dateCreated datePublished" datetime="2019-12-23T18:45:59+08:00">2019-12-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">李宏毅深度学习笔记</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>视频来源：https://www.bilibili.com/video/av9770302/?p=15</p>
+<h2 id="前提概览">1 前提概览</h2>
+<p>生成网络可以做什么？ 写诗，画动漫头像。</p>
+<h3 id="auto-encoder">1.1 Auto-encoder</h3>
+<p><img src="/images/blog/gan1.jpg" /></p>
 <p>通过encoder将一张图片变成一个 code vector，然后用一个decoder将此code vector 生成一张图像。它们训练时时联合训练，训练完成之后，可以用decoder来生成一张图片。</p>
-<p><img src="/images/blog/gan2.jpg" alt=""></p>
-<h4 id="1-1-1-实例"><a href="#1-1-1-实例" class="headerlink" title="1.1.1  实例"></a>1.1.1  实例</h4><p>生成一个手写字生成的decoder，其生成的coder vector假设会2维的，如下：</p>
-<p><img src="/images/blog/gan3.jpg" alt=""></p>
-<p>接着，我们输入一个二维向量，假设为 $ [-1.5,0] $，可能生成的手写字是$0$。假设我们输入一个二维向量 $[1.5,0]$生成的手写字可能是$1$。如下图：</p>
-<p><img src="/images/blog/gan4.jpg" alt=""></p>
-<p>如果，二维向量的值在$ [-1.5,0] $和$ [1.5,0] $之间等距离取值的话，可能得到如下的结果</p>
-<p><img src="/images/blog/gan5.jpg" alt=""></p>
+<p><img src="/images/blog/gan2.jpg" /></p>
+<h4 id="实例">1.1.1 实例</h4>
+<p>生成一个手写字生成的decoder，其生成的coder vector假设会2维的，如下：</p>
+<p><img src="/images/blog/gan3.jpg" /></p>
+<p>接着，我们输入一个二维向量，假设为 $ [-1.5,0] $，可能生成的手写字是<span class="math inline">\(0\)</span>。假设我们输入一个二维向量 <span class="math inline">\([1.5,0]\)</span>生成的手写字可能是<span class="math inline">\(1\)</span>。如下图：</p>
+<p><img src="/images/blog/gan4.jpg" /></p>
+<p>如果，二维向量的值在$ [-1.5,0] <span class="math inline">\(和\)</span> [1.5,0] $之间等距离取值的话，可能得到如下的结果</p>
+<p><img src="/images/blog/gan5.jpg" /></p>
 <p><strong>但是auto-encoder无法生成state of art的结果。</strong></p>
-<h3 id="1-2-VAE-Variational-Auto-Encoder"><a href="#1-2-VAE-Variational-Auto-Encoder" class="headerlink" title="1.2  VAE(Variational Auto-Encoder)"></a>1.2  VAE(Variational Auto-Encoder)</h3><p>VAE是一个进阶版的auto-encoder，训练的时候，输入一张图片，但是<strong>它同时输出三个vector</strong>，假设这三个vector都是3维的，如下图：</p>
-<p><img src="/images/blog/gan6.jpg" alt=""></p>
-<p>其中的$m_1,m_2,m_3$代表VAE的encoder的输出code，只不过是个三维vector。同时还会生成另外一个三维的vector $\sigma _1,\sigma _2,\sigma _3$,同时会随机从一个符合正态分布的数据集中sample一个三维vector $e_1,e_2,e_3$ （称为noise）。接下来做如下操作：</p>
-<ol>
-<li>将vector $\sigma _1,\sigma _2,\sigma _3$ 指数化</li>
-<li>将第一步指数化之后的值与noise vector  $e_1,e_2,e_3$ 相乘</li>
-<li>将生成的code vector $m_1,m_2,m_3$与第二步的结果相加，得到结果 $c_1,c_2,c_3$</li>
+<h3 id="vaevariational-auto-encoder">1.2 VAE(Variational Auto-Encoder)</h3>
+<p>VAE是一个进阶版的auto-encoder，训练的时候，输入一张图片，但是<strong>它同时输出三个vector</strong>，假设这三个vector都是3维的，如下图：</p>
+<p><img src="/images/blog/gan6.jpg" /></p>
+<p>其中的<span class="math inline">\(m_1,m_2,m_3\)</span>代表VAE的encoder的输出code，只不过是个三维vector。同时还会生成另外一个三维的vector <span class="math inline">\(\sigma _1,\sigma _2,\sigma _3\)</span>,同时会随机从一个符合正态分布的数据集中sample一个三维vector <span class="math inline">\(e_1,e_2,e_3\)</span> （称为noise）。接下来做如下操作：</p>
+<ol type="1">
+<li>将vector <span class="math inline">\(\sigma _1,\sigma _2,\sigma _3\)</span> 指数化</li>
+<li>将第一步指数化之后的值与noise vector <span class="math inline">\(e_1,e_2,e_3\)</span> 相乘</li>
+<li>将生成的code vector <span class="math inline">\(m_1,m_2,m_3\)</span>与第二步的结果相加，得到结果 <span class="math inline">\(c_1,c_2,c_3\)</span></li>
 </ol>
-<p>再将最后的结果 $c_1,c_2,c_3$ 输入到<strong>decoder</strong>网络训练，整个过程如下：</p>
-<p><img src="/images/blog/gan7.jpg" alt=""></p>
-<h4 id="1-2-1-VAE的受限条件"><a href="#1-2-1-VAE的受限条件" class="headerlink" title="1.2.1 VAE的受限条件"></a>1.2.1 VAE的受限条件</h4><p>在训练VAE时由于添加了额外的项 $\sigma$，则需要添加一个受限条件（假设），即需要最小化：</p>
-<p>$$<br>\sum _{i=1} ^3(exp(\sigma _i)-(1+\sigma _i)+(m_i)^2)<br>$$</p>
-<p>其中 $(m_i)^2$ 可以看做L2 正则，而最小化 $exp(\sigma _i)-(1+\sigma _i)$ 部分即最小化 $\sigma _i$，当它为0时，这部分的值最小。</p>
-<h4 id="1-2-2-VAE的问题"><a href="#1-2-2-VAE的问题" class="headerlink" title="1.2.2  VAE的问题"></a>1.2.2  VAE的问题</h4><p>我们期望的VAE是它能生成与真实图像越接近越好的图像</p>
-<p><img src="/images/blog/gan8.jpg" alt=""></p>
+<p>再将最后的结果 <span class="math inline">\(c_1,c_2,c_3\)</span> 输入到<strong>decoder</strong>网络训练，整个过程如下：</p>
+<p><img src="/images/blog/gan7.jpg" /></p>
+<h4 id="vae的受限条件">1.2.1 VAE的受限条件</h4>
+<p>在训练VAE时由于添加了额外的项 <span class="math inline">\(\sigma\)</span>，则需要添加一个受限条件（假设），即需要最小化：</p>
+<p><span class="math display">\[
+\sum _{i=1} ^3(exp(\sigma _i)-(1+\sigma _i)+(m_i)^2)
+\]</span></p>
+<p>其中 <span class="math inline">\((m_i)^2\)</span> 可以看做L2 正则，而最小化 <span class="math inline">\(exp(\sigma _i)-(1+\sigma _i)\)</span> 部分即最小化 <span class="math inline">\(\sigma _i\)</span>，当它为0时，这部分的值最小。</p>
+<h4 id="vae的问题">1.2.2 VAE的问题</h4>
+<p>我们期望的VAE是它能生成与真实图像越接近越好的图像</p>
+<p><img src="/images/blog/gan8.jpg" /></p>
 <p>但实际上VAE实际模拟过程与人类的有出入，下图蓝色框代表了两种可能出现的情况。很显然，人类可以分辨出左边是比较接近真实的，右边的不那么接近的（黄色框），但是对于VAE（蓝色框）来说它们在损失函数面前是等价的。</p>
-<p><img src="/images/blog/gan9.jpg" alt=""></p>
-<h3 id="1-3-evolution-of-generation"><a href="#1-3-evolution-of-generation" class="headerlink" title="1.3 evolution of generation"></a>1.3 evolution of generation</h3><p><img src="/images/blog/gan10.jpg" alt=""></p>
+<p><img src="/images/blog/gan9.jpg" /></p>
+<h3 id="evolution-of-generation">1.3 evolution of generation</h3>
+<p><img src="/images/blog/gan10.jpg" /></p>
 <p>上图是一个示例，分别迭代多次，每次是一对 <code>generator</code> 和 <code>discriminator</code>，不断演化，最后得到较好结果。其中的<code>discriminator</code>是一个二分类器，如果来自真实图像，则输出1，如果来自生成网络则输出0.</p>
-<h4 id="1-3-1-GAN中的Discriminator"><a href="#1-3-1-GAN中的Discriminator" class="headerlink" title="1.3.1  GAN中的Discriminator"></a>1.3.1  GAN中的Discriminator</h4><p>Discriminatory本质上是一个二分类分类器，输入一张图片，它会判断该图片是real(1)还是fake(0)。</p>
-<p><img src="/images/blog/gan11.jpg" alt=""></p>
-<h4 id="1-3-2-GAN中的Generator"><a href="#1-3-2-GAN中的Generator" class="headerlink" title="1.3.2 GAN中的Generator"></a>1.3.2 GAN中的Generator</h4><p><img src="/images/blog/gan12.jpg" alt=""></p>
+<h4 id="gan中的discriminator">1.3.1 GAN中的Discriminator</h4>
+<p>Discriminatory本质上是一个二分类分类器，输入一张图片，它会判断该图片是real(1)还是fake(0)。</p>
+<p><img src="/images/blog/gan11.jpg" /></p>
+<h4 id="gan中的generator">1.3.2 GAN中的Generator</h4>
+<p><img src="/images/blog/gan12.jpg" /></p>
 <p>GAN中的Generator与VAE中的decoder类似，输入一个随机的vector，输出一些图片。与VAE不同的是，在训练VAE的时候需要最小化一个重构误差</p>
 <p>此处GAN中Generator的架构与VAE一样，只是在训练时方法不一。</p>
 <p>首先，我们有个所有参数都是随机产生的generator。此时输入一组参数随机的向量，generator会产生一组<strong>假的</strong>图像；同时从训练数据集中随机抽取一组<strong>真的</strong>图像，然后将所有假的图像标签标记为0(negative sample)，所有真的图像标记为1(positive sample)</p>
-<h4 id="1-3-3-GAN-过程"><a href="#1-3-3-GAN-过程" class="headerlink" title="1.3.3 GAN 过程"></a>1.3.3 GAN 过程</h4><p>首先随机输入一组向量给Generator，产生一组图像，Discriminator知道这个是假的图像，会输出一个很低的置信度。</p>
-<p><img src="/images/blog/gan13.jpg" alt=""></p>
+<h4 id="gan-过程">1.3.3 GAN 过程</h4>
+<p>首先随机输入一组向量给Generator，产生一组图像，Discriminator知道这个是假的图像，会输出一个很低的置信度。</p>
+<p><img src="/images/blog/gan13.jpg" /></p>
 <p>接下来，需要更新generator参数，它会产生的图像让第一代的Discrimintor觉得它是真的图像，输出1。</p>
 <p><strong>注意，我们在训练过程中会固定 Discriminator，使用随机梯度更新Generator</strong></p>
-<h2 id="二-GAN的核心思路"><a href="#二-GAN的核心思路" class="headerlink" title="二 GAN的核心思路"></a>二 GAN的核心思路</h2><h3 id="2-1-最大似然估计"><a href="#2-1-最大似然估计" class="headerlink" title="2.1 最大似然估计"></a>2.1 最大似然估计</h3><ul>
-<li>给定数据分布 $P_{data}(x)$，此处的$x$就想象成一张图片的所有的像素值串起来。</li>
-<li>现在我们要找到一个数据分布$P_G(x;\theta)$，它受控于一组参数$\theta$的。<ul>
-<li>其中$P_G(x;\theta)$是一种数据分布，比如可以是高斯混合模型。其中$\theta$代表了高斯分布的期望和方差这两个参数。只不过在GAN中$P_G(x;\theta)$ 是一个 神经网络。</li>
-<li>那么我们要做的事情就是，找到一个一组参数 $\theta$，使得 $P_G(x;\theta)$的分布与$P_{data}(x)$ 的分布越接近越好。</li>
+<h2 id="二-gan的核心思路">二 GAN的核心思路</h2>
+<h3 id="最大似然估计">2.1 最大似然估计</h3>
+<ul>
+<li>给定数据分布 <span class="math inline">\(P_{data}(x)\)</span>，此处的<span class="math inline">\(x\)</span>就想象成一张图片的所有的像素值串起来。</li>
+<li>现在我们要找到一个数据分布<span class="math inline">\(P_G(x;\theta)\)</span>，它受控于一组参数<span class="math inline">\(\theta\)</span>的。
+<ul>
+<li>其中<span class="math inline">\(P_G(x;\theta)\)</span>是一种数据分布，比如可以是高斯混合模型。其中<span class="math inline">\(\theta\)</span>代表了高斯分布的期望和方差这两个参数。只不过在GAN中<span class="math inline">\(P_G(x;\theta)\)</span> 是一个 神经网络。</li>
+<li>那么我们要做的事情就是，找到一个一组参数 <span class="math inline">\(\theta\)</span>，使得 <span class="math inline">\(P_G(x;\theta)\)</span>的分布与<span class="math inline">\(P_{data}(x)\)</span> 的分布越接近越好。</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<p>从 $P_{data}(x)$中抽样${x^1,x^2,…x^m}$。</p>
-<p>如果给定参数$\theta$ 那么我们可以计算 $P_G(x^i;\theta)$的值。</p>
-<p><strong>似然度</strong>：即给定参数$\theta$时，从$P_G(x^i;\theta)$ 中抽样产生 $x^1,x^2,x^3…x^n$的概率。似然度为 $L=\prod ^m _{i=1}P_G(x^i;\theta)$。</p>
-<p>我们要做的其实就找一组参数 $\theta ^*$使得最大化 $L$的似然度。对于高斯混合 模型，参数就是均值、方差，以及混合权重。比如有下图的高斯混合模型，数据有三个高斯分布混合而成，如下：</p>
+<p>从 <span class="math inline">\(P_{data}(x)\)</span>中抽样<span class="math inline">\({x^1,x^2,...x^m}\)</span>。</p>
+<p>如果给定参数<span class="math inline">\(\theta\)</span> 那么我们可以计算 <span class="math inline">\(P_G(x^i;\theta)\)</span>的值。</p>
+<p><strong>似然度</strong>：即给定参数<span class="math inline">\(\theta\)</span>时，从<span class="math inline">\(P_G(x^i;\theta)\)</span> 中抽样产生 <span class="math inline">\(x^1,x^2,x^3...x^n\)</span>的概率。似然度为 <span class="math inline">\(L=\prod ^m _{i=1}P_G(x^i;\theta)\)</span>。</p>
+<p>我们要做的其实就找一组参数 <span class="math inline">\(\theta ^*\)</span>使得最大化 <span class="math inline">\(L\)</span>的似然度。对于高斯混合 模型，参数就是均值、方差，以及混合权重。比如有下图的高斯混合模型，数据有三个高斯分布混合而成，如下：</p>
 <p>该分布中均值即上图中三个黄色中心点，方差即三个圆形半径。</p>
-<p><img src="/images/blog/gan14.jpg" alt=""></p>
-<p>$$<br>\theta ^* = arg \quad max_{\theta} \prod ^m <em>{i=1}P_G(x^i;\theta)=arg\quad max</em>{\theta}\quad log \prod ^m <em>{i=1}P_G(x^i;\theta)\quad 等同于求对数极大值\<br>= arg \quad max</em>{\theta}\sum ^m_{i=1}logP_G(x^i;\theta)\quad\quad 其中{x^1,x^2,…x^m}都是从  P_{data}(x)中抽样得到的 \<br> \approx arg\quad max_{\theta}\quad E_{x<del>P_{data}}[logP_G(x;\theta)] \quad\quad 等同于从 P_{x</del>{data}}分布中抽样 x^1,x^2,..x^n 然后计算每个 x^1,x^2,..x^n 使得 log P_G(x;\theta) 最大这件事 \<br>=arg \quad max_{\theta} \int <em>x P</em>{data}(x)logP_G(x;\theta)dx \<br>等同于  arg \quad max_{\theta} \int P_{data}(x)logP_G(x;\theta)dx-\int <em>xP</em>{data}(x)log P_{data}dx \<br>=arg\quad min_{\theta}\quad KL(P_{data}(x)||P_G(x;\theta)) \quad 【KL散度】<br>$$</p>
+<p><img src="/images/blog/gan14.jpg" /></p>
+<p><span class="math display">\[
+\theta ^* = arg \quad max_{\theta} \prod ^m _{i=1}P_G(x^i;\theta)=arg\quad max_{\theta}\quad log \prod ^m _{i=1}P_G(x^i;\theta)\quad 等同于求对数极大值\\
+= arg \quad max_{\theta}\sum ^m_{i=1}logP_G(x^i;\theta)\quad\quad 其中{x^1,x^2,...x^m}都是从  P_{data}(x)中抽样得到的 \\
+ \approx arg\quad max_{\theta}\quad E_{x~P_{data}}[logP_G(x;\theta)] \quad\quad 等同于从 P_{x~{data}}分布中抽样 x^1,x^2,..x^n 然后计算每个 x^1,x^2,..x^n 使得 log P_G(x;\theta) 最大这件事 \\
+=arg \quad max_{\theta} \int _x P_{data}(x)logP_G(x;\theta)dx \\
+等同于  arg \quad max_{\theta} \int P_{data}(x)logP_G(x;\theta)dx-\int _xP_{data}(x)log P_{data}dx \\
+=arg\quad min_{\theta}\quad KL(P_{data}(x)\|\|P_G(x;\theta)) \quad 【KL散度】
+\]</span></p>
 <p>在GAN之前，高斯混合模型生成的图像非常模糊，因为高斯混合模型无法真正模拟图像数据分布。</p>
-<h3 id="2-2-将-P-G-x-theta-换成一个神经网络"><a href="#2-2-将-P-G-x-theta-换成一个神经网络" class="headerlink" title="2.2 将 $P_G(x;\theta)$ 换成一个神经网络"></a>2.2 将 $P_G(x;\theta)$ 换成一个神经网络</h3><p>此时的GAN结构如下，输入通常为一个简单的 高斯分布的向量。经过神经网络 $G(z)$ 之后输出x</p>
-<p><img src="/images/blog/gan15.jpg" alt=""></p>
-<p>关于神经网络 $G(z)$ 的函数表达式可以表示为： $P_G(x)=\int <em>xP</em>{prior}(z)I_{[G(z)=x]}dz$ 。该公式的通俗理解是，假设$G(z)$参数已经固定(即网络参数固定)，从该网络中取样得到x的概率等于，对所有可能的z取积分，乘以z出现的概率($P_{prior}(z)$)，同时每个z经过函数$G(z)$之后生成x，该x是否即为当前正在考量的x，此处由函数$I_{G(z)=x}$判定，如果等同则为1，否则为0。</p>
-<p>当前问题是，如果以这种方式计算。难以计算，给定x，即便我们知道输入分布z的参数，但是由于神经网络极其复杂，要想计算由网络生成x的概率会很困难。 在无法计算似然度的情况下，无法调整参数$\theta$使得网络输出x接近真实数据分布。这个就是GAN的共享。</p>
-<h3 id="2-3-GAN的基本介绍"><a href="#2-3-GAN的基本介绍" class="headerlink" title="2.3 GAN的基本介绍"></a>2.3 GAN的基本介绍</h3><ul>
-<li>Generator G<ul>
+<h3 id="将-p_gxtheta-换成一个神经网络">2.2 将 <span class="math inline">\(P_G(x;\theta)\)</span> 换成一个神经网络</h3>
+<p>此时的GAN结构如下，输入通常为一个简单的 高斯分布的向量。经过神经网络 <span class="math inline">\(G(z)\)</span> 之后输出x</p>
+<p><img src="/images/blog/gan15.jpg" /></p>
+<p>关于神经网络 <span class="math inline">\(G(z)\)</span> 的函数表达式可以表示为： <span class="math inline">\(P_G(x)=\int _xP_{prior}(z)I_{[G(z)=x]}dz\)</span> 。该公式的通俗理解是，假设<span class="math inline">\(G(z)\)</span>参数已经固定(即网络参数固定)，从该网络中取样得到x的概率等于，对所有可能的z取积分，乘以z出现的概率(<span class="math inline">\(P_{prior}(z)\)</span>)，同时每个z经过函数<span class="math inline">\(G(z)\)</span>之后生成x，该x是否即为当前正在考量的x，此处由函数<span class="math inline">\(I_{G(z)=x}\)</span>判定，如果等同则为1，否则为0。</p>
+<p>当前问题是，如果以这种方式计算。难以计算，给定x，即便我们知道输入分布z的参数，但是由于神经网络极其复杂，要想计算由网络生成x的概率会很困难。 在无法计算似然度的情况下，无法调整参数<span class="math inline">\(\theta\)</span>使得网络输出x接近真实数据分布。这个就是GAN的共享。</p>
+<h3 id="gan的基本介绍">2.3 GAN的基本介绍</h3>
+<ul>
+<li>Generator G
+<ul>
 <li>G是一个函数，输入为Z，输出为x</li>
-<li>给定先验分布 $P_{prior}(z)$ ，又得知函数G，我们可以定义一个概率分布 $P_G(x)$</li>
-</ul>
-</li>
-<li>Discriminator D<ul>
+<li>给定先验分布 <span class="math inline">\(P_{prior}(z)\)</span> ，又得知函数G，我们可以定义一个概率分布 <span class="math inline">\(P_G(x)\)</span></li>
+</ul></li>
+<li>Discriminator D
+<ul>
 <li>D是一个函数，输入为x，输出为标量。</li>
-<li>Discriminator D的作用就是衡量 $P_G(x)$和 $P_{data}(x)$的差异</li>
+<li>Discriminator D的作用就是衡量 <span class="math inline">\(P_G(x)\)</span>和 <span class="math inline">\(P_{data}(x)\)</span>的差异</li>
+</ul></li>
+<li>有一个函数 <span class="math inline">\(V(G,D)\)</span>，我们要找的最好的G。 <span class="math inline">\(G^* = arg\quad min_G\quad max_D\quad V(G,D)\)</span></li>
 </ul>
-</li>
-<li>有一个函数 $V(G,D)$，我们要找的最好的G。 $G^* = arg\quad min_G\quad max_D\quad V(G,D)$</li>
-</ul>
-<h4 id="2-3-1-如何理解-G-arg-quad-min-G-quad-max-D-quad-V-G-D"><a href="#2-3-1-如何理解-G-arg-quad-min-G-quad-max-D-quad-V-G-D" class="headerlink" title="2.3.1 如何理解 $G^* = arg\quad min_G\quad max_D\quad V(G,D)$"></a>2.3.1 如何理解 $G^* = arg\quad min_G\quad max_D\quad V(G,D)$</h4><p>我们先看最右边的 $max_D\quad V(G,D)$ 部分。它的意思是选择使得 $V(G,D)$最大的 D，假设我们只有三个可能的G($G_1,G_2,G_3$，如下图)，实际上由于G是一个神经网络，所以它有无数种可能。</p>
-<p>下图中，分别对于不同可能的G，改变D，可以得到不同的 $V(G,D)$。对于$G_1,G_2,G_3$，$max_DV(G,D)$(最大值)就是下图中，红色点的值。</p>
-<p><img src="/images/blog/gan16.jpg" alt=""></p>
-<p>接下来再去寻找一个$G^* $使得 $max_DV(G,D)$最小的G，可以从上图（红色点）中看到，对于 $G_1,G_2,G_3$其最大值，在为$G_3$时它的最大值最小。</p>
-<h4 id="2-3-2-关于函数-V的定义"><a href="#2-3-2-关于函数-V的定义" class="headerlink" title="2.3.2 关于函数 V的定义"></a>2.3.2 关于函数 V的定义</h4><p>$V= E_{x<del>P_{data}}[logD(x)]+E_{x</del>P_G}[log(1-D(x))]$ ,先不用考虑此公式如何得来。 </p>
-<p>对于给定的G，$max_DV(G,D)$评估的是 $P_G$和$P_{data}$之间的差异，所以我们要寻找的是那个能使得  $P_G$和$P_{data}$差异最小的 $P_G$（$P_{data}$固定）。</p>
+<h4 id="如何理解-g-argquad-min_gquad-max_dquad-vgd">2.3.1 如何理解 <span class="math inline">\(G^* = arg\quad min_G\quad max_D\quad V(G,D)\)</span></h4>
+<p>我们先看最右边的 <span class="math inline">\(max_D\quad V(G,D)\)</span> 部分。它的意思是选择使得 <span class="math inline">\(V(G,D)\)</span>最大的 D，假设我们只有三个可能的G(<span class="math inline">\(G_1,G_2,G_3\)</span>，如下图)，实际上由于G是一个神经网络，所以它有无数种可能。</p>
+<p>下图中，分别对于不同可能的G，改变D，可以得到不同的 <span class="math inline">\(V(G,D)\)</span>。对于<span class="math inline">\(G_1,G_2,G_3\)</span>，<span class="math inline">\(max_DV(G,D)\)</span>(最大值)就是下图中，红色点的值。</p>
+<p><img src="/images/blog/gan16.jpg" /></p>
+<p>接下来再去寻找一个$G^* $使得 <span class="math inline">\(max_DV(G,D)\)</span>最小的G，可以从上图（红色点）中看到，对于 <span class="math inline">\(G_1,G_2,G_3\)</span>其最大值，在为<span class="math inline">\(G_3\)</span>时它的最大值最小。</p>
+<h4 id="关于函数-v的定义">2.3.2 关于函数 V的定义</h4>
+<p><span class="math inline">\(V= E_{x~P_{data}}[logD(x)]+E_{x~P_G}[log(1-D(x))]\)</span> ,先不用考虑此公式如何得来。</p>
+<p>对于给定的G，<span class="math inline">\(max_DV(G,D)\)</span>评估的是 <span class="math inline">\(P_G\)</span>和<span class="math inline">\(P_{data}\)</span>之间的差异，所以我们要寻找的是那个能使得 <span class="math inline">\(P_G\)</span>和<span class="math inline">\(P_{data}\)</span>差异最小的 <span class="math inline">\(P_G\)</span>（<span class="math inline">\(P_{data}\)</span>固定）。</p>
 <ul>
-<li><p>对于给定G，最优的$D^*$是可以最大化V的。其中V的形式如下：<br>$$<br>V=E_{x<del>P_{data}}[logD(x)]+E_{x</del>P_G}[log(1-D(x))]\<br>=\int <em>xP</em>{data}(x)logD(x)dx+\int <em>xP_G(x)log(1-D(x))dx \quad \quad 期望等于概率的积分\<br>=\int _x[P</em>{data}logD(x)+P_G(x)log(1-D(x))]dx\quad\quad 都是对x的积分，相同部分放一起<br>$$</p>
-</li>
-<li><p>对于给定$x$，最优化的V等价于最大化上式中括号中的<br>$$<br>P_{data}logD(x)+P_G(x)log(1-D(x)) \<br>a\quad\quad\quad D\quad\quad b\quad\quad\quad D\quad\quad \<br>给定x，P_{data}和P_G都是常量<br>$$</p>
-</li>
-<li><p>找到$D^*$能够最大化： $f(D)=alog(D)+blog(1-D)$,对该式子求极值的方法就是下面求导，取0得到。</p>
-</li>
+<li><p>对于给定G，最优的<span class="math inline">\(D^*\)</span>是可以最大化V的。其中V的形式如下： <span class="math display">\[
+V=E_{x~P_{data}}[logD(x)]+E_{x~P_G}[log(1-D(x))]\\
+=\int _xP_{data}(x)logD(x)dx+\int _xP_G(x)log(1-D(x))dx \quad \quad 期望等于概率的积分\\
+=\int _x[P_{data}logD(x)+P_G(x)log(1-D(x))]dx\quad\quad 都是对x的积分，相同部分放一起 
+\]</span></p></li>
+<li><p>对于给定<span class="math inline">\(x\)</span>，最优化的V等价于最大化上式中括号中的 <span class="math display">\[
+P_{data}logD(x)+P_G(x)log(1-D(x)) \\
+a\quad\quad\quad D\quad\quad b\quad\quad\quad D\quad\quad \\
+给定x，P_{data}和P_G都是常量
+\]</span></p></li>
+<li><p>找到<span class="math inline">\(D^*\)</span>能够最大化： <span class="math inline">\(f(D)=alog(D)+blog(1-D)\)</span>,对该式子求极值的方法就是下面求导，取0得到。</p></li>
 </ul>
-<p>$$<br>\frac{df(D)}{dD}=a\times \frac{1}{D}+b\times \frac{1}{1-D}\times (-1)=0 \<br>\rightarrow a\times \frac{1}{D}=b\times \frac{1}{1-D} \<br>\rightarrow a\times (1-D^<em>)=b\times D</em> \<br>\rightarrow D^* = \frac{a}{a+b} \quad\quad 再把a,b代回来得到\<br>\rightarrow D^*(x)=\frac{P_{data(x)}}{P_{data}(x)+P_G(x)}<br>$$</p>
-<p>将各个$D^*$ 显现在图中，如下：</p>
-<p><img src="/images/blog/gan17.jpg" alt=""></p>
-<p>红色顶点处即，不同的$G$，取得最大D的值。该点到水平轴(D)的距离就是$V(G,D)$的值，也即$P_{G_1}$和$P_{data}$的差异。</p>
-<p>由上面的推导可知 $D^*(x)=\frac{P_{data(x)}}{P_{data}(x)+P_G(x)}$。而$V(G,D)=E_{x<del>P_{data}}[logD(x)]+E_{x</del>P_G[log(1-D(x))]}$。那么，其实我们带入得到:</p>
-<p>$$<br>D^*(x)=\frac{P_{data(x)}}{P_{data}(x)+P_G(x)}  \<br>=E_{x<del>P_{data}}[log\frac{P_{data}(x)}{P_{data}(x)+P_G(x)}] + E_{x</del>P_G}[log\frac{P_G(x)}{P_{data}(x)+P_G}]  \quad 将求期望转换为求积分\<br>\rightarrow \int <em>x log\frac{P</em>{data}(x)}{P_{data}(x)+P_G(x)}dx +\int <em>x P_G(x)log \frac{P_G(x)}{P</em>{data}(x)+P_G(x)}dx \<br>下面就开始推导 KL散度了，这里就不推导了。推导完也记不住，也看不懂<br>$$</p>
+<p><span class="math display">\[
+\frac{df(D)}{dD}=a\times \frac{1}{D}+b\times \frac{1}{1-D}\times (-1)=0 \\
+\rightarrow a\times \frac{1}{D}=b\times \frac{1}{1-D} \\
+\rightarrow a\times (1-D^*)=b\times D* \\
+\rightarrow D^* = \frac{a}{a+b} \quad\quad 再把a,b代回来得到\\
+\rightarrow D^*(x)=\frac{P_{data(x)}}{P_{data}(x)+P_G(x)}
+\]</span></p>
+<p>将各个<span class="math inline">\(D^*\)</span> 显现在图中，如下：</p>
+<p><img src="/images/blog/gan17.jpg" /></p>
+<p>红色顶点处即，不同的<span class="math inline">\(G\)</span>，取得最大D的值。该点到水平轴(D)的距离就是<span class="math inline">\(V(G,D)\)</span>的值，也即<span class="math inline">\(P_{G_1}\)</span>和<span class="math inline">\(P_{data}\)</span>的差异。</p>
+<p>由上面的推导可知 <span class="math inline">\(D^*(x)=\frac{P_{data(x)}}{P_{data}(x)+P_G(x)}\)</span>。而<span class="math inline">\(V(G,D)=E_{x~P_{data}}[logD(x)]+E_{x~P_G[log(1-D(x))]}\)</span>。那么，其实我们带入得到:</p>
+<p><span class="math display">\[
+D^*(x)=\frac{P_{data(x)}}{P_{data}(x)+P_G(x)}  \\
+=E_{x~P_{data}}[log\frac{P_{data}(x)}{P_{data}(x)+P_G(x)}] + E_{x~P_G}[log\frac{P_G(x)}{P_{data}(x)+P_G}]  \quad 将求期望转换为求积分\\
+\rightarrow \int _x log\frac{P_{data}(x)}{P_{data}(x)+P_G(x)}dx +\int _x P_G(x)log \frac{P_G(x)}{P_{data}(x)+P_G(x)}dx \\
+下面就开始推导 KL散度了，这里就不推导了。推导完也记不住，也看不懂
+\]</span></p>
 <ul>
-<li><p>那么对于给定G， $max <em>DV(G,D)$可以看做计算  $-2log2+2JSD(P</em>{data}(x)||P_G(x))$(其中$JSD(P_{data}(x)||P_G(x))$用以衡量$P_G和P_{data}$之间的差异度，是从上面的推导推导而来)。$JSD(P_{data}(x)||P_G(x))$的取值范围，最小为 $0$,即$P_G$和$P_{data}$完全重合，最小值为$log2$即$P_G$和$P_{data}$完全不存在交集。所以$max _DV(G,D)$的取值范围为 $[-2log2,0]$</p>
-</li>
-<li><p>那么，那个G才是使得$max <em>DV(G,D)$ 最小的值呢？  只有当 $P_G=P</em>{data}$</p>
-</li>
+<li><p>那么对于给定G， <span class="math inline">\(max _DV(G,D)\)</span>可以看做计算 <span class="math inline">\(-2log2+2JSD(P_{data}(x)\|\|P_G(x))\)</span>(其中<span class="math inline">\(JSD(P_{data}(x)\|\|P_G(x))\)</span>用以衡量<span class="math inline">\(P_G和P_{data}\)</span>之间的差异度，是从上面的推导推导而来)。<span class="math inline">\(JSD(P_{data}(x)\|\|P_G(x))\)</span>的取值范围，最小为 <span class="math inline">\(0\)</span>,即<span class="math inline">\(P_G\)</span>和<span class="math inline">\(P_{data}\)</span>完全重合，最小值为<span class="math inline">\(log2\)</span>即<span class="math inline">\(P_G\)</span>和<span class="math inline">\(P_{data}\)</span>完全不存在交集。所以<span class="math inline">\(max _DV(G,D)\)</span>的取值范围为 <span class="math inline">\([-2log2,0]\)</span></p></li>
+<li><p>那么，那个G才是使得<span class="math inline">\(max _DV(G,D)\)</span> 最小的值呢？ 只有当 <span class="math inline">\(P_G=P_{data}\)</span></p></li>
 </ul>
-<h4 id="2-3-3-具体算法"><a href="#2-3-3-具体算法" class="headerlink" title="2.3.3 具体算法"></a>2.3.3 具体算法</h4><p>算法可以按照如下步骤循环：</p>
-<ol>
-<li><p>给定一个初始的 $G_0$</p>
-</li>
-<li><p>根据$G_0$ 找到一个 $D^* _0$使得它可以最大化 $V(G_0,D)$</p>
-<ul>
-<li>其中 $V(G_0,D^* <em>0)$ 是$P</em>{data}$和 $P_{G_0}(x)$之间的JS差异。</li>
-</ul>
-</li>
-<li><p>下一步，我们需要找一个新的 $G$，假若为 $G_1$。它必须使得$P_{data}$和 $P_{G_0}(x)$之间的JS差异减小。可以通过求梯度的方法，</p>
-<ul>
-<li><p>$ \theta _G\leftarrow \theta_G -\lambda \frac{\partial V(G,D^* _0)}{\partial \theta _G}$ 。可以通过此公式计算得到新的 $G_1$</p>
-</li>
-<li><p>用新的 $G_1$计算$P_{data}$和 $P_{G_1}(x)$之间的JS差异</p>
-</li>
-</ul>
-</li>
-<li><p>再找下一个$G_2$，使用同样的方式…</p>
-</li>
-<li><p>重复，不断去寻找新的G</p>
-</li>
+<h4 id="具体算法">2.3.3 具体算法</h4>
+<p>算法可以按照如下步骤循环：</p>
+<ol type="1">
+<li><p>给定一个初始的 <span class="math inline">\(G_0\)</span></p></li>
+<li><p>根据<span class="math inline">\(G_0\)</span> 找到一个 <span class="math inline">\(D^* _0\)</span>使得它可以最大化 <span class="math inline">\(V(G_0,D)\)</span></p></li>
 </ol>
-<h4 id="2-3-4-实际如何操作"><a href="#2-3-4-实际如何操作" class="headerlink" title="2.3.4 实际如何操作"></a>2.3.4 实际如何操作</h4><p>我们的loss函数是 $V=E_{x<del>P_{data}}[logD(x)]+E_{x</del>P_G}[log(1-D(x))]$。在上面的推导过程中，我们是假定可以对$P_{data}$求积分的，但是实际情况是，{P_{data}}是所有可能图像的分布，是不可积分的。所以，我们做如下逼近。</p>
 <ul>
-<li><p>通过从 $P_{data}(x)$中抽样 ${x^1,x^2,x^3,…x^m}$来毕竟 $P_{data}$可能的数据分布，同时从generator $P_G(x)$中也抽样 $\tilde x^1,\tilde x^2,..\tilde x^m$。</p>
-</li>
-<li><p>那么我们求上面的$V=E_{x<del>P_{data}}[logD(x)]+E_{x</del>P_G}[log(1-D(x))]$也等同于求一个 $\tilde V=\frac{1}{m}\sum ^m_{i=1}logD(x^i)+\frac{1}{m}\sum ^m_{i=1}log(1-D(\tilde x^i))$ 。此式可以看做一个对二分类分类器的交叉熵损失函数。</p>
+<li>其中 <span class="math inline">\(V(G_0,D^* _0)\)</span> 是<span class="math inline">\(P_{data}\)</span>和 <span class="math inline">\(P_{G_0}(x)\)</span>之间的JS差异。</li>
+</ul>
+<ol start="3" type="1">
+<li>下一步，我们需要找一个新的 <span class="math inline">\(G\)</span>，假若为 <span class="math inline">\(G_1\)</span>。它必须使得<span class="math inline">\(P_{data}\)</span>和 <span class="math inline">\(P_{G_0}(x)\)</span>之间的JS差异减小。可以通过求梯度的方法，</li>
+</ol>
 <ul>
-<li>比如一个二分类分类器，假若其输出为$D(x)$，那么我们就需要最小化其交叉熵，我们会这么做</li>
-<li>如果$x$是正样本，那么就需要最小化 $-logD(x)$</li>
-<li>如果$x$是负样本，那么就需要最小化 $-log(1-D(x))$</li>
+<li><p>$ _G_G -$ 。可以通过此公式计算得到新的 <span class="math inline">\(G_1\)</span></p></li>
+<li><p>用新的 <span class="math inline">\(G_1\)</span>计算<span class="math inline">\(P_{data}\)</span>和 <span class="math inline">\(P_{G_1}(x)\)</span>之间的JS差异</p></li>
 </ul>
-</li>
-<li><p>再回过来，D是一个参数为$\theta$的二分类的分类器。我们从 $P_{data}(x)$中抽取 $x^1,x^2,…x^m$作为正样本，从$P_G$中抽样 $\tilde x^1,\tilde x^2,…\tilde x^m$作为负样本。以上面讨论的结论可以将最大化$V$变成最小化 $L=-\frac{1}{m}\sum^m <em>{i=1}logD(x^i)-\frac{1}{m}\sum ^m</em>{i=1}log(1-D(\tilde x^i))$</p>
-</li>
+<ol start="4" type="1">
+<li><p>再找下一个<span class="math inline">\(G_2\)</span>，使用同样的方式...</p></li>
+<li><p>重复，不断去寻找新的G</p></li>
+</ol>
+<h4 id="实际如何操作">2.3.4 实际如何操作</h4>
+<p>我们的loss函数是 <span class="math inline">\(V=E_{x~P_{data}}[logD(x)]+E_{x~P_G}[log(1-D(x))]\)</span>。在上面的推导过程中，我们是假定可以对<span class="math inline">\(P_{data}\)</span>求积分的，但是实际情况是，{P_{data}}是所有可能图像的分布，是不可积分的。所以，我们做如下逼近。</p>
+<ul>
+<li><p>通过从 <span class="math inline">\(P_{data}(x)\)</span>中抽样 <span class="math inline">\({x^1,x^2,x^3,...x^m}\)</span>来毕竟 <span class="math inline">\(P_{data}\)</span>可能的数据分布，同时从generator <span class="math inline">\(P_G(x)\)</span>中也抽样 <span class="math inline">\(\tilde x^1,\tilde x^2,..\tilde x^m\)</span>。</p></li>
+<li>那么我们求上面的<span class="math inline">\(V=E_{x~P_{data}}[logD(x)]+E_{x~P_G}[log(1-D(x))]\)</span>也等同于求一个 <span class="math inline">\(\tilde V=\frac{1}{m}\sum ^m_{i=1}logD(x^i)+\frac{1}{m}\sum ^m_{i=1}log(1-D(\tilde x^i))\)</span> 。此式可以看做一个对二分类分类器的交叉熵损失函数。
+<ul>
+<li>比如一个二分类分类器，假若其输出为<span class="math inline">\(D(x)\)</span>，那么我们就需要最小化其交叉熵，我们会这么做</li>
+<li>如果<span class="math inline">\(x\)</span>是正样本，那么就需要最小化 <span class="math inline">\(-logD(x)\)</span></li>
+<li>如果<span class="math inline">\(x\)</span>是负样本，那么就需要最小化 <span class="math inline">\(-log(1-D(x))\)</span></li>
+</ul></li>
+<li><p>再回过来，D是一个参数为<span class="math inline">\(\theta\)</span>的二分类的分类器。我们从 <span class="math inline">\(P_{data}(x)\)</span>中抽取 <span class="math inline">\(x^1,x^2,...x^m\)</span>作为正样本，从<span class="math inline">\(P_G\)</span>中抽样 <span class="math inline">\(\tilde x^1,\tilde x^2,...\tilde x^m\)</span>作为负样本。以上面讨论的结论可以将最大化<span class="math inline">\(V\)</span>变成最小化 <span class="math inline">\(L=-\frac{1}{m}\sum^m _{i=1}logD(x^i)-\frac{1}{m}\sum ^m_{i=1}log(1-D(\tilde x^i))\)</span></p></li>
 </ul>
-<h3 id="2-4-GAN完整算法"><a href="#2-4-GAN完整算法" class="headerlink" title="2.4 GAN完整算法"></a>2.4 GAN完整算法</h3><ul>
+<h3 id="gan完整算法">2.4 GAN完整算法</h3>
+<ul>
 <li>在每次算法迭代过程中，都会更新Discriminator和Generator</li>
 </ul>
 <p>我们先看看学习<strong>Discriminator</strong> 部分，一般会<strong>重复K次</strong>，一次无法找到全局最优参数。</p>
 <ul>
-<li>从数据分布 $P_{data}(x)$中抽样 ${x^1,x^2,…x^m}$</li>
-<li>从先验分布$P_{prior}(z)$中随机抽取噪声数据${z^1,z^2,…z^m}$。注意此处的先验分布只是个普通的正态分布</li>
-<li>将先验分布抽样得到的${z^1,z^2,…z^m}$喂入$\tilde x^i=G(z^1)$，获取一批生成数据 ${\tilde x^1,\tilde x^2,…\tilde x^m}$</li>
-<li>更新discriminator的参数 $\theta _d$，可以使得下式<strong>最大</strong><ul>
-<li>$\tilde V = \frac{1}{m}\sum ^m_{i=1}logD(x^1)+\frac{1}{m}\sum ^m _{i=1}log(1-D(\tilde x^1))$</li>
-<li>使用梯度下降方法计算 $\theta _d\leftarrow \theta _d+\lambda \nabla \tilde V(\theta _d)$</li>
-</ul>
-</li>
+<li>从数据分布 <span class="math inline">\(P_{data}(x)\)</span>中抽样 <span class="math inline">\({x^1,x^2,...x^m}\)</span></li>
+<li>从先验分布<span class="math inline">\(P_{prior}(z)\)</span>中随机抽取噪声数据<span class="math inline">\({z^1,z^2,...z^m}\)</span>。注意此处的先验分布只是个普通的正态分布</li>
+<li>将先验分布抽样得到的<span class="math inline">\({z^1,z^2,...z^m}\)</span>喂入<span class="math inline">\(\tilde x^i=G(z^1)\)</span>，获取一批生成数据 <span class="math inline">\({\tilde x^1,\tilde x^2,...\tilde x^m}\)</span></li>
+<li>更新discriminator的参数 <span class="math inline">\(\theta _d\)</span>，可以使得下式<strong>最大</strong>
+<ul>
+<li><span class="math inline">\(\tilde V = \frac{1}{m}\sum ^m_{i=1}logD(x^1)+\frac{1}{m}\sum ^m _{i=1}log(1-D(\tilde x^1))\)</span></li>
+<li>使用梯度下降方法计算 <span class="math inline">\(\theta _d\leftarrow \theta _d+\lambda \nabla \tilde V(\theta _d)\)</span></li>
+</ul></li>
 </ul>
 <p>再来看训练<strong>Generator</strong>部分，下面的部分通常只会<strong>更新一次</strong>。generator不能更新太多，否则会导致JS差异度无法下降（generator已经以假乱真了）。</p>
 <ul>
-<li><p>从先验分布$P_{prior}(z)$中随机抽取噪声数据${z^1,z^2,…z^m}$。此处的随机噪声数据可以与上面训练Discriminator部分的随机样本值一样，也可以不一样</p>
-</li>
-<li><p>更新Generator的参数 $\theta _g$使得下式<strong>最小</strong></p>
+<li><p>从先验分布<span class="math inline">\(P_{prior}(z)\)</span>中随机抽取噪声数据<span class="math inline">\({z^1,z^2,...z^m}\)</span>。此处的随机噪声数据可以与上面训练Discriminator部分的随机样本值一样，也可以不一样</p></li>
+<li>更新Generator的参数 <span class="math inline">\(\theta _g\)</span>使得下式<strong>最小</strong>
 <ul>
-<li>$\tilde V = \frac{1}{m}\sum^m <em>{i=1}logD(x^i)+\frac{1}{m}\sum ^m</em>{i=1}(1-D(G(z^i)))$ 。可以看到此式，前半部分跟Generator无关</li>
-<li>再用梯度下降法去更新 Generator的参数：$\theta _g-leftarrow \theta _g+\lambda \nabla \tilde V(\theta _g)$</li>
+<li><span class="math inline">\(\tilde V = \frac{1}{m}\sum^m _{i=1}logD(x^i)+\frac{1}{m}\sum ^m_{i=1}(1-D(G(z^i)))\)</span> 。可以看到此式，前半部分跟Generator无关</li>
+<li>再用梯度下降法去更新 Generator的参数：<span class="math inline">\(\theta _g\-leftarrow \theta _g+\lambda \nabla \tilde V(\theta _g)\)</span></li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h2 id="3-实际如何实现GAN"><a href="#3-实际如何实现GAN" class="headerlink" title="3 实际如何实现GAN"></a>3 实际如何实现GAN</h2><h3 id="3-1-真实实现中，Generator的目标函数"><a href="#3-1-真实实现中，Generator的目标函数" class="headerlink" title="3.1 真实实现中，Generator的目标函数"></a>3.1 真实实现中，Generator的目标函数</h3><p>从上面的讨论中，我们可以看到Generator会使得式子 $V= E_{x<del>P_{data}}[logD(x)]+E_{x</del>-P_G}[log(1-D(x))]$的值最小。省略前面的(与generator无关)，只看$E_{x~-P_G}[log(1-D(x))]$这部分，目标函数理论上应该是最小化此式，但是我们可以分别看看 $-log(D(x))$和 $log(1-D(x))$曲线，如下图（上面蓝色的为$-log(D(x))$，下面红色的为$log(1-D(x))$）：</p>
-<p><img src="/images/blog/gan18.jpg" alt=""></p>
-<p>观察需要最小化的 $log(1-D(x))$，在$D(x)$很小时，该曲线很平滑，在$D(x)$很大时该曲线很陡峭。 $D(x)$很小意味着，由Generator产生出来的x无法骗过Discriminator，Discriminator可以很容易认出。也即在训练的初始步骤，由generator产生的样本都集中在平滑部分，此时的$log(1-D(x))$微分值很小，训练变得缓慢。此时，我们可以修改目标函数为<br>$$<br>  v= E_{x~P_G}[-log(D(x))]<br>$$</p>
-<p>此式子效果等同于$log(1-D(x))$，同时可以快速训练，在初始步骤微分值很大，在后续步骤变得很小，比较符合训练期待。</p>
-<h3 id="3-2-如何评估JS-divergence-差异"><a href="#3-2-如何评估JS-divergence-差异" class="headerlink" title="3.2 如何评估JS divergence(差异)"></a>3.2 如何评估JS divergence(差异)</h3><p>我们将discriminator的loss就是来衡量JS divegence，loss越大，divergence越大</p>
-<p><img src="/images/blog/gan19.jpg" alt=""></p>
+<h2 id="实际如何实现gan">3 实际如何实现GAN</h2>
+<h3 id="真实实现中generator的目标函数">3.1 真实实现中，Generator的目标函数</h3>
+<p>从上面的讨论中，我们可以看到Generator会使得式子 <span class="math inline">\(V= E_{x~P_{data}}[logD(x)]+E_{x~-P_G}[log(1-D(x))]\)</span>的值最小。省略前面的(与generator无关)，只看<span class="math inline">\(E_{x~-P_G}[log(1-D(x))]\)</span>这部分，目标函数理论上应该是最小化此式，但是我们可以分别看看 <span class="math inline">\(-log(D(x))\)</span>和 <span class="math inline">\(log(1-D(x))\)</span>曲线，如下图（上面蓝色的为<span class="math inline">\(-log(D(x))\)</span>，下面红色的为<span class="math inline">\(log(1-D(x))\)</span>）：</p>
+<p><img src="/images/blog/gan18.jpg" /></p>
+<p>观察需要最小化的 <span class="math inline">\(log(1-D(x))\)</span>，在<span class="math inline">\(D(x)\)</span>很小时，该曲线很平滑，在<span class="math inline">\(D(x)\)</span>很大时该曲线很陡峭。 <span class="math inline">\(D(x)\)</span>很小意味着，由Generator产生出来的x无法骗过Discriminator，Discriminator可以很容易认出。也即在训练的初始步骤，由generator产生的样本都集中在平滑部分，此时的<span class="math inline">\(log(1-D(x))\)</span>微分值很小，训练变得缓慢。此时，我们可以修改目标函数为 <span class="math display">\[
+  v= E_{x~P_G}[-log(D(x))]
+\]</span></p>
+<p>此式子效果等同于<span class="math inline">\(log(1-D(x))\)</span>，同时可以快速训练，在初始步骤微分值很大，在后续步骤变得很小，比较符合训练期待。</p>
+<h3 id="如何评估js-divergence差异">3.2 如何评估JS divergence(差异)</h3>
+<p>我们将discriminator的loss就是来衡量JS divegence，loss越大，divergence越大</p>
+<p><img src="/images/blog/gan19.jpg" /></p>
 <p>图中分别衡量的三个<strong>Generator</strong>，分别训练了1个epoches，10个epoches，25个epoches。其中训练了25个epoches的generator已经几乎可以state of art了，但是用这些Generator去训练discriminator时，discriminator依然有十分高的准确率。</p>
-<p>我们先看看目标损失函数 $max <em>DV(G,D)=-2log2+2JSD(P</em>{data}(x)||P_G(x))$ 导致这个问题的主要原因有以下几点</p>
+<p>我们先看看目标损失函数 <span class="math inline">\(max _DV(G,D)=-2log2+2JSD(P_{data}(x)\|\|P_G(x))\)</span> 导致这个问题的主要原因有以下几点</p>
 <ul>
 <li>我们在训练和调整到的时候，不是真正用积分去计算，而是通过抽样来拟合。现在假设我们有红色和蓝色两个椭圆的数据点分布，如下，但是因为我们是使用抽样的方式来代表数据分布：</li>
 </ul>
-<p><img src="/images/blog/gan20.jpg" alt=""></p>
-<p>即便Generator产生的数据样本与真实样本之间有重叠，但是由于Discriminator比较强，所以它依然能找到一条曲线将红色点和蓝色点区分开。如何解决这个问题？</p>
+<p><img src="/images/blog/gan20.jpg" /></p>
+<p>即便Generator产生的数据样本与真实样本之间有重叠，但是由于Discriminator比较强，所以它依然能找到一条曲线将红色点和蓝色点区分开。如何解决这个问题？ + 使得discriminator 变弱一点，少更新，加dropout。但是一个弱discriminator将导致JS divergence无法计算。 + <span class="math inline">\(P_G\)</span>和<span class="math inline">\(P_{data}\)</span>都是高维空间数据，现在假设它们都是二维空间的，那么 <span class="math inline">\(P_G\)</span>和<span class="math inline">\(P_{data}\)</span>可以看做二维空间里面的两条直线，那么这两条之间的交集非常小，几乎趋近于零（如下两条直线）。</p>
+<p><img src="/images/blog/gan21.jpg" /></p>
+<p>所以真实<span class="math inline">\(P_G\)</span>和<span class="math inline">\(P_{data}\)</span>的情况可能像下面这样演化：</p>
+<p><img src="/images/blog/gan22.jpg" /></p>
+<p>可以看到在<span class="math inline">\(P_G_0\)</span>和<span class="math inline">\(P_G_{50}\)</span>...到<span class="math inline">\(P_G_{100}\)</span>之前，JS divergence都是log2，GAN没有演化的动力。</p>
+<h3 id="如何解决gan无法优化的问题">3.3 如何解决GAN无法优化的问题</h3>
 <ul>
-<li>使得discriminator 变弱一点，少更新，加dropout。但是一个弱discriminator将导致JS divergence无法计算。</li>
-<li>$P_G$和$P_{data}$都是高维空间数据，现在假设它们都是二维空间的，那么 $P_G$和$P_{data}$可以看做二维空间里面的两条直线，那么这两条之间的交集非常小，几乎趋近于零（如下两条直线）。</li>
-</ul>
-<p><img src="/images/blog/gan21.jpg" alt=""></p>
-<p>所以真实$P_G$和$P_{data}$的情况可能像下面这样演化：</p>
-<p><img src="/images/blog/gan22.jpg" alt=""></p>
-<p>可以看到在$P_G_0$和$P_G_{50}$…到$P_G_{100}$之前，JS divergence都是log2，GAN没有演化的动力。 </p>
-<h3 id="3-3-如何解决GAN无法优化的问题"><a href="#3-3-如何解决GAN无法优化的问题" class="headerlink" title="3.3 如何解决GAN无法优化的问题"></a>3.3 如何解决GAN无法优化的问题</h3><ul>
 <li>加入噪音数据。在discriminator的输入中加入一些人工噪音数据</li>
 <li>训练Discriminator时，将其label加噪音。比如有张图片是positive，现在随机替换图像的部分内容为噪音</li>
 </ul>
-<p>加入噪音数据之后，原本交集非常少$P_G$和$P_{data}$就可能会拓宽。如下：</p>
-<p><img src="/images/blog/gan23.jpg" alt=""></p>
+<p>加入噪音数据之后，原本交集非常少<span class="math inline">\(P_G\)</span>和<span class="math inline">\(P_{data}\)</span>就可能会拓宽。如下：</p>
+<p><img src="/images/blog/gan23.jpg" /></p>
 <p><strong>注意：噪音数据要随着训练的推荐，逐步减小</strong></p>
-<h2 id="4-mode-collapse"><a href="#4-mode-collapse" class="headerlink" title="4 mode collapse"></a>4 mode collapse</h2><p>比如有真实的数据分布为蓝色，而generator生成的数据分布为红色。如下左图，右边是对应生成的图像。</p>
-<p><img src="/images/blog/gan24.jpg" alt=""></p>
-<p>现在问题是，我们只知道GAN生成了的数据，无法知道GAN没有生成的数据。 </p>
-<p>假设当前$P_{data}$的数据分布如下，为8个黑点。    </p>
-<p><img src="/images/blog/gan25.jpg" alt=""></p>
-<p>但是，我们训练过程中会出现不一致的情况。比如，我们期望$P_G$可以慢慢去覆盖$P_{data}$,但是实际训练时$P_G$一直只产生一个数据分布，不断去调整，但始终无法覆盖所有的$P_{data}$</p>
-<p><img src="/images/blog/gan26.jpg" alt=""></p>
+<h2 id="mode-collapse">4 mode collapse</h2>
+<p>比如有真实的数据分布为蓝色，而generator生成的数据分布为红色。如下左图，右边是对应生成的图像。</p>
+<p><img src="/images/blog/gan24.jpg" /></p>
+<p>现在问题是，我们只知道GAN生成了的数据，无法知道GAN没有生成的数据。</p>
+<p>假设当前<span class="math inline">\(P_{data}\)</span>的数据分布如下，为8个黑点。</p>
+<p><img src="/images/blog/gan25.jpg" /></p>
+<p>但是，我们训练过程中会出现不一致的情况。比如，我们期望<span class="math inline">\(P_G\)</span>可以慢慢去覆盖<span class="math inline">\(P_{data}\)</span>,但是实际训练时<span class="math inline">\(P_G\)</span>一直只产生一个数据分布，不断去调整，但始终无法覆盖所有的<span class="math inline">\(P_{data}\)</span></p>
+<p><img src="/images/blog/gan26.jpg" /></p>
 <p>可能的原因是之前的损失函数定义，即KL divergence定义有误。下图左边代表了原始的损失函数定义</p>
-<p><img src="/images/blog/gan27.jpg" alt=""></p>
-<p>其中 $KL= \int P_{data}log\frac{P_{data}}{P_G}dx$，当$P_{data}$有值，而$P_G$没有值的时候，该函数将取无穷大的值。所以此时GAN会尽力去覆盖尽可能多的$P_{data}$的数据。</p>
-<p>而看上图右边，KL divergence的倒数，$Reverse KL= \int P_{data}log\frac{P_G}{P_{data}}dx$。此时当$P_G$有值，而$P_{data}$没有值得时候函数取值会趋近无穷大，此时为了避免出现这种情况,$P_G$会尽可能拟合一个数据分布(假设真实的$P_{data}$由多个分布组成的话)。</p>
-<h2 id="5-condintional-GAN"><a href="#5-condintional-GAN" class="headerlink" title="5 condintional GAN"></a>5 condintional GAN</h2><p>与GAN不同的时，我们想生成制定的东西，此时的<strong>Generator</strong>输入就不止一个先验分布（正态分布）了。如下：</p>
-<p><img src="/images/blog/gan28.jpg" alt=""></p>
-<p>但此时可能会出现一个问题，generator可能会无视先验分布($P_Z$)，generator会觉得先验分布只是个噪音数据，解决办法是在generator里面添加 dropout。</p>
+<p><img src="/images/blog/gan27.jpg" /></p>
+<p>其中 <span class="math inline">\(KL= \int P_{data}log\frac{P_{data}}{P_G}dx\)</span>，当<span class="math inline">\(P_{data}\)</span>有值，而<span class="math inline">\(P_G\)</span>没有值的时候，该函数将取无穷大的值。所以此时GAN会尽力去覆盖尽可能多的<span class="math inline">\(P_{data}\)</span>的数据。</p>
+<p>而看上图右边，KL divergence的倒数，<span class="math inline">\(Reverse KL= \int P_{data}log\frac{P_G}{P_{data}}dx\)</span>。此时当<span class="math inline">\(P_G\)</span>有值，而<span class="math inline">\(P_{data}\)</span>没有值得时候函数取值会趋近无穷大，此时为了避免出现这种情况,<span class="math inline">\(P_G\)</span>会尽可能拟合一个数据分布(假设真实的<span class="math inline">\(P_{data}\)</span>由多个分布组成的话)。</p>
+<h2 id="condintional-gan">5 condintional GAN</h2>
+<p>与GAN不同的时，我们想生成制定的东西，此时的<strong>Generator</strong>输入就不止一个先验分布（正态分布）了。如下：</p>
+<p><img src="/images/blog/gan28.jpg" /></p>
+<p>但此时可能会出现一个问题，generator可能会无视先验分布(<span class="math inline">\(P_Z\)</span>)，generator会觉得先验分布只是个噪音数据，解决办法是在generator里面添加 dropout。</p>
 <p>此时训练<strong>Discriminator</strong>也不一样，它的输入不再是一张图片，而是一张图片以及对应的描述，而对应的label则根据正负样本区别对待。</p>
-<p><img src="/images/blog/gan29.jpg" alt=""></p>
+<p><img src="/images/blog/gan29.jpg" /></p>
 <ul>
-<li>正样本： $(\hat c,\hat x)$,其中$\hat c$为图像真实描述，$\hat x$为真实图像。</li>
-<li>负样本： $(\hat c,G(\hat c)),(\hat c’,x)$。其中$\hat c$为真正的图像描述，而$G(\hat c)为对generator输入$\hat c$时生成的图像$。同时要有另外一种fake sample，给discriminator真实的图像，但是给错误的描述。比如此处的$\hat x$为真实图像，但是$\hat c’$为错误描述。 </li>
+<li>正样本： <span class="math inline">\((\hat c,\hat x)\)</span>,其中<span class="math inline">\(\hat c\)</span>为图像真实描述，<span class="math inline">\(\hat x\)</span>为真实图像。</li>
+<li>负样本： <span class="math inline">\((\hat c,G(\hat c)),(\hat c&#39;,x)\)</span>。其中<span class="math inline">\(\hat c\)</span>为真正的图像描述，而<span class="math inline">\(G(\hat c)为对generator输入\)</span>c<span class="math inline">\(时生成的图像\)</span>。同时要有另外一种fake sample，给discriminator真实的图像，但是给错误的描述。比如此处的<span class="math inline">\(\hat x\)</span>为真实图像，但是<span class="math inline">\(\hat c&#39;\)</span>为错误描述。</li>
 </ul>
 
     </div>
-    <p class="post-meta">
-        <span class="post-cat">分类：
-            <a class="cat-link" href="/categories/blog/">blog</a>
-        </span>
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-</article>
-<!-- 分享按钮 -->
 
-  <div class="article-share clearfix text-center">
-    <div class="share-area">
-      <span class="share-txt">分享到：</span>
-      <a href="javascript: window.open('http://service.weibo.com/share/share.php?url=' + encodeURIComponent(location.href) + '&title=' + document.title + '&language=zh_cn');" class="share-icon weibo"></a>
-      <a href="javascript: alert('请复制链接到微信并发送');" class="share-icon wechat"></a>
-      <a href="javascript: window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + encodeURIComponent(location.href) + '&title=' + document.title);" class="share-icon qqzone"></a>
-      <a href="javascript: window.open('http://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(location.href) + '&desc=Jelon个人博客&title=' + document.title + '&callback=' + encodeURIComponent(location.href));" class="share-icon qq"></a>
-      <a href="javascript: window.open('http://shuo.douban.com/!service/share?href=' + encodeURIComponent(location.href) + '&name=' + document.title + '&text=' + document.title);" class="share-icon douban"></a>
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2018-03-18-LHY_RNN_and_GAN/" rel="prev" title="李宏毅深度学习-八-RNN和GAN">
+      <i class="fa fa-chevron-left"></i> 李宏毅深度学习-八-RNN和GAN
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2018-05-11-LHY_transferlearning/" rel="next" title="李宏毅深度学习：迁移学习">
+      李宏毅深度学习：迁移学习 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
   </div>
 
 
-<!-- 上一篇/下一篇 -->
+          </div>
+          
 
-<div class="article-nav clearfix">
-    
-    <span class="prev fl">
-        上一篇<br >
-        <a href="/2019/12/23/2018-05-11-LHY_transferlearning/">
-            
-                李宏毅深度学习：迁移学习
-            
-        </a>
-    </span>
-    
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
 
-    
-    <span class="next fr">
-        下一篇<br >
-        <a href="/2019/12/23/2018-03-18-LHY_RNN_and_GAN/">
-            
-                李宏毅深度学习-八-RNN和GAN
-            
-        </a>
-    </span>
-    
-</div>
-
-<!-- 文章评论 -->
-
+        </div>
+          
   
-<script src="/js/comment.js"></script>
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
 
-  <div id="comments" class="comment">
-    <!--
-    <div class="sign-bar">
-      GitHub 已登录!
-      <span class="sign-link">登出</span>
-    </div>
-    <section class="box">
-      <div class="com-avatar"><img src="/img/jelon.jpg" alt="avatar"></div>
-      <div class="com-text">
-        <div class="main">
-          <textarea class="text-area-edited show" placeholder="欢迎评论！"></textarea>
-          <div class="text-area-preview"></div>
-        </div>
-        <div class="switch">
-          <div class="switch-item on">编辑</div>
-          <div class="switch-item">预览</div>
-        </div>
-        <div class="button">提交</div>
-      </div>
-    </section>
-    <section class="tips">注：评论支持 markdown 语法！</section>
-    <section class="list-wrap">
-      <ul class="list">
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">张德龙</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like liked">已赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">333333</div>
-          </div>
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
         </li>
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">刘德华</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like">点赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">vvvvv</div>
-          </div>
+        <li class="sidebar-nav-overview">
+          Overview
         </li>
       </ul>
-      <div class="page-nav">
-        <a href="javascript: void(0);" class="item">1</a>
-        <a href="javascript: void(0);" class="item">2</a>
-        <a href="javascript: void(0);" class="item current">3</a>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前提概览"><span class="nav-number">1.</span> <span class="nav-text">1 前提概览</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#auto-encoder"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 Auto-encoder</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实例"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1.1 实例</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vaevariational-auto-encoder"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 VAE(Variational Auto-Encoder)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#vae的受限条件"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.2.1 VAE的受限条件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vae的问题"><span class="nav-number">1.2.2.</span> <span class="nav-text">1.2.2 VAE的问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#evolution-of-generation"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 evolution of generation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#gan中的discriminator"><span class="nav-number">1.3.1.</span> <span class="nav-text">1.3.1 GAN中的Discriminator</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gan中的generator"><span class="nav-number">1.3.2.</span> <span class="nav-text">1.3.2 GAN中的Generator</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gan-过程"><span class="nav-number">1.3.3.</span> <span class="nav-text">1.3.3 GAN 过程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-gan的核心思路"><span class="nav-number">2.</span> <span class="nav-text">二 GAN的核心思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#最大似然估计"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 最大似然估计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#将-p_gxtheta-换成一个神经网络"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 将 \(P_G(x;\theta)\) 换成一个神经网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gan的基本介绍"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 GAN的基本介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#如何理解-g-argquad-min_gquad-max_dquad-vgd"><span class="nav-number">2.3.1.</span> <span class="nav-text">2.3.1 如何理解 \(G^* &#x3D; arg\quad min_G\quad max_D\quad V(G,D)\)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关于函数-v的定义"><span class="nav-number">2.3.2.</span> <span class="nav-text">2.3.2 关于函数 V的定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#具体算法"><span class="nav-number">2.3.3.</span> <span class="nav-text">2.3.3 具体算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实际如何操作"><span class="nav-number">2.3.4.</span> <span class="nav-text">2.3.4 实际如何操作</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gan完整算法"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 GAN完整算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实际如何实现gan"><span class="nav-number">3.</span> <span class="nav-text">3 实际如何实现GAN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#真实实现中generator的目标函数"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 真实实现中，Generator的目标函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何评估js-divergence差异"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 如何评估JS divergence(差异)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何解决gan无法优化的问题"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 如何解决GAN无法优化的问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mode-collapse"><span class="nav-number">4.</span> <span class="nav-text">4 mode collapse</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#condintional-gan"><span class="nav-number">5.</span> <span class="nav-text">5 condintional GAN</span></a></li></ol></div>
       </div>
-    </section>
-    -->
-  </div>
-  <script>
-  JELON.Comment({
-    container: 'comments',
-    label: '2018-04-02-LHY_GAN' || '2019/12/23/2018-04-02-LHY_GAN/',
-    owner: 'your_github_id',
-    repo: 'your_blog_comments',
-    clientId: 'your_client_id',
-    clientSecret: 'your_client_secret'
-  });
-  </script>
+      <!--/noindex-->
 
-
-            </div>
-
-        </section>
-        <!-- 侧栏部分 -->
-<aside class="sidebar">
-    <section class="widget">
-        <h3 class="widget-hd"><strong>文章分类</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-    <li>
-        <a href="/categories/blog/">blog</a>
-        <span class="badge">(94)</span>
-    </li>
-    
-</ul>
-    </section>
-
-    
-    <section class="widget">
-        <h3 class="widget-hd"><strong>热门标签</strong></h3>
-        <!-- 文章标签 -->
-<div class="widget-bd tag-wrap">
-  
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
 </div>
-    </section>
-    
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
 
-    
 
-    
-    <!-- 友情链接 -->
-    <section class="widget">
-        <h3 class="widget-hd"><strong>友情链接</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-        <li>
-            <a href="https://jelon.top" target="_blank" title="Jelon个人前端小站">前端博客小站</a>
-        </li>
-    
-        <li>
-            <a href="https://www.baidu.com" target="_blank" title="百度搜索">百度</a>
-        </li>
-    
-</ul>
-    </section>
-    
-</aside>
-<!-- / 侧栏部分 -->
+
+      </div>
+
     </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
 
-    <!-- 博客底部 -->
+
+      </div>
+    </main>
+
     <footer class="footer">
-    &copy;
-    
-        2016-2019
-    
+      <div class="footer-inner">
+        
 
-    <a href="/">Jelon Loves You</a>
-</footer>
-<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
 
-    <!--博客js脚本 -->
-    <!-- 这里放网站js脚本 -->
+        
 
-<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
 
 </body>
 </html>

@@ -1,462 +1,699 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" >
-    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
-    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
-    
-    <title>深度学习基础：SVD奇异值分解及其意义【转】 | Hexo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
-    <meta name="keywords" content="Jelon, 前端, Web, 张德龙, 前端开发" >
-    <meta name="description" content="Jelon个人前端小站" >
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml" >
-    
-    
-    <link rel="shortcut icon" href="/favicon.ico" >
-    
-    
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/main.css">
 
-    <!--[if lt IE 9]>
-    
-<script src="/js/html5.js"></script>
 
-    <![endif]-->
-    
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "//hm.baidu.com/hm.js?fd459238242776d173cdc64918fb32f2";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://shartoo.github.com').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
 </script>
 
+  <meta name="description" content="深度学习基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习基础：SVD奇异值分解及其意义【转】">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2016-10-25-SVD-decomponent/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="深度学习基础">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/svd1.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/svd2.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/svd3.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/svd4.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/svd5.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/svd6.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/svd7.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/svd8.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/svd9.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/svd20.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/svd21.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/svd22.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/svd24.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/svd25.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/svd26.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/svd27.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/svd10.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/svd11.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/svd12.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/svd13.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/svd14.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/svd15.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/svd16.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/svd17.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/svd18.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/svd19.jpg">
+<meta property="article:published_time" content="2019-12-23T10:45:59.367Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.205Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/svd1.jpg">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<link rel="canonical" href="http://shartoo.github.com/2019/12/23/2016-10-25-SVD-decomponent/">
 
-<body class="home">
-    <!--[if lt IE 9]>
-    <div class="browsehappy">
-        当前网页 <strong>不支持</strong>
-        你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/" target="_blank" rel="noopener">升级你的浏览器</a>.
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>深度学习基础：SVD奇异值分解及其意义【转】 | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
     </div>
-    <![endif]-->
+  </div>
 
-    <!-- 博客头部 -->
-    <header class="header">
-    <section class="container header-main">
-        <div class="logo">
-            <a href="/">
-                <div class="cover">
-                    <span class="name">Hexo</span>
-                    <span class="description"></span>
-                </div>
-            </a>
-        </div>
-        <div class="dropnav icon-paragraph-justify" id="JELON__btnDropNav"></div>
-        <ul class="menu hidden" id="JELON__menu">
-            
-            <li rel="/2019/12/23/2016-10-25-SVD-decomponent/index.html" class="item ">
-                <a href="/" title="首页" class="icon-home">&nbsp;首页</a>
-            </li>
-            
-            <li rel="/2019/12/23/2016-10-25-SVD-decomponent/index.html" class="item ">
-                <a href="/lab/" title="实验室" class="icon-lab">&nbsp;实验室</a>
-            </li>
-            
-            <li rel="/2019/12/23/2016-10-25-SVD-decomponent/index.html" class="item ">
-                <a href="/about/" title="关于" class="icon-about">&nbsp;关于</a>
-            </li>
-            
-            <li rel="/2019/12/23/2016-10-25-SVD-decomponent/index.html" class="item ">
-                <a href="/comment/" title="留言" class="icon-comment">&nbsp;留言</a>
-            </li>
-            
-        </ul>
-        <div class="profile clearfix">
-            <div class="feeds fl">
-                
-                
-                <p class="links">
-                    
-                        <a href="https://github.com/jangdelong" target="_blank">Github</a>
-                        |
-                    
-                        <a href="https://pages.coding.me" target="_blank">Hosted by Coding Pages</a>
-                        
-                    
-                </p>
-                <p class="sns">
-                    
-                        <a href="http://weibo.com/jangdelong" class="sinaweibo" target="_blank"><b>■</b> 新浪微博</a>
-                    
-                        <a href="https://www.facebook.com/profile.php?id=100011855760219&amp;ref=bookmarks" class="qqweibo" target="_blank"><b>■</b> Facebook</a>
-                    
-                    <a href="javascript: void(0);" class="wechat">
-                        <b>■</b>
-                        公众号
-                        <span class="popover">
-                            <img src="/img/wechat_mp.jpg" width="120" height="120" alt="我的微信订阅号">
-                            <i class="arrow"></i>
-                        </span>
-                    </a>
-                </p>
-                
-            </div>
-            <div class="avatar fr">
-                <img src="/img/jelon.jpg" alt="avatar" title="Jelon" >
-            </div>
-        </div>
-    </section>
-</header>
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
 
 
-    <!-- 博客正文 -->
-    <div class="container body clearfix">
-        <section class="content">
-            <div class="content-main widget">
-                <!-- 文章页 -->
-<!-- 文章 -->
-<article class="post article">
-    <header class="text-center">
-        <h3 class="post-title"><span>深度学习基础：SVD奇异值分解及其意义【转】</span></h3>
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
     </header>
-    <p class="post-meta text-center">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.367Z">2019-12-23</time>
-    </p>
-    <div class="post-content">
-        <p>英文原文:<a href="http://blog.csdn.net/redline2005/article/details/24099377" target="_blank" rel="noopener">英文原文</a><br>中文转自:<a href="http://blog.sciencenet.cn/blog-696950-699432.html" target="_blank" rel="noopener">中文原文</a></p>
-<h2 id="一-简介"><a href="#一-简介" class="headerlink" title="一 简介"></a>一 简介</h2><p>SVD实际上是数学专业内容，但它现在已经渗入到不同的领域中。SVD的过程不是很好理解，因为它不够直观，但它对矩阵分解的效果却非常好。比如，Netflix（一个提供在线电影租赁的公司）曾经就悬赏100万美金，如果谁能提高它的电影推荐系统评分预测准确率提高10%的话。令人惊讶的是，这个目标充满了挑战，来自世界各地的团队运用了各种不同的技术。最终的获胜队伍”BellKor’s Pragmatic Chaos”采用的核心算法就是基于SVD。<br>SVD提供了一种非常便捷的矩阵分解方式，能够发现数据中十分有意思的潜在模式。在这篇文章中，我们将会提供对SVD几何上的理解和一些简单的应用实例。</p>
-<h3 id="1-1-线性变换的几何意义"><a href="#1-1-线性变换的几何意义" class="headerlink" title="1.1 线性变换的几何意义"></a>1.1 线性变换的几何意义</h3><p>  <strong>奇异值分解应该就是把一个线性变换分解成两个线性变换，一个线性变换代表旋转，另一个代表拉伸。</strong></p>
-<p> 让我们来看一些简单的线性变换例子，以 2 X 2 的线性变换矩阵为例，首先来看一个较为特殊的，对角矩阵：</p>
-<p> $$<br> M=<br> \begin{bmatrix}<br>  3\quad 0\<br>  0\quad 1 \<br> \end{bmatrix}</p>
-<p> $$</p>
-<p> 从几何上讲，M 是将二维平面上的点(x,y)经过线性变换到另外一个点的变换矩阵，如下图所示</p>
-<p> $$<br>   \begin{bmatrix}<br>    3\quad 0 \<br>    0\quad 1\<br>   \end{bmatrix}<br>   \begin{bmatrix}<br>    x\<br>    y\<br>   \end{bmatrix} =<br>   \begin{bmatrix}<br>   3x\<br>   y\<br>   \end{bmatrix}<br> $$</p>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://shartoo.github.com/2019/12/23/2016-10-25-SVD-decomponent/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深度学习基础：SVD奇异值分解及其意义【转】
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2019-12-23 18:45:59 / Modified: 17:55:14" itemprop="dateCreated datePublished" datetime="2019-12-23T18:45:59+08:00">2019-12-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">深度学习基础</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>英文原文:<a href="http://blog.csdn.net/redline2005/article/details/24099377" target="_blank" rel="noopener">英文原文</a> 中文转自:<a href="http://blog.sciencenet.cn/blog-696950-699432.html" target="_blank" rel="noopener">中文原文</a></p>
+<h2 id="一-简介">一 简介</h2>
+<p>SVD实际上是数学专业内容，但它现在已经渗入到不同的领域中。SVD的过程不是很好理解，因为它不够直观，但它对矩阵分解的效果却非常好。比如，Netflix（一个提供在线电影租赁的公司）曾经就悬赏100万美金，如果谁能提高它的电影推荐系统评分预测准确率提高10%的话。令人惊讶的是，这个目标充满了挑战，来自世界各地的团队运用了各种不同的技术。最终的获胜队伍&quot;BellKor's Pragmatic Chaos&quot;采用的核心算法就是基于SVD。 SVD提供了一种非常便捷的矩阵分解方式，能够发现数据中十分有意思的潜在模式。在这篇文章中，我们将会提供对SVD几何上的理解和一些简单的应用实例。</p>
+<h3 id="线性变换的几何意义">1.1 线性变换的几何意义</h3>
+<p><strong>奇异值分解应该就是把一个线性变换分解成两个线性变换，一个线性变换代表旋转，另一个代表拉伸。</strong></p>
+<p>让我们来看一些简单的线性变换例子，以 2 X 2 的线性变换矩阵为例，首先来看一个较为特殊的，对角矩阵：</p>
+$$ M=
+<span class="math display">\[\begin{bmatrix}
+  3\quad 0\\
+  0\quad 1 \\
+ \end{bmatrix}\]</span>
+<p>$$</p>
+<p>从几何上讲，M 是将二维平面上的点(x,y)经过线性变换到另外一个点的变换矩阵，如下图所示</p>
+<p><span class="math display">\[
+   \begin{bmatrix}
+    3\quad 0 \\
+    0\quad 1\\
+   \end{bmatrix}
+   \begin{bmatrix}
+    x\\
+    y\\
+   \end{bmatrix} =
+   \begin{bmatrix}
+   3x\\
+   y\\
+   \end{bmatrix}
+ \]</span></p>
 <p>变换的效果如下图所示，变换后的平面仅仅是沿 X 水平方面进行了拉伸3倍，垂直方向是并没有发生变化。</p>
-<p><img src="/images/blog/svd1.jpg" alt="水平变换效果"></p>
+<figure>
+<img src="/images/blog/svd1.jpg" alt="水平变换效果" /><figcaption>水平变换效果</figcaption>
+</figure>
 <p>现在看下矩阵：</p>
-<p>$$<br>M=<br>\begin{bmatrix}<br> 2\quad 1\<br> 1\quad 2 \<br>\end{bmatrix}</p>
+$$ M=
+<span class="math display">\[\begin{bmatrix}
+ 2\quad 1\\
+ 1\quad 2 \\
+\end{bmatrix}\]</span>
 <p>$$</p>
 <p>这个矩阵产生的变换效果如下图所示:</p>
-<p><img src="/images/blog/svd2.jpg" alt="水平变换效果"></p>
-<p>  这种变换效果看起来非常的奇怪，在实际环境下很难描述出来变换的规律 ( 这里应该是指无法清晰辨识出旋转的角度，拉伸的倍数之类的信息)。还是基于上面的对称矩阵，假设我们把左边的平面旋转45度角，然后再进行矩阵M 的线性变换，效果如下图所示：</p>
-<p>  <img src="/images/blog/svd3.jpg" alt="水平变换效果"></p>
-<p>看起来是不是有点熟悉？ 对的，经过 M 线性变换后，跟前面的对角矩阵的功能是相同的，都是将网格沿着一个方向拉伸了3倍。<br>这里的 M 是一个特例，因为它是对称的。非特殊的就是我们在实际应用中经常遇见一些 非对称的，非方阵的矩阵。如上图所示，如果我们有一个 2 X 2 的对称矩阵M 的话，我们先将网格平面旋转一定的角度，M 的变换效果就是在两个维度上进行拉伸变换了。</p>
-<p>用更加数学的方式进行表示的话，给定一个对称矩阵 M ，我们可以找到一些相互正交 $V_i$ ，满足 $MV_i$ 就是沿着 $V_i$ 方向的拉伸变换，公式如下：</p>
-<p>$$<br>  Mv_i=\lambda _iv_i<br>$$</p>
-<p>这里的 $\lambda _i$是拉伸尺度(scalar)。从几何上看，M 对向量 $V_i$ 进行了拉伸，映射变换。$V_i$ 称作矩阵 M 的特征向量(eigenvector)，$\lambda _i$ 称作为矩阵M 特征值(eigenvalue)。这里有一个非常重要的定理，对称矩阵M 的特征向量是相互正交的。</p>
-<p>如果我们用这些特征向量对网格平面进行线性变换的话，再通过 M 矩阵对网格平面进行线性换的效果跟对M 矩阵的特征向量进行线性变换的效果是一样的。<br>对于更为普通的矩阵而言，我们该怎么做才能让一个原来就是相互垂直的网格平面(orthogonal grid), 线性变换成另外一个网格平面同样垂直呢？PS：这里的垂直如图所示，就是两根交错的线条是垂直的。</p>
-<p>$$<br>M=<br>\begin{bmatrix}<br> 1\quad 1\<br> 0\quad 1 \<br>\end{bmatrix}</p>
+<figure>
+<img src="/images/blog/svd2.jpg" alt="水平变换效果" /><figcaption>水平变换效果</figcaption>
+</figure>
+<p>这种变换效果看起来非常的奇怪，在实际环境下很难描述出来变换的规律 ( 这里应该是指无法清晰辨识出旋转的角度，拉伸的倍数之类的信息)。还是基于上面的对称矩阵，假设我们把左边的平面旋转45度角，然后再进行矩阵M 的线性变换，效果如下图所示：</p>
+<figure>
+<img src="/images/blog/svd3.jpg" alt="水平变换效果" /><figcaption>水平变换效果</figcaption>
+</figure>
+<p>看起来是不是有点熟悉？ 对的，经过 M 线性变换后，跟前面的对角矩阵的功能是相同的，都是将网格沿着一个方向拉伸了3倍。 这里的 M 是一个特例，因为它是对称的。非特殊的就是我们在实际应用中经常遇见一些 非对称的，非方阵的矩阵。如上图所示，如果我们有一个 2 X 2 的对称矩阵M 的话，我们先将网格平面旋转一定的角度，M 的变换效果就是在两个维度上进行拉伸变换了。</p>
+<p>用更加数学的方式进行表示的话，给定一个对称矩阵 M ，我们可以找到一些相互正交 <span class="math inline">\(V_i\)</span> ，满足 <span class="math inline">\(MV_i\)</span> 就是沿着 <span class="math inline">\(V_i\)</span> 方向的拉伸变换，公式如下：</p>
+<p><span class="math display">\[
+  Mv_i=\lambda _iv_i
+\]</span></p>
+<p>这里的 <span class="math inline">\(\lambda _i\)</span>是拉伸尺度(scalar)。从几何上看，M 对向量 <span class="math inline">\(V_i\)</span> 进行了拉伸，映射变换。<span class="math inline">\(V_i\)</span> 称作矩阵 M 的特征向量(eigenvector)，<span class="math inline">\(\lambda _i\)</span> 称作为矩阵M 特征值(eigenvalue)。这里有一个非常重要的定理，对称矩阵M 的特征向量是相互正交的。</p>
+<p>如果我们用这些特征向量对网格平面进行线性变换的话，再通过 M 矩阵对网格平面进行线性换的效果跟对M 矩阵的特征向量进行线性变换的效果是一样的。 对于更为普通的矩阵而言，我们该怎么做才能让一个原来就是相互垂直的网格平面(orthogonal grid), 线性变换成另外一个网格平面同样垂直呢？PS：这里的垂直如图所示，就是两根交错的线条是垂直的。</p>
+$$ M=
+<span class="math display">\[\begin{bmatrix}
+ 1\quad 1\\
+ 0\quad 1 \\
+\end{bmatrix}\]</span>
 <p>$$</p>
 <p>经过上述矩阵变换以后的效果如图:</p>
-<p>  <img src="/images/blog/svd4.jpg" alt="水平变换效果"></p>
-<p>  从图中可以看出，并没有达到我们想要的效果。我们把网格平面旋转 30 度角的话，然后再进行同样的线性变换以后的效果，如下图所示</p>
-<p>  <img src="/images/blog/svd5.jpg" alt="水平变换效果"></p>
-<p>  让我们来看下网格平面旋转60度角的时候的效果。</p>
-<p>  <img src="/images/blog/svd6.jpg" alt="水平变换效果"></p>
-<p>  嗯嗯，这个看起来挺不错的样子。如果在精确一点的话，应该把网格平面旋转 58.28 度才能达到理想的效果。</p>
-<p>  <img src="/images/blog/svd7.jpg" alt="水平变换效果"></p>
-<h2 id="二-几何意义"><a href="#二-几何意义" class="headerlink" title="二 几何意义"></a>二 几何意义</h2><p>该部分是从几何层面上去理解二维的SVD：对于任意的 2 x 2 矩阵，通过SVD可以将一个相互垂直的网格(orthogonal grid)变换到另外一个相互垂直的网格。<br>我们可以通过向量的方式来描述这个事实: 首先，选择两个相互正交的单位向量 $v_1$和 $v_2$, 向量 $Mv_1$ 和 $Mv_2$ 正交。</p>
-<p>  <img src="/images/blog/svd8.jpg" alt="水平变换效果"></p>
-<p>$u_1$ 和 $u_2$ 分别表示 $Mv_1$ 和 $Mv_2$ 的单位向量，$σ_1 * u_1 =  Mv_1$ 和 $σ_2 * u_2 =  Mv_2$ 。$σ_1$ 和 $σ_2$分别表示这不同方向向量上的模，也称作为矩阵M 的奇异值。</p>
-<p>  <img src="/images/blog/svd9.jpg" alt="水平变换效果"></p>
+<figure>
+<img src="/images/blog/svd4.jpg" alt="水平变换效果" /><figcaption>水平变换效果</figcaption>
+</figure>
+<p>从图中可以看出，并没有达到我们想要的效果。我们把网格平面旋转 30 度角的话，然后再进行同样的线性变换以后的效果，如下图所示</p>
+<figure>
+<img src="/images/blog/svd5.jpg" alt="水平变换效果" /><figcaption>水平变换效果</figcaption>
+</figure>
+<p>让我们来看下网格平面旋转60度角的时候的效果。</p>
+<figure>
+<img src="/images/blog/svd6.jpg" alt="水平变换效果" /><figcaption>水平变换效果</figcaption>
+</figure>
+<p>嗯嗯，这个看起来挺不错的样子。如果在精确一点的话，应该把网格平面旋转 58.28 度才能达到理想的效果。</p>
+<figure>
+<img src="/images/blog/svd7.jpg" alt="水平变换效果" /><figcaption>水平变换效果</figcaption>
+</figure>
+<h2 id="二-几何意义">二 几何意义</h2>
+<p>该部分是从几何层面上去理解二维的SVD：对于任意的 2 x 2 矩阵，通过SVD可以将一个相互垂直的网格(orthogonal grid)变换到另外一个相互垂直的网格。 我们可以通过向量的方式来描述这个事实: 首先，选择两个相互正交的单位向量 <span class="math inline">\(v_1\)</span>和 <span class="math inline">\(v_2\)</span>, 向量 <span class="math inline">\(Mv_1\)</span> 和 <span class="math inline">\(Mv_2\)</span> 正交。</p>
+<figure>
+<img src="/images/blog/svd8.jpg" alt="水平变换效果" /><figcaption>水平变换效果</figcaption>
+</figure>
+<p><span class="math inline">\(u_1\)</span> 和 <span class="math inline">\(u_2\)</span> 分别表示 <span class="math inline">\(Mv_1\)</span> 和 <span class="math inline">\(Mv_2\)</span> 的单位向量，<span class="math inline">\(σ_1 * u_1 = Mv_1\)</span> 和 <span class="math inline">\(σ_2 * u_2 = Mv_2\)</span> 。<span class="math inline">\(σ_1\)</span> 和 <span class="math inline">\(σ_2\)</span>分别表示这不同方向向量上的模，也称作为矩阵M 的奇异值。</p>
+<figure>
+<img src="/images/blog/svd9.jpg" alt="水平变换效果" /><figcaption>水平变换效果</figcaption>
+</figure>
 <p>这样我们就有了如下关系式：</p>
-<p>$$<br>Mv_1 = σ_1u_1 \<br>Mv_2 = σ_2u_2<br>$$</p>
-<p>我们现在可以简单描述下经过 M 线性变换后的向量 x 的表达形式。由于向量 $v_1$ 和 $v_2$ 是正交的单位向量，我们可以得到如下式子</p>
-<p>$$<br>  x = (v_1x)v_1 + (v_2x)v_2<br>$$</p>
+<p><span class="math display">\[
+Mv_1 = σ_1u_1 \\
+Mv_2 = σ_2u_2
+\]</span></p>
+<p>我们现在可以简单描述下经过 M 线性变换后的向量 x 的表达形式。由于向量 <span class="math inline">\(v_1\)</span> 和 <span class="math inline">\(v_2\)</span> 是正交的单位向量，我们可以得到如下式子</p>
+<p><span class="math display">\[
+  x = (v_1x)v_1 + (v_2x)v_2
+\]</span></p>
 <p>这就意味着：</p>
-<p>  $$<br>    Mx = (v_1x)Mv_1 + (v_2x)Mv_2    \<br>     Mx = (v_1x) σ_1u_1 + (v_2x) σ_2u_2<br>  $$</p>
+<p><span class="math display">\[
+    Mx = (v_1x)Mv_1 + (v_2x)Mv_2    \\
+     Mx = (v_1x) σ_1u_1 + (v_2x) σ_2u_2
+  \]</span></p>
 <p>向量内积可以用向量的转置来表示，如下所示:</p>
-<p>$$<br>   V. x= V^Tx<br>$$</p>
+<p><span class="math display">\[
+   V. x= V^Tx
+\]</span></p>
 <p>最终的式子为:</p>
-<p>$$<br>Mx = u_1σ_1 v_1^Tx + u_2σ_2 v_2^Tx   \<br>M =u_1σ_1 v_1^T + u_2σ_2 v_2^T<br>$$</p>
+<p><span class="math display">\[
+Mx = u_1σ_1 v_1^Tx + u_2σ_2 v_2^Tx   \\
+M =u_1σ_1 v_1^T + u_2σ_2 v_2^T
+\]</span></p>
 <p>上述的式子经常表示成</p>
-<p>$$<br>  M = U\sum V^T<br>$$</p>
-<p>u 矩阵的列向量分别是 $u_1,u_2，\sum $是一个对角矩阵，对角元素分别是对应的 $σ_1$ 和 $σ_2$ ，V矩阵的列向量分别是 $v_1,v_2$ 。上角标T 表示矩阵 V 的转置。</p>
+<p><span class="math display">\[
+  M = U\sum V^T
+\]</span></p>
+<p>u 矩阵的列向量分别是 $u_1,u_2，$是一个对角矩阵，对角元素分别是对应的 <span class="math inline">\(σ_1\)</span> 和 <span class="math inline">\(σ_2\)</span> ，V矩阵的列向量分别是 <span class="math inline">\(v_1,v_2\)</span> 。上角标T 表示矩阵 V 的转置。</p>
 <p>这就表明任意的矩阵 M 是可以分解成三个矩阵。V表示了原始域的标准正交基，u 表示经过M 变换后的co-domain的标准正交基，Σ表示了V 中的向量与u中相对应向量之间的关系。(V describes an orthonormal basis in the domain, and U describes an orthonormal basis in the co-domain, and Σ describes how much the vectors in V are stretched to give the vectors in U.)</p>
-<h2 id="三-奇异值分解的物理意义"><a href="#三-奇异值分解的物理意义" class="headerlink" title="三 奇异值分解的物理意义"></a>三 奇异值分解的物理意义</h2><p>  此部分转载自知乎 <a href="https://www.zhihu.com/question/22237507/answer/28007137" target="_blank" rel="noopener">奇异值分解物理意义，郑宁的回答</a></p>
-<p>  矩阵的奇异值是一个数学意义上的概念，一般是由奇异值分解（Singular Value Decomposition，简称SVD分解）得到。如果要问奇异值表示什么物理意义，那么就必须考虑在不同的实际工程应用中奇异值所对应的含义。下面先尽量避开严格的数学符号推导，直观的从一张图片出发，让我们来看看奇异值代表什么意义。</p>
+<h2 id="三-奇异值分解的物理意义">三 奇异值分解的物理意义</h2>
+<p>此部分转载自知乎 <a href="https://www.zhihu.com/question/22237507/answer/28007137" target="_blank" rel="noopener">奇异值分解物理意义，郑宁的回答</a></p>
+<p>矩阵的奇异值是一个数学意义上的概念，一般是由奇异值分解（Singular Value Decomposition，简称SVD分解）得到。如果要问奇异值表示什么物理意义，那么就必须考虑在不同的实际工程应用中奇异值所对应的含义。下面先尽量避开严格的数学符号推导，直观的从一张图片出发，让我们来看看奇异值代表什么意义。</p>
 <p>这是女神上野树里（Ueno Juri）的一张照片，像素为高度450*宽度333</p>
-<p>  <img src="/images/blog/svd20.jpg" alt=""></p>
-<p>  我们都知道，图片实际上对应着一个矩阵，矩阵的大小就是像素大小，比如这张图对应的矩阵阶数就是450*333，矩阵上每个元素的数值对应着像素值。我们记这个像素矩阵为 $A$ 。</p>
-<p>  现在我们对矩阵 $A$ 进行奇异值分解。直观上，奇异值分解将矩阵分解成若干个秩一矩阵之和，用公式表示就是：</p>
-<p>  $$<br>    A =\sigma_1\mu_1v_1^T+\sigma_2\mu_2v_2^T+…+\sigma_r\mu_rv_r^T<br>  $$</p>
-<p>  其中等式右边每一项前的系数 $\sigma$就是奇异值，u和v分别表示列向量，秩一矩阵的意思是矩阵秩为1。注意到每一项 $\mu v$ 都是秩为1的矩阵。我们假定奇异值满足:</p>
-<p>  $$<br>    \sigma_1\ge\sigma_2\ge….\sigma_r\ge0<br>  $$</p>
+<p><img src="/images/blog/svd20.jpg" /></p>
+<p>我们都知道，图片实际上对应着一个矩阵，矩阵的大小就是像素大小，比如这张图对应的矩阵阶数就是450*333，矩阵上每个元素的数值对应着像素值。我们记这个像素矩阵为 <span class="math inline">\(A\)</span> 。</p>
+<p>现在我们对矩阵 <span class="math inline">\(A\)</span> 进行奇异值分解。直观上，奇异值分解将矩阵分解成若干个秩一矩阵之和，用公式表示就是：</p>
+<p><span class="math display">\[
+    A =\sigma_1\mu_1v_1^T+\sigma_2\mu_2v_2^T+...+\sigma_r\mu_rv_r^T
+  \]</span></p>
+<p>其中等式右边每一项前的系数 <span class="math inline">\(\sigma\)</span>就是奇异值，u和v分别表示列向量，秩一矩阵的意思是矩阵秩为1。注意到每一项 <span class="math inline">\(\mu v\)</span> 都是秩为1的矩阵。我们假定奇异值满足:</p>
+<p><span class="math display">\[
+    \sigma_1\ge\sigma_2\ge....\sigma_r\ge0
+  \]</span></p>
 <p>（奇异值大于0是个重要的性质，但这里先别在意），如果不满足的话重新排列顺序即可，这无非是编号顺序的问题。</p>
 <p>既然奇异值有从大到小排列的顺序，我们自然要问，如果只保留大的奇异值，舍去较小的奇异值，这样(1)式里的等式自然不再成立，那会得到怎样的矩阵——也就是图像？</p>
-<p>令 $A_1=\sigma_1 u_1v_1^{\rm T}$ ，这只保留(1)中等式右边第一项，然后作图</p>
-<p>  <img src="/images/blog/svd21.jpg" alt=""></p>
+<p>令 <span class="math inline">\(A_1=\sigma_1 u_1v_1^{\rm T}\)</span> ，这只保留(1)中等式右边第一项，然后作图</p>
+<p><img src="/images/blog/svd21.jpg" /></p>
 <p>结果就是完全看不清是啥……我们试着多增加几项进来:</p>
-<p>$$<br>  A_5 =\sigma_1\mu_1v_1^T+\sigma_2\mu_2v_2^T+…+\sigma_5\mu_5v_5^T<br>$$</p>
+<p><span class="math display">\[
+  A_5 =\sigma_1\mu_1v_1^T+\sigma_2\mu_2v_2^T+...+\sigma_5\mu_5v_5^T
+\]</span></p>
 <p>再作图</p>
-<p><img src="/images/blog/svd22.jpg" alt=""></p>
-<p>隐约可以辨别这是短发伽椰子的脸……但还是很模糊，毕竟我们只取了5个奇异值而已。下面我们取20个奇异值试试，也就是(1)式等式右边取前20项构成 $A_{20}$</p>
+<p><img src="/images/blog/svd22.jpg" /></p>
+<p>隐约可以辨别这是短发伽椰子的脸……但还是很模糊，毕竟我们只取了5个奇异值而已。下面我们取20个奇异值试试，也就是(1)式等式右边取前20项构成 <span class="math inline">\(A_{20}\)</span></p>
 <p>虽然还有些马赛克般的模糊，但我们总算能辨别出这是Juri酱的脸。当我们取到(1)式等式右边前50项时：</p>
-<p><img src="/images/blog/svd24.jpg" alt=""></p>
+<p><img src="/images/blog/svd24.jpg" /></p>
 <p>我们得到和原图差别不大的图像。也就是说当k从1不断增大时，A_k不断的逼近A。让我们回到公式</p>
-<p>$$<br>     A =\sigma_1\mu_1v_1^T+\sigma_2\mu_2v_2^T+…+\sigma_r\mu_rv_r^T<br>$$</p>
+<p><span class="math display">\[
+     A =\sigma_1\mu_1v_1^T+\sigma_2\mu_2v_2^T+...+\sigma_r\mu_rv_r^T
+\]</span></p>
 <p>矩阵表示一个450<em>333的矩阵，需要保存个元素的值。等式右边和分别是450</em>1和333*1的向量，每一项有个元素。如果我们要存储很多高清的图片，而又受限于存储空间的限制，在尽可能保证图像可被识别的精度的前提下，我们可以保留奇异值较大的若干项，舍去奇异值较小的项即可。例如在上面的例子中，如果我们只保留奇异值分解的前50项，则需要存储的元素为，和存储原始矩阵相比，存储量仅为后者的26%。</p>
 <p><strong>奇异值往往对应着矩阵中隐含的重要信息，且重要性和奇异值大小正相关。每个矩阵A都可以表示为一系列秩为1的“小矩阵”之和，而奇异值则衡量了这些“小矩阵”对于A的权重。</strong></p>
 <p>在图像处理领域，奇异值不仅可以应用在数据压缩上，还可以对图像去噪。如果一副图像包含噪声，我们有理由相信那些较小的奇异值就是由于噪声引起的。当我们强行令这些较小的奇异值为0时，就可以去除图片中的噪声。如下是一张25*15的图像（本例来源于[1]）</p>
-<p><img src="/images/blog/svd25.jpg" alt=""></p>
+<p><img src="/images/blog/svd25.jpg" /></p>
 <p>但往往我们只能得到如下带有噪声的图像（和无噪声图像相比，下图的部分白格子中带有灰色）：</p>
-<p><img src="/images/blog/svd26.jpg" alt=""></p>
+<p><img src="/images/blog/svd26.jpg" /></p>
 <p>通过奇异值分解，我们发现矩阵的奇异值从大到小分别为：14.15，4.67，3.00，0.21，……，0.05。除了前3个奇异值较大以外，其余奇异值相比之下都很小。强行令这些小奇异值为0，然后只用前3个奇异值构造新的矩阵，得到</p>
-<p><img src="/images/blog/svd27.jpg" alt=""></p>
+<p><img src="/images/blog/svd27.jpg" /></p>
 <p>可以明显看出噪声减少了（白格子上灰白相间的图案减少了）。</p>
 <p>奇异值分解还广泛的用于主成分分析（Principle Component Analysis，简称PCA）和推荐系统（如Netflex的电影推荐系统）等。在这些应用领域，奇异值也有相应的意义</p>
-<h2 id="四-如何获得奇异值分解"><a href="#四-如何获得奇异值分解" class="headerlink" title="四 如何获得奇异值分解"></a>四 如何获得奇异值分解</h2><p>事实上我们可以找到任何矩阵的奇异值分解，那么我们是如何做到的呢？假设在原始域中有一个单位圆，如下图所示。经过 M 矩阵变换以后在co-domain中单位圆会变成一个椭圆，它的长轴(Mv1)和短轴(Mv2)分别对应转换后的两个标准正交向量，也是在椭圆范围内最长和最短的两个向量。</p>
-<p>  <img src="/images/blog/svd10.jpg" alt="水平变换效果"></p>
-<p>换句话说，定义在单位圆上的函数|Mx|分别在 $v_1$ 和 $v_2$ 方向上取得最大和最小值。这样我们就把寻找矩阵的奇异值分解过程缩小到了优化函数|Mx|上了。结果发现（具体的推到过程这里就不详细介绍了）这个函数取得最优值的向量分别是矩阵 MT M 的特征向量。由于MTM是对称矩阵，因此不同特征值对应的特征向量都是互相正交的，我们用 $v_i$ 表示MTM的所有特征向量。奇异值 $σ_i = |Mv_i| $， 向量 $u_i$ 为 $Mv_i$ 方向上的单位向量。但为什么 $u_i$ 也是正交的呢？</p>
+<h2 id="四-如何获得奇异值分解">四 如何获得奇异值分解</h2>
+<p>事实上我们可以找到任何矩阵的奇异值分解，那么我们是如何做到的呢？假设在原始域中有一个单位圆，如下图所示。经过 M 矩阵变换以后在co-domain中单位圆会变成一个椭圆，它的长轴(Mv1)和短轴(Mv2)分别对应转换后的两个标准正交向量，也是在椭圆范围内最长和最短的两个向量。</p>
+<figure>
+<img src="/images/blog/svd10.jpg" alt="水平变换效果" /><figcaption>水平变换效果</figcaption>
+</figure>
+<p>换句话说，定义在单位圆上的函数|Mx|分别在 <span class="math inline">\(v_1\)</span> 和 <span class="math inline">\(v_2\)</span> 方向上取得最大和最小值。这样我们就把寻找矩阵的奇异值分解过程缩小到了优化函数|Mx|上了。结果发现（具体的推到过程这里就不详细介绍了）这个函数取得最优值的向量分别是矩阵 MT M 的特征向量。由于MTM是对称矩阵，因此不同特征值对应的特征向量都是互相正交的，我们用 <span class="math inline">\(v_i\)</span> 表示MTM的所有特征向量。奇异值 $σ_i = |Mv_i| $， 向量 <span class="math inline">\(u_i\)</span> 为 <span class="math inline">\(Mv_i\)</span> 方向上的单位向量。但为什么 <span class="math inline">\(u_i\)</span> 也是正交的呢？</p>
 <p>推倒如下：</p>
-<p>$σ_i$ 和 $σ_j$ 分别是不同两个奇异值</p>
-<p>$$<br>Mv_i = σ_iu_i  \<br>Mv_j = σ_ju_j.<br>$$</p>
+<p><span class="math inline">\(σ_i\)</span> 和 <span class="math inline">\(σ_j\)</span> 分别是不同两个奇异值</p>
+<p><span class="math display">\[
+Mv_i = σ_iu_i  \\
+Mv_j = σ_ju_j.
+\]</span></p>
 <p>我们先看下MviMvj，并假设它们分别对应的奇异值都不为零。一方面这个表达的值为0，推到如下</p>
-<p>$$<br>Mv_i Mv_j = v_i^TM^T Mv_j = v_i M^TMv_j = λ_jv_i v_j = 0<br>$$</p>
+<p><span class="math display">\[
+Mv_i Mv_j = v_i^TM^T Mv_j = v_i M^TMv_j = λ_jv_i v_j = 0
+\]</span></p>
 <p>另一方面，我们有</p>
-<p>$$<br>Mv_i Mv_j = σ_iσ_j u_i u_j = 0<br>$$</p>
-<p>因此，$u_i$ 和 $u_j$ 是正交的。但实际上，这并非是求解奇异值的方法，效率会非常低。这里也主要不是讨论如何求解奇异值，为了演示方便，采用的都是二阶矩阵。</p>
-<h2 id="五-应用实例"><a href="#五-应用实例" class="headerlink" title="五 应用实例"></a>五 应用实例</h2><h3 id="5-1-应用实例一"><a href="#5-1-应用实例一" class="headerlink" title="5.1 应用实例一"></a>5.1 应用实例一</h3><p>$$<br>M =<br>  \begin{bmatrix}<br>   1\quad 1 \<br>   2\quad 2 \<br>  \end{bmatrix}<br>$$</p>
+<p><span class="math display">\[
+Mv_i Mv_j = σ_iσ_j u_i u_j = 0
+\]</span></p>
+<p>因此，<span class="math inline">\(u_i\)</span> 和 <span class="math inline">\(u_j\)</span> 是正交的。但实际上，这并非是求解奇异值的方法，效率会非常低。这里也主要不是讨论如何求解奇异值，为了演示方便，采用的都是二阶矩阵。</p>
+<h2 id="五-应用实例">五 应用实例</h2>
+<h3 id="应用实例一">5.1 应用实例一</h3>
+<p><span class="math display">\[
+M =
+  \begin{bmatrix}
+   1\quad 1 \\
+   2\quad 2 \\
+  \end{bmatrix}
+\]</span></p>
 <p>经过这个矩阵变换后的效果如下图所示</p>
-<p><img src="/images/blog/svd11.jpg" alt="水平变换效果"></p>
+<figure>
+<img src="/images/blog/svd11.jpg" alt="水平变换效果" /><figcaption>水平变换效果</figcaption>
+</figure>
 <p>在这个例子中，第二个奇异值为 0，因此经过变换后只有一个方向上有表达</p>
-<p>$$<br>  M =u_1σ_1 v_1^T<br>$$</p>
+<p><span class="math display">\[
+  M =u_1σ_1 v_1^T
+\]</span></p>
 <p>换句话说，如果某些奇异值非常小的话，其相对应的几项就可以不同出现在矩阵 M 的分解式中。因此，我们可以看到矩阵 M 的秩的大小等于非零奇异值的个数。</p>
-<h3 id="5-2-应用实例二"><a href="#5-2-应用实例二" class="headerlink" title="5.2  应用实例二"></a>5.2  应用实例二</h3><p> 我们来看一个奇异值分解在数据表达上的应用。假设我们有如下的一张 15 x 25 的图像数据。</p>
-<p><img src="/images/blog/svd12.jpg" alt="水平变换效果"></p>
+<h3 id="应用实例二">5.2 应用实例二</h3>
+<p>我们来看一个奇异值分解在数据表达上的应用。假设我们有如下的一张 15 x 25 的图像数据。</p>
+<figure>
+<img src="/images/blog/svd12.jpg" alt="水平变换效果" /><figcaption>水平变换效果</figcaption>
+</figure>
 <p>如图所示，该图像主要由下面三部分构成。</p>
-<p><img src="/images/blog/svd13.jpg" alt="水平变换效果"></p>
+<figure>
+<img src="/images/blog/svd13.jpg" alt="水平变换效果" /><figcaption>水平变换效果</figcaption>
+</figure>
 <p>我们将图像表示成 15 x 25 的矩阵，矩阵的元素对应着图像的不同像素，如果像素是白色的话，就取 1，黑色的就取 0. 我们得到了一个具有375个元素的矩阵，如下图所示</p>
-<p><img src="/images/blog/svd14.jpg" alt="水平变换效果"></p>
+<figure>
+<img src="/images/blog/svd14.jpg" alt="水平变换效果" /><figcaption>水平变换效果</figcaption>
+</figure>
 <p>如果我们对矩阵M进行奇异值分解以后，得到奇异值分别是</p>
-<p>$$<br>σ_1 = 14.72 \<br>σ_2 = 5.22  \<br>σ_3 = 3.31 \<br>$$</p>
+<p><span class="math display">\[
+σ_1 = 14.72 \\
+σ_2 = 5.22  \\
+σ_3 = 3.31 \\
+\]</span></p>
 <p>矩阵M就可以表示成</p>
-<p>$$<br>M=u_1σ_1 v_1^T + u_2σ_2 v_2^T + u_3σ_3 v_3^T<br>$$</p>
-<p>$v_i$ 具有15个元素，$u_i$ 具有25个元素，$σ_i$ 对应不同的奇异值。如上图所示，我们就可以用123个元素来表示具有375个元素的图像数据了。</p>
-<h3 id="5-3-应用实例三：减噪-noise-reduction"><a href="#5-3-应用实例三：减噪-noise-reduction" class="headerlink" title="5.3 应用实例三：减噪(noise reduction)"></a>5.3 应用实例三：减噪(noise reduction)</h3><p> 前面的例子的奇异值都不为零，或者都还算比较大，下面我们来探索一下拥有零或者非常小的奇异值的情况。通常来讲，大的奇异值对应的部分会包含更多的信息。比如，我们有一张扫描的，带有噪声的图像，如下图所示</p>
-<p> <img src="/images/blog/svd15.jpg" alt="水平变换效果"></p>
-<p> 我们采用跟实例二相同的处理方式处理该扫描图像。得到图像矩阵的奇异值：</p>
-<p> $$<br>σ_1 = 14.15   \<br>σ_2 = 4.67     \<br>σ_3 = 3.00   \<br>σ_4 = 0.21   \<br>σ_5 = 0.19  \<br>…<br>σ_15 = 0.05 \<br> $$</p>
+<p><span class="math display">\[
+M=u_1σ_1 v_1^T + u_2σ_2 v_2^T + u_3σ_3 v_3^T
+\]</span></p>
+<p><span class="math inline">\(v_i\)</span> 具有15个元素，<span class="math inline">\(u_i\)</span> 具有25个元素，<span class="math inline">\(σ_i\)</span> 对应不同的奇异值。如上图所示，我们就可以用123个元素来表示具有375个元素的图像数据了。</p>
+<h3 id="应用实例三减噪noise-reduction">5.3 应用实例三：减噪(noise reduction)</h3>
+<p>前面的例子的奇异值都不为零，或者都还算比较大，下面我们来探索一下拥有零或者非常小的奇异值的情况。通常来讲，大的奇异值对应的部分会包含更多的信息。比如，我们有一张扫描的，带有噪声的图像，如下图所示</p>
+<figure>
+<img src="/images/blog/svd15.jpg" alt="水平变换效果" /><figcaption>水平变换效果</figcaption>
+</figure>
+<p>我们采用跟实例二相同的处理方式处理该扫描图像。得到图像矩阵的奇异值：</p>
+<p><span class="math display">\[
+σ_1 = 14.15   \\
+σ_2 = 4.67     \\
+σ_3 = 3.00   \\
+σ_4 = 0.21   \\
+σ_5 = 0.19  \\
+...
+σ_15 = 0.05 \\
+ \]</span></p>
 <p>很明显，前面三个奇异值远远比后面的奇异值要大，这样矩阵 M 的分解方式就可以如下：</p>
-<p>$$<br>  M \approx  u_1σ_1 v_1^T + u_2σ_2 v_2^T + u_3σ_3 v_3^T<br>$$</p>
+<p><span class="math display">\[
+  M \approx  u_1σ_1 v_1^T + u_2σ_2 v_2^T + u_3σ_3 v_3^T
+\]</span></p>
 <p>经过奇异值分解后，我们得到了一张降噪后的图像。</p>
-<p><img src="/images/blog/svd16.jpg" alt="水平变换效果"></p>
-<h3 id="5-4-应用实例四：数据分析-data-analysis"><a href="#5-4-应用实例四：数据分析-data-analysis" class="headerlink" title="5.4 应用实例四：数据分析(data analysis)"></a>5.4 应用实例四：数据分析(data analysis)</h3><p>我们搜集的数据中总是存在噪声：无论采用的设备多精密，方法有多好，总是会存在一些误差的。如果你们还记得上文提到的，大的奇异值对应了矩阵中的主要信息的话，运用SVD进行数据分析，提取其中的主要部分的话，还是相当合理的。<br>作为例子，假如我们搜集的数据如下所示：</p>
-<p><img src="/images/blog/svd17.jpg" alt="水平变换效果"></p>
+<figure>
+<img src="/images/blog/svd16.jpg" alt="水平变换效果" /><figcaption>水平变换效果</figcaption>
+</figure>
+<h3 id="应用实例四数据分析data-analysis">5.4 应用实例四：数据分析(data analysis)</h3>
+<p>我们搜集的数据中总是存在噪声：无论采用的设备多精密，方法有多好，总是会存在一些误差的。如果你们还记得上文提到的，大的奇异值对应了矩阵中的主要信息的话，运用SVD进行数据分析，提取其中的主要部分的话，还是相当合理的。 作为例子，假如我们搜集的数据如下所示：</p>
+<figure>
+<img src="/images/blog/svd17.jpg" alt="水平变换效果" /><figcaption>水平变换效果</figcaption>
+</figure>
 <p>我们将数据用矩阵的形式表示：</p>
-<p><img src="/images/blog/svd18.jpg" alt="水平变换效果"></p>
+<figure>
+<img src="/images/blog/svd18.jpg" alt="水平变换效果" /><figcaption>水平变换效果</figcaption>
+</figure>
 <p>经过奇异值分解后，得到</p>
-<p>$$<br>σ_1 = 6.04  \<br>σ_2 = 0.22 \<br>$$</p>
+<p><span class="math display">\[
+σ_1 = 6.04  \\
+σ_2 = 0.22 \\
+\]</span></p>
 <p>由于第一个奇异值远比第二个要大，数据中有包含一些噪声，第二个奇异值在原始矩阵分解相对应的部分可以忽略。经过SVD分解后，保留了主要样本点如图所示</p>
-<p><img src="/images/blog/svd19.jpg" alt="水平变换效果"></p>
+<figure>
+<img src="/images/blog/svd19.jpg" alt="水平变换效果" /><figcaption>水平变换效果</figcaption>
+</figure>
 <p>就保留主要样本数据来看，该过程跟PCA( principal component analysis)技术有一些联系，PCA也使用了SVD去检测数据间依赖和冗余信息.</p>
 
     </div>
-    <p class="post-meta">
-        <span class="post-cat">分类：
-            <a class="cat-link" href="/categories/blog/">blog</a>
-        </span>
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-</article>
-<!-- 分享按钮 -->
 
-  <div class="article-share clearfix text-center">
-    <div class="share-area">
-      <span class="share-txt">分享到：</span>
-      <a href="javascript: window.open('http://service.weibo.com/share/share.php?url=' + encodeURIComponent(location.href) + '&title=' + document.title + '&language=zh_cn');" class="share-icon weibo"></a>
-      <a href="javascript: alert('请复制链接到微信并发送');" class="share-icon wechat"></a>
-      <a href="javascript: window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + encodeURIComponent(location.href) + '&title=' + document.title);" class="share-icon qqzone"></a>
-      <a href="javascript: window.open('http://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(location.href) + '&desc=Jelon个人博客&title=' + document.title + '&callback=' + encodeURIComponent(location.href));" class="share-icon qq"></a>
-      <a href="javascript: window.open('http://shuo.douban.com/!service/share?href=' + encodeURIComponent(location.href) + '&name=' + document.title + '&text=' + document.title);" class="share-icon douban"></a>
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2016-10-19-optimization-deep-models/" rel="prev" title="深度学习：训练模型的优化">
+      <i class="fa fa-chevron-left"></i> 深度学习：训练模型的优化
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2016-11-06-deepfeedforwardnn/" rel="next" title="深度学习：深度前馈网络">
+      深度学习：深度前馈网络 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
   </div>
 
 
-<!-- 上一篇/下一篇 -->
+          </div>
+          
 
-<div class="article-nav clearfix">
-    
-    <span class="prev fl">
-        上一篇<br >
-        <a href="/2019/12/23/2016-11-06-deepfeedforwardnn/">
-            
-                深度学习：深度前馈网络
-            
-        </a>
-    </span>
-    
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
 
-    
-    <span class="next fr">
-        下一篇<br >
-        <a href="/2019/12/23/2016-10-19-optimization-deep-models/">
-            
-                深度学习：训练模型的优化
-            
-        </a>
-    </span>
-    
-</div>
-
-<!-- 文章评论 -->
-
+        </div>
+          
   
-<script src="/js/comment.js"></script>
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
 
-  <div id="comments" class="comment">
-    <!--
-    <div class="sign-bar">
-      GitHub 已登录!
-      <span class="sign-link">登出</span>
-    </div>
-    <section class="box">
-      <div class="com-avatar"><img src="/img/jelon.jpg" alt="avatar"></div>
-      <div class="com-text">
-        <div class="main">
-          <textarea class="text-area-edited show" placeholder="欢迎评论！"></textarea>
-          <div class="text-area-preview"></div>
-        </div>
-        <div class="switch">
-          <div class="switch-item on">编辑</div>
-          <div class="switch-item">预览</div>
-        </div>
-        <div class="button">提交</div>
-      </div>
-    </section>
-    <section class="tips">注：评论支持 markdown 语法！</section>
-    <section class="list-wrap">
-      <ul class="list">
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">张德龙</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like liked">已赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">333333</div>
-          </div>
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
         </li>
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">刘德华</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like">点赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">vvvvv</div>
-          </div>
+        <li class="sidebar-nav-overview">
+          Overview
         </li>
       </ul>
-      <div class="page-nav">
-        <a href="javascript: void(0);" class="item">1</a>
-        <a href="javascript: void(0);" class="item">2</a>
-        <a href="javascript: void(0);" class="item current">3</a>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-简介"><span class="nav-number">1.</span> <span class="nav-text">一 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#线性变换的几何意义"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 线性变换的几何意义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-几何意义"><span class="nav-number">2.</span> <span class="nav-text">二 几何意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-奇异值分解的物理意义"><span class="nav-number">3.</span> <span class="nav-text">三 奇异值分解的物理意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-如何获得奇异值分解"><span class="nav-number">4.</span> <span class="nav-text">四 如何获得奇异值分解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五-应用实例"><span class="nav-number">5.</span> <span class="nav-text">五 应用实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#应用实例一"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 应用实例一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用实例二"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 应用实例二</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用实例三减噪noise-reduction"><span class="nav-number">5.3.</span> <span class="nav-text">5.3 应用实例三：减噪(noise reduction)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用实例四数据分析data-analysis"><span class="nav-number">5.4.</span> <span class="nav-text">5.4 应用实例四：数据分析(data analysis)</span></a></li></ol></li></ol></div>
       </div>
-    </section>
-    -->
-  </div>
-  <script>
-  JELON.Comment({
-    container: 'comments',
-    label: '2016-10-25-SVD-decomponent' || '2019/12/23/2016-10-25-SVD-decomponent/',
-    owner: 'your_github_id',
-    repo: 'your_blog_comments',
-    clientId: 'your_client_id',
-    clientSecret: 'your_client_secret'
-  });
-  </script>
+      <!--/noindex-->
 
-
-            </div>
-
-        </section>
-        <!-- 侧栏部分 -->
-<aside class="sidebar">
-    <section class="widget">
-        <h3 class="widget-hd"><strong>文章分类</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-    <li>
-        <a href="/categories/blog/">blog</a>
-        <span class="badge">(94)</span>
-    </li>
-    
-</ul>
-    </section>
-
-    
-    <section class="widget">
-        <h3 class="widget-hd"><strong>热门标签</strong></h3>
-        <!-- 文章标签 -->
-<div class="widget-bd tag-wrap">
-  
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
 </div>
-    </section>
-    
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
 
-    
 
-    
-    <!-- 友情链接 -->
-    <section class="widget">
-        <h3 class="widget-hd"><strong>友情链接</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-        <li>
-            <a href="https://jelon.top" target="_blank" title="Jelon个人前端小站">前端博客小站</a>
-        </li>
-    
-        <li>
-            <a href="https://www.baidu.com" target="_blank" title="百度搜索">百度</a>
-        </li>
-    
-</ul>
-    </section>
-    
-</aside>
-<!-- / 侧栏部分 -->
+
+      </div>
+
     </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
 
-    <!-- 博客底部 -->
+
+      </div>
+    </main>
+
     <footer class="footer">
-    &copy;
-    
-        2016-2019
-    
+      <div class="footer-inner">
+        
 
-    <a href="/">Jelon Loves You</a>
-</footer>
-<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
 
-    <!--博客js脚本 -->
-    <!-- 这里放网站js脚本 -->
+        
 
-<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
 
 </body>
 </html>

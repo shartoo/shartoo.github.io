@@ -1,407 +1,477 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" >
-    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
-    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
-    
-    <title>GAN：论文笔记 | Hexo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
-    <meta name="keywords" content="Jelon, 前端, Web, 张德龙, 前端开发" >
-    <meta name="description" content="Jelon个人前端小站" >
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml" >
-    
-    
-    <link rel="shortcut icon" href="/favicon.ico" >
-    
-    
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/main.css">
 
-    <!--[if lt IE 9]>
-    
-<script src="/js/html5.js"></script>
 
-    <![endif]-->
-    
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "//hm.baidu.com/hm.js?fd459238242776d173cdc64918fb32f2";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://shartoo.github.com').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
 </script>
 
+  <meta name="description" content="深度学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GAN：论文笔记">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2016-12-27-gan-paper/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="深度学习">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan1.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.431Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.209Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/gan1.png">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
-
-<body class="home">
-    <!--[if lt IE 9]>
-    <div class="browsehappy">
-        当前网页 <strong>不支持</strong>
-        你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/" target="_blank" rel="noopener">升级你的浏览器</a>.
-    </div>
-    <![endif]-->
-
-    <!-- 博客头部 -->
-    <header class="header">
-    <section class="container header-main">
-        <div class="logo">
-            <a href="/">
-                <div class="cover">
-                    <span class="name">Hexo</span>
-                    <span class="description"></span>
-                </div>
-            </a>
-        </div>
-        <div class="dropnav icon-paragraph-justify" id="JELON__btnDropNav"></div>
-        <ul class="menu hidden" id="JELON__menu">
-            
-            <li rel="/2019/12/23/2016-12-27-gan-paper/index.html" class="item ">
-                <a href="/" title="首页" class="icon-home">&nbsp;首页</a>
-            </li>
-            
-            <li rel="/2019/12/23/2016-12-27-gan-paper/index.html" class="item ">
-                <a href="/lab/" title="实验室" class="icon-lab">&nbsp;实验室</a>
-            </li>
-            
-            <li rel="/2019/12/23/2016-12-27-gan-paper/index.html" class="item ">
-                <a href="/about/" title="关于" class="icon-about">&nbsp;关于</a>
-            </li>
-            
-            <li rel="/2019/12/23/2016-12-27-gan-paper/index.html" class="item ">
-                <a href="/comment/" title="留言" class="icon-comment">&nbsp;留言</a>
-            </li>
-            
-        </ul>
-        <div class="profile clearfix">
-            <div class="feeds fl">
-                
-                
-                <p class="links">
-                    
-                        <a href="https://github.com/jangdelong" target="_blank">Github</a>
-                        |
-                    
-                        <a href="https://pages.coding.me" target="_blank">Hosted by Coding Pages</a>
-                        
-                    
-                </p>
-                <p class="sns">
-                    
-                        <a href="http://weibo.com/jangdelong" class="sinaweibo" target="_blank"><b>■</b> 新浪微博</a>
-                    
-                        <a href="https://www.facebook.com/profile.php?id=100011855760219&amp;ref=bookmarks" class="qqweibo" target="_blank"><b>■</b> Facebook</a>
-                    
-                    <a href="javascript: void(0);" class="wechat">
-                        <b>■</b>
-                        公众号
-                        <span class="popover">
-                            <img src="/img/wechat_mp.jpg" width="120" height="120" alt="我的微信订阅号">
-                            <i class="arrow"></i>
-                        </span>
-                    </a>
-                </p>
-                
-            </div>
-            <div class="avatar fr">
-                <img src="/img/jelon.jpg" alt="avatar" title="Jelon" >
-            </div>
-        </div>
-    </section>
-</header>
+<link rel="canonical" href="http://shartoo.github.com/2019/12/23/2016-12-27-gan-paper/">
 
 
-    <!-- 博客正文 -->
-    <div class="container body clearfix">
-        <section class="content">
-            <div class="content-main widget">
-                <!-- 文章页 -->
-<!-- 文章 -->
-<article class="post article">
-    <header class="text-center">
-        <h3 class="post-title"><span>GAN：论文笔记</span></h3>
-    </header>
-    <p class="post-meta text-center">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.431Z">2019-12-23</time>
-    </p>
-    <div class="post-content">
-        <h2 id="一-GAN网络"><a href="#一-GAN网络" class="headerlink" title="一 GAN网络"></a>一 GAN网络</h2><p>与一般的被用于Supervised Learning任务的深度神经网络不同，GAN同时要训练一个生成网络(Generator)和一个判别网络(Discriminator)，前者输入一个noise变量 z ，输出一个伪图片数据 $G(z;θ_g)$ ，后者输入一个图片(real image)／伪图片(fake image)数据 x ，输出一个表示该输入是自然图片或者伪造图片的二分类置信度 $D(x;θ_d)$ ，理想情况下，判别器 D 需要尽可能准确的判断输入数据到底是一个真实的图片还是某种伪造的图片，而生成器G又需要尽最大可能去欺骗D，让D把自己产生的伪造图片全部判断成真实的图片。</p>
-<p>根据上述训练过程的描述，我们可以定义一个损失函数：</p>
-<p>$$<br>  Loss = \frac{1}{m}\sum[logD(x^i)+log(1-D(G(z^i)))]<br>$$</p>
-<h2 id="二-DCGAN网络"><a href="#二-DCGAN网络" class="headerlink" title="二 DCGAN网络"></a>二 DCGAN网络</h2><h3 id="2-0-介绍"><a href="#2-0-介绍" class="headerlink" title="2.0 介绍"></a>2.0 介绍</h3><p>本论文做了以下贡献。</p>
-<ul>
-<li><p>提出并评估了一系列的加在卷积GAN网络拓扑结构的约束，使得卷积GAN网络在大部分设置中稳定的用于训练。给这种架构取名为深度卷积GAN(DCGAN)</p>
-</li>
-<li><p>对图像分类任务使用训练好的分类器，结合其他无监督学习算法，性能较好。</p>
-</li>
-<li><p>可视化了GAN学习到的过滤器(filter)，并且实验表明特定的过滤器已经学习到画特定的物体。</p>
-</li>
-<li><p>表明，生成器有些有趣的矢量算数性质，它可以很容易地完成生成模型的语义质量的操作。</p>
-</li>
-</ul>
-<h3 id="2-1-无标签数据中的表征学习"><a href="#2-1-无标签数据中的表征学习" class="headerlink" title="2.1 无标签数据中的表征学习"></a>2.1 无标签数据中的表征学习</h3><ul>
-<li><p>经典的无标签表征学习是在数据上做聚类（K均值聚类）。图像领域，可以在图像patches上做层次聚类，以此来学习表征</p>
-</li>
-<li><p>另外一个方法是训练自动编码器（卷积，堆叠），它可以分离编码的组件是什么以及组件位置。梯形结构将图像编码成压缩编码，然后解码编码来重构图像。</p>
-</li>
-</ul>
-<h3 id="2-2-生成自然图像"><a href="#2-2-生成自然图像" class="headerlink" title="2.2 生成自然图像"></a>2.2 生成自然图像</h3><p>  生成自然图像模型主要有两种：参数化和非参数化。</p>
-<ul>
-<li><p>非参数化模型一般是从已存在的数据库中做匹配，通常是匹配图像块(patches)。这种方法已经用在了<code>纹理合成</code>,<code>超分辨率</code>,<code>绘画</code>。</p>
-</li>
-<li><p>参数模型目前已经被研究得较充分（例如MNIST数据集或者纹理合成）。但是生成真实世界的自然图像还没有取得成功。一种<code>变分抽样方法</code>生成图像，生成的图像中容易有模糊干扰。另外一种方法是，使用迭代前向扩散方法生成图像。GAN生成网络生成的图像有噪音，并且可能产生无法理解的图像。一种拉普拉斯金字塔拓展方法的方法生成质量更高的图像，但是依然摆脱不了噪音。一种RNN和反卷积网络可以生成一些较好的自然图片。</p>
-</li>
-</ul>
-<h3 id="2-3-CNN内部的可视化"><a href="#2-3-CNN内部的可视化" class="headerlink" title="2.3 CNN内部的可视化"></a>2.3 CNN内部的可视化</h3><p> 使用反卷过滤最大激励，可以知道CNN中每个卷积过滤器（卷积核）的效果。</p>
-<h3 id="2-4-方法和模型架构"><a href="#2-4-方法和模型架构" class="headerlink" title="2.4 方法和模型架构"></a>2.4 方法和模型架构</h3><p> 经验表明：使用CNN来增大GAN的方法来给图像建模的方法是失败的。我们定义了一组架构，它可以在多个不同数据集上稳定训练，并且可以训练更高的分辨率和更深的生成模型。</p>
-<p> 方法的核心在于，采用并修改了CNN架构中三个方面。</p>
-<ol>
-<li><p>所有的用stride卷积替换确定性空间池化函数（例如最大池化）卷积网络，这允许网络学习它自己的空间下采样。我们在生成器中使用了这种方法，这使得它能够学习自己的空间下采样和分类器。</p>
-</li>
-<li><p>去掉顶层卷积特征上的全连接层。最好的例子是全局均值池化用在艺术图像分类模型。我们发现，全局均值池化增加了模型的稳定性，但是拖累了其收敛速度。一个中间层的生成器和分类器，分别直接将顶层的卷积特征链接到输入和输出，其结果较好。GAN的第一层，以正态噪音分布Z作为输入，可以称为全连接，因为它只是矩阵操作，但是结果被reshaped成一个4维tensor，并用作卷积堆叠的起始。对于分类器，最后的卷积层被平铺(flatten)并喂入单个sigmoid输出。</p>
-</li>
-<li><p>第三个是Batch Normalization，通过对每个输入神经元进行归一化（均值为0，方差是单位方差（1））来稳定学习。它可以避免由于poor initialization和深层模型中的梯度扩散问题。直接将batchnorm应用到所有层，将会导致抽样震荡和模型不稳定。因此，不要将batchnorm用在输出层的生成器和输入层的分类器。</p>
-<p>Relu激活函数用在生成器中，输出层使用Tanh激活函数的除外。我们发现使用收敛的激活函数可以让模型更快的饱和并覆盖训练分布的颜色空间。在分类器中，我们发现，使用leaky Retified 激活函数表现较好，尤其是高分辨率模型。这与原始的GAN模型相反，它用的是maxout激励函数。</p>
-</li>
-</ol>
-<p> <strong>总结</strong></p>
-<ul>
-<li><p>使用strided 卷积（分类器）和fractional-strided卷积（生成器）替换所有池化层。</p>
-</li>
-<li><p>分类器和生成器中都是用batchnorm</p>
-</li>
-<li><p>深层架构，移除全连接层</p>
-</li>
-<li><p>除了输出层使用Tanh激活函数，其他层都使用Relu</p>
-</li>
-<li><p>所有层的分类器都使用 LeakyRelu</p>
-</li>
-</ul>
-<h3 id="2-5-模型细节"><a href="#2-5-模型细节" class="headerlink" title="2.5 模型细节"></a>2.5 模型细节</h3><ul>
-<li><p>数据集：, Large-scale Scene Understanding (LSUN) (Yu et al., 2015),Imagenet-1k and a newly assembled Faces dataset</p>
-</li>
-<li><p>预处理：图像不做预处理，激活函数tanh范围拓展到[-1,1]</p>
-</li>
-<li><p>所有模型预训练都是使用mini-batch SGD，mini-batch 是128。</p>
-</li>
-<li><p>所有权重初始化是，均值为0，方差为0.02</p>
-</li>
-<li><p>LeakyRelu：the slope of the leak was set to 0.2 in all models</p>
-</li>
-<li><p>之前的GAN使用动量来加速训练，此文使用带超参数的Adam 优化器</p>
-</li>
-<li><p>学习率为 0.0002</p>
-</li>
-<li><p>动量项 $\beta _1 =0.5$ 更稳定（原始的是0.9）</p>
-<p><img src="/images/blog/gan1.png" alt="网络细节"></p>
-<p>一个100维的正态分布Z被投影到一个小的空间范围，许多特征maps的卷积表征。一系列的四fractionally-strided卷积（有些论文误称为反卷积），然后将这个高度表征表示为64x64像素的图像。注意：没有使用全连接层或池化层。</p>
-</li>
-</ul>
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
 
-    </div>
-    <p class="post-meta">
-        <span class="post-cat">分类：
-            <a class="cat-link" href="/categories/blog/">blog</a>
-        </span>
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-</article>
-<!-- 分享按钮 -->
+  <title>GAN：论文笔记 | Hexo</title>
+  
 
-  <div class="article-share clearfix text-center">
-    <div class="share-area">
-      <span class="share-txt">分享到：</span>
-      <a href="javascript: window.open('http://service.weibo.com/share/share.php?url=' + encodeURIComponent(location.href) + '&title=' + document.title + '&language=zh_cn');" class="share-icon weibo"></a>
-      <a href="javascript: alert('请复制链接到微信并发送');" class="share-icon wechat"></a>
-      <a href="javascript: window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + encodeURIComponent(location.href) + '&title=' + document.title);" class="share-icon qqzone"></a>
-      <a href="javascript: window.open('http://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(location.href) + '&desc=Jelon个人博客&title=' + document.title + '&callback=' + encodeURIComponent(location.href));" class="share-icon qq"></a>
-      <a href="javascript: window.open('http://shuo.douban.com/!service/share?href=' + encodeURIComponent(location.href) + '&name=' + document.title + '&text=' + document.title);" class="share-icon douban"></a>
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
     </div>
   </div>
 
-
-<!-- 上一篇/下一篇 -->
-
-<div class="article-nav clearfix">
-    
-    <span class="prev fl">
-        上一篇<br >
-        <a href="/2019/12/23/2017-01-13-RCNN-series/">
-            
-                RCNN,Fast RCNN,Faster RCNN 总结
-            
-        </a>
-    </span>
-    
-
-    
-    <span class="next fr">
-        下一篇<br >
-        <a href="/2019/12/23/2016-12-22-theano-deeplearning/">
-            
-                theano 深度学习数据准备
-            
-        </a>
-    </span>
-    
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
 </div>
 
-<!-- 文章评论 -->
 
+<nav class="site-nav">
   
-<script src="/js/comment.js"></script>
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
 
-  <div id="comments" class="comment">
-    <!--
-    <div class="sign-bar">
-      GitHub 已登录!
-      <span class="sign-link">登出</span>
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://shartoo.github.com/2019/12/23/2016-12-27-gan-paper/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          GAN：论文笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2019-12-23 18:45:59 / Modified: 17:55:14" itemprop="dateCreated datePublished" datetime="2019-12-23T18:45:59+08:00">2019-12-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">深度学习</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="一-gan网络">一 GAN网络</h2>
+<p>与一般的被用于Supervised Learning任务的深度神经网络不同，GAN同时要训练一个生成网络(Generator)和一个判别网络(Discriminator)，前者输入一个noise变量 z ，输出一个伪图片数据 <span class="math inline">\(G(z;θ_g)\)</span> ，后者输入一个图片(real image)／伪图片(fake image)数据 x ，输出一个表示该输入是自然图片或者伪造图片的二分类置信度 <span class="math inline">\(D(x;θ_d)\)</span> ，理想情况下，判别器 D 需要尽可能准确的判断输入数据到底是一个真实的图片还是某种伪造的图片，而生成器G又需要尽最大可能去欺骗D，让D把自己产生的伪造图片全部判断成真实的图片。</p>
+<p>根据上述训练过程的描述，我们可以定义一个损失函数：</p>
+<p><span class="math display">\[
+  Loss = \frac{1}{m}\sum[logD(x^i)+log(1-D(G(z^i)))]
+\]</span></p>
+<h2 id="二-dcgan网络">二 DCGAN网络</h2>
+<h3 id="介绍">2.0 介绍</h3>
+<p>本论文做了以下贡献。</p>
+<ul>
+<li><p>提出并评估了一系列的加在卷积GAN网络拓扑结构的约束，使得卷积GAN网络在大部分设置中稳定的用于训练。给这种架构取名为深度卷积GAN(DCGAN)</p></li>
+<li><p>对图像分类任务使用训练好的分类器，结合其他无监督学习算法，性能较好。</p></li>
+<li><p>可视化了GAN学习到的过滤器(filter)，并且实验表明特定的过滤器已经学习到画特定的物体。</p></li>
+<li><p>表明，生成器有些有趣的矢量算数性质，它可以很容易地完成生成模型的语义质量的操作。</p></li>
+</ul>
+<h3 id="无标签数据中的表征学习">2.1 无标签数据中的表征学习</h3>
+<ul>
+<li><p>经典的无标签表征学习是在数据上做聚类（K均值聚类）。图像领域，可以在图像patches上做层次聚类，以此来学习表征</p></li>
+<li><p>另外一个方法是训练自动编码器（卷积，堆叠），它可以分离编码的组件是什么以及组件位置。梯形结构将图像编码成压缩编码，然后解码编码来重构图像。</p></li>
+</ul>
+<h3 id="生成自然图像">2.2 生成自然图像</h3>
+<p>生成自然图像模型主要有两种：参数化和非参数化。</p>
+<ul>
+<li><p>非参数化模型一般是从已存在的数据库中做匹配，通常是匹配图像块(patches)。这种方法已经用在了<code>纹理合成</code>,<code>超分辨率</code>,<code>绘画</code>。</p></li>
+<li><p>参数模型目前已经被研究得较充分（例如MNIST数据集或者纹理合成）。但是生成真实世界的自然图像还没有取得成功。一种<code>变分抽样方法</code>生成图像，生成的图像中容易有模糊干扰。另外一种方法是，使用迭代前向扩散方法生成图像。GAN生成网络生成的图像有噪音，并且可能产生无法理解的图像。一种拉普拉斯金字塔拓展方法的方法生成质量更高的图像，但是依然摆脱不了噪音。一种RNN和反卷积网络可以生成一些较好的自然图片。</p></li>
+</ul>
+<h3 id="cnn内部的可视化">2.3 CNN内部的可视化</h3>
+<p>使用反卷过滤最大激励，可以知道CNN中每个卷积过滤器（卷积核）的效果。</p>
+<h3 id="方法和模型架构">2.4 方法和模型架构</h3>
+<p>经验表明：使用CNN来增大GAN的方法来给图像建模的方法是失败的。我们定义了一组架构，它可以在多个不同数据集上稳定训练，并且可以训练更高的分辨率和更深的生成模型。</p>
+<p>方法的核心在于，采用并修改了CNN架构中三个方面。</p>
+<ol type="1">
+<li>所有的用stride卷积替换确定性空间池化函数（例如最大池化）卷积网络，这允许网络学习它自己的空间下采样。我们在生成器中使用了这种方法，这使得它能够学习自己的空间下采样和分类器。</li>
+</ol>
+<p>2.去掉顶层卷积特征上的全连接层。最好的例子是全局均值池化用在艺术图像分类模型。我们发现，全局均值池化增加了模型的稳定性，但是拖累了其收敛速度。一个中间层的生成器和分类器，分别直接将顶层的卷积特征链接到输入和输出，其结果较好。GAN的第一层，以正态噪音分布Z作为输入，可以称为全连接，因为它只是矩阵操作，但是结果被reshaped成一个4维tensor，并用作卷积堆叠的起始。对于分类器，最后的卷积层被平铺(flatten)并喂入单个sigmoid输出。</p>
+<ol start="3" type="1">
+<li>第三个是Batch Normalization，通过对每个输入神经元进行归一化（均值为0，方差是单位方差（1））来稳定学习。它可以避免由于poor initialization和深层模型中的梯度扩散问题。直接将batchnorm应用到所有层，将会导致抽样震荡和模型不稳定。因此，不要将batchnorm用在输出层的生成器和输入层的分类器。</li>
+</ol>
+<p>Relu激活函数用在生成器中，输出层使用Tanh激活函数的除外。我们发现使用收敛的激活函数可以让模型更快的饱和并覆盖训练分布的颜色空间。在分类器中，我们发现，使用leaky Retified 激活函数表现较好，尤其是高分辨率模型。这与原始的GAN模型相反，它用的是maxout激励函数。</p>
+<p><strong>总结</strong></p>
+<ul>
+<li><p>使用strided 卷积（分类器）和fractional-strided卷积（生成器）替换所有池化层。</p></li>
+<li><p>分类器和生成器中都是用batchnorm</p></li>
+<li><p>深层架构，移除全连接层</p></li>
+<li><p>除了输出层使用Tanh激活函数，其他层都使用Relu</p></li>
+<li><p>所有层的分类器都使用 LeakyRelu</p></li>
+</ul>
+<h3 id="模型细节">2.5 模型细节</h3>
+<ul>
+<li><p>数据集：, Large-scale Scene Understanding (LSUN) (Yu et al., 2015),Imagenet-1k and a newly assembled Faces dataset</p></li>
+<li><p>预处理：图像不做预处理，激活函数tanh范围拓展到[-1,1]</p></li>
+<li><p>所有模型预训练都是使用mini-batch SGD，mini-batch 是128。</p></li>
+<li><p>所有权重初始化是，均值为0，方差为0.02</p></li>
+<li><p>LeakyRelu：the slope of the leak was set to 0.2 in all models</p></li>
+<li><p>之前的GAN使用动量来加速训练，此文使用带超参数的Adam 优化器</p></li>
+<li><p>学习率为 0.0002</p></li>
+<li><p>动量项 <span class="math inline">\(\beta _1 =0.5\)</span> 更稳定（原始的是0.9）</p></li>
+</ul>
+<figure>
+<img src="/images/blog/gan1.png" alt="网络细节" /><figcaption>网络细节</figcaption>
+</figure>
+<p>一个100维的正态分布Z被投影到一个小的空间范围，许多特征maps的卷积表征。一系列的四fractionally-strided卷积（有些论文误称为反卷积），然后将这个高度表征表示为64x64像素的图像。注意：没有使用全连接层或池化层。</p>
+
     </div>
-    <section class="box">
-      <div class="com-avatar"><img src="/img/jelon.jpg" alt="avatar"></div>
-      <div class="com-text">
-        <div class="main">
-          <textarea class="text-area-edited show" placeholder="欢迎评论！"></textarea>
-          <div class="text-area-preview"></div>
-        </div>
-        <div class="switch">
-          <div class="switch-item on">编辑</div>
-          <div class="switch-item">预览</div>
-        </div>
-        <div class="button">提交</div>
-      </div>
-    </section>
-    <section class="tips">注：评论支持 markdown 语法！</section>
-    <section class="list-wrap">
-      <ul class="list">
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2016-12-22-theano-deeplearning/" rel="prev" title="theano 深度学习数据准备">
+      <i class="fa fa-chevron-left"></i> theano 深度学习数据准备
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2017-01-13-RCNN-series/" rel="next" title="RCNN,Fast RCNN,Faster RCNN 总结">
+      RCNN,Fast RCNN,Faster RCNN 总结 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
           </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">张德龙</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like liked">已赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">333333</div>
-          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
         </li>
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">刘德华</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like">点赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">vvvvv</div>
-          </div>
+        <li class="sidebar-nav-overview">
+          Overview
         </li>
       </ul>
-      <div class="page-nav">
-        <a href="javascript: void(0);" class="item">1</a>
-        <a href="javascript: void(0);" class="item">2</a>
-        <a href="javascript: void(0);" class="item current">3</a>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-gan网络"><span class="nav-number">1.</span> <span class="nav-text">一 GAN网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-dcgan网络"><span class="nav-number">2.</span> <span class="nav-text">二 DCGAN网络</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">2.1.</span> <span class="nav-text">2.0 介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#无标签数据中的表征学习"><span class="nav-number">2.2.</span> <span class="nav-text">2.1 无标签数据中的表征学习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#生成自然图像"><span class="nav-number">2.3.</span> <span class="nav-text">2.2 生成自然图像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cnn内部的可视化"><span class="nav-number">2.4.</span> <span class="nav-text">2.3 CNN内部的可视化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法和模型架构"><span class="nav-number">2.5.</span> <span class="nav-text">2.4 方法和模型架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模型细节"><span class="nav-number">2.6.</span> <span class="nav-text">2.5 模型细节</span></a></li></ol></li></ol></div>
       </div>
-    </section>
-    -->
-  </div>
-  <script>
-  JELON.Comment({
-    container: 'comments',
-    label: '2016-12-27-gan-paper' || '2019/12/23/2016-12-27-gan-paper/',
-    owner: 'your_github_id',
-    repo: 'your_blog_comments',
-    clientId: 'your_client_id',
-    clientSecret: 'your_client_secret'
-  });
-  </script>
+      <!--/noindex-->
 
-
-            </div>
-
-        </section>
-        <!-- 侧栏部分 -->
-<aside class="sidebar">
-    <section class="widget">
-        <h3 class="widget-hd"><strong>文章分类</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-    <li>
-        <a href="/categories/blog/">blog</a>
-        <span class="badge">(94)</span>
-    </li>
-    
-</ul>
-    </section>
-
-    
-    <section class="widget">
-        <h3 class="widget-hd"><strong>热门标签</strong></h3>
-        <!-- 文章标签 -->
-<div class="widget-bd tag-wrap">
-  
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
 </div>
-    </section>
-    
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
 
-    
 
-    
-    <!-- 友情链接 -->
-    <section class="widget">
-        <h3 class="widget-hd"><strong>友情链接</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-        <li>
-            <a href="https://jelon.top" target="_blank" title="Jelon个人前端小站">前端博客小站</a>
-        </li>
-    
-        <li>
-            <a href="https://www.baidu.com" target="_blank" title="百度搜索">百度</a>
-        </li>
-    
-</ul>
-    </section>
-    
-</aside>
-<!-- / 侧栏部分 -->
+
+      </div>
+
     </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
 
-    <!-- 博客底部 -->
+
+      </div>
+    </main>
+
     <footer class="footer">
-    &copy;
-    
-        2016-2019
-    
+      <div class="footer-inner">
+        
 
-    <a href="/">Jelon Loves You</a>
-</footer>
-<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
 
-    <!--博客js脚本 -->
-    <!-- 这里放网站js脚本 -->
+        
 
-<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
 
 </body>
 </html>

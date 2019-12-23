@@ -1,156 +1,259 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" >
-    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
-    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
-    
-    <title>数据挖掘方法之四：多重共线性及变量选择方法 | Hexo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
-    <meta name="keywords" content="Jelon, 前端, Web, 张德龙, 前端开发" >
-    <meta name="description" content="Jelon个人前端小站" >
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml" >
-    
-    
-    <link rel="shortcut icon" href="/favicon.ico" >
-    
-    
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/main.css">
 
-    <!--[if lt IE 9]>
-    
-<script src="/js/html5.js"></script>
 
-    <![endif]-->
-    
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "//hm.baidu.com/hm.js?fd459238242776d173cdc64918fb32f2";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://shartoo.github.com').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
 </script>
 
+  <meta name="description" content="数据挖掘专栏">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据挖掘方法之四：多重共线性及变量选择方法">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2013-05-04-datamining-mutillinerandselect/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="数据挖掘专栏">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/muitllinerandselect1.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/muitllinerandselect4.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/muitllinerandselect5.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/muitllinerandselect7.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/muitllinerandselect10.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.238Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.191Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/muitllinerandselect1.png">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<link rel="canonical" href="http://shartoo.github.com/2019/12/23/2013-05-04-datamining-mutillinerandselect/">
 
-<body class="home">
-    <!--[if lt IE 9]>
-    <div class="browsehappy">
-        当前网页 <strong>不支持</strong>
-        你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/" target="_blank" rel="noopener">升级你的浏览器</a>.
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>数据挖掘方法之四：多重共线性及变量选择方法 | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
     </div>
-    <![endif]-->
+  </div>
 
-    <!-- 博客头部 -->
-    <header class="header">
-    <section class="container header-main">
-        <div class="logo">
-            <a href="/">
-                <div class="cover">
-                    <span class="name">Hexo</span>
-                    <span class="description"></span>
-                </div>
-            </a>
-        </div>
-        <div class="dropnav icon-paragraph-justify" id="JELON__btnDropNav"></div>
-        <ul class="menu hidden" id="JELON__menu">
-            
-            <li rel="/2019/12/23/2013-05-04-datamining-mutillinerandselect/index.html" class="item ">
-                <a href="/" title="首页" class="icon-home">&nbsp;首页</a>
-            </li>
-            
-            <li rel="/2019/12/23/2013-05-04-datamining-mutillinerandselect/index.html" class="item ">
-                <a href="/lab/" title="实验室" class="icon-lab">&nbsp;实验室</a>
-            </li>
-            
-            <li rel="/2019/12/23/2013-05-04-datamining-mutillinerandselect/index.html" class="item ">
-                <a href="/about/" title="关于" class="icon-about">&nbsp;关于</a>
-            </li>
-            
-            <li rel="/2019/12/23/2013-05-04-datamining-mutillinerandselect/index.html" class="item ">
-                <a href="/comment/" title="留言" class="icon-comment">&nbsp;留言</a>
-            </li>
-            
-        </ul>
-        <div class="profile clearfix">
-            <div class="feeds fl">
-                
-                
-                <p class="links">
-                    
-                        <a href="https://github.com/jangdelong" target="_blank">Github</a>
-                        |
-                    
-                        <a href="https://pages.coding.me" target="_blank">Hosted by Coding Pages</a>
-                        
-                    
-                </p>
-                <p class="sns">
-                    
-                        <a href="http://weibo.com/jangdelong" class="sinaweibo" target="_blank"><b>■</b> 新浪微博</a>
-                    
-                        <a href="https://www.facebook.com/profile.php?id=100011855760219&amp;ref=bookmarks" class="qqweibo" target="_blank"><b>■</b> Facebook</a>
-                    
-                    <a href="javascript: void(0);" class="wechat">
-                        <b>■</b>
-                        公众号
-                        <span class="popover">
-                            <img src="/img/wechat_mp.jpg" width="120" height="120" alt="我的微信订阅号">
-                            <i class="arrow"></i>
-                        </span>
-                    </a>
-                </p>
-                
-            </div>
-            <div class="avatar fr">
-                <img src="/img/jelon.jpg" alt="avatar" title="Jelon" >
-            </div>
-        </div>
-    </section>
-</header>
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
 
 
-    <!-- 博客正文 -->
-    <div class="container body clearfix">
-        <section class="content">
-            <div class="content-main widget">
-                <!-- 文章页 -->
-<!-- 文章 -->
-<article class="post article">
-    <header class="text-center">
-        <h3 class="post-title"><span>数据挖掘方法之四：多重共线性及变量选择方法</span></h3>
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
     </header>
-    <p class="post-meta text-center">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.238Z">2019-12-23</time>
-    </p>
-    <div class="post-content">
-        <h2 id="一-概念"><a href="#一-概念" class="headerlink" title="一 概念"></a>一 概念</h2><p>  前多重共线性： 也即使用的多个预测变量之间存在线性相关。多重共线性会导致解的不稳定，进而可能导致意外的结果。在线性代数中，基坐标必须是相互正交的，也即不相关的，此处在做多元回归预测时，必须保证预测变量之间是不相关的。</p>
-<h3 id="避免不正交的方法"><a href="#避免不正交的方法" class="headerlink" title="避免不正交的方法"></a>避免不正交的方法</h3><h3 id="1分析之前"><a href="#1分析之前" class="headerlink" title="1分析之前"></a>1分析之前</h3><h4 id="a-逐个计算预测变量之间的相关系数"><a href="#a-逐个计算预测变量之间的相关系数" class="headerlink" title="a.逐个计算预测变量之间的相关系数"></a>a.逐个计算预测变量之间的相关系数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; cor(sugar$sugars,sugar$shelf)  </span><br><span class="line">[1] 0.1004379  </span><br><span class="line">&gt; cor(sugar$fiber,sugar$potass)  </span><br><span class="line">[1] 0.9033737</span><br></pre></td></tr></table></figure>
 
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://shartoo.github.com/2019/12/23/2013-05-04-datamining-mutillinerandselect/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数据挖掘方法之四：多重共线性及变量选择方法
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2019-12-23 18:45:59 / Modified: 17:55:14" itemprop="dateCreated datePublished" datetime="2019-12-23T18:45:59+08:00">2019-12-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">数据挖掘专栏</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="一-概念">一 概念</h2>
+<p>前多重共线性： 也即使用的多个预测变量之间存在线性相关。多重共线性会导致解的不稳定，进而可能导致意外的结果。在线性代数中，基坐标必须是相互正交的，也即不相关的，此处在做多元回归预测时，必须保证预测变量之间是不相关的。</p>
+<h3 id="避免不正交的方法">避免不正交的方法</h3>
+<h3 id="分析之前">1分析之前</h3>
+<h4 id="a.逐个计算预测变量之间的相关系数">a.逐个计算预测变量之间的相关系数</h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; cor(sugar$sugars,sugar$shelf)  </span><br><span class="line">[1] 0.1004379  </span><br><span class="line">&gt; cor(sugar$fiber,sugar$potass)  </span><br><span class="line">[1] 0.9033737</span><br></pre></td></tr></table></figure>
 <p>可以看到纤维和钾含量存在高度相关性，需要注意</p>
-<h4 id="b-为预测变量建立矩阵图"><a href="#b-为预测变量建立矩阵图" class="headerlink" title="b.为预测变量建立矩阵图"></a>b.为预测变量建立矩阵图</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt; #同时画多个变量的对照图需要使用 car包中的 scatterplotMatrix函数  </span><br><span class="line">&gt;install.packages(&quot;car&quot;)  </span><br><span class="line">&gt;library(car)  </span><br><span class="line">&gt;#使用谷物数据集的 “糖”，“纤维”，“钾”三列数据  </span><br><span class="line">&gt; sugar_frame&lt;-as.data.frame(sugar[,c(&quot;糖&quot;,&quot;纤维&quot;,&quot;钾&quot;)])  </span><br><span class="line">&gt;#画出对照图  </span><br><span class="line">&gt; scatterplotMatrix(sugar_frame,spread&#x3D;F,lty.smooth&#x3D;2,var.labels&#x3D;c(&quot;糖&quot;,&quot;纤维&quot;,&quot;钾&quot;))</span><br></pre></td></tr></table></figure>
-
-<p>结果如下图：<br><img src="/images/blog/muitllinerandselect1.png"><br>可以看到第四张和第六张是纤维和钾的相关图，可以看出他们之间有很强相关性。</p>
-<h3 id="1-2-分析之后：方差膨胀因子-variance-inflation-factors-VIFs"><a href="#1-2-分析之后：方差膨胀因子-variance-inflation-factors-VIFs" class="headerlink" title="1.2 分析之后：方差膨胀因子(variance inflation factors,VIFs)"></a>1.2 分析之后：方差膨胀因子(variance inflation factors,VIFs)</h3><p>$$<br>  VIF=\frac{1}{1-R^2_i}<br>$$</p>
-<p>其中 $R_i^2$ 表示 $R^2$ 的值是通过在其他预测变量上回归分析 $x_i$ 得到的。假设xi和其他变量没有任何关系,那么 $R_i^2=0$ ，于是可以得到 $VIFi=\frac{1}{1-0}=1$ 。也即VIF最小值为1，没有最大值.</p>
-<p> $VIF_i$ 的变化对第i个系数的变化率Sbi如何产生影响，有如下公式：</p>
-<p> $$<br>   Sb_i=Sc_i=S\sqrt{\frac{1}{(n-1)S^2_i}\frac{1}{1-R^2_i}}=S\sqrt{\frac{VIF_i}{(n-1)S^2_i}}<br> $$</p>
-<p>如果 $x_i$ 与其他预测变量不想管，那么 $VIF_i=1$ ，而且相关系数的标准差 $Sb_i$ 没有增大。然而如果xi与其他变量相关，那么较大的 $VIF_i$ 值会使得相关系数的标准差 $Sb_i$过度膨胀。因此，方差估计的膨胀会导致估计精度的下降。</p>
+<h4 id="b.为预测变量建立矩阵图">b.为预测变量建立矩阵图</h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt; #同时画多个变量的对照图需要使用 car包中的 scatterplotMatrix函数  </span><br><span class="line">&gt;install.packages(&quot;car&quot;)  </span><br><span class="line">&gt;library(car)  </span><br><span class="line">&gt;#使用谷物数据集的 “糖”，“纤维”，“钾”三列数据  </span><br><span class="line">&gt; sugar_frame&lt;-as.data.frame(sugar[,c(&quot;糖&quot;,&quot;纤维&quot;,&quot;钾&quot;)])  </span><br><span class="line">&gt;#画出对照图  </span><br><span class="line">&gt; scatterplotMatrix(sugar_frame,spread&#x3D;F,lty.smooth&#x3D;2,var.labels&#x3D;c(&quot;糖&quot;,&quot;纤维&quot;,&quot;钾&quot;))</span><br></pre></td></tr></table></figure>
+<p>结果如下图： <img src="/images/blog/muitllinerandselect1.png"> 可以看到第四张和第六张是纤维和钾的相关图，可以看出他们之间有很强相关性。</p>
+<h3 id="分析之后方差膨胀因子variance-inflation-factorsvifs">1.2 分析之后：方差膨胀因子(variance inflation factors,VIFs)</h3>
+<p><span class="math display">\[
+  VIF=\frac{1}{1-R^2_i}
+\]</span></p>
+<p>其中 <span class="math inline">\(R_i^2\)</span> 表示 <span class="math inline">\(R^2\)</span> 的值是通过在其他预测变量上回归分析 <span class="math inline">\(x_i\)</span> 得到的。假设xi和其他变量没有任何关系,那么 <span class="math inline">\(R_i^2=0\)</span> ，于是可以得到 <span class="math inline">\(VIFi=\frac{1}{1-0}=1\)</span> 。也即VIF最小值为1，没有最大值.</p>
+<p><span class="math inline">\(VIF_i\)</span> 的变化对第i个系数的变化率Sbi如何产生影响，有如下公式：</p>
+<p><span class="math display">\[
+   Sb_i=Sc_i=S\sqrt{\frac{1}{(n-1)S^2_i}\frac{1}{1-R^2_i}}=S\sqrt{\frac{VIF_i}{(n-1)S^2_i}}
+ \]</span></p>
+<p>如果 <span class="math inline">\(x_i\)</span> 与其他预测变量不想管，那么 <span class="math inline">\(VIF_i=1\)</span> ，而且相关系数的标准差 <span class="math inline">\(Sb_i\)</span> 没有增大。然而如果xi与其他变量相关，那么较大的 <span class="math inline">\(VIF_i\)</span> 值会使得相关系数的标准差 <span class="math inline">\(Sb_i\)</span>过度膨胀。因此，方差估计的膨胀会导致估计精度的下降。</p>
 <p>粗略的经验法则如下:</p>
 <ul>
-<li>VIF&gt;=5  模型有中度的多重共线性（相当于 $R^2=0.08$ ）</li>
-<li>VIF&gt;=10  模型中有严重多重共线性(相当于 $R^2=0.90$ )</li>
+<li>VIF&gt;=5 模型有中度的多重共线性（相当于 <span class="math inline">\(R^2=0.08\)</span> ）</li>
+<li>VIF&gt;=10 模型中有严重多重共线性(相当于 <span class="math inline">\(R^2=0.90\)</span> )</li>
 </ul>
 <p>下面来查看谷物数据集中 糖、纤维、钾的膨胀因子</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&gt; #回归拟合  </span><br><span class="line">&gt; fit&lt;-lm(data&#x3D;sugar,rating~sugars+fiber+potass)  </span><br><span class="line">&gt;#注意，我们只是用了sugar数据集中包含“糖”，“纤维”，“钾”三列数据的sugar_frame  </span><br><span class="line">&gt;#进行膨胀因子计算时，需要使用gvlma包中的vif函数，因此需要先安装  </span><br><span class="line">&gt; install.packages(&quot;gvlma&quot;)  </span><br><span class="line">&gt; library(gvlma)  </span><br><span class="line">Warning message:  </span><br><span class="line">程辑包‘gvlma’是用R版本3.0.2 来建造的   </span><br><span class="line">&gt;#线性模型的综合验证  </span><br><span class="line">&gt; gvlma(fit)  </span><br><span class="line">  Call:  </span><br><span class="line">  lm(formula &#x3D; rating ~ sugars + fiber + potass, data &#x3D; sugar)  </span><br><span class="line"></span><br><span class="line">    Coefficients:  </span><br><span class="line">    (Intercept)       sugars        fiber       potass    </span><br><span class="line">        52.6762      -2.0510       4.3701      -0.0543    </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    ASSESSMENT OF THE LINEAR MODEL ASSUMPTIONS  </span><br><span class="line">    USING THE GLOBAL TEST ON 4 DEGREES-OF-FREEDOM:  </span><br><span class="line">    Level of Significance &#x3D;  0.05   </span><br><span class="line"></span><br><span class="line">    Call:  </span><br><span class="line">     gvlma(x &#x3D; fit)   </span><br><span class="line"></span><br><span class="line">                         Value p-value                   Decision  </span><br><span class="line">    Global Stat        7.24415 0.12353    Assumptions acceptable.  </span><br><span class="line">    Skewness           5.61716 0.01779 Assumptions NOT satisfied!  </span><br><span class="line">    Kurtsis           0.02125 0.88411    Assumptions acceptable.  </span><br><span class="line">    Link Function      0.40164 0.52624    Assumptions acceptable.  </span><br><span class="line">    Heteroscedasticity 1.20410 0.27250    Assumptions acceptable.  </span><br><span class="line">    &gt;#查看膨胀因子 vif  </span><br><span class="line">    &gt; vif(fit)  </span><br><span class="line">      sugars    fiber   potass   </span><br><span class="line">     1.164237 6.327286 6.204047</span><br></pre></td></tr></table></figure>
-
-<h2 id="二-变量选择方法"><a href="#二-变量选择方法" class="headerlink" title="二.  变量选择方法"></a>二.  变量选择方法</h2><p>为帮助数据分析人员确定在多元回归模型中应该包含哪些变量，下面是几种变量选择方法</p>
+<h2 id="二.-变量选择方法">二. 变量选择方法</h2>
+<p>为帮助数据分析人员确定在多元回归模型中应该包含哪些变量，下面是几种变量选择方法</p>
 <ul>
 <li>向前选择</li>
 <li>向后排除</li>
@@ -158,235 +261,232 @@
 <li>最优子集</li>
 </ul>
 <p>注意四种选择方法所使用的数据集都是 “谷物数据集”。</p>
-<h3 id="2-1-向前选择程序"><a href="#2-1-向前选择程序" class="headerlink" title="2.1   向前选择程序"></a>2.1   向前选择程序</h3><p>1.对于第一个加入模型的变量，选择与回应变量相关度最高的预测变量（假设为 $x_1$ ）如果所有变量对模型都不重要，则停止,否则执行2<br>2. 对其余的每个变量，F统计序列式 $F(x_2|x_1),F(x_3|x_1),F(x_4|x_1)$ .第二次通过此算法时是, $F(x_3|x_1,x_2),F(x_4|x_1,x_2)$ 。选择具有最大F统计序列的变量<br>3. 对 2 选择出来的变量，进行F统计序列的显著性检验。如果结果模型没有重大意义，则停止，否咋将从 2 得到的变量加入到模型中，然后返回2</p>
+<h3 id="向前选择程序">2.1 向前选择程序</h3>
+<p>1.对于第一个加入模型的变量，选择与回应变量相关度最高的预测变量（假设为 <span class="math inline">\(x_1\)</span> ）如果所有变量对模型都不重要，则停止,否则执行2 2. 对其余的每个变量，F统计序列式 <span class="math inline">\(F(x_2\|x_1),F(x_3\|x_1),F(x_4\|x_1)\)</span> .第二次通过此算法时是, <span class="math inline">\(F(x_3|x_1,x_2),F(x_4|x_1,x_2)\)</span> 。选择具有最大F统计序列的变量 3. 对 2 选择出来的变量，进行F统计序列的显著性检验。如果结果模型没有重大意义，则停止，否咋将从 2 得到的变量加入到模型中，然后返回2</p>
 <p><strong>初始</strong>：模型中没有变量。</p>
 <p><strong>过程</strong>：把与回应变量（营养级别） 密切相关的变量选出来，如果是显著的就加入到模型中。变量糖在所有预测变量中与营养级别有最高的相关系数（r=0.762）。然后进行序列F检验，例如F(纤维|糖)和F(钠|糖)等，然后看到，F(纤维|糖)显著性检验具有最高的F统计序列值，这样变量纤维作为第二个变量加入到模型中。再进行一次序列F检验，比如F(钠|糖，纤维)和F(脂肪|糖，纤维)，等等。F(钠|糖，纤维)具有最高的序列F统计值。因而钠作为第三个变量加入到模型中。</p>
-<p><strong>结束</strong>：一次按照第二步进行，得到如下变量加入顺序：脂肪，蛋白质，碳水化合物，卡里路，维生素和钾。此时再也找不到其他显著的变量加入模型中才中断，此时的多元回归模型如下：<br><img src="/images/blog/muitllinerandselect4.png"><br>下图显示了一个顺序选择的模型概览:<br><img src="/images/blog/muitllinerandselect5.png"></p>
-<h3 id="2-2-向后排除程序"><a href="#2-2-向后排除程序" class="headerlink" title="2.2 向后排除程序"></a>2.2 向后排除程序</h3><p>向后排除程序是从模型中所有变量或者所有用户自定义变量集开始的。步骤如下:</p>
-<ol>
-<li>在全模型中执行向后排除，即使用所有变量的模型。例如，可能全模型中有4个变量 $x_1,x_2,x_3,x_4$</li>
-<li>对于当前模型中的每个变量，计算出它的偏F统计量。第一次是：$F(x_1,x_2,x_3,x_4)、F(x_2|x_1,x_3,x_4)、F(x_3|x_1,x_2,x_4)和F(x_4|x_1,x_2,x_3)$ 。选择具有最小偏F统计量的比那辆，其值用 $F_{min}$表示</li>
-<li>检验 $F_{min}$ 的显著性。如果 $F_{min}$ 不显著，从模型中删除与Fmin对应的变量，然后返回执行2，如果 $F_{min}$ 显著，停止这个过程。</li>
+<p><strong>结束</strong>：一次按照第二步进行，得到如下变量加入顺序：脂肪，蛋白质，碳水化合物，卡里路，维生素和钾。此时再也找不到其他显著的变量加入模型中才中断，此时的多元回归模型如下： <img src="/images/blog/muitllinerandselect4.png"> 下图显示了一个顺序选择的模型概览: <img src="/images/blog/muitllinerandselect5.png"></p>
+<h3 id="向后排除程序">2.2 向后排除程序</h3>
+<p>向后排除程序是从模型中所有变量或者所有用户自定义变量集开始的。步骤如下:</p>
+<ol type="1">
+<li>在全模型中执行向后排除，即使用所有变量的模型。例如，可能全模型中有4个变量 <span class="math inline">\(x_1,x_2,x_3,x_4\)</span></li>
+<li>对于当前模型中的每个变量，计算出它的偏F统计量。第一次是：<span class="math inline">\(F(x_1,x_2,x_3,x_4)、F(x_2\|x_1,x_3,x_4)、F(x_3\|x_1,x_2,x_4)和F(x_4\|x_1,x_2,x_3)\)</span> 。选择具有最小偏F统计量的比那辆，其值用 <span class="math inline">\(F_{min}\)</span>表示</li>
+<li>检验 <span class="math inline">\(F_{min}\)</span> 的显著性。如果 <span class="math inline">\(F_{min}\)</span> 不显著，从模型中删除与Fmin对应的变量，然后返回执行2，如果 <span class="math inline">\(F_{min}\)</span> 显著，停止这个过程。</li>
 </ol>
-<p><strong>实例</strong>：<br>起始时模型包含了所有变量，然后计算该模型中每个变量的偏F统计量。例如，这些统计量分别是F(重量|糖，纤维，….杯子)，F(杯子|糖，纤维,…..重量|)。找到最小偏F统计量（ $F_{min}$ ）对应的变量。第一次是重量，此时 $F_{min}$ 不显著，因而从模型中去掉，接下来变量具有最小偏F统计是杯子，也是不显著的，因而需要被剔除。第三次具有最小偏F统计量的是货架2的指标变量，但是Fmin对应的p值并没有大道可以从模型中剔除，因而保留并中断。得到的模型为：</p>
-<p>$$<br>  y =b_0+b_1(糖)+b_2(纤维)+b_3(钠)+b_4(脂肪)+b_5(蛋白质)+b_6(碳水化合物)+b_7(卡里路)+b_8(维生素)+b_9(钾)+b_10(货架2)+e<br>$$</p>
-<img src="/images/blog/muitllinerandselect7.png">
-模型1表示包含所有预测变量，模型2中剔除了重量之外所有预测变量，于是有：
-
-<p>$$<br>  SS_{重量|所有其他变量}=SS_{所有变量}-SS_{重量以外所有变量}=12980.078-14980.005=0.073<br>$$</p>
+<p><strong>实例</strong>： 起始时模型包含了所有变量，然后计算该模型中每个变量的偏F统计量。例如，这些统计量分别是F(重量|糖，纤维，....杯子)，F(杯子|糖，纤维,.....重量|)。找到最小偏F统计量（ <span class="math inline">\(F_{min}\)</span> ）对应的变量。第一次是重量，此时 <span class="math inline">\(F_{min}\)</span> 不显著，因而从模型中去掉，接下来变量具有最小偏F统计是杯子，也是不显著的，因而需要被剔除。第三次具有最小偏F统计量的是货架2的指标变量，但是Fmin对应的p值并没有大道可以从模型中剔除，因而保留并中断。得到的模型为：</p>
+<p><span class="math display">\[
+  y =b_0+b_1(糖)+b_2(纤维)+b_3(钠)+b_4(脂肪)+b_5(蛋白质)+b_6(碳水化合物)+b_7(卡里路)+b_8(维生素)+b_9(钾)+b_10(货架2)+e
+\]</span></p>
+<p><img src="/images/blog/muitllinerandselect7.png"> 模型1表示包含所有预测变量，模型2中剔除了重量之外所有预测变量，于是有：</p>
+<p><span class="math display">\[
+  SS_{重量\|所有其他变量}=SS_{所有变量}-SS_{重量以外所有变量}=12980.078-14980.005=0.073
+\]</span></p>
 <p>上表信息中显示，偏F统计量的结果为：</p>
-<p>$$<br>  F(重量|所有其他变量)= \frac{SS_{重量|所有其他变量}}{MSE_{所有变量}}=0.073/0.261=0.0280<br>$$</p>
-<p>F统计量的值0.28 落在 $F_{1,n-p-2}=F_{1,72}$ 分布的40%点处，对应的p值是0.60，因而重量不应该包含在模型中。</p>
-<h3 id="2-3-逐步选择程序"><a href="#2-3-逐步选择程序" class="headerlink" title="2.3 逐步选择程序"></a>2.3 逐步选择程序</h3><p> 逐步选择程序是向前选择方法的一种改进。在向前选择中会出现这种情况，当新加入的变量加入到模型时，向前选择过程中已经加入的变量可能就显得不重要了，这在向前选择方法中是没有考虑的。逐步选择过程可以检验这种情况，方法是每一步在现有变量的基础上计算每个变量的部分平方和，执行偏F检验。如果模型中有一个变量不再是显著的，这个含有最小偏F统计的变狼就会被移出模型。当不再有变量加入或者移出模型时，结束过程并得到最终模型。</p>
-<h3 id="2-4-最优子集程序"><a href="#2-4-最优子集程序" class="headerlink" title="2.4  最优子集程序"></a>2.4  最优子集程序</h3><p>对于预测变量集不是太大的数据集，最优子集是一种较好方法。但是如果预测变量超过30个，最优子集方法就会产生组合爆炸，难以控制。步骤如下：</p>
-<ol>
+<p><span class="math display">\[
+  F(重量\|所有其他变量)= \frac{SS_{重量|所有其他变量}}{MSE_{所有变量}}=0.073/0.261=0.0280
+\]</span></p>
+<p>F统计量的值0.28 落在 <span class="math inline">\(F_{1,n-p-2}=F_{1,72}\)</span> 分布的40%点处，对应的p值是0.60，因而重量不应该包含在模型中。</p>
+<h3 id="逐步选择程序">2.3 逐步选择程序</h3>
+<p>逐步选择程序是向前选择方法的一种改进。在向前选择中会出现这种情况，当新加入的变量加入到模型时，向前选择过程中已经加入的变量可能就显得不重要了，这在向前选择方法中是没有考虑的。逐步选择过程可以检验这种情况，方法是每一步在现有变量的基础上计算每个变量的部分平方和，执行偏F检验。如果模型中有一个变量不再是显著的，这个含有最小偏F统计的变狼就会被移出模型。当不再有变量加入或者移出模型时，结束过程并得到最终模型。</p>
+<h3 id="最优子集程序">2.4 最优子集程序</h3>
+<p>对于预测变量集不是太大的数据集，最优子集是一种较好方法。但是如果预测变量超过30个，最优子集方法就会产生组合爆炸，难以控制。步骤如下：</p>
+<ol type="1">
 <li>分析人员需要指定需要多少个（假设为m）供筛选的模型，以及在一个模型中含有最大预测变量个数（假设为n）</li>
-<li>对于含有一个预测变量的所有模型，例如：$y=b_0+b_1(糖),y=b_0+b_1(纤维)$,….等。计算对应的 $R^2$ ,修正 $R^2$ 和S值都计算出来，最优的m个模型是基于这些统计值得到。</li>
+<li>对于含有一个预测变量的所有模型，例如：<span class="math inline">\(y=b_0+b_1(糖),y=b_0+b_1(纤维)\)</span>,....等。计算对应的 <span class="math inline">\(R^2\)</span> ,修正 <span class="math inline">\(R^2\)</span> 和S值都计算出来，最优的m个模型是基于这些统计值得到。</li>
 <li>对于含有两个最优的m个模型是基于这些统计值得到。</li>
 <li>重复以上，直到达到最大的预测变量（n）个数，然后分析人员把预测变量个数为1,2,,..n的最优模型罗列，以选择最佳总体模型</li>
 </ol>
 <p><strong>实例，下图是最优子集程序用于谷物数据集的省略概览</strong></p>
-<p><font color="blue">[注意，整个过程比下图要复杂，例如变量数为1时，本应该有12行结果，下图中只简要用了两行，其他的也是]</font><br><img src="/images/blog/muitllinerandselect10.png"><br>图中，每一行代表一个不同的模型，某模型中包含了哪个变量，该变量对应的方格被涂成黑色。如，第一个模型（第一行）仅包含了变量糖；第四个模型（第四行）包含了糖和钾。其中的最优模型子集被红色覆盖的那个模型（也即那一行）。</p>
+<p><font color="blue">[注意，整个过程比下图要复杂，例如变量数为1时，本应该有12行结果，下图中只简要用了两行，其他的也是]</font> <img src="/images/blog/muitllinerandselect10.png"> 图中，每一行代表一个不同的模型，某模型中包含了哪个变量，该变量对应的方格被涂成黑色。如，第一个模型（第一行）仅包含了变量糖；第四个模型（第四行）包含了糖和钾。其中的最优模型子集被红色覆盖的那个模型（也即那一行）。</p>
 
     </div>
-    <p class="post-meta">
-        <span class="post-cat">分类：
-            <a class="cat-link" href="/categories/blog/">blog</a>
-        </span>
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-</article>
-<!-- 分享按钮 -->
 
-  <div class="article-share clearfix text-center">
-    <div class="share-area">
-      <span class="share-txt">分享到：</span>
-      <a href="javascript: window.open('http://service.weibo.com/share/share.php?url=' + encodeURIComponent(location.href) + '&title=' + document.title + '&language=zh_cn');" class="share-icon weibo"></a>
-      <a href="javascript: alert('请复制链接到微信并发送');" class="share-icon wechat"></a>
-      <a href="javascript: window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + encodeURIComponent(location.href) + '&title=' + document.title);" class="share-icon qqzone"></a>
-      <a href="javascript: window.open('http://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(location.href) + '&desc=Jelon个人博客&title=' + document.title + '&callback=' + encodeURIComponent(location.href));" class="share-icon qq"></a>
-      <a href="javascript: window.open('http://shuo.douban.com/!service/share?href=' + encodeURIComponent(location.href) + '&name=' + document.title + '&text=' + document.title);" class="share-icon douban"></a>
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2013-04-24-datamining-mutilregression/" rel="prev" title="2013-04-24-datamining-mutilregression">
+      <i class="fa fa-chevron-left"></i> 2013-04-24-datamining-mutilregression
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2013-05-12-datamining-logicregression/" rel="next" title="数据挖掘方法之五：逻辑回归">
+      数据挖掘方法之五：逻辑回归 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
   </div>
 
 
-<!-- 上一篇/下一篇 -->
+          </div>
+          
 
-<div class="article-nav clearfix">
-    
-    <span class="prev fl">
-        上一篇<br >
-        <a href="/2019/12/23/2013-05-12-datamining-logicregression/">
-            
-                数据挖掘方法之五：逻辑回归
-            
-        </a>
-    </span>
-    
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
 
-    
-    <span class="next fr">
-        下一篇<br >
-        <a href="/2019/12/23/2013-04-24-datamining-mutilregression/">
-            
-                2013-04-24-datamining-mutilregression
-            
-        </a>
-    </span>
-    
-</div>
-
-<!-- 文章评论 -->
-
+        </div>
+          
   
-<script src="/js/comment.js"></script>
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
 
-  <div id="comments" class="comment">
-    <!--
-    <div class="sign-bar">
-      GitHub 已登录!
-      <span class="sign-link">登出</span>
-    </div>
-    <section class="box">
-      <div class="com-avatar"><img src="/img/jelon.jpg" alt="avatar"></div>
-      <div class="com-text">
-        <div class="main">
-          <textarea class="text-area-edited show" placeholder="欢迎评论！"></textarea>
-          <div class="text-area-preview"></div>
-        </div>
-        <div class="switch">
-          <div class="switch-item on">编辑</div>
-          <div class="switch-item">预览</div>
-        </div>
-        <div class="button">提交</div>
-      </div>
-    </section>
-    <section class="tips">注：评论支持 markdown 语法！</section>
-    <section class="list-wrap">
-      <ul class="list">
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">张德龙</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like liked">已赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">333333</div>
-          </div>
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
         </li>
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">刘德华</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like">点赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">vvvvv</div>
-          </div>
+        <li class="sidebar-nav-overview">
+          Overview
         </li>
       </ul>
-      <div class="page-nav">
-        <a href="javascript: void(0);" class="item">1</a>
-        <a href="javascript: void(0);" class="item">2</a>
-        <a href="javascript: void(0);" class="item current">3</a>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-概念"><span class="nav-number">1.</span> <span class="nav-text">一 概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#避免不正交的方法"><span class="nav-number">1.1.</span> <span class="nav-text">避免不正交的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析之前"><span class="nav-number">1.2.</span> <span class="nav-text">1分析之前</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#a.逐个计算预测变量之间的相关系数"><span class="nav-number">1.2.1.</span> <span class="nav-text">a.逐个计算预测变量之间的相关系数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#b.为预测变量建立矩阵图"><span class="nav-number">1.2.2.</span> <span class="nav-text">b.为预测变量建立矩阵图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析之后方差膨胀因子variance-inflation-factorsvifs"><span class="nav-number">1.3.</span> <span class="nav-text">1.2 分析之后：方差膨胀因子(variance inflation factors,VIFs)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二.-变量选择方法"><span class="nav-number">2.</span> <span class="nav-text">二. 变量选择方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#向前选择程序"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 向前选择程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向后排除程序"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 向后排除程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#逐步选择程序"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 逐步选择程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最优子集程序"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 最优子集程序</span></a></li></ol></li></ol></div>
       </div>
-    </section>
-    -->
-  </div>
-  <script>
-  JELON.Comment({
-    container: 'comments',
-    label: '2013-05-04-datamining-mutillinerandselect' || '2019/12/23/2013-05-04-datamining-mutillinerandselect/',
-    owner: 'your_github_id',
-    repo: 'your_blog_comments',
-    clientId: 'your_client_id',
-    clientSecret: 'your_client_secret'
-  });
-  </script>
+      <!--/noindex-->
 
-
-            </div>
-
-        </section>
-        <!-- 侧栏部分 -->
-<aside class="sidebar">
-    <section class="widget">
-        <h3 class="widget-hd"><strong>文章分类</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-    <li>
-        <a href="/categories/blog/">blog</a>
-        <span class="badge">(94)</span>
-    </li>
-    
-</ul>
-    </section>
-
-    
-    <section class="widget">
-        <h3 class="widget-hd"><strong>热门标签</strong></h3>
-        <!-- 文章标签 -->
-<div class="widget-bd tag-wrap">
-  
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
 </div>
-    </section>
-    
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
 
-    
 
-    
-    <!-- 友情链接 -->
-    <section class="widget">
-        <h3 class="widget-hd"><strong>友情链接</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-        <li>
-            <a href="https://jelon.top" target="_blank" title="Jelon个人前端小站">前端博客小站</a>
-        </li>
-    
-        <li>
-            <a href="https://www.baidu.com" target="_blank" title="百度搜索">百度</a>
-        </li>
-    
-</ul>
-    </section>
-    
-</aside>
-<!-- / 侧栏部分 -->
+
+      </div>
+
     </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
 
-    <!-- 博客底部 -->
+
+      </div>
+    </main>
+
     <footer class="footer">
-    &copy;
-    
-        2016-2019
-    
+      <div class="footer-inner">
+        
 
-    <a href="/">Jelon Loves You</a>
-</footer>
-<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
 
-    <!--博客js脚本 -->
-    <!-- 这里放网站js脚本 -->
+        
 
-<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
 
 </body>
 </html>

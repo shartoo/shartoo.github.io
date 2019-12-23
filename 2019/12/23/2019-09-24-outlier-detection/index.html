@@ -1,180 +1,280 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" >
-    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
-    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
-    
-    <title>使用pyod做离群点检测 | Hexo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
-    <meta name="keywords" content="Jelon, 前端, Web, 张德龙, 前端开发" >
-    <meta name="description" content="Jelon个人前端小站" >
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml" >
-    
-    
-    <link rel="shortcut icon" href="/favicon.ico" >
-    
-    
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/main.css">
 
-    <!--[if lt IE 9]>
-    
-<script src="/js/html5.js"></script>
 
-    <![endif]-->
-    
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "//hm.baidu.com/hm.js?fd459238242776d173cdc64918fb32f2";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://shartoo.github.com').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
 </script>
 
+  <meta name="description" content="数据科学">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用pyod做离群点检测">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2019-09-24-outlier-detection/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="数据科学">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/outlier_sample.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/outlier_detection_ABOD.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/outlier_detection_avg_knn.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/outlier_detection_CBLOF.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/outlier_detection_feature_bagging.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/outlier_detection_HBOS.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/outlier_detection_Isolation_Forest.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/outlier_detection_KNN.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.734Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.232Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/outlier_sample.png">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<link rel="canonical" href="http://shartoo.github.com/2019/12/23/2019-09-24-outlier-detection/">
 
-<body class="home">
-    <!--[if lt IE 9]>
-    <div class="browsehappy">
-        当前网页 <strong>不支持</strong>
-        你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/" target="_blank" rel="noopener">升级你的浏览器</a>.
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>使用pyod做离群点检测 | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
     </div>
-    <![endif]-->
+  </div>
 
-    <!-- 博客头部 -->
-    <header class="header">
-    <section class="container header-main">
-        <div class="logo">
-            <a href="/">
-                <div class="cover">
-                    <span class="name">Hexo</span>
-                    <span class="description"></span>
-                </div>
-            </a>
-        </div>
-        <div class="dropnav icon-paragraph-justify" id="JELON__btnDropNav"></div>
-        <ul class="menu hidden" id="JELON__menu">
-            
-            <li rel="/2019/12/23/2019-09-24-outlier-detection/index.html" class="item ">
-                <a href="/" title="首页" class="icon-home">&nbsp;首页</a>
-            </li>
-            
-            <li rel="/2019/12/23/2019-09-24-outlier-detection/index.html" class="item ">
-                <a href="/lab/" title="实验室" class="icon-lab">&nbsp;实验室</a>
-            </li>
-            
-            <li rel="/2019/12/23/2019-09-24-outlier-detection/index.html" class="item ">
-                <a href="/about/" title="关于" class="icon-about">&nbsp;关于</a>
-            </li>
-            
-            <li rel="/2019/12/23/2019-09-24-outlier-detection/index.html" class="item ">
-                <a href="/comment/" title="留言" class="icon-comment">&nbsp;留言</a>
-            </li>
-            
-        </ul>
-        <div class="profile clearfix">
-            <div class="feeds fl">
-                
-                
-                <p class="links">
-                    
-                        <a href="https://github.com/jangdelong" target="_blank">Github</a>
-                        |
-                    
-                        <a href="https://pages.coding.me" target="_blank">Hosted by Coding Pages</a>
-                        
-                    
-                </p>
-                <p class="sns">
-                    
-                        <a href="http://weibo.com/jangdelong" class="sinaweibo" target="_blank"><b>■</b> 新浪微博</a>
-                    
-                        <a href="https://www.facebook.com/profile.php?id=100011855760219&amp;ref=bookmarks" class="qqweibo" target="_blank"><b>■</b> Facebook</a>
-                    
-                    <a href="javascript: void(0);" class="wechat">
-                        <b>■</b>
-                        公众号
-                        <span class="popover">
-                            <img src="/img/wechat_mp.jpg" width="120" height="120" alt="我的微信订阅号">
-                            <i class="arrow"></i>
-                        </span>
-                    </a>
-                </p>
-                
-            </div>
-            <div class="avatar fr">
-                <img src="/img/jelon.jpg" alt="avatar" title="Jelon" >
-            </div>
-        </div>
-    </section>
-</header>
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
 
 
-    <!-- 博客正文 -->
-    <div class="container body clearfix">
-        <section class="content">
-            <div class="content-main widget">
-                <!-- 文章页 -->
-<!-- 文章 -->
-<article class="post article">
-    <header class="text-center">
-        <h3 class="post-title"><span>使用pyod做离群点检测</span></h3>
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
     </header>
-    <p class="post-meta text-center">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.734Z">2019-12-23</time>
-    </p>
-    <div class="post-content">
-        <p><a href="https://www.analyticsvidhya.com/blog/2019/02/outlier-detection-python-pyod/" target="_blank" rel="noopener">https://www.analyticsvidhya.com/blog/2019/02/outlier-detection-python-pyod/</a></p>
-<h3 id="1-什么是离群点"><a href="#1-什么是离群点" class="headerlink" title="1 什么是离群点"></a>1 什么是离群点</h3><p>一个极大的偏离正常值的数据点。下面是一些常见的离群点</p>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://shartoo.github.com/2019/12/23/2019-09-24-outlier-detection/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用pyod做离群点检测
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2019-12-23 18:45:59 / Modified: 17:55:14" itemprop="dateCreated datePublished" datetime="2019-12-23T18:45:59+08:00">2019-12-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">数据科学</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>https://www.analyticsvidhya.com/blog/2019/02/outlier-detection-python-pyod/</p>
+<h3 id="什么是离群点">1 什么是离群点</h3>
+<p>一个极大的偏离正常值的数据点。下面是一些常见的离群点</p>
 <ul>
 <li>一个学生的平均得分超过剩下90%的得分，而其他人的得分平均仅为70%。显然的离群点</li>
 <li>分析某个顾客的购买行为，大部分集中在100-块，突然出现1000块的消费。</li>
 </ul>
-<p>有多种类型的离群点</p>
-<ul>
-<li><strong>单变量的</strong>： 只有一个变量的值会出现极端值</li>
-<li><strong>多变量的</strong>： 至少两个以上的变量值的综合得分极端。</li>
-</ul>
-<h3 id="2-为什么需要检测离群点"><a href="#2-为什么需要检测离群点" class="headerlink" title="2 为什么需要检测离群点"></a>2 为什么需要检测离群点</h3><p>离群点会影响我们的正常的数据分析和建模，如下图左边是包含离群点的模型，右边是处理掉离群点之后的模型结构。</p>
-<p><img src="/images/blog/outlier_sample.png" alt=""></p>
+<p>有多种类型的离群点 + <strong>单变量的</strong>： 只有一个变量的值会出现极端值 + <strong>多变量的</strong>： 至少两个以上的变量值的综合得分极端。</p>
+<h3 id="为什么需要检测离群点">2 为什么需要检测离群点</h3>
+<p>离群点会影响我们的正常的数据分析和建模，如下图左边是包含离群点的模型，右边是处理掉离群点之后的模型结构。</p>
+<p><img src="/images/blog/outlier_sample.png" /></p>
 <p>但是，<strong>离群点并非一直都是不好的</strong>。简单的移除离群点并非明智之举，我们需要去理解离群点。</p>
 <p>现在的趋势是使用直接的方式如盒图、直方图和散点图来检测离群点。但是<strong>在处理大规模数据集和需要在更大数据集中识别某种模式时，专用的离群点检测算法是非常有价值的</strong>。</p>
 <p>某些应用，如金融欺诈识别和网络安全里面的入侵检测需要及时响应的以及精确的技术来识别离群点。</p>
-<h3 id="3-为什么要使用PyOD-来做离群点检测"><a href="#3-为什么要使用PyOD-来做离群点检测" class="headerlink" title="3 为什么要使用PyOD 来做离群点检测"></a>3 为什么要使用PyOD 来做离群点检测</h3><p>现有的一些实现，比如PyNomaly，并非为了做离群点而设计的（尽管依然值得一试）。PyOD是一个可拓展的Python工具包用来检测多变量数据中的离群点。提供了接近20种离群点检测算法。</p>
-<h3 id="4-PyOD的特征"><a href="#4-PyOD的特征" class="headerlink" title="4 PyOD的特征"></a>4 PyOD的特征</h3><ul>
+<h3 id="为什么要使用pyod-来做离群点检测">3 为什么要使用PyOD 来做离群点检测</h3>
+<p>现有的一些实现，比如PyNomaly，并非为了做离群点而设计的（尽管依然值得一试）。PyOD是一个可拓展的Python工具包用来检测多变量数据中的离群点。提供了接近20种离群点检测算法。</p>
+<h3 id="pyod的特征">4 PyOD的特征</h3>
+<ul>
 <li>开源、并附有详细的说明文档和实例。</li>
 <li>支持先进的模型，包括神经网络，深度学习和离群点检测集成学习方法</li>
 <li>使用JIT优化加速，以及使用numba和joblib并行化</li>
 <li>python2 和3 都可以用</li>
 </ul>
-<h3 id="5-安装使用PyOD"><a href="#5-安装使用PyOD" class="headerlink" title="5 安装使用PyOD"></a>5 安装使用PyOD</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install pyod</span><br><span class="line">pip install --upgrade pyod # to make sure that the latest version is installed!</span><br></pre></td></tr></table></figure>
+<h3 id="安装使用pyod">5 安装使用PyOD</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install pyod</span><br><span class="line">pip install --upgrade pyod # to make sure that the latest version is installed!</span><br></pre></td></tr></table></figure>
 <p>注意，PyOD包含了一些神经网络模型，基于keras。但是它不会自动安装Keras或者Tensorflow。需要手动安装这两个库，才能使用其神经网络模型。安装过程的依赖有点多。</p>
-<h3 id="6-使用PyOD来做离群点检测"><a href="#6-使用PyOD来做离群点检测" class="headerlink" title="6 使用PyOD来做离群点检测"></a>6 使用PyOD来做离群点检测</h3><p>注意，我们使用的是<strong>离群得分</strong>，即每个模型都会给每个数据点打分而非直接根据一个阈值判定某个点是否为离群点。</p>
+<h3 id="使用pyod来做离群点检测">6 使用PyOD来做离群点检测</h3>
+<p>注意，我们使用的是<strong>离群得分</strong>，即每个模型都会给每个数据点打分而非直接根据一个阈值判定某个点是否为离群点。</p>
 <p><strong>Angle_Based Outlier Detection (ABOD)</strong></p>
 <ul>
-<li>它考虑了每个数据点和其邻居的关系，但是不考虑邻居之间的关系。<ul>
+<li>它考虑了每个数据点和其邻居的关系，但是不考虑邻居之间的关系。</li>
 <li>ABOD在多维度数据上表现较好</li>
-<li>PyOD提供了两种不同版本的ABOD</li>
-</ul>
-</li>
+<li>PyOD提供了两种不同版本的ABOD
+<ul>
 <li>Fast ABOD：使用KNN来近似</li>
 <li>Original ABOD：以高时间复杂度来考虑所有训练数据点</li>
+</ul></li>
 </ul>
 <p><strong>KNN 检测器</strong></p>
 <ul>
 <li>对于任意数据点，其到第k个邻居的距离可以作为其离群得分</li>
-<li>PyOD提供三种不同的KNN检测器<ul>
+<li>PyOD提供三种不同的KNN检测器
+<ul>
 <li><code>Largest</code>： 使用第k个邻居的距离来作为离群得分</li>
 <li><code>Mean</code>: 使用全部k个邻居的平均距离作为离群得分</li>
 <li><code>Median</code>:使用k个邻居的距离的中位数作为离群得分</li>
-</ul>
-</li>
+</ul></li>
 </ul>
 <p><strong>Isolation Forest</strong></p>
 <ul>
@@ -197,214 +297,204 @@
 <li>默认使用LOF(Local Outiler Factor)作为基准评估器。但是其他检测器，如KNN，ABOD都可以作为基准检测器</li>
 <li>Feature Bagging首先通过随机选取特征子集来构建n个子样本。这带来了基准评估器的多样性。最终，通过取所有基准评估器的平均或者最大值来预测得分。</li>
 </ul>
-<p><strong>*Clustering Based  Local Outiler Factor</strong></p>
+<p>*<strong>Clustering Based Local Outiler Factor</strong></p>
 <ul>
 <li>它将数据分为小聚类簇和大聚类簇。离群得分基于数据点所属的聚类簇的大小来计算，距离计算方式为到最近大聚类簇的距离。</li>
 </ul>
-<h3 id="7-PyOD在-Big-Mart-Sales-问题上的表现"><a href="#7-PyOD在-Big-Mart-Sales-问题上的表现" class="headerlink" title="7 PyOD在 Big Mart Sales 问题上的表现"></a>7 PyOD在 Big Mart Sales 问题上的表现</h3><p><a href="https://datahack.analyticsvidhya.com/contest/practice-problem-big-mart-sales-iii/?utm_source=outlierdetectionpyod&utm_medium=blog" target="_blank" rel="noopener">Big Mart Sales Problem</a>。需要注册然后下载数据集，附件中有</p>
+<h3 id="pyod在-big-mart-sales-问题上的表现">7 PyOD在 Big Mart Sales 问题上的表现</h3>
+<p><a href="https://datahack.analyticsvidhya.com/contest/practice-problem-big-mart-sales-iii/?utm_source=outlierdetectionpyod&amp;utm_medium=blog" target="_blank" rel="noopener">Big Mart Sales Problem</a>。需要注册然后下载数据集，附件中有</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">import numpy as np</span><br><span class="line">from scipy import stats</span><br><span class="line">from pyod.models.abod import ABOD</span><br><span class="line">from pyod.models.cblof import CBLOF</span><br><span class="line">from pyod.models.feature_bagging import FeatureBagging</span><br><span class="line">from pyod.models.hbos import HBOS</span><br><span class="line">from pyod.models.iforest import IForest</span><br><span class="line">from pyod.models.knn import KNN</span><br><span class="line">from pyod.models.lof import LOF</span><br><span class="line">from sklearn.preprocessing import MinMaxScaler</span><br><span class="line"></span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">import matplotlib.font_manager as mfm</span><br><span class="line"></span><br><span class="line">df &#x3D; pd.read_csv(&quot;train.csv&quot;)</span><br><span class="line">print(df.describe())</span><br><span class="line">show &#x3D; False</span><br><span class="line">if show:</span><br><span class="line">    plt.figure(figsize&#x3D;(10,10))</span><br><span class="line">    plt.scatter(df[&#39;Item_MRP&#39;],df[&#39;Item_Outlet_Sales&#39;])</span><br><span class="line">    plt.xlabel(&quot;Item_MRF&quot;)</span><br><span class="line">    plt.ylabel(&quot;Item_Outlet_Sales&quot;)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">scaler &#x3D; MinMaxScaler(feature_range&#x3D;(0,1))</span><br><span class="line">df[[&#39;Item_MRP&#39;,&#39;Item_Outlet_Sales&#39;]] &#x3D; scaler.fit_transform(df[[&#39;Item_MRP&#39;,&#39;Item_Outlet_Sales&#39;]])</span><br><span class="line">print(df[[&#39;Item_MRP&#39;,&#39;Item_Outlet_Sales&#39;]].head())</span><br><span class="line"></span><br><span class="line">x1 &#x3D; df[&#39;Item_MRP&#39;].values.reshape(-1,1)</span><br><span class="line">x2 &#x3D; df[&#39;Item_Outlet_Sales&#39;].values.reshape(-1,1)</span><br><span class="line">x &#x3D; np.concatenate((x1,x2),axis&#x3D;1)</span><br><span class="line"># 设置 5%的离群点数据</span><br><span class="line">random_state &#x3D; np.random.RandomState(42)</span><br><span class="line">outliers_fraction &#x3D; 0.05</span><br><span class="line"># 定义7个后续会使用的离群点检测模型</span><br><span class="line">classifiers &#x3D; &#123;</span><br><span class="line">    &quot;Angle-based Outlier Detector(ABOD)&quot; : ABOD(contamination&#x3D;outliers_fraction),</span><br><span class="line">    &quot;Cluster-based Local Outiler Factor (CBLOF)&quot;: CBLOF(contamination &#x3D; outliers_fraction,check_estimator&#x3D;False,random_state &#x3D; random_state),</span><br><span class="line">    &quot;Feature Bagging&quot; : FeatureBagging(LOF(n_neighbors&#x3D;35),contamination&#x3D;outliers_fraction,check_estimator&#x3D;False,random_state &#x3D; random_state),</span><br><span class="line">    &quot;Histogram-base Outlier Detection(HBOS)&quot; : HBOS(contamination&#x3D;outliers_fraction),</span><br><span class="line">    &quot;Isolation Forest&quot; :IForest(contamination&#x3D;outliers_fraction,random_state &#x3D; random_state),</span><br><span class="line">    &quot;KNN&quot; : KNN(contamination&#x3D;outliers_fraction),</span><br><span class="line">    &quot;Average KNN&quot; :KNN(method&#x3D;&#39;mean&#39;,contamination&#x3D;outliers_fraction)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#逐一 比较模型</span><br><span class="line">xx,yy &#x3D; np.meshgrid(np.linspace(0,1,200),np.linspace(0,1,200))</span><br><span class="line">for i ,(clf_name,clf) in enumerate(classifiers.items()):</span><br><span class="line">    clf.fit(x)</span><br><span class="line">    # 预测利群得分</span><br><span class="line">    scores_pred &#x3D; clf.decision_function(x)*-1</span><br><span class="line">    # 预测数据点是否为 离群点</span><br><span class="line">    y_pred &#x3D; clf.predict(x)</span><br><span class="line">    n_inliers &#x3D; len(y_pred)-np.count_nonzero(y_pred)</span><br><span class="line">    n_outliers &#x3D; np.count_nonzero(y_pred&#x3D;&#x3D;1)</span><br><span class="line">    plt.figure(figsize&#x3D;(10,10))</span><br><span class="line"></span><br><span class="line">    # 复制一份数据</span><br><span class="line">    dfx &#x3D; df</span><br><span class="line">    dfx[&#39;outlier&#39;] &#x3D; y_pred.tolist()</span><br><span class="line">    # IX1 非离群点的特征1，IX2 非利群点的特征2</span><br><span class="line">    IX1 &#x3D; np.array(dfx[&#39;Item_MRP&#39;][dfx[&#39;outlier&#39;]&#x3D;&#x3D;0]).reshape(-1,1)</span><br><span class="line">    IX2 &#x3D; np.array(dfx[&#39;Item_Outlet_Sales&#39;][dfx[&#39;outlier&#39;]&#x3D;&#x3D;0]).reshape(-1,1)</span><br><span class="line">    # OX1 离群点的特征1，OX2离群点特征2</span><br><span class="line">    OX1 &#x3D; np.array(dfx[&#39;Item_MRP&#39;][dfx[&#39;outlier&#39;]&#x3D;&#x3D;1]).reshape(-1,1)</span><br><span class="line">    OX2 &#x3D; np.array(dfx[&#39;Item_Outlet_Sales&#39;][dfx[&#39;outlier&#39;] &#x3D;&#x3D; 1]).reshape(-1, 1)</span><br><span class="line">    print(&quot;模型 %s 检测到的&quot;%clf_name,&quot;离群点有 &quot;,n_outliers,&quot;非离群点有&quot;,n_inliers)</span><br><span class="line"></span><br><span class="line">    # 判定数据点是否为离群点的 阈值</span><br><span class="line">    threshold &#x3D; stats.scoreatpercentile(scores_pred,100*outliers_fraction)</span><br><span class="line">    # 决策函数来计算原始的每个数据点的离群点得分</span><br><span class="line">    z &#x3D; clf.decision_function(np.c_[xx.ravel(),yy.ravel()]) * -1</span><br><span class="line">    z &#x3D; z.reshape(xx.shape)</span><br><span class="line">    # 最小离群得分和阈值之间的点 使用蓝色填充</span><br><span class="line">    plt.contourf(xx,yy,z,levels&#x3D;np.linspace(z.min(),threshold,7),cmap&#x3D;plt.cm.Blues_r)</span><br><span class="line">    # 离群得分等于阈值的数据点 使用红色填充</span><br><span class="line">    a &#x3D; plt.contour(xx,yy,z,levels&#x3D;[threshold],linewidths &#x3D;2,colors&#x3D;&#39;red&#39;)</span><br><span class="line">    # 离群得分在阈值和最大离群得分之间的数据 使用橘色填充</span><br><span class="line">    plt.contourf(xx,yy,z,levels&#x3D;[threshold,z.max()],colors&#x3D;&#39;orange&#39;)</span><br><span class="line">    b &#x3D; plt.scatter(IX1,IX2,c&#x3D;&#39;white&#39;,s&#x3D;20,edgecolor &#x3D;&#39;k&#39;)</span><br><span class="line">    c &#x3D; plt.scatter(OX1,OX2,c&#x3D;&#39;black&#39;,s&#x3D;20,edgecolor &#x3D; &#39;k&#39;)</span><br><span class="line">    plt.axis(&#39;tight&#39;)</span><br><span class="line">    # loc &#x3D; 2 用来左上角</span><br><span class="line">    plt.legend(</span><br><span class="line">        [a.collections[0],b,c],</span><br><span class="line">        [&#39;learned decision function&#39;,&#39;inliers&#39;,&#39;outliers&#39;],</span><br><span class="line">        prop&#x3D;mfm.FontProperties(size&#x3D;20),</span><br><span class="line">        loc&#x3D;2</span><br><span class="line">    )</span><br><span class="line">    plt.xlim((0,1))</span><br><span class="line">    plt.ylim((0,1))</span><br><span class="line">    plt.title(clf_name)</span><br><span class="line">    plt.savefig(&quot;%s.png&quot;%clf_name)</span><br><span class="line">    #plt.show()</span><br></pre></td></tr></table></figure>
 <p>结果如下；</p>
-<p><img src="/images/blog/outlier_detection_ABOD.png" alt=""><br><img src="/images/blog/outlier_detection_avg_knn.png" alt=""><br><img src="/images/blog/outlier_detection_CBLOF.png" alt=""><br><img src="/images/blog/outlier_detection_feature_bagging.png" alt=""><br><img src="/images/blog/outlier_detection_HBOS.png" alt=""><br><img src="/images/blog/outlier_detection_Isolation_Forest.png" alt=""><br><img src="/images/blog/outlier_detection_KNN.png" alt=""></p>
+<p><img src="/images/blog/outlier_detection_ABOD.png" /> <img src="/images/blog/outlier_detection_avg_knn.png" /> <img src="/images/blog/outlier_detection_CBLOF.png" /> <img src="/images/blog/outlier_detection_feature_bagging.png" /> <img src="/images/blog/outlier_detection_HBOS.png" /> <img src="/images/blog/outlier_detection_Isolation_Forest.png" /> <img src="/images/blog/outlier_detection_KNN.png" /></p>
 
     </div>
-    <p class="post-meta">
-        <span class="post-cat">分类：
-            <a class="cat-link" href="/categories/blog/">blog</a>
-        </span>
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-</article>
-<!-- 分享按钮 -->
 
-  <div class="article-share clearfix text-center">
-    <div class="share-area">
-      <span class="share-txt">分享到：</span>
-      <a href="javascript: window.open('http://service.weibo.com/share/share.php?url=' + encodeURIComponent(location.href) + '&title=' + document.title + '&language=zh_cn');" class="share-icon weibo"></a>
-      <a href="javascript: alert('请复制链接到微信并发送');" class="share-icon wechat"></a>
-      <a href="javascript: window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + encodeURIComponent(location.href) + '&title=' + document.title);" class="share-icon qqzone"></a>
-      <a href="javascript: window.open('http://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(location.href) + '&desc=Jelon个人博客&title=' + document.title + '&callback=' + encodeURIComponent(location.href));" class="share-icon qq"></a>
-      <a href="javascript: window.open('http://shuo.douban.com/!service/share?href=' + encodeURIComponent(location.href) + '&name=' + document.title + '&text=' + document.title);" class="share-icon douban"></a>
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2019-05-12-edit-stylegan-humanface/" rel="prev" title="使用StyleGAN训练自己的数据集.md">
+      <i class="fa fa-chevron-left"></i> 使用StyleGAN训练自己的数据集.md
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2019-10-28--understand-pytorch/" rel="next" title="理解pytorch的计算逻辑">
+      理解pytorch的计算逻辑 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
   </div>
 
 
-<!-- 上一篇/下一篇 -->
+          </div>
+          
 
-<div class="article-nav clearfix">
-    
-    <span class="prev fl">
-        上一篇<br >
-        <a href="/2019/12/23/2019-10-28--understand-pytorch/">
-            
-                理解pytorch的计算逻辑
-            
-        </a>
-    </span>
-    
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
 
-    
-    <span class="next fr">
-        下一篇<br >
-        <a href="/2019/12/23/2019-05-12-edit-stylegan-humanface/">
-            
-                使用StyleGAN训练自己的数据集.md
-            
-        </a>
-    </span>
-    
-</div>
-
-<!-- 文章评论 -->
-
+        </div>
+          
   
-<script src="/js/comment.js"></script>
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
 
-  <div id="comments" class="comment">
-    <!--
-    <div class="sign-bar">
-      GitHub 已登录!
-      <span class="sign-link">登出</span>
-    </div>
-    <section class="box">
-      <div class="com-avatar"><img src="/img/jelon.jpg" alt="avatar"></div>
-      <div class="com-text">
-        <div class="main">
-          <textarea class="text-area-edited show" placeholder="欢迎评论！"></textarea>
-          <div class="text-area-preview"></div>
-        </div>
-        <div class="switch">
-          <div class="switch-item on">编辑</div>
-          <div class="switch-item">预览</div>
-        </div>
-        <div class="button">提交</div>
-      </div>
-    </section>
-    <section class="tips">注：评论支持 markdown 语法！</section>
-    <section class="list-wrap">
-      <ul class="list">
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">张德龙</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like liked">已赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">333333</div>
-          </div>
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
         </li>
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">刘德华</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like">点赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">vvvvv</div>
-          </div>
+        <li class="sidebar-nav-overview">
+          Overview
         </li>
       </ul>
-      <div class="page-nav">
-        <a href="javascript: void(0);" class="item">1</a>
-        <a href="javascript: void(0);" class="item">2</a>
-        <a href="javascript: void(0);" class="item current">3</a>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是离群点"><span class="nav-number">1.</span> <span class="nav-text">1 什么是离群点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么需要检测离群点"><span class="nav-number">2.</span> <span class="nav-text">2 为什么需要检测离群点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么要使用pyod-来做离群点检测"><span class="nav-number">3.</span> <span class="nav-text">3 为什么要使用PyOD 来做离群点检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pyod的特征"><span class="nav-number">4.</span> <span class="nav-text">4 PyOD的特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装使用pyod"><span class="nav-number">5.</span> <span class="nav-text">5 安装使用PyOD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用pyod来做离群点检测"><span class="nav-number">6.</span> <span class="nav-text">6 使用PyOD来做离群点检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pyod在-big-mart-sales-问题上的表现"><span class="nav-number">7.</span> <span class="nav-text">7 PyOD在 Big Mart Sales 问题上的表现</span></a></li></ol></div>
       </div>
-    </section>
-    -->
-  </div>
-  <script>
-  JELON.Comment({
-    container: 'comments',
-    label: '2019-09-24-outlier-detection' || '2019/12/23/2019-09-24-outlier-detection/',
-    owner: 'your_github_id',
-    repo: 'your_blog_comments',
-    clientId: 'your_client_id',
-    clientSecret: 'your_client_secret'
-  });
-  </script>
+      <!--/noindex-->
 
-
-            </div>
-
-        </section>
-        <!-- 侧栏部分 -->
-<aside class="sidebar">
-    <section class="widget">
-        <h3 class="widget-hd"><strong>文章分类</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-    <li>
-        <a href="/categories/blog/">blog</a>
-        <span class="badge">(94)</span>
-    </li>
-    
-</ul>
-    </section>
-
-    
-    <section class="widget">
-        <h3 class="widget-hd"><strong>热门标签</strong></h3>
-        <!-- 文章标签 -->
-<div class="widget-bd tag-wrap">
-  
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
 </div>
-    </section>
-    
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
 
-    
 
-    
-    <!-- 友情链接 -->
-    <section class="widget">
-        <h3 class="widget-hd"><strong>友情链接</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-        <li>
-            <a href="https://jelon.top" target="_blank" title="Jelon个人前端小站">前端博客小站</a>
-        </li>
-    
-        <li>
-            <a href="https://www.baidu.com" target="_blank" title="百度搜索">百度</a>
-        </li>
-    
-</ul>
-    </section>
-    
-</aside>
-<!-- / 侧栏部分 -->
+
+      </div>
+
     </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
 
-    <!-- 博客底部 -->
+
+      </div>
+    </main>
+
     <footer class="footer">
-    &copy;
-    
-        2016-2019
-    
+      <div class="footer-inner">
+        
 
-    <a href="/">Jelon Loves You</a>
-</footer>
-<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
 
-    <!--博客js脚本 -->
-    <!-- 这里放网站js脚本 -->
+        
 
-<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
 
 </body>
 </html>

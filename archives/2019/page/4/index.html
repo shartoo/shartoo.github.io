@@ -1,2030 +1,549 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" >
-    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
-    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
-    
-    <title>文章归档: 2019 | Hexo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
-    <meta name="keywords" content="Jelon, 前端, Web, 张德龙, 前端开发" >
-    <meta name="description" content="Jelon个人前端小站" >
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml" >
-    
-    
-    <link rel="shortcut icon" href="/favicon.ico" >
-    
-    
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/main.css">
 
-    <!--[if lt IE 9]>
-    
-<script src="/js/html5.js"></script>
 
-    <![endif]-->
-    
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "//hm.baidu.com/hm.js?fd459238242776d173cdc64918fb32f2";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://shartoo.github.com').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
 </script>
 
-
-<meta name="generator" content="Hexo 4.2.0"></head>
-
-<body class="home">
-    <!--[if lt IE 9]>
-    <div class="browsehappy">
-        当前网页 <strong>不支持</strong>
-        你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/" target="_blank" rel="noopener">升级你的浏览器</a>.
-    </div>
-    <![endif]-->
-
-    <!-- 博客头部 -->
-    <header class="header">
-    <section class="container header-main">
-        <div class="logo">
-            <a href="/">
-                <div class="cover">
-                    <span class="name">Hexo</span>
-                    <span class="description"></span>
-                </div>
-            </a>
-        </div>
-        <div class="dropnav icon-paragraph-justify" id="JELON__btnDropNav"></div>
-        <ul class="menu hidden" id="JELON__menu">
-            
-            <li rel="/archives/2019/page/4/index.html" class="item ">
-                <a href="/" title="首页" class="icon-home">&nbsp;首页</a>
-            </li>
-            
-            <li rel="/archives/2019/page/4/index.html" class="item ">
-                <a href="/lab/" title="实验室" class="icon-lab">&nbsp;实验室</a>
-            </li>
-            
-            <li rel="/archives/2019/page/4/index.html" class="item ">
-                <a href="/about/" title="关于" class="icon-about">&nbsp;关于</a>
-            </li>
-            
-            <li rel="/archives/2019/page/4/index.html" class="item ">
-                <a href="/comment/" title="留言" class="icon-comment">&nbsp;留言</a>
-            </li>
-            
-        </ul>
-        <div class="profile clearfix">
-            <div class="feeds fl">
-                
-                
-                <p class="links">
-                    
-                        <a href="https://github.com/jangdelong" target="_blank">Github</a>
-                        |
-                    
-                        <a href="https://pages.coding.me" target="_blank">Hosted by Coding Pages</a>
-                        
-                    
-                </p>
-                <p class="sns">
-                    
-                        <a href="http://weibo.com/jangdelong" class="sinaweibo" target="_blank"><b>■</b> 新浪微博</a>
-                    
-                        <a href="https://www.facebook.com/profile.php?id=100011855760219&amp;ref=bookmarks" class="qqweibo" target="_blank"><b>■</b> Facebook</a>
-                    
-                    <a href="javascript: void(0);" class="wechat">
-                        <b>■</b>
-                        公众号
-                        <span class="popover">
-                            <img src="/img/wechat_mp.jpg" width="120" height="120" alt="我的微信订阅号">
-                            <i class="arrow"></i>
-                        </span>
-                    </a>
-                </p>
-                
-            </div>
-            <div class="avatar fr">
-                <img src="/img/jelon.jpg" alt="avatar" title="Jelon" >
-            </div>
-        </div>
-    </section>
-</header>
-
-
-    <!-- 博客正文 -->
-    <div class="container body clearfix">
-        <section class="content">
-            <div class="content-main widget">
-                <!-- 文章归档 -->
-
-    <h3 class="widget-hd">
-        <strong>
-            
-                文章归档
-                <!-- 文章归档，可以根据日期分类 -->
-            
-        </strong>
-    </h3>
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2018-05-11-LHY_transferlearning/">
-    		李宏毅深度学习：迁移学习
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.589Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <p>笔记视频：<a href="https://www.bilibili.com/video/av15889450/#page=26" target="_blank" rel="noopener">https://www.bilibili.com/video/av15889450/#page=26</a></p>
-<h2 id="1-基本概念"><a href="#1-基本概念" class="headerlink" title="1 基本概念"></a>1 基本概念</h2><p>迁移学习：当前训练的数据集与目标任务没有直接相关。此处的不直接相关特指以下情形：</p>
-<ul>
-<li>相同领域，但是不同任务。比如都是对动物分类的，但是分类的目标不同，比如只有猫和狗的图片数据，但是分类任务是对大象和老虎分类。</li>
-</ul>
-<p><img src="/images/blog/transfer_learning1.jpg" alt=""><br><img src="/images/blog/transfer_learning2.jpg" alt=""></p>
-<ul>
-<li>领域不同，但是任务相同。 比如同样是对猫和狗做分类，但是数据是真是相机拍摄的图像，而目标是招财猫和动漫狗，它们的数据分布不一致</li>
-</ul>
-<p><img src="/images/blog/transfer_learning3.jpg" alt=""></p>
-<h3 id="1-1-为何会考虑迁移学习"><a href="#1-1-为何会考虑迁移学习" class="headerlink" title="1.1 为何会考虑迁移学习"></a>1.1 为何会考虑迁移学习</h3><p>数据不充足的情况下，可能会考虑使用迁移学习，比如以下情况。</p>
-<table>
-<thead>
-<tr>
-<th>目标领域</th>
-<th>目标任务</th>
-<th>不相关的数据</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>语音识别</td>
-<td>对台湾语做识别</td>
-<td>从youtube上爬取英文、中文语音数据训练模型来迁移学习</td>
-</tr>
-<tr>
-<td>图像分类</td>
-<td>医疗数据极度缺乏，做医疗诊断时</td>
-<td>使用已有的海量图像数据(coco,imagenet等)</td>
-</tr>
-<tr>
-<td>文本分析</td>
-<td>特定领域，比如法律文件分析</td>
-<td>可以从其他领域的文本分析迁移</td>
-</tr>
-</tbody></table>
-<h2 id="2-可以用迁移学习做什么"><a href="#2-可以用迁移学习做什么" class="headerlink" title="2 可以用迁移学习做什么"></a>2 可以用迁移学习做什么</h2><h3 id="2-1-模型fine-tuning"><a href="#2-1-模型fine-tuning" class="headerlink" title="2.1 模型fine-tuning"></a>2.1 模型fine-tuning</h3><p>当我们的特定任务所拥有的数据集非常少(比如识别某个人的声音，但是那个人的声音数据很少)，但是非相关的数据集很多(比如来自很多人的很多语音数据)，我们无法用某一个人的声音数据来训练一个语音识别模型，这种情况要做迁移学习，可以称之为<strong>one-shot</strong>。用许多人的语音数据训练模型，再来某个人的语音数据来fine-tuning。</p>
-<p><strong>问题</strong></p>
-<p>目标数据集太少，即便是用非直接相关数据训练出了一个初始模型，然后用目标数据集做迁移学习，很容易会导致<strong>过拟合</strong>。</p>
-<h2 id="3-迁移学习技巧"><a href="#3-迁移学习技巧" class="headerlink" title="3 迁移学习技巧"></a>3 迁移学习技巧</h2><h3 id="3-1-Conservation-Training"><a href="#3-1-Conservation-Training" class="headerlink" title="3.1 Conservation Training"></a>3.1 Conservation Training</h3><p>例如，已经有大量的source data数据（比如语音识别中大量的不同speaker的语音数据），以及target data(某个speaker的语音数据)。此时如果直接用source data训练出来的模型，再用target data做迁移学习，模型可能就会坏掉。 </p>
-<p>可以在training的时候，加一些限制(就是加一些非L1,L2的正则化)，使得训练完成之后，前后两次模型效果差不太多。</p>
-<p><img src="/images/blog/transfer_learning4.jpg" alt=""></p>
-<h3 id="3-2-Layer-transfer"><a href="#3-2-Layer-transfer" class="headerlink" title="3.2 Layer transfer"></a>3.2 Layer transfer</h3><p>先用源数据训练出一个模型，然后将这个模型的某些层网络直接复制到新的网络中，然后只用新数据训练网络的余下层网络。这样训练时只需要训练很少的参数。</p>
-<p><img src="/images/blog/transfer_learning5.jpg" alt=""></p>
-<p>但是，哪些层应该被transfer，哪些不应该被transfer? 不同的任务之中，需要transfer的网络层不同。</p>
-<ul>
-<li><p>语音识别中，通常只复制最后几层网络。然后重新训练输入层网络。(同样的发音方式，得到的结果不同)语音识别的结果，应该跟发音者没有关系的，所以最后几层是可以被复制的。而不同的地方在于，从声音信号到发音方式，每个人都不一样。</p>
-</li>
-<li><p>在图像任务中。通常只复制前面几层，而训练最后几层。通常前几层做的就是检测图像中有没有简单的几层图形，而这些是可以迁移到其他任务中。而通常最后几层通常是比较特异化的，这些是需要训练的。</p>
-</li>
-</ul>
-<p><img src="/images/blog/transfer_learning6.jpg" alt=""></p>
-<p><strong>网络层迁移学习的实验结果(图像任务)</strong></p>
-<p>ImageNet的数据120万图像分为source和target，按照分类数量划分，其中500个分类作为source，另外500个为target。其中横轴为transfer learning复制的网络层，其中0代表没有复制网络层，纵轴为分类准确率。可以发现，当我们只复制前面几个网络层时，效果有提升，但是复制得太多效果就开始变差。</p>
-<p><img src="/images/blog/transfer_learning7.jpg" alt=""></p>
-<p>上图中</p>
-<ul>
-<li><p>5 黄色线：代表在做了复制网络前几层之后，做了fine tuning之后的结果</p>
-</li>
-<li><p>3蓝色线：对照组。在目标领域上训练出一个模型，然后复制此模型的前面几层，然后固定住这几层，接着继续用<strong>目标数据</strong>训练剩下的几层。</p>
-</li>
-<li><p>2蓝色线：对照组。在目标领域上训练出一个模型，然后复制此模型的前面几层，然后固定住这几层，接着继续用*<em>新数据</em>训练剩下的几层。结果，有时候很差。在训练时，前面的层和后面的层其实是需要相互搭配的，否则后面的层的结果就很差。</p>
-</li>
-<li><p>4红色线：</p>
-</li>
-</ul>
-<p><strong>source和target不是同种分类数据时</strong></p>
-<p>如果source和target是不同的分类数据，比如source数据是自然风光，而target是人造物体，那么做transfer learning时，其准确率会大幅度降低。</p>
-<p><img src="/images/blog/transfer_learning8.jpg" alt=""></p>
-<p>如果只复制前面几层时，与没有复制没有太多区别。</p>
-<h3 id="3-3-多任务学习"><a href="#3-3-多任务学习" class="headerlink" title="3.3 多任务学习"></a>3.3 多任务学习</h3><p>一个成功的实例是，多语言语音识别。输入是不同语言的语音，前面的几层公用参数，后面的几层不同参数。</p>
-<p><img src="/images/blog/transfer_learning9.jpg" alt=""></p>
-<h2 id="4-progressive-neural-network"><a href="#4-progressive-neural-network" class="headerlink" title="4 progressive neural network"></a>4 progressive neural network</h2><p><img src="/images/blog/transfer_learning10.jpg" alt=""></p>
-<p>先训练一个Task1的网络，训练完成之后，固定其参数。再去训练一个Task2，它的每个隐藏层的都会去接 Task1的隐藏层输出。它的好处是，即便Task1和Task2完全不像，Task2的数据不会影响到Task1的模型参数，所以迁移的结果一定不会更差，最糟糕的情况就是直接训练Task2模型(此时Task1的输出设置为0)</p>
-<h2 id="5-labeled-source-data-amp-unlabeled-target-data"><a href="#5-labeled-source-data-amp-unlabeled-target-data" class="headerlink" title="5 labeled source data  &amp; unlabeled target data"></a>5 labeled source data  &amp; unlabeled target data</h2><p>源数据为标记数据$(x^s,y^s)$ 作为训练集，而目标数据为非标记数据$x^t$为测试集。比如下图的<code>MNIST</code>数据集为训练集，而<code>MNIST-M</code>为测试集，其中<code>MNIST-M</code>同样为手写字，不过其背景变为风景和彩色的。</p>
-<p><img src="/images/blog/transfer_learning11.jpg" alt=""></p>
-<p>我们分析下领域对抗训练，把CNN作为特征抽取工具，会发现source data有很明显的分类现象，而target data却没有。</p>
-<p><img src="/images/blog/transfer_learning12.jpg" alt=""></p>
-<p>如上图中，MNIST数据集很明显的分为10个团，而MNIST-M没有。此时对于MNIST-M无能为力。</p>
-<p>所以，我们希望CNN的feature extractor能够消除领域特性，就需要使用 <code>domain-adversarial training</code></p>
-<h3 id="5-1-domain-adversarial-training"><a href="#5-1-domain-adversarial-training" class="headerlink" title="5.1 domain-adversarial training"></a>5.1 domain-adversarial training</h3><p><img src="/images/blog/transfer_learning13.jpg" alt=""></p>
-<p>feature extractor与domain classifer做相反的事，domain classifer 极力区分当前数据的来源，而feature extractor希望domain classifer能够无视domain 的差异。</p>
-<p><img src="/images/blog/transfer_learning14.jpg" alt=""></p>
-<p>其实际做法是，在计算BP时，feature extractor 将domain classifer的梯度乘以负1，然后传给 domain classifer。</p>
-<p>以下是这种训练出来的实验结果</p>
-<p><img src="/images/blog/transfer_learning15.jpg" alt=""></p>
-<h2 id="6-zero-shot"><a href="#6-zero-shot" class="headerlink" title="6  zero-shot"></a>6  zero-shot</h2><p>即：测试集里面的分类数据是训练集中从未出现过的，比如训练集的分类是毛和狗，而测试集里面却有草泥马</p>
-<p><img src="/images/blog/transfer_learning16.jpg" alt=""></p>
-<p>这种任务，在语音识别中很常见，训练集中不可能出现所有的语音和词汇。在语音上的做法是，不去直接辨别一段声音属于哪个word，而是去辨别一段声音属于哪个音标，然后做一个音标和tab之间的对应关系表，即lexics。所以，即便某些词汇没有出现在训练集，也可以从音标和lexics表得到。</p>
-<p>那么，这个操作应用到图像中就是以每种分类的特定属性替代分类。比如狗这个分类，以<code>furry</code>,<code>4 legs</code>,<code>tail</code>这些属性来表示，切记这些属性必须足够丰富才可以。那么在训练时，就不直接识别分类，而是识别图像具备哪些属性。</p>
-<p><img src="/images/blog/transfer_learning17.jpg" alt=""></p>
-<p>测试集的时候，即便来了一个未出现的动物，也可以使用这些属性描述。</p>
-<p><img src="/images/blog/transfer_learning18.jpg" alt=""></p>
-<p>如果属性集太大，还可以做 attribute embedding。</p>
-<p><img src="/images/blog/transfer_learning19.jpg" alt=""></p>
-<p>其中$f(x^2)和g(y^2)$ 都可能是神经网络。</p>
-<h3 id="6-1-zero-shot的成功应用"><a href="#6-1-zero-shot的成功应用" class="headerlink" title="6.1 zero-shot的成功应用"></a>6.1 zero-shot的成功应用</h3><p>机器翻译</p>
-<p><img src="/images/blog/transfer_learning20.jpg" alt=""></p>
-<p>在没有日语翻译成韩文的数据集，由于有韩语翻译到英文、日文和英文翻译到日文，所以可以完成从日语翻译成韩文。根据学习好的encoder，把各种语言的词汇映射到空间中的向量，会出现下图的结果</p>
-<p><img src="/images/blog/transfer_learning21.jpg" alt=""></p>
-<p>上图中，不同颜色代表不同语言，处于相同位置的代表意义相同。</p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2018-05-11-LHY_transferlearning/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2018-05-11-LHY_transferlearning/" title="李宏毅深度学习：迁移学习">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2018-04-02-LHY_GAN/">
-    		李宏毅深度学习-15-生成网络
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.566Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <p>视频来源：<a href="https://www.bilibili.com/video/av9770302/?p=15" target="_blank" rel="noopener">https://www.bilibili.com/video/av9770302/?p=15</a></p>
-<h2 id="1-前提概览"><a href="#1-前提概览" class="headerlink" title="1 前提概览"></a>1 前提概览</h2><p>生成网络可以做什么？ 写诗，画动漫头像。</p>
-<h3 id="1-1-Auto-encoder"><a href="#1-1-Auto-encoder" class="headerlink" title="1.1 Auto-encoder"></a>1.1 Auto-encoder</h3><p><img src="/images/blog/gan1.jpg" alt=""></p>
-<p>通过encoder将一张图片变成一个 code vector，然后用一个decoder将此code vector 生成一张图像。它们训练时时联合训练，训练完成之后，可以用decoder来生成一张图片。</p>
-<p><img src="/images/blog/gan2.jpg" alt=""></p>
-<h4 id="1-1-1-实例"><a href="#1-1-1-实例" class="headerlink" title="1.1.1  实例"></a>1.1.1  实例</h4><p>生成一个手写字生成的decoder，其生成的coder vector假设会2维的，如下：</p>
-<p><img src="/images/blog/gan3.jpg" alt=""></p>
-<p>接着，我们输入一个二维向量，假设为 $ [-1.5,0] $，可能生成的手写字是$0$。假设我们输入一个二维向量 $[1.5,0]$生成的手写字可能是$1$。如下图：</p>
-<p><img src="/images/blog/gan4.jpg" alt=""></p>
-<p>如果，二维向量的值在$ [-1.5,0] $和$ [1.5,0] $之间等距离取值的话，可能得到如下的结果</p>
-<p><img src="/images/blog/gan5.jpg" alt=""></p>
-<p><strong>但是auto-encoder无法生成state of art的结果。</strong></p>
-<h3 id="1-2-VAE-Variational-Auto-Encoder"><a href="#1-2-VAE-Variational-Auto-Encoder" class="headerlink" title="1.2  VAE(Variational Auto-Encoder)"></a>1.2  VAE(Variational Auto-Encoder)</h3><p>VAE是一个进阶版的auto-encoder，训练的时候，输入一张图片，但是<strong>它同时输出三个vector</strong>，假设这三个vector都是3维的，如下图：</p>
-<p><img src="/images/blog/gan6.jpg" alt=""></p>
-<p>其中的$m_1,m_2,m_3$代表VAE的encoder的输出code，只不过是个三维vector。同时还会生成另外一个三维的vector $\sigma _1,\sigma _2,\sigma _3$,同时会随机从一个符合正态分布的数据集中sample一个三维vector $e_1,e_2,e_3$ （称为noise）。接下来做如下操作：</p>
-<ol>
-<li>将vector $\sigma _1,\sigma _2,\sigma _3$ 指数化</li>
-<li>将第一步指数化之后的值与noise vector  $e_1,e_2,e_3$ 相乘</li>
-<li>将生成的code vector $m_1,m_2,m_3$与第二步的结果相加，得到结果 $c_1,c_2,c_3$</li>
-</ol>
-<p>再将最后的结果 $c_1,c_2,c_3$ 输入到<strong>decoder</strong>网络训练，整个过程如下：</p>
-<p><img src="/images/blog/gan7.jpg" alt=""></p>
-<h4 id="1-2-1-VAE的受限条件"><a href="#1-2-1-VAE的受限条件" class="headerlink" title="1.2.1 VAE的受限条件"></a>1.2.1 VAE的受限条件</h4><p>在训练VAE时由于添加了额外的项 $\sigma$，则需要添加一个受限条件（假设），即需要最小化：</p>
-<p>$$<br>\sum _{i=1} ^3(exp(\sigma _i)-(1+\sigma _i)+(m_i)^2)<br>$$</p>
-<p>其中 $(m_i)^2$ 可以看做L2 正则，而最小化 $exp(\sigma _i)-(1+\sigma _i)$ 部分即最小化 $\sigma _i$，当它为0时，这部分的值最小。</p>
-<h4 id="1-2-2-VAE的问题"><a href="#1-2-2-VAE的问题" class="headerlink" title="1.2.2  VAE的问题"></a>1.2.2  VAE的问题</h4><p>我们期望的VAE是它能生成与真实图像越接近越好的图像</p>
-<p><img src="/images/blog/gan8.jpg" alt=""></p>
-<p>但实际上VAE实际模拟过程与人类的有出入，下图蓝色框代表了两种可能出现的情况。很显然，人类可以分辨出左边是比较接近真实的，右边的不那么接近的（黄色框），但是对于VAE（蓝色框）来说它们在损失函数面前是等价的。</p>
-<p><img src="/images/blog/gan9.jpg" alt=""></p>
-<h3 id="1-3-evolution-of-generation"><a href="#1-3-evolution-of-generation" class="headerlink" title="1.3 evolution of generation"></a>1.3 evolution of generation</h3><p><img src="/images/blog/gan10.jpg" alt=""></p>
-<p>上图是一个示例，分别迭代多次，每次是一对 <code>generator</code> 和 <code>discriminator</code>，不断演化，最后得到较好结果。其中的<code>discriminator</code>是一个二分类器，如果来自真实图像，则输出1，如果来自生成网络则输出0.</p>
-<h4 id="1-3-1-GAN中的Discriminator"><a href="#1-3-1-GAN中的Discriminator" class="headerlink" title="1.3.1  GAN中的Discriminator"></a>1.3.1  GAN中的Discriminator</h4><p>Discriminatory本质上是一个二分类分类器，输入一张图片，它会判断该图片是real(1)还是fake(0)。</p>
-<p><img src="/images/blog/gan11.jpg" alt=""></p>
-<h4 id="1-3-2-GAN中的Generator"><a href="#1-3-2-GAN中的Generator" class="headerlink" title="1.3.2 GAN中的Generator"></a>1.3.2 GAN中的Generator</h4><p><img src="/images/blog/gan12.jpg" alt=""></p>
-<p>GAN中的Generator与VAE中的decoder类似，输入一个随机的vector，输出一些图片。与VAE不同的是，在训练VAE的时候需要最小化一个重构误差</p>
-<p>此处GAN中Generator的架构与VAE一样，只是在训练时方法不一。</p>
-<p>首先，我们有个所有参数都是随机产生的generator。此时输入一组参数随机的向量，generator会产生一组<strong>假的</strong>图像；同时从训练数据集中随机抽取一组<strong>真的</strong>图像，然后将所有假的图像标签标记为0(negative sample)，所有真的图像标记为1(positive sample)</p>
-<h4 id="1-3-3-GAN-过程"><a href="#1-3-3-GAN-过程" class="headerlink" title="1.3.3 GAN 过程"></a>1.3.3 GAN 过程</h4><p>首先随机输入一组向量给Generator，产生一组图像，Discriminator知道这个是假的图像，会输出一个很低的置信度。</p>
-<p><img src="/images/blog/gan13.jpg" alt=""></p>
-<p>接下来，需要更新generator参数，它会产生的图像让第一代的Discrimintor觉得它是真的图像，输出1。</p>
-<p><strong>注意，我们在训练过程中会固定 Discriminator，使用随机梯度更新Generator</strong></p>
-<h2 id="二-GAN的核心思路"><a href="#二-GAN的核心思路" class="headerlink" title="二 GAN的核心思路"></a>二 GAN的核心思路</h2><h3 id="2-1-最大似然估计"><a href="#2-1-最大似然估计" class="headerlink" title="2.1 最大似然估计"></a>2.1 最大似然估计</h3><ul>
-<li>给定数据分布 $P_{data}(x)$，此处的$x$就想象成一张图片的所有的像素值串起来。</li>
-<li>现在我们要找到一个数据分布$P_G(x;\theta)$，它受控于一组参数$\theta$的。<ul>
-<li>其中$P_G(x;\theta)$是一种数据分布，比如可以是高斯混合模型。其中$\theta$代表了高斯分布的期望和方差这两个参数。只不过在GAN中$P_G(x;\theta)$ 是一个 神经网络。</li>
-<li>那么我们要做的事情就是，找到一个一组参数 $\theta$，使得 $P_G(x;\theta)$的分布与$P_{data}(x)$ 的分布越接近越好。</li>
-</ul>
-</li>
-</ul>
-<p>从 $P_{data}(x)$中抽样${x^1,x^2,…x^m}$。</p>
-<p>如果给定参数$\theta$ 那么我们可以计算 $P_G(x^i;\theta)$的值。</p>
-<p><strong>似然度</strong>：即给定参数$\theta$时，从$P_G(x^i;\theta)$ 中抽样产生 $x^1,x^2,x^3…x^n$的概率。似然度为 $L=\prod ^m _{i=1}P_G(x^i;\theta)$。</p>
-<p>我们要做的其实就找一组参数 $\theta ^*$使得最大化 $L$的似然度。对于高斯混合 模型，参数就是均值、方差，以及混合权重。比如有下图的高斯混合模型，数据有三个高斯分布混合而成，如下：</p>
-<p>该分布中均值即上图中三个黄色中心点，方差即三个圆形半径。</p>
-<p><img src="/images/blog/gan14.jpg" alt=""></p>
-<p>$$<br>\theta ^* = arg \quad max_{\theta} \prod ^m <em>{i=1}P_G(x^i;\theta)=arg\quad max</em>{\theta}\quad log \prod ^m <em>{i=1}P_G(x^i;\theta)\quad 等同于求对数极大值\<br>= arg \quad max</em>{\theta}\sum ^m_{i=1}logP_G(x^i;\theta)\quad\quad 其中{x^1,x^2,…x^m}都是从  P_{data}(x)中抽样得到的 \<br> \approx arg\quad max_{\theta}\quad E_{x<del>P_{data}}[logP_G(x;\theta)] \quad\quad 等同于从 P_{x</del>{data}}分布中抽样 x^1,x^2,..x^n 然后计算每个 x^1,x^2,..x^n 使得 log P_G(x;\theta) 最大这件事 \<br>=arg \quad max_{\theta} \int <em>x P</em>{data}(x)logP_G(x;\theta)dx \<br>等同于  arg \quad max_{\theta} \int P_{data}(x)logP_G(x;\theta)dx-\int <em>xP</em>{data}(x)log P_{data}dx \<br>=arg\quad min_{\theta}\quad KL(P_{data}(x)||P_G(x;\theta)) \quad 【KL散度】<br>$$</p>
-<p>在GAN之前，高斯混合模型生成的图像非常模糊，因为高斯混合模型无法真正模拟图像数据分布。</p>
-<h3 id="2-2-将-P-G-x-theta-换成一个神经网络"><a href="#2-2-将-P-G-x-theta-换成一个神经网络" class="headerlink" title="2.2 将 $P_G(x;\theta)$ 换成一个神经网络"></a>2.2 将 $P_G(x;\theta)$ 换成一个神经网络</h3><p>此时的GAN结构如下，输入通常为一个简单的 高斯分布的向量。经过神经网络 $G(z)$ 之后输出x</p>
-<p><img src="/images/blog/gan15.jpg" alt=""></p>
-<p>关于神经网络 $G(z)$ 的函数表达式可以表示为： $P_G(x)=\int <em>xP</em>{prior}(z)I_{[G(z)=x]}dz$ 。该公式的通俗理解是，假设$G(z)$参数已经固定(即网络参数固定)，从该网络中取样得到x的概率等于，对所有可能的z取积分，乘以z出现的概率($P_{prior}(z)$)，同时每个z经过函数$G(z)$之后生成x，该x是否即为当前正在考量的x，此处由函数$I_{G(z)=x}$判定，如果等同则为1，否则为0。</p>
-<p>当前问题是，如果以这种方式计算。难以计算，给定x，即便我们知道输入分布z的参数，但是由于神经网络极其复杂，要想计算由网络生成x的概率会很困难。 在无法计算似然度的情况下，无法调整参数$\theta$使得网络输出x接近真实数据分布。这个就是GAN的共享。</p>
-<h3 id="2-3-GAN的基本介绍"><a href="#2-3-GAN的基本介绍" class="headerlink" title="2.3 GAN的基本介绍"></a>2.3 GAN的基本介绍</h3><ul>
-<li>Generator G<ul>
-<li>G是一个函数，输入为Z，输出为x</li>
-<li>给定先验分布 $P_{prior}(z)$ ，又得知函数G，我们可以定义一个概率分布 $P_G(x)$</li>
-</ul>
-</li>
-<li>Discriminator D<ul>
-<li>D是一个函数，输入为x，输出为标量。</li>
-<li>Discriminator D的作用就是衡量 $P_G(x)$和 $P_{data}(x)$的差异</li>
-</ul>
-</li>
-<li>有一个函数 $V(G,D)$，我们要找的最好的G。 $G^* = arg\quad min_G\quad max_D\quad V(G,D)$</li>
-</ul>
-<h4 id="2-3-1-如何理解-G-arg-quad-min-G-quad-max-D-quad-V-G-D"><a href="#2-3-1-如何理解-G-arg-quad-min-G-quad-max-D-quad-V-G-D" class="headerlink" title="2.3.1 如何理解 $G^* = arg\quad min_G\quad max_D\quad V(G,D)$"></a>2.3.1 如何理解 $G^* = arg\quad min_G\quad max_D\quad V(G,D)$</h4><p>我们先看最右边的 $max_D\quad V(G,D)$ 部分。它的意思是选择使得 $V(G,D)$最大的 D，假设我们只有三个可能的G($G_1,G_2,G_3$，如下图)，实际上由于G是一个神经网络，所以它有无数种可能。</p>
-<p>下图中，分别对于不同可能的G，改变D，可以得到不同的 $V(G,D)$。对于$G_1,G_2,G_3$，$max_DV(G,D)$(最大值)就是下图中，红色点的值。</p>
-<p><img src="/images/blog/gan16.jpg" alt=""></p>
-<p>接下来再去寻找一个$G^* $使得 $max_DV(G,D)$最小的G，可以从上图（红色点）中看到，对于 $G_1,G_2,G_3$其最大值，在为$G_3$时它的最大值最小。</p>
-<h4 id="2-3-2-关于函数-V的定义"><a href="#2-3-2-关于函数-V的定义" class="headerlink" title="2.3.2 关于函数 V的定义"></a>2.3.2 关于函数 V的定义</h4><p>$V= E_{x<del>P_{data}}[logD(x)]+E_{x</del>P_G}[log(1-D(x))]$ ,先不用考虑此公式如何得来。 </p>
-<p>对于给定的G，$max_DV(G,D)$评估的是 $P_G$和$P_{data}$之间的差异，所以我们要寻找的是那个能使得  $P_G$和$P_{data}$差异最小的 $P_G$（$P_{data}$固定）。</p>
-<ul>
-<li><p>对于给定G，最优的$D^*$是可以最大化V的。其中V的形式如下：<br>$$<br>V=E_{x<del>P_{data}}[logD(x)]+E_{x</del>P_G}[log(1-D(x))]\<br>=\int <em>xP</em>{data}(x)logD(x)dx+\int <em>xP_G(x)log(1-D(x))dx \quad \quad 期望等于概率的积分\<br>=\int _x[P</em>{data}logD(x)+P_G(x)log(1-D(x))]dx\quad\quad 都是对x的积分，相同部分放一起<br>$$</p>
-</li>
-<li><p>对于给定$x$，最优化的V等价于最大化上式中括号中的<br>$$<br>P_{data}logD(x)+P_G(x)log(1-D(x)) \<br>a\quad\quad\quad D\quad\quad b\quad\quad\quad D\quad\quad \<br>给定x，P_{data}和P_G都是常量<br>$$</p>
-</li>
-<li><p>找到$D^*$能够最大化： $f(D)=alog(D)+blog(1-D)$,对该式子求极值的方法就是下面求导，取0得到。</p>
-</li>
-</ul>
-<p>$$<br>\frac{df(D)}{dD}=a\times \frac{1}{D}+b\times \frac{1}{1-D}\times (-1)=0 \<br>\rightarrow a\times \frac{1}{D}=b\times \frac{1}{1-D} \<br>\rightarrow a\times (1-D^<em>)=b\times D</em> \<br>\rightarrow D^* = \frac{a}{a+b} \quad\quad 再把a,b代回来得到\<br>\rightarrow D^*(x)=\frac{P_{data(x)}}{P_{data}(x)+P_G(x)}<br>$$</p>
-<p>将各个$D^*$ 显现在图中，如下：</p>
-<p><img src="/images/blog/gan17.jpg" alt=""></p>
-<p>红色顶点处即，不同的$G$，取得最大D的值。该点到水平轴(D)的距离就是$V(G,D)$的值，也即$P_{G_1}$和$P_{data}$的差异。</p>
-<p>由上面的推导可知 $D^*(x)=\frac{P_{data(x)}}{P_{data}(x)+P_G(x)}$。而$V(G,D)=E_{x<del>P_{data}}[logD(x)]+E_{x</del>P_G[log(1-D(x))]}$。那么，其实我们带入得到:</p>
-<p>$$<br>D^*(x)=\frac{P_{data(x)}}{P_{data}(x)+P_G(x)}  \<br>=E_{x<del>P_{data}}[log\frac{P_{data}(x)}{P_{data}(x)+P_G(x)}] + E_{x</del>P_G}[log\frac{P_G(x)}{P_{data}(x)+P_G}]  \quad 将求期望转换为求积分\<br>\rightarrow \int <em>x log\frac{P</em>{data}(x)}{P_{data}(x)+P_G(x)}dx +\int <em>x P_G(x)log \frac{P_G(x)}{P</em>{data}(x)+P_G(x)}dx \<br>下面就开始推导 KL散度了，这里就不推导了。推导完也记不住，也看不懂<br>$$</p>
-<ul>
-<li><p>那么对于给定G， $max <em>DV(G,D)$可以看做计算  $-2log2+2JSD(P</em>{data}(x)||P_G(x))$(其中$JSD(P_{data}(x)||P_G(x))$用以衡量$P_G和P_{data}$之间的差异度，是从上面的推导推导而来)。$JSD(P_{data}(x)||P_G(x))$的取值范围，最小为 $0$,即$P_G$和$P_{data}$完全重合，最小值为$log2$即$P_G$和$P_{data}$完全不存在交集。所以$max _DV(G,D)$的取值范围为 $[-2log2,0]$</p>
-</li>
-<li><p>那么，那个G才是使得$max <em>DV(G,D)$ 最小的值呢？  只有当 $P_G=P</em>{data}$</p>
-</li>
-</ul>
-<h4 id="2-3-3-具体算法"><a href="#2-3-3-具体算法" class="headerlink" title="2.3.3 具体算法"></a>2.3.3 具体算法</h4><p>算法可以按照如下步骤循环：</p>
-<ol>
-<li><p>给定一个初始的 $G_0$</p>
-</li>
-<li><p>根据$G_0$ 找到一个 $D^* _0$使得它可以最大化 $V(G_0,D)$</p>
-<ul>
-<li>其中 $V(G_0,D^* <em>0)$ 是$P</em>{data}$和 $P_{G_0}(x)$之间的JS差异。</li>
-</ul>
-</li>
-<li><p>下一步，我们需要找一个新的 $G$，假若为 $G_1$。它必须使得$P_{data}$和 $P_{G_0}(x)$之间的JS差异减小。可以通过求梯度的方法，</p>
-<ul>
-<li><p>$ \theta _G\leftarrow \theta_G -\lambda \frac{\partial V(G,D^* _0)}{\partial \theta _G}$ 。可以通过此公式计算得到新的 $G_1$</p>
-</li>
-<li><p>用新的 $G_1$计算$P_{data}$和 $P_{G_1}(x)$之间的JS差异</p>
-</li>
-</ul>
-</li>
-<li><p>再找下一个$G_2$，使用同样的方式…</p>
-</li>
-<li><p>重复，不断去寻找新的G</p>
-</li>
-</ol>
-<h4 id="2-3-4-实际如何操作"><a href="#2-3-4-实际如何操作" class="headerlink" title="2.3.4 实际如何操作"></a>2.3.4 实际如何操作</h4><p>我们的loss函数是 $V=E_{x<del>P_{data}}[logD(x)]+E_{x</del>P_G}[log(1-D(x))]$。在上面的推导过程中，我们是假定可以对$P_{data}$求积分的，但是实际情况是，{P_{data}}是所有可能图像的分布，是不可积分的。所以，我们做如下逼近。</p>
-<ul>
-<li><p>通过从 $P_{data}(x)$中抽样 ${x^1,x^2,x^3,…x^m}$来毕竟 $P_{data}$可能的数据分布，同时从generator $P_G(x)$中也抽样 $\tilde x^1,\tilde x^2,..\tilde x^m$。</p>
-</li>
-<li><p>那么我们求上面的$V=E_{x<del>P_{data}}[logD(x)]+E_{x</del>P_G}[log(1-D(x))]$也等同于求一个 $\tilde V=\frac{1}{m}\sum ^m_{i=1}logD(x^i)+\frac{1}{m}\sum ^m_{i=1}log(1-D(\tilde x^i))$ 。此式可以看做一个对二分类分类器的交叉熵损失函数。</p>
-<ul>
-<li>比如一个二分类分类器，假若其输出为$D(x)$，那么我们就需要最小化其交叉熵，我们会这么做</li>
-<li>如果$x$是正样本，那么就需要最小化 $-logD(x)$</li>
-<li>如果$x$是负样本，那么就需要最小化 $-log(1-D(x))$</li>
-</ul>
-</li>
-<li><p>再回过来，D是一个参数为$\theta$的二分类的分类器。我们从 $P_{data}(x)$中抽取 $x^1,x^2,…x^m$作为正样本，从$P_G$中抽样 $\tilde x^1,\tilde x^2,…\tilde x^m$作为负样本。以上面讨论的结论可以将最大化$V$变成最小化 $L=-\frac{1}{m}\sum^m <em>{i=1}logD(x^i)-\frac{1}{m}\sum ^m</em>{i=1}log(1-D(\tilde x^i))$</p>
-</li>
-</ul>
-<h3 id="2-4-GAN完整算法"><a href="#2-4-GAN完整算法" class="headerlink" title="2.4 GAN完整算法"></a>2.4 GAN完整算法</h3><ul>
-<li>在每次算法迭代过程中，都会更新Discriminator和Generator</li>
-</ul>
-<p>我们先看看学习<strong>Discriminator</strong> 部分，一般会<strong>重复K次</strong>，一次无法找到全局最优参数。</p>
-<ul>
-<li>从数据分布 $P_{data}(x)$中抽样 ${x^1,x^2,…x^m}$</li>
-<li>从先验分布$P_{prior}(z)$中随机抽取噪声数据${z^1,z^2,…z^m}$。注意此处的先验分布只是个普通的正态分布</li>
-<li>将先验分布抽样得到的${z^1,z^2,…z^m}$喂入$\tilde x^i=G(z^1)$，获取一批生成数据 ${\tilde x^1,\tilde x^2,…\tilde x^m}$</li>
-<li>更新discriminator的参数 $\theta _d$，可以使得下式<strong>最大</strong><ul>
-<li>$\tilde V = \frac{1}{m}\sum ^m_{i=1}logD(x^1)+\frac{1}{m}\sum ^m _{i=1}log(1-D(\tilde x^1))$</li>
-<li>使用梯度下降方法计算 $\theta _d\leftarrow \theta _d+\lambda \nabla \tilde V(\theta _d)$</li>
-</ul>
-</li>
-</ul>
-<p>再来看训练<strong>Generator</strong>部分，下面的部分通常只会<strong>更新一次</strong>。generator不能更新太多，否则会导致JS差异度无法下降（generator已经以假乱真了）。</p>
-<ul>
-<li><p>从先验分布$P_{prior}(z)$中随机抽取噪声数据${z^1,z^2,…z^m}$。此处的随机噪声数据可以与上面训练Discriminator部分的随机样本值一样，也可以不一样</p>
-</li>
-<li><p>更新Generator的参数 $\theta _g$使得下式<strong>最小</strong></p>
-<ul>
-<li>$\tilde V = \frac{1}{m}\sum^m <em>{i=1}logD(x^i)+\frac{1}{m}\sum ^m</em>{i=1}(1-D(G(z^i)))$ 。可以看到此式，前半部分跟Generator无关</li>
-<li>再用梯度下降法去更新 Generator的参数：$\theta _g-leftarrow \theta _g+\lambda \nabla \tilde V(\theta _g)$</li>
-</ul>
-</li>
-</ul>
-<h2 id="3-实际如何实现GAN"><a href="#3-实际如何实现GAN" class="headerlink" title="3 实际如何实现GAN"></a>3 实际如何实现GAN</h2><h3 id="3-1-真实实现中，Generator的目标函数"><a href="#3-1-真实实现中，Generator的目标函数" class="headerlink" title="3.1 真实实现中，Generator的目标函数"></a>3.1 真实实现中，Generator的目标函数</h3><p>从上面的讨论中，我们可以看到Generator会使得式子 $V= E_{x<del>P_{data}}[logD(x)]+E_{x</del>-P_G}[log(1-D(x))]$的值最小。省略前面的(与generator无关)，只看$E_{x~-P_G}[log(1-D(x))]$这部分，目标函数理论上应该是最小化此式，但是我们可以分别看看 $-log(D(x))$和 $log(1-D(x))$曲线，如下图（上面蓝色的为$-log(D(x))$，下面红色的为$log(1-D(x))$）：</p>
-<p><img src="/images/blog/gan18.jpg" alt=""></p>
-<p>观察需要最小化的 $log(1-D(x))$，在$D(x)$很小时，该曲线很平滑，在$D(x)$很大时该曲线很陡峭。 $D(x)$很小意味着，由Generator产生出来的x无法骗过Discriminator，Discriminator可以很容易认出。也即在训练的初始步骤，由generator产生的样本都集中在平滑部分，此时的$log(1-D(x))$微分值很小，训练变得缓慢。此时，我们可以修改目标函数为<br>$$<br>  v= E_{x~P_G}[-log(D(x))]<br>$$</p>
-<p>此式子效果等同于$log(1-D(x))$，同时可以快速训练，在初始步骤微分值很大，在后续步骤变得很小，比较符合训练期待。</p>
-<h3 id="3-2-如何评估JS-divergence-差异"><a href="#3-2-如何评估JS-divergence-差异" class="headerlink" title="3.2 如何评估JS divergence(差异)"></a>3.2 如何评估JS divergence(差异)</h3><p>我们将discriminator的loss就是来衡量JS divegence，loss越大，divergence越大</p>
-<p><img src="/images/blog/gan19.jpg" alt=""></p>
-<p>图中分别衡量的三个<strong>Generator</strong>，分别训练了1个epoches，10个epoches，25个epoches。其中训练了25个epoches的generator已经几乎可以state of art了，但是用这些Generator去训练discriminator时，discriminator依然有十分高的准确率。</p>
-<p>我们先看看目标损失函数 $max <em>DV(G,D)=-2log2+2JSD(P</em>{data}(x)||P_G(x))$ 导致这个问题的主要原因有以下几点</p>
-<ul>
-<li>我们在训练和调整到的时候，不是真正用积分去计算，而是通过抽样来拟合。现在假设我们有红色和蓝色两个椭圆的数据点分布，如下，但是因为我们是使用抽样的方式来代表数据分布：</li>
-</ul>
-<p><img src="/images/blog/gan20.jpg" alt=""></p>
-<p>即便Generator产生的数据样本与真实样本之间有重叠，但是由于Discriminator比较强，所以它依然能找到一条曲线将红色点和蓝色点区分开。如何解决这个问题？</p>
-<ul>
-<li>使得discriminator 变弱一点，少更新，加dropout。但是一个弱discriminator将导致JS divergence无法计算。</li>
-<li>$P_G$和$P_{data}$都是高维空间数据，现在假设它们都是二维空间的，那么 $P_G$和$P_{data}$可以看做二维空间里面的两条直线，那么这两条之间的交集非常小，几乎趋近于零（如下两条直线）。</li>
-</ul>
-<p><img src="/images/blog/gan21.jpg" alt=""></p>
-<p>所以真实$P_G$和$P_{data}$的情况可能像下面这样演化：</p>
-<p><img src="/images/blog/gan22.jpg" alt=""></p>
-<p>可以看到在$P_G_0$和$P_G_{50}$…到$P_G_{100}$之前，JS divergence都是log2，GAN没有演化的动力。 </p>
-<h3 id="3-3-如何解决GAN无法优化的问题"><a href="#3-3-如何解决GAN无法优化的问题" class="headerlink" title="3.3 如何解决GAN无法优化的问题"></a>3.3 如何解决GAN无法优化的问题</h3><ul>
-<li>加入噪音数据。在discriminator的输入中加入一些人工噪音数据</li>
-<li>训练Discriminator时，将其label加噪音。比如有张图片是positive，现在随机替换图像的部分内容为噪音</li>
-</ul>
-<p>加入噪音数据之后，原本交集非常少$P_G$和$P_{data}$就可能会拓宽。如下：</p>
-<p><img src="/images/blog/gan23.jpg" alt=""></p>
-<p><strong>注意：噪音数据要随着训练的推荐，逐步减小</strong></p>
-<h2 id="4-mode-collapse"><a href="#4-mode-collapse" class="headerlink" title="4 mode collapse"></a>4 mode collapse</h2><p>比如有真实的数据分布为蓝色，而generator生成的数据分布为红色。如下左图，右边是对应生成的图像。</p>
-<p><img src="/images/blog/gan24.jpg" alt=""></p>
-<p>现在问题是，我们只知道GAN生成了的数据，无法知道GAN没有生成的数据。 </p>
-<p>假设当前$P_{data}$的数据分布如下，为8个黑点。    </p>
-<p><img src="/images/blog/gan25.jpg" alt=""></p>
-<p>但是，我们训练过程中会出现不一致的情况。比如，我们期望$P_G$可以慢慢去覆盖$P_{data}$,但是实际训练时$P_G$一直只产生一个数据分布，不断去调整，但始终无法覆盖所有的$P_{data}$</p>
-<p><img src="/images/blog/gan26.jpg" alt=""></p>
-<p>可能的原因是之前的损失函数定义，即KL divergence定义有误。下图左边代表了原始的损失函数定义</p>
-<p><img src="/images/blog/gan27.jpg" alt=""></p>
-<p>其中 $KL= \int P_{data}log\frac{P_{data}}{P_G}dx$，当$P_{data}$有值，而$P_G$没有值的时候，该函数将取无穷大的值。所以此时GAN会尽力去覆盖尽可能多的$P_{data}$的数据。</p>
-<p>而看上图右边，KL divergence的倒数，$Reverse KL= \int P_{data}log\frac{P_G}{P_{data}}dx$。此时当$P_G$有值，而$P_{data}$没有值得时候函数取值会趋近无穷大，此时为了避免出现这种情况,$P_G$会尽可能拟合一个数据分布(假设真实的$P_{data}$由多个分布组成的话)。</p>
-<h2 id="5-condintional-GAN"><a href="#5-condintional-GAN" class="headerlink" title="5 condintional GAN"></a>5 condintional GAN</h2><p>与GAN不同的时，我们想生成制定的东西，此时的<strong>Generator</strong>输入就不止一个先验分布（正态分布）了。如下：</p>
-<p><img src="/images/blog/gan28.jpg" alt=""></p>
-<p>但此时可能会出现一个问题，generator可能会无视先验分布($P_Z$)，generator会觉得先验分布只是个噪音数据，解决办法是在generator里面添加 dropout。</p>
-<p>此时训练<strong>Discriminator</strong>也不一样，它的输入不再是一张图片，而是一张图片以及对应的描述，而对应的label则根据正负样本区别对待。</p>
-<p><img src="/images/blog/gan29.jpg" alt=""></p>
-<ul>
-<li>正样本： $(\hat c,\hat x)$,其中$\hat c$为图像真实描述，$\hat x$为真实图像。</li>
-<li>负样本： $(\hat c,G(\hat c)),(\hat c’,x)$。其中$\hat c$为真正的图像描述，而$G(\hat c)为对generator输入$\hat c$时生成的图像$。同时要有另外一种fake sample，给discriminator真实的图像，但是给错误的描述。比如此处的$\hat x$为真实图像，但是$\hat c’$为错误描述。 </li>
-</ul>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2018-04-02-LHY_GAN/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2018-04-02-LHY_GAN/" title="李宏毅深度学习-15-生成网络">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2018-03-18-LHY_RNN_and_GAN/">
-    		李宏毅深度学习-八-RNN和GAN
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.557Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h2 id="1-生成网络"><a href="#1-生成网络" class="headerlink" title="1 生成网络"></a>1 生成网络</h2><h3 id="1-1-生成文本"><a href="#1-1-生成文本" class="headerlink" title="1.1 生成文本"></a>1.1 生成文本</h3><p>我们需要知道的是，一个句子由字符或者单词组成。但是中文里面一个单词是一个有意义的单位。使用RNN生成句子时，每次由RNN生成一个字符或单词。</p>
-<p>假若我们要基于RNN生成一个句子，生成过程如下：</p>
-<ul>
-<li>向RNN中输入 <code>&lt;BOS&gt;</code>(begin of sentence)</li>
-<li>RNN会给出某个字符(或单词)的分布概率，根据这个概率分布抽样，可以得到一个词。比如说<code>床</code></li>
-<li>继续把<code>床</code>这个词输入到RNN，RNN继续输出字符（或词）的分布概率，根据其概率分布抽样得到下一个词，以此类推，下一个词比如为<code>前</code></li>
-</ul>
-<p><img src="/images/rnn_and_gan1.jpg" alt=""></p>
-<h3 id="1-2-生成图像"><a href="#1-2-生成图像" class="headerlink" title="1.2 生成图像"></a>1.2 生成图像</h3><p>图像都是由像素组成，可以由RNN每次生成一个像素。图像的二维结构转换为一个像素序列，如下图：</p>
-<p><img src="/images/rnn_and_gan2.jpg" alt=""></p>
-<p>序列处理过程如下：</p>
-<p><img src="/images/rnn_and_gan3.jpg" alt=""></p>
-<p>但是这种方式只有像素值的连续性，没有考虑图像中像素的局部关联性。一种更贴近的方式是下面的图，中间黑色像素块同时受上面的红色块以及左边的粉红色块的影响。</p>
-<p><img src="/images/rnn_and_gan4.jpg" alt=""></p>
-<p>但是要生成这种考虑空间特征的图像，可以使用Grid LSTM。如下图</p>
-<p><img src="/images/rnn_and_gan5.jpg" alt=""></p>
-<p>左下角黑框为一个filter。最开始时输入一个类似<code>BOS</code>的字符，由Grid LSTM生成第一个像素蓝色块，再将蓝色块输入到Grid LSTM(中间图第二个黑色箭头)，Grid LSTM会生成第二个红色块，第二个红色像素块在生成时会考虑输入<code>蓝色块</code>和之前的输入信息。</p>
-<p>如何产生空间信息，如下图</p>
-<p><img src="/images/rnn_and_gan6.jpg" alt=""></p>
-<p>上图中，注意红色箭头的位置，是一个空间中的第二层。</p>
-<p><strong>此方法可以生成 state of art 的图像。</strong></p>
-<h2 id="2-基于条件的生成"><a href="#2-基于条件的生成" class="headerlink" title="2  基于条件的生成"></a>2  基于条件的生成</h2><p>RNN只能生成一些随机的句子，我们想要基于条件生成想要的文本。比如在 image caption中，看到特定图像能生成对应的文本描述，在chatbot对话中会根据对话者所说的话来生成回应。</p>
-<h3 id="2-1-看图说话-image-caption"><a href="#2-1-看图说话-image-caption" class="headerlink" title="2.1 看图说话 image caption"></a>2.1 看图说话 image caption</h3><p>一般使用 <code>CNN+RNN</code>的方式生成，使用cnn来抽取图像特征，再将特征传入RNN即可生成对应描述，如下图示例。</p>
-<p><img src="/images/rnn_and_gan7.jpg" alt=""></p>
-<p>左边的CNN会将抽取出的特征vector传给右边的RNN，如果觉得只在开始的时候传入会导致RNN后续遗忘，可以每次都传入图像特征vector。</p>
-<h3 id="2-2-机器翻译"><a href="#2-2-机器翻译" class="headerlink" title="2.2 机器翻译"></a>2.2 机器翻译</h3><p>比如，我们想把中文<code>机器学习</code>翻译成对应的英文<code>machine learning</code>，即 <code>机器学习</code>$\Rightarrow$<code>machine learning</code>。此时二者之间毫无关联，但是我们把中文变成一个vector然后传入RNN。</p>
-<p><strong>将中文变成vector</strong></p>
-<p>同样可以使用RNN来完成，下图将<code>机器学习</code>这四个字用RNN抽取出一个vector代表整个句子的信息。</p>
-<p><img src="/images/rnn_and_gan8.jpg" alt=""></p>
-<p>然后再将抽取出的vector传入给另外一个RNN，如下图：</p>
-<p><img src="/images/rnn_and_gan9.jpg" alt=""></p>
-<p>其中红色的矩形块代表了中文部分抽取出的特征，可以三次重复传入右边的RNN，让右边的RNN分别输出对应的<code>machine</code>,<code>learning</code>以及句号(代表结束)。</p>
-<p>比如可以同样将类似的方法来做chatbot，比如我输入一句<code>你好吗</code>，用RNN生成一个vector然后传入右边的RNN，让其生成<code>我很好</code>，类似的对话。</p>
-<p>类似的设计在深度学习里面称之为<strong>Encoder-Decoder</strong></p>
-<p><img src="/images/rnn_and_gan9.jpg" alt=""></p>
-<p>它们二者可以联合训练。至于左边的encoder和右边的decoder是否一样，可以视情况而定，<strong>encoder和decoder可以一样，也可以不一</strong>。如果二者一样，可能容易导致过拟合。</p>
-<h2 id="3-Attention-Dynamic-Conditional-Generation"><a href="#3-Attention-Dynamic-Conditional-Generation" class="headerlink" title="3 Attention(Dynamic  Conditional Generation)"></a>3 Attention(Dynamic  Conditional Generation)</h2><p>在上一节里面的<code>机器学习</code>$\Rightarrow$<code>machine learning</code>时，左边的encoder每次传入到右边的decoder都是<strong>同样的vector</strong>。其实，我们可以使得每次传给右边的vector不一样。比如，我们想要右边的输出为<code>machine</code>时，关注左边的<code>机器</code>即可，此时RNN应该可以更好的掌握</p>
-<p><img src="/images/rnn_and_gan11.jpg" alt=""></p>
-<h3 id="3-1-机器翻译"><a href="#3-1-机器翻译" class="headerlink" title="3.1  机器翻译"></a>3.1  机器翻译</h3><p><strong>基于注意力的模型</strong></p>
-<ul>
-<li><strong>输入</strong>： 每个时间点的每次词汇都可以用一个vector来表示，这个vector是RNN hidden layer的输出</li>
-<li><strong>初始参数$z^0$</strong>： 有一个初始的vector $z^0$，可以当做RNN的一个参数，它可以根据训练数据集学习得到</li>
-<li><strong>匹配函数match</strong>: 假设有这样一个匹配函数<code>match</code>，此函数由自己设计。用来计算每个timestep，输入词汇与$z^n$的匹配程度。match的示例<ul>
-<li>余弦相似度: match函数可以是余弦相似度，来计算$z$和$h$ 的相似度。</li>
-<li>更小的神经网络：match函数可以是另外一个神经网络，输入是$z$和$h$,输出是一个标量（衡量匹配度）</li>
-<li>参数式: match函数里面有个矩阵参数$w$，此参数可以被学习。可以用$\alpha = h^TWz$来衡量匹配度。</li>
-</ul>
-</li>
-</ul>
-<p>例如：</p>
-<p><img src="/images/rnn_and_gan12.jpg" alt=""></p>
-<p>现在对所有的RNN的隐藏层输出$h^t$计算与$z^0$的匹配度，然后加个softmax（非必要），得到所有输入词汇的匹配程度，如下：</p>
-<p><img src="/images/rnn_and_gan13.jpg" alt=""></p>
-<p>经过匹配函数match之后，各个输入词汇的在$c^0$中所占比最发生变化，再将输出的$c^0$作为输入传给右边（decoder）的RNN，会使得decoder更加关注此示例中的<code>机器</code>这个单词，更容易学习输出对应的<code>machine</code>，如下图</p>
-<p><img src="/images/rnn_and_gan14.jpg" alt=""></p>
-<p>可以将此步骤右边decoder的rnn的hidden layer的输出$z^1$作为左边encoder的新的匹配函数（当然可以是其他各式各样的方法），来继续下一步的输出。</p>
-<p><img src="/images/rnn_and_gan15.jpg" alt=""></p>
-<h3 id="3-2-语音识别"><a href="#3-2-语音识别" class="headerlink" title="3.2 语音识别"></a>3.2 语音识别</h3><p>输入一段音频信号，可以将其抽取为一排vector，每个时间点大概0.01秒用一个vector来表示。神经网络会对所有的vector先计算匹配度，下图的下半部分黑色方格代表匹配度，颜色越深代表越匹配。</p>
-<p><img src="/images/rnn_and_gan16.jpg" alt=""></p>
-<p>如图，使用第一个红色方格标记的部分黑色方格代表此时RNN需要注意的输入，将此输入传入给一个decoder，会得到对应的输出，即左边横轴的音素<code>h</code>，不仅如此，decoder还会产生空白。</p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2018-03-18-LHY_RNN_and_GAN/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2018-03-18-LHY_RNN_and_GAN/" title="李宏毅深度学习-八-RNN和GAN">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2018-03-09-SSD_detail/">
-    		SSD深入理解
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.551Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h2 id="1-网络结构"><a href="#1-网络结构" class="headerlink" title="1  网络结构"></a>1  网络结构</h2><p> <img src="/images/blog/ssd_structure1.png" alt="网络结构图"><br>加的卷积层的 feature map 的大小变化比较大，允许能够检测出不同尺度下的物体： 在低层的feature map,感受野比较小，高层的感受野比较大，在不同的feature map进行卷积，可以达到多尺度的目的。</p>
-<p><strong>SSD去掉了全连接层</strong>，每一个输出只会感受到目标周围的信息，包括上下文。这样来做就增加了合理性。并且不同的feature map,预测不同宽高比的图像，这样比YOLO增加了预测更多的比例的box</p>
-<p><strong>横向流程图</strong></p>
-<p> <img src="/images/blog/ssd_structure2.jpg" alt="网络横向结构图"></p>
-<h3 id="1-1-网络结构-代码"><a href="#1-1-网络结构-代码" class="headerlink" title="1.1 网络结构(代码)"></a>1.1 网络结构(代码)</h3><p>basenet 以VGG-19为例。</p>
-<p>代码如下:</p>
-<p>第一段是 VGG-19</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"># Input image format</span><br><span class="line">  img_height, img_width, img_channels &#x3D; image_size[0], image_size[1], image_size[2]</span><br><span class="line"></span><br><span class="line">  ### Design the actual network</span><br><span class="line">  ###############################  这一段是basenet网络结构  用的是VGG-19   ######################################</span><br><span class="line">  x &#x3D; Input(shape&#x3D;(img_height, img_width, img_channels))</span><br><span class="line">  normed &#x3D; Lambda(lambda z: z&#x2F;127.5 - 1.0, # Convert input feature range to [-1,1]</span><br><span class="line">                  output_shape&#x3D;(img_height, img_width, img_channels),</span><br><span class="line">                  name&#x3D;&#39;lambda1&#39;)(x)</span><br><span class="line"></span><br><span class="line">  conv1_1 &#x3D; Conv2D(64, (3, 3), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv1_1&#39;)(normed)</span><br><span class="line">  conv1_2 &#x3D; Conv2D(64, (3, 3), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv1_2&#39;)(conv1_1)</span><br><span class="line">  pool1 &#x3D; MaxPooling2D(pool_size&#x3D;(2, 2), strides&#x3D;(2, 2), padding&#x3D;&#39;valid&#39;, name&#x3D;&#39;pool1&#39;)(conv1_2)</span><br><span class="line"></span><br><span class="line">  conv2_1 &#x3D; Conv2D(128, (3, 3), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv2_1&#39;)(pool1)</span><br><span class="line">  conv2_2 &#x3D; Conv2D(128, (3, 3), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv2_2&#39;)(conv2_1)</span><br><span class="line">  pool2 &#x3D; MaxPooling2D(pool_size&#x3D;(2, 2), strides&#x3D;(2, 2), padding&#x3D;&#39;valid&#39;, name&#x3D;&#39;pool2&#39;)(conv2_2)</span><br><span class="line"></span><br><span class="line">  conv3_1 &#x3D; Conv2D(256, (3, 3), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv3_1&#39;)(pool2)</span><br><span class="line">  conv3_2 &#x3D; Conv2D(256, (3, 3), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv3_2&#39;)(conv3_1)</span><br><span class="line">  conv3_3 &#x3D; Conv2D(256, (3, 3), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv3_3&#39;)(conv3_2)</span><br><span class="line">  pool3 &#x3D; MaxPooling2D(pool_size&#x3D;(2, 2), strides&#x3D;(2, 2), padding&#x3D;&#39;valid&#39;, name&#x3D;&#39;pool3&#39;)(conv3_3)</span><br><span class="line"></span><br><span class="line">  conv4_1 &#x3D; Conv2D(512, (3, 3), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv4_1&#39;)(pool3)</span><br><span class="line">  conv4_2 &#x3D; Conv2D(512, (3, 3), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv4_2&#39;)(conv4_1)</span><br><span class="line">  conv4_3 &#x3D; Conv2D(512, (3, 3), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv4_3&#39;)(conv4_2)</span><br><span class="line">  pool4 &#x3D; MaxPooling2D(pool_size&#x3D;(2, 2), strides&#x3D;(2, 2), padding&#x3D;&#39;valid&#39;, name&#x3D;&#39;pool4&#39;)(conv4_3)</span><br><span class="line"></span><br><span class="line">  conv5_1 &#x3D; Conv2D(512, (3, 3), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv5_1&#39;)(pool4)</span><br><span class="line">  conv5_2 &#x3D; Conv2D(512, (3, 3), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv5_2&#39;)(conv5_1)</span><br><span class="line">  conv5_3 &#x3D; Conv2D(512, (3, 3), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv5_3&#39;)(conv5_2)</span><br><span class="line">  pool5 &#x3D; MaxPooling2D(pool_size&#x3D;(3, 3), strides&#x3D;(1, 1), padding&#x3D;&#39;same&#39;, name&#x3D;&#39;pool5&#39;)(conv5_3)</span><br><span class="line">   ###############################  这一段是basenet网络结束      ######################################</span><br></pre></td></tr></table></figure>
-
-<p>第二段为SSD使用的6个额外的特征层(接上面的)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">fc6 &#x3D; Conv2D(1024, (3, 3), dilation_rate&#x3D;(6, 6), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;fc6&#39;)(pool5)</span><br><span class="line">fc7 &#x3D; Conv2D(1024, (1, 1), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;fc7&#39;)(fc6)</span><br><span class="line"></span><br><span class="line">conv6_1 &#x3D; Conv2D(256, (1, 1), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv6_1&#39;)(fc7)</span><br><span class="line">conv6_2 &#x3D; Conv2D(512, (3, 3), strides&#x3D;(2, 2), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv6_2&#39;)(conv6_1)</span><br><span class="line"></span><br><span class="line">conv7_1 &#x3D; Conv2D(128, (1, 1), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv7_1&#39;)(conv6_2)</span><br><span class="line">conv7_2 &#x3D; Conv2D(256, (3, 3), strides&#x3D;(2, 2), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv7_2&#39;)(conv7_1)</span><br><span class="line"></span><br><span class="line">conv8_1 &#x3D; Conv2D(128, (1, 1), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv8_1&#39;)(conv7_2)</span><br><span class="line">conv8_2 &#x3D; Conv2D(256, (3, 3), strides&#x3D;(1, 1), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;valid&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv8_2&#39;)(conv8_1)</span><br><span class="line"></span><br><span class="line">conv9_1 &#x3D; Conv2D(128, (1, 1), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv9_1&#39;)(conv8_2)</span><br><span class="line">conv9_2 &#x3D; Conv2D(256, (3, 3), strides&#x3D;(1, 1), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;valid&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv9_2&#39;)(conv9_1)</span><br></pre></td></tr></table></figure>
-<p>对conv4_3的输出做正则化处理</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># Feed conv4_3 into the L2 normalization layer</span><br><span class="line">conv4_3_norm &#x3D; L2Normalization(gamma_init&#x3D;20, name&#x3D;&#39;conv4_3_norm&#39;)(conv4_3)</span><br></pre></td></tr></table></figure>
-
-<p>接下来的步骤是基于basenet的结果做多层输出。 包含以下几个特征层</p>
-<ul>
-<li>conv4_3_norm</li>
-<li>fc7</li>
-<li>conv6_2</li>
-<li>conv7_2</li>
-<li>conv8_2</li>
-<li>conv9_2</li>
-</ul>
-<h2 id="2-分类和回归"><a href="#2-分类和回归" class="headerlink" title="2  分类和回归"></a>2  分类和回归</h2><p>顺着代码继续走。接下来是解析 上图中 <code>Detector &amp; classifier</code> 这部分的代码。</p>
-<p>需要了解的是上面的<code>Detector &amp; classifier</code> 这部分操作其实由三部分组成。以<code>Detector &amp; classifier 4</code>为例，如下图：</p>
-<p><img src="/images/blog/ssd_3_clas_loc.png" alt="网络横向结构图"></p>
-<p>做了 三个操作：</p>
-<ul>
-<li>生成 anchor box</li>
-<li>做卷积-&gt;定位(localization)</li>
-<li>做卷积-&gt;分类(confidence)</li>
-</ul>
-<p>注意上图默认是每个feature map上每个点生成3个 priorbox，所以一共生成了75个。</p>
-<h3 id="2-1-卷积-gt-分类"><a href="#2-1-卷积-gt-分类" class="headerlink" title="2.1 卷积-&gt;分类"></a>2.1 卷积-&gt;分类</h3><p>直接看源码如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># we predict &#39;n_classes&#39; confidence values for each box,hence the confidence predictors have depth &#39;n_boxes*n_classes&#39;</span><br><span class="line"># Output shape of confidence layers : &#39; (batch,height,width,n_boxes*n_classes)</span><br><span class="line">conv4_3_mbox_conf &#x3D; Conv2D(n_boxes_fc7*n_classes,(3,3),padding&#x3D;&#39;same&#39;,kernel_initializer&#x3D;&#39;he_normal&#39;,name &#x3D; &#39;conv4_3_norm_mbox_conf&#39;)(conv4_3)</span><br><span class="line">fc7_mbox_conf &#x3D; Conv2D(n_boxes_fc7*n_classes,(3,3),padding &#x3D;&#39;same&#39;,kernel_initializer&#x3D;&#39;he_normal&#39;,name&#x3D;&#39;fc7_mbox_conf&#39;)(fc7)</span><br><span class="line">conv8_2_mbox_conf &#x3D; Conv2D(n_boxes_conv6_2*n_classes,(3,3),padding&#x3D;&#39;same&#39;,kernel_initializer&#x3D;&#39;he_normal&#39;,name&#x3D;&#39;conv8_2_mbox_conf&#39;)(conv8_2)</span><br><span class="line">conv9_2_mbox_conf &#x3D; Conv2D(n_boxes_conv7_2*n_classes,(3,3),padding&#x3D;&#39;same&#39;,kernel_initializer&#x3D;&#39;he_normal&#39;,name&#x3D;&#39;conv9_2_mbox_conf&#39;)(conv9_2)</span><br><span class="line">conv10_2_mbox_conf &#x3D; Conv2D(n_boxes_conv9_2*n_classes,(3,3),padding&#x3D;&#39;same&#39;,kernel_initializer&#x3D;&#39;he_normal&#39;,name&#x3D;&#39;conv9_2_mbox_conf&#39;)(conv10_2)</span><br></pre></td></tr></table></figure>
-
-<p>需要注意的是<strong>卷积核数目是跟分类数目相关</strong>。假设某一层feature map的size是 $m\times n$，通道数是 $p$。例如上面展示的 <code>Detector &amp; classifier4</code>就是  $m=5,n=5,p=256$。做分类时<strong>所有的卷积核都是3x3xp</strong>(上面的代码没有体现出p),而输出通道数是 $n_{boxes}\times n_{classes}$ （代码中的n_boxes和n_classes）<br>n_boxes代表的是default box(从feature map上自动生成的方框)。不同feautre map层的n_boxes不同，一般是4或6.</p>
-<h3 id="2-2-卷积-gt-回归-其实还是卷积"><a href="#2-2-卷积-gt-回归-其实还是卷积" class="headerlink" title="2.2 卷积-&gt;回归(其实还是卷积)"></a>2.2 卷积-&gt;回归(其实还是卷积)</h3><p>从feature map中回归得到 每个预测框的 $x(中心点x坐标),y(中心点y坐标),w(预测框的宽度),h(预测框的高度)$ 。同样使用 $3\times 3$的卷积核(理论上应该是 $3\times3\times p$)。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">## predict 4 boxes for coordinates for each box,hence the localization predictors have depth &#39;n_boxes*4&#39;</span><br><span class="line">conv4_3_mbox_loc &#x3D; Conv2D(n_boxes_conv6_2*4,(3,3),padding&#x3D;&#39;same&#39;,kernel_initializer&#x3D;&#39;he_normal&#39;,name&#x3D;&#39;conv4_3_mbox_loc&#39;)(conv4_3_norm)</span><br><span class="line">fc7_mbox_loc &#x3D; Conv2D(n_boxes_fc7*4,(3,3),padding&#x3D;&#39;same&#39;,kernel_initializer&#x3D;&#39;he_normal&#39;,name&#x3D;&#39;fc7_mbox_loc&#39;)(fc7)</span><br><span class="line">conv8_2_mbox_loc &#x3D; Conv2D(n_boxes_conv7_2*4,(3,3),padding&#x3D;&#39;same&#39;,kernel_initializer&#x3D;&#39;he_normal&#39;,name&#x3D;&#39;conv8_2_mbox_loc&#39;)(conv8_2)</span><br><span class="line">conv9_2_mbox_loc &#x3D; Conv2D(n_boxes_conv8_2*4,(3,3),padding&#x3D;&#39;same&#39;,kernel_initializer&#x3D;&#39;he_normal&#39;,name&#x3D;&#39;conv9_2_mbox_loc&#39;)(conv9_2)</span><br><span class="line">conv10_2_mbox_loc &#x3D; Conv2D(n_boxes_conv9_2*4,(3,3),padding&#x3D;&#39;same&#39;,kernel_initializer&#x3D;&#39;he_normal&#39;,name&#x3D;&#39;conv10_2_mbox_loc&#39;)(conv10_2)</span><br></pre></td></tr></table></figure>
-<p>与上面的一致，只不过输出通道数变为 $n_{boxes}\times 4$，最后乘以4，代表的是对每个default box(从feature map上自动生成的方框)的位置信息。</p>
-<h3 id="2-4-生成prior-box-default-box"><a href="#2-4-生成prior-box-default-box" class="headerlink" title="2.4 生成prior box(default box)"></a>2.4 生成prior box(default box)</h3><p><strong>注意，此时已经有两个地方生成box了。一个来自2.2步的卷积，一个是这一步由新的keras层生成。这一步生成的box是模板形式的，而且最后一个维度是8（2.2步生成的是4）是4个location维度+4个偏置(回归所需的参数)。</strong></p>
-<p>论文中并没有提到prior box是基于什么生成的，看图的话会以为是直接从feature map中生成，从代码来看，<strong>prior box是从位置回归的feature map中生成</strong>，这一点与第二节开始的那个图(生成75个box)不太一致，此处暂时按照代码的思路走。代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">## Generate the anchor box(called &quot;priors&quot; in the original caffe&#x2F;c++ implemention )</span><br><span class="line"># output shape of anchor &#39;(batch,height,width,n_boxes,8)&#39;</span><br><span class="line">conv4_3_mbox_priorbox &#x3D; AnchorBoxes(img_height,img_width,this_scale &#x3D; scales[0],next_scale &#x3D; scales[1],</span><br><span class="line">                                        aspect_ratios &#x3D; aspect_ratios_conv4_3,two_boxes_for_ar1 &#x3D; two_boxes_for_ar1,</span><br><span class="line">                                        limit_boxes&#x3D; limit_boxes,variances&#x3D;variances,coords &#x3D; coords,normalize_coords&#x3D; normalize_coords,</span><br><span class="line">                                        name&#x3D;&#39;conv4_3_mbox_priorbox&#39;)(conv4_3_mbox_loc)</span><br><span class="line">fc7_mbox_priorbox &#x3D; AnchorBoxes(img_height, img_width, this_scale&#x3D;scales[1], next_scale&#x3D;scales[2],</span><br><span class="line">                                    aspect_ratios&#x3D;aspect_ratios_fc7,</span><br><span class="line">                                    two_boxes_for_ar1&#x3D;two_boxes_for_ar1, limit_boxes&#x3D;limit_boxes, variances&#x3D;variances,</span><br><span class="line">                                    coords&#x3D;coords, normalize_coords&#x3D;normalize_coords, name&#x3D;&#39;fc7_mbox_priorbox&#39;)(fc7_mbox_loc)</span><br><span class="line">conv8_2_mbox_priorbox &#x3D; AnchorBoxes(img_height, img_width, this_scale&#x3D;scales[3], next_scale&#x3D;scales[4],</span><br><span class="line">                                        aspect_ratios&#x3D;aspect_ratios_conv7_2,</span><br><span class="line">                                        two_boxes_for_ar1&#x3D;two_boxes_for_ar1, limit_boxes&#x3D;limit_boxes,</span><br><span class="line">                                        variances&#x3D;variances, coords&#x3D;coords, normalize_coords&#x3D;normalize_coords,</span><br><span class="line">                                        name&#x3D;&#39;conv7_2_mbox_priorbox&#39;)(conv8_2_mbox_loc)</span><br><span class="line">conv9_2_mbox_priorbox &#x3D; AnchorBoxes(img_height, img_width, this_scale&#x3D;scales[4], next_scale&#x3D;scales[5],</span><br><span class="line">                                        aspect_ratios&#x3D;aspect_ratios_conv8_2,</span><br><span class="line">                                        two_boxes_for_ar1&#x3D;two_boxes_for_ar1, limit_boxes&#x3D;limit_boxes,</span><br><span class="line">                                        variances&#x3D;variances, coords&#x3D;coords, normalize_coords&#x3D;normalize_coords,</span><br><span class="line">                                        name&#x3D;&#39;conv8_2_mbox_priorbox&#39;)(conv9_2_mbox_loc)</span><br><span class="line">conv10_2_mbox_priorbox &#x3D; AnchorBoxes(img_height, img_width, this_scale&#x3D;scales[5], next_scale&#x3D;scales[6],</span><br><span class="line">                                        aspect_ratios&#x3D;aspect_ratios_conv9_2,</span><br><span class="line">                                        two_boxes_for_ar1&#x3D;two_boxes_for_ar1, limit_boxes&#x3D;limit_boxes,</span><br><span class="line">                                        variances&#x3D;variances, coords&#x3D;coords, normalize_coords&#x3D;normalize_coords,</span><br><span class="line">                                        name&#x3D;&#39;conv9_2_mbox_priorbox&#39;)(conv10_2_mbox_loc)&#96;</span><br></pre></td></tr></table></figure>
-
-<p>注意 priorbox的输入是 box_loc。上面的 AnchorBoxes是重写了一个Keras的网络层。</p>
-<h3 id="2-5-如何生成prior-box"><a href="#2-5-如何生成prior-box" class="headerlink" title="2.5 如何生成prior box"></a>2.5 如何生成prior box</h3><h4 id="2-5-1-理论"><a href="#2-5-1-理论" class="headerlink" title="2.5.1 理论"></a>2.5.1 理论</h4><p>prior box是按照不同的 scale 和 ratio 生成，m(默认是6，但是有的层不一定，比如conv4_3层的是3(实际上因为对于ratio=1的会多生成一个，所以是4个))个 default boxes，这种结构有点类似于 Faster R-CNN 中的 Anchor。(此处m=6所以：$5\times 5\times 6$ = 150 boxes)。</p>
-<p><img src="/images/blog/ssd_4_map.png" alt="网络横向结构图"></p>
-<p>上图中从左到右依次是：原图，以特征图中一个像素点为中心生成的3个priorbox（不同宽和高），特征图(256x5x5)。</p>
-<ul>
-<li><p><strong>scale</strong>: 假定使用N个不同层的feature map 来做预测。最底层的 feature map 的 scale 值为 $s_{min}=0.2$，最高层的为$s_{max} = 0.9$ ，其他层通过下面公式计算得到 $s_k = s_{min}+\frac{s_{max}-s_{min}}{m-1}(k-1), k\in [1,N]$ (低层检测小目标，高层检测大目标)。当前$300\times3\times3$网络一共使用了6(N=6)个feature map，即网络结构图中的detector1..detector6。比如第一层<strong>detector1</strong>的$s_k=0.2$，第二层的<strong>detector2</strong>的$s_k=0.2+\frac{0.9-0.2}{6-1}(2-1)=0.34$,…第五层<strong>detector5</strong>的$s_k=0.2+\frac{0.9-0.2}{6-1}(5-1)=0.76$</p>
-</li>
-<li><p><strong>ratio</strong>: 使用不同的 ratio值 $a_r\in \lbrace 1,2,\frac{1}{2},3,\frac{1}{3}\rbrace$ 计算 default box 的宽度和高度： $w_K^{a} = s_k \sqrt{a_r} , h_k^{a} =s_k/\sqrt{a_r}$ 。另外对于 ratio = 1 的情况，额外再指定 scale 为 $s_k{`}=\sqrt{s_ks_{k+1}}$ 也就是总共有 6 中不同的 default box。比如示意图中的为<strong>detector4</strong>，其$s_k=0.62$,依据公式 $w_K^{a} = s_k \sqrt{a_r}$ 按照 $\lbrace 1,2,\frac{1}{2},3,\frac{1}{3}\rbrace$ 顺序可以有 $w_k^a$ : $[0.62\times300,0.62\times1.414\times300,0.62\times0.707\times300,0.62\times1.732\times300,0.62\times0.577\times300]$ 。<strong>与图中的168不一致</strong></p>
-</li>
-<li><p><strong>default box中心</strong>：上每个 default box的中心位置设置成 $(\frac{i+0.5}{\vert f_k \vert},\frac{j+0.5}{\vert f_k\vert})$ ，其中 $\vert f_k \vert$ 表示第k个特征图的大小 $i,j\in [0,\vert f_k\vert]$  。</p>
-</li>
-</ul>
-<p>注意：每一层的scale参数是</p>
-<p><strong>注意这些参数都是相对于原图的参数，不是最终值</strong></p>
-<h4 id="2-5-2-代码解析"><a href="#2-5-2-代码解析" class="headerlink" title="2.5.2 代码解析"></a>2.5.2 代码解析</h4><p>我把<code>ssd_box_encode_decode_utils.py</code>代码里面关于如何生成prior box的部分精简部分提取出来如下,注意生成prior box的代码是一个类<code>AnchorBoxes</code>：</p>
-<p>先看构造方法里面的参数</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">def __init__(self,</span><br><span class="line">                img_height,</span><br><span class="line">                img_width,</span><br><span class="line">                this_scale,</span><br><span class="line">                next_scale,</span><br><span class="line">                aspect_ratios&#x3D;[0.5, 1.0, 2.0],</span><br><span class="line">                two_boxes_for_ar1&#x3D;True,</span><br><span class="line">                limit_boxes&#x3D;True,</span><br><span class="line">                variances&#x3D;[1.0, 1.0, 1.0, 1.0],</span><br><span class="line">                coords&#x3D;&#39;centroids&#39;,</span><br><span class="line">                normalize_coords&#x3D;False,</span><br><span class="line">                **kwargs)</span><br></pre></td></tr></table></figure>
-
-<p>依次解析参数。</p>
-<ul>
-<li>img_height：原始输入图像的尺寸</li>
-<li>img_width：</li>
-<li>this_scale：当前feature map的scale</li>
-<li>next_scale：下一个feature map的scale。至于用处，下面的代码会说明</li>
-<li>aspect_ratios=[0.5, 1.0, 2.0] :当前feature map即将生成的<strong>每个</strong>prior box的ratios，它的长度即当前feature map上<strong>每个特征点</strong>会生成的prior box数目。</li>
-<li>two_boxes_for_ar1=True：对于ratios=1的特征层是否多生成一个 prior box</li>
-<li>limit_boxes=True :是否限制boxes的数目</li>
-<li>variances=[1.0, 1.0, 1.0, 1.0]： 这个参数是用来和 two_boxes_for_ar1配合使用，用来处理如何多生成一个prior box的</li>
-<li>coords=’centroids’：坐标体系，是$(x,y,w,h)$还是$(x_{min},y_{min},x_{max},y_{max})$</li>
-<li>normalize_coords=False:是否归一化</li>
-</ul>
-<p>接下来看<code>call(self,x)函数</code>，该函数里面写明了如何处理数据，如何生成priorbox。</p>
-<h4 id="2-5-3-获取每个cell的尺寸"><a href="#2-5-3-获取每个cell的尺寸" class="headerlink" title="2.5.3 获取每个cell的尺寸"></a>2.5.3 获取每个cell的尺寸</h4><p>cell代表的是将<strong>原图</strong>切割成 <strong>feature_map_width * feature_map_height</strong>个小矩形格。代码<code>keras_layer_AnchorBoxes</code>的<code>call</code>方法中演示了如何根据每个特征层生成priorbox。代码做了两个操作</p>
-<ul>
-<li><p>获取每个cell的宽和高</p>
-</li>
-<li><p>获取每个cell的 起始坐标(左上角的x,y)</p>
-</li>
-</ul>
-<p>为了演示如何处理，我单独测试这个代码。假设测试的特征层为上图的 $5\times5\times5\times256$ ,让所有的值为1.</p>
-<p><img src="/images/blog/ssd_5_code1.png" alt=""></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">input &#x3D; np.ones([16,5,5,512],dtype&#x3D;np.int16)</span><br></pre></td></tr></table></figure>
-
-<p>当前层feature map的ratios = [0.5,1,2]，根据公式$w_K^{a} = s_k \sqrt{a_r} , h_k^{a} =s_k/\sqrt{a_r}$。计算 priorbox的宽和高，注意中间都会乘以size(原图尺寸参考)。</p>
-<p>以下图的168为例，</p>
-<p><img src="/images/blog/ssd_6_map.png" alt=""></p>
-<p>然后将<strong>原图划分cell</strong>，依据是当前feature map大小。比如下面的代码中，feature map大小是 $5\times 5$，原图大小是 $300\times300$，那么每个cell尺寸是 $\frac{300}{5}\times \frac{300}{5}=60\times60$</p>
-<p><img src="/images/blog/ssd_7_code2.png" alt=""></p>
-<p>上面这一步做的其实是下图</p>
-<p><img src="/images/blog/ssd_8_bbox.png" alt="网络横向结构图"></p>
-<p>不同的feature map的cell宽和高不同。依据feature map将原图划分为等额的cell，<strong>红框部分是获取每个cell在原图里的起始坐标点(x,y)</strong>。</p>
-<p>注意boxes是如何产生的 <code>boxes_tensor = np.zeros((feature_map_height, feature_map_width, self.n_boxes, 4))</code> 创建了一个  <strong><em>size= [feature_map_height,feature_map_width,n_boxes,4]</em></strong> 的四维矩阵。代表的是每个feature map的每个特征点有n_boxes个priorbox，而每个priorbox有<code>x</code>,<code>y</code>,<code>w</code>，<code>h</code>四个参数来定义一个priorbox。</p>
-<p>接下来是把priorbox超出原图边界的修正下。</p>
-<p>然后再创建一个<code>variances_tensor</code>，它和上面的<code>boxes_tensor</code>维度一样，只不过它的值都为0加上variance(尺寸和n_boxes一样).然后将<code>variances_tensor</code>和<code>boxes_tensor</code>做连接（concatenate）操作。所以生成的priorbox 会变成 <strong><em>size= [feature_map_height,feature_map_width,n_boxes,8]</em></strong> (论文里面不会说得这么具体)</p>
-<p>下图可以看出，原图中两个动物分别在不同层次的<code>detector &amp; classifier</code> 被检测出来。<br><img src="/images/blog/ssd_9_code0.png" alt=""></p>
-<h3 id="2-6-Reshape"><a href="#2-6-Reshape" class="headerlink" title="2.6 Reshape"></a>2.6 Reshape</h3><p>接下来变换特征矩阵便于做统一处理。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># reshape the predict class predictoins,yield 3D tensor of shape &#39;(batch,height*width*n_boxes,n_classes)&#39;</span><br><span class="line"># we want the classes isolated in the last axis to perform softmax on the them</span><br><span class="line">conv4_3_mbox_conf_reshape &#x3D; Reshape((-1,n_classes),name &#x3D; &#39;conv4_3_mbox_conf_reshape&#39;)(conv4_3_mbox_conf)</span><br><span class="line">fc7_mbox_conf_reshape &#x3D; Reshape((-1,n_classes),name&#x3D; &#39;fc7_mbox_conf_reshape&#39;)(fc7_mbox_conf)</span><br><span class="line">conv8_2_mbox_conf_reshape &#x3D; Reshape((-1,n_classes),name &#x3D; &#39;conv8_2_mbox_conf_reshape&#39;)(conv8_2_mbox_conf)</span><br><span class="line">conv9_2_mbox_conf_reshape &#x3D; Reshape((-1,n_classes),name&#x3D; &#39;conv9_2_mbox_conf_reshape&#39;)(conv9_2_mbox_conf)</span><br><span class="line">conv10_2_mbox_conf_reshpe &#x3D; Reshape((-1,n_classes),name &#x3D; &#39;conv10_2_mbox_conf_reshape&#39;)(conv10_2_mbox_conf)</span><br><span class="line"></span><br><span class="line">conv4_3_mbox_loc_reshape &#x3D; Reshape((-1,4),name &#x3D; &#39;conv4_3_mbox_loc_reshape&#39;)(conv4_3_mbox_loc)</span><br><span class="line">fc7_mbox_loc_reshape &#x3D; Reshape((-1, 4), name&#x3D;&#39;fc7_mbox_loc_reshape&#39;)(fc7_mbox_loc)</span><br><span class="line">conv8_2_mbox_loc_reshape &#x3D; Reshape((-1, 4), name&#x3D;&#39;conv8_2_mbox_loc_reshape&#39;)(conv8_2_mbox_loc)</span><br><span class="line">conv9_2_mbox_loc_reshape &#x3D; Reshape((-1, 4), name&#x3D;&#39;conv9_2_mbox_loc_reshape&#39;)(conv9_2_mbox_loc)</span><br><span class="line">conv10_2_mbox_loc_reshpe &#x3D; Reshape((-1, 4), name&#x3D;&#39;conv10_2_mbox_loc_reshape&#39;)(conv10_2_mbox_loc)</span><br><span class="line"></span><br><span class="line">## Reshape the anchor box tensors ,yield 3D tensors of shape &#96;(batch,height*width*n_boxes,8)&#96;</span><br><span class="line">conv4_3_mbox_priorbox_conf_reshape &#x3D; Reshape((-1,8),name&#x3D;&#39;conv4_3_mbox_priorbox_conf_reshape&#39;)(conv4_3_mbox_priorbox)</span><br><span class="line">fc7_mbox_priorbox_conf_reshappe &#x3D; Reshape((-1,8),name&#x3D;&#39;fc7_mbox_priorbox_conf_reshappe&#39;)(fc7_mbox_priorbox)</span><br><span class="line">conv8_2_priorbox_conf_reshape &#x3D; Reshape((-1,8),name&#x3D; &#39;conv8_2_priorbox_conf_reshape&#39;)(conv8_2_mbox_priorbox)</span><br><span class="line">conv9_2_mbox_priorbox_reshape &#x3D; Reshape((-1, 8), name&#x3D;&#39;conv9_2_mbox_priorbox_reshape&#39;)(conv9_2_mbox_priorbox)</span><br><span class="line">conv10_2_mbox_priorbox_reshape &#x3D; Reshape((-1, 8), name&#x3D;&#39;conv10_2_mbox_priorbox_reshape&#39;)(conv10_2_mbox_priorbox)</span><br></pre></td></tr></table></figure>
-<p>如何理解这一步的操作？</p>
-<p>比如feature map为 $5\times 5\times 256$ (对应的是<code>conv8_2_mbox_conf</code>)这一层，如何运算到当前步骤(不考虑batch)。</p>
-<ol>
-<li>【分类】做$3\times3$卷积运算,输入通道数是 256，卷积数目是 <strong>n_boxes_conv6_2*n_classes</strong>(注意不是n_boxes_conv8_2<em>n_classes)【见2.1节，没有改变feature map大小】，那么输出矩阵是[n_boxes_conv6_2</em>n_classes,5,5] 。n_boxes_conf6_2 = 4，假设是20个分类(要加一个背景分类)，那么产生新的feature map尺寸为[21x4,5,5]。对应的会生成一共 $21\times4\times5\times5=2100$个priorbox</li>
-<li>【回归】做$3\times3$卷积运算,输入通道数是 256，卷积数目是 <strong>n_boxes_conv6_2*4</strong>(注意乘以的是4，不是分类数)【见<strong>2.2</strong>节，没有改变feature map大小】，那么输出矩阵是[n_boxes_conv6_2*4,5,5] 。n_boxes_conf6_2 = 4)，那么产生新的feature map尺寸为[4x4,5,5]。对应的会生成一共 $4\times4\times5\times5=400$个priorbox</li>
-<li>【生成priorbox】，从上一步【回归】的矩阵输出 $4\times4\times5\times5$,feature map大小是 $5\times5$，当前层每个特征点生成4个priorbox，每个priorbox有<code>x</code>,<code>y</code>,<code>w</code>,<code>h</code>四个参数。这一步才是真的填补priorbox的四个参数，并且添加了每个参数的偏置variance，变成8.(即$8\times4\times5\times5$)</li>
-<li>【reshape】<ul>
-<li>对【分类】步骤的结果reshape：[n_boxes_conv6_2*n_classes,5,5]（即[21x4,5,5]）–&gt;[-1,n_classes]（即[100,21]）</li>
-<li>对【回归】步骤的结果reshape: [n_boxes_conv6_2*4,5,5] （即[4x4,5,5])–&gt;[-1,4]（即[100,4]）</li>
-<li>对【priorbox】步骤的结果reshape:[n_boxes_conv6_2*8,5,5]（即[4x8,5,5]）–&gt;[-1,8]（即[100,8]）</li>
-</ul>
-</li>
-</ol>
-<h3 id="2-8-连接concatenate"><a href="#2-8-连接concatenate" class="headerlink" title="2.8 连接concatenate"></a>2.8 连接concatenate</h3><p>连接所有的分类，回归，priorbox</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">## Concatenate the prediction from different layers</span><br><span class="line"># Axis 0 (batch)  and axis 2 (n_classes or 4)  are identical for all layer predictions</span><br><span class="line"># so we want to concatenate along axis 1, the number of box per layer</span><br><span class="line"># Output shape of &#96;mbox_conf&#96;  :(batch,n_boxes_total,n_classes)</span><br><span class="line">mbox_conf &#x3D; Concatenate(axis&#x3D;1,name&#x3D;&#39;mbox_conf&#39;)([conv4_3_mbox_conf,fc7_mbox_conf_reshape,conv8_2_mbox_conf_reshape,conv9_2_mbox_conf_reshape,conv10_2_mbox_conf_reshpe])</span><br><span class="line"></span><br><span class="line"># output shape of mbox_loc (batch,n_boxes_total,4)</span><br><span class="line">mbox_loc &#x3D; Concatenate(axis&#x3D;1,name&#x3D;&#39;mbox_loc&#39;)([conv4_3_mbox_loc_reshape,fc7_mbox_loc_reshape,conv8_2_mbox_loc_reshape,conv9_2_mbox_loc_reshape,conv10_2_mbox_loc_reshpe])</span><br><span class="line"></span><br><span class="line"># Output shape of &#39;mbox_prior &#39;: (batch,n_boxes_total,8)</span><br><span class="line">mbox_priorbox &#x3D; Concatenate(axis&#x3D;1,name&#x3D;&#39;mbox_priorbox&#39;)([conv4_3_mbox_priorbox_conf_reshape,fc7_mbox_priorbox_conf_reshappe,conv8_2_priorbox_conf_reshape,conv9_2_mbox_priorbox_reshape,conv10_2_mbox_priorbox_reshape])</span><br></pre></td></tr></table></figure>
-
-<p>所以从代码上来看，所有的分类走一条线，回归走一条线，生成priorbox走一条线（中间是从回归那边过来）。一条线的意思是，从basenet开始到最后添加的所有的feature map层处理这一段流程。<strong>从论文来看回归即priorbox，但是代码上来看是分开的</strong></p>
-<p>回归<code>loc</code>和<code>priorbox</code>所生成的结果是相互独立的，而分类的结果之间是相互影响的(每个分类都有个单独的结果)，需要做一个softmax实现多分类。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mbox_conf_softmax &#x3D; Activation(&#39;softmax&#39;,name&#x3D;&#39;mbox_conf_softmax&#39;)(mbox_conf)</span><br></pre></td></tr></table></figure>
-<p>最后做个汇总，把分类、回归、priorbox连接起来。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># concatenate the class and box predictions and the anchor box</span><br><span class="line"># output shape is (batch,n_boxes_total,n_classes+8+4)</span><br><span class="line">prediction &#x3D; Concatenate(axis &#x3D; 1,name&#x3D;&#39;all_prediction&#39;)([mbox_conf_softmax,mbox_loc,mbox_priorbox])</span><br></pre></td></tr></table></figure>
-
-<p>注意是在最后一个维度连接，最后的维度是 <strong>n_classes+4+8</strong></p>
-<h2 id="3-数据生成generator"><a href="#3-数据生成generator" class="headerlink" title="3 数据生成generator"></a>3 数据生成generator</h2><p>从源代码来看，generator相当复杂。我们可以只关注<code>ssd_batch_generator.py</code>中的<code>generator</code>方法，可以看到里面做了大量的数据增强。我们顺序来看</p>
-<p><strong>数据混排</strong></p>
-<p><img src="/images/blog/ssd_9_datashuffle.png" alt=""></p>
-<p><strong>等值变换</strong>（增强对比度）</p>
-<p><img src="/images/blog/ssd_10_equal.png" alt=""></p>
-<p><strong>明暗度变换</strong></p>
-<p><img src="/images/blog/ssd_11_brightness.png" alt=""></p>
-<p><strong>水平翻转</strong></p>
-<p><img src="/images/blog/ssd_12_flip.png" alt=""></p>
-<p>等等。。</p>
-<h2 id="4-如何生成训练样本-正-负Box"><a href="#4-如何生成训练样本-正-负Box" class="headerlink" title="4 如何生成训练样本(正/负Box)"></a>4 如何生成训练样本(正/负Box)</h2><p>AnchorBox是FasterRCNN的叫法，SSD的是PriorBox。下面的代码是<code>ssd_box_encode_decode_utils</code>的<code>encode_y</code>方法。通过这个方法可以知道代码里面是如何生成正/负样本的。</p>
-<p>方法传入的是一张图片的所有真实bbox,即[(分类1，xmin,ymin,xmax,ymax),(分类2,xmin,ymin,xmax,ymax),…]。注意，从下面这段代码可以看出，<strong>没有直接使用真实的标注bbox，而是使用与真实bbox重叠超过一定比率的预设priorbox作为正样本，小于一定比率的为负样本</strong></p>
-<p>大概过程如下：</p>
-<ol>
-<li>先收集整个网络的PriorBox。包含了根据SSD所有特征层生成的PriorBox。作为全部正样本候选</li>
-<li>拷贝一份正样本，作为负样本的候选。</li>
-<li>计算每个正样本与全部真实标记框的IOU<ul>
-<li>1 如果所有的PriorBox与真实标记得IOU都没有高于阈值的，则将有最高IOU的PriorBox作为正样本。同时从负样本中剔除该PriorBox</li>
-<li>2 IOU高于阈值的PriorBox会作为正样本保留，同时将对应的priorbox从负样本中剔除</li>
-</ul>
-</li>
-</ol>
-<p><img src="/images/blog/ssd_13_bbox.png" alt=""></p>
-<h3 id="4-1-如何在矩阵中做变换的"><a href="#4-1-如何在矩阵中做变换的" class="headerlink" title="4.1 如何在矩阵中做变换的"></a>4.1 如何在矩阵中做变换的</h3><p>回顾2.8节，SSD网络的最后输出是  <strong>[box_feature,n_classes+4+8]</strong>。</p>
-<p>我们考虑下矩阵是如何变换的，下面的列表是依次说明每一列所代表的意义。</p>
-<table>
-<thead>
-<tr>
-<th>index</th>
-<th>标记</th>
-<th>意义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>[0,..]</td>
-<td>box_feature</td>
-<td>所有的box</td>
-</tr>
-<tr>
-<td>1</td>
-<td>if_class</td>
-<td>背景分类的概率</td>
-</tr>
-<tr>
-<td>2</td>
-<td>if_class</td>
-<td>分类1的概率</td>
-</tr>
-<tr>
-<td>3</td>
-<td>if_class</td>
-<td>分类2的概率</td>
-</tr>
-<tr>
-<td>4</td>
-<td>if_class</td>
-<td>分类3的概率</td>
-</tr>
-<tr>
-<td>…</td>
-<td>…</td>
-<td>分类n的概率</td>
-</tr>
-<tr>
-<td>n+1</td>
-<td>xmin</td>
-<td>SSD网络预测的可能的box的坐标xmin)</td>
-</tr>
-<tr>
-<td>n+2</td>
-<td>xmin</td>
-<td>SSD网络预测的可能的box的坐标ymin)</td>
-</tr>
-<tr>
-<td>n+3</td>
-<td>xmin</td>
-<td>SSD网络预测的可能的box的坐标xmax</td>
-</tr>
-<tr>
-<td>n+4</td>
-<td>xmin</td>
-<td>SSD网络预测的可能的box的坐标ymax</td>
-</tr>
-<tr>
-<td>n+5</td>
-<td>box_xmin</td>
-<td>生成的PriorBox的坐标xmin</td>
-</tr>
-<tr>
-<td>n+6</td>
-<td>box_ymin</td>
-<td>生成的PriorBox的坐标ymin</td>
-</tr>
-<tr>
-<td>n+7</td>
-<td>box_xmax</td>
-<td>生成的PriorBox的坐标xmax</td>
-</tr>
-<tr>
-<td>n+8</td>
-<td>box_ymax</td>
-<td>生成的PriorBox的坐标ymax</td>
-</tr>
-<tr>
-<td>n+9</td>
-<td>box_x_var</td>
-<td>将网络预测的xmin调整到真实xmin所需的参数</td>
-</tr>
-<tr>
-<td>n+10</td>
-<td>box_y_var</td>
-<td>将网络预测的ymin调整到真实ymin所需的参数</td>
-</tr>
-<tr>
-<td>n+11</td>
-<td>box_wth_var</td>
-<td>将网络预测的box的<strong>宽度</strong>调整到真实box<strong>宽度</strong>所需的参数</td>
-</tr>
-<tr>
-<td>n+12</td>
-<td>box_hgt_var</td>
-<td>将网络预测的box的<strong>高度</strong>调整到真实box<strong>高度</strong>所需的参数</td>
-</tr>
-</tbody></table>
-<p>注意：</p>
-<ul>
-<li><code>SSD网络预测的可能的box的坐标</code>: 这个结果你可以当做普通卷积的一个输出结果，跟PriorBox无关</li>
-<li><code>生成的PriorBox的坐标</code>:指的是在feature map参照下生成的各个priorbox坐标。这个是模板形式，任意图片进来都是相同的值。它的作用是产生正/负样本，真实坐标是没有直接参与训练的，priorbox坐标与真实坐标iou大于阈值的为正，小于另外一个阈值的为负。</li>
-</ul>
-<p>添加测试代码:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">aspect_ratios_per_layer &#x3D; [[0.5, 1.0, 2.0],</span><br><span class="line">                          [1.0 &#x2F; 3.0, 0.5, 1.0, 2.0, 3.0],</span><br><span class="line">                          [1.0 &#x2F; 3.0, 0.5, 1.0, 2.0, 3.0],</span><br><span class="line">                          [1.0 &#x2F; 3.0, 0.5, 1.0, 2.0, 3.0],</span><br><span class="line">                          [0.5, 1.0, 2.0],</span><br><span class="line">                          [0.5, 1.0, 2.0]]</span><br><span class="line">encoder &#x3D; SSDBoxEncoder(300,300,21,predictor_sizes &#x3D; [(20,50,120,150),(20,50,120,150),(20,50,120,150),(20,50,120,150)])</span><br><span class="line">ground_label &#x3D; [[np.array([1,20,50,120,150]),np.array([2,220,150,70,80])]]</span><br><span class="line">encoder.encode_y(ground_label)</span><br></pre></td></tr></table></figure>
-
-<p>我们先分析生成生成Box的数量问题。通过调试上面的测试代码，可以看到</p>
-<p><img src="/images/blog/ssd_14_box.png" alt=""></p>
-<p>下面再对shape的后一个size 33做出解释。</p>
-<p><img src="/images/blog/ssd_15_boxes.png" alt=""></p>
-<h2 id="4-损失函数"><a href="#4-损失函数" class="headerlink" title="4 损失函数"></a>4 损失函数</h2><p>损失函数的代码在<code>keras_ssd_loss.py</code>这个类中。</p>
-<h3 id="4-1-理论"><a href="#4-1-理论" class="headerlink" title="4.1 理论"></a>4.1 理论</h3><p>目标函数，和常见的 Object Detection 的方法目标函数相同，分为两部分：计算相应的 default box 与目标类别的 score(置信度)以及相应的回归结果（位置回归）。置信度是采用 Softmax Loss（Faster R-CNN是log loss），位置回归则是采用 Smooth L1 loss （与Faster R-CNN一样采用 offset_PTDF靠近 offset_GTDF的策略）。</p>
-<p>$$<br> L(x,c,l,g) = \frac{1}{n}(L_{cof}(x,c)+\alpha L_{loc}(x,l,g))<br>$$</p>
-<p>其中N代表正样本数目。回归损失函数如下：</p>
-<p>$$<br>L_{loc}(x,l,g) =\sum ^N_{i\in Pos}\sum_{m\in \lbrace cx,cy,w,h\rbrace}x_{i,j}^k smooth_{L_1}(l_i^m-\hat g_j^m) \<br>\hat g_j^{cx}= \frac{(g_j^{cx}-d_i^{cx})}{d_i^w} \<br>\hat g_j^{cy}= \frac{(g_j^{cy}-d_i^{cy})}{d_i^h} \<br>\hat g_j^w= \frac{(g_j^w-d_i^w)}{d_i^w} \<br>\hat g_j^h= \frac{(g_j^h-d_i^h)}{d_i^h}<br>$$</p>
-<p>分类损失函数如下：</p>
-<p>$$<br> L_{conf}(x,c) = \sum <em>{i\in Pos}^Nx</em>{ij}^plog(\hat c_i^p)-\sum_{i\in Neg}log(\hat c_i^0) \quad\quad 其中 \hat c_i^p = \frac{exp(c_i^p)}{\sum_pexp(c_i^p)}<br>$$</p>
-<h3 id="4-2-代码中的详细计算"><a href="#4-2-代码中的详细计算" class="headerlink" title="4.2 代码中的详细计算"></a>4.2 代码中的详细计算</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 1: Compute the losses for class and box predictions for every box</span><br><span class="line">classification_loss &#x3D; tf.to_float(self.log_loss(y_true[:,:,:-12], y_pred[:,:,:-12])) # Output shape: (batch_size, n_boxes)</span><br><span class="line">localization_loss &#x3D; tf.to_float(self.smooth_L1_loss(y_true[:,:,-12:-8], y_pred[:,:,-12:-8])) # Output shape: (batch_size, n_boxes)</span><br></pre></td></tr></table></figure>
-
-<p>可以看到计算loss的时候是分别取出对应部分值的。注意<strong>2.8节</strong>最后的维度是 <strong>n_classes+4+8</strong>,上面计算classification_loss的时候是取得<strong>n_classes</strong>部分，localization_loss取的是<code>4</code>(回归得到的priorbox的四个参数)。<strong>此处最后的<code>8</code>没有使用，这个<code>8</code>是生成的priorbox的4个参数和4个参数的偏置，只有在inference的时候需要使用</strong>。</p>
-<p><strong>生成模板</strong></p>
-<p><code>generate_encode_template</code>主要做了一下操作：</p>
-<ol>
-<li>给所有特征层生成box。包括宽、高、坐标、尺寸等。<strong>[batch_size,len(box),4]</strong> （这一步使用的是<code>generate_anchor_boxes</code>方法，不是keras新层AnchorBox，AnchorBox生成的box的最后一个维度是8，已经带了variance）</li>
-<li>生成与box同等数量的分类(one-hot形式)，初始都是0。 <strong>[batch_size,len(box),n_classes]</strong></li>
-<li>生成与box同等数量的variance。<strong>[batch_size,len(box),4]</strong></li>
-<li>连接1+2+3步骤生成的矩阵，其中第一步生成的box重复一次(原本只是模板，只有初始值（为了保证与ssd网络的输出维度一致）)，所以尺寸是<strong>[batch_size,len(box),n_classes+4+4+4]</strong></li>
-</ol>
-<p><strong>匹配模板</strong></p>
-<p><code>encode_y</code>对传入的<code>ground_truth_labels</code></p>
-<h4 id="3-3-如何卷积"><a href="#3-3-如何卷积" class="headerlink" title="3.3 如何卷积"></a>3.3 如何卷积</h4><p>feature map 都会通过一些小的卷积核操作，得到每一个 default boxes 关于物体类别的21个置信度 $(c_1,c_2 ,\cdots, c_p$ 20个类别和1个背景) 和4偏移 (shape offsets) 。</p>
-<ul>
-<li><p>假设feature map 通道数为 p 卷积核大小统一为 3<em>3</em>p （此处p=256）。个人猜想作者为了使得卷积后的feature map与输入尺度保持一致必然有 padding = 1， stride = 1 。  $ \frac{inputFieldSize-kernelSize+2\times padding}{stride}+1 = \frac{5-3+2\times 1 }{1}+1 = 5$</p>
-</li>
-<li><p>假如feature map 的size 为 m<em>n, 通道数为 p，使用的卷积核大小为 3<em>3</em>p。每个 feature map 上的每个特征点对应 k 个 default boxes，物体的类别数为 c，那么一个feature map就需要使用 k(c+4)个这样的卷积滤波器，最后有 (m*n) *k</em> (c+4)个输出</p>
-</li>
-</ul>
-<p>参考 </p>
-<p><a href="https://zhuanlan.zhihu.com/p/24954433" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/24954433</a></p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2018-03-09-SSD_detail/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2018-03-09-SSD_detail/" title="SSD深入理解">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2018-03-03-LHY_RNN/">
-    		李宏毅深度学习-七-RNN
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.544Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h2 id="1-什么是循环神经网络"><a href="#1-什么是循环神经网络" class="headerlink" title="1  什么是循环神经网络"></a>1  什么是循环神经网络</h2><p>以NLP中的语义分析为例：输入一个词序列，经过神经网络分析，输出此词序列是正面/负面情绪。</p>
-<p>首先，<strong>词序列</strong>会被表示为一个<strong>词向量</strong>，接着 我们查看循环神经网络和递归神经网络的处理方式。</p>
-<p><strong>循环结构</strong></p>
-<p><img src="/images/blog/LHY7_RNN.jpg" alt="前馈网络示意图"></p>
-<p>上图是一个典型的循环结构，输入为$x^1,x^2,x^3,x^4$ 这些词向量，$f$为循环神经网络的神经元，每个$f$都是一样的，最后输出的$f$经过另外一个激活函数$g$之后即可输出语音分析结果。</p>
-<p><strong>递归网络</strong><br>如果采取的是递归网络，我们需要先决定好输入为$x^1,x^2,x^3,x^4$ 这些词向量之间的先后依赖关系。如下图，$x^1,x^2$一起输入到函数$f$以及$x^3,x^4$一起输入到函数$f$做输出这个是需要自己事先分析并决定好的。</p>
-<p><img src="/images/blog/LHY7_RNN2.jpg" alt="前馈网络示意图"></p>
-<h3 id="1-1-递归结构"><a href="#1-1-递归结构" class="headerlink" title="1.1 递归结构"></a>1.1 递归结构</h3><p>我们先了解下递归结构，假说需要分析<code>not very good</code>这句话的词性。会分别拆分为<code>not</code>,<code>very</code>,<code>good</code>，这三个单词需要按照<code>very</code>,<code>good</code>先结合之后再和<code>not</code>结合（这个需要我们事先决定）。对应的形式如下，至于函数$f$的形式，需要使用训练数据集学习出来：</p>
-<p><img src="/images/blog/LHY7_RNN3.jpg" alt="前馈网络示意图"></p>
-<p>完整的学习构建过程如下，假设我们最后需要输出5个分类，从非常负面到非常正面：</p>
-<p><img src="/images/blog/LHY7_RNN4.jpg" alt="前馈网络示意图"></p>
-<h3 id="1-2-递归网络中函数f的结构"><a href="#1-2-递归网络中函数f的结构" class="headerlink" title="1.2 递归网络中函数f的结构"></a>1.2 递归网络中函数f的结构</h3><h4 id="1-2-1-简单结构"><a href="#1-2-1-简单结构" class="headerlink" title="1.2.1 简单结构"></a>1.2.1 简单结构</h4><p>最简单的结构，如下图：</p>
-<p><img src="/images/blog/LHY7_RNN5.jpg" alt="前馈网络示意图"></p>
-<p>左边是计算式，右边是结构式。向量<code>a</code>和<code>b</code>串接在一起，乘以参数<code>w</code>(其中<code>w</code>是通过学习得到)，得到最左边的绿色向量结果。</p>
-<p>但是这种方式得到的结果一般并不理想，因为有些<strong>矩阵之间存在相互影响关系</strong>,比如上面演示的<code>very</code>和<code>good</code>的结合就会强化正面，<code>very</code>和<code>bad</code>结合就会强化负面。<strong>直接串接在一起只有组合和累计效果，没有相乘关系</strong>。</p>
-<h4 id="1-2-2-递归的Neural-Tensor-Network"><a href="#1-2-2-递归的Neural-Tensor-Network" class="headerlink" title="1.2.2 递归的Neural Tensor Network"></a>1.2.2 递归的Neural Tensor Network</h4><p>递归的Neural Tensor Network可以产生相乘效果，如下图，除了包含上面的简单结构之外，它还做了其他组合。</p>
-<p><img src="/images/blog/LHY7_RNN6.jpg" alt="前馈网络示意图"></p>
-<p>上图中，左侧黑色<code>w</code>左乘了<code>x</code>的转置并右乘了<code>x</code>（其中<code>x</code>是<code>a</code>和<code>b</code>的串接），此处他们之间运算公式为$\sum <em>{i,j} W</em>{i,j}x_ix_j$，注意此处出现的相乘关系。其中$x_i,x_j$分别来自蓝色和黄色矩阵。但是上图虚线框内的相乘结果是一个标量，无法直接与右侧相加的，右侧的相乘结果是$2\times 4$乘以$4\times 1$得到$2\times 1$。需要额外添加其他项，需要重复虚线框内的操作，不过将黑色<code>w</code>矩阵替换为一个新的矩阵，这样的一个组合就会得到一个$2\times 1$的矩阵。</p>
-<p><img src="/images/blog/LHY7_RNN7.jpg" alt="前馈网络示意图"></p>
-<h3 id="1-2-矩阵-向量-Matrix-Vector-递归网络"><a href="#1-2-矩阵-向量-Matrix-Vector-递归网络" class="headerlink" title="1.2  矩阵-向量(Matrix-Vector)递归网络"></a>1.2  矩阵-向量(Matrix-Vector)递归网络</h3><p>该网络以每个词都由两部分组成，即<code>单词本身的含义</code>和<code>对其他词的影响</code>，如下。</p>
-<p><img src="/images/blog/LHY7_RNN8.jpg" alt="前馈网络示意图"></p>
-<p>一个实例如下，比如<code>not</code>这个否定词的作用是对词性取反。它本身的含义可以认为是空白，对其他词的影响都是取反，所以可以分解为两部分一部分是空白向量(<code>a</code>)，一部分是对角值为-1的向量(<code>A</code>)。</p>
-<p><img src="/images/blog/LHY7_RNN9.jpg" alt="前馈网络示意图"></p>
-<p>而<code>good</code>这个词除了表示了一种积极的信息(<code>b</code>)外，对其他词几乎没有影响，所以对其他词的影响部分向量可以看做一个全为1的单位向量(<code>B</code>)，如下：</p>
-<p><img src="/images/blog/LHY7_RNN10.jpg" alt="前馈网络示意图"></p>
-<p>一个完整的计算过程如下，右上角展开之后的计算过程是中间的黑框内：</p>
-<p><img src="/images/blog/LHY7_RNN11.jpg" alt="前馈网络示意图"></p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2018-03-03-LHY_RNN/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2018-03-03-LHY_RNN/" title="李宏毅深度学习-七-RNN">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2018-02-03-LHYDeepLearning_highway/">
-    		李宏毅深度学习-六-HighwayNetwork和LSTM
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.535Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h2 id="1-前馈网络和循环神经网络-RNN"><a href="#1-前馈网络和循环神经网络-RNN" class="headerlink" title="1   前馈网络和循环神经网络(RNN)"></a>1   前馈网络和循环神经网络(RNN)</h2><p><strong>前馈网络示意图</strong></p>
-<p><img src="/images/blog/LHY_RNN1.jpg" alt="前馈网络示意图">    </p>
-<p>上图中，$f_1,f_2,f_3,f_4..$表示的是前馈网络的网络层，一个输入$x$，一个输出$y$。</p>
-<p><strong>循环神经网络</strong></p>
-<p><img src="/images/blog/LHY_RNN2.jpg" alt="RNN示意图">    </p>
-<p>对比可知，两者十分相似。不同之处是，</p>
-<ol>
-<li>循环神经网络每个网络层都有输入，而前馈网络只有一个输入</li>
-<li>循环神经网络的每一层的激活函数是同一个，而前馈网络的每一层的激活函数都不同。</li>
-</ol>
-<h2 id="2-如何把GRU改成Highway-Network"><a href="#2-如何把GRU改成Highway-Network" class="headerlink" title="2 如何把GRU改成Highway Network"></a>2 如何把GRU改成Highway Network</h2><p>GRU网络示意图如下：</p>
-<p><img src="/images/blog/LHY_GRU.jpg" alt="GRU示意图">   </p>
-<p>变成  </p>
-<p><img src="/images/blog/LHY_GRU2.jpg" alt="GRU示意图">    </p>
-<ol>
-<li>拿掉每个时间步的输入$x^t$,</li>
-<li>拿掉$y^t$,RNN每个时间步都会输出一个$y^t$,Highway network只有一个最后的输出$y^t$.</li>
-<li>把 $h^{t-1}$ 改成 $a^{t-1}$。其中$a^{t-1}$ 是第$t$层的输出</li>
-<li>拿掉<code>reset gate</code>。它的作用是让GRU忘记之前发生过的事情，但是Highway不应该忘记，它只有一个开始的。</li>
-</ol>
-<h2 id="3-Highway-Network"><a href="#3-Highway-Network" class="headerlink" title="3 Highway Network"></a>3 Highway Network</h2><p>一个常见的Highway Network的示意图如下：</p>
-<p><img src="/images/blog/LHY_Highway.jpg" alt="Highway示意图">   </p>
-<p>注意，它由两部分组成：Gate controller 部分和copy部分。其中的$z,h^{‘},a^{t-1}$（可以通过第二节看到这些详细的）分别如下计算：<br>$$<br> h^{‘}=\sigma (Wa^{t-1}) \<br>z=\sigma(W^{‘}a^{t-1}) \quad\quad  蓝色部分\<br>a^t = z\bigodot a^{t-1}+(1-z)\bigodot h  \quad\quad  黑色部分<br>$$</p>
-<p>一个较深的Highway Network示意图</p>
-<p><img src="/images/blog/LHY_Highway2.jpg" alt="Highway示意图">   </p>
-<p>它在训练过程中会自动给连接层之间的gate 赋予权重，会自动丢弃某些不重要的层，会自动决定需要多少层。</p>
-<p>事实上Highway Network的论文中有论证，通过不断丢弃某些层来评估对网络loss的影响。下图是在<code>MNIST</code>数据集上评测<code>ResNet</code>网络，下图中横轴代表的是网络层，纵轴代表的是网络loss。可以看到$15~45$层 这些层被丢弃之后对网络loss几乎没有影响。</p>
-<p><img src="/images/blog/LHY_Highway_loss1.jpg" alt="Highway示意图"> </p>
-<p>另外一张图是评测<code>ResNet</code>在CIFAR-10数据集上的结果，可以看到拿掉某些层对网络性能的影响非常大。CIFAR-10是个比较复杂的数据集。</p>
-<p><img src="/images/blog/LHY_Highway_loss2.jpg" alt="Highway示意图"> </p>
-<h2 id="4-Grid-LSTM"><a href="#4-Grid-LSTM" class="headerlink" title="4 Grid LSTM"></a>4 Grid LSTM</h2><p>它是一种既横着，又竖着的LSTM。它既有时间方向的记忆，又有深度方向的记忆（左边是<strong>LSTM</strong>，右边是<strong>Grid LSTM</strong>）：</p>
-<p><img src="/images/blog/LHY_GRIDLSTM1.jpg" alt="GridLSTM示意图"> </p>
-<p>原来的LSTM的输入是 $c$ 和 $h$，输出是$c’$和$h^t$，这些都是时间方向上的</p>
-<p>Grid LSTM时间方向上与传统的LSTM一致，<strong>多出了一个深度方向的输入输出.输入是$a$,$b$输出是$a’$,$b’$</strong></p>
-<h3 id="4-1-Grid-LSTM如何连接"><a href="#4-1-Grid-LSTM如何连接" class="headerlink" title="4.1 Grid LSTM如何连接"></a>4.1 Grid LSTM如何连接</h3><p><img src="/images/blog/LHY_GRIDLSTM2.jpg" alt="GridLSTM示意图"> </p>
-<h3 id="4-2-Grid-LSTM内部结构"><a href="#4-2-Grid-LSTM内部结构" class="headerlink" title="4.2  Grid LSTM内部结构"></a>4.2  Grid LSTM内部结构</h3><p><img src="/images/blog/LHY_GRIDLSTM3.jpg" alt="GridLSTM示意图"> </p>
-<p>其中</p>
-<ul>
-<li>$h$ 是<strong>输入</strong></li>
-<li>$z^f$ 是 <strong>遗忘门</strong></li>
-<li>$z^i$ 是<strong>输入门</strong></li>
-<li>$z$  是 <strong>输入信息</strong></li>
-<li>$z^o$ 是<strong>输出门</strong></li>
-<li>$c$  是<strong>记忆</strong></li>
-</ul>
-<p>我们 可以将上图右边做一个切分，分别是<strong>历史记忆</strong>，<strong>当前输入</strong>，<strong>准备输出</strong></p>
-<p><img src="/images/blog/LHY_GRIDLSTM4.jpg" alt="GridLSTM示意图"> </p>
-<h3 id="4-3-Grid-LSTM的输入输出"><a href="#4-3-Grid-LSTM的输入输出" class="headerlink" title="4.3 Grid LSTM的输入输出"></a>4.3 Grid LSTM的输入输出</h3><p>Grid LSTM 有<strong>两套记忆</strong>以及<strong>两套隐藏层输出</strong> ，如何结合并表现出来？</p>
-<p><img src="/images/blog/LHY_GRIDLSTM5.jpg" alt="GridLSTM示意图"> </p>
-<p>其中 $h$和$b$一起产生各类门(<code>遗忘门</code>,<code>输出门</code>,<code>输入门</code>,<code>输入信息</code>)， $c$和$a$组合成一串较长向量作为历史记忆。</p>
-<h3 id="4-4-3D-Grid-LSTM"><a href="#4-4-3D-Grid-LSTM" class="headerlink" title="4.4 3D Grid LSTM"></a>4.4 3D Grid LSTM</h3><p><img src="/images/blog/LHY_3DGRIDLSTM.jpg" alt="GridLSTM示意图"> </p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2018-02-03-LHYDeepLearning_highway/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2018-02-03-LHYDeepLearning_highway/" title="李宏毅深度学习-六-HighwayNetwork和LSTM">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2017-11-14-darknet_on_tx2/">
-    		darknet在nvidia tx2上的训练自己的数据
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.532Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h2 id="一-准备数据"><a href="#一-准备数据" class="headerlink" title="一 准备数据"></a>一 准备数据</h2><p><strong>注意</strong>：所有的文件最好在linux下通过代码或者vi的方式来创建，如果从window下创建再拷贝过去的话，很容易出现各种找不到文件的错误。</p>
-<p>首先知道yolo需要的几个数据</p>
-<ul>
-<li>cfg</li>
-<li>data</li>
-<li>names</li>
-<li>weights</li>
-</ul>
-<p>其中前三个内容分别可以为:</p>
-<h3 id="1-1-obj-cfg"><a href="#1-1-obj-cfg" class="headerlink" title="1.1 obj.cfg"></a>1.1 obj.cfg</h3><p>yolo的网络配置文件，一般可以从其官网 <a href="https://github.com/pjreddie/darknet/blob/master/cfg/yolo-voc.cfg" target="_blank" rel="noopener">darknet-yolo-cfg文件</a>下载一份，然后修改。不要自己手动创建，容易因为编码问题导致程序无法运行。</p>
-<p>内容为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br></pre></td><td class="code"><pre><span class="line">[net]</span><br><span class="line"># Testing</span><br><span class="line">batch&#x3D;1</span><br><span class="line">subdivisions&#x3D;1</span><br><span class="line"># Training</span><br><span class="line"># batch&#x3D;64</span><br><span class="line"># subdivisions&#x3D;8</span><br><span class="line">height&#x3D;416</span><br><span class="line">width&#x3D;416</span><br><span class="line">channels&#x3D;3</span><br><span class="line">momentum&#x3D;0.9</span><br><span class="line">decay&#x3D;0.0005</span><br><span class="line">angle&#x3D;0</span><br><span class="line">saturation &#x3D; 1.5</span><br><span class="line">exposure &#x3D; 1.5</span><br><span class="line">hue&#x3D;.1</span><br><span class="line"></span><br><span class="line">learning_rate&#x3D;0.001</span><br><span class="line">burn_in&#x3D;1000</span><br><span class="line">max_batches &#x3D; 80200</span><br><span class="line">policy&#x3D;steps</span><br><span class="line">steps&#x3D;40000,60000</span><br><span class="line">scales&#x3D;.1,.1</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;32</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[maxpool]</span><br><span class="line">size&#x3D;2</span><br><span class="line">stride&#x3D;2</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;64</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[maxpool]</span><br><span class="line">size&#x3D;2</span><br><span class="line">stride&#x3D;2</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;128</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;64</span><br><span class="line">size&#x3D;1</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;128</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[maxpool]</span><br><span class="line">size&#x3D;2</span><br><span class="line">stride&#x3D;2</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;256</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;128</span><br><span class="line">size&#x3D;1</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;256</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[maxpool]</span><br><span class="line">size&#x3D;2</span><br><span class="line">stride&#x3D;2</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;512</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;256</span><br><span class="line">size&#x3D;1</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;512</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;256</span><br><span class="line">size&#x3D;1</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;512</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[maxpool]</span><br><span class="line">size&#x3D;2</span><br><span class="line">stride&#x3D;2</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;1024</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;512</span><br><span class="line">size&#x3D;1</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;1024</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;512</span><br><span class="line">size&#x3D;1</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;1024</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#######</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">filters&#x3D;1024</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">filters&#x3D;1024</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[route]</span><br><span class="line">layers&#x3D;-9</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">size&#x3D;1</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">filters&#x3D;64</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[reorg]</span><br><span class="line">stride&#x3D;2</span><br><span class="line"></span><br><span class="line">[route]</span><br><span class="line">layers&#x3D;-1,-4</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">filters&#x3D;1024</span><br><span class="line">activation&#x3D;leaky</span><br><span class="line"></span><br><span class="line">[convolutional]</span><br><span class="line">size&#x3D;1</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">filters&#x3D;125</span><br><span class="line">activation&#x3D;linear</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[region]</span><br><span class="line">anchors &#x3D;  1.3221, 1.73145, 3.19275, 4.00944, 5.05587, 8.09892, 9.47112, 4.84053, 11.2364, 10.0071</span><br><span class="line">bias_match&#x3D;1</span><br><span class="line">classes&#x3D;20</span><br><span class="line">coords&#x3D;4</span><br><span class="line">num&#x3D;5</span><br><span class="line">softmax&#x3D;1</span><br><span class="line">jitter&#x3D;.3</span><br><span class="line">rescore&#x3D;1</span><br><span class="line"></span><br><span class="line">object_scale&#x3D;5</span><br><span class="line">noobject_scale&#x3D;1</span><br><span class="line">class_scale&#x3D;1</span><br><span class="line">coord_scale&#x3D;1</span><br><span class="line"></span><br><span class="line">absolute&#x3D;1</span><br><span class="line">thresh &#x3D; .6</span><br><span class="line">random&#x3D;1</span><br></pre></td></tr></table></figure>
-
-<h3 id="1-2-obj-data"><a href="#1-2-obj-data" class="headerlink" title="1.2 obj.data"></a>1.2 obj.data</h3><p>个人的数据配置，内容如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">classes&#x3D; 1  </span><br><span class="line">train  &#x3D; train.txt  </span><br><span class="line">valid  &#x3D; test.txt  </span><br><span class="line">names &#x3D; obj.names  </span><br><span class="line">backup &#x3D; backup&#x2F;</span><br></pre></td></tr></table></figure>
-<p>其中 </p>
-<ul>
-<li>classes:为训练数据的类别数目，比如4分类模型，则为4</li>
-<li>train: 训练集图片路径。一般是相对于darknet根目录的路径。</li>
-<li>valid: 测试集图片路径。与train相同</li>
-<li>names: 图片类别对应的名称。比如：0代表狗，1代表猫，那么第一行就是dog，第二行就是cat。。下面会示例这个文件内容</li>
-<li>backup:训练模型过程中产生的权重文件保存路径。有点像tensorflow的checkpoint路径</li>
-</ul>
-<p>下面示例（<code>train</code>）train.txt所包含的内容：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;images&#x2F;ee0fb09cfb52bde5157debcdca252fc7.jpg</span><br><span class="line">.&#x2F;images&#x2F;98e053938a2113363003ebd1bf9f81fe.jpg</span><br><span class="line">.&#x2F;images&#x2F;33104814567100bbd1034ef68d0bd39a.jpg</span><br><span class="line">.&#x2F;images&#x2F;115ed44ee5f896674210900491085839.jpg</span><br></pre></td></tr></table></figure>
-
-<h3 id="1-3-obj-names"><a href="#1-3-obj-names" class="headerlink" title="1.3 obj.names"></a>1.3 obj.names</h3><p>注意这个文件里面的内容顺序代表了标注文件中的分类名称：</p>
-<h3 id="1-4-weights权重文件"><a href="#1-4-weights权重文件" class="headerlink" title="1.4 weights权重文件"></a>1.4 weights权重文件</h3><p>darknet可以基于其他预训练的权重文件再训练，重新训练时可能需要提供一个权重文件，可以比如<a href="https://pjreddie.com/media/files/darknet19_448.conv.23" target="_blank" rel="noopener">ImageNet</a>的预训练权重开始。</p>
-<h2 id="二-训练"><a href="#二-训练" class="headerlink" title="二 训练"></a>二 训练</h2><p>训练脚本为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;darknet detector train cfg&#x2F;obj.data cfg&#x2F;yolo-obj.cfg darknet19_448.conv.23</span><br></pre></td></tr></table></figure>
-
-<h2 id="三-错误排查"><a href="#三-错误排查" class="headerlink" title="三 错误排查"></a>三 错误排查</h2><h3 id="3-1-error-1"><a href="#3-1-error-1" class="headerlink" title="3.1 error 1:"></a>3.1 error 1:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">nvidia@tegra-ubuntu:~&#x2F;workspace&#x2F;cpp&#x2F;darknet$ sudo .&#x2F;darknet detector train ~&#x2F;data&#x2F;test_yolo_data&#x2F;cfg&#x2F;test.data ~&#x2F;data&#x2F;test_yolo_data&#x2F;cfg&#x2F;test.cfg .&#x2F;weights&#x2F;tiny-yolo-voc.weights </span><br><span class="line">[sudo] password for nvidia: </span><br><span class="line">test</span><br><span class="line">First section must be [net] or [network]: No such file or directory</span><br><span class="line">darknet: .&#x2F;src&#x2F;utils.c:253: error: Assertion &#96;0&#39; failed.</span><br><span class="line">Aborted (core dumped)</span><br></pre></td></tr></table></figure>
-<p>将 darknet源代码 <code>cfg/voc-yolo.cfg</code>拷贝一份再修改参数。修改如下参数</p>
-<ul>
-<li>第三行修改为：</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">batch&#x3D;64</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>第四行修改为,注意这个地方可能会导致 <code>could&#39;t open file train.txt</code>问题，可以尝试修改为其他，比如16,32</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">subdivisions&#x3D;8</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>第244行修改为</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">classes&#x3D;4</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>237行修改为。修改规则为 (classes+5)<em>5，当前有4个分类，所以是 (4+5)</em>5=45</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">filters&#x3D;45</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="3-2-error-2"><a href="#3-2-error-2" class="headerlink" title="3.2 error 2"></a>3.2 error 2</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">nvidia@tegra-ubuntu:~&#x2F;workspace&#x2F;cpp&#x2F;darknet$ sudo .&#x2F;darknet detector train ~&#x2F;data&#x2F;test_yolo_data&#x2F;cfg&#x2F;test.data ~&#x2F;data&#x2F;test_yolo_data&#x2F;cfg&#x2F;yolo-test.cfg ~&#x2F;data&#x2F;test_yolo_data&#x2F;darknet19_448.conv.23 </span><br><span class="line">yolo-test</span><br><span class="line">layer     filters    size              input                output</span><br><span class="line">    0 conv     32  3 x 3 &#x2F; 1   416 x 416 x   3   -&gt;   416 x 416 x  32</span><br><span class="line">    1 max          2 x 2 &#x2F; 2   416 x 416 x  32   -&gt;   208 x 208 x  32</span><br><span class="line">    2 conv     64  3 x 3 &#x2F; 1   208 x 208 x  32   -&gt;   208 x 208 x  64</span><br><span class="line">    3 max          2 x 2 &#x2F; 2   208 x 208 x  64   -&gt;   104 x 104 x  64</span><br><span class="line">    4 conv    128  3 x 3 &#x2F; 1   104 x 104 x  64   -&gt;   104 x 104 x 128</span><br><span class="line">    5 conv     64  1 x 1 &#x2F; 1   104 x 104 x 128   -&gt;   104 x 104 x  64</span><br><span class="line">    6 conv    128  3 x 3 &#x2F; 1   104 x 104 x  64   -&gt;   104 x 104 x 128</span><br><span class="line">    7 max          2 x 2 &#x2F; 2   104 x 104 x 128   -&gt;    52 x  52 x 128</span><br><span class="line">    8 conv    256  3 x 3 &#x2F; 1    52 x  52 x 128   -&gt;    52 x  52 x 256</span><br><span class="line">    9 conv    128  1 x 1 &#x2F; 1    52 x  52 x 256   -&gt;    52 x  52 x 128</span><br><span class="line">   10 conv    256  3 x 3 &#x2F; 1    52 x  52 x 128   -&gt;    52 x  52 x 256</span><br><span class="line">   11 max          2 x 2 &#x2F; 2    52 x  52 x 256   -&gt;    26 x  26 x 256</span><br><span class="line">   12 conv    512  3 x 3 &#x2F; 1    26 x  26 x 256   -&gt;    26 x  26 x 512</span><br><span class="line">   13 conv    256  1 x 1 &#x2F; 1    26 x  26 x 512   -&gt;    26 x  26 x 256</span><br><span class="line">   14 conv    512  3 x 3 &#x2F; 1    26 x  26 x 256   -&gt;    26 x  26 x 512</span><br><span class="line">   15 conv    256  1 x 1 &#x2F; 1    26 x  26 x 512   -&gt;    26 x  26 x 256</span><br><span class="line">   16 conv    512  3 x 3 &#x2F; 1    26 x  26 x 256   -&gt;    26 x  26 x 512</span><br><span class="line">   17 max          2 x 2 &#x2F; 2    26 x  26 x 512   -&gt;    13 x  13 x 512</span><br><span class="line">   18 conv   1024  3 x 3 &#x2F; 1    13 x  13 x 512   -&gt;    13 x  13 x1024</span><br><span class="line">   19 conv    512  1 x 1 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x 512</span><br><span class="line">   20 conv   1024  3 x 3 &#x2F; 1    13 x  13 x 512   -&gt;    13 x  13 x1024</span><br><span class="line">   21 conv    512  1 x 1 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x 512</span><br><span class="line">   22 conv   1024  3 x 3 &#x2F; 1    13 x  13 x 512   -&gt;    13 x  13 x1024</span><br><span class="line">   23 conv   1024  3 x 3 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x1024</span><br><span class="line">   24 conv   1024  3 x 3 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x1024</span><br><span class="line">   25 route  16</span><br><span class="line">   26 conv     64  1 x 1 &#x2F; 1    26 x  26 x 512   -&gt;    26 x  26 x  64</span><br><span class="line">   27 reorg              &#x2F; 2    26 x  26 x  64   -&gt;    13 x  13 x 256</span><br><span class="line">   28 route  27 24</span><br><span class="line">   29 conv   1024  3 x 3 &#x2F; 1    13 x  13 x1280   -&gt;    13 x  13 x1024</span><br><span class="line">   30 conv    125  1 x 1 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x 125</span><br><span class="line">   31 detection</span><br><span class="line">darknet: .&#x2F;src&#x2F;parser.c:281: parse_region: Assertion &#96;l.outputs &#x3D;&#x3D; params.inputs&#39; failed.</span><br><span class="line">Aborted (core dumped)</span><br></pre></td></tr></table></figure>
-
-<p>参考:<a href="https://groups.google.com/forum/#!topic/darknet/4_RNBWVEOnQ" target="_blank" rel="noopener">https://groups.google.com/forum/#!topic/darknet/4_RNBWVEOnQ</a></p>
-<p>解决方案就是修改上一步的 <code>filters=45</code>。</p>
-<h3 id="3-3-error-3"><a href="#3-3-error-3" class="headerlink" title="3.3 error 3"></a>3.3 error 3</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">nvidia@tegra-ubuntu:~&#x2F;workspace&#x2F;cpp&#x2F;darknet$ sudo .&#x2F;darknet detector train ~&#x2F;data&#x2F;test_yolo_data&#x2F;cfg&#x2F;test.data ~&#x2F;data&#x2F;test_yolo_data&#x2F;cfg&#x2F;yolo-test.cfg ~&#x2F;data&#x2F;test_yolo_data&#x2F;darknet19_448.conv.23 </span><br><span class="line">yolo-test</span><br><span class="line">layer     filters    size              input                output</span><br><span class="line">    0 conv     32  3 x 3 &#x2F; 1   416 x 416 x   3   -&gt;   416 x 416 x  32</span><br><span class="line">    1 max          2 x 2 &#x2F; 2   416 x 416 x  32   -&gt;   208 x 208 x  32</span><br><span class="line">    2 conv     64  3 x 3 &#x2F; 1   208 x 208 x  32   -&gt;   208 x 208 x  64</span><br><span class="line">    3 max          2 x 2 &#x2F; 2   208 x 208 x  64   -&gt;   104 x 104 x  64</span><br><span class="line">    4 conv    128  3 x 3 &#x2F; 1   104 x 104 x  64   -&gt;   104 x 104 x 128</span><br><span class="line">    5 conv     64  1 x 1 &#x2F; 1   104 x 104 x 128   -&gt;   104 x 104 x  64</span><br><span class="line">    6 conv    128  3 x 3 &#x2F; 1   104 x 104 x  64   -&gt;   104 x 104 x 128</span><br><span class="line">    7 max          2 x 2 &#x2F; 2   104 x 104 x 128   -&gt;    52 x  52 x 128</span><br><span class="line">    8 conv    256  3 x 3 &#x2F; 1    52 x  52 x 128   -&gt;    52 x  52 x 256</span><br><span class="line">    9 conv    128  1 x 1 &#x2F; 1    52 x  52 x 256   -&gt;    52 x  52 x 128</span><br><span class="line">   10 conv    256  3 x 3 &#x2F; 1    52 x  52 x 128   -&gt;    52 x  52 x 256</span><br><span class="line">   11 max          2 x 2 &#x2F; 2    52 x  52 x 256   -&gt;    26 x  26 x 256</span><br><span class="line">   12 conv    512  3 x 3 &#x2F; 1    26 x  26 x 256   -&gt;    26 x  26 x 512</span><br><span class="line">   13 conv    256  1 x 1 &#x2F; 1    26 x  26 x 512   -&gt;    26 x  26 x 256</span><br><span class="line">   14 conv    512  3 x 3 &#x2F; 1    26 x  26 x 256   -&gt;    26 x  26 x 512</span><br><span class="line">   15 conv    256  1 x 1 &#x2F; 1    26 x  26 x 512   -&gt;    26 x  26 x 256</span><br><span class="line">   16 conv    512  3 x 3 &#x2F; 1    26 x  26 x 256   -&gt;    26 x  26 x 512</span><br><span class="line">   17 max          2 x 2 &#x2F; 2    26 x  26 x 512   -&gt;    13 x  13 x 512</span><br><span class="line">   18 conv   1024  3 x 3 &#x2F; 1    13 x  13 x 512   -&gt;    13 x  13 x1024</span><br><span class="line">   19 conv    512  1 x 1 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x 512</span><br><span class="line">   20 conv   1024  3 x 3 &#x2F; 1    13 x  13 x 512   -&gt;    13 x  13 x1024</span><br><span class="line">   21 conv    512  1 x 1 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x 512</span><br><span class="line">   22 conv   1024  3 x 3 &#x2F; 1    13 x  13 x 512   -&gt;    13 x  13 x1024</span><br><span class="line">   23 conv   1024  3 x 3 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x1024</span><br><span class="line">   24 conv   1024  3 x 3 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x1024</span><br><span class="line">   25 route  16</span><br><span class="line">   26 conv     64  1 x 1 &#x2F; 1    26 x  26 x 512   -&gt;    26 x  26 x  64</span><br><span class="line">   27 reorg              &#x2F; 2    26 x  26 x  64   -&gt;    13 x  13 x 256</span><br><span class="line">   28 route  27 24</span><br><span class="line">   29 conv   1024  3 x 3 &#x2F; 1    13 x  13 x1280   -&gt;    13 x  13 x1024</span><br><span class="line">   30 conv     45  1 x 1 &#x2F; 1    13 x  13 x1024   -&gt;    13 x  13 x  45</span><br><span class="line">   31 detection</span><br><span class="line">mask_scale: Using default &#39;1.000000&#39;</span><br><span class="line">Loading weights from &#x2F;home&#x2F;nvidia&#x2F;data&#x2F;test_yolo_data&#x2F;darknet19_448.conv.23...Done!</span><br><span class="line">Learning Rate: 0.001, Momentum: 0.9, Decay: 0.0005</span><br><span class="line">Couldn&#39;t open file: train.txt</span><br></pre></td></tr></table></figure>
-
-<p>参考： <a href="https://groups.google.com/forum/#!msg/darknet/7JgHFfTyFHM/kPzfynNnAQAJ" target="_blank" rel="noopener">https://groups.google.com/forum/#!msg/darknet/7JgHFfTyFHM/kPzfynNnAQAJ</a><br>这个解决办法是将 <code>test.cfg</code>文件中的 <code>subdivisions=8</code>修改为 <code>subdivisions=16</code>或者其他32,64等。但是这个解决办法对我无效，我后来发现需要在linux下重新 编辑一个新的文件<code>test.data</code>(voc.data)。是由于之前的文件是在windows下生成的，与ubuntu系统的编码格式不同。</p>
-<p>参考 </p>
-<p><a href="https://timebutt.github.io/static/how-to-train-yolov2-to-detect-custom-objects/" target="_blank" rel="noopener">https://timebutt.github.io/static/how-to-train-yolov2-to-detect-custom-objects/</a></p>
-<p><a href="https://pjreddie.com/darknet/yolo/" target="_blank" rel="noopener">https://pjreddie.com/darknet/yolo/</a></p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2017-11-14-darknet_on_tx2/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2017-11-14-darknet_on_tx2/" title="darknet在nvidia tx2上的训练自己的数据">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2017-10-22-CNN+RNN_Audio/">
-    		CNN+RNN来做口语识别
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.522Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <p>翻译自： <a href="https://yerevann.github.io/2016/06/26/combining-cnn-and-rnn-for-spoken-language-identification/" target="_blank" rel="noopener">combining-cnn-and-rnn-for-spoken-language-identificatio</a></p>
-<p>github：<a href="https://github.com/harvitronix/continuous-online-video-classification-blog" target="_blank" rel="noopener">源码</a></p>
-<p><strong>翻译的原因是觉得示意图很好</strong></p>
-<h2 id="输入和输出"><a href="#输入和输出" class="headerlink" title="输入和输出"></a>输入和输出</h2><p>正如以前一样，网络的输入是语音记录的图谱。图谱似乎是语音的作为深度学习系统的标准表征形式。</p>
-<p>一些网络使用多达11khz的频率(858x256的图像)，而其他使用5.5khz的频率(858x128)。通常情况下，使用5.5khz的结果要相对好一点（可能是因为更高的频率没有包含太多有用的信息，反倒更容易过拟合）。</p>
-<p>所有网络的输出层都是全连接的softmax层，176个神经元。</p>
-<h2 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h2><p>我们测试了几个网络结构。第一个是纯粹的类似Alex-Net的卷积网络。第二个没有使用任何卷积层，并将（语音）图谱的列作为RNN的序列输入。第三个使用的是，将卷积神经网络抽取出的特征输入到RNN。所有的网络都用Theano和Lasagne。</p>
-<p>几乎所有的网络都可以很轻易地在训练集上达到100%的准确率。下表描述的是在验证集上的准确率。</p>
-<h2 id="卷积网络"><a href="#卷积网络" class="headerlink" title="卷积网络"></a>卷积网络</h2><p>网络结构由6块(block) 2D卷积组成，Relu激活函数，2D maxpooling和BatchNormalization。第一个卷积层的kernel尺寸是 $7\times 7$，第二个是 $5\times 5$,剩下的都是 $3\times 3$。Pooling的尺寸一直都是 $3\times 3$，步长为2.</p>
-<p><strong>BatchNormalization</strong>可以显著提升训练速度。我们最后只在最后的一个Pooling层和softmax层之间使用了一个全连接层，并使用了50%的dropout。</p>
-<table>
-<thead>
-<tr>
-<th>网络</th>
-<th>准确率</th>
-<th>注意</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><a href="https://github.com/YerevaNN/Spoken-language-identification/blob/master/theano/networks/tc_net.py" target="_blank" rel="noopener">tc_net</a></td>
-<td>&lt;80%</td>
-<td>此网络与前面描述的CNN的区别在于，这个网络只有一个全连接层。我们并没有怎么训练这个网络，因为<code>ignore_border=False</code>，这个会拖慢训练过程</td>
-</tr>
-<tr>
-<td><a href="https://github.com/YerevaNN/Spoken-language-identification/blob/master/theano/networks/tc_net_mod.py" target="_blank" rel="noopener">tc_net_mod</a></td>
-<td>97.14%</td>
-<td>与tc_net相同，只不过这里不是 <code>ignore_border=False</code>而是加入了<code>pad=2</code></td>
-</tr>
-<tr>
-<td>tc_net_mod_5khz_small</td>
-<td>96.49%</td>
-<td>是tc_net_mod的较小副本，使用的是5.5khz</td>
-</tr>
-</tbody></table>
-<p>Lasagne设置<code>ignore_border=False</code>  会使得Theano不使用CuDnn，将其设置为True，可以显著提升速度。</p>
-<p>下面是<code>tc_net_mod</code>的详细网络结构：</p>
-<table>
-<thead>
-<tr>
-<th>Nr</th>
-<th>Type</th>
-<th>Channel</th>
-<th>Width</th>
-<th>Height</th>
-<th>Kernel size/stride</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>0</td>
-<td>input</td>
-<td>1</td>
-<td>858</td>
-<td>256</td>
-<td></td>
-</tr>
-<tr>
-<td>1</td>
-<td>Conv</td>
-<td>16</td>
-<td>852</td>
-<td>250</td>
-<td>7x7/1</td>
-</tr>
-<tr>
-<td></td>
-<td>Relu</td>
-<td>16</td>
-<td>852</td>
-<td>250</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>MaxPooling</td>
-<td>16</td>
-<td>427</td>
-<td>126</td>
-<td>3x3/,pad=2</td>
-</tr>
-<tr>
-<td></td>
-<td>BatchNorm</td>
-<td>16</td>
-<td>427</td>
-<td>126</td>
-<td></td>
-</tr>
-<tr>
-<td>1</td>
-<td>Conv</td>
-<td>16</td>
-<td>852</td>
-<td>250</td>
-<td>7x7/1</td>
-</tr>
-<tr>
-<td></td>
-<td>Relu</td>
-<td>16</td>
-<td>852</td>
-<td>250</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>MaxPooling</td>
-<td>16</td>
-<td>427</td>
-<td>126</td>
-<td>3x3/,pad=2</td>
-</tr>
-<tr>
-<td></td>
-<td>BatchNorm</td>
-<td>16</td>
-<td>427</td>
-<td>126</td>
-<td></td>
-</tr>
-<tr>
-<td>2</td>
-<td>Conv</td>
-<td>32</td>
-<td>423</td>
-<td>122</td>
-<td>5x5/1</td>
-</tr>
-<tr>
-<td></td>
-<td>Relu</td>
-<td>32</td>
-<td>423</td>
-<td>122</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>MaxPooling</td>
-<td>32</td>
-<td>213</td>
-<td>62</td>
-<td>3x3/2,pad=2</td>
-</tr>
-<tr>
-<td></td>
-<td>BatchNorm</td>
-<td>32</td>
-<td>213</td>
-<td>62</td>
-<td></td>
-</tr>
-<tr>
-<td>3</td>
-<td>Conv</td>
-<td>64</td>
-<td>211</td>
-<td>60</td>
-<td>3x3/1</td>
-</tr>
-<tr>
-<td></td>
-<td>Relu</td>
-<td>64</td>
-<td>211</td>
-<td>60</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>MaxPooling</td>
-<td>64</td>
-<td>107</td>
-<td>31</td>
-<td>3x3/2,pad=2</td>
-</tr>
-<tr>
-<td></td>
-<td>BatchNorm</td>
-<td>64</td>
-<td>107</td>
-<td>31</td>
-<td></td>
-</tr>
-<tr>
-<td>4</td>
-<td>Conv</td>
-<td>128</td>
-<td>105</td>
-<td>29</td>
-<td>3x3/1</td>
-</tr>
-<tr>
-<td></td>
-<td>Relu</td>
-<td>128</td>
-<td>105</td>
-<td>29</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>MaxPooling</td>
-<td>128</td>
-<td>54</td>
-<td>16</td>
-<td>3x3/,pad=2</td>
-</tr>
-<tr>
-<td></td>
-<td>BatchNorm</td>
-<td>128</td>
-<td>54</td>
-<td>16</td>
-<td></td>
-</tr>
-<tr>
-<td>5</td>
-<td>Conv</td>
-<td>128</td>
-<td>52</td>
-<td>13</td>
-<td>3x3/1</td>
-</tr>
-<tr>
-<td></td>
-<td>Relu</td>
-<td>128</td>
-<td>52</td>
-<td>14</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>MaxPooling</td>
-<td>128</td>
-<td>27</td>
-<td>8</td>
-<td>3x3/2,pad=2</td>
-</tr>
-<tr>
-<td></td>
-<td>BatchNorm</td>
-<td>128</td>
-<td>27</td>
-<td>8</td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>Conv</td>
-<td>256</td>
-<td>25</td>
-<td>6</td>
-<td>3x3/1</td>
-</tr>
-<tr>
-<td></td>
-<td>Relu</td>
-<td>256</td>
-<td>25</td>
-<td>6</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>MaxPooling</td>
-<td>256</td>
-<td>14</td>
-<td>3</td>
-<td>3x3/2,pad=2</td>
-</tr>
-<tr>
-<td></td>
-<td>BatchNorm</td>
-<td>256</td>
-<td>14</td>
-<td>3</td>
-<td></td>
-</tr>
-<tr>
-<td>7</td>
-<td>Fully connected</td>
-<td>1024</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>Relu</td>
-<td>1024</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>BatchNorm</td>
-<td>1024</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>Dropout</td>
-<td>1024</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>8</td>
-<td>Fully Connected</td>
-<td>176</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>Softmax Loss</td>
-<td>176</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<h2 id="RNN"><a href="#RNN" class="headerlink" title="RNN"></a>RNN</h2><p>图谱可以看做列向量序列，其中列向量由256（或者128，如果只使用&lt;5.5khz）个数字组成。我们使用了RNN，其中每一层500个GRU Cell，结构图如下：</p>
-<p><img src="/images/blog/cnn+rnn_rnn1.png" alt="RNN"></p>
-<table>
-<thead>
-<tr>
-<th>网络</th>
-<th>准确率</th>
-<th>注意事项</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>rnn</td>
-<td>93.27</td>
-<td>在输入层上只有一个GRU层</td>
-</tr>
-<tr>
-<td>rnn_2layers</td>
-<td>95.66</td>
-<td>输入层上两个GRU层</td>
-</tr>
-<tr>
-<td>rnn_2layers_5khz</td>
-<td>98.42</td>
-<td>输入层上两个GRU层，最大频率是5.5khz</td>
-</tr>
-</tbody></table>
-<p>CNN和RNN都在几个epoch中使用了$adadelta$ 参数，然后再使用冲量SGD（0.003或0.0003）。如果从一开始就使用带冲量的SGD，收敛得很慢。带$adadelta$ 的收敛速度会快一点，但是一般不会得到很高的准确率。</p>
-<h2 id="结合CNN和RNN"><a href="#结合CNN和RNN" class="headerlink" title="结合CNN和RNN"></a>结合CNN和RNN</h2><p>CNN与RNN结合的框架一般是卷积抽取的特征作为输入，RNN作为输出，然后再在RNN的输出之后连接一个全连接层，最后是一个softmax层。</p>
-<p>CNN的输出是几个channel（即feature map）的集合。我们可以在每个channel上使用几个独立的GRU(可以使用或者不适用权值共享)，如下图：</p>
-<p><img src="/images/blog/cnn+rnn_cnn-multi-rnn.png" alt="CNN+RNN"></p>
-<p>另外一种做法是，将CNN的输出作为一个3D-tensor，然后在那个tensor的2D slice上运行<strong>单个</strong>GRU。</p>
-<p><img src="/images/blog/cnn+rnn_cnn-multi-rnn2.png" alt="CNN+RNN"></p>
-<p>后一个做法需要更多的参数，但是<strong>不同channel的信息会在GRU中混淆，这看起来会提升一点性能</strong>。这种架构类似于<a href="http://static.googleusercontent.com/media/research.google.com/en//pubs/archive/43455.pdf" target="_blank" rel="noopener">这篇语音识别论文</a>，除了他们会使用一些从输入到RNN和CNN到全连接层的残差(residual)连接。注意到类似的架构在<a href="http://arxiv.org/abs/1602.00367" target="_blank" rel="noopener">文本分类</a>上效果较好。</p>
-<p><strong>下面的网络对应的代码位于<a href="https://github.com/YerevaNN/Spoken-language-identification/tree/master/theano/networks" target="_blank" rel="noopener">网络</a></strong></p>
-<table>
-<thead>
-<tr>
-<th>网络</th>
-<th>准确率</th>
-<th>注意</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>tc_net_rnn</td>
-<td>92.4</td>
-<td>CNN由3个卷积块组成，输出32个channel，尺寸为104x13。每个channel以104个尺寸为13的向量序列输入喂入独立的GRU。GRU的输出会最终融合，然后输入到一个全连接层</td>
-</tr>
-<tr>
-<td>tc_net_rnn_nodense</td>
-<td>91.94</td>
-<td>与上一个网络一样，只是GRU之后没有全连接层，GRU的输出直接喂入softmax层</td>
-</tr>
-<tr>
-<td>fc_net_rnn_shared</td>
-<td>96.96</td>
-<td>与上一个网络一样。但是32个GRU单元之间共享权重，这可用于对抗过拟合</td>
-</tr>
-<tr>
-<td>tc_net_rnn_shared_pad</td>
-<td>98.11</td>
-<td>4个卷积块使用<code>pad=2</code>，而不是<code>ignore_border=False</code>.CNN的输出是32个尺寸为 $54\times 8$的channels。使用32个GRU（每个channel与一个GRU对应），同时共享权重，同时不使用全连接层</td>
-</tr>
-<tr>
-<td>tc_net_deeprnn_shared_pad</td>
-<td>96.57</td>
-<td>4个卷积块与上面的一样，但是在CNN的输出之后使用了2层共享权重的GRU。由于使用了2层，所以过拟合会严重一点</td>
-</tr>
-<tr>
-<td>tc_net_shared_pad_agum</td>
-<td>98.68</td>
-<td>与tc_net_rnn_shared_pad一样，但是网络会在输入上做随机裁剪，并间隔9秒。性能提升了一点</td>
-</tr>
-<tr>
-<td>tc_net_rnn_onernn</td>
-<td>99.2</td>
-<td>4个卷积块的输出被分组为一个 $32\time 54\times 8$ 的3D-tensor，单个GRU运行于54个尺寸为 $32\times 8$的序列上</td>
-</tr>
-<tr>
-<td>tc_net_rnn_onernn_notimepool</td>
-<td>99.24</td>
-<td>与上面的网络类似，但是pool层在时间轴上的步长设为1。因为CNN的输出是32个尺寸为 $852\times 8$的channels</td>
-</tr>
-</tbody></table>
-<p>第二层GRU并没有什么用，因为会产生过拟合。</p>
-<p>看起来<strong>在时间维度的子抽样并不是什么好办法。在子抽样过程中丢失的信息，被RNN用起来效果更好</strong>。在论文<a href="http://arxiv.org/abs/1602.00367v1" target="_blank" rel="noopener">文本分类</a>中，作者直接建议所有的池化层/子抽样层都可以用RNN层来代替。本文没有尝试这种方法，不过应该是蛮有前景的。</p>
-<p>这些网络都使用了带冲量的SGD。学习率在10个epoches左右时设置为0.003，然后手工缩减到0.001，然后到0.0003。平均大概需要35个epoches来训练这些网络。</p>
-<h2 id="Ensembling（集成学习）"><a href="#Ensembling（集成学习）" class="headerlink" title="Ensembling（集成学习）"></a>Ensembling（集成学习）</h2><p>最好的单模型在验证集上取得了99.24%的准确率。所有的这些模型做了33个预测（不同的epoches之后，一些模型不止预测一次），我们只是简单的累加预测概率，并获得99.67%的准确率。出乎意料之外的是，其他集成学习尝试，（只是在所有模型的某些子集上集成）并没有获得更好的结果。</p>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>这些CNN+RNN混合模型的超参数数量十分之多。受限于硬件，我们只覆盖了很少一部分可能的配置。</p>
-<p>由于原始的<a href="https://apps.topcoder.com/forums/?module=Thread&threadID=866217&start=0&mc=3" target="_blank" rel="noopener">竞赛</a>是非公开的数据集，所以我们没法发布全部的源代码在<a href="https://github.com/YerevaNN/Spoken-language-identification/tree/master/theano" target="_blank" rel="noopener">Github</a>。</p>
-<p>参考：　<a href="http://blog.revolutionanalytics.com/2016/09/deep-learning-part-3.html" target="_blank" rel="noopener">http://blog.revolutionanalytics.com/2016/09/deep-learning-part-3.html</a></p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2017-10-22-CNN+RNN_Audio/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2017-10-22-CNN+RNN_Audio/" title="CNN+RNN来做口语识别">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2017-09-21-tf_obj_detect_api_train_owndata/">
-    		使用tensorflow object detection api训练自己的数据
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.520Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h2 id="一-数据准备"><a href="#一-数据准备" class="headerlink" title="一  数据准备"></a>一  数据准备</h2><p>首先，我们有如下数据结构如下：</p>
-<ul>
-<li>data<ul>
-<li>annotations:标注文件<ul>
-<li>txt：txt文本标注文件</li>
-<li>xmls：xml格式标注文件</li>
-</ul>
-</li>
-<li>images：图像文件</li>
-<li>config: 配置文件目录，下面有个当前数据集的 <code>.config</code> 配置文件。</li>
-<li>tf_records：需要创建的一个目录，用于存储tensorflow将images转换为tf_records。</li>
-<li>xx_label_map.pbtxt:分类名称对应的整型分类</li>
-</ul>
-</li>
-</ul>
-<h3 id="1-1-images文件"><a href="#1-1-images文件" class="headerlink" title="1.1 images文件"></a>1.1 images文件</h3><p>images目录下的文件为：</p>
-<p><img src="/images/blog/tf_obj_detect_own_iamges.jpg" alt="images目录"></p>
-<h3 id="1-2-标注文件"><a href="#1-2-标注文件" class="headerlink" title="1.2  标注文件"></a>1.2  标注文件</h3><p>xml标注文件类似：</p>
-<p><img src="/images/blog/tf_obj_detect_own_xml.jpg" alt="xml标注文件"></p>
-<p> txt标注文件可以不需要。</p>
-<h3 id="1-3-label-map-pbtxt文件"><a href="#1-3-label-map-pbtxt文件" class="headerlink" title="1.3  label_map.pbtxt文件"></a>1.3  label_map.pbtxt文件</h3><p><code>xx_label_map.pbtxt</code>文件中的内容如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">item &#123;</span><br><span class="line">  id: 1</span><br><span class="line">  name: &#39;Abyssinian&#39;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">item &#123;</span><br><span class="line">  id: 2</span><br><span class="line">  name: &#39;american_bulldog&#39;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">item &#123;</span><br><span class="line">  id: 3</span><br><span class="line">  name: &#39;american_pit_bull_terrier&#39;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="1-4-创建tf-record文件"><a href="#1-4-创建tf-record文件" class="headerlink" title="1.4  创建tf_record文件"></a>1.4  创建tf_record文件</h3><p>先创建一个<code>create_xx_tf_record.py</code>文件，单独用来处理训练数据。可以直接从object_detection工程下的<code>create_pacal_tf_record.py</code>（如果是每个图片只有一个分类，可以使用<code>create_pet_tf_record.py</code>）复制而来。</p>
-<p>修改起始参数配置：</p>
-<ul>
-<li>data_dir: 数据目录，包含了图片和标注的目录</li>
-<li>output_dir:输出目录，图片转换为tf_record之后存储的位置</li>
-<li>label_map_path:上面提到的xx_label_map.pbtxt</li>
-</ul>
-<p>修改<code>dict_to_tf_example</code></p>
-<p> 参考你的标准xml文件，有些地方需要修改。</p>
-<p> <img src="/images/blog/tf_obj_detect_own_dict.jpg" alt="dict_to_tf"></p>
-<p>修改<code>main</code></p>
-<p><img src="/images/blog/tf_obj_detect_own_main.jpg" alt="修改main"></p>
-<p> 确保你的标注文件，图片目录对应的目录。标注文件目录下是否存在 <code>trainval.txt</code>文件是否存在，这个需要<strong>自己生成</strong>。我生成的列表（注意：没有带后缀）为：</p>
-<p><img src="/images/blog/tf_obj_detect_own_trainval.jpg" alt="trainval文件"></p>
-<p>执行完之后会在对应目录下生成 tf_record文件。</p>
-<h3 id="1-5-创建-config-配置文件"><a href="#1-5-创建-config-配置文件" class="headerlink" title="1.5 创建 .config 配置文件"></a>1.5 创建 <code>.config</code> 配置文件</h3><p>目录<code>tensorflow\models\object_detection\samples\configs</code>下有各种配置文件，当前工程使用的是  <code>faster_rcnn_inception_resnet_v2_robot.config</code>，将其修改为适应当前数据的配置。</p>
-<p>主要修改了这些参数：</p>
-<ul>
-<li>num_classes： 分类数目。视数据分类数目而定，当前数据集只有3个分类，修改为3</li>
-<li>fine_tune_checkpoint：此处应该为空白，之前修改成github上下载的faster_rcnn的ckpt文件会导致无法训练的情况。</li>
-<li>from_detection_checkpoint： 设置为true</li>
-<li>num_steps: 训练步数。如果数据集较小，可以修改为较小。<code>pets</code>数据集包含7393张图片设置为20万次，当前数据集只有500张，设置为一万次应该差不多。可以在训练的时候查看loss增减情况来修改步数。</li>
-</ul>
-<h2 id="2-训练"><a href="#2-训练" class="headerlink" title="2 训练"></a>2 训练</h2><p>训练时执行<code>train.py</code>即可。不过需要传入一些参数，可以使用官网的指定方式：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">python object_detection&#x2F;train.py \</span><br><span class="line">    --logtostderr \</span><br><span class="line">    --pipeline_config_path&#x3D;$&#123;PATH_TO_YOUR_PIPELINE_CONFIG&#125; \</span><br><span class="line">    --train_dir&#x3D;$&#123;PATH_TO_TRAIN_DIR&#125;</span><br></pre></td></tr></table></figure>
-<p>我在pycharm下运行，所以在Run-&gt;configigure里面加入参数即可。需要指定的参数是：</p>
-<ul>
-<li>pipeline_config_path:上面提到的<code>.config</code>配置文件</li>
-<li>train_dir: 训练模型过程中保存的ckpt文件（tensorflow的权重文件）</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--logtostderr --pipeline_config_path&#x3D;D:&#x2F;data&#x2F;robot_auto_seller&#x2F;config&#x2F;faster_rcnn_inception_resnet_v2_robot.config --train_dir&#x3D;D:&#x2F;data&#x2F;robot_auto_seller&#x2F;tf_ckpt</span><br></pre></td></tr></table></figure>
-
-<p>训练完成之后，大概的效果如下：</p>
-<p><img src="/images/blog/tf_obj_detect_own_train_result.jpg" alt="训练效果"></p>
-<p>如果训练得当，应该可以用tensorboard查看训练参数变化：</p>
-<p><img src="/images/blog/tf_obj_detect_own_tensorboard_cmd.jpg" alt="tensorboard"></p>
-<p>打开浏览器中的： <a href="http://localhost:6006/#scalars" target="_blank" rel="noopener">http://localhost:6006/#scalars</a></p>
-<p><img src="/images/blog/tf_obj_detect_own_tensorboard2.jpg" alt="tensorboard2"></p>
-<h2 id="3-转换权重文件"><a href="#3-转换权重文件" class="headerlink" title="3 转换权重文件"></a>3 转换权重文件</h2><p>训练完成之后的权重文件大概是会包含如下文件:</p>
-<ul>
-<li>model.ckpt-${CHECKPOINT_NUMBER}.data-00000-of-00001,</li>
-<li>model.ckpt-${CHECKPOINT_NUMBER}.index</li>
-<li>model.ckpt-${CHECKPOINT_NUMBER}.meta</li>
-</ul>
-<p>我生成的大概为：</p>
-<p><img src="/images/blog/tf_obj_detect_own_ckpt.jpg" alt="ckpt文件"></p>
-<p> 这些文件无法直接使用，<code>eval.py</code> 所使用的权重文件是<code>.pb</code>。需要做一步转换，object_detection工程中已经包含了该工具<code>export_inference_graph.py</code>，运行指令为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python object_detection&#x2F;export_inference_graph.py \</span><br><span class="line">    --input_type image_tensor \</span><br><span class="line">    --pipeline_config_path $&#123;PIPELINE_CONFIG_PATH&#125; \</span><br><span class="line">    --trained_checkpoint_prefix $&#123;TRAIN_PATH&#125; \</span><br><span class="line">    --output_directory output_inference_graph.pb</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>pipeline_config_path :pipeline的配置路径，使用的是上面训练所使用的<code>.config</code>文件</li>
-<li>trained_checkpoint_prefix :上一步保存tensorflow的权重文件ckpt的。精确到step数目，比如为<code>xxx/model.ckpt-8876</code></li>
-<li>output_directory ：最终输出的可以用来做inference得文件（到具体文件名称）</li>
-</ul>
-<p>我的脚本为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--input_type image_tensor --pipeline_config_path D:&#x2F;data&#x2F;aa&#x2F;config&#x2F;faster_rcnn_inception_resnet_v2_robot.config --trained_checkpoint_prefix D:&#x2F;data&#x2F;aa&#x2F;tf_ckpt&#x2F;model.ckpt-6359  --output_directory  D:&#x2F;data&#x2F;aa&#x2F;robot_inference_graph</span><br></pre></td></tr></table></figure>
-
-<p>生成的效果为：</p>
-<p><img src="/images/blog/tf_obj_detect_own_graph.png" alt="pb文件"></p>
-<h2 id="4-预测"><a href="#4-预测" class="headerlink" title="4  预测"></a>4  预测</h2><p>预测代码为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"># coding: utf-8</span><br><span class="line">import numpy as np</span><br><span class="line">import os</span><br><span class="line">import six.moves.urllib as urllib</span><br><span class="line">import sys</span><br><span class="line">import tarfile</span><br><span class="line">import tensorflow as tf</span><br><span class="line">import zipfile</span><br><span class="line"></span><br><span class="line">from collections import defaultdict</span><br><span class="line">from io import StringIO</span><br><span class="line">from matplotlib import pyplot as plt</span><br><span class="line">from PIL import Image</span><br><span class="line">import cv2  </span><br><span class="line">from object_detection.utils import label_map_util</span><br><span class="line">from object_detection.utils import visualization_utils as vis_util</span><br><span class="line"></span><br><span class="line">cap &#x3D; cv2.VideoCapture(0)</span><br><span class="line">PATH_TO_CKPT &#x3D; &#39;D:&#x2F;data&#x2F;aa&#x2F;robot_inference_graph&#x2F;frozen_inference_graph.pb&#39;</span><br><span class="line">PATH_TO_LABELS &#x3D; os.path.join(&#39;D:&#x2F;data&#x2F;aa&#39;, &#39;robot_label_map.pbtxt&#39;)</span><br><span class="line">NUM_CLASSES &#x3D; 3</span><br><span class="line"></span><br><span class="line"># Load a (frozen) Tensorflow model into memory.</span><br><span class="line">detection_graph &#x3D; tf.Graph()</span><br><span class="line">with detection_graph.as_default():</span><br><span class="line">    od_graph_def &#x3D; tf.GraphDef()</span><br><span class="line">    with tf.gfile.GFile(PATH_TO_CKPT, &#39;rb&#39;) as fid:</span><br><span class="line">        serialized_graph &#x3D; fid.read()</span><br><span class="line">        od_graph_def.ParseFromString(serialized_graph)</span><br><span class="line">        tf.import_graph_def(od_graph_def, name&#x3D;&#39;&#39;)</span><br><span class="line"></span><br><span class="line">label_map &#x3D; label_map_util.load_labelmap(PATH_TO_LABELS)</span><br><span class="line">categories &#x3D; label_map_util.convert_label_map_to_categories(label_map, max_num_classes&#x3D;NUM_CLASSES,</span><br><span class="line">                                                            use_display_name&#x3D;True)</span><br><span class="line">category_index &#x3D; label_map_util.create_category_index(categories)</span><br><span class="line"></span><br><span class="line">def load_image_into_numpy_array(image):</span><br><span class="line">    (im_width, im_height) &#x3D; image.size</span><br><span class="line">    return np.array(image.getdata()).reshape(</span><br><span class="line">        (im_height, im_width, 3)).astype(np.uint8)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># # Detection</span><br><span class="line">PATH_TO_TEST_IMAGES_DIR &#x3D; &#39;D:&#x2F;data&#x2F;aa&#x2F;images&#39;</span><br><span class="line">TEST_IMAGE_PATHS &#x3D; [os.path.join(PATH_TO_TEST_IMAGES_DIR, &#39;000&#123;&#125;.jpg&#39;.format(i)) for i in range(109, 115)]</span><br><span class="line"># Size, in inches, of the output images.</span><br><span class="line">IMAGE_SIZE &#x3D; (12, 8)</span><br><span class="line"></span><br><span class="line">with detection_graph.as_default():</span><br><span class="line">    with tf.Session(graph&#x3D;detection_graph) as sess:</span><br><span class="line">        #while True:  # for image_path in TEST_IMAGE_PATHS:    #changed 20170825</span><br><span class="line">        # Definite input and output Tensors for detection_graph</span><br><span class="line">        image_tensor &#x3D; detection_graph.get_tensor_by_name(&#39;image_tensor:0&#39;)</span><br><span class="line">        # Each box represents a part of the image where a particular object was detected.</span><br><span class="line">        detection_boxes &#x3D; detection_graph.get_tensor_by_name(&#39;detection_boxes:0&#39;)</span><br><span class="line">        # Each score represent how level of confidence for each of the objects.</span><br><span class="line">        # Score is shown on the result image, together with the class label.</span><br><span class="line">        detection_scores &#x3D; detection_graph.get_tensor_by_name(&#39;detection_scores:0&#39;)</span><br><span class="line">        detection_classes &#x3D; detection_graph.get_tensor_by_name(&#39;detection_classes:0&#39;)</span><br><span class="line">        num_detections &#x3D; detection_graph.get_tensor_by_name(&#39;num_detections:0&#39;)</span><br><span class="line">        for image_path in TEST_IMAGE_PATHS:</span><br><span class="line">            image &#x3D; Image.open(image_path)</span><br><span class="line">            # the array based representation of the image will be used later in order to prepare the</span><br><span class="line">            # result image with boxes and labels on it.</span><br><span class="line">            image_np &#x3D; load_image_into_numpy_array(image)</span><br><span class="line">            # Expand dimensions since the model expects images to have shape: [1, None, None, 3]</span><br><span class="line">            image_np_expanded &#x3D; np.expand_dims(image_np, axis&#x3D;0)</span><br><span class="line">            # Actual detection.</span><br><span class="line">            (boxes, scores, classes, num) &#x3D; sess.run(</span><br><span class="line">                [detection_boxes, detection_scores, detection_classes, num_detections],</span><br><span class="line">                feed_dict&#x3D;&#123;image_tensor: image_np_expanded&#125;)</span><br><span class="line">            # Visualization of the results of a detection.</span><br><span class="line">            print(boxes)</span><br><span class="line">            vis_util.visualize_boxes_and_labels_on_image_array(</span><br><span class="line">                image_np,</span><br><span class="line">                np.squeeze(boxes),</span><br><span class="line">                np.squeeze(classes).astype(np.int32),</span><br><span class="line">                np.squeeze(scores),</span><br><span class="line">                category_index,</span><br><span class="line">                use_normalized_coordinates&#x3D;True,</span><br><span class="line">                line_thickness&#x3D;8)</span><br><span class="line">            plt.figure(figsize&#x3D;IMAGE_SIZE)</span><br><span class="line">            cv2.imwrite(&#39;D:&#x2F;data&#x2F;robot_auto_seller&#x2F;&#39;+os.path.basename(image_path),image_np)</span><br><span class="line">            plt.imshow(image_np)</span><br></pre></td></tr></table></figure>
-<p>此检测过程有两个版本。一个版本是开启摄像头检测，一个版本是直接检测图片。上面这部分代码是检测图片的。修改部分为</p>
-<ul>
-<li><p>PATH_TO_CKPT ： 训练生成的<code>.pb</code>权重文件（上一步转换之后的结果）</p>
-</li>
-<li><p>PATH_TO_LABELS ：标签和分类(int)对应关系配置文件。第一步中设置的。</p>
-</li>
-<li><p>NUM_CLASSES ： 分类数。当前数据集是3个分类</p>
-</li>
-<li><p>PATH_TO_TEST_IMAGES_DIR ：需要检测的图片的路径。<br>TEST_IMAGE_PATHS ： 需要检测的图片列表。</p>
-<p>使用摄像头检测的例子放在附件中了。</p>
-</li>
-</ul>
-<p>参考：<br><a href="https://github.com/tensorflow/models/blob/master/object_detection/object_detection_tutorial.ipynb" target="_blank" rel="noopener">tensorflow 官方教程</a><br><a href="https://medium.com/towards-data-science/how-to-train-your-own-object-detector-with-tensorflows-object-detector-api-bec72ecfe1d9" target="_blank" rel="noopener">浣熊检测（英文）</a><br><a href="http://blog.csdn.net/qq_20373723/article/details/77838545" target="_blank" rel="noopener">tensorflow 生成pb文件</a></p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2017-09-21-tf_obj_detect_api_train_owndata/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2017-09-21-tf_obj_detect_api_train_owndata/" title="使用tensorflow object detection api训练自己的数据">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-        <!-- 文章列表 item -->
-<article class="post">
-    <header>
-        <!-- 标签这有且只能显示一个 -->
-        
-        <a class="cat-link" href="/categories/blog/">blog</a>
-        
-        <!-- 文章标题 -->
-        
-    <h3 class="post-title">
-    	<a href="http://shartoo.github.com/2019/12/23/2017-09-20-tensorflow_object_detection_api/">
-    		window测试tensorflow object detection api
-    	</a>
-    </h3>
-
-    </header>
-    <p class="post-meta">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.519Z">2019-12-23</time>
-        &nbsp;&nbsp;
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-
-    <div class="post-content">
-        <div class="post-excerpt">
-            
-                <h2 id="0-注意"><a href="#0-注意" class="headerlink" title="0 注意"></a>0 注意</h2><p>安装window版本的tensorflow时，如果tensorflow版本是1.3。需要安装 cudnn 6.0,但是貌似官网不让看了，windows端安装地址为： <a href="http://developer.download.nvidia.com/compute/redist/cudnn/v6.0/cudnn-8.0-windows10-x64-v6.0.zip" target="_blank" rel="noopener">windows cudnn6.0</a><br>window 端的为 <a href="http://developer.download.nvidia.com/compute/redist/cudnn/v6.0/cudnn-8.0-linux-x64-v6.0.tgz" target="_blank" rel="noopener">linux cudnn 6.0</a></p>
-<h2 id="1-预备"><a href="#1-预备" class="headerlink" title="1 预备"></a>1 预备</h2><h3 id="1-1-Tensorflow-Object-Detection-API-依赖："><a href="#1-1-Tensorflow-Object-Detection-API-依赖：" class="headerlink" title="1.1 Tensorflow Object Detection API 依赖："></a>1.1 Tensorflow Object Detection API 依赖：</h3><ul>
-<li>Protobuf 2.6(最新版本是3.4，下面会提到如何安装)</li>
-<li>Pillow 1.0 （从网站 <a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy" target="_blank" rel="noopener">python第三方包下载网站</a>）</li>
-<li>lxml（从网站 <a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy" target="_blank" rel="noopener">python第三方包下载网站</a>）</li>
-<li>tf Slim (<code>tensorflow/models</code>模块中包含了)</li>
-<li>Jupyter notebook(如果不运行官网的网页测试就不需要)</li>
-<li>Matplotlib</li>
-<li>Tensorflow</li>
-</ul>
-<h3 id="1-2-下载model"><a href="#1-2-下载model" class="headerlink" title="1.2 下载model"></a>1.2 下载model</h3><p>下载链接： <a href="https://github.com/tensorflow/models" target="_blank" rel="noopener">https://github.com/tensorflow/models</a></p>
-<p>将<code>models/object_detection</code>拷贝到一个新工程目录<code>object_detection</code>下（工程名和代码目录都叫object_detection,工程名可以是其他）。我的目录结构如下：</p>
-<p><img src="/images/blog/tf_obj_detect_struct1.jpg" alt="项目架构"></p>
-<p>之所以在弄两个object_detection，是要保留代码的引用逻辑，否则你要改一堆import 错误。而单独把object_detection抽出来是方便集成到其他工程里。</p>
-<h3 id="1-3-安装protoc"><a href="#1-3-安装protoc" class="headerlink" title="1.3 安装protoc"></a>1.3 安装protoc</h3><p>下载链接： <a href="https://github.com/google/protobuf/releases" target="_blank" rel="noopener">protoc</a></p>
-<p><img src="/images/blog/tf_obj_detect_download1.jpg" alt="protoc下载"></p>
-<p>我们在windows下使用，选择win32.下载后解压到某个目录下，解压 后的目录包含了<code>bin</code>目录：</p>
-<p><img src="/images/blog/tf_obj_detect_win_proto_bin.jpg" alt="protoc"></p>
-<p> 为了避免夜长梦多，我直接把这个路径加入到window环境变量</p>
-<p><img src="/images/blog/tf_obj_detect_win_var.png" alt="protoc环境变量"></p>
-<h3 id="1-4-将proto文件生成对应的代码"><a href="#1-4-将proto文件生成对应的代码" class="headerlink" title="1.4 将proto文件生成对应的代码"></a>1.4 将proto文件生成对应的代码</h3><p>虽然不太理解tensorflow的 <code>model/object_detection/protos/</code>目录下一堆<code>.proto</code>文件用处（proto貌似是谷歌文件传输数据格式），但是从安装过程大概可知，这些文件会被生成python文件。依赖的是一下命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protoc object_detection&#x2F;protos&#x2F;*.proto --python_out&#x3D;.</span><br></pre></td></tr></table></figure>
-<p>注意该命令是在你的 <code>object_detection</code>文件夹的上一层目录下执行，默认是在<code>tensorflow/model</code>下。</p>
-<p><img src="/images/blog/tf_obj_detect_proto_effect.png" alt="protoc前后"></p>
-<h3 id="1-5-预知的错误"><a href="#1-5-预知的错误" class="headerlink" title="1.5 预知的错误"></a>1.5 预知的错误</h3><p>如果存在 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">from nets import xxx</span><br></pre></td></tr></table></figure>
-<p>错误，是因为官网教程中提到的一句，将<code>slim</code>要加入到python环境变量中。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># From tensorflow&#x2F;models&#x2F;</span><br><span class="line">export PYTHONPATH&#x3D;$PYTHONPATH:&#96;pwd&#96;:&#96;pwd&#96;&#x2F;slim</span><br></pre></td></tr></table></figure>
-
-<p>windows下没法完成这句，所以我们在需要用到nets的时候，把对应的网络（位于<code>\models\slim\nets</code>）复制过去即可。比如 <code>faster_rcnn_inception_resnet_v2_feature_extractor</code>开始的</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">from nets import inception_resnet_v2</span><br></pre></td></tr></table></figure>
-<p>这一句显然无法执行，我们可以替换为:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">from object_detection.nets import inception_resnet_v2</span><br></pre></td></tr></table></figure>
-
-<p>从<code>\models\slim\nets</code>下将<code>nets</code>文件夹拷贝到<code>object_detect/object_detection</code>工程下。</p>
-<p><img src="/images/blog/tf_obj_detect_copy_net.jpg" alt="工程结构"></p>
-<h2 id="2-编写测试代码"><a href="#2-编写测试代码" class="headerlink" title="2 编写测试代码"></a>2 编写测试代码</h2><p>测试代码基本复制自官方的 jupyter notebook脚本，名字为<code>object_detection_test.py</code> </p>
-<p><img src="/images/blog/tf_obj_detect_test_code.png" alt="测试demo"></p>
-<p>代码为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"># coding: utf-8</span><br><span class="line"></span><br><span class="line">import numpy as np</span><br><span class="line">import os</span><br><span class="line">import six.moves.urllib as urllib</span><br><span class="line">import sys</span><br><span class="line">import tarfile</span><br><span class="line">import tensorflow as tf</span><br><span class="line">import zipfile</span><br><span class="line"></span><br><span class="line">from collections import defaultdict</span><br><span class="line">from io import StringIO</span><br><span class="line">from matplotlib import pyplot as plt</span><br><span class="line">from PIL import Image</span><br><span class="line"></span><br><span class="line">import cv2  # add 20170825</span><br><span class="line"></span><br><span class="line">cap &#x3D; cv2.VideoCapture(0)  # add 20170825</span><br><span class="line">sys.path.append(&quot;..&quot;)</span><br><span class="line"></span><br><span class="line">from object_detection.utils import label_map_util</span><br><span class="line"></span><br><span class="line">from object_detection.utils import visualization_utils as vis_util</span><br><span class="line"></span><br><span class="line">MODEL_NAME &#x3D; &#39;ssd_mobilenet_v1_coco_11_06_2017&#39;</span><br><span class="line">MODEL_FILE &#x3D; MODEL_NAME + &#39;.tar.gz&#39;</span><br><span class="line">DOWNLOAD_BASE &#x3D; &#39;http:&#x2F;&#x2F;download.tensorflow.org&#x2F;models&#x2F;object_detection&#x2F;&#39;</span><br><span class="line">PATH_TO_CKPT &#x3D; MODEL_NAME + &#39;&#x2F;frozen_inference_graph.pb&#39;</span><br><span class="line"></span><br><span class="line"># List of the strings that is used to add correct label for each box.</span><br><span class="line">PATH_TO_LABELS &#x3D; os.path.join(&#39;data&#39;, &#39;mscoco_label_map.pbtxt&#39;)</span><br><span class="line"></span><br><span class="line">NUM_CLASSES &#x3D; 90</span><br><span class="line"></span><br><span class="line">opener &#x3D; urllib.request.URLopener()</span><br><span class="line">opener.retrieve(DOWNLOAD_BASE + MODEL_FILE, MODEL_FILE)</span><br><span class="line">tar_file &#x3D; tarfile.open(MODEL_FILE)</span><br><span class="line">for file in tar_file.getmembers():</span><br><span class="line">    file_name &#x3D; os.path.basename(file.name)</span><br><span class="line">    if &#39;frozen_inference_graph.pb&#39; in file_name:</span><br><span class="line">        tar_file.extract(file, os.getcwd())</span><br><span class="line"></span><br><span class="line">detection_graph &#x3D; tf.Graph()</span><br><span class="line">with detection_graph.as_default():</span><br><span class="line">    od_graph_def &#x3D; tf.GraphDef()</span><br><span class="line">    with tf.gfile.GFile(PATH_TO_CKPT, &#39;rb&#39;) as fid:</span><br><span class="line">        serialized_graph &#x3D; fid.read()</span><br><span class="line">        od_graph_def.ParseFromString(serialized_graph)</span><br><span class="line">        tf.import_graph_def(od_graph_def, name&#x3D;&#39;&#39;)</span><br><span class="line"></span><br><span class="line">label_map &#x3D; label_map_util.load_labelmap(PATH_TO_LABELS)</span><br><span class="line">categories &#x3D; label_map_util.convert_label_map_to_categories(label_map, max_num_classes&#x3D;NUM_CLASSES,</span><br><span class="line">                                                            use_display_name&#x3D;True)</span><br><span class="line">category_index &#x3D; label_map_util.create_category_index(categories)</span><br><span class="line"></span><br><span class="line">def load_image_into_numpy_array(image):</span><br><span class="line">    (im_width, im_height) &#x3D; image.size</span><br><span class="line">    return np.array(image.getdata()).reshape(</span><br><span class="line">        (im_height, im_width, 3)).astype(np.uint8)</span><br><span class="line"></span><br><span class="line">PATH_TO_TEST_IMAGES_DIR &#x3D; &#39;test_images&#39;</span><br><span class="line">TEST_IMAGE_PATHS &#x3D; [os.path.join(PATH_TO_TEST_IMAGES_DIR, &#39;image&#123;&#125;.jpg&#39;.format(i)) for i in range(1, 3)]</span><br><span class="line"></span><br><span class="line"># Size, in inches, of the output images.</span><br><span class="line">IMAGE_SIZE &#x3D; (12, 8)</span><br><span class="line"></span><br><span class="line"># In[10]:</span><br><span class="line"></span><br><span class="line">with detection_graph.as_default():</span><br><span class="line">    with tf.Session(graph&#x3D;detection_graph) as sess:</span><br><span class="line">        while True:  # for image_path in TEST_IMAGE_PATHS:    #changed 20170825</span><br><span class="line">            ret, image_np &#x3D; cap.read()</span><br><span class="line"></span><br><span class="line">            # Expand dimensions since the model expects images to have shape: [1, None, None, 3]</span><br><span class="line">            image_np_expanded &#x3D; np.expand_dims(image_np, axis&#x3D;0)</span><br><span class="line">            image_tensor &#x3D; detection_graph.get_tensor_by_name(&#39;image_tensor:0&#39;)</span><br><span class="line">            # Each box represents a part of the image where a particular object was detected.</span><br><span class="line">            boxes &#x3D; detection_graph.get_tensor_by_name(&#39;detection_boxes:0&#39;)</span><br><span class="line">            # Each score represent how level of confidence for each of the objects.</span><br><span class="line">            # Score is shown on the result image, together with the class label.</span><br><span class="line">            scores &#x3D; detection_graph.get_tensor_by_name(&#39;detection_scores:0&#39;)</span><br><span class="line">            classes &#x3D; detection_graph.get_tensor_by_name(&#39;detection_classes:0&#39;)</span><br><span class="line">            num_detections &#x3D; detection_graph.get_tensor_by_name(&#39;num_detections:0&#39;)</span><br><span class="line">            # Actual detection.</span><br><span class="line">            (boxes, scores, classes, num_detections) &#x3D; sess.run(</span><br><span class="line">                [boxes, scores, classes, num_detections],</span><br><span class="line">                feed_dict&#x3D;&#123;image_tensor: image_np_expanded&#125;)</span><br><span class="line">            # Visualization of the results of a detection.</span><br><span class="line">            vis_util.visualize_boxes_and_labels_on_image_array(</span><br><span class="line">                image_np,</span><br><span class="line">                np.squeeze(boxes),</span><br><span class="line">                np.squeeze(classes).astype(np.int32),</span><br><span class="line">                np.squeeze(scores),</span><br><span class="line">                category_index,</span><br><span class="line">                use_normalized_coordinates&#x3D;True,</span><br><span class="line">                line_thickness&#x3D;8)</span><br><span class="line">            cv2.imshow(&#39;object detection&#39;, cv2.resize(image_np, (1024, 800)))</span><br><span class="line">            if cv2.waitKey(25) &amp; 0xFF &#x3D;&#x3D; ord(&#39;q&#39;):</span><br><span class="line">                cv2.destroyAllWindows()</span><br><span class="line">                break</span><br></pre></td></tr></table></figure>
-
-<p>注意，启动程序之前得准备个摄像头。</p>
-<p>测试效果</p>
-<p><img src="/images/blog/tf_obj_detect_test_result.png" alt="测试demo效果"></p>
-<p>参考 :<a href="http://blog.csdn.net/c20081052/article/details/77608954" target="_blank" rel="noopener">http://blog.csdn.net/c20081052/article/details/77608954</a></p>
-
-            
-            <p class="more">
-                <a href="http://shartoo.github.com/2019/12/23/2017-09-20-tensorflow_object_detection_api/">阅读剩下更多</a>
-            </p>
-        </div>
-        <div class="post-thumbnail" data-img="">
-            <a href="http://shartoo.github.com/2019/12/23/2017-09-20-tensorflow_object_detection_api/" title="window测试tensorflow object detection api">
-                
-                    <img class="thumbnail" src="/img/default.png" data-echo="/img/thumbnail/3.jpg" alt="默认配图" >
-                
-            </a>
-        </div>
-    </div>
-</article>
-
-    
-
-    
-    <nav class="page-navigator">
-        <a class="extend prev" rel="prev" href="/archives/2019/page/3/">前一页</a><a class="page-number" href="/archives/2019/">1</a><a class="page-number" href="/archives/2019/page/2/">2</a><a class="page-number" href="/archives/2019/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/archives/2019/page/5/">5</a><a class="page-number" href="/archives/2019/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/archives/2019/page/10/">10</a><a class="extend next" rel="next" href="/archives/2019/page/5/">后一页</a>
-    </nav>
-    
-
-
-            </div>
-
-        </section>
-        <!-- 侧栏部分 -->
-<aside class="sidebar">
-    <section class="widget">
-        <h3 class="widget-hd"><strong>文章分类</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-    <li>
-        <a href="/categories/blog/">blog</a>
-        <span class="badge">(94)</span>
-    </li>
-    
-</ul>
-    </section>
-
-    
-    <section class="widget">
-        <h3 class="widget-hd"><strong>热门标签</strong></h3>
-        <!-- 文章标签 -->
-<div class="widget-bd tag-wrap">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://shartoo.github.com/archives/2019/page/4/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://shartoo.github.com/archives/2019/page/4/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: false
+  };
+</script>
+
+  <title>Archive | Hexo</title>
   
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
 </div>
-    </section>
-    
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
 
     
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
 
-    
-    <!-- 友情链接 -->
-    <section class="widget">
-        <h3 class="widget-hd"><strong>友情链接</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-        <li>
-            <a href="https://jelon.top" target="_blank" title="Jelon个人前端小站">前端博客小站</a>
-        </li>
-    
-        <li>
-            <a href="https://www.baidu.com" target="_blank" title="百度搜索">百度</a>
-        </li>
-    
-</ul>
-    </section>
-    
-</aside>
-<!-- / 侧栏部分 -->
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  
+  
+  
+  <div class="post-block">
+    <div class="posts-collapse">
+      <div class="collection-title">
+        
+        <span class="collection-header">Good! 98 posts in total. Keep on posting.</span>
+      </div>
+
+      
+    <div class="collection-year">
+      <h1 class="collection-header">2019</h1>
     </div>
 
-    <!-- 博客底部 -->
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2018-05-11-LHY_transferlearning/" itemprop="url">
+            <span itemprop="name">李宏毅深度学习：迁移学习</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2018-04-02-LHY_GAN/" itemprop="url">
+            <span itemprop="name">李宏毅深度学习-15-生成网络</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2018-03-18-LHY_RNN_and_GAN/" itemprop="url">
+            <span itemprop="name">李宏毅深度学习-八-RNN和GAN</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2018-03-09-SSD_detail/" itemprop="url">
+            <span itemprop="name">SSD深入理解</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2018-03-03-LHY_RNN/" itemprop="url">
+            <span itemprop="name">李宏毅深度学习-七-RNN</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2018-02-03-LHYDeepLearning_highway/" itemprop="url">
+            <span itemprop="name">李宏毅深度学习-六-HighwayNetwork和LSTM</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2017-11-14-darknet_on_tx2/" itemprop="url">
+            <span itemprop="name">darknet在nvidia tx2上的训练自己的数据</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2017-10-22-CNN+RNN_Audio/" itemprop="url">
+            <span itemprop="name">CNN+RNN来做口语识别</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2017-09-21-tf_obj_detect_api_train_owndata/" itemprop="url">
+            <span itemprop="name">使用tensorflow object detection api训练自己的数据</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2019-12-23T18:45:59+08:00"
+              content="2019-12-23">
+          12-23
+        </time>
+      </div>
+
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2019/12/23/2017-09-20-tensorflow_object_detection_api/" itemprop="url">
+            <span itemprop="name">window测试tensorflow object detection api</span>
+          </a>
+      </h2>
+
+    </header>
+  </article>
+
+
+    </div>
+  </div>
+  
+  
+  
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/archives/2019/page/3/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/archives/2019/">1</a><span class="space">&hellip;</span><a class="page-number" href="/archives/2019/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/archives/2019/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/archives/2019/page/10/">10</a><a class="extend next" rel="next" href="/archives/2019/page/5/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+  </nav>
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
     <footer class="footer">
-    &copy;
-    
-        2016-2019
-    
+      <div class="footer-inner">
+        
 
-    <a href="/">Jelon Loves You</a>
-</footer>
-<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
 
-    <!--博客js脚本 -->
-    <!-- 这里放网站js脚本 -->
+        
 
-<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
 
 </body>
 </html>

@@ -1,189 +1,284 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" >
-    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
-    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
-    
-    <title>elastic search 性能测试 | Hexo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
-    <meta name="keywords" content="Jelon, 前端, Web, 张德龙, 前端开发" >
-    <meta name="description" content="Jelon个人前端小站" >
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml" >
-    
-    
-    <link rel="shortcut icon" href="/favicon.ico" >
-    
-    
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/main.css">
 
-    <!--[if lt IE 9]>
-    
-<script src="/js/html5.js"></script>
 
-    <![endif]-->
-    
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "//hm.baidu.com/hm.js?fd459238242776d173cdc64918fb32f2";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://shartoo.github.com').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
 </script>
 
+  <meta name="description" content="搜索&amp;NLP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="elastic search 性能测试">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2016-06-30-ElasticSearchTest/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="搜索&amp;NLP">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/%E7%B4%A2%E5%BC%95%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/%E6%97%B6%E9%97%B4%E6%B6%88%E8%80%97.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/%E5%90%88%E5%B9%B6%E6%97%B6%E9%97%B4%E9%83%A8%E5%88%86.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/%E6%A0%88%E4%BD%BF%E7%94%A8.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/%E7%B4%A2%E5%BC%95CPU.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/%E7%B4%A2%E5%BC%95%E7%A3%81%E7%9B%98%E4%BD%BF%E7%94%A8.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/%E7%B4%A2%E5%BC%95%E6%AE%B5%E6%95%B0.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gradle%E6%B5%8B%E8%AF%95%E6%97%B6%E9%97%B4.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/SearchQPS.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/SearchQPS1.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/%E8%AF%B7%E6%B1%82%E6%97%B6%E9%97%B4%E7%BB%9F%E8%AE%A1.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%97%B6%E9%97%B4.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.309Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.197Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/%E7%B4%A2%E5%BC%95%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95.png">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<link rel="canonical" href="http://shartoo.github.com/2019/12/23/2016-06-30-ElasticSearchTest/">
 
-<body class="home">
-    <!--[if lt IE 9]>
-    <div class="browsehappy">
-        当前网页 <strong>不支持</strong>
-        你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/" target="_blank" rel="noopener">升级你的浏览器</a>.
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>elastic search 性能测试 | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
     </div>
-    <![endif]-->
+  </div>
 
-    <!-- 博客头部 -->
-    <header class="header">
-    <section class="container header-main">
-        <div class="logo">
-            <a href="/">
-                <div class="cover">
-                    <span class="name">Hexo</span>
-                    <span class="description"></span>
-                </div>
-            </a>
-        </div>
-        <div class="dropnav icon-paragraph-justify" id="JELON__btnDropNav"></div>
-        <ul class="menu hidden" id="JELON__menu">
-            
-            <li rel="/2019/12/23/2016-06-30-ElasticSearchTest/index.html" class="item ">
-                <a href="/" title="首页" class="icon-home">&nbsp;首页</a>
-            </li>
-            
-            <li rel="/2019/12/23/2016-06-30-ElasticSearchTest/index.html" class="item ">
-                <a href="/lab/" title="实验室" class="icon-lab">&nbsp;实验室</a>
-            </li>
-            
-            <li rel="/2019/12/23/2016-06-30-ElasticSearchTest/index.html" class="item ">
-                <a href="/about/" title="关于" class="icon-about">&nbsp;关于</a>
-            </li>
-            
-            <li rel="/2019/12/23/2016-06-30-ElasticSearchTest/index.html" class="item ">
-                <a href="/comment/" title="留言" class="icon-comment">&nbsp;留言</a>
-            </li>
-            
-        </ul>
-        <div class="profile clearfix">
-            <div class="feeds fl">
-                
-                
-                <p class="links">
-                    
-                        <a href="https://github.com/jangdelong" target="_blank">Github</a>
-                        |
-                    
-                        <a href="https://pages.coding.me" target="_blank">Hosted by Coding Pages</a>
-                        
-                    
-                </p>
-                <p class="sns">
-                    
-                        <a href="http://weibo.com/jangdelong" class="sinaweibo" target="_blank"><b>■</b> 新浪微博</a>
-                    
-                        <a href="https://www.facebook.com/profile.php?id=100011855760219&amp;ref=bookmarks" class="qqweibo" target="_blank"><b>■</b> Facebook</a>
-                    
-                    <a href="javascript: void(0);" class="wechat">
-                        <b>■</b>
-                        公众号
-                        <span class="popover">
-                            <img src="/img/wechat_mp.jpg" width="120" height="120" alt="我的微信订阅号">
-                            <i class="arrow"></i>
-                        </span>
-                    </a>
-                </p>
-                
-            </div>
-            <div class="avatar fr">
-                <img src="/img/jelon.jpg" alt="avatar" title="Jelon" >
-            </div>
-        </div>
-    </section>
-</header>
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
 
 
-    <!-- 博客正文 -->
-    <div class="container body clearfix">
-        <section class="content">
-            <div class="content-main widget">
-                <!-- 文章页 -->
-<!-- 文章 -->
-<article class="post article">
-    <header class="text-center">
-        <h3 class="post-title"><span>elastic search 性能测试</span></h3>
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
     </header>
-    <p class="post-meta text-center">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.309Z">2019-12-23</time>
-    </p>
-    <div class="post-content">
-        <h1 id="ElasticSearch性能测试"><a href="#ElasticSearch性能测试" class="headerlink" title="ElasticSearch性能测试"></a>ElasticSearch性能测试</h1><p>原文翻译自:<a href="https://benchmarks.elastic.co/index.html" target="_blank" rel="noopener">ElasticSearch官方性能测试</a></p>
-<hr>
 
-<h1 id="基准测试场景"><a href="#基准测试场景" class="headerlink" title="基准测试场景"></a>基准测试场景</h1><p>注：ES中的文档类似一条记录。<br><strong>数据</strong></p>
-<p> 测试使用了860万份文档，取自Geonames的POI数据。</p>
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://shartoo.github.com/2019/12/23/2016-06-30-ElasticSearchTest/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          elastic search 性能测试
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2019-12-23 18:45:59 / Modified: 17:55:14" itemprop="dateCreated datePublished" datetime="2019-12-23T18:45:59+08:00">2019-12-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">搜索&NLP</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="elasticsearch性能测试">ElasticSearch性能测试</h1>
+原文翻译自:<a href="https://benchmarks.elastic.co/index.html" target="_blank" rel="noopener">ElasticSearch官方性能测试</a>
+<hr>
+<h1 id="基准测试场景">基准测试场景</h1>
+<p>注：ES中的文档类似一条记录。 <strong>数据</strong></p>
+<p>测试使用了860万份文档，取自Geonames的POI数据。</p>
 <table>
-<thead>
-<tr>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody><tr>
+<tbody>
+<tr class="odd">
 <td>文档数</td>
 <td>860万</td>
 </tr>
-<tr>
+<tr class="even">
 <td>数据大小</td>
 <td>2.8GB(JSON)</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>客户端线程数</td>
 <td>8</td>
 </tr>
-<tr>
+<tr class="even">
 <td>每个bulk请求</td>
 <td>5000份文档</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>服务器数目</td>
 <td>1个或2个</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p><strong>服务器配置</strong></p>
 <table>
-<thead>
-<tr>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody><tr>
+<tbody>
+<tr class="odd">
 <td>核心数</td>
 <td>36个real cores,使用超线程可达72个</td>
 </tr>
-<tr>
+<tr class="even">
 <td>RAM</td>
 <td>256</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>SSD</td>
 <td>Intel 750 PCIe/NVMe</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p><strong>默认设置</strong></p>
 <ul>
 <li>默认，2个节点都是追加，使用全部默认配置，2个节点运行在一个沙盒中（5个shards,1份拷贝）</li>
@@ -193,245 +288,235 @@
 <li>index.number_of_replicas:0</li>
 <li>index.translog.flush_threshold_size: 4g</li>
 </ul>
-<h2 id="索引性能"><a href="#索引性能" class="headerlink" title="索引性能"></a>索引性能</h2><p>以下图片展示的是ElasticSearch每晚基于master分支代码的性能测试结果。<br> <img src="/images/blog/%E7%B4%A2%E5%BC%95%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95.png" alt="索引性能测试"></p>
+<h2 id="索引性能">索引性能</h2>
+以下图片展示的是ElasticSearch每晚基于master分支代码的性能测试结果。 <img src="/images/blog/索引性能测试.png" alt="索引性能测试" />
 <hr>
-## 时间消耗
-下图显示的是与索引性能使用相同数据时，索引时间（分钟），合并时间（分钟），刷新时间（分钟），Flush时间（分钟），Merge throttle 时间（分钟）。
-![时间消耗](/images/blog/时间消耗.png)
+<h2 id="时间消耗">时间消耗</h2>
+下图显示的是与索引性能使用相同数据时，索引时间（分钟），合并时间（分钟），刷新时间（分钟），Flush时间（分钟），Merge throttle 时间（分钟）。 <img src="/images/blog/时间消耗.png" alt="时间消耗" />
 <hr>
-## 合并时间，部分
-![合并时间，部分](/images/blog/合并时间部分.png)
+<h2 id="合并时间部分">合并时间，部分</h2>
+<img src="/images/blog/合并时间部分.png" alt="合并时间，部分" />
 <hr>
-## 堆使用的总段数
-![栈使用](/images/blog/栈使用.png)
+<h2 id="堆使用的总段数">堆使用的总段数</h2>
+<img src="/images/blog/栈使用.png" alt="栈使用" />
 <hr>
-## Indexing CPU utilization（默认）
-![索引CPU](/images/blog/索引CPU.png)
+<h2 id="indexing-cpu-utilization默认">Indexing CPU utilization（默认）</h2>
+<img src="/images/blog/索引CPU.png" alt="索引CPU" />
 <hr>
-## 索引磁盘使用
-![索引磁盘使用](/images/blog/索引磁盘使用.png)
+<h2 id="索引磁盘使用">索引磁盘使用</h2>
+<img src="/images/blog/索引磁盘使用.png" alt="索引磁盘使用" />
 <hr>
-## 索引段数
-![索引段数](/images/blog/索引段数.png)
+<h2 id="索引段数">索引段数</h2>
+<img src="/images/blog/索引段数.png" alt="索引段数" />
 <hr>
-## gradle测试时间
-gradle是一个基于Apache Ant和Apache Maven概念的项目自动化建构工具。它使用一种基于Groovy的特定领域语言(DSL)来声明项目设置。[gradle](http://baike.baidu.com/link?url=DTDzrjTMJX-D4eNPwemJ0RSqD1kmDvKmBVQc3x5WSYs0qEPTBni-rwmTugMtyAG1ukQlXC_m3BC0DkIbA0Uf6q)
-![gradle测试时间](/images/blog/gradle测试时间.png)
+<h2 id="gradle测试时间">gradle测试时间</h2>
+gradle是一个基于Apache Ant和Apache Maven概念的项目自动化建构工具。它使用一种基于Groovy的特定领域语言(DSL)来声明项目设置。<a href="http://baike.baidu.com/link?url=DTDzrjTMJX-D4eNPwemJ0RSqD1kmDvKmBVQc3x5WSYs0qEPTBni-rwmTugMtyAG1ukQlXC_m3BC0DkIbA0Uf6q" target="_blank" rel="noopener">gradle</a> <img src="/images/blog/gradle测试时间.png" alt="gradle测试时间" />
 <hr>
 <hr>
-## Search QPS(脚本)
-![Search QPS 脚本](/images/blog/SearchQPS.png)
+<h2 id="search-qps脚本">Search QPS(脚本)</h2>
+<img src="/images/blog/SearchQPS.png" alt="Search QPS 脚本" />
 <hr>
-## Search QPS
-![search qps](/images/blog/SearchQPS1.png)
+<h2 id="search-qps">Search QPS</h2>
+<img src="/images/blog/SearchQPS1.png" alt="search qps" />
 <hr>
-## 请求时间统计
-![请求时间统计](/images/blog/请求时间统计.png)
+<h2 id="请求时间统计">请求时间统计</h2>
+<img src="/images/blog/请求时间统计.png" alt="请求时间统计" />
 <hr>
+<h2 id="垃圾回收时间">垃圾回收时间</h2>
+<figure>
+<img src="/images/blog/垃圾回收时间.png" alt="垃圾回收时间" /><figcaption>垃圾回收时间</figcaption>
+</figure>
+<hr>
+<h2 id="section"></h2>
 
-<h2 id="垃圾回收时间"><a href="#垃圾回收时间" class="headerlink" title="垃圾回收时间"></a>垃圾回收时间</h2><p><img src="/images/blog/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%97%B6%E9%97%B4.png" alt="垃圾回收时间"></p>
-<hr>
-
-<h2 id=""><a href="#" class="headerlink" title=""></a></h2>
     </div>
-    <p class="post-meta">
-        <span class="post-cat">分类：
-            <a class="cat-link" href="/categories/blog/">blog</a>
-        </span>
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-</article>
-<!-- 分享按钮 -->
 
-  <div class="article-share clearfix text-center">
-    <div class="share-area">
-      <span class="share-txt">分享到：</span>
-      <a href="javascript: window.open('http://service.weibo.com/share/share.php?url=' + encodeURIComponent(location.href) + '&title=' + document.title + '&language=zh_cn');" class="share-icon weibo"></a>
-      <a href="javascript: alert('请复制链接到微信并发送');" class="share-icon wechat"></a>
-      <a href="javascript: window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + encodeURIComponent(location.href) + '&title=' + document.title);" class="share-icon qqzone"></a>
-      <a href="javascript: window.open('http://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(location.href) + '&desc=Jelon个人博客&title=' + document.title + '&callback=' + encodeURIComponent(location.href));" class="share-icon qq"></a>
-      <a href="javascript: window.open('http://shuo.douban.com/!service/share?href=' + encodeURIComponent(location.href) + '&name=' + document.title + '&text=' + document.title);" class="share-icon douban"></a>
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2016-06-13-GoogleTensorFlowBasicConcept/" rel="prev" title="谷歌TensorFlow基本概念">
+      <i class="fa fa-chevron-left"></i> 谷歌TensorFlow基本概念
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2016-08-18-tensorflow-CIFAR10/" rel="next" title="tensorflow:使用tensorflow构建简单卷积神经网络">
+      tensorflow:使用tensorflow构建简单卷积神经网络 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
   </div>
 
 
-<!-- 上一篇/下一篇 -->
+          </div>
+          
 
-<div class="article-nav clearfix">
-    
-    <span class="prev fl">
-        上一篇<br >
-        <a href="/2019/12/23/2016-08-18-tensorflow-CIFAR10/">
-            
-                tensorflow:使用tensorflow构建简单卷积神经网络
-            
-        </a>
-    </span>
-    
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
 
-    
-    <span class="next fr">
-        下一篇<br >
-        <a href="/2019/12/23/2016-06-13-GoogleTensorFlowBasicConcept/">
-            
-                谷歌TensorFlow基本概念
-            
-        </a>
-    </span>
-    
-</div>
-
-<!-- 文章评论 -->
-
+        </div>
+          
   
-<script src="/js/comment.js"></script>
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
 
-  <div id="comments" class="comment">
-    <!--
-    <div class="sign-bar">
-      GitHub 已登录!
-      <span class="sign-link">登出</span>
-    </div>
-    <section class="box">
-      <div class="com-avatar"><img src="/img/jelon.jpg" alt="avatar"></div>
-      <div class="com-text">
-        <div class="main">
-          <textarea class="text-area-edited show" placeholder="欢迎评论！"></textarea>
-          <div class="text-area-preview"></div>
-        </div>
-        <div class="switch">
-          <div class="switch-item on">编辑</div>
-          <div class="switch-item">预览</div>
-        </div>
-        <div class="button">提交</div>
-      </div>
-    </section>
-    <section class="tips">注：评论支持 markdown 语法！</section>
-    <section class="list-wrap">
-      <ul class="list">
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">张德龙</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like liked">已赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">333333</div>
-          </div>
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
         </li>
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">刘德华</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like">点赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">vvvvv</div>
-          </div>
+        <li class="sidebar-nav-overview">
+          Overview
         </li>
       </ul>
-      <div class="page-nav">
-        <a href="javascript: void(0);" class="item">1</a>
-        <a href="javascript: void(0);" class="item">2</a>
-        <a href="javascript: void(0);" class="item current">3</a>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#elasticsearch性能测试"><span class="nav-number">1.</span> <span class="nav-text">ElasticSearch性能测试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基准测试场景"><span class="nav-number">2.</span> <span class="nav-text">基准测试场景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#索引性能"><span class="nav-number">2.1.</span> <span class="nav-text">索引性能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#时间消耗"><span class="nav-number">2.2.</span> <span class="nav-text">时间消耗</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#合并时间部分"><span class="nav-number">2.3.</span> <span class="nav-text">合并时间，部分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#堆使用的总段数"><span class="nav-number">2.4.</span> <span class="nav-text">堆使用的总段数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#indexing-cpu-utilization默认"><span class="nav-number">2.5.</span> <span class="nav-text">Indexing CPU utilization（默认）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引磁盘使用"><span class="nav-number">2.6.</span> <span class="nav-text">索引磁盘使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引段数"><span class="nav-number">2.7.</span> <span class="nav-text">索引段数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gradle测试时间"><span class="nav-number">2.8.</span> <span class="nav-text">gradle测试时间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#search-qps脚本"><span class="nav-number">2.9.</span> <span class="nav-text">Search QPS(脚本)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#search-qps"><span class="nav-number">2.10.</span> <span class="nav-text">Search QPS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#请求时间统计"><span class="nav-number">2.11.</span> <span class="nav-text">请求时间统计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#垃圾回收时间"><span class="nav-number">2.12.</span> <span class="nav-text">垃圾回收时间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#section"><span class="nav-number">2.13.</span> <span class="nav-text"></span></a></li></ol></li></ol></div>
       </div>
-    </section>
-    -->
-  </div>
-  <script>
-  JELON.Comment({
-    container: 'comments',
-    label: '2016-06-30-ElasticSearchTest' || '2019/12/23/2016-06-30-ElasticSearchTest/',
-    owner: 'your_github_id',
-    repo: 'your_blog_comments',
-    clientId: 'your_client_id',
-    clientSecret: 'your_client_secret'
-  });
-  </script>
+      <!--/noindex-->
 
-
-            </div>
-
-        </section>
-        <!-- 侧栏部分 -->
-<aside class="sidebar">
-    <section class="widget">
-        <h3 class="widget-hd"><strong>文章分类</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-    <li>
-        <a href="/categories/blog/">blog</a>
-        <span class="badge">(94)</span>
-    </li>
-    
-</ul>
-    </section>
-
-    
-    <section class="widget">
-        <h3 class="widget-hd"><strong>热门标签</strong></h3>
-        <!-- 文章标签 -->
-<div class="widget-bd tag-wrap">
-  
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
 </div>
-    </section>
-    
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
 
-    
 
-    
-    <!-- 友情链接 -->
-    <section class="widget">
-        <h3 class="widget-hd"><strong>友情链接</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-        <li>
-            <a href="https://jelon.top" target="_blank" title="Jelon个人前端小站">前端博客小站</a>
-        </li>
-    
-        <li>
-            <a href="https://www.baidu.com" target="_blank" title="百度搜索">百度</a>
-        </li>
-    
-</ul>
-    </section>
-    
-</aside>
-<!-- / 侧栏部分 -->
+
+      </div>
+
     </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
 
-    <!-- 博客底部 -->
+
+      </div>
+    </main>
+
     <footer class="footer">
-    &copy;
-    
-        2016-2019
-    
+      <div class="footer-inner">
+        
 
-    <a href="/">Jelon Loves You</a>
-</footer>
-<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
 
-    <!--博客js脚本 -->
-    <!-- 这里放网站js脚本 -->
+        
 
-<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
 
 </body>
 </html>

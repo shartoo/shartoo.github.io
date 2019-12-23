@@ -1,392 +1,479 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" >
-    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
-    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
-    
-    <title>theano 深度学习数据准备 | Hexo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
-    <meta name="keywords" content="Jelon, 前端, Web, 张德龙, 前端开发" >
-    <meta name="description" content="Jelon个人前端小站" >
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml" >
-    
-    
-    <link rel="shortcut icon" href="/favicon.ico" >
-    
-    
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/main.css">
 
-    <!--[if lt IE 9]>
-    
-<script src="/js/html5.js"></script>
 
-    <![endif]-->
-    
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "//hm.baidu.com/hm.js?fd459238242776d173cdc64918fb32f2";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://shartoo.github.com').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
 </script>
 
+  <meta name="description" content="深度学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="theano 深度学习数据准备">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2016-12-22-theano-deeplearning/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="深度学习">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/theano1.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/theano2.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/theano3.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/theano4.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/theano5.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/theano6.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/theano7.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/theano8.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/theano9.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.418Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.209Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/theano1.png">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<link rel="canonical" href="http://shartoo.github.com/2019/12/23/2016-12-22-theano-deeplearning/">
 
-<body class="home">
-    <!--[if lt IE 9]>
-    <div class="browsehappy">
-        当前网页 <strong>不支持</strong>
-        你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/" target="_blank" rel="noopener">升级你的浏览器</a>.
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>theano 深度学习数据准备 | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
     </div>
-    <![endif]-->
+  </div>
 
-    <!-- 博客头部 -->
-    <header class="header">
-    <section class="container header-main">
-        <div class="logo">
-            <a href="/">
-                <div class="cover">
-                    <span class="name">Hexo</span>
-                    <span class="description"></span>
-                </div>
-            </a>
-        </div>
-        <div class="dropnav icon-paragraph-justify" id="JELON__btnDropNav"></div>
-        <ul class="menu hidden" id="JELON__menu">
-            
-            <li rel="/2019/12/23/2016-12-22-theano-deeplearning/index.html" class="item ">
-                <a href="/" title="首页" class="icon-home">&nbsp;首页</a>
-            </li>
-            
-            <li rel="/2019/12/23/2016-12-22-theano-deeplearning/index.html" class="item ">
-                <a href="/lab/" title="实验室" class="icon-lab">&nbsp;实验室</a>
-            </li>
-            
-            <li rel="/2019/12/23/2016-12-22-theano-deeplearning/index.html" class="item ">
-                <a href="/about/" title="关于" class="icon-about">&nbsp;关于</a>
-            </li>
-            
-            <li rel="/2019/12/23/2016-12-22-theano-deeplearning/index.html" class="item ">
-                <a href="/comment/" title="留言" class="icon-comment">&nbsp;留言</a>
-            </li>
-            
-        </ul>
-        <div class="profile clearfix">
-            <div class="feeds fl">
-                
-                
-                <p class="links">
-                    
-                        <a href="https://github.com/jangdelong" target="_blank">Github</a>
-                        |
-                    
-                        <a href="https://pages.coding.me" target="_blank">Hosted by Coding Pages</a>
-                        
-                    
-                </p>
-                <p class="sns">
-                    
-                        <a href="http://weibo.com/jangdelong" class="sinaweibo" target="_blank"><b>■</b> 新浪微博</a>
-                    
-                        <a href="https://www.facebook.com/profile.php?id=100011855760219&amp;ref=bookmarks" class="qqweibo" target="_blank"><b>■</b> Facebook</a>
-                    
-                    <a href="javascript: void(0);" class="wechat">
-                        <b>■</b>
-                        公众号
-                        <span class="popover">
-                            <img src="/img/wechat_mp.jpg" width="120" height="120" alt="我的微信订阅号">
-                            <i class="arrow"></i>
-                        </span>
-                    </a>
-                </p>
-                
-            </div>
-            <div class="avatar fr">
-                <img src="/img/jelon.jpg" alt="avatar" title="Jelon" >
-            </div>
-        </div>
-    </section>
-</header>
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
 
 
-    <!-- 博客正文 -->
-    <div class="container body clearfix">
-        <section class="content">
-            <div class="content-main widget">
-                <!-- 文章页 -->
-<!-- 文章 -->
-<article class="post article">
-    <header class="text-center">
-        <h3 class="post-title"><span>theano 深度学习数据准备</span></h3>
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
     </header>
-    <p class="post-meta text-center">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.418Z">2019-12-23</time>
-    </p>
-    <div class="post-content">
-        <h2 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h2><p> 使用的是MNIST手写字识别,<a href="http://deeplearning.net/data/mnist/mnist.pkl.gz" target="_blank" rel="noopener">下载</a>。数据由60000个样本，50000个训练样本和10000个测试样本，每个样本被统一为28x28像素。原始数据集中每个样本的像素值区间是[0,255]，其中0代表黑色，255为白色，中间的是灰色。</p>
-<p> <img src="/images/blog/theano1.png" alt="样本">)<img src="/images/blog/theano2.png" alt="样本">)<img src="/images/blog/theano3.png" alt="样本">)<img src="/images/blog/theano4.png" alt="样本"></p>
-<h2 id="卷积神经网络"><a href="#卷积神经网络" class="headerlink" title="卷积神经网络"></a>卷积神经网络</h2><p> CNN每层都是由多个特征map组成，( $h^{()k},k=0…k$ )。隐藏层的权重可以用一个四维的Tensor表示，分别代表<strong>目标特征map</strong>，<strong>源特征map</strong>，<strong>原始图像中竖轴坐标</strong>，<strong>原始图像中横轴坐标</strong>。偏置b可以用一个向量表示，向量中每个元素是目标特征map中的一个元素。下图演示了这个过程:</p>
-<p> <img src="/images/blog/theano5.png" alt="CNN"></p>
-<p>上图展示了两层CNN网络，<code>m-1</code>层包含了4个特征map，隐藏层<code>m</code>包含了两个特征map ( $h^0和h^1$ )。 输出神经元中的像素，$h^0$ 和 $h^1$ (途中蓝色( $W^1$ 旁边)和红色矩形框( $W^2$ 旁边))，是从 <code>m-1</code> 层的2x2的接收域的像素中计算得来的。注意看，接受域是如何覆盖全部的四个输入特征map的。特征 $h^0$ 和 $h^1$ 的权重 $W^0$ 和 $W^1$ 都是3维Tensor,第一个维度代表的是第几个输入特征maps的，其他两个是像素坐标。</p>
-<p>结合起来看 $W^{kl} _{ij}$ 代表第 <code>m</code>层的第 <code>k</code> 个特征的每个像素与第 <code>m-1</code>层的第 <code>l</code> 个特征的坐标点为 <code>i,j</code> 像素的权重。所以，在上图由4个通道卷积得到2个通道的过程中，参数的数目为4×2×2×2个，其中4表示4个通道，第一个2表示生成2个通道，最后的2×2表示卷积核大小。</p>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://shartoo.github.com/2019/12/23/2016-12-22-theano-deeplearning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          theano 深度学习数据准备
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2019-12-23 18:45:59 / Modified: 17:55:14" itemprop="dateCreated datePublished" datetime="2019-12-23T18:45:59+08:00">2019-12-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">深度学习</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="数据集">数据集</h2>
+<p>使用的是MNIST手写字识别,<a href="http://deeplearning.net/data/mnist/mnist.pkl.gz" target="_blank" rel="noopener">下载</a>。数据由60000个样本，50000个训练样本和10000个测试样本，每个样本被统一为28x28像素。原始数据集中每个样本的像素值区间是[0,255]，其中0代表黑色，255为白色，中间的是灰色。</p>
+<p><img src="/images/blog/theano1.png" alt="样本" /><img src="/images/blog/theano2.png" alt="样本" /><img src="/images/blog/theano3.png" alt="样本" /><img src="/images/blog/theano4.png" alt="样本" /></p>
+<h2 id="卷积神经网络">卷积神经网络</h2>
+<p>CNN每层都是由多个特征map组成，( <span class="math inline">\(h^{()k},k=0...k\)</span> )。隐藏层的权重可以用一个四维的Tensor表示，分别代表<strong>目标特征map</strong>，<strong>源特征map</strong>，<strong>原始图像中竖轴坐标</strong>，<strong>原始图像中横轴坐标</strong>。偏置b可以用一个向量表示，向量中每个元素是目标特征map中的一个元素。下图演示了这个过程:</p>
+<figure>
+<img src="/images/blog/theano5.png" alt="CNN" /><figcaption>CNN</figcaption>
+</figure>
+<p>上图展示了两层CNN网络，<code>m-1</code>层包含了4个特征map，隐藏层<code>m</code>包含了两个特征map ( <span class="math inline">\(h^0和h^1\)</span> )。 输出神经元中的像素，<span class="math inline">\(h^0\)</span> 和 <span class="math inline">\(h^1\)</span> (途中蓝色( <span class="math inline">\(W^1\)</span> 旁边)和红色矩形框( <span class="math inline">\(W^2\)</span> 旁边))，是从 <code>m-1</code> 层的2x2的接收域的像素中计算得来的。注意看，接受域是如何覆盖全部的四个输入特征map的。特征 <span class="math inline">\(h^0\)</span> 和 <span class="math inline">\(h^1\)</span> 的权重 <span class="math inline">\(W^0\)</span> 和 <span class="math inline">\(W^1\)</span> 都是3维Tensor,第一个维度代表的是第几个输入特征maps的，其他两个是像素坐标。</p>
+<p>结合起来看 <span class="math inline">\(W^{kl} _{ij}\)</span> 代表第 <code>m</code>层的第 <code>k</code> 个特征的每个像素与第 <code>m-1</code>层的第 <code>l</code> 个特征的坐标点为 <code>i,j</code> 像素的权重。所以，在上图由4个通道卷积得到2个通道的过程中，参数的数目为4×2×2×2个，其中4表示4个通道，第一个2表示生成2个通道，最后的2×2表示卷积核大小。</p>
 <p>下面演示 theano的代码和详细数据过程：</p>
 <p><strong>导入基本包</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import theano</span><br><span class="line">from theano import tensor as T</span><br><span class="line">from theano.tensor.nnet import conv2d</span><br><span class="line"></span><br><span class="line">import numpy</span><br></pre></td></tr></table></figure>
-
 <p><strong>初始化一个随机数生成器</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rng &#x3D; numpy.random.RandomState(23455)</span><br></pre></td></tr></table></figure>
-
 <p><strong>初始化输入</strong></p>
 <p>注意，深度学习框架中，一般会先构架计算图（即，把计算过程定义好），然后再输入数据。所以，此时的初始化时一个空的占位变量。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># instantiate 4D tensor for input</span><br><span class="line">input &#x3D; T.tensor4(name&#x3D;&#39;input&#39;)</span><br></pre></td></tr></table></figure>
-
-<p>通过调试，查看变量的初始化<br><img src="/images/blog/theano6.png" alt="CNN"></p>
+<p>通过调试，查看变量的初始化 <img src="/images/blog/theano6.png" alt="CNN" /></p>
 <p><strong>初始化权重矩阵</strong></p>
 <p>注意：权重的数据类型是 <code>theano.shared</code></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># initialize shared variable for weights.</span><br><span class="line">w_shp &#x3D; (2, 3, 9, 9)</span><br><span class="line">w_bound &#x3D; numpy.sqrt(3 * 9 * 9)</span><br><span class="line">W &#x3D; theano.shared( numpy.asarray(</span><br><span class="line">            rng.uniform(</span><br><span class="line">                low&#x3D;-1.0 &#x2F; w_bound,</span><br><span class="line">                high&#x3D;1.0 &#x2F; w_bound,</span><br><span class="line">                size&#x3D;w_shp),</span><br><span class="line">            dtype&#x3D;input.dtype), name &#x3D;&#39;W&#39;)</span><br></pre></td></tr></table></figure>
 <p>观察权重的数据结构和内部的值。</p>
-<p><img src="/images/blog/theano7.png" alt="CNN"></p>
+<figure>
+<img src="/images/blog/theano7.png" alt="CNN" /><figcaption>CNN</figcaption>
+</figure>
 <p><strong>初始化偏置</strong></p>
 <p>偏置只有2个，因为此处只使用了 2个特征抽取map。</p>
 <p>此时的偏置的数据类型也是 <code>theano.shared</code></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">b_shp &#x3D; (2,)</span><br><span class="line">b &#x3D; theano.shared(numpy.asarray(</span><br><span class="line">           rng.uniform(low&#x3D;-.5, high&#x3D;.5, size&#x3D;b_shp),</span><br><span class="line">           dtype&#x3D;input.dtype), name &#x3D;&#39;b&#39;)</span><br></pre></td></tr></table></figure>
-
 <p><strong>计算卷积</strong></p>
 <p>构建符号表达的计算图，此时是个空架子</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># build symbolic expression that computes the convolution of input with filters in w</span><br><span class="line">conv_out &#x3D; conv2d(input, W)</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/blog/theano8.png" alt="CNN"></p>
+<figure>
+<img src="/images/blog/theano8.png" alt="CNN" /><figcaption>CNN</figcaption>
+</figure>
 <p><strong>卷积网络的激活输出</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">output &#x3D; T.nnet.sigmoid(conv_out + b.dimshuffle(&#39;x&#39;, 0, &#39;x&#39;, &#39;x&#39;))</span><br><span class="line"></span><br><span class="line"># create theano function to compute filtered images</span><br><span class="line">f &#x3D; theano.function([input], output)</span><br></pre></td></tr></table></figure>
-
 <p>** 给卷积网络灌入图像数据**</p>
 <p>下面的代码直接使用了CNN网络中的函数 <code>f</code>，注意下面代码中的 <code>filtered_img = f(img_)</code>，其他部分是普通的图像处理。此处往图像中灌入图像数据，并返回卷积之后的结果。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import numpy</span><br><span class="line">import pylab</span><br><span class="line">from PIL import Image</span><br><span class="line"></span><br><span class="line"># open random image of dimensions 639x516</span><br><span class="line">img &#x3D; Image.open(open(&#39;doc&#x2F;images&#x2F;3wolfmoon.jpg&#39;))</span><br><span class="line"># dimensions are (height, width, channel)</span><br><span class="line">img &#x3D; numpy.asarray(img, dtype&#x3D;&#39;float64&#39;) &#x2F; 256.</span><br><span class="line"></span><br><span class="line"># put image in 4D tensor of shape (1, 3, height, width)</span><br><span class="line">img_ &#x3D; img.transpose(2, 0, 1).reshape(1, 3, 639, 516)</span><br><span class="line">filtered_img &#x3D; f(img_)</span><br><span class="line"></span><br><span class="line"># plot original image and first and second components of output</span><br><span class="line">pylab.subplot(1, 3, 1); pylab.axis(&#39;off&#39;); pylab.imshow(img)</span><br><span class="line">pylab.gray();</span><br><span class="line"># recall that the convOp output (filtered image) is actually a &quot;minibatch&quot;,</span><br><span class="line"># of size 1 here, so we take index 0 in the first dimension:</span><br><span class="line">pylab.subplot(1, 3, 2); pylab.axis(&#39;off&#39;); pylab.imshow(filtered_img[0, 0, :, :])</span><br><span class="line">pylab.subplot(1, 3, 3); pylab.axis(&#39;off&#39;); pylab.imshow(filtered_img[0, 1, :, :])</span><br><span class="line">pylab.show()</span><br></pre></td></tr></table></figure>
-
 <p>下图演示了图片被输入到图像中的结构:</p>
 <p>图片被处理为<code>ndarray</code>类型，并保留了RGB通道的结构。</p>
-<p><img src="/images/blog/theano9.png" alt="CNN"></p>
+<figure>
+<img src="/images/blog/theano9.png" alt="CNN" /><figcaption>CNN</figcaption>
+</figure>
 <p><strong>详细的卷积过程</strong></p>
 <p>查看函数 <code>conv_out=conv2d(input,w)</code> 在<code>theano</code>中如何定义：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">def conv2d(input, filters, input_shape&#x3D;None, filter_shape&#x3D;None,</span><br><span class="line">           border_mode&#x3D;&#39;valid&#39;, subsample&#x3D;(1, 1), filter_flip&#x3D;True,</span><br><span class="line">           image_shape&#x3D;None, filter_dilation&#x3D;(1, 1), **kwargs):</span><br><span class="line"></span><br><span class="line">    if &#39;imshp_logical&#39; in kwargs or &#39;kshp_logical&#39; in kwargs:</span><br><span class="line">        raise ValueError(</span><br><span class="line">            &quot;Keyword arguments &#39;imshp_logical&#39; and &#39;kshp_logical&#39; for conv2d &quot;</span><br><span class="line">            &quot;are not supported anymore (and have not been a reliable way to &quot;</span><br><span class="line">            &quot;perform upsampling). That feature is still available by calling &quot;</span><br><span class="line">            &quot;theano.tensor.nnet.conv.conv2d() for the time being.&quot;)</span><br><span class="line">    if len(kwargs.keys()) &gt; 0:</span><br><span class="line">        warnings.warn(str(kwargs.keys()) +</span><br><span class="line">                      &quot; are now deprecated in &quot;</span><br><span class="line">                      &quot;&#96;tensor.nnet.abstract_conv.conv2d&#96; interface&quot;</span><br><span class="line">                      &quot; and will be ignored.&quot;,</span><br><span class="line">                      stacklevel&#x3D;2)</span><br><span class="line"></span><br><span class="line">    if image_shape is not None:</span><br><span class="line">        warnings.warn(&quot;The &#96;image_shape&#96; keyword argument to &quot;</span><br><span class="line">                      &quot;&#96;tensor.nnet.conv2d&#96; is deprecated, it has been &quot;</span><br><span class="line">                      &quot;renamed to &#96;input_shape&#96;.&quot;,</span><br><span class="line">                      stacklevel&#x3D;2)</span><br><span class="line">        if input_shape is None:</span><br><span class="line">            input_shape &#x3D; image_shape</span><br><span class="line">        else:</span><br><span class="line">            raise ValueError(&quot;input_shape and image_shape should not&quot;</span><br><span class="line">                             &quot; be provided at the same time.&quot;)</span><br><span class="line"></span><br><span class="line">    return abstract_conv2d(input, filters, input_shape, filter_shape,</span><br><span class="line">                           border_mode, subsample, filter_flip,</span><br><span class="line">                           filter_dilation)</span><br></pre></td></tr></table></figure>
-
 <p>看代码可知，此函数只是个外壳，最后的<code>abstract_conv2d</code>才是实际的处理方法。继续进入到 <code>abstract_conv2d</code>函数内部：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">def conv2d(input,</span><br><span class="line">          filters,</span><br><span class="line">          input_shape&#x3D;None,</span><br><span class="line">          filter_shape&#x3D;None,</span><br><span class="line">          border_mode&#x3D;&#39;valid&#39;,</span><br><span class="line">          subsample&#x3D;(1, 1),</span><br><span class="line">          filter_flip&#x3D;True,</span><br><span class="line">          filter_dilation&#x3D;(1, 1)):</span><br><span class="line">   &quot;&quot;&quot;This function will build the symbolic graph for convolving a mini-batch of a</span><br><span class="line">   stack of 2D inputs with a set of 2D filters. The implementation is modelled</span><br><span class="line">   after Convolutional Neural Networks (CNN).</span><br><span class="line"></span><br><span class="line">   Refer to :func:&#96;nnet.conv2d &lt;theano.tensor.nnet.conv2d&gt;&#96; for a more detailed documentation.</span><br><span class="line">   &quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">   input &#x3D; as_tensor_variable(input)</span><br><span class="line">   filters &#x3D; as_tensor_variable(filters)</span><br><span class="line">   conv_op &#x3D; AbstractConv2d(imshp&#x3D;input_shape,</span><br><span class="line">                            kshp&#x3D;filter_shape,</span><br><span class="line">                            border_mode&#x3D;border_mode,</span><br><span class="line">                            subsample&#x3D;subsample,</span><br><span class="line">                            filter_flip&#x3D;filter_flip,</span><br><span class="line">                            filter_dilation&#x3D;filter_dilation)</span><br><span class="line">   return conv_op(input, filters)</span><br></pre></td></tr></table></figure>
-
 <p>此函数，也只将python中的<code>input</code>变量和<code>filters</code>变量转换为<code>theano</code> 中的张量Tensor。之后将初始化了一个<code>AbstractConv2d</code>对象</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">input &#x3D; as_tensor_variable(input)</span><br><span class="line">filters &#x3D; as_tensor_variable(filters)</span><br><span class="line">conv_op &#x3D; AbstractConv2d(imshp&#x3D;input_shape,</span><br><span class="line">                          kshp&#x3D;filter_shape,</span><br><span class="line">                          border_mode&#x3D;border_mode,</span><br><span class="line">                          subsample&#x3D;subsample,</span><br><span class="line">                          filter_flip&#x3D;filter_flip,</span><br><span class="line">                          filter_dilation&#x3D;filter_dilation)</span><br><span class="line"> return conv_op(input, filters)</span><br></pre></td></tr></table></figure>
-
 <p>继续深入 <code>AbstractConv2d</code>这个构造方法内部</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">class AbstractConv2d(AbstractConv):</span><br><span class="line">    &quot;&quot;&quot; Abstract Op for the forward convolution.</span><br><span class="line">    Refer to :func:&#96;BaseAbstractConv &lt;theano.tensor.nnet.abstract_conv.BaseAbstractConv&gt;&#96;</span><br><span class="line">    for a more detailed documentation.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">    def __init__(self,</span><br><span class="line">                 imshp&#x3D;None,</span><br><span class="line">                 kshp&#x3D;None,</span><br><span class="line">                 border_mode&#x3D;&quot;valid&quot;,</span><br><span class="line">                 subsample&#x3D;(1, 1),</span><br><span class="line">                 filter_flip&#x3D;True,</span><br><span class="line">                 filter_dilation&#x3D;(1, 1)):</span><br><span class="line">        super(AbstractConv2d, self).__init__(convdim&#x3D;2,</span><br><span class="line">                                             imshp&#x3D;imshp, kshp&#x3D;kshp,</span><br><span class="line">                                             border_mode&#x3D;border_mode,</span><br><span class="line">                                             subsample&#x3D;subsample,</span><br><span class="line">                                             filter_flip&#x3D;filter_flip,</span><br><span class="line">                                             filter_dilation&#x3D;filter_dilation)</span><br></pre></td></tr></table></figure>
-
 <p>从代码中可以看到，它实际是<code>super(AbstractConv2d, self)</code>继续调用父类<code>AbstractConv</code>的<code>super(AbstractConv2d, self)</code>的构造方法。但是<code>theano</code>中此处的父类是个抽象类，它在执行<code>super(AbstractConv2d, self)</code>时，实际是调用了自己的构造方法。</p>
 
     </div>
-    <p class="post-meta">
-        <span class="post-cat">分类：
-            <a class="cat-link" href="/categories/blog/">blog</a>
-        </span>
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-</article>
-<!-- 分享按钮 -->
 
-  <div class="article-share clearfix text-center">
-    <div class="share-area">
-      <span class="share-txt">分享到：</span>
-      <a href="javascript: window.open('http://service.weibo.com/share/share.php?url=' + encodeURIComponent(location.href) + '&title=' + document.title + '&language=zh_cn');" class="share-icon weibo"></a>
-      <a href="javascript: alert('请复制链接到微信并发送');" class="share-icon wechat"></a>
-      <a href="javascript: window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + encodeURIComponent(location.href) + '&title=' + document.title);" class="share-icon qqzone"></a>
-      <a href="javascript: window.open('http://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(location.href) + '&desc=Jelon个人博客&title=' + document.title + '&callback=' + encodeURIComponent(location.href));" class="share-icon qq"></a>
-      <a href="javascript: window.open('http://shuo.douban.com/!service/share?href=' + encodeURIComponent(location.href) + '&name=' + document.title + '&text=' + document.title);" class="share-icon douban"></a>
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2016-11-24-represationlearning/" rel="prev" title="深度学习：表征学习">
+      <i class="fa fa-chevron-left"></i> 深度学习：表征学习
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2016-12-27-gan-paper/" rel="next" title="GAN：论文笔记">
+      GAN：论文笔记 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
   </div>
 
 
-<!-- 上一篇/下一篇 -->
+          </div>
+          
 
-<div class="article-nav clearfix">
-    
-    <span class="prev fl">
-        上一篇<br >
-        <a href="/2019/12/23/2016-12-27-gan-paper/">
-            
-                GAN：论文笔记
-            
-        </a>
-    </span>
-    
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
 
-    
-    <span class="next fr">
-        下一篇<br >
-        <a href="/2019/12/23/2016-11-24-represationlearning/">
-            
-                深度学习：表征学习
-            
-        </a>
-    </span>
-    
-</div>
-
-<!-- 文章评论 -->
-
+        </div>
+          
   
-<script src="/js/comment.js"></script>
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
 
-  <div id="comments" class="comment">
-    <!--
-    <div class="sign-bar">
-      GitHub 已登录!
-      <span class="sign-link">登出</span>
-    </div>
-    <section class="box">
-      <div class="com-avatar"><img src="/img/jelon.jpg" alt="avatar"></div>
-      <div class="com-text">
-        <div class="main">
-          <textarea class="text-area-edited show" placeholder="欢迎评论！"></textarea>
-          <div class="text-area-preview"></div>
-        </div>
-        <div class="switch">
-          <div class="switch-item on">编辑</div>
-          <div class="switch-item">预览</div>
-        </div>
-        <div class="button">提交</div>
-      </div>
-    </section>
-    <section class="tips">注：评论支持 markdown 语法！</section>
-    <section class="list-wrap">
-      <ul class="list">
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">张德龙</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like liked">已赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">333333</div>
-          </div>
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
         </li>
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">刘德华</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like">点赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">vvvvv</div>
-          </div>
+        <li class="sidebar-nav-overview">
+          Overview
         </li>
       </ul>
-      <div class="page-nav">
-        <a href="javascript: void(0);" class="item">1</a>
-        <a href="javascript: void(0);" class="item">2</a>
-        <a href="javascript: void(0);" class="item current">3</a>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据集"><span class="nav-number">1.</span> <span class="nav-text">数据集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#卷积神经网络"><span class="nav-number">2.</span> <span class="nav-text">卷积神经网络</span></a></li></ol></div>
       </div>
-    </section>
-    -->
-  </div>
-  <script>
-  JELON.Comment({
-    container: 'comments',
-    label: '2016-12-22-theano-deeplearning' || '2019/12/23/2016-12-22-theano-deeplearning/',
-    owner: 'your_github_id',
-    repo: 'your_blog_comments',
-    clientId: 'your_client_id',
-    clientSecret: 'your_client_secret'
-  });
-  </script>
+      <!--/noindex-->
 
-
-            </div>
-
-        </section>
-        <!-- 侧栏部分 -->
-<aside class="sidebar">
-    <section class="widget">
-        <h3 class="widget-hd"><strong>文章分类</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-    <li>
-        <a href="/categories/blog/">blog</a>
-        <span class="badge">(94)</span>
-    </li>
-    
-</ul>
-    </section>
-
-    
-    <section class="widget">
-        <h3 class="widget-hd"><strong>热门标签</strong></h3>
-        <!-- 文章标签 -->
-<div class="widget-bd tag-wrap">
-  
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
 </div>
-    </section>
-    
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
 
-    
 
-    
-    <!-- 友情链接 -->
-    <section class="widget">
-        <h3 class="widget-hd"><strong>友情链接</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-        <li>
-            <a href="https://jelon.top" target="_blank" title="Jelon个人前端小站">前端博客小站</a>
-        </li>
-    
-        <li>
-            <a href="https://www.baidu.com" target="_blank" title="百度搜索">百度</a>
-        </li>
-    
-</ul>
-    </section>
-    
-</aside>
-<!-- / 侧栏部分 -->
+
+      </div>
+
     </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
 
-    <!-- 博客底部 -->
+
+      </div>
+    </main>
+
     <footer class="footer">
-    &copy;
-    
-        2016-2019
-    
+      <div class="footer-inner">
+        
 
-    <a href="/">Jelon Loves You</a>
-</footer>
-<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
 
-    <!--博客js脚本 -->
-    <!-- 这里放网站js脚本 -->
+        
 
-<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
 
 </body>
 </html>

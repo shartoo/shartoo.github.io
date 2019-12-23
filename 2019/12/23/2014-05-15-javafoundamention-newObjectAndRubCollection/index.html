@@ -1,362 +1,467 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" >
-    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
-    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
-    
-    <title>Java对象创建过程与垃圾回收机制 | Hexo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
-    <meta name="keywords" content="Jelon, 前端, Web, 张德龙, 前端开发" >
-    <meta name="description" content="Jelon个人前端小站" >
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml" >
-    
-    
-    <link rel="shortcut icon" href="/favicon.ico" >
-    
-    
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/main.css">
 
-    <!--[if lt IE 9]>
-    
-<script src="/js/html5.js"></script>
 
-    <![endif]-->
-    
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "//hm.baidu.com/hm.js?fd459238242776d173cdc64918fb32f2";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://shartoo.github.com').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
 </script>
 
+  <meta name="description" content="关于Java JVM的一些学习笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java对象创建过程与垃圾回收机制">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2014-05-15-javafoundamention-newObjectAndRubCollection/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="关于Java JVM的一些学习笔记">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/java-jvm-obj-rubcollect1.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/java-jvm-obj-rubcollect2.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/java-jvm-obj-rubcollect3.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.261Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.193Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/java-jvm-obj-rubcollect1.png">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
-
-<body class="home">
-    <!--[if lt IE 9]>
-    <div class="browsehappy">
-        当前网页 <strong>不支持</strong>
-        你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/" target="_blank" rel="noopener">升级你的浏览器</a>.
-    </div>
-    <![endif]-->
-
-    <!-- 博客头部 -->
-    <header class="header">
-    <section class="container header-main">
-        <div class="logo">
-            <a href="/">
-                <div class="cover">
-                    <span class="name">Hexo</span>
-                    <span class="description"></span>
-                </div>
-            </a>
-        </div>
-        <div class="dropnav icon-paragraph-justify" id="JELON__btnDropNav"></div>
-        <ul class="menu hidden" id="JELON__menu">
-            
-            <li rel="/2019/12/23/2014-05-15-javafoundamention-newObjectAndRubCollection/index.html" class="item ">
-                <a href="/" title="首页" class="icon-home">&nbsp;首页</a>
-            </li>
-            
-            <li rel="/2019/12/23/2014-05-15-javafoundamention-newObjectAndRubCollection/index.html" class="item ">
-                <a href="/lab/" title="实验室" class="icon-lab">&nbsp;实验室</a>
-            </li>
-            
-            <li rel="/2019/12/23/2014-05-15-javafoundamention-newObjectAndRubCollection/index.html" class="item ">
-                <a href="/about/" title="关于" class="icon-about">&nbsp;关于</a>
-            </li>
-            
-            <li rel="/2019/12/23/2014-05-15-javafoundamention-newObjectAndRubCollection/index.html" class="item ">
-                <a href="/comment/" title="留言" class="icon-comment">&nbsp;留言</a>
-            </li>
-            
-        </ul>
-        <div class="profile clearfix">
-            <div class="feeds fl">
-                
-                
-                <p class="links">
-                    
-                        <a href="https://github.com/jangdelong" target="_blank">Github</a>
-                        |
-                    
-                        <a href="https://pages.coding.me" target="_blank">Hosted by Coding Pages</a>
-                        
-                    
-                </p>
-                <p class="sns">
-                    
-                        <a href="http://weibo.com/jangdelong" class="sinaweibo" target="_blank"><b>■</b> 新浪微博</a>
-                    
-                        <a href="https://www.facebook.com/profile.php?id=100011855760219&amp;ref=bookmarks" class="qqweibo" target="_blank"><b>■</b> Facebook</a>
-                    
-                    <a href="javascript: void(0);" class="wechat">
-                        <b>■</b>
-                        公众号
-                        <span class="popover">
-                            <img src="/img/wechat_mp.jpg" width="120" height="120" alt="我的微信订阅号">
-                            <i class="arrow"></i>
-                        </span>
-                    </a>
-                </p>
-                
-            </div>
-            <div class="avatar fr">
-                <img src="/img/jelon.jpg" alt="avatar" title="Jelon" >
-            </div>
-        </div>
-    </section>
-</header>
+<link rel="canonical" href="http://shartoo.github.com/2019/12/23/2014-05-15-javafoundamention-newObjectAndRubCollection/">
 
 
-    <!-- 博客正文 -->
-    <div class="container body clearfix">
-        <section class="content">
-            <div class="content-main widget">
-                <!-- 文章页 -->
-<!-- 文章 -->
-<article class="post article">
-    <header class="text-center">
-        <h3 class="post-title"><span>Java对象创建过程与垃圾回收机制</span></h3>
-    </header>
-    <p class="post-meta text-center">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.261Z">2019-12-23</time>
-    </p>
-    <div class="post-content">
-        <h2 id="一-创建对象的步骤"><a href="#一-创建对象的步骤" class="headerlink" title="一 创建对象的步骤"></a>一 创建对象的步骤</h2><ol>
-<li>虚拟机遇到一条<B>new</B>指令<br></li>
-<li>检查指令的参数能否在常量池中定位到一个类的符号引用，并检查这个符号引用代表的类是否已被加载、解析和初始化过<br></li>
-<li>若没有，则必须首先执行相应的类加载过程<br></li>
-<li>类加载完成，虚拟机为新生对象分配内存。分配内存相当于从Java堆中划分出一块内存大小确定的块，分两种情况<br>(1)Java堆内存，属于绝对规整的那种。只需指针向空闲空间挪动一段举例即可<br>(2)不规整。空闲区和已分配区交错，需要一张“空闲列表”记录哪些区域是分配了的<br></li>
-<li>虚拟机对对象进行必要的设置。如，这个对象是哪个类的实例，如何才能找到类的元数据信息，对象的哈希码。此步骤为止<font color="blue">虚拟机步骤完成</font><br></li>
-<li><font color="blue">Java程序开始：</font>init方法还没有执行，所有字段仍然为0，new指令后，执行 init 方法。</li>
-</ol>
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
 
-<h2 id="二-垃圾回收的目标"><a href="#二-垃圾回收的目标" class="headerlink" title="二 垃圾回收的目标"></a>二 垃圾回收的目标</h2><p>Java运行期间的各个部分：程序计数器、虚拟机栈、本地方法栈，这三个区域随着线程而存亡。栈中的线帧随着方法的进入和退出而入栈、出栈。每个线帧分配多少内存在类的结构确定时也确定。这几个区域的内存分配和回收都是确定的，方法结束或线程结束时，内存就回收了。<br></p>
-<p>而Java堆和方法区就不一样了，一个接口的多个实现类所需要的内存都不一样，一个方法的各个分支所需内存也不一样，程序运行期间才能动态确认。<font color="blue">垃圾收集器关注的也是此部分</font>    <br></p>
-<h2 id="三-判断对象是否存活-堆中"><a href="#三-判断对象是否存活-堆中" class="headerlink" title="三 判断对象是否存活(堆中)"></a>三 判断对象是否存活(堆中)</h2><p>有以下方法：</p>
-<ol>
-<li><B>引用记数法：</B>给对象添加一个引育弄个计数器，有一个地方引用时该计数器加1，一个引用失效时，减一<br>
-<B>缺点：</B>无法应对循环引用，例如【objA.instance=objB和obj.instance=objA】</li>
-<li><B>可达性分析算法：</B>以一个称为"GC Root"的对象作为起始点，从这些节点往下搜索。当一个对象到"GC Root"的引用路径不可达时，证明该对象不可用。<font color="blue">java采用此方法</font><img src="/images/blog/java-jvm-obj-rubcollect1.png"></li>
-</ol>
+  <title>Java对象创建过程与垃圾回收机制 | Hexo</title>
+  
 
-<h2 id="四-回收方法区"><a href="#四-回收方法区" class="headerlink" title="四 回收方法区"></a>四 回收方法区</h2><p>主要有两部分：(1)废弃的常量（2）无用的类</p>
-<ol>
-<li><B>废弃常量:</B>没有任何对象引用它</li>
-<li><B>无用的类：</B><br>(1)该类所有的实例都已被回收，也即Java堆中不存在该类的任何实例<br>(2)加载该类的classLoader已被回收<br>(3)该类对应的java.lang.Class对象没有任何地方被引用，无法在任何地方通过反射访问该类的方法</li>
-</ol>
 
-<h2 id="五-对象的访问定位"><a href="#五-对象的访问定位" class="headerlink" title="五 对象的访问定位"></a>五 对象的访问定位</h2><p>Java程序，需要通过栈上的reference数据来操作堆行的具体对象。reference类型在Java中只规定了一个指向该对象的引用，如何去定位，访问堆中的对象的具体对象。不同的虚拟机实现，分为使用句柄和直接指针两种。<br><br></p>
-<h3 id="5-1-句柄访问"><a href="#5-1-句柄访问" class="headerlink" title="5.1 句柄访问"></a>5.1 句柄访问</h3><p>Java堆中划分一块内存作为句柄池，reference中存储的即对象的句柄地址，而句柄包含了对象实例数据与类型数据各自的具体地址信息。<br><img src="/images/blog/java-jvm-obj-rubcollect2.png"><br><br><br><B>优点：</B>reference中存储的是稳定的句柄地址，对象被移动（垃圾回收时），只会改变句柄中的实例数据指针，而reference本身不需要移动</p>
-<h3 id="5-2-直接指针访问"><a href="#5-2-直接指针访问" class="headerlink" title="5.2 直接指针访问"></a>5.2 直接指针访问</h3><p>Java堆中对象的布局中就必须考虑如何放置访问类型数据相关信息，reference中存储的直接是对象地址<br><img src="/images/blog/java-jvm-obj-rubcollect3.png"><br><br><B>优点：</B>速度更快，节省了一次指针定位的时间开销。虚拟机Sun HotSpot即采用此方法。</p>
 
-    </div>
-    <p class="post-meta">
-        <span class="post-cat">分类：
-            <a class="cat-link" href="/categories/blog/">blog</a>
-        </span>
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-</article>
-<!-- 分享按钮 -->
 
-  <div class="article-share clearfix text-center">
-    <div class="share-area">
-      <span class="share-txt">分享到：</span>
-      <a href="javascript: window.open('http://service.weibo.com/share/share.php?url=' + encodeURIComponent(location.href) + '&title=' + document.title + '&language=zh_cn');" class="share-icon weibo"></a>
-      <a href="javascript: alert('请复制链接到微信并发送');" class="share-icon wechat"></a>
-      <a href="javascript: window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + encodeURIComponent(location.href) + '&title=' + document.title);" class="share-icon qqzone"></a>
-      <a href="javascript: window.open('http://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(location.href) + '&desc=Jelon个人博客&title=' + document.title + '&callback=' + encodeURIComponent(location.href));" class="share-icon qq"></a>
-      <a href="javascript: window.open('http://shuo.douban.com/!service/share?href=' + encodeURIComponent(location.href) + '&name=' + document.title + '&text=' + document.title);" class="share-icon douban"></a>
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
     </div>
   </div>
 
-
-<!-- 上一篇/下一篇 -->
-
-<div class="article-nav clearfix">
-    
-    <span class="prev fl">
-        上一篇<br >
-        <a href="/2019/12/23/2014-05-17-bigdata-streamdata-introduce/">
-            
-                大数据之流数据挖掘
-            
-        </a>
-    </span>
-    
-
-    
-    <span class="next fr">
-        下一篇<br >
-        <a href="/2019/12/23/2014-05-11-javafoundamention1/">
-            
-                Java基础笔记-Java内存区域
-            
-        </a>
-    </span>
-    
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
 </div>
 
-<!-- 文章评论 -->
 
+<nav class="site-nav">
   
-<script src="/js/comment.js"></script>
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
 
-  <div id="comments" class="comment">
-    <!--
-    <div class="sign-bar">
-      GitHub 已登录!
-      <span class="sign-link">登出</span>
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://shartoo.github.com/2019/12/23/2014-05-15-javafoundamention-newObjectAndRubCollection/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java对象创建过程与垃圾回收机制
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2019-12-23 18:45:59 / Modified: 17:55:14" itemprop="dateCreated datePublished" datetime="2019-12-23T18:45:59+08:00">2019-12-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">关于Java JVM的一些学习笔记</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="一-创建对象的步骤">一 创建对象的步骤</h2>
+<ol>
+<li>
+虚拟机遇到一条<B>new</B>指令<br>
+</li>
+<li>
+检查指令的参数能否在常量池中定位到一个类的符号引用，并检查这个符号引用代表的类是否已被加载、解析和初始化过<br>
+</li>
+<li>
+若没有，则必须首先执行相应的类加载过程<br>
+</li>
+<li>
+类加载完成，虚拟机为新生对象分配内存。分配内存相当于从Java堆中划分出一块内存大小确定的块，分两种情况<br>(1)Java堆内存，属于绝对规整的那种。只需指针向空闲空间挪动一段举例即可<br>(2)不规整。空闲区和已分配区交错，需要一张“空闲列表”记录哪些区域是分配了的<br>
+</li>
+<li>
+虚拟机对对象进行必要的设置。如，这个对象是哪个类的实例，如何才能找到类的元数据信息，对象的哈希码。此步骤为止<font color="blue">虚拟机步骤完成</font><br>
+</li>
+<li>
+<font color="blue">Java程序开始：</font>init方法还没有执行，所有字段仍然为0，new指令后，执行 init 方法。
+</li>
+</ol>
+<h2 id="二-垃圾回收的目标">二 垃圾回收的目标</h2>
+<p>Java运行期间的各个部分：程序计数器、虚拟机栈、本地方法栈，这三个区域随着线程而存亡。栈中的线帧随着方法的进入和退出而入栈、出栈。每个线帧分配多少内存在类的结构确定时也确定。这几个区域的内存分配和回收都是确定的，方法结束或线程结束时，内存就回收了。<br></p>
+<p>而Java堆和方法区就不一样了，一个接口的多个实现类所需要的内存都不一样，一个方法的各个分支所需内存也不一样，程序运行期间才能动态确认。<font color="blue">垃圾收集器关注的也是此部分</font> <br></p>
+<h2 id="三-判断对象是否存活堆中">三 判断对象是否存活(堆中)</h2>
+有以下方法：
+<ol>
+<li>
+<B>引用记数法：</B>给对象添加一个引育弄个计数器，有一个地方引用时该计数器加1，一个引用失效时，减一<br> <B>缺点：</B>无法应对循环引用，例如【objA.instance=objB和obj.instance=objA】
+</li>
+<li>
+<B>可达性分析算法：</B>以一个称为&quot;GC Root&quot;的对象作为起始点，从这些节点往下搜索。当一个对象到&quot;GC Root&quot;的引用路径不可达时，证明该对象不可用。<font color="blue">java采用此方法</font><img src="/images/blog/java-jvm-obj-rubcollect1.png">
+</li>
+</ol>
+<h2 id="四-回收方法区">四 回收方法区</h2>
+主要有两部分：(1)废弃的常量（2）无用的类
+<ol>
+<li>
+<B>废弃常量:</B>没有任何对象引用它
+</li>
+<li>
+<B>无用的类：</B><br>(1)该类所有的实例都已被回收，也即Java堆中不存在该类的任何实例<br>(2)加载该类的classLoader已被回收<br>(3)该类对应的java.lang.Class对象没有任何地方被引用，无法在任何地方通过反射访问该类的方法
+</li>
+</ol>
+<h2 id="五-对象的访问定位">五 对象的访问定位</h2>
+<p>Java程序，需要通过栈上的reference数据来操作堆行的具体对象。reference类型在Java中只规定了一个指向该对象的引用，如何去定位，访问堆中的对象的具体对象。不同的虚拟机实现，分为使用句柄和直接指针两种。 <br></p>
+<h3 id="句柄访问">5.1 句柄访问</h3>
+<p>Java堆中划分一块内存作为句柄池，reference中存储的即对象的句柄地址，而句柄包含了对象实例数据与类型数据各自的具体地址信息。 <img src="/images/blog/java-jvm-obj-rubcollect2.png"> <br> <B>优点：</B>reference中存储的是稳定的句柄地址，对象被移动（垃圾回收时），只会改变句柄中的实例数据指针，而reference本身不需要移动</p>
+<h3 id="直接指针访问">5.2 直接指针访问</h3>
+<p>Java堆中对象的布局中就必须考虑如何放置访问类型数据相关信息，reference中存储的直接是对象地址 <img src="/images/blog/java-jvm-obj-rubcollect3.png"><br> <B>优点：</B>速度更快，节省了一次指针定位的时间开销。虚拟机Sun HotSpot即采用此方法。</p>
+
     </div>
-    <section class="box">
-      <div class="com-avatar"><img src="/img/jelon.jpg" alt="avatar"></div>
-      <div class="com-text">
-        <div class="main">
-          <textarea class="text-area-edited show" placeholder="欢迎评论！"></textarea>
-          <div class="text-area-preview"></div>
-        </div>
-        <div class="switch">
-          <div class="switch-item on">编辑</div>
-          <div class="switch-item">预览</div>
-        </div>
-        <div class="button">提交</div>
-      </div>
-    </section>
-    <section class="tips">注：评论支持 markdown 语法！</section>
-    <section class="list-wrap">
-      <ul class="list">
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2014-05-11-javafoundamention1/" rel="prev" title="Java基础笔记-Java内存区域">
+      <i class="fa fa-chevron-left"></i> Java基础笔记-Java内存区域
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2014-05-17-bigdata-streamdata-introduce/" rel="next" title="大数据之流数据挖掘">
+      大数据之流数据挖掘 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
           </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">张德龙</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like liked">已赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">333333</div>
-          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
         </li>
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">刘德华</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like">点赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">vvvvv</div>
-          </div>
+        <li class="sidebar-nav-overview">
+          Overview
         </li>
       </ul>
-      <div class="page-nav">
-        <a href="javascript: void(0);" class="item">1</a>
-        <a href="javascript: void(0);" class="item">2</a>
-        <a href="javascript: void(0);" class="item current">3</a>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-创建对象的步骤"><span class="nav-number">1.</span> <span class="nav-text">一 创建对象的步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-垃圾回收的目标"><span class="nav-number">2.</span> <span class="nav-text">二 垃圾回收的目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-判断对象是否存活堆中"><span class="nav-number">3.</span> <span class="nav-text">三 判断对象是否存活(堆中)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-回收方法区"><span class="nav-number">4.</span> <span class="nav-text">四 回收方法区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五-对象的访问定位"><span class="nav-number">5.</span> <span class="nav-text">五 对象的访问定位</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#句柄访问"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 句柄访问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#直接指针访问"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 直接指针访问</span></a></li></ol></li></ol></div>
       </div>
-    </section>
-    -->
-  </div>
-  <script>
-  JELON.Comment({
-    container: 'comments',
-    label: '2014-05-15-javafoundamention-newObjectAndRubCollection' || '2019/12/23/2014-05-15-javafoundamention-newObjectAndRubCollection/',
-    owner: 'your_github_id',
-    repo: 'your_blog_comments',
-    clientId: 'your_client_id',
-    clientSecret: 'your_client_secret'
-  });
-  </script>
+      <!--/noindex-->
 
-
-            </div>
-
-        </section>
-        <!-- 侧栏部分 -->
-<aside class="sidebar">
-    <section class="widget">
-        <h3 class="widget-hd"><strong>文章分类</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-    <li>
-        <a href="/categories/blog/">blog</a>
-        <span class="badge">(94)</span>
-    </li>
-    
-</ul>
-    </section>
-
-    
-    <section class="widget">
-        <h3 class="widget-hd"><strong>热门标签</strong></h3>
-        <!-- 文章标签 -->
-<div class="widget-bd tag-wrap">
-  
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
 </div>
-    </section>
-    
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
 
-    
 
-    
-    <!-- 友情链接 -->
-    <section class="widget">
-        <h3 class="widget-hd"><strong>友情链接</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-        <li>
-            <a href="https://jelon.top" target="_blank" title="Jelon个人前端小站">前端博客小站</a>
-        </li>
-    
-        <li>
-            <a href="https://www.baidu.com" target="_blank" title="百度搜索">百度</a>
-        </li>
-    
-</ul>
-    </section>
-    
-</aside>
-<!-- / 侧栏部分 -->
+
+      </div>
+
     </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
 
-    <!-- 博客底部 -->
+
+      </div>
+    </main>
+
     <footer class="footer">
-    &copy;
-    
-        2016-2019
-    
+      <div class="footer-inner">
+        
 
-    <a href="/">Jelon Loves You</a>
-</footer>
-<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
 
-    <!--博客js脚本 -->
-    <!-- 这里放网站js脚本 -->
+        
 
-<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
 
 </body>
 </html>

@@ -1,422 +1,495 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" >
-    <meta http-equiv="X-UA-Compatible" content="IE=11,IE=10,IE=9,IE=8" >
-    <meta name="baidu-site-verification" content="dIcXMeY8Ya" />
-    
-    <title>大数据：spark mllib决策树 | Hexo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" >
-    <meta name="keywords" content="Jelon, 前端, Web, 张德龙, 前端开发" >
-    <meta name="description" content="Jelon个人前端小站" >
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-    
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml" >
-    
-    
-    <link rel="shortcut icon" href="/favicon.ico" >
-    
-    
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/main.css">
 
-    <!--[if lt IE 9]>
-    
-<script src="/js/html5.js"></script>
 
-    <![endif]-->
-    
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "//hm.baidu.com/hm.js?fd459238242776d173cdc64918fb32f2";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://shartoo.github.com').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
 </script>
 
+  <meta name="description" content="大数据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大数据：spark mllib决策树">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2016-10-02-spark-mllib-desciontree/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="大数据">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-12-23T10:45:59.343Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.203Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+<link rel="canonical" href="http://shartoo.github.com/2019/12/23/2016-10-02-spark-mllib-desciontree/">
 
-<body class="home">
-    <!--[if lt IE 9]>
-    <div class="browsehappy">
-        当前网页 <strong>不支持</strong>
-        你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/" target="_blank" rel="noopener">升级你的浏览器</a>.
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>大数据：spark mllib决策树 | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
     </div>
-    <![endif]-->
+  </div>
 
-    <!-- 博客头部 -->
-    <header class="header">
-    <section class="container header-main">
-        <div class="logo">
-            <a href="/">
-                <div class="cover">
-                    <span class="name">Hexo</span>
-                    <span class="description"></span>
-                </div>
-            </a>
-        </div>
-        <div class="dropnav icon-paragraph-justify" id="JELON__btnDropNav"></div>
-        <ul class="menu hidden" id="JELON__menu">
-            
-            <li rel="/2019/12/23/2016-10-02-spark-mllib-desciontree/index.html" class="item ">
-                <a href="/" title="首页" class="icon-home">&nbsp;首页</a>
-            </li>
-            
-            <li rel="/2019/12/23/2016-10-02-spark-mllib-desciontree/index.html" class="item ">
-                <a href="/lab/" title="实验室" class="icon-lab">&nbsp;实验室</a>
-            </li>
-            
-            <li rel="/2019/12/23/2016-10-02-spark-mllib-desciontree/index.html" class="item ">
-                <a href="/about/" title="关于" class="icon-about">&nbsp;关于</a>
-            </li>
-            
-            <li rel="/2019/12/23/2016-10-02-spark-mllib-desciontree/index.html" class="item ">
-                <a href="/comment/" title="留言" class="icon-comment">&nbsp;留言</a>
-            </li>
-            
-        </ul>
-        <div class="profile clearfix">
-            <div class="feeds fl">
-                
-                
-                <p class="links">
-                    
-                        <a href="https://github.com/jangdelong" target="_blank">Github</a>
-                        |
-                    
-                        <a href="https://pages.coding.me" target="_blank">Hosted by Coding Pages</a>
-                        
-                    
-                </p>
-                <p class="sns">
-                    
-                        <a href="http://weibo.com/jangdelong" class="sinaweibo" target="_blank"><b>■</b> 新浪微博</a>
-                    
-                        <a href="https://www.facebook.com/profile.php?id=100011855760219&amp;ref=bookmarks" class="qqweibo" target="_blank"><b>■</b> Facebook</a>
-                    
-                    <a href="javascript: void(0);" class="wechat">
-                        <b>■</b>
-                        公众号
-                        <span class="popover">
-                            <img src="/img/wechat_mp.jpg" width="120" height="120" alt="我的微信订阅号">
-                            <i class="arrow"></i>
-                        </span>
-                    </a>
-                </p>
-                
-            </div>
-            <div class="avatar fr">
-                <img src="/img/jelon.jpg" alt="avatar" title="Jelon" >
-            </div>
-        </div>
-    </section>
-</header>
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
 
 
-    <!-- 博客正文 -->
-    <div class="container body clearfix">
-        <section class="content">
-            <div class="content-main widget">
-                <!-- 文章页 -->
-<!-- 文章 -->
-<article class="post article">
-    <header class="text-center">
-        <h3 class="post-title"><span>大数据：spark mllib决策树</span></h3>
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
     </header>
-    <p class="post-meta text-center">
-        Jelon 发表于
-        <time datetime="2019-12-23T10:45:59.343Z">2019-12-23</time>
-    </p>
-    <div class="post-content">
-        <h1 id="一-基本算法"><a href="#一-基本算法" class="headerlink" title="一 基本算法"></a>一 基本算法</h1><p>&emsp;&emsp;决策树是一个在特征空间递归执行二分类的贪心算法。决策树预测所有叶子节点分区的标签。为了在树的每个节点最大化信息增益，其每个分区都是基于贪心策略从可能分裂集合里选择一个最佳分裂(split)。也即，每个数节点分裂的选择是从集合 $argmaxIG(D,s)$，其中$IG(D,s)$是信息增益，而s是应用到数据集D上的分裂。</p>
-<h2 id="二-节点不纯度和信息增益"><a href="#二-节点不纯度和信息增益" class="headerlink" title="二 节点不纯度和信息增益"></a>二 节点不纯度和信息增益</h2><p>节点不纯度是用以衡量节点同质化标签的度量。当前为了分类提供两种不纯度方法（Gini impurity和信息熵），为回归提供了一个不纯度度量（方差）。</p>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://shartoo.github.com/2019/12/23/2016-10-02-spark-mllib-desciontree/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          大数据：spark mllib决策树
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2019-12-23 18:45:59 / Modified: 17:55:14" itemprop="dateCreated datePublished" datetime="2019-12-23T18:45:59+08:00">2019-12-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">大数据</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="一-基本算法">一 基本算法</h1>
+<p>  决策树是一个在特征空间递归执行二分类的贪心算法。决策树预测所有叶子节点分区的标签。为了在树的每个节点最大化信息增益，其每个分区都是基于贪心策略从可能分裂集合里选择一个最佳分裂(split)。也即，每个数节点分裂的选择是从集合 <span class="math inline">\(argmaxIG(D,s)\)</span>，其中<span class="math inline">\(IG(D,s)\)</span>是信息增益，而s是应用到数据集D上的分裂。</p>
+<h2 id="二-节点不纯度和信息增益">二 节点不纯度和信息增益</h2>
+<p>节点不纯度是用以衡量节点同质化标签的度量。当前为了分类提供两种不纯度方法（Gini impurity和信息熵），为回归提供了一个不纯度度量（方差）。</p>
 <table>
+<colgroup>
+<col style="width: 52%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>impurity(不纯度)</th>
 <th>作业</th>
 <th>公式</th>
 <th>描述</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr class="odd">
 <td>Gini impurity</td>
 <td>分类</td>
-<td>$\sum_{i=1}^cf_i(1-f_i)$</td>
-<td>$f_i$ 是某个节点上标签为i的频率,C是标签数据</td>
+<td><span class="math inline">\(\sum_{i=1}^cf_i(1-f_i)\)</span></td>
+<td><span class="math inline">\(f_i\)</span> 是某个节点上标签为i的频率,C是标签数据</td>
 </tr>
-<tr>
+<tr class="even">
 <td>信息熵</td>
 <td>分类</td>
-<td>$\sum_{i=1}^c-f_i\log(f_i)$</td>
+<td><span class="math inline">\(\sum_{i=1}^c-f_i\log(f_i)\)</span></td>
 <td>$f_i $是某个节点上标签为i的频率,C是标签数据</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>方差</td>
 <td>回归</td>
-<td>$\frac{1}{N}\sum_{i=1}^N(y_i-\mu)^2$</td>
-<td>$y_i$是某个数据实例的标签，N是数据实例的总数，$\mu$是由$\frac{1}{N}\sum_{i=1}^Ny_i$均值</td>
+<td><span class="math inline">\(\frac{1}{N}\sum_{i=1}^N(y_i-\mu)^2\)</span></td>
+<td><span class="math inline">\(y_i\)</span>是某个数据实例的标签，N是数据实例的总数，<span class="math inline">\(\mu\)</span>是由<span class="math inline">\(\frac{1}{N}\sum_{i=1}^Ny_i\)</span>均值</td>
 </tr>
-</tbody></table>
-<p>信息增益是衡量父母节点的不纯度与两个孩子节点不纯度权值求和的差异。假设一个分裂$s$将数据集 D(包含N个元素)分裂成两个子集合 $D_{left}$（包含$N_{left}$个元素）和 $D_{right}$ (包含 $N_{right}$ )，相应的信息增益是:</p>
+</tbody>
+</table>
+<p>信息增益是衡量父母节点的不纯度与两个孩子节点不纯度权值求和的差异。假设一个分裂<span class="math inline">\(s\)</span>将数据集 D(包含N个元素)分裂成两个子集合 <span class="math inline">\(D_{left}\)</span>（包含<span class="math inline">\(N_{left}\)</span>个元素）和 <span class="math inline">\(D_{right}\)</span> (包含 <span class="math inline">\(N_{right}\)</span> )，相应的信息增益是:</p>
 <p>$$</p>
-<p>IG(D,s) = Impurity(D)-\frac{N_{left}}{N}Impurity(D_{left})-\frac{N_{right}}{N}Impurity(D_{right})</p>
+<p>IG(D,s) = Impurity(D)-Impurity(D_{left})-Impurity(D_{right})</p>
 <p>$$</p>
-<h2 id="三-分裂候选"><a href="#三-分裂候选" class="headerlink" title="三 分裂候选"></a>三 分裂候选</h2><h3 id="3-1-连续特征"><a href="#3-1-连续特征" class="headerlink" title="3.1 连续特征"></a>3.1 连续特征</h3><p>对于小数据集在单机上的实现，对每个连续特征来说其分裂候选一般是该特征的唯一值。有些实现会将特征值排序然后使用排序后的唯一值作为分裂候选以达到更快的计算速度。<br>&emsp;&emsp;对于大规模分布式数据来说排序的特征值是代价高昂的。通过对部分抽样数据进行位数计算来近似计算其分裂候选，以此来实现排序。排序后的分裂会创建“分箱”，可以通过参数<strong><em>maxBins</em></strong>来指定最大分箱数。<br>&emsp;&emsp;注意，分箱数目可以比数据实例数目大（这种情况比较少见，由于默认的<strong><em>maxBins</em></strong>是32）。如果分裂时条件不满足了，决策树会自动减少分箱数目。</p>
-<h3 id="3-2-分类特征"><a href="#3-2-分类特征" class="headerlink" title="3.2 分类特征"></a>3.2 分类特征</h3><p>对于一个分类特征，有M个可能的取值（类别），可能会有$2^{M-1}-1$个分裂候选。对于二分类(0/1)和回归，我们可以通过对类别特征排序（用平均标签）将分裂候选减少至<strong>M-1</strong>。例如对于某个二分类问题，1个类别特征，3个分类A,B,C，相应的标签为1的比例为0.2,0.6,0.4，类别特征排序为A,C,B。两个分裂候选是A|C,B和A,C|B，其中竖线代表分裂。<br>&emsp;&emsp;在多分类中，所有的$2^{M-1}-1$个可能的分裂无论何时都可能会被使用到。如果$2^{M-1}-1$比参数<strong><em>maxBins</em></strong>大，使用一个与二分类和回归分析中类似的启发式方法。<strong><em>M</em></strong>个类别特征都是根据不纯度排序的。</p>
-<h2 id="四-停止规则"><a href="#四-停止规则" class="headerlink" title="四 停止规则"></a>四 停止规则</h2><p>递归的构建树过程会在某个节点满足以下条件时停止：</p>
-<ol>
-<li><p>树深度已经等于训练参数<strong><em>maxDepth</em></strong>。</p>
-</li>
-<li><p>分裂候选产生的信息增益都小于参数<strong><em>minInfoGain</em></strong>。</p>
-</li>
-<li><p>分裂候选已经不能产生孩子节点，满足每个孩子节点有至少<strong><em>minInstancePerNode</em></strong>训练集实例。</p>
-</li>
+<h2 id="三-分裂候选">三 分裂候选</h2>
+<h3 id="连续特征">3.1 连续特征</h3>
+<p>对于小数据集在单机上的实现，对每个连续特征来说其分裂候选一般是该特征的唯一值。有些实现会将特征值排序然后使用排序后的唯一值作为分裂候选以达到更快的计算速度。   对于大规模分布式数据来说排序的特征值是代价高昂的。通过对部分抽样数据进行位数计算来近似计算其分裂候选，以此来实现排序。排序后的分裂会创建“分箱”，可以通过参数<strong><em>maxBins</em></strong>来指定最大分箱数。   注意，分箱数目可以比数据实例数目大（这种情况比较少见，由于默认的<strong><em>maxBins</em></strong>是32）。如果分裂时条件不满足了，决策树会自动减少分箱数目。</p>
+<h3 id="分类特征">3.2 分类特征</h3>
+<p>对于一个分类特征，有M个可能的取值（类别），可能会有<span class="math inline">\(2^{M-1}-1\)</span>个分裂候选。对于二分类(0/1)和回归，我们可以通过对类别特征排序（用平均标签）将分裂候选减少至<strong>M-1</strong>。例如对于某个二分类问题，1个类别特征，3个分类A,B,C，相应的标签为1的比例为0.2,0.6,0.4，类别特征排序为A,C,B。两个分裂候选是A|C,B和A,C|B，其中竖线代表分裂。   在多分类中，所有的<span class="math inline">\(2^{M-1}-1\)</span>个可能的分裂无论何时都可能会被使用到。如果<span class="math inline">\(2^{M-1}-1\)</span>比参数<strong><em>maxBins</em></strong>大，使用一个与二分类和回归分析中类似的启发式方法。<strong><em>M</em></strong>个类别特征都是根据不纯度排序的。</p>
+<h2 id="四-停止规则">四 停止规则</h2>
+<p>递归的构建树过程会在某个节点满足以下条件时停止：</p>
+<ol type="1">
+<li><p>树深度已经等于训练参数<strong><em>maxDepth</em></strong>。</p></li>
+<li><p>分裂候选产生的信息增益都小于参数<strong><em>minInfoGain</em></strong>。</p></li>
+<li><p>分裂候选已经不能产生孩子节点，满足每个孩子节点有至少<strong><em>minInstancePerNode</em></strong>训练集实例。</p></li>
 </ol>
-<h2 id="五-参数设置问题"><a href="#五-参数设置问题" class="headerlink" title="五 参数设置问题"></a>五 参数设置问题</h2><p>以下参数需要设置但不需要调节。</p>
-<ol>
-<li><p><strong>algo</strong>：分类还是回归。</p>
-</li>
-<li><p><strong>numClass</strong>:分类的类别数目（只对分类）</p>
-</li>
-<li><p><strong>categoricalFeaturesInfo</strong>：设置哪些特征是类别以及每个这些特征值可以取多少类别值。此参数以map的形式给出，所有不在这个map中的特征都会被视为连续的。map的取值示例如下:</p>
-</li>
+<h2 id="五-参数设置问题">五 参数设置问题</h2>
+<p>以下参数需要设置但不需要调节。</p>
+<ol type="1">
+<li><p><strong>algo</strong>：分类还是回归。</p></li>
+<li><p><strong>numClass</strong>:分类的类别数目（只对分类）</p></li>
+<li><p><strong>categoricalFeaturesInfo</strong>：设置哪些特征是类别以及每个这些特征值可以取多少类别值。此参数以map的形式给出，所有不在这个map中的特征都会被视为连续的。map的取值示例如下:</p></li>
 </ol>
 <ul>
-<li><p>Map(0-&gt;2,4-&gt;10….) 指明，特征0 是二分类（取值为0或1），特征4有10个类别（取值是0-9）</p>
-</li>
-<li><p><strong>注意</strong>：你并不需要配置 <em>categoricalFeaturesInfo</em>。算法依然会运行并给出不错的结果，然而如果可特征化的值设计得很好，算法可以有更好的性能。</p>
-</li>
+<li><p>Map(0-&gt;2,4-&gt;10....) 指明，特征0 是二分类（取值为0或1），特征4有10个类别（取值是0-9）</p></li>
+<li><p><strong>注意</strong>：你并不需要配置 <em>categoricalFeaturesInfo</em>。算法依然会运行并给出不错的结果，然而如果可特征化的值设计得很好，算法可以有更好的性能。</p></li>
 </ul>
-<h2 id="六-停止标准"><a href="#六-停止标准" class="headerlink" title="六 停止标准"></a>六 停止标准</h2><p>&emsp;&emsp;这些参数决定算法何时停止（增加节点），调节以下参数时，注意在测试数据集上验证并避免过拟合。</p>
+<h2 id="六-停止标准">六 停止标准</h2>
+<p>  这些参数决定算法何时停止（增加节点），调节以下参数时，注意在测试数据集上验证并避免过拟合。</p>
 <ul>
-<li><p><strong>maxDepth</strong>:树的最大深度。越深的树（可能会获取更高的准确率）计算代价越高，但是它们也更耗时同时更可能过拟合。</p>
-</li>
-<li><p><strong>minInstancesPerNode</strong>:对于一个可能会进一步分裂的节点，它的子节点必须有至少这么多个训练实例数据。此参数一般和随机森林一起使用，因为这些会比单独的树要训练得更深。</p>
-</li>
-<li><p><strong>minInfoGain</strong>:对于可能会进一步分裂的节点，分裂必须增加这么多信息增益。</p>
-</li>
+<li><p><strong>maxDepth</strong>:树的最大深度。越深的树（可能会获取更高的准确率）计算代价越高，但是它们也更耗时同时更可能过拟合。</p></li>
+<li><p><strong>minInstancesPerNode</strong>:对于一个可能会进一步分裂的节点，它的子节点必须有至少这么多个训练实例数据。此参数一般和随机森林一起使用，因为这些会比单独的树要训练得更深。</p></li>
+<li><p><strong>minInfoGain</strong>:对于可能会进一步分裂的节点，分裂必须增加这么多信息增益。</p></li>
 </ul>
-<h2 id="七-调节参数"><a href="#七-调节参数" class="headerlink" title="七 调节参数"></a>七 调节参数</h2><p>&emsp;&emsp;这些参数可以调节，但是注意在测试数据集上验证并避免过拟合。</p>
-<ul>
-<li><strong>maxBins</strong>:离散化连续型变量时使用的分箱数。增加 <strong>maxBins</strong>使得算法考虑更多的分裂候选并产生更细粒度的分裂决策，然而会增加计算消耗和组件间沟通成本。注意：对于任何可类别话的特征，参数<strong>maxBins</strong>必须至少是类别<strong>M</strong>最大值。</li>
-<li><strong>maxMemoryInMB</strong>:进行统计时使用的内存量。默认值保守取到256MB，足以使得决策树在大多数场景适用。增大此参数可以减少数据传输让训练过程更快。<br>实现细节：为了更快的处理速度，决策树算法收集每组会分裂的节点的统计数据（而不是一次一个节点）。能放入一个组中处理的节点是由内存需求决定的（不同的特征不同）。参数<strong>maxMemoryInMB</strong>配置了每个使用这些统计的worker的内存限制。</li>
-<li><strong>subsamplingRate</strong>:学习决策树的训练数据集比例。这个参数大多用在训练树的集合（随机森林、GradientBoostedTrees（渐变提振树））中，用以在袁术数据集中抽样数据。在单个决策树中，此参数并没有那么重要，因为训练数据并不是最大的限制。</li>
-<li><strong>impurity</strong>:在分裂候选中筛选衡量不纯度的参数，这个参数必须与<strong>algo</strong>参数相对应。</li>
-</ul>
-<h2 id="八-缓存和检查点"><a href="#八-缓存和检查点" class="headerlink" title="八 缓存和检查点"></a>八 缓存和检查点</h2><p>当参数<strong>maxDepth</strong>设置得很大时，有必要开启节点ID缓存和检查点。在随机森林中，如何参数<strong>numTrees</strong>设置得很大时，也比较有用。</p>
-<ul>
-<li><strong>useNodeIdCache</strong>：如何此参数设置为* ture*，算法将会避免在每次迭时传入当前模型（tree ,trees）。算法默认会让当前模型与executors交流，使得executors每个树节点能够达到训练实例要求。当开启此参数时，算法将会缓存这部分信息。</li>
-</ul>
-<p>节点ID缓存会生成一些RDD（每次迭代时生成一个）。这种很长的lineage(血缘)会导致性能问题，但是检查点中间RDD可以缓和这些问题，<strong>注意</strong>只有当<strong><em>useNodeIdCache</em></strong>设置为<strong><em>true</em></strong>检查点才可用。</p>
-<ul>
-<li><strong>checkpointDir</strong>:节点ID缓存RDD的检查点目录。</li>
-<li><strong>checkpointInteral</strong>:节点ID缓存RDD的频率，设置的过小会导致过量的写入HDFS，设置得太大时会使得executors失败并需要重新计算时等待太长。</li>
-</ul>
-<h2 id="九-代码实例"><a href="#九-代码实例" class="headerlink" title="九 代码实例"></a>九 代码实例</h2><p>以下代码展示了如何载入一个<strong>LIBSVM</strong>数据文件，解析成一个<strong>LabeledPoint</strong>RDD，然后使用决策树，使用Gini不纯度作为不纯度衡量指标，最大树深度是5.测试误差用来计算算法准确率。</p>
+<h2 id="七-调节参数">七 调节参数</h2>
+<p>  这些参数可以调节，但是注意在测试数据集上验证并避免过拟合。 + <strong>maxBins</strong>:离散化连续型变量时使用的分箱数。增加 <strong>maxBins</strong>使得算法考虑更多的分裂候选并产生更细粒度的分裂决策，然而会增加计算消耗和组件间沟通成本。注意：对于任何可类别话的特征，参数<strong>maxBins</strong>必须至少是类别<strong>M</strong>最大值。 + <strong>maxMemoryInMB</strong>:进行统计时使用的内存量。默认值保守取到256MB，足以使得决策树在大多数场景适用。增大此参数可以减少数据传输让训练过程更快。 实现细节：为了更快的处理速度，决策树算法收集每组会分裂的节点的统计数据（而不是一次一个节点）。能放入一个组中处理的节点是由内存需求决定的（不同的特征不同）。参数<strong>maxMemoryInMB</strong>配置了每个使用这些统计的worker的内存限制。 + <strong>subsamplingRate</strong>:学习决策树的训练数据集比例。这个参数大多用在训练树的集合（随机森林、GradientBoostedTrees（渐变提振树））中，用以在袁术数据集中抽样数据。在单个决策树中，此参数并没有那么重要，因为训练数据并不是最大的限制。 + <strong>impurity</strong>:在分裂候选中筛选衡量不纯度的参数，这个参数必须与<strong>algo</strong>参数相对应。</p>
+<h2 id="八-缓存和检查点">八 缓存和检查点</h2>
+<p>当参数<strong>maxDepth</strong>设置得很大时，有必要开启节点ID缓存和检查点。在随机森林中，如何参数<strong>numTrees</strong>设置得很大时，也比较有用。 + <strong>useNodeIdCache</strong>：如何此参数设置为* ture*，算法将会避免在每次迭时传入当前模型（tree ,trees）。算法默认会让当前模型与executors交流，使得executors每个树节点能够达到训练实例要求。当开启此参数时，算法将会缓存这部分信息。</p>
+<p>节点ID缓存会生成一些RDD（每次迭代时生成一个）。这种很长的lineage(血缘)会导致性能问题，但是检查点中间RDD可以缓和这些问题，<strong>注意</strong>只有当<strong><em>useNodeIdCache</em></strong>设置为<strong><em>true</em></strong>检查点才可用。 + <strong>checkpointDir</strong>:节点ID缓存RDD的检查点目录。 + <strong>checkpointInteral</strong>:节点ID缓存RDD的频率，设置的过小会导致过量的写入HDFS，设置得太大时会使得executors失败并需要重新计算时等待太长。</p>
+<h2 id="九-代码实例">九 代码实例</h2>
+<p>以下代码展示了如何载入一个<strong>LIBSVM</strong>数据文件，解析成一个<strong>LabeledPoint</strong>RDD，然后使用决策树，使用Gini不纯度作为不纯度衡量指标，最大树深度是5.测试误差用来计算算法准确率。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">测试决策树</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">import logging</span><br><span class="line">from pyspark.mllib.tree import DecisionTree,DecisionTreeModel</span><br><span class="line">from pyspark.mllib.util import MLUtils</span><br><span class="line"></span><br><span class="line"># Path for spark source folder</span><br><span class="line">os.environ[&#39;SPARK_HOME&#39;]&#x3D;&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6&quot;</span><br><span class="line"># Append pyspark  to Python Path</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python&quot;)</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python\lib\py4j-0.9-src.zip&quot;)</span><br><span class="line"></span><br><span class="line">from pyspark import SparkContext</span><br><span class="line">from pyspark import SparkConf</span><br><span class="line"></span><br><span class="line">conf &#x3D; SparkConf()</span><br><span class="line">conf.set(&quot;YARN_CONF_DIR &quot;, &quot;D:\javaPackages\hadoop_conf_dir\yarn-conf&quot;)</span><br><span class="line">conf.set(&quot;spark.driver.memory&quot;, &quot;2g&quot;)</span><br><span class="line"></span><br><span class="line">#conf.set(&quot;spark.executor.memory&quot;, &quot;1g&quot;)</span><br><span class="line">#conf.set(&quot;spark.python.worker.memory&quot;, &quot;1g&quot;)</span><br><span class="line">conf.setMaster(&quot;yarn-client&quot;)</span><br><span class="line">conf.setAppName(&quot;TestDecisionTree&quot;)</span><br><span class="line">logger &#x3D; logging.getLogger(&#39;pyspark&#39;)</span><br><span class="line">sc &#x3D; SparkContext(conf&#x3D;conf)</span><br><span class="line"></span><br><span class="line">mylog &#x3D; []</span><br><span class="line">#载入和解析数据文件为 LabeledPoint RDDdata &#x3D; MLUtils.loadLibSVMFile(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;&quot;)</span><br><span class="line">#将数据拆分成训练集合测试集</span><br><span class="line">(trainingData,testData) &#x3D; data.randomSplit([0.7,0.3])</span><br><span class="line"></span><br><span class="line">##训练决策树模型</span><br><span class="line">#空的 categoricalFeauresInfo 代表了所有的特征都是连续的</span><br><span class="line">model &#x3D; DecisionTree.trainClassifier(trainingData, numClasses&#x3D;2,categoricalFeaturesInfo&#x3D;&#123;&#125;,impurity&#x3D;&#39;gini&#39;,maxDepth&#x3D;5,maxBins&#x3D;32)</span><br><span class="line"></span><br><span class="line"># 在测试实例上评估模型并计算测试误差</span><br><span class="line"></span><br><span class="line">predictions &#x3D; model.predict(testData.map(lambda x:x.features))</span><br><span class="line">labelsAndPoint &#x3D; testData.map(lambda lp:lp.label).zip(predictions)</span><br><span class="line">testMSE &#x3D; labelsAndPoint.map(lambda (v,p):(v-p)**2).sum()&#x2F;float(testData.count())</span><br><span class="line">mylog.append(&quot;测试误差是&quot;)</span><br><span class="line">mylog.append(testMSE)</span><br><span class="line"></span><br><span class="line">#存储模型</span><br><span class="line"></span><br><span class="line">model.save(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;&quot;)</span><br><span class="line">sc.parallelize(mylog).saveAsTextFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;log&quot;)</span><br><span class="line">sameModel &#x3D; DecisionTreeModel.load(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;&quot;)</span><br></pre></td></tr></table></figure>
 
     </div>
-    <p class="post-meta">
-        <span class="post-cat">分类：
-            <a class="cat-link" href="/categories/blog/">blog</a>
-        </span>
-        <span class="post-tags">
-            标签：
-            
-        </span>
-    </p>
-</article>
-<!-- 分享按钮 -->
 
-  <div class="article-share clearfix text-center">
-    <div class="share-area">
-      <span class="share-txt">分享到：</span>
-      <a href="javascript: window.open('http://service.weibo.com/share/share.php?url=' + encodeURIComponent(location.href) + '&title=' + document.title + '&language=zh_cn');" class="share-icon weibo"></a>
-      <a href="javascript: alert('请复制链接到微信并发送');" class="share-icon wechat"></a>
-      <a href="javascript: window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + encodeURIComponent(location.href) + '&title=' + document.title);" class="share-icon qqzone"></a>
-      <a href="javascript: window.open('http://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(location.href) + '&desc=Jelon个人博客&title=' + document.title + '&callback=' + encodeURIComponent(location.href));" class="share-icon qq"></a>
-      <a href="javascript: window.open('http://shuo.douban.com/!service/share?href=' + encodeURIComponent(location.href) + '&name=' + document.title + '&text=' + document.title);" class="share-icon douban"></a>
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2016-10-01-regular-attachment/" rel="prev" title="深度学习：参数正则化参考资料">
+      <i class="fa fa-chevron-left"></i> 深度学习：参数正则化参考资料
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/23/2016-10-02-spark-python-example/" rel="next" title="大数据：spark mllib python使用示例">
+      大数据：spark mllib python使用示例 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
   </div>
 
 
-<!-- 上一篇/下一篇 -->
+          </div>
+          
 
-<div class="article-nav clearfix">
-    
-    <span class="prev fl">
-        上一篇<br >
-        <a href="/2019/12/23/2016-10-02-spark-python-example/">
-            
-                大数据：spark mllib python使用示例
-            
-        </a>
-    </span>
-    
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
 
-    
-    <span class="next fr">
-        下一篇<br >
-        <a href="/2019/12/23/2016-10-01-regular-attachment/">
-            
-                深度学习：参数正则化参考资料
-            
-        </a>
-    </span>
-    
-</div>
-
-<!-- 文章评论 -->
-
+        </div>
+          
   
-<script src="/js/comment.js"></script>
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
 
-  <div id="comments" class="comment">
-    <!--
-    <div class="sign-bar">
-      GitHub 已登录!
-      <span class="sign-link">登出</span>
-    </div>
-    <section class="box">
-      <div class="com-avatar"><img src="/img/jelon.jpg" alt="avatar"></div>
-      <div class="com-text">
-        <div class="main">
-          <textarea class="text-area-edited show" placeholder="欢迎评论！"></textarea>
-          <div class="text-area-preview"></div>
-        </div>
-        <div class="switch">
-          <div class="switch-item on">编辑</div>
-          <div class="switch-item">预览</div>
-        </div>
-        <div class="button">提交</div>
-      </div>
-    </section>
-    <section class="tips">注：评论支持 markdown 语法！</section>
-    <section class="list-wrap">
-      <ul class="list">
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">张德龙</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like liked">已赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">333333</div>
-          </div>
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
         </li>
-        <li>
-          <div class="user-avatar">
-            <a href="/">
-              <img src="/img/jelon.jpg" alt="user-avatar">
-            </a>
-          </div>
-          <div class="user-comment">
-            <div class="user-comment-header">
-              <span class="post-name">刘德华</span>
-              <span class="post-time">2017年12月12日</span>
-              <span class="like">点赞</span>
-              <span class="like-num">2</span>
-            </div>
-            <div class="user-comment-body">vvvvv</div>
-          </div>
+        <li class="sidebar-nav-overview">
+          Overview
         </li>
       </ul>
-      <div class="page-nav">
-        <a href="javascript: void(0);" class="item">1</a>
-        <a href="javascript: void(0);" class="item">2</a>
-        <a href="javascript: void(0);" class="item current">3</a>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一-基本算法"><span class="nav-number">1.</span> <span class="nav-text">一 基本算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#二-节点不纯度和信息增益"><span class="nav-number">1.1.</span> <span class="nav-text">二 节点不纯度和信息增益</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-分裂候选"><span class="nav-number">1.2.</span> <span class="nav-text">三 分裂候选</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#连续特征"><span class="nav-number">1.2.1.</span> <span class="nav-text">3.1 连续特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类特征"><span class="nav-number">1.2.2.</span> <span class="nav-text">3.2 分类特征</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-停止规则"><span class="nav-number">1.3.</span> <span class="nav-text">四 停止规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五-参数设置问题"><span class="nav-number">1.4.</span> <span class="nav-text">五 参数设置问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六-停止标准"><span class="nav-number">1.5.</span> <span class="nav-text">六 停止标准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#七-调节参数"><span class="nav-number">1.6.</span> <span class="nav-text">七 调节参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#八-缓存和检查点"><span class="nav-number">1.7.</span> <span class="nav-text">八 缓存和检查点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#九-代码实例"><span class="nav-number">1.8.</span> <span class="nav-text">九 代码实例</span></a></li></ol></li></ol></div>
       </div>
-    </section>
-    -->
-  </div>
-  <script>
-  JELON.Comment({
-    container: 'comments',
-    label: '2016-10-02-spark-mllib-desciontree' || '2019/12/23/2016-10-02-spark-mllib-desciontree/',
-    owner: 'your_github_id',
-    repo: 'your_blog_comments',
-    clientId: 'your_client_id',
-    clientSecret: 'your_client_secret'
-  });
-  </script>
+      <!--/noindex-->
 
-
-            </div>
-
-        </section>
-        <!-- 侧栏部分 -->
-<aside class="sidebar">
-    <section class="widget">
-        <h3 class="widget-hd"><strong>文章分类</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-    <li>
-        <a href="/categories/blog/">blog</a>
-        <span class="badge">(94)</span>
-    </li>
-    
-</ul>
-    </section>
-
-    
-    <section class="widget">
-        <h3 class="widget-hd"><strong>热门标签</strong></h3>
-        <!-- 文章标签 -->
-<div class="widget-bd tag-wrap">
-  
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
 </div>
-    </section>
-    
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
 
-    
 
-    
-    <!-- 友情链接 -->
-    <section class="widget">
-        <h3 class="widget-hd"><strong>友情链接</strong></h3>
-        <!-- 文章分类 -->
-<ul class="widget-bd">
-    
-        <li>
-            <a href="https://jelon.top" target="_blank" title="Jelon个人前端小站">前端博客小站</a>
-        </li>
-    
-        <li>
-            <a href="https://www.baidu.com" target="_blank" title="百度搜索">百度</a>
-        </li>
-    
-</ul>
-    </section>
-    
-</aside>
-<!-- / 侧栏部分 -->
+
+      </div>
+
     </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
 
-    <!-- 博客底部 -->
+
+      </div>
+    </main>
+
     <footer class="footer">
-    &copy;
-    
-        2016-2019
-    
+      <div class="footer-inner">
+        
 
-    <a href="/">Jelon Loves You</a>
-</footer>
-<div class="back-to-top" id="JELON__backToTop" title="返回顶部">返回顶部</div>
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
 
-    <!--博客js脚本 -->
-    <!-- 这里放网站js脚本 -->
+        
 
-<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
 
 </body>
 </html>
