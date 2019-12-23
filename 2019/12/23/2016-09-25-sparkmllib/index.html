@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>大数据：spark mllib集成学习 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="大数据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大数据：spark mllib集成学习">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2016-09-25-sparkmllib/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="大数据">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-12-23T10:45:59.339Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.201Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2016-09-25-sparkmllib" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2016-09-25-sparkmllib/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.339Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      大数据：spark mllib集成学习
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>此文可以参考<a href="http://blog.jobbole.com/85408/" target="_blank" rel="noopener">如何在MLlib中实现随机森林和梯度提升树（GBTs）</a>一起阅读</p>
+<h1 id="一-梯度提升树和随机森林"><a href="#一-梯度提升树和随机森林" class="headerlink" title="一  梯度提升树和随机森林"></a>一  梯度提升树和随机森林</h1><p>&emsp;&emsp;梯度提升树(Gradient-Boosted Trees，GBTs)和随机森林都是决策树的集成学习方法，但是训练过程不一。以下是两种之间的一些利弊：</p>
+<ul>
+<li>GBTs一次训练一颗树，所以它会比随机森林耗时更长。随机森林可以并行训练多颗树。<ul>
+<li>另一方面，给GBTs使用比随机森林更小的树比较合理，训练更小的树耗时更少。</li>
+</ul>
+</li>
+<li>随机森林更不易过拟合。训练更多的决策树可以减少随机森林过拟合风险，但会增加GBTs过拟合风险。</li>
+<li>由于增加随机森林使用的决策树数目可以单调的提升性能，因而森林更容易调节。但对于GBTs，决策树数目过大时可能会导致性能的减弱。</li>
+</ul>
+<h1 id="二-随机森林"><a href="#二-随机森林" class="headerlink" title="二 随机森林"></a>二 随机森林</h1><p>在分类和回归中，随机森林是最成功的机器学习方法。它结合多颗决策树以减少过拟合风险。比如决策树，随机森林可以处理类别特征，如果不需要数据规范化（关于数据规范化，可以参考<a href="http://blog.csdn.net/memray/article/details/9023737" target="_blank" rel="noopener">数据规范化</a>,数据规范化的好处参考<br><a href="https://www.zhihu.com/question/37129350/answer/70964527" target="_blank" rel="noopener">为什么feature scaling会使 gradient desent收敛更好</a>）的话可以拓展到多分类，并且可以处理非线性和特征交互问题。<br><strong>spark.mllib</strong> 可以同时使用连续型数据和类别特征，为分类和逻辑回归提供二分类和多分类。直接使用了现有的决策树实现了随机森林。</p>
+<h2 id="2-1-基本算法"><a href="#2-1-基本算法" class="headerlink" title="2.1 基本算法"></a>2.1 基本算法</h2><p>随机森林单独的训练集合中每一课决策树，因而可以并行执行。算法在训练过程中引入了随机性，使得每个决策树都不一样。结合每棵树的决策可以减少最终决策偏差，提高算法最终表现。</p>
+<h2 id="2-2-训练数据"><a href="#2-2-训练数据" class="headerlink" title="2.2 训练数据"></a>2.2 训练数据</h2><p>随机森林算法中加入的随机性包括以下：</p>
+<ul>
+<li>每次迭代时从原始数据集中抽样部分数据，以保证每次的数据不同。</li>
+<li>每次切分树节点时会考虑特征的随机子集。</li>
+</ul>
+<h2 id="2-3-预测"><a href="#2-3-预测" class="headerlink" title="2.3 预测"></a>2.3 预测</h2><p>&emsp;&emsp;为了在新数据上作出预测，随机森林需要从其决策树集合中合计出预测，这个过程在分类和回归中是完全不同的。</p>
+<ul>
+<li>分类：多数表决，每棵树的预测都会为某一个分类投一票，得票最多的分类即预测分类。</li>
+<li>回归： 平均主义，每棵树预测值是一个实数，预测的分类为所有预测值的均值。</li>
+</ul>
+<h2 id="2-4-小提示"><a href="#2-4-小提示" class="headerlink" title="2.4 小提示"></a>2.4 小提示</h2><p>&emsp;&emsp;以下两个参数微调可以提高算法性能</p>
+<ul>
+<li><strong>numTrees</strong>:森林中的决策树数目。<ul>
+<li>增加数数目可以减少预测偏差，提高模型的测试时间准确率。</li>
+<li>训练时长会随着树数目增加而大致线性增长</li>
+</ul>
+</li>
+<li><strong>maxDepth</strong>:森林中每棵树的最大深度<ul>
+<li>增加深度会更强大的模型，同时会增加消耗。但是更深的树，训练时间更长，同时更容易产生过拟合问题。</li>
+<li>通常来说，与单一决策树相比，随机森林总更适合训练更深的树。单一决策树更容易产生过拟合问题。</li>
+</ul>
+</li>
+</ul>
+<p>&emsp;&emsp;以下连个参数通常不需要调节，但是可以用来加速训练过程</p>
+<ul>
+<li><strong>subsample</strong>: 此参数用来设置随机森林中每棵树训练时使用的数据集大小，值为原始数据集比例。推荐默认值1.0，但是减少此值可以加速训练过程。</li>
+<li><strong>featureSubsetStraegy</strong>: 每个树节点分裂候选的特征数。该值设置为分数或者关于总特征数的函数。减少此值可以加速训练过程，但是太低的话可能会影响性能。</li>
+</ul>
+<h2 id="2-5-代码示例"><a href="#2-5-代码示例" class="headerlink" title="2.5 代码示例"></a>2.5 代码示例</h2><p>以下代码演示了如何载入 <strong>LIBSVM data file</strong> ，将其解析成<strong>LabeledPoint</strong>类型的RDD，然后使用随机森林来分类。使用测试误差来衡量算法准确率</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2016-09-25-sparkmllib/" data-id="ck4ifp1lt001h2wje2yoee9bj" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2016-09-26-pyspark-moiverecommand/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          使用pyspark做数据挖掘
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2016-09-21-bp_tricks/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">深度学习：后向传播网络中使用的一些小tricks</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

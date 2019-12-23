@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>使用传统方法换脸算法 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="图像处理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用传统方法换脸算法">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2019-04-28-cv-switch-face/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="图像处理">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/cv_switch_face_1.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/cv_switch_face_2.gif">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/cv_switch_face_3.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/cv_switch_face_4.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/cv_switch_face_5.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/cv_switch_face_6.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.722Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.231Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/cv_switch_face_1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2019-04-28-cv-switch-face" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2019-04-28-cv-switch-face/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.722Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用传统方法换脸算法
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>参考 <a href="https://matthewearl.github.io/2015/07/28/switching-eds-with-python/" target="_blank" rel="noopener">switch face with python</a></p>
+<h3 id="1-使用dlib抽取面部关键点"><a href="#1-使用dlib抽取面部关键点" class="headerlink" title="1 使用dlib抽取面部关键点"></a>1 使用dlib抽取面部关键点</h3><p><img src="/images/blog/cv_switch_face_1.png" alt=""></p>
+<p>关键代码如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">PREDICTOR_PATH &#x3D; &quot;&#x2F;home&#x2F;matt&#x2F;dlib-18.16&#x2F;shape_predictor_68_face_landmarks.dat&quot;</span><br><span class="line"></span><br><span class="line">detector &#x3D; dlib.get_frontal_face_detector()</span><br><span class="line">predictor &#x3D; dlib.shape_predictor(PREDICTOR_PATH)</span><br><span class="line"></span><br><span class="line">def get_landmarks(im):</span><br><span class="line">    rects &#x3D; detector(im, 1)</span><br><span class="line">    </span><br><span class="line">    if len(rects) &gt; 1:</span><br><span class="line">        raise TooManyFaces</span><br><span class="line">    if len(rects) &#x3D;&#x3D; 0:</span><br><span class="line">        raise NoFaces</span><br><span class="line"></span><br><span class="line">    return numpy.matrix([[p.x, p.y] for p in predictor(im, rects[0]).parts()])</span><br></pre></td></tr></table></figure>
+
+<p>特征抽取器<code>predictor</code>传入一个矩形的人脸部分，预测内部的人脸的68个关键点坐标，即$68\times 2$个值。</p>
+<h3 id="2-使用procrustes分析进行人脸对齐"><a href="#2-使用procrustes分析进行人脸对齐" class="headerlink" title="2 使用procrustes分析进行人脸对齐"></a>2 使用procrustes分析进行人脸对齐</h3><p>检测两张人脸的关键点之后，每个点的特定属性我们是知道的，比如第30个点代表的是鼻尖的坐标。我们接下来要做的是，如何扭曲、转换、以及缩放第一个人脸的点，使得它与目标关键点尽可能接近。这个相同的转换步骤可以用，第二个人脸图像来覆盖第一个人脸图像来实现。</p>
+<p>数学形式的解法为，我们寻找$T,s,R$最小化下面的等式:</p>
+<p>$$<br>\sum _{i=1} ^{68}|sRp_i ^T+T-q_i ^T|^2<br>$$</p>
+<p>其中$R$是一个$2\times 2$的正交矩阵，$s$是个标量，$T$是一个2向量，$p_ihe q_i$是上面计算得到的68个关键点。此问题等价于求解一个<strong>正交procrustes分析</strong>问题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">def transformation_from_points(points1, points2):</span><br><span class="line">    points1 &#x3D; points1.astype(numpy.float64)</span><br><span class="line">    points2 &#x3D; points2.astype(numpy.float64)</span><br><span class="line"></span><br><span class="line">    c1 &#x3D; numpy.mean(points1, axis&#x3D;0)</span><br><span class="line">    c2 &#x3D; numpy.mean(points2, axis&#x3D;0)</span><br><span class="line">    points1 -&#x3D; c1</span><br><span class="line">    points2 -&#x3D; c2</span><br><span class="line"></span><br><span class="line">    s1 &#x3D; numpy.std(points1)</span><br><span class="line">    s2 &#x3D; numpy.std(points2)</span><br><span class="line">    points1 &#x2F;&#x3D; s1</span><br><span class="line">    points2 &#x2F;&#x3D; s2</span><br><span class="line"></span><br><span class="line">    U, S, Vt &#x3D; numpy.linalg.svd(points1.T * points2)</span><br><span class="line">    R &#x3D; (U * Vt).T</span><br><span class="line"></span><br><span class="line">    return numpy.vstack([numpy.hstack(((s2 &#x2F; s1) * R,</span><br><span class="line">                                       c2.T - (s2 &#x2F; s1) * R * c1.T)),</span><br><span class="line">                         numpy.matrix([0., 0., 1.])])</span><br></pre></td></tr></table></figure>
+
+<p>以上代码执行了如下步骤</p>
+<ol>
+<li>将所有输入转换为浮点型，便于后续的计算</li>
+<li>减去每个点集合的中心坐标(即减去均值)。一旦结果点集合的最优变换和扭曲解找到，中心的<code>c1</code>和<code>c2</code>可以用来求解全局解。</li>
+<li>类似的，每个点除以标准差。消除尺度影响</li>
+<li>使用SVD计算扭曲比率，需要去查看<strong>正交Procrustes问题</strong>的求解过程才能了解。</li>
+<li>返回完整的转换为放射变换矩阵。</li>
+</ol>
+<p>结果可以用Opencv的<code>cv2.wrapAffine</code>函数来映射第二张图到第一张图。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">def warp_im(im, M, dshape):</span><br><span class="line">    output_im &#x3D; numpy.zeros(dshape, dtype&#x3D;im.dtype)</span><br><span class="line">    cv2.warpAffine(im,</span><br><span class="line">                   M[:2],</span><br><span class="line">                   (dshape[1], dshape[0]),</span><br><span class="line">                   dst&#x3D;output_im,</span><br><span class="line">                   borderMode&#x3D;cv2.BORDER_TRANSPARENT,</span><br><span class="line">                   flags&#x3D;cv2.WARP_INVERSE_MAP)</span><br><span class="line">    return output_im</span><br></pre></td></tr></table></figure>
+<p>其实就是为了让两张图的点位能对得上，将某张图进行旋转，缩放，使得两张图的人脸的关键点能处于相同的坐标位置。</p>
+<p><img src="/images/blog/cv_switch_face_2.gif" alt=""></p>
+<h3 id="3-目标图的轮廓纠正"><a href="#3-目标图的轮廓纠正" class="headerlink" title="3 目标图的轮廓纠正"></a>3 目标图的轮廓纠正</h3><p><img src="/images/blog/cv_switch_face_3.png" alt=""></p>
+<p>Non colour-corrected overlay<br>接下来需要解决的问题是，两张图像的不同肤色和光照差异，会导致连接处边缘的突兀。下面的方法是尝试纠正这个问题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">COLOUR_CORRECT_BLUR_FRAC &#x3D; 0.6</span><br><span class="line">LEFT_EYE_POINTS &#x3D; list(range(42, 48))</span><br><span class="line">RIGHT_EYE_POINTS &#x3D; list(range(36, 42))</span><br><span class="line"></span><br><span class="line">def correct_colours(im1, im2, landmarks1):</span><br><span class="line">    blur_amount &#x3D; COLOUR_CORRECT_BLUR_FRAC * numpy.linalg.norm(</span><br><span class="line">                              numpy.mean(landmarks1[LEFT_EYE_POINTS], axis&#x3D;0) -</span><br><span class="line">                              numpy.mean(landmarks1[RIGHT_EYE_POINTS], axis&#x3D;0))</span><br><span class="line">    blur_amount &#x3D; int(blur_amount)</span><br><span class="line">    if blur_amount % 2 &#x3D;&#x3D; 0:</span><br><span class="line">        blur_amount +&#x3D; 1</span><br><span class="line">    im1_blur &#x3D; cv2.GaussianBlur(im1, (blur_amount, blur_amount), 0)</span><br><span class="line">    im2_blur &#x3D; cv2.GaussianBlur(im2, (blur_amount, blur_amount), 0)</span><br><span class="line"></span><br><span class="line">    # Avoid divide-by-zero errors.</span><br><span class="line">    im2_blur +&#x3D; 128 * (im2_blur &lt;&#x3D; 1.0)</span><br><span class="line"></span><br><span class="line">    return (im2.astype(numpy.float64) * im1_blur.astype(numpy.float64) &#x2F;</span><br><span class="line">                                                im2_blur.astype(numpy.float64))</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/blog/cv_switch_face_4.png" alt=""></p>
+<p>此方法尝试改变第二张图像的轮廓去匹配第一张图的。做法是：<strong>第二张图除以其高斯模糊，然后乘以第一张图的高斯模糊</strong>。此算法源于<a href="https://en.wikipedia.org/wiki/Color_balance#Scaling_monitor_R.2C_G.2C_and_B" target="_blank" rel="noopener">RGB的缩放轮廓纠正</a>,但是对所有图像使用了一个常量的缩放因子，每个像素有其局部缩放因子。</p>
+<p>由此方法，两张图像的光照差异可以在某种程度上累加。例如，如果第一张图某一边在发光二第二张图有均衡的光照，那么轮廓纠正之后图二会出现出现某些暗处。也就是说这是个比较粗暴的方案，合适大小的高斯核是问题的关键。太小的话会导致图一种某些面部特征会出现在图二中，太大的话会导致核外面某些像素重叠，并出现变色。此处使用的是$0.6\times 瞳孔距离$。</p>
+<h3 id="4-将图二特征渲染回图一"><a href="#4-将图二特征渲染回图一" class="headerlink" title="4 将图二特征渲染回图一"></a>4 将图二特征渲染回图一</h3><p>使用一个mask从图二中抽取部分，渲染到图一中。</p>
+<p><img src="/images/blog/cv_switch_face_5.png" alt=""></p>
+<ul>
+<li>值为1的区域(上图中的白色区域)对应的是图二中人脸特征选取的部分</li>
+<li>值为0的区域(上图中黑色区域)对应的是图一该出现的部分。0到1之间的区域是两张图的混合。</li>
+</ul>
+<p>下面代码是生成如上区域的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">LEFT_EYE_POINTS &#x3D; list(range(42, 48))</span><br><span class="line">RIGHT_EYE_POINTS &#x3D; list(range(36, 42))</span><br><span class="line">LEFT_BROW_POINTS &#x3D; list(range(22, 27))</span><br><span class="line">RIGHT_BROW_POINTS &#x3D; list(range(17, 22))</span><br><span class="line">NOSE_POINTS &#x3D; list(range(27, 35))</span><br><span class="line">MOUTH_POINTS &#x3D; list(range(48, 61))</span><br><span class="line">OVERLAY_POINTS &#x3D; [</span><br><span class="line">    LEFT_EYE_POINTS + RIGHT_EYE_POINTS + LEFT_BROW_POINTS + RIGHT_BROW_POINTS,</span><br><span class="line">    NOSE_POINTS + MOUTH_POINTS,</span><br><span class="line">]</span><br><span class="line">FEATHER_AMOUNT &#x3D; 11</span><br><span class="line"></span><br><span class="line">def draw_convex_hull(im, points, color):</span><br><span class="line">    points &#x3D; cv2.convexHull(points)</span><br><span class="line">    cv2.fillConvexPoly(im, points, color&#x3D;color)</span><br><span class="line"></span><br><span class="line">def get_face_mask(im, landmarks):</span><br><span class="line">    im &#x3D; numpy.zeros(im.shape[:2], dtype&#x3D;numpy.float64)</span><br><span class="line"></span><br><span class="line">    for group in OVERLAY_POINTS:</span><br><span class="line">        draw_convex_hull(im,</span><br><span class="line">                         landmarks[group],</span><br><span class="line">                         color&#x3D;1)</span><br><span class="line"></span><br><span class="line">    im &#x3D; numpy.array([im, im, im]).transpose((1, 2, 0))</span><br><span class="line"></span><br><span class="line">    im &#x3D; (cv2.GaussianBlur(im, (FEATHER_AMOUNT, FEATHER_AMOUNT), 0) &gt; 0) * 1.0</span><br><span class="line">    im &#x3D; cv2.GaussianBlur(im, (FEATHER_AMOUNT, FEATHER_AMOUNT), 0)</span><br><span class="line"></span><br><span class="line">    return im</span><br><span class="line"></span><br><span class="line">mask &#x3D; get_face_mask(im2, landmarks2)</span><br><span class="line">warped_mask &#x3D; warp_im(mask, M, im1.shape)</span><br><span class="line">combined_mask &#x3D; numpy.max([get_face_mask(im1, landmarks1), warped_mask],</span><br><span class="line">                          axis&#x3D;0)</span><br></pre></td></tr></table></figure>
+
+<p>上面代码分解如下</p>
+<ol>
+<li><p><code>get_face_mask()</code>方法是用来定义生成图像的一个mask和一个面部关键点的矩阵。它画了两个白色凸多边形:一个环绕着眼睛区域，一个环绕着鼻子和嘴巴区域。接着它会羽化mask的边缘11个像素。羽化有助于隐藏遗留的颜色不连续问题</p>
+</li>
+<li><p>此类面部的mask会给两张图都生成。图二的mask会被转换进图一的坐标空间，使用步骤2相同的转换。</p>
+</li>
+<li><p>此mask接下来会逐像素取最大值。结合两个mask可以保证图一中的特征会被覆盖，同时图二中的特征也会被展示。</p>
+</li>
+</ol>
+<p>最后，mask用于得到最终的合成结果。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">output_im &#x3D; im1 * (1.0 - combined_mask) + warped_corrected_im2 * combined_mask</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/blog/cv_switch_face_6.png" alt=""></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2019-04-28-cv-switch-face/" data-id="ck4ifp1n2004z2wje4wjh6ttd" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2019-05-12-edit-stylegan-humanface/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          使用StyleGAN训练自己的数据集.md
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2019-04-22-Mask%20Embedding%20in%20conditional%20GAN/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Mask Embedding in conditional GAN for Guided Synthesis of High Resolution Images</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

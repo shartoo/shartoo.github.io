@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>数据挖掘方法之二：回归模型（简单线性回归） | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="数据挖掘专栏">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据挖掘方法之二：回归模型（简单线性回归）">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2013-04-20-datamining-regression/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="数据挖掘专栏">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-12-23T10:45:59.218Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.190Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2013-04-20-datamining-regression" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2013-04-20-datamining-regression/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.218Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      数据挖掘方法之二：回归模型（简单线性回归）
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="注：文中所使用代码为R"><a href="#注：文中所使用代码为R" class="headerlink" title="注：文中所使用代码为R"></a>注：文中所使用代码为R</h2><h2 id="一-概念"><a href="#一-概念" class="headerlink" title="一 概念"></a>一 概念</h2><p>简单线性回归模型是用于估计一个连续预测变量和一个连续回应变量的线性关系。回归方程或估计回归方程(estimated regression equation,ERE)：<br>$$\bar y=b_0+b_1x$$</p>
+<ul>
+<li>$\bar y$是回应变量的估计值</li>
+<li>$b_0$是回归线在y轴上的截距</li>
+<li>$b_1$是回归线的斜率</li>
+<li>$b_0$和$b_1$称为回归系数</li>
+</ul>
+<h2 id="二-实例"><a href="#二-实例" class="headerlink" title="二 实例"></a>二 实例</h2><p>数据来源: <a href="http://lib.stat.cmu.edu/DASL/Datafiles/Cereals.html" target="_blank" rel="noopener">谷物数据集</a><br>数据描述：谷物数据集,包含了77种早餐谷物的16个属性对应的营养信息<br>首先导入数据：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sugar&lt;-read.table(file&#x3D;&quot;&#x2F;LabData&#x2F;RData&#x2F;regression&#x2F;nutrition.txt&quot;,header&#x3D;TRUE)</span><br></pre></td></tr></table></figure>
+<p>部分数据概览如下：</p>
+<figure class="highlight plain"><figcaption><span>```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">![数据集](&#x2F;images&#x2F;blog&#x2F;regression1.png)</span><br><span class="line"></span><br><span class="line">就给定谷物的含糖量对该谷物的营养成分进行评价，77种谷物的营养级别与含糖量的散点图和拟合回归线如下:</span><br></pre></td></tr></table></figure>
+<pre><code>plot(data=sugar,rating~sugars,main=&quot;营养级别和含糖量的散点图及拟合线&quot;,xlab=&quot;含糖量&quot;,ylab=&quot;营养级别&quot;)  
+
+lm.reg&lt;-lm(data=sugar,rating~sugars)  
+
+abline(lm.reg,lty=4,lwd=3)   </code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">![拟合](&#x2F;images&#x2F;blog&#x2F;regression2.png)</span><br><span class="line"></span><br><span class="line">使用线性回归模型拟合结果如下：</span><br></pre></td></tr></table></figure>
+<pre><code>lm(data=sugar,rating~sugars)       
+Call:      
+lm(formula = rating ~ sugars, data = sugar)      
+Coefficients:      
+  (Intercept)       sugars        
+   59.284       -2.401       </code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br></pre></td><td class="code"><pre><span class="line">这里给定ERE为 ： $\bar y&#x3D;59.284-2.401*sugars$， 所以$b_0$&#x3D;59.284,$b_1$&#x3D;-2.401   </span><br><span class="line"></span><br><span class="line">### 误差残留   </span><br><span class="line"></span><br><span class="line"> **问题**：数据集中包含了一个含糖量(sugars&#x3D;1)为1的谷物 cheerios(数据概览中，黑色框部分)，其营养价值是50.765,而非估计值的56.98.</span><br><span class="line">  二者之差也即</span><br><span class="line"></span><br><span class="line">$$y-\bar y&#x3D;56.98-50.765&#x3D;6.215,$$</span><br><span class="line"></span><br><span class="line">称为预测误差(prediction error)、估计误差(estimation error)或者误差残留(residual error)。</span><br><span class="line"></span><br><span class="line">为寻求这种预测误差总体尽可能小，最小二乘回归法会选择一条唯一的回归线，满足使得数据集的整体残差平方和达到最小值。有多重方法可以选择，如中位数回归方法，但最小二乘法回归是最常见的。   </span><br><span class="line">&lt;br&gt;</span><br><span class="line"></span><br><span class="line">## 三 误差评估</span><br><span class="line"></span><br><span class="line">### 1 最小二乘法估计   </span><br><span class="line"></span><br><span class="line">公式如下：</span><br><span class="line"></span><br><span class="line">$$y&#x3D;m_0+m_1x+e$$</span><br><span class="line">   &lt;font color&#x3D;&quot;blue&quot;&gt;其中误差项e引入用以解释不确定性的因素。&lt;&#x2F;font&gt;</span><br><span class="line"></span><br><span class="line">**基本假设**</span><br><span class="line"></span><br><span class="line">1. 零均值假设：误差项是期望为零的随机变量，即$E(e)&#x3D;0$</span><br><span class="line">2. 不变方差假设：误差项e的方差（用$σ^2$表示）是常数且与 $x_1,x_2,....$ 的值无关</span><br><span class="line">3. 独立性假设：e的变量是相互独立的</span><br><span class="line">4. 正态性假设：误差项e是正态随机变量,也即：误差项e的值是独立的正态分布随机变量，带有均值0和不变方差$σ^2$</span><br><span class="line"></span><br><span class="line">回应变量y的分布:</span><br><span class="line"></span><br><span class="line">(1)根据零假设，回应变量y的值均落在回归线上</span><br><span class="line">(2)根据不变方差假设，不论预测变量x1,x2,..取什么值，y的方差不变</span><br><span class="line">(3)根据独立性假设，对任意的 $x_1,x_2,..$ 取值，y的值都是相互独立的</span><br><span class="line">(4)根据正态性假设，回应变量y也是正态分布的随机变量。也即回应变量y也是独立正态变量，均值不变，方差不变。</span><br><span class="line">最小二乘回归线(least-square line)将误差的平方和最小化，总的预测误差用SSEp表示，则总的误差平方和为：</span><br><span class="line"></span><br><span class="line">$$</span><br><span class="line">   SSE_p&#x3D;\sum^n_&#123;i-1&#125;\epsilon^2&#x3D;\sum^n_&#123;i-1&#125;(y_i-\beta_0-\beta_1x_i)^2</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line">利用微积分，在以下微积分方程结果为0的时候, $b_0$ 和 $b_1$ 的取值会让总的误差平方和最小。关于 $b_0$ 和 $b_1$ 的偏微分方程为:</span><br><span class="line"></span><br><span class="line">$$</span><br><span class="line">   \frac &#123;\partial SSE_p&#125;&#123;\partial \beta_0&#125;&#x3D;-2\sum^n_&#123;i-1&#125;(y_i-\beta_0-\beta_1x_i)</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line">$$</span><br><span class="line">   \frac&#123;\partial SSE_p&#125;&#123;\partial \beta_1&#125;&#x3D;-2\sum^n_&#123;i-1&#125;x_i(y_i-\beta_0-\beta_1x_i)</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line">令上式为0，则有:&lt;br&gt;</span><br><span class="line">$$</span><br><span class="line">(y_i-\beta_0-\beta_1x_i)&#x3D;0</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line">$$</span><br><span class="line">(y_i-\beta_0-\beta_1x_i) &#x3D;0</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line">分别求和，得到</span><br><span class="line"></span><br><span class="line">$$</span><br><span class="line">  \sum^n_&#123;i-1&#125;y_i-nb_0-b_1\sum^a_&#123;i-1&#125;x_i&#x3D;0</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line">$$</span><br><span class="line">   \sum^n_&#123;i-1&#125;x_iy_i-b_0\sum^n_&#123;i-1&#125;x_i-b_1\sum^n_&#123;i-1&#125;x^2_i&#x3D;0</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line">重新表示为：</span><br><span class="line"></span><br><span class="line">$$</span><br><span class="line">  b_0n+b_1\sum^n_&#123;i-1&#125;x_i&#x3D;\sum^n_&#123;i-1&#125;y_i</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line">$$</span><br><span class="line">   b_0\sum^n_&#123;i-1&#125;x_i+b_i\sum^n_&#123;i-1&#125;x_i^2&#x3D;\sum^n_&#123;i-1&#125;x_iy_i</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line">求出 $b_0$ 和 $b_1$ 的值：</span><br><span class="line"></span><br><span class="line">$$</span><br><span class="line">  b_1&#x3D;\frac&#123;\sum x_iy_i-[(\sum x_i)(\sum y_i)]&#x2F;n&#125;&#123;\sum x^2_i-(\sum x_i)^2&#x2F;n&#125;</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line">$$</span><br><span class="line">  b_0 &#x3D; \bar y-b_1\bar x (\bar x为x 的均值)</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### 2 决定系数</span><br><span class="line"></span><br><span class="line">$r^2$ 称为决定系数（coefficient of determination）用来衡量回归线的拟合度，也即最小二乘回归线产生的线性估计与实际观测数据的拟合程度。前面提到y^代表回应变量的估计值，$y-\bar y$ 代表预测误差或残差。</span><br><span class="line"></span><br><span class="line">#### 引子</span><br><span class="line"></span><br><span class="line">1.想象一下，如果不考虑数据集中含糖量而直接预测其营养价值，我们直观的做法是求其平均值作为预测值。假设开始为数据集里的每个记录计算(y-y&#39;)（其中y&#39;为回应变量的平均值），然后计算其平方和，这与计算误差(y-y^)，然后计算误差平方和类似。这时统计量总体误差平方和SST为：</span><br><span class="line"></span><br><span class="line">$$</span><br><span class="line">   SST &#x3D;(y_1-y&#39;)^2+(y_2-y&#39;)^2+(y_3-y&#39;)^2....</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line">SST，也称为总体平方和(sum of squares total，SST)是在没有考虑预测变量的情况下，衡量回应变量总体变异的统计量。</span><br><span class="line"></span><br><span class="line">2. 接下来是衡量估计回归方程能多大程度提高估计的准确度。运用回归线时的估计误差为： $y-\bar y$  ,当忽略含糖量信息时，估计误差是 $y-y&#39;$ 。因此改进量是：$\bar y-y&#39;$ .进一步基于 $\bar y-y&#39;$ 构造一个平方和的统计量，这样的统计量被称为回归平方和 *(sum of squares of regression,SSR)* ，是相对于忽略预测信息，衡量在使用回归线后预测精度提高的统计量，即：</span><br><span class="line"></span><br><span class="line">$$</span><br><span class="line">   SSR &#x3D; (\bar y_1-y&#39;)^2+(\bar y_2-y&#39;)^2+....</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line">由: $y-y&#39;&#x3D;(\bar y-y&#39;)+(y-\bar y)$  两边都进行平方，然后进行总和运算，有：</span><br><span class="line"></span><br><span class="line">$$</span><br><span class="line">  SST &#x3D;SSR +SSE</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line">#### 结论   </span><br><span class="line"></span><br><span class="line">SST衡量了回应变量变异的一部分，这部分是被回应变量和预测变量之间的线性关系所解释的。然而不是所有的数据点都正好落在回归线上，这意味着还有一部分y变量的变异不能被回归线所解释。SSE可以被认为是衡量不能被x和y之间的回归线所解释的其他变异，包括随机变异。</span><br><span class="line">决定系数 $r^2$ ，它衡量了用回归线来描述预测变量和回应变量之间线性关系的符合程度</span><br><span class="line"></span><br><span class="line">$$</span><br><span class="line">   r^2 &#x3D;\frac&#123;SSR&#125;&#123;SST&#125;</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line">### 3 估计值的标准误差</span><br><span class="line"></span><br><span class="line">**符号**：*S*</span><br><span class="line"></span><br><span class="line">**概念**：用于衡量由回归线产生估计值的精度的统计量。</span><br><span class="line">为介绍s，首先引入均方误差 *(mean squares error，MSE)* ：</span><br><span class="line"></span><br><span class="line">$$</span><br><span class="line">    MSE &#x3D; \frac&#123;SSE&#125;&#123;n-m-1&#125;</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line">其中，m标示预测变量的个数，简单线性回归是m&#x3D;1,多元线性回归时m大于1。与 *SSE* 一样， *MSE* 用于衡量在回应变量中没有被回归分析所解释的变异。</span><br><span class="line">标准误差的估计由下式给出:</span><br><span class="line"></span><br><span class="line">$$</span><br><span class="line">   S &#x3D;\sqrt &#123;MSE&#125;&#x3D;\sqrt &#123;SSE&#x2F;(n-m-1)&#125;</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line"> *S* 值为“典型”残差的估计，*s* 是衡量估计中的典型误差，即回应预测值与实际值之间的差异。也即标准误差能反应估计回归方程做出预测的精确度，因此 *s* 越小越好。</span><br><span class="line"></span><br><span class="line">### 4 其他评估   </span><br><span class="line"></span><br><span class="line">#### 1. 相关系数</span><br><span class="line"></span><br><span class="line">用来定义两个变量线性关系的统计量称为相关系数 *(correlation coefficient，也称皮尔森相关系数)* ，用来衡量变量之间线性关系强弱。计算公式如下：</span><br><span class="line"></span><br><span class="line">$$</span><br><span class="line">   r &#x3D;\frac&#123;\sum (x-x&#39;)(y-y&#39;)&#125;&#123;(n-1)S_xS_y&#125;</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line">+ 其中 $S_x$和 $S_y$分别代表样本x和y的标准差</span><br><span class="line">+ 相关系数r的取值范围为：(-1,1)</span><br><span class="line">+ 变量r的值越接近于1，表明二者正向相关性越大，随着x增大y也会增大。</span><br><span class="line">+ 变量r的值越接近于-1，表明二者负向相关性越大，随着x增大y会减小。</span><br><span class="line"></span><br><span class="line">#### 2. 方差分析表(ANOVA table)   </span><br><span class="line"></span><br><span class="line">一般形式如下：</span><br><span class="line"></span><br><span class="line">|变异源|平方和( *SS* )|自由度|均方差( *MS* )|F|</span><br><span class="line">|---|---|---|---|---|</span><br><span class="line">|回归| *SSR* | *m* | $MSR &#x3D;\frac&#123;SSR&#125;&#123;m&#125;$ | $F&#x3D; \frac&#123;MSR&#125;&#123;MSE&#125;$ |</span><br><span class="line">|误差| *SSE* | *n-m-1*| $MSE &#x3D;\frac&#123;SSE&#125;&#123;n-m-1&#125;$ ||</span><br><span class="line">|合计| *SST&#x3D;SSR+SSE* | *n-1* |||</span><br><span class="line"></span><br><span class="line">下面展示了 糖含量营养级别回归结果:</span><br></pre></td></tr></table></figure>
+<p>anova&lt;-aov(data=sugar,rating~sugars)<br>summary(anova)<br>                 Df Sum Sq Mean Sq  F value   Pr(&gt;F)<br>    sugars       1   8655    8655   102.3    1.15e-15<br>    Residuals   75   6342      85                   </p>
+<pre><code>sugars      ***  
+Residuals        
+           ---  </code></pre><p>  Signif. codes:  0 ‘<strong>*’ 0.001 ‘</strong>’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">#### 3. 异常点、高杠杠点和强影响观测值   </span><br><span class="line"></span><br><span class="line"> **高杠杆点** *(High leverage point)*：可以被认为是一个观测值在预测空间中的极限，也即一个高杠杆值可以被认为是不考虑y值得x变量的极限。杠杆第i个观察值hi可以被标示如下（x&#39;为平均数）：</span><br><span class="line"></span><br><span class="line"> $$</span><br><span class="line">   h_i &#x3D;\frac&#123;1&#125;&#123;h&#125;+\frac&#123;(x-x&#39;)^2&#125;&#123;\sum (x_i-x&#39;)^2&#125;</span><br><span class="line"> $$</span><br><span class="line"></span><br><span class="line">对于给定数据集,1&#x2F;n和右边分式分母都是常数，所以第i个观察的杠杆只依赖于 $(x_i-x&#39;)^2$。</span><br><span class="line">一个拥有大于 $\frac&#123;2*(m+1)&#125;&#123;n&#125;$ 和 $\frac&#123;3*(m+1)&#125;&#123;n&#125;$ 的观察点被认为是高杠杆点。</span><br><span class="line"></span><br><span class="line">**异常点** 观测到的偏离回归直（曲）线的点。一种粗略的评价观察值的方法是使用标准残留值 *(standardized residuals)*一般用:</span><br><span class="line"></span><br><span class="line">$$</span><br><span class="line">   S_&#123;i,resid&#125;&#x3D;s\sqrt&#123;1-h_i&#125;</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line">来标示第i个残留数的标准差，则hi代表第i个观测值的杠杆影响，那么标准残留值可以表示为:</span><br><span class="line"></span><br><span class="line">$$</span><br><span class="line">    r_&#123;i,stand &#125;&#x3D; \frac&#123;(y-y&#39;_i)&#125;&#123;s_&#123;i,resid&#125;&#125;</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line">如果标准残留值得绝对值超过了2，就可以认为是一个异常点,上图中观测点1和4应该是异常点。</span><br><span class="line"></span><br><span class="line"> **强影响力点** ：对数据集的分析造成较大影响的观测点。通常强影响力观测值同时有较大的残留值和较高的杠杆，但也有可能它既不是异常点也没有较高的杠杆，但两者特点组合成一个具有影响力的点。粗略估算一个观察点是否是强影响力点的方法是看它的Cook距离 *(Cook&#39;s distance)* 是否大于1.0，更确切的说，用Cook距离与F分布 *(m,n-m)* 来比较，若观测值落在分布的第一部分（低于25个百分点），就说它对整体分布只有一点点影响，若落在中点以后就说明该点是有影响力的。Cook距离将残留值和刚刚都考虑进去的，第i个观察点的距离可以为：</span><br><span class="line"></span><br><span class="line">$$</span><br><span class="line">   \frac&#123;(y_i-y&#39;_i)^2&#125;&#123;(m+1)S^2&#125;\frac&#123;h_i&#125;&#123;1-h_i&#125;</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line">其中 $y_i-y&#39;_i$表示第i个残留值，m表示预测变量的个数，s为标准误差的估计，hi为第i个观察点的杠杆。左边的比率含有一个元素代表了残留值，右边的函数代表了杠杆值。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## 四 回归推断</span><br><span class="line"></span><br><span class="line">最小二乘法回归是建立在一个假设基础上的线性回归模型，我们需要一个系统地框架来评估两个变量之间是否存在线性关系。对于最小二乘法的公式：</span><br><span class="line"></span><br><span class="line">$$</span><br><span class="line">     y &#x3D; m_0+m_1x+e</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line">主要有以下四种方法：</span><br><span class="line"></span><br><span class="line">1.用来推断回应变量与预测变量之间关系的t检验法</span><br><span class="line">2. 斜率m1的置信区间</span><br><span class="line">3. 在给定一个特定的预测值条件下，回应变量&lt;B&gt;均值&lt;&#x2F;B&gt;的置信区间</span><br><span class="line">4. 在给定一个特定的预测值条件下，回应变量&lt;B&gt;随机值&lt;&#x2F;B&gt;的预测区间</span><br><span class="line"></span><br><span class="line">### 4.1 x和y之间线性关系的t检验</span><br><span class="line"></span><br><span class="line">对于简单线性回归t检验与F检验是等价的。&lt;br&gt;</span><br><span class="line"></span><br><span class="line">#### 对斜率的估计</span><br><span class="line"></span><br><span class="line">用最小二乘法估计的斜率m&#39;(注意m1是真实斜率)是一个统计量，像所有统计量一样服从一个特定均值和标准差的样本分布.斜率的回归推断是基于m&#39;的样本方差的点估计 Sm&#39;,Sm&#39;被解释为对斜率变异性的衡量指标，较大的Sm&#39;预示着斜率m*的估计是不稳定的。t检验基于统计量 $t&#x3D;(m&#39;-m_1)&#x2F;Sm&#39;$ ,它服从一个自由度为 $n-2$ 的t分布，当零假设为真（变量x和y之间不存在线性关系）时，检验统计量 $t&#x3D;m&#39;&#x2F;Sm&#39;$ 服从一个自由度为 *n-2* 的 t 分布。</span><br><span class="line"></span><br><span class="line">我们重新概览下77种谷物数据中营养级别与含糖量的线性回归结果：</span><br></pre></td></tr></table></figure>
+<pre><code> lm.reg&lt;-lm(data=sugar,rating~sugars)  
+ summary(lm.reg)  
+
+Call:  
+lm(formula = rating ~ sugars, data = sugar)  
+
+Residuals:  
+    Min      1Q  Median      3Q     Max   
+-17.853  -5.677  -1.439   5.160  34.421   
+
+Coefficients:  
+            Estimate Std. Error t value Pr(&gt;|t|)      
+(Intercept)  59.2844     1.9485   30.43  &lt; 2e-16 ***  
+sugars       -2.4008     0.2373  -10.12 1.15e-15 ***  
+---  
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1  
+
+Residual standard error: 9.196 on 75 degrees of freedom  
+Multiple R-squared:  0.5771,    Adjusted R-squared:  0.5715   
+F-statistic: 102.3 on 1 and 75 DF,  p-value: 1.153e-15</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">我们可以得到：</span><br><span class="line">  + 在系数列下面，找到斜率m&#39;的估计值为 -2.4008。</span><br><span class="line">  + 在SE系数列里找到斜率m&#39;的标准差Sm&#39;为 0.2373</span><br><span class="line">  + 在T值列找到t的统计量，即t检验的值 , $t&#x3D;\frac&#123;m&#39;&#125;&#123;Sm&#39;&#125;&#x3D;\frac&#123;-2.4008&#125;&#123;0.2373&#125;&#x3D;-10.1171$</span><br><span class="line">  + 在最后一列可以找到t检验的p值，是一个双尾检验，形式为：p值&#x3D; $P(|t|&gt;tobs)$ ，其中的tobs代表观测值。此处P值&#x3D; $P(|t|&gt;tobs)&#x3D;P(|t|&gt;-10.1171)$ 近似为0，小于任何显著性要求的合理界限，因此可以拒绝零假设也即认为含糖量和营养级别之前存在线性关系。</span><br><span class="line"></span><br><span class="line">### 4.2 回归直线斜率的置信区间</span><br><span class="line"></span><br><span class="line">置信区间也即在一定概率P下保证变量落在某区间 [a,b]内。对于回归直线的真实斜率 $m_1$来说，*100\*(1-c)%* 的置信区间也即有 100*(1-c)%的把握保证回归线的真实斜率位于 [ $m&#39;-(t_&#123;n-2&#125;)(Sm&#39;),m&#39;+(t_&#123;n-2&#125;)(Sm&#39;)$ ]区间。其中 $t_&#123;n-2&#125;$ 是自由度为n-2的 t 分布。</span><br><span class="line"></span><br><span class="line">例如构建一个回归直线的真实斜率 $m_1$的95%的置信区间。有一个对m1的点估计值 m&#39;&#x3D;-2.4008,对95%的之心去和自由度为 $n-2&#x3D;77-2&#x3D;75$ 的t临界值为 2.0(查表t75.95%&#x3D;2.0),从表中得到 Sm&#39;&#x3D;0.2373，因此置信区间为：</span><br><span class="line"></span><br><span class="line">$$</span><br><span class="line">    [ $m&#39;-(t_&#123;n-2&#125;)(Sm&#39;),m&#39;+(t_&#123;n-2&#125;)(Sm&#39;)$ ]</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line">相关代码及结果如下：&lt;br&gt;</span><br></pre></td></tr></table></figure>
+<p>lm.reg&lt;-lm(data=sugar,rating~sugars)<br>#level=0.95为置信度<br>confint(lm.reg,level=0.95)<br>                    2.5 %    97.5 %<br>    (Intercept) 55.402783 63.165952<br>    sugars      -2.873567 -1.92807</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 4.3 给定x条件下，y均值的置信区间和y随机选择值的预测区间</span><br><span class="line"></span><br><span class="line">给定x条件下，y&lt;B&gt;均值&lt;&#x2F;B&gt;的置信区间由如下公式判定：</span><br><span class="line"></span><br><span class="line">$$</span><br><span class="line">  \bar y\pm t_&#123;n-2&#125;(s)\sqrt &#123;\frac&#123;1&#125;&#123;n&#125;+\frac&#123;(x_p-\bar x)^2&#125;&#123;\sum(x_i-\bar x)^2&#125;&#125;</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line">其中 $\bar y$ 表示给定x值后，y的点估计值，$t_&#123;n-2&#125;$ 是与样本大小和置信水平相关联的乘数，s是估计的标准误差，$\bar x$ 是产生预测值所对应的x专指变量。</span><br><span class="line"></span><br><span class="line">给定x条件下，y随机选择值的预测区间:</span><br><span class="line"></span><br><span class="line">$$</span><br><span class="line">   \bar y\pm t_&#123;n-2&#125;(s)\sqrt &#123;1+\frac&#123;1&#125;&#123;n&#125;+\frac&#123;(x_p-\bar x)^2&#125;&#123;\sum(x_i-\bar x)^2&#125;&#125;</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line"> **注意**：第二张图中表达式与第一张图中表达式相比，除了在平方根李出现了 **&quot;1+&quot;** 外完全一样，这说明比起均值估计来，对于单个y值得估计会有更大的变化范围，这也说明了预测区间总是比类似的置信区间要宽</span><br><span class="line"></span><br><span class="line">我们希望预测含糖量为 sugars&#x3D;10时该谷物的营养级别范围，实例代码如下：</span><br></pre></td></tr></table></figure>
+<pre><code>&gt; point&lt;-data.frame(sugars=10)  
+&gt; point  
+  sugars  
+1     10  
+&gt; lm.reg  
+
+Call:  
+lm(formula = rating ~ sugars, data = sugar)  
+
+Coefficients:  
+(Intercept)       sugars    
+     59.284       -2.401    
+
+&gt; lm.pred&lt;-predict(lm.reg,point,interval=&quot;prediction&quot;,level=0.95)  
+&gt; lm.pred  
+       fit     lwr      upr  
+ 1 35.27617 16.7815 53.77083</code></pre><pre><code>
+可以看到在95%的置信度下，含糖量为10的谷物其营养级别介于 16.7815和53.77083之间</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2013-04-20-datamining-regression/" data-id="ck4ifp1ky00012wjea4zb03fs" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2013-04-24-datamining-mutilregression/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          数据挖掘方法之三：多元回归模型
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2013-04-01-dataming-PCA/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">数据挖掘方法之一：主成份分析</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

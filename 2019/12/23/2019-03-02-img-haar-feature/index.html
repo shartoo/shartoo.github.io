@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>图像处理基础Haar特征 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="图像特征">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图像处理基础Haar特征">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2019-03-02-img-haar-feature/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="图像特征">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/haar_1.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/haar_2.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/haar_3.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/haar_4.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/haar_5.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/haar_6.jpg">
+<meta property="article:published_time" content="2019-12-23T10:45:59.693Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.228Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/haar_1.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2019-03-02-img-haar-feature" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2019-03-02-img-haar-feature/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.693Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      图像处理基础Haar特征
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-Haar特征"><a href="#1-Haar特征" class="headerlink" title="1 Haar特征"></a>1 Haar特征</h2><p>Haar特征最早是由应用于人脸特征表示时提出的，此特征反映的是图像部分区域内灰度变化情况，如：眼睛要比脸颊颜色要深，鼻梁两侧比鼻梁颜色要深，嘴巴比周围颜色要深等。<br>Haar特征有4类: <code>边缘特征</code>,<code>线性特征</code>,<code>中心特征</code>,<code>对角线特征</code>，如下图示例，这些，组合成特征模板。特征模板内有白色和黑色两种矩形，并定义该模板的特征值为白色矩形像素和减去黑色矩形像素和。</p>
+<p><img src="/images/blog/haar_1.jpg" alt="haar特征"></p>
+<p><strong>如何计算上面特征</strong></p>
+<ul>
+<li>对于A和B ：$特征值=sum _白-sum_黑$</li>
+<li>对于C：$特征值=sum _白-2\times sum_黑$,白色乘以2的原因是，保持与黑色区域一样的像素数目。</li>
+</ul>
+<p>通过改变特征模板的大小和位置，可在图像子窗口中穷举出大量的特征。上图的特征模板称为“特征原型”。而特征类别、大小和位置的变化，使得很小的检测窗口含有非常多的矩形特征。这就带来了两个问题</p>
+<ol>
+<li>如何快速计算那么多的特征： <strong>积分图</strong></li>
+<li>哪些矩形特征才是对分类器分类最有效的：<strong>训练分类算法</strong>，如AdaBoost</li>
+</ol>
+<h2 id="2-积分图"><a href="#2-积分图" class="headerlink" title="2 积分图"></a>2 积分图</h2><p>积分图就是只遍历一次图像就可以求出图像中所有区域像素和的快速算法。核心思想是：将图像从起点开始到各个点所形成的矩形区域像素之和作为一个数组的元素保存在内存中，当要计算某个区域的像素和时可以直接索引数组的元素，不用重新计算这个区域的像素和，从而加快了计算。</p>
+<p>积分图是一种能够描述全局信息的<strong>矩阵表示</strong>方法。<strong>积分图的构造方式是位置（i,j）处的值ii(i,j)是原图像(i,j)左上角方向所有像素的和</strong>。</p>
+<p>积分图的构建算法</p>
+<ol>
+<li>用$s(i,j)$表示行方向的累加和，初始化$s(i,-1)=0$</li>
+<li>用$ii(i,j)$表示一个积分图像，初始化$ii(-1,i)=0$</li>
+<li>逐行扫描图像，递归计算每个像素$(i,j)$行方向的累加和$s(i,j)$和积分图像$ii(i,j)$的值。<br>$$<br>s(i,j)=s(i,j-1)+f(i,j) \<br>ii(i,j)=ii(i-1,j)+s(i,j)<br>$$</li>
+<li>扫描图像一遍，当到达图像右下角像素时，积分图像ii就构造好了。</li>
+</ol>
+<p><strong>计算方块内的像素和</strong><br>计算好了积分图，我们接下来就可以利用积分图来加速计算某个方块内部的像素的和</p>
+<p><img src="/images/blog/haar_2.jpg" alt="haar特征"></p>
+<p>如上图，假设我们想计算区域D的像素和。上图中D的四个顶点分别是1,2,3,4。令$rectsum_n$代表顶点$n$左上角的所有像素和，那么区域D内的像素和为: $rectsum_4-rectsum_2-rectsum_3+rectsum_1，注意顶点1的坐上所有像素和被减了2次，所以要加一次$</p>
+<h2 id="3-Adaboost-算法"><a href="#3-Adaboost-算法" class="headerlink" title="3 Adaboost 算法"></a>3 Adaboost 算法</h2><p>opencv中关于adaboost训练过程参考 <a href="https://docs.opencv.org/3.3.0/dc/d88/tutorial_traincascade.html" target="_blank" rel="noopener">opencv tutorial_traincascade</a><br>后面再讲到 Adaboost算法时，再详细说明。</p>
+<h2 id="4-opencv-中使用haar特征检测人脸"><a href="#4-opencv-中使用haar特征检测人脸" class="headerlink" title="4 opencv 中使用haar特征检测人脸"></a>4 opencv 中使用haar特征检测人脸</h2><p>opencv已经预先包含了多种训练好的<code>人脸分类器</code>，<code>眼睛分类器</code>，<code>微笑分类器</code>等。可以自己定义和训练一个，此处直接使用opencv已经训练好的人脸级联分类器，它的算法原理就是使用了Haar特征+Adaboost算法训练出的级联分类器。</p>
+<p>首先，载入xml定义的分类器，载入的图像必须是灰度图</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">import cv2 as cv</span><br><span class="line">face_cascade &#x3D; cv.CascadeClassifier(&#39;haarcascade_frontalface_default.xml&#39;)</span><br><span class="line">eye_cascade &#x3D; cv.CascadeClassifier(&#39;haarcascade_eye.xml&#39;)</span><br><span class="line">img &#x3D; cv.imread(&#39;sachin.jpg&#39;)</span><br><span class="line">gray &#x3D; cv.cvtColor(img, cv.COLOR_BGR2GRAY)</span><br></pre></td></tr></table></figure>
+<p>接着开始检测人脸，如果有检测到则画出矩形框，下图是检测结果(同时包含了眼睛检测)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">faces &#x3D; face_cascade.detectMultiScale(gray, 1.3, 5)</span><br><span class="line">for (x,y,w,h) in faces:</span><br><span class="line">    cv.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)</span><br><span class="line">    roi_gray &#x3D; gray[y:y+h, x:x+w]</span><br><span class="line">    roi_color &#x3D; img[y:y+h, x:x+w]</span><br><span class="line">    eyes &#x3D; eye_cascade.detectMultiScale(roi_gray)</span><br><span class="line">    for (ex,ey,ew,eh) in eyes:</span><br><span class="line">        cv.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)</span><br><span class="line">cv.imshow(&#39;img&#39;,img)</span><br><span class="line">cv.waitKey(0)</span><br><span class="line">cv.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/blog/haar_3.jpg" alt="haar特征"></p>
+<h2 id="5-Haar特征拓展"><a href="#5-Haar特征拓展" class="headerlink" title="5 Haar特征拓展"></a>5 Haar特征拓展</h2><h3 id="5-1-ABH特征"><a href="#5-1-ABH特征" class="headerlink" title="5.1 ABH特征"></a>5.1 ABH特征</h3><p>为提高二分Haar特征的区分能力，我们提出 了一种多二分Haar特征，并使用它们的共现性作为新的特征，成为ABH(Asseming Binary Haar)特征。</p>
+<p>下图演示了ABH特征的一个例子。</p>
+<p><img src="/images/blog/haar_4.jpg" alt="haar特征"></p>
+<p>上图中ABH特征集成了三个二分Haar特征，当三个二分Haar特征值分别为1,1,0时，ABH特征为 a(b1,b2,b3)=(110)2=6<br>其中 a为三个二分Haar特征 b1,b2,b3 的ABH特征计算函数， (.)2 是一个从二进制转十进制的操作。特征值说明了对 2F个不同结合的index，其中F是结合的二分特征数。</p>
+<h3 id="5-2-LAB-Locally-Assembing-Binary-特征"><a href="#5-2-LAB-Locally-Assembing-Binary-特征" class="headerlink" title="5.2 LAB(Locally Assembing Binary)特征"></a>5.2 LAB(Locally Assembing Binary)特征</h3><p>ABH特征的数目巨大。为了枚举所有的特征，需要几个自由参数，比如二分Haar特征的集合数目，每个二分Haar特征的大小，每个二分Haar特征的坐标位置。从如此巨大的特征池中学习是不可逆的。我们发现了一种对应的用于人脸检测的缩减集合，称为LAB Haar特征。</p>
+<p>ABH特征之中，LAB特征是那些结合8个局部邻接2-矩形的二分Haar特征，它们大小相同并且共享同一个中心矩形。下图展示了一个8个二分Haar特征用以集合为一个LAB特征。</p>
+<p><img src="/images/blog/haar_5.jpg" alt="haar特征"></p>
+<p>下图是一个2个LAB特征的示例</p>
+<p><img src="/images/blog/haar_6.jpg" alt="haar特征"></p>
+<p>图中展示了两个不同的LAB特征，中心的黑色矩形被8个相邻的二分Haar特征共享，所有9个矩形都是相同的大小。</p>
+<p>从公式上看，一个LAB特征可以用一个四元组表示 l(x,y,w,h) ，其中 x,y 分别代表了左上角的x和y轴坐标，(w,h) 代表了矩形的宽和高。</p>
+<p>LAB特征保留了所有二分Haar特征的优势，同时又很强的区分能力，大小也很小。LAB特征抓取了图像的局部强度。计算LAB特征需要计算8个2-矩形Haar特征。LAB特征值区间为 {0,…255}，每个值对应了特别的局部结构。</p>
+<p><a href="https://docs.opencv.org/3.4.3/d7/d8b/tutorial_py_face_detection.html" target="_blank" rel="noopener">opencv haar特征进行人脸检测</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2019-03-02-img-haar-feature/" data-id="ck4ifp1mx004l2wjed78dggw9" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2019-03-04-HOG-feature/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          HOG特征详解
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2019-02-24-image-pramid/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">图像中的各种金字塔</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

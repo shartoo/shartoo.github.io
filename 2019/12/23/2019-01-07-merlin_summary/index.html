@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>语音合成：merlin使用概览 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="语音合成">
+<meta property="og:type" content="article">
+<meta property="og:title" content="语音合成：merlin使用概览">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2019-01-07-merlin_summary/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="语音合成">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-12-23T10:45:59.685Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.227Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2019-01-07-merlin_summary" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2019-01-07-merlin_summary/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.685Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      语音合成：merlin使用概览
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="0-概览"><a href="#0-概览" class="headerlink" title="0 概览"></a>0 概览</h3><p>本文详细解释Merlin Mandarin_voice下脚本一步一步所做的事。</p>
+<h3 id="01-setup"><a href="#01-setup" class="headerlink" title="01_setup"></a>01_setup</h3><p>脚本<code>merlin/egs/mandarin_voice/s1/01_setup.sh</code></p>
+<p>主要工作是创建一个目录，做好准备工作。主要创建了如下文件夹:</p>
+<ul>
+<li>experiments<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">─ mandarin_voice(voice name)</span><br><span class="line">    ├── acoustic_model</span><br><span class="line">    │ ├── data</span><br><span class="line">    │ ├── gen</span><br><span class="line">    │ ├── inter_module</span><br><span class="line">    │ ├── log</span><br><span class="line">    │ └── nnets_model</span><br><span class="line">    ├── duration_model</span><br><span class="line">    │ ├── data</span><br><span class="line">    │ ├── gen</span><br><span class="line">    │ ├── inter_module</span><br><span class="line">    │ ├── log</span><br><span class="line">    │ └── nnets_model</span><br><span class="line">    └── test_synthesis</span><br><span class="line">        ├── gen-lab</span><br><span class="line">        ├── prompt-lab</span><br><span class="line">        ├── test_id_list.scp</span><br><span class="line">        └── wav</span><br></pre></td></tr></table></figure></li>
+<li>database<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"> feats</span><br><span class="line">│ ├── bap</span><br><span class="line">│ ├── lf0</span><br><span class="line">│ └── mgc</span><br><span class="line">├── labels</span><br><span class="line">│ └── label_phone_align</span><br><span class="line">├── prompt-lab</span><br><span class="line">│ ├── A11_0.lab</span><br><span class="line">│ ├── A11_1.lab</span><br><span class="line">│ ├── A11_2.lab</span><br><span class="line">...</span><br><span class="line">└── wav</span><br><span class="line">    ├── A11_0.wav</span><br><span class="line">    ├── A11_100.wav</span><br><span class="line">    ├── A11_101.wav</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>将一些基本参数写入到<code>conf/global_setting.cfg</code>文件中</p>
+<h3 id="02-prepare-lab"><a href="#02-prepare-lab" class="headerlink" title="02_prepare_lab"></a>02_prepare_lab</h3><p>需要两个参数：</p>
+<ul>
+<li>lab_dir: 第一步中的标注目录 <code>database/labels</code></li>
+<li>prompt_lab_dir :第一步中生成的<code>database/prompt-lab</code></li>
+</ul>
+<h4 id="2-1-准备文件夹"><a href="#2-1-准备文件夹" class="headerlink" title="2.1 准备文件夹"></a>2.1 准备文件夹</h4><ul>
+<li>将 <code>database/labels</code>目录下的<code>lab_phone_align</code>下的lab文件分别复制到<code>experiments/mandarin_voice/duration_model/data</code>（时域模型）和<code>experiments/mandarin_voice/acoustic_model/data</code>（声学模型）下。【用于训练】</li>
+<li>将<code>database/prompt-lab</code>下的lab文件复制到<code>experiments/mandarin_voice/test_synthesis</code>下【用于测试（合成）】</li>
+</ul>
+<h4 id="2-2-生成文件列表"><a href="#2-2-生成文件列表" class="headerlink" title="2.2 生成文件列表"></a>2.2 生成文件列表</h4><ul>
+<li>将<code>database/labels</code>目录下的<code>lab_phone_align</code>下的lab文件列表写入到<code>experiments/mandarin_voice/duration_model/FileIdList&#39;和</code>experiments/mandarin_voice/acoustic_model/FileIdList’。并移除文件后缀【训练集文件列表】</li>
+<li>将<code>database/prompt-lab</code>下的lab文件列表写入到<code>experiments/mandarin_voice/test_synthesis/test_id_list.scp</code>文件中，并移除文件后缀【用于合成语音的文本列表】</li>
+</ul>
+<h3 id="03-prepare-acoustic-feature"><a href="#03-prepare-acoustic-feature" class="headerlink" title="03_prepare_acoustic_feature"></a>03_prepare_acoustic_feature</h3><p>需要两个参数</p>
+<ul>
+<li><strong>wav_dir</strong>: 使用的是第一步中的<code>database/wav</code>，下面存放的是所有的wav音频文件</li>
+<li><strong>feat_dir</strong>:输出文件目录<code>database/feats</code>，是当前脚本输出的特征存放文件目录<h4 id="3-1-使用声码器抽取声学特征"><a href="#3-1-使用声码器抽取声学特征" class="headerlink" title="3.1 使用声码器抽取声学特征"></a>3.1 使用声码器抽取声学特征</h4></li>
+</ul>
+<p>使用<code>merlin/misc/scripts/vocoder/world/extract_features_for_merlin.py</code>脚本抽取，注意，其中的声码器可以是<code>WORLD</code>也可以是其他的，比如<code>straight</code>,<code>WORLD_2</code>。其实依然是在python中调用以下脚本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">world &#x3D; os.path.join(merlin_dir, &quot;tools&#x2F;bin&#x2F;WORLD&quot;)</span><br><span class="line">sptk &#x3D; os.path.join(merlin_dir, &quot;tools&#x2F;bin&#x2F;SPTK-3.9&quot;)</span><br><span class="line">reaper &#x3D; os.path.join(merlin_dir, &quot;tools&#x2F;bin&#x2F;REAPER&quot;)</span><br></pre></td></tr></table></figure>
+<p>生成的特征目录如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sp_dir &#x3D; os.path.join(feat_dir, &#39;sp&#39; )</span><br><span class="line">mgc_dir &#x3D; os.path.join(feat_dir, &#39;mgc&#39;)</span><br><span class="line">ap_dir &#x3D; os.path.join(feat_dir, &#39;ap&#39; )</span><br><span class="line">bap_dir &#x3D; os.path.join(feat_dir, &#39;bap&#39;)</span><br><span class="line">f0_dir &#x3D; os.path.join(feat_dir, &#39;f0&#39; )</span><br><span class="line">lf0_dir &#x3D; os.path.join(feat_dir, &#39;lf0&#39;)</span><br></pre></td></tr></table></figure>
+<p>如果我们使用world作为vocoder的话，会使用<code>misc/scripts/vocoder/world/extract_features_for_merlin.py</code>脚本，生成步骤其实是：</p>
+<ol>
+<li>直接从原始wav文件，使用<code>world analysis</code>抽取 <code>sp</code>,<code>bapd</code>特征。<code>straight</code>vocoder 会产生 <code>ap</code>,如果使用reaper会产生<code>f0</code>特征。</li>
+<li><code>f0</code>$\rightarrow$ <code>lf0</code>,<code>bapd</code>$\rightarrow$ <code>bap</code>,<code>sp</code>$\rightarrow$ <code>mgc</code></li>
+</ol>
+<h4 id="3-2-复制特征到声学特征目录下"><a href="#3-2-复制特征到声学特征目录下" class="headerlink" title="3.2 复制特征到声学特征目录下"></a>3.2 复制特征到声学特征目录下</h4><p>将所有<code>feat_dir</code>下的所有文件,包括<code>sp</code>,<code>mgc</code>,<code>ap</code>,<code>bap</code>,<code>f0</code>,<code>lf0</code>复制到<code>experiments/mandarin_voice/acoustic_model/data</code>下。</p>
+<h2 id="04-prepare-conf-files"><a href="#04-prepare-conf-files" class="headerlink" title="04_prepare_conf_files"></a>04_prepare_conf_files</h2><p>执行<code>./scripts/prepare_config_files.sh</code></p>
+<p><strong>duration相关配置</strong></p>
+<ul>
+<li><p>先从<code>merlin/misc/recipes/duration_demo.conf</code>复制一份到<code>conf/duration_mandarin_voice.conf</code>，并修改<code>conf/duration_mandarin_voice.conf</code>中的一些目录</p>
+<ul>
+<li>MerlinDir</li>
+<li>WorkDir</li>
+<li>TOPLEVEL</li>
+<li>FileIdList</li>
+</ul>
+</li>
+<li><p>修改Label相关的配置项【Labels】</p>
+<ul>
+<li>silence_pattern：修改为 <code>[&#39;*-sil+*&#39;]</code></li>
+<li>label_type:<code>state_align</code> 或 <code>phone_align</code>，修改之后为<code>phone_align</code></li>
+<li>label_align: 即配置音素对齐文件的目录<code>/experiments/mandarin_voice/duration_model/data/label_phone_align</code></li>
+<li>question_file_name:<code>/misc/questions/questions-mandarin.hed</code>问题集</li>
+</ul>
+</li>
+<li><p>修改输出配置【Outputs】，label_type有<code>state_align</code> 或 <code>phone_align</code>，如果是<code>state_align</code>会在【outputs】处指定<code>dur=5</code>,如果是<code>phone_align</code>则指定<code>dur=1</code></p>
+</li>
+<li><p>神经网络的架构配置，如果当前声音文件是<code>demo</code>则修改<code>hidden_layer_size</code> 【architechture】</p>
+</li>
+<li><p>修改训练、验证、测试数据数量。【data】</p>
+<ul>
+<li>train_file_number: 200</li>
+<li>valid_file_number: 25</li>
+<li>test_file_number: 25</li>
+</ul>
+</li>
+</ul>
+<p><strong>acoustic相关配置</strong></p>
+<ul>
+<li>复制文件<code>conf/acoustic_mandarin_voice.conf</code>，修改变量，label配置都和duration相关配置一样。</li>
+<li>修改输出配置【outputs】<ul>
+<li>mgc</li>
+<li>dmgc</li>
+<li>bap</li>
+<li>dbap</li>
+<li>lf0</li>
+<li>dlf0</li>
+</ul>
+</li>
+<li>波形文件设置【waveform】<ul>
+<li>framelength</li>
+<li>minimum_phase_order</li>
+<li>fw_alpha</li>
+</ul>
+</li>
+<li>其他的【architechture】和【data】都和duration相关配置一样。</li>
+</ul>
+<p>执行<code>./scripts/prepare_config_files_for_synthesis.sh</code>配置测试（或合成）语音相关的参数。基本和上面的<code>./scripts/prepare_config_files.sh</code>一样，需要配置<code>duration</code>和<code>ascoustic</code>参数。新增了【Processes】</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">DurationModel: True</span><br><span class="line">GenTestList: True</span><br><span class="line"># sub-processes</span><br><span class="line">NORMLAB: True</span><br><span class="line">MAKEDUR: False</span><br><span class="line">MAKECMP: False</span><br><span class="line">NORMCMP: False</span><br><span class="line">TRAINDNN: False</span><br><span class="line">DNNGEN: True</span><br><span class="line">CALMCD: False</span><br></pre></td></tr></table></figure>
+
+<h3 id="05-train-duration-model"><a href="#05-train-duration-model" class="headerlink" title="05_train_duration_model"></a>05_train_duration_model</h3><p>实际执行的是<code>./scripts/submit.sh   merlin/src/run_merlin.py   conf/duration_mandarin_voice.conf</code></p>
+<p>其中<code>./scripts/submit.sh</code>是theano相关参数的配置。</p>
+<h3 id="06-train-acoustic-model"><a href="#06-train-acoustic-model" class="headerlink" title="06_train_acoustic_model"></a>06_train_acoustic_model</h3><p>训练声学模型，实际执行的是<code>./scripts/submit.sh   merlin/src/run_merlin.py   conf/acoustic_mandarin_voice.conf</code></p>
+<h3 id="07-run-merlin"><a href="#07-run-merlin" class="headerlink" title="07_run_merlin"></a>07_run_merlin</h3><p>需要两个参数</p>
+<ul>
+<li>test_dur_config_file: 语音合成的时域配置文件</li>
+<li>test_synth_config_file:语音合成的</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2019-01-07-merlin_summary/" data-id="ck4ifp1mv004f2wje3s5n6daz" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2019-01-08-merlin_mandarin_summary/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          merlin中文语音合成概览
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2019-01-03-obj_detect_summary/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">深度学习目标检测网络汇总对比</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

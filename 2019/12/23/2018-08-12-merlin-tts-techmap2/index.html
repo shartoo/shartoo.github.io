@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>merlin语音合成讲义二：如何构建系统之数据准备 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="语音">
+<meta property="og:type" content="article">
+<meta property="og:title" content="merlin语音合成讲义二：如何构建系统之数据准备">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2018-08-12-merlin-tts-techmap2/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="语音">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_1.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_2.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_3.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_4.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_5.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_6.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_7.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_8.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_9.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_10.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_11.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_12.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_13.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_14.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_15.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_16.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_17.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_18.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_19.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_20.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_21.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_22.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_23.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_24.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_25.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_26.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_27.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_28.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_29.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_30.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_31.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_32.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_33.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_34.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_35.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_36.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_37.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_38.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_39.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_40.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_41.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_42.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_43.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_44.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_45.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_46.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_47.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_48.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_49.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_50.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_51.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_52.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_53.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_54.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_55.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_56.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_57.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_58.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_59.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_60.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_61.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.629Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.223Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2_1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2018-08-12-merlin-tts-techmap2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2018-08-12-merlin-tts-techmap2/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.629Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      merlin语音合成讲义二：如何构建系统之数据准备
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一 前端部分</p>
+<p><img src="/images/blog/merlin_tts_tch2_1.png" alt="TTS merlin技术路线"></p>
+<p>如果存在已经训练好的前端工具，我们可以使用已经有的工具<code>Festival</code>,<code>MaryTTS</code>,<code>sSpeak</code><br>如果我们没有标注数据，我们可以使用<code>Ossian</code></p>
+<h3 id="1-1-Ossian-Toolkit"><a href="#1-1-Ossian-Toolkit" class="headerlink" title="1.1 Ossian Toolkit"></a>1.1 Ossian Toolkit</h3><ul>
+<li>使用训练数据，可以使用最少的speech+text<ul>
+<li>句子或段落对齐</li>
+</ul>
+</li>
+<li>可以利用用户的任何额外数据</li>
+<li>提供<code>前端模块</code>和<code>胶水</code>来组合，Merlin DNNs</li>
+</ul>
+<p>我们将展示</p>
+<ul>
+<li>Ossian如何与Merlin结合来构建一个<code>Swahili</code>声音而不需要任何语言专家，只需要转录语音</li>
+<li>引入Ossian的某些思路来管理，而不需要标注</li>
+</ul>
+<h4 id="1-1-1-Ossian-：Training-Data"><a href="#1-1-1-Ossian-：Training-Data" class="headerlink" title="1.1.1  Ossian ：Training Data"></a>1.1.1  Ossian ：Training Data</h4><p>我们仅需要UTF-8格式的文本和语音，同时匹配 <code>句子 除以 段落</code> 尺寸的chunks</p>
+<p><img src="/images/blog/merlin_tts_tch2_2.png" alt="TTS merlin技术路线"></p>
+<p><img src="/images/blog/merlin_tts_tch2_3.png" alt="TTS merlin技术路线"></p>
+<p><strong>utt文件</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;utt text &#x3D;&quot;Khartoum imejitenga na mzozo huo.&quot; waveform&#x3D;&quot;.&#x2F;wav&#x2F;pm_n2336.wav&quot;  utterance_name&#x3D;&quot;pm_n2236&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>其中<code>utterance_name=&quot;pm_n2236&quot;</code>是一个XML格式的发生结构，在训练集语料库为每个句子构建的。<br>其内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;utt text&#x3D;&quot;Khartoum imejitenga na mzozo huo.&quot; waveform&#x3D;&quot;.&#x2F;wav&#x2F;pm_n2236.wav&quot;</span><br><span class="line">utterance_name&#x3D;&quot;pm_n2236&quot; processors_used&#x3D;&quot;,word_splitter&quot;&gt;</span><br><span class="line">&lt;token text&#x3D;&quot;_END_&quot; token_class&#x3D;&quot;_END_&quot;&#x2F;&gt;</span><br><span class="line">&lt;token text&#x3D;&quot;Khartoum&quot; token_class&#x3D;&quot;word&quot;&#x2F;&gt;</span><br><span class="line">&lt;token text&#x3D;&quot; &quot; token_class&#x3D;&quot;space&quot;&#x2F;&gt;</span><br><span class="line">&lt;token text&#x3D;&quot;imejitenga&quot; token_class&#x3D;&quot;word&quot;&#x2F;&gt;</span><br><span class="line">&lt;token text&#x3D;&quot; &quot; token_class&#x3D;&quot;space&quot;&#x2F;&gt;</span><br><span class="line">&lt;token text&#x3D;&quot;na&quot; token_class&#x3D;&quot;word&quot;&#x2F;&gt;</span><br><span class="line">&lt;token text&#x3D;&quot; &quot; token_class&#x3D;&quot;space&quot;&#x2F;&gt;</span><br><span class="line">&lt;token text&#x3D;&quot;mzozo&quot; token_class&#x3D;&quot;word&quot;&#x2F;&gt;</span><br><span class="line">&lt;token text&#x3D;&quot; &quot; token_class&#x3D;&quot;space&quot;&#x2F;&gt;</span><br><span class="line">&lt;token text&#x3D;&quot;huo&quot; token_class&#x3D;&quot;word&quot;&#x2F;&gt;</span><br><span class="line">&lt;token text&#x3D;&quot;.&quot; token_class&#x3D;&quot;punctuation&quot;&#x2F;&gt;</span><br><span class="line">&lt;token text&#x3D;&quot;_END_&quot; token_class&#x3D;&quot;_END_&quot;&#x2F;&gt;</span><br><span class="line">&lt;&#x2F;utt&gt;</span><br></pre></td></tr></table></figure>
+<p>unicode字符属性用以无关语言的正则表达式来tokenise文本<br>正则表达式</p>
+<p><img src="/images/blog/merlin_tts_tch2_4.png" alt="TTS merlin技术路线"></p>
+<p>同时unicode用来将tokens分类为单词，空格和标点。</p>
+<h3 id="1-1-2-词性标注-POS-Tagging"><a href="#1-1-2-词性标注-POS-Tagging" class="headerlink" title="1.1.2 词性标注(POS Tagging)"></a>1.1.2 词性标注(POS Tagging)</h3><p><img src="/images/blog/merlin_tts_tch2_5.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch2_6.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch2_7.png" alt="TTS merlin技术路线"></p>
+<h4 id="4-1-3-分布式词向量作为POS-Part-Of-Speech-tag-替代品"><a href="#4-1-3-分布式词向量作为POS-Part-Of-Speech-tag-替代品" class="headerlink" title="4.1.3 分布式词向量作为POS(Part Of Speech) tag 替代品"></a>4.1.3 分布式词向量作为POS(Part Of Speech) tag 替代品</h4><p><img src="/images/blog/merlin_tts_tch2_8.png" alt="TTS merlin技术路线"><br>分别来看<br><img src="/images/blog/merlin_tts_tch2_9.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch2_10.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch2_11.png" alt="TTS merlin技术路线"></p>
+<p>将所有词映射到词向量空间<br><img src="/images/blog/merlin_tts_tch2_12.png" alt="TTS merlin技术路线"></p>
+<p>将词向量替代POS<br><img src="/images/blog/merlin_tts_tch2_13.png" alt="TTS merlin技术路线"></p>
+<p>以字母替代音素的标注文件<br><img src="/images/blog/merlin_tts_tch2_14.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch2_15.png" alt="TTS merlin技术路线"></p>
+<h3 id="4-2-强制对齐和-静音检测"><a href="#4-2-强制对齐和-静音检测" class="headerlink" title="4.2 强制对齐和 静音检测"></a>4.2 强制对齐和 静音检测</h3><p><img src="/images/blog/merlin_tts_tch2_16.png" alt="TTS merlin技术路线"></p>
+<h3 id="4-3-phrasing-短语"><a href="#4-3-phrasing-短语" class="headerlink" title="4.3 phrasing(短语)"></a>4.3 phrasing(短语)</h3><p><img src="/images/blog/merlin_tts_tch2_17.png" alt="TTS merlin技术路线"></p>
+<h2 id="5-语言特征工程：使用XPATHS-做flatten"><a href="#5-语言特征工程：使用XPATHS-做flatten" class="headerlink" title="5 语言特征工程：使用XPATHS 做flatten"></a>5 语言特征工程：使用XPATHS 做flatten</h2><p><img src="/images/blog/merlin_tts_tch2_18.png" alt="TTS merlin技术路线"><br>对应的详细标注<br><img src="/images/blog/merlin_tts_tch2_19.png" alt="TTS merlin技术路线"></p>
+<h2 id="6-语言特征和工程"><a href="#6-语言特征和工程" class="headerlink" title="6 语言特征和工程"></a>6 语言特征和工程</h2><p><img src="/images/blog/merlin_tts_tch2_20.png" alt="TTS merlin技术路线"></p>
+<h3 id="6-1-语言特征工程：flatten到上下文依赖的音素"><a href="#6-1-语言特征工程：flatten到上下文依赖的音素" class="headerlink" title="6.1 语言特征工程：flatten到上下文依赖的音素"></a>6.1 语言特征工程：flatten到上下文依赖的音素</h3><p><img src="/images/blog/merlin_tts_tch2_21.png" alt="TTS merlin技术路线"></p>
+<p>注意看左下角，<code>ao-th+er</code>，当前音素为<code>th</code>，其前缀为<code>ao</code>,后缀为<code>er</code>。进一步</p>
+<p><img src="/images/blog/merlin_tts_tch2_22.png" alt="TTS merlin技术路线"></p>
+<p>得到一个完整的音素标注。再进一步</p>
+<p><img src="/images/blog/merlin_tts_tch2_23.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch2_24.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch2_25.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch2_26.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch2_27.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch2_28.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch2_29.png" alt="TTS merlin技术路线"></p>
+<p>详细解释上面的标注文件</p>
+<p><img src="/images/blog/merlin_tts_tch2_30.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch2_31.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch2_32.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch2_33.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch2_34.png" alt="TTS merlin技术路线"></p>
+<p>一个句子的完整标注文件<br><img src="/images/blog/merlin_tts_tch2_35.png" alt="TTS merlin技术路线"></p>
+<h3 id="6-3-将每个上下文依赖的音素编码为向量"><a href="#6-3-将每个上下文依赖的音素编码为向量" class="headerlink" title="6.3 将每个上下文依赖的音素编码为向量"></a>6.3 将每个上下文依赖的音素编码为向量</h3><p><strong>示例</strong>：使用一个长度为1-40二进制码来编码quinphone</p>
+<p><img src="/images/blog/merlin_tts_tch2_36.png" alt="TTS merlin技术路线"></p>
+<p>对应的二进制码</p>
+<p><img src="/images/blog/merlin_tts_tch2_37.png" alt="TTS merlin技术路线"></p>
+<p>开始编码，以头<code>sil</code>开始：</p>
+<p><img src="/images/blog/merlin_tts_tch2_38.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch2_39.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch2_40.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch2_41.png" alt="TTS merlin技术路线"></p>
+<h3 id="6-4-语言特征工程：上采样到声学帧率-framerate"><a href="#6-4-语言特征工程：上采样到声学帧率-framerate" class="headerlink" title="6.4 语言特征工程：上采样到声学帧率(framerate)"></a>6.4 语言特征工程：上采样到声学帧率(framerate)</h3><p><img src="/images/blog/merlin_tts_tch2_42.png" alt="TTS merlin技术路线"></p>
+<h3 id="6-5-语言特征工程：添加音素内-within-phone-位置特征"><a href="#6-5-语言特征工程：添加音素内-within-phone-位置特征" class="headerlink" title="6.5 语言特征工程：添加音素内(within-phone)位置特征"></a>6.5 语言特征工程：添加音素内(within-phone)位置特征</h3><p><img src="/images/blog/merlin_tts_tch2_43.png" alt="TTS merlin技术路线"></p>
+<h2 id="7-时域到底来源于哪里"><a href="#7-时域到底来源于哪里" class="headerlink" title="7 时域到底来源于哪里"></a>7 时域到底来源于哪里</h2><p>先看脚本<br>02_prepare_labels.sh</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># alignments can be state-level (like HTS) or phone-level</span><br><span class="line">if [ &quot;$Labels&quot; &#x3D;&#x3D; &quot;state_align&quot; ]</span><br><span class="line">.&#x2F;scripts&#x2F;run_state_aligner.sh $wav_dir $inp_txt $lab_dir $global_config_file</span><br><span class="line">elif [ &quot;$Labels&quot; &#x3D;&#x3D; &quot;phone_align&quot; ]</span><br><span class="line">.&#x2F;scripts&#x2F;run_phone_aligner.sh $wav_dir $inp_txt $lab_dir $global_config_file</span><br><span class="line"># the alignments will be used to train the duration model later</span><br><span class="line">cp -r $lab_dir&#x2F;label_$Labels $duration_data_dir</span><br><span class="line"># and to upsample the linguistic features to acoustic frame rate</span><br><span class="line"># when training the acoustic model</span><br><span class="line">cp -r $lab_dir&#x2F;label_$Labels $acoustic_data_dir</span><br></pre></td></tr></table></figure>
+<p>run_state_aligner.sh</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#do prepare full-contextual labels without timestamps</span><br><span class="line">echo &quot;preparing full-contextual labels using Festival frontend...&quot;</span><br><span class="line">bash $&#123;WorkDir&#125;&#x2F;scripts&#x2F;prepare_labels_from_txt.sh $inp_txt $lab_dir $global_config_file $train</span><br><span class="line"># do forced alignment using HVite from HTK</span><br><span class="line">python $aligner&#x2F;forced_alignment.py</span><br></pre></td></tr></table></figure>
+<p>forced_alignment.py</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">aligner &#x3D; ForcedAlignment()</span><br><span class="line">aligner.prepare_training(file_id_list_name, wav_dir, lab_dir, work_dir, multiple_speaker)</span><br><span class="line">aligner.train_hmm(7, 32)</span><br><span class="line">aligner.align(work_dir, lab_align_dir)</span><br></pre></td></tr></table></figure>
+
+<h2 id="8-声学特征抽取和工程"><a href="#8-声学特征抽取和工程" class="headerlink" title="8 声学特征抽取和工程"></a>8 声学特征抽取和工程</h2><h3 id="8-1-为何我们使用声学特征抽取-波形waveform"><a href="#8-1-为何我们使用声学特征抽取-波形waveform" class="headerlink" title="8.1 为何我们使用声学特征抽取-波形waveform"></a>8.1 为何我们使用声学特征抽取-波形waveform</h3><ul>
+<li>音素 a: 的波形</li>
+</ul>
+<p><img src="/images/blog/merlin_tts_tch2_44.png" alt="TTS merlin技术路线"></p>
+<ul>
+<li>音素a:的magnitude spectrum（幅度频谱）</li>
+</ul>
+<p><img src="/images/blog/merlin_tts_tch2_45.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch2_46.png" alt="TTS merlin技术路线"></p>
+<h3 id="8-2-术语"><a href="#8-2-术语" class="headerlink" title="8.2 术语"></a>8.2 术语</h3><ul>
+<li>Spectral Envelope：频谱封装</li>
+</ul>
+<p><img src="/images/blog/merlin_tts_tch2_47.png" alt="TTS merlin技术路线"></p>
+<ul>
+<li>F0</li>
+</ul>
+<p><img src="/images/blog/merlin_tts_tch2_48.png" alt="TTS merlin技术路线"></p>
+<ul>
+<li>Aperiodic energy：非周期能量</li>
+</ul>
+<p><img src="/images/blog/merlin_tts_tch2_49.png" alt="TTS merlin技术路线"></p>
+<h3 id="8-5-典型声码器-WORLD"><a href="#8-5-典型声码器-WORLD" class="headerlink" title="8.5 典型声码器 WORLD"></a>8.5 典型声码器 WORLD</h3><ul>
+<li>语音特征<ul>
+<li>Spectral Envelope(使用CheapTrick评估)</li>
+<li>F0：使用DIO评估</li>
+<li>Band aperiodicties：使用D4C评估</li>
+</ul>
+</li>
+</ul>
+<h4 id="8-5-1-spectral-envelope-评估"><a href="#8-5-1-spectral-envelope-评估" class="headerlink" title="8.5.1 spectral envelope 评估"></a>8.5.1 spectral envelope 评估</h4><ul>
+<li>Hanning窗长度3T0</li>
+</ul>
+<p><img src="/images/blog/merlin_tts_tch2_50.png" alt="TTS merlin技术路线"></p>
+<ul>
+<li>使用一个<strong>长度为 2/3 F0</strong>移动平均过滤器</li>
+</ul>
+<p><img src="/images/blog/merlin_tts_tch2_51.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch2_52.png" alt="TTS merlin技术路线"></p>
+<ul>
+<li>使用一个<strong>长度为 2 F0</strong>移动平均过滤器</li>
+</ul>
+<p><img src="/images/blog/merlin_tts_tch2_53.png" alt="TTS merlin技术路线"></p>
+<ul>
+<li>$SpEnv= q_0logSp(F)+q1logSp(F+F0)+q1logSp(F-F0)$</li>
+</ul>
+<p><img src="/images/blog/merlin_tts_tch2_54.png" alt="TTS merlin技术路线"></p>
+<h4 id="8-5-3-F0-评估"><a href="#8-5-3-F0-评估" class="headerlink" title="8.5.3 F0 评估"></a>8.5.3 F0 评估</h4><p><img src="/images/blog/merlin_tts_tch2_55.png" alt="TTS merlin技术路线"></p>
+<h4 id="8-5-4-band-aperiodicities"><a href="#8-5-4-band-aperiodicities" class="headerlink" title="8.5.4 band aperiodicities"></a>8.5.4 band aperiodicities</h4><ul>
+<li>能量和非能量之间的比率，对固定频率bands取平均</li>
+<li>比如： 总功率/sine 波形功率(total power /sine wave power)</li>
+<li>示例中，此比例为<ul>
+<li>最低band： a</li>
+<li>更多band： b</li>
+<li>最高band： c</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/blog/merlin_tts_tch2_56.png" alt="TTS merlin技术路线"></p>
+<h3 id="8-6-声学特征工程"><a href="#8-6-声学特征工程" class="headerlink" title="8.6 声学特征工程"></a>8.6 声学特征工程</h3><p><img src="/images/blog/merlin_tts_tch2_57.png" alt="TTS merlin技术路线"></p>
+<p>原始声学特征与实际使用的声学特征</p>
+<p><img src="/images/blog/merlin_tts_tch2_58.png" alt="TTS merlin技术路线"></p>
+<p>抽取一部分来分析</p>
+<p><img src="/images/blog/merlin_tts_tch2_59.png" alt="TTS merlin技术路线"></p>
+<p>再细致来看</p>
+<p><img src="/images/blog/merlin_tts_tch2_60.png" alt="TTS merlin技术路线"></p>
+<p>处理步骤如下</p>
+<p><img src="/images/blog/merlin_tts_tch2_61.png" alt="TTS merlin技术路线"></p>
+<p>可以直接运行脚本<code>03_prepare_acoustic_features.sh</code>得到</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python $&#123;MerlinDir&#125;&#x2F;misc&#x2F;scripts&#x2F;vocoder&#x2F;$&#123;Vocoder,,&#125;&#x2F;</span><br><span class="line">extract_features_for_merlin.py $&#123;MerlinDir&#125; $&#123;wav_dir&#125; $&#123;feat_dir&#125; $SamplingFreq</span><br></pre></td></tr></table></figure>
+<p><code>extract_features_for_merlin.py</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"># tools directory</span><br><span class="line">world &#x3D; os.path.join(merlin_dir, &quot;tools&#x2F;bin&#x2F;WORLD&quot;)</span><br><span class="line">sptk &#x3D; os.path.join(merlin_dir, &quot;tools&#x2F;bin&#x2F;SPTK-3.9&quot;)</span><br><span class="line">if fs &#x3D;&#x3D; 16000:</span><br><span class="line">nFFTHalf &#x3D; 1024</span><br><span class="line">alpha &#x3D; 0.58</span><br><span class="line">elif fs &#x3D;&#x3D; 48000:</span><br><span class="line">nFFTHalf &#x3D; 2048</span><br><span class="line">alpha &#x3D; 0.77</span><br><span class="line">mcsize&#x3D;59</span><br><span class="line">world_analysis_cmd &#x3D; &quot;%s %s %s %s %s&quot; % (os.path.join(world, &#39;analysis&#39;), \</span><br><span class="line">filename,</span><br><span class="line">os.path.join(f0_dir, file_id + &#39;.f0&#39;), \</span><br><span class="line">os.path.join(sp_dir, file_id + &#39;.sp&#39;), \</span><br><span class="line">os.path.join(bap_dir, file_id + &#39;.bapd&#39;))</span><br><span class="line">os.system(world_analysis_cmd)</span><br><span class="line">### convert f0 to lf0 ###</span><br><span class="line">sptk_x2x_da_cmd &#x3D; &quot;%s +da %s &gt; %s&quot; % (os.path.join(sptk, &#39;x2x&#39;), \</span><br><span class="line">extract_features_for_merlin.py</span><br><span class="line">os.path.join(f0_dir, file_id + &#39;.f0a&#39;), \</span><br><span class="line">os.path.join(sptk, &#39;sopr&#39;) + &#39; -magic 0.0 -LN -MAGIC</span><br><span class="line">-1.0E+10&#39;, \</span><br><span class="line">os.path.join(lf0_dir, file_id + &#39;.lf0&#39;))</span><br><span class="line">os.system(sptk_x2x_af_cmd)</span><br><span class="line">### convert sp to mgc ###</span><br><span class="line">sptk_x2x_df_cmd1 &#x3D; &quot;%s +df %s | %s | %s &gt;%s&quot; % (os.path.join(sptk, &#39;x2x&#39;), \</span><br><span class="line">os.path.join(sp_dir, file_id + &#39;.sp&#39;), \</span><br><span class="line">os.path.join(sptk, &#39;sopr&#39;) + &#39; -R -m 32768.0&#39;, \</span><br><span class="line">os.path.join(sptk, &#39;mcep&#39;) + &#39; -a &#39; + str(alpha</span><br><span class="line">&#39; -m &#39; + str(</span><br><span class="line">mcsize) + &#39; -l &#39; + str(</span><br><span class="line">nFFTHalf) + &#39; -e 1.0E-8 -j 0 -f 0.0 -q 3 &#39;,</span><br><span class="line">os.path.join(mgc_dir, file_id + &#39;.mgc&#39;))</span><br><span class="line">os.system(sptk_x2x_df_cmd1)</span><br><span class="line">### convert bapd to bap ###</span><br><span class="line">sptk_x2x_df_cmd2 &#x3D; &quot;%s +df %s &gt; %s &quot; % (os.path.join(sptk, &quot;x2x&quot;), \</span><br><span class="line">os.path.join(bap_dir, file_id + &quot;.bapd&quot;), \</span><br><span class="line">os.path.join(bap_dir, file_id + &#39;.bap&#39;))</span><br><span class="line">os.system(sptk_x2x_df_cmd2)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2018-08-12-merlin-tts-techmap2/" data-id="ck4ifp1ml003v2wje4ac868ra" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2018-08-13-merlin-tts-techmap3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          merlin语音合成讲义三：系统回归
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2018-08-11-merlin-tts-techmap1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">merlin语音合成讲义一：技术路线概览</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

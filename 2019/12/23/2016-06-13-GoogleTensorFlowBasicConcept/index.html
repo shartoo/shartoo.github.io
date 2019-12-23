@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>谷歌TensorFlow基本概念 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="深度学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="谷歌TensorFlow基本概念">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2016-06-13-GoogleTensorFlowBasicConcept/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="深度学习">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/tensorflow_basicconcept.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.306Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.197Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/tensorflow_basicconcept.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2016-06-13-GoogleTensorFlowBasicConcept" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2016-06-13-GoogleTensorFlowBasicConcept/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.306Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      谷歌TensorFlow基本概念
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="start-up"><a href="#start-up" class="headerlink" title="start up"></a>start up</h1><h2 id="1-1-谷歌深度学习工具历史"><a href="#1-1-谷歌深度学习工具历史" class="headerlink" title="1.1 谷歌深度学习工具历史:"></a>1.1 谷歌深度学习工具历史:</h2><ol>
+<li>第一代：<strong>DistBelief</strong> 由 Dean于2011年发起，主要产品有：<ul>
+<li>Inception (图像识别领域)</li>
+<li>谷歌Search</li>
+<li>谷歌翻译</li>
+<li>谷歌照片</li>
+</ul>
+</li>
+<li>第二代：<strong>TensorFlow</strong> 由Dean于2015年11月发起，大部分DistBelief都转向了TensorFlow</li>
+</ol>
+<h2 id="1-2-产品特性"><a href="#1-2-产品特性" class="headerlink" title="1.2 产品特性"></a>1.2 产品特性</h2><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>编程模型</td>
+<td>类数据流的模型</td>
+</tr>
+<tr>
+<td>语言</td>
+<td>Python C++</td>
+</tr>
+<tr>
+<td>部署</td>
+<td>code once,run ererywhere</td>
+</tr>
+<tr>
+<td>计算资源</td>
+<td>cpu,gpu</td>
+</tr>
+<tr>
+<td>分布式处理</td>
+<td>本地实现，分布式实现</td>
+</tr>
+<tr>
+<td>数学表达式</td>
+<td>数学图表达式，自动分化</td>
+</tr>
+<tr>
+<td>优化</td>
+<td>自动消除，kernel 优化，通信优化，支持模式，数据并行</td>
+</tr>
+</tbody></table>
+<h2 id="1-3-计算图"><a href="#1-3-计算图" class="headerlink" title="1.3 计算图"></a>1.3 计算图</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line">b &#x3D; tf.Variable(tf.zeros([100]))                   # 100维的向量，都初始化为0</span><br><span class="line">w &#x3D; tf.Variable(tf.random_uniform([784,100],-1,1)) # 784x100的矩阵</span><br><span class="line">x &#x3D; tf.placeholder(name&#x3D;&quot;x&quot;)                       # 输入的占位符placeholder</span><br><span class="line">relu &#x3D; tf.nn.relu(tf.matmul(w,x)+b)                # Relu(Wx+b)</span><br><span class="line">C &#x3D;[...]                                           # 使用relu的一个函数计算代价</span><br></pre></td></tr></table></figure>
+<p>对应的计算图如下:<br><img src="/images/blog/tensorflow_basicconcept.png" alt="计算图"></p>
+<h2 id="1-4-Tensorflow的代码样例"><a href="#1-4-Tensorflow的代码样例" class="headerlink" title="1.4 Tensorflow的代码样例"></a>1.4 Tensorflow的代码样例</h2><ol>
+<li>构建数据流图的第一部分代码</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line">import numpy as np</span><br><span class="line"># 创建100个numpy的 x,y 假数据点，y &#x3D; x*0.1+0.3</span><br><span class="line">x_data &#x3D; np.random.rand(100).astype(&quot;float32&quot;)</span><br><span class="line">y_data &#x3D; x_data*0.1+0.3</span><br><span class="line"># 找出计算 y_data &#x3D;W*x_data+b的w和b的值，虽然我们知道w&#x3D;0.1,b&#x3D;0.3,但是tensorflow会找到并计算出来</span><br><span class="line">w &#x3D; tf.Variable(tf.random_uniform)</span><br></pre></td></tr></table></figure>
+
+<h1 id="2-tensorflow概览"><a href="#2-tensorflow概览" class="headerlink" title="2 tensorflow概览"></a>2 tensorflow概览</h1><p>要使用tensorflow的话，你需要理解以下概念:</p>
+<ul>
+<li>图代表了计算</li>
+<li>图需要在会话(Sessions)中执行</li>
+<li>张量(tensor)代表数据</li>
+<li>使用Variables来持有状态</li>
+<li>使用<strong>feeds</strong> 和 <strong>fetches</strong>来获得任何操作的输入输出数据</li>
+</ul>
+<p>tensorflow的概览</p>
+<ul>
+<li>一个将计算转化为图的编程系统</li>
+<li>图中的节点是：<ul>
+<li>操作(op):执行某些计算</li>
+<li>输入(input):一个或多个张量(tensorflow)</li>
+<li>Tensor张量：一个有类型的多维数组</li>
+</ul>
+</li>
+</ul>
+<h1 id="3-两个计算阶段"><a href="#3-两个计算阶段" class="headerlink" title="3 两个计算阶段"></a>3 两个计算阶段</h1><h2 id="3-1-在图中计算"><a href="#3-1-在图中计算" class="headerlink" title="3.1 在图中计算"></a>3.1 在图中计算</h2><ul>
+<li>图必须在Session中运行</li>
+<li>会话(Session)<ul>
+<li>将图操作放入到设备上，比如CPUs和GPUs</li>
+<li>提供执行方法</li>
+<li>返回操作产生的张量，比如python中的<strong>numpy ndarray对象</strong>，以及C和C++<strong>tensorflow::Tensor</strong>实例。</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-2-图中的两个计算阶段"><a href="#3-2-图中的两个计算阶段" class="headerlink" title="3.2 图中的两个计算阶段"></a>3.2 图中的两个计算阶段</h2><ol>
+<li><p>构建阶段</p>
+<ul>
+<li>形成图</li>
+<li>创建图来代表神经网络并训练这个神经网络</li>
+</ul>
+</li>
+<li><p>执行阶段</p>
+<ul>
+<li>使用会话执行途中的操作</li>
+<li>重复执行图中训练操作集合</li>
+</ul>
+</li>
+<li><p>构建图</p>
+</li>
+</ol>
+<ul>
+<li>开始那些不需要任何输入(source ops)的操作(op)，常量</li>
+<li>将它们的输出传入到其他做计算的操作</li>
+<li>操作构建者返回对象<ul>
+<li>代表了结构化操作的输出</li>
+<li>将这些输出传入其他操作构建者作为输入</li>
+</ul>
+</li>
+</ul>
+<ol start="4">
+<li><p>默认图</p>
+<p>将节点加入此图的操作构建者</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line"># 创建一个产生1x2的矩阵的常量操作，操作被作为节点加入到默认图</span><br><span class="line"># 构建者的返回值代表了常量操作的输出</span><br><span class="line">matrix1 &#x3D; tf.constant([[3,3.]])</span><br><span class="line"># 创建另外一个产生 2x1矩阵的常量操作</span><br><span class="line">matrix2 &#x3D; tf.constant([[2.0],[2.]])</span><br></pre></td></tr></table></figure>
+<p>   有三个节点：两个<strong>constant</strong>操作(ops)以及一个<strong>matmul</strong>操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 创建一个Matmul操作，将 matrix1和matrix2作为输入</span><br><span class="line"># 返回值，‘product’，代表了矩阵相乘的结果</span><br><span class="line">product &#x3D; tf.matmul(matrix1,matrix2)</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>在会话Session中运行图</li>
+</ol>
+<ul>
+<li>创建一个Session对象：应该在被关闭以释放资源</li>
+<li>没有参数，session构建者运行默认图</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 运行默认图</span><br><span class="line">sess &#x3D; tf.Session()</span><br><span class="line"># 要运行matmul操作，我们调用了session的‘run()’方法，传入&#39;producr&#39;代表了matmul操作的输出。这即回调了matmul操作的输出结果</span><br><span class="line"># 操作的输出以一个numpy的&#39;ndarray&#39;对象返回&#39;result&#39;</span><br><span class="line">result &#x3D; sess.run(product)</span><br><span class="line">print result</span><br><span class="line"># &#x3D;&#x3D;&gt;[[12.]]</span><br><span class="line">#关闭会话</span><br><span class="line">sess.close()</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>Session运行图，Session.run()方法执行操作</li>
+<li>一个Session块(block)<ul>
+<li>在块的结尾自动关闭<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">with tf.Session() as sess:</span><br><span class="line">    result &#x3D; sess.run([product])</span><br><span class="line">    print result</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>GPU的使用</li>
+</ol>
+<ul>
+<li>将图定义转换为分布在各种计算资源，比如CPU和GPU之间的可执行操作</li>
+<li>如果有GPU，tensorflow会有限使用GPU</li>
+</ul>
+<p>#4 交互使用</p>
+<ul>
+<li>在python环境中，比如Ipython,<strong>InteractiveSession</strong>类会被使用</li>
+<li><strong>Tensor.eval()</strong>和<strong>Operation.run()</strong></li>
+<li>这可以避免必须用一个变量来保持一个session</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># 进入一个交互的Tensorflow Session</span><br><span class="line">import tensorflow as tf</span><br><span class="line">sess &#x3D; tf.InteractiveSession()</span><br><span class="line"></span><br><span class="line">x &#x3D; tf.Variable([1.0,2.0])</span><br><span class="line">y &#x3D; tf.constant([3.0,3.0])</span><br><span class="line">#使用&#39;x&#39;的initializer的 run() 方法初始化</span><br><span class="line">x.initializer.run()</span><br><span class="line"></span><br><span class="line"># 添加一个操作从&#39;x&#39;中抽取&#39;a&#39;，执行并打印结果</span><br><span class="line">sub &#x3D; tf.sub(x,a)</span><br><span class="line">print sub.eval()</span><br><span class="line"># &#x3D;&#x3D;&gt;[-2,-1.]</span><br><span class="line"></span><br><span class="line"># 关闭session</span><br><span class="line">sess.close()</span><br></pre></td></tr></table></figure>
+
+<h1 id="5-张量-Tensors"><a href="#5-张量-Tensors" class="headerlink" title="5 张量(Tensors)"></a>5 张量(Tensors)</h1><ul>
+<li>Tensor(张量)数据结构代表了所有数据</li>
+<li>在计算图中只有张量在操作之间传递</li>
+<li>n维数组或者列表<ul>
+<li>静态类型，秩，或者 shape</li>
+</ul>
+</li>
+</ul>
+<p><strong>rank(秩)</strong></p>
+<table>
+<thead>
+<tr>
+<th>rank</th>
+<th>数学实体</th>
+<th>python示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>Scalar(大小)</td>
+<td>s =483</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Vector(大小和方向)</td>
+<td>v=[1.1,2.2,3.3]</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Matrix(数据表)</td>
+<td>m=[[1,2,3],[4,5,6],[7,8,9]]</td>
+</tr>
+<tr>
+<td>3</td>
+<td>3-Tensor(立方(cube)的数量)</td>
+<td>t=[[[2],[4],[6],[8]],[[10],[12]]]</td>
+</tr>
+<tr>
+<td>n</td>
+<td>n-Tensor</td>
+<td>同上</td>
+</tr>
+</tbody></table>
+<p><strong>shape</strong></p>
+<p>|Rank| Shape|维数|示例|<br>|—|—|—|<br>|0|[]|0-D|一个0-D张量，一个标量|<br>|1|[D0]|1-D|一个1-D张量，shape是[5]|<br>|2|[D0,D1]|2-D|一个2-D张量，shape是[3,4]|<br>|3|[D0,D1,D2]|3-D|一个3-D张量，shape[1,4,3]|<br>|n|[D0,D1,D2,…Dn]|n-D|一个n-D张量，shape是[D0,D1,…Dn]|</p>
+<p><strong>数据类型</strong></p>
+<table>
+<thead>
+<tr>
+<th>Data type</th>
+<th>python类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DT_FLOAT</td>
+<td>tf.float32</td>
+<td>32位浮点类型</td>
+</tr>
+<tr>
+<td>DT_DOUBLE</td>
+<td>tf.float64</td>
+<td>64位浮点类型</td>
+</tr>
+<tr>
+<td>DT_INT64</td>
+<td>tf.int64</td>
+<td>64位有符号整型</td>
+</tr>
+<tr>
+<td>DT_INT32</td>
+<td>tf.int32</td>
+<td>32位有符号整型</td>
+</tr>
+<tr>
+<td>DT_INT16</td>
+<td>tf.int16</td>
+<td>16位有符号整型</td>
+</tr>
+<tr>
+<td>DT_INt8</td>
+<td>tf.int8</td>
+<td>8位有符号整型</td>
+</tr>
+<tr>
+<td>DT_UINT</td>
+<td>tf.unit8</td>
+<td>8位无符号整型</td>
+</tr>
+<tr>
+<td>DT_STRING</td>
+<td>tf.string</td>
+<td>变量长度的字节数组，Tensor每个元素是一个字节数组</td>
+</tr>
+<tr>
+<td>DT_BOOL</td>
+<td>tf.bool</td>
+<td>Boolean</td>
+</tr>
+<tr>
+<td>DT_COMPLEX64</td>
+<td>tf.complex64</td>
+<td>由两个32位浮点数组成的复数，实数和大小部分</td>
+</tr>
+<tr>
+<td>DT_QINT32</td>
+<td>tf.qint32</td>
+<td>量化操作中32位有符号整型</td>
+</tr>
+<tr>
+<td>DT_QINT8</td>
+<td>tf.qint8</td>
+<td>量化操作中8位有符号整型</td>
+</tr>
+<tr>
+<td>DT_QUINT8</td>
+<td>tf.quint8</td>
+<td>量化操作中8位无符号整型</td>
+</tr>
+</tbody></table>
+<p>#6 变量<br>变量的创建、初始化、存储和载入</p>
+<ul>
+<li>为了持有和更新参数，在图中保持状态可以通过调用 <strong>run()</strong>方法</li>
+<li>内存buffer包含张量</li>
+<li>必须是明确初始化并且在训练期间和训练之后存储到磁盘上的</li>
+<li>类 <strong>tf.Variable</strong><ul>
+<li>构造器：变量的初始化值，一个任意类型和shape的张量</li>
+<li>构造之后，类型和shape都会固定</li>
+<li>使用<strong>assign</strong>操作op， validate_shape = False<h2 id="6-1-创建"><a href="#6-1-创建" class="headerlink" title="6.1 创建"></a>6.1 创建</h2></li>
+</ul>
+</li>
+<li>传入一个张量作为初始值到 Variable构造方法中</li>
+<li>初始值：常量constants,序列化和随机值<ul>
+<li>tf.zeros(),tf.linspace(),tf.random_normal()</li>
+</ul>
+</li>
+<li>固定shape：与操作的shape相同</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 创建两个变量</span><br><span class="line">weight &#x3D; tf.Variable(tf.random_normal([784,200],stddev&#x3D;0.35),name &#x3D;&quot;weights&quot;)</span><br><span class="line">biases &#x3D; tf.Variable(tf.zeros([200]),name &#x3D;&quot;biases&quot;)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>调用 tf.Variable() 加入操作到图中</li>
+</ul>
+<h2 id="6-2-初始化"><a href="#6-2-初始化" class="headerlink" title="6.2 初始化"></a>6.2 初始化</h2><ul>
+<li>添加一个操作并执行</li>
+<li>tf.initialize_all_variables()</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 添加一个操作来初始化变量</span><br><span class="line">init_op &#x3D; tf.initialize_all_variables()</span><br><span class="line"># 过后，执行model</span><br><span class="line">with tf.Session() as sess:</span><br><span class="line">    #运行初始化操作</span><br><span class="line">    sess.run（init_op）</span><br></pre></td></tr></table></figure>
+<h2 id="6-3-存储和恢复"><a href="#6-3-存储和恢复" class="headerlink" title="6.3 存储和恢复"></a>6.3 存储和恢复</h2><ul>
+<li><strong>tf.saver</strong></li>
+<li>检查点文件：Variables都存储在二进制文件中，该文件包含了一个变量名到张量值得map</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># 创建一些变量</span><br><span class="line">v1 &#x3D; tf.Variables(...,name &#x3D;&quot;v1&quot;)</span><br><span class="line">v2 &#x3D; tf.Variables(...,name&#x3D;&quot;v2&quot;)</span><br><span class="line">...</span><br><span class="line">#添加一个操作来初始化变量</span><br><span class="line">init_op &#x3D; tf.initialize_all_variables()</span><br><span class="line"></span><br><span class="line"># 添加操作来保存和恢复所有变量</span><br><span class="line">saver &#x3D; tf.train.Saver()</span><br><span class="line"># 然后，运行模型，初始化变量，做一些操作，保存变量到磁盘中</span><br><span class="line">with tf.Session() as sess:</span><br><span class="line">     sess.run(init_op)</span><br><span class="line">     # 对模型做一些操作</span><br><span class="line">    .....</span><br><span class="line">    #存储变量到磁盘中</span><br><span class="line">    save_path &#x3D; saver.save(sess,&quot;&#x2F;tmp&#x2F;model.ckpt&quot;)</span><br><span class="line">    print (&quot;Model saved in file: %s&quot;%save_path)</span><br></pre></td></tr></table></figure>
+<p>** 恢复**</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">with tf.Session() as sess:</span><br><span class="line">    # 从磁盘中恢复变量</span><br><span class="line">    saver.restore(sess,&quot;&#x2F;tmp&#x2F;model.ckpt&quot;)</span><br><span class="line">    print (&quot;Model restored&quot;)</span><br><span class="line">    # 做一些操作</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-4-选择哪些变量来存储和恢复"><a href="#6-4-选择哪些变量来存储和恢复" class="headerlink" title="6.4 选择哪些变量来存储和恢复"></a>6.4 选择哪些变量来存储和恢复</h2><ul>
+<li><p>在 ** tf.train.Saver()**中没有参数</p>
+<ul>
+<li>处理图中所有变量，每个变量都会被保存在该名字之下</li>
+</ul>
+</li>
+<li><p>存储和恢复变量的子集</p>
+<ul>
+<li>训练5层神经网络，想训练一个新的6层神经网络，从5层圣经网络中恢复参数</li>
+</ul>
+</li>
+<li><p>向<strong>tf.train.Saver()</strong>构造方法中传入一个Python词典:keys</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># 创建一些变量</span><br><span class="line">v1 &#x3D; tf.Variables(...,name &#x3D;&quot;v1&quot;)</span><br><span class="line">v2 &#x3D; tf.Variables(...,name &#x3D;&quot;v2&quot;)</span><br><span class="line"># 添加操作存储和恢复变量 v2,使用名字 &quot;my_v2&quot;</span><br><span class="line">saver &#x3D; tf.train.Saver(&#123;&quot;my_v2&quot;:v2&#125;)</span><br><span class="line"># 使用saver对象</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<h2 id="6-5-简单计数器的示例代码"><a href="#6-5-简单计数器的示例代码" class="headerlink" title="6.5 简单计数器的示例代码"></a>6.5 简单计数器的示例代码</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"># 创建一个变量，初始化为标量0</span><br><span class="line">state &#x3D; tf.Variables(0,name&#x3D;&quot;Counter&quot;)</span><br><span class="line"># 创建一个操作来给&quot;state&quot;加1</span><br><span class="line">one &#x3D; tf.constant(1)</span><br><span class="line">new_value &#x3D; tf.add(state,one)</span><br><span class="line">update &#x3D; tf.assign(state,new_value)</span><br><span class="line"></span><br><span class="line"># 在图被运行，变量必须是通过运行一个&quot;init&quot;操作被初始化。</span><br><span class="line"># 我们首先要将&quot;init&quot;操作加入到图中</span><br><span class="line">init_op &#x3D; tf.initialize_all_variables()</span><br><span class="line"></span><br><span class="line"># 运行图，和操作</span><br><span class="line">with tf.Session() as sess:</span><br><span class="line">    #运行 &#39;init&#39;操作</span><br><span class="line">    sess.run(init_op)</span><br><span class="line">    # 打印&#39;state&#39;的初始化值</span><br><span class="line">    print (sess.run(state))</span><br><span class="line">    # 运行更新&#39;state&#39;的操作，并打印&#39;state&#39;</span><br><span class="line">    for _ in range(3):</span><br><span class="line">        sess.run(update)</span><br><span class="line">        print (sess.run(state))</span><br><span class="line"># 输出</span><br><span class="line">#0</span><br><span class="line">#1</span><br><span class="line">#2</span><br><span class="line">#3</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-6-取数据Fetches"><a href="#6-6-取数据Fetches" class="headerlink" title="6.6 取数据Fetches"></a>6.6 取数据Fetches</h2><ul>
+<li>在Session对象中调用<strong>run()</strong>方法来执行图，并传入张量来取回数据</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">input1 &#x3D; tf.constant(3.0)</span><br><span class="line">input2 &#x3D; tf.constant(2.0)</span><br><span class="line">input3 &#x3D; tf.constant(5.0)</span><br><span class="line">intermed &#x3D; tf.add(input2,input3)</span><br><span class="line">mul &#x3D; tf.mul(input1,intermed)</span><br><span class="line"></span><br><span class="line">with tf.Session() as sess:</span><br><span class="line">     result &#x3D; sess.run([mul,intermed])</span><br><span class="line">     print (result)</span><br><span class="line"># 输出</span><br><span class="line"># [array([21.],dtype &#x3D; float32),array([7.],dtype &#x3D; float32)]</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-7-Feeds"><a href="#6-7-Feeds" class="headerlink" title="6.7 Feeds"></a>6.7 Feeds</h2><ul>
+<li>直接打包一个张量到图中的任何操作</li>
+<li>使用一个张量值临时替换一个操作的输出值</li>
+<li>feed数据作为<strong>run()</strong>方法的一个参数</li>
+<li>仅仅用来运行调用被传入值</li>
+<li><strong>tf.placeholder()</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">input1 &#x3D; tf.placeholder(tf.float32)</span><br><span class="line">input2 &#x3D;tf.placeholder(tf.float32)</span><br><span class="line">output &#x3D; tf.mul(input1,input2)</span><br><span class="line"></span><br><span class="line">with tf.Session() as sess:</span><br><span class="line">    print (sess.run([output],feed_dict &#x3D; &#123;input1:[7.],input2:[2.]&#125;))</span><br><span class="line"></span><br><span class="line">#输出</span><br><span class="line">#[array([14.],dtype&#x3D;float32)]</span><br></pre></td></tr></table></figure>
+
+<h1 id="7-操作"><a href="#7-操作" class="headerlink" title="7 操作"></a>7 操作</h1><table>
+<thead>
+<tr>
+<th>类别</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>逐元素数学运算</td>
+<td>Add,Sub,Mul,Div,Exp,Log,Greater,Less,Equal…</td>
+</tr>
+<tr>
+<td>数组操作</td>
+<td>Concat,Slice,Split,Constant,Rank,Shape,Shuffle..</td>
+</tr>
+<tr>
+<td>矩阵运算</td>
+<td>MatMul,MatrixInverse,MatrixDeterminant…</td>
+</tr>
+<tr>
+<td>状态操作</td>
+<td>Variable,Assign,AssignAdd…</td>
+</tr>
+<tr>
+<td>神经元构建块</td>
+<td>SoftMax,Sigmoid,ReLU,Convolution2D,MaxPool…</td>
+</tr>
+<tr>
+<td>检查点操作</td>
+<td>Save,Restore</td>
+</tr>
+<tr>
+<td>队列和同步操作</td>
+<td>Enqueue,Dequeue,MutexAcquire,MutexRelease,…</td>
+</tr>
+<tr>
+<td>控制流操作</td>
+<td>Merge,Switch,Enter,Leave,NextIteration</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2016-06-13-GoogleTensorFlowBasicConcept/" data-id="ck4ifp1lj000v2wjec7j2fhqq" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2016-06-30-ElasticSearchTest/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          elastic search 性能测试
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2016-03-16-bigdata-hadooplzo/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">hadoop lzo问题</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

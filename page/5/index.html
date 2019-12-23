@@ -1,0 +1,2698 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://shartoo.github.com/page/5/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-2017-07-12-fust_multi_view_face_detection" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2017-07-12-fust_multi_view_face_detection/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.517Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/23/2017-07-12-fust_multi_view_face_detection/">Funnel-structured cascade for multi-view face detection with alignmentawareness 论文阅读笔记</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一-简介"><a href="#一-简介" class="headerlink" title="一 简介"></a>一 简介</h2><p>  目前主流的三类人脸识别方法。</p>
+<ul>
+<li>最经典的是增强级联框架（boosted cascade framework）。这些检测器(detector)计算高效，可快速抽取特征。</li>
+<li>为了处理精确处理面部变化较大，DPM（deformable part models可变形部件模型）：用以同时抽取图像的全局和局部特征。它基于一种覆盖分类内部变化的启发式方法，因此对于图像中人物表情姿势的变化有较好鲁棒性。但是非常耗时。</li>
+<li>最新的是使用CNN卷积神经网络的方法。缺点是计算代价高，因为网络得复杂性和许多复杂的非线性操作。</li>
+</ul>
+<p>以上工作都没有考虑特殊场景，比如<strong>多角度人脸识别</strong>。为了多角度识别人脸，一种直接的方法就是并行使用多个人脸检测器(detector)。并行架构需要所有候选窗口被所有模型分类，这导致计算成本和误报率的飙升。为缓解此类问题，所有模型需要精心地训练，使模型具有较好的区分能力去辨别人脸和非人脸。</p>
+<p><img src="/images/blog/facedetect_model_2.jpg" alt="多模型"></p>
+<p>多视角的多模型可以如上图这样组织成树形或金字塔形。这些结构中，根分类器都是区分是否为人脸，接下来的其他分类模型将人脸按照不同的精细粒度分为不同子分类，这里的每个模型都是独立的。金字塔模型实际是将共享了某些高层节点的模型压缩了，因此金字塔模型与并行模型有一样的问题。树形结构分类器不同之处在于，分支的动机是避免在同一层评估所有的分类器，但是这会导致检测错误分类分支。</p>
+<p>为此我们提出了一种漏斗形级联的多视角人脸检测结构，获得较高准确率和较快速度。该结构上宽下窄，模型如下图。</p>
+<p><img src="/images/blog/fust_arch.jpg" alt="漏斗级联架构"></p>
+<p>模型的顶层是一些并行运行的，快速而粗粒度的分类器，用来快速地移除非人脸窗口。每个模型都是针对性地使用一小段区间范围的视角的人脸，因而可以保证多角度人脸的较高召回率。越往下，模型的区分能力越强，但是也越耗时，它们被用来筛选符合条件的窗口候选。模型的底部收集最后通过的窗口，最后一阶段是一个统一的多层干感知机。</p>
+<h2 id="二-漏斗结构级联的多视角人脸检测器"><a href="#二-漏斗结构级联的多视角人脸检测器" class="headerlink" title="二 漏斗结构级联的多视角人脸检测器"></a>二 漏斗结构级联的多视角人脸检测器</h2><p> 输入图像根据滑动窗口树状图扫描，然后每个窗口依次分阶段地穿过探测器。</p>
+<p> <strong>Fast LAB接连分类器</strong>用来快速移除大部分非人脸窗口，（LAB（Locally Assembled Binary））同时保证人脸窗口的较高召回率。<strong>Coarse MLP Cascade</strong>分类器以较低代价来进一步调整候选窗口。最后，统一<strong>Fine MLP Cascade</strong>分类器使用形状索引特征精确地区分人脸。</p>
+<h3 id="2-1-Fast-LAB-cascade"><a href="#2-1-Fast-LAB-cascade" class="headerlink" title="2.1 Fast LAB cascade"></a>2.1 Fast LAB cascade</h3><p> 实时人脸识别时，最大的障碍在于需要检验的滑动窗口树状图的候选窗口太多。在一个640x480的图像上，要检测脸特征尺寸超过20x20的人脸，需要检查超过一百万个窗口。使用增强级联分类器，由Yan et al提出了一种有效的LAB((Locally Assembled Binary)，只需要考虑Haar 特征的相对关系，并使用look-up（查阅表）加速。一个窗口中抽取一个LAB特征仅需要访问内存一次。我们可以使用LAB 特征，可以在程序开始时快速地移除占比非常大的非人脸特征。</p>
+<p> 尽管LAB 特征方法有速度，但是对于多角度人脸窗口的复杂变换表现较差。因此我们采取了一种分而治之的思路，将较难的多视角人脸问题分解为容易的单视角人脸检测问题。多个LAB 级联分类器，每个角度一个分类器，并行处理，然后最终的候选人脸窗口是所有经分类器筛选过后的结果合集。</p>
+<p> <strong>公式：</strong>定义整个包含了多角度人脸的训练集为 <strong><em>S</em></strong>，根据角度划分为 <strong><em>v</em></strong> 个子集，<br> 定义为 $S_i,i=1,2,…v$ 。对每个训练集 $S_i$ ,一个LAB级联分类器 $c_i$ 被训练，它用于检测第 $i$ 个角度的人脸。对于输入图像中的窗口 $x$ ，它是否为人脸取决于如下所有的LAB 级联分类器：</p>
+<p> $$<br>  y=c_i(x)\vee c_2(x)…\vee c_v(x)<br> $$</p>
+<p> 其中 $y \epsilon \lbrace0,1\rbrace$ ，$c_i(x)\epsilon \lbrace0,1\rbrace$ 表明 $x$ 是否为人脸。使用多模型消耗更多时间，但是所有模型共享相同的LAB特征映射（用来特征抽取）。</p>
+<h3 id="2-2-Coarse-MLP-cascade-粗粒度多层感知机级联"><a href="#2-2-Coarse-MLP-cascade-粗粒度多层感知机级联" class="headerlink" title="2.2  Coarse MLP cascade 粗粒度多层感知机级联"></a>2.2  Coarse MLP cascade 粗粒度多层感知机级联</h3><p>  LAB级联阶段之后，大部分非人脸窗口被抛弃，剩下的部分对于单个LAB 特征难以处理。因此，接下来，候选窗口将交给更复杂的分类器来处理，比如带 <strong>SURF（Speeded-up Robust Feature）</strong> 的MLP。为避免增加太多计算，小型网络被开发为更好，但是依旧粗粒度的校验。</p>
+<p>  此外，使用SURF特征的MLP用于窗口分类，可以更好的建模非线性多角度人脸和带有等同的非线性激活函数的非人脸模式。</p>
+<p>  MLP由输入层，输出层和一个或多个隐藏层组成。公式化n层的MLP如下:</p>
+<p>$$<br>  F(x)=f_{n-1}(f_{n-2}(…f_1(x)))\quad tag 2\<br>  f_i(z)=\sigma(W_iz+b_i)<br>$$</p>
+<p>其中 $x$   是输入，比如候选窗口的SURF特征； $W_i$ 和 $b_i$ 分别为链接第 $i$ 层和第 $i+1$ 层的权重和偏置。激活函数 $\sigma$ 形如： $\sigma (x)=\frac{1}{1+e^{-x}}$ ，从上式可以看出，隐藏层和输出都做了非线性变换。MLP的训练目标是最小化预测值和实际值之间的均方误差</p>
+<p>$$<br> min_F\sum_{i=1}^n \mid \mid F(x_i)-y_i \mid \mid ^2<br>$$</p>
+<p>其中 $x_i$ 是第 $i$ 个训练样本， $y_i$ 是对应的标签(0或1)。</p>
+<p>由于MLP级联分类器有足够能力建模人脸和非人脸变换，穿过多个LAB级联分类器之间的窗口可以由同一个模型处理，也即MLP级联可以连接多个LAB级联分类器。</p>
+<h3 id="2-3-带形状索引特征的细粒度MLP级联"><a href="#2-3-带形状索引特征的细粒度MLP级联" class="headerlink" title="2.3 带形状索引特征的细粒度MLP级联"></a>2.3 带形状索引特征的细粒度MLP级联</h3><p> 多视角人脸外貌之间存在一些冲突，主要源于非对齐特征，比如基于坐标抽取的特征存在语义不一致问题。比如，一个面向前方的人脸的中央区域包含了鼻子，但是面部外形也是脖子的一部分。为解决这个问题，我们采取了一种基于形状索引的方法在语义相同的位置上抽取特征作为细粒度MLP级联分类器的输入。如下图所示，选择了四个语义位置，分别对应的面部坐标是左、右眼中心，鼻尖和嘴中心。对于侧脸，不可见的眼部被视为与另外一只眼睛处于相同坐标。</p>
+<p><img src="/images/blog/fust_land.jpg" alt="人脸关键点检测"></p>
+<p>对于表情更丰富的基于形状索引的特征，更大、性能更强的非线性变换用来实现面部和非面部微调。与之前的不同的是，更大的MLPs同时预测标签，推测一个候选窗口是否为一张脸，推测其形状。一个额外的形状预测误差项加入到目标函数，新的优化问题变为如下：</p>
+<p>$$<br>min_F \sum_{i=1}^n \mid \mid F_c(\phi (x_i,\hat S_i))-y_i \mid \mid ^2+\lambda \sum_{i=1}^n \mid\mid F_s(\phi (x_i-\hat S_i))-s_i \mid\mid ^2_2<br>$$</p>
+<p>其中 $F_c$ 是面部分类输出， $F_s$ 是预测形状输出。 $\phi (x_i,\hat s_i)$ 代表的是基于形状索引的特征（比如SIFT），它是按照平均形状或预测形状为 $\hat s_i$ 从第 $i$ 个训练样本抽取的，其中 $s_i$ 是实际形状。 $\lambda$ 是平衡两类误差的权重因子，一般设置为 $\frac{1}{d}$，其中d为形状的维度。从上面的等式可以看出，可以获得一个比输入 $\hat s_i$更精确地外形 $F_s(\phi(x_i,\hat s_i))$ （注意看下标）。因此，多个级联的MLPs，用于特征抽取的形状越来越精确，这会获得更加有区分力的基于形状索引的特征，并且最后让多角度人脸与非人脸区域差异更大。下图展示了这一过程：</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2017-07-12-fust_multi_view_face_detection/" data-id="ck4ifp1md00352wje3uytexc5" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2017-06-12-sim_predict" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2017-06-12-sim_predict/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.516Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/23/2017-06-12-sim_predict/">近似推断</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一-问题描述"><a href="#一-问题描述" class="headerlink" title="一  问题描述"></a>一  问题描述</h2><p>*<em>如果我们有一组可见变量v，如何推断产生这些数据的模型m *</em></p>
+<p>难点：除了可见变量v，通常还有一系列的隐含变量h，模型由1）</p>
+<ul>
+<li><p>模型的类别ξ （如高斯分布，伽马分布，多项式分布等）与2）</p>
+</li>
+<li><p>模型的参数Θ 共同决定，即m (ξ, Θ ) 。</p>
+<p>模型的选择 :假设 H为所有可能的模型集合（包括不同类别），那么选择m=argmax{p(m(ξ, Θ) |v ), m ∈ M}，<br>上述问题的主要挑战在于计算p(h| v)或者计算在p(h| v)下的期望。</p>
+</li>
+</ul>
+<p><strong>为什么做近似推断</strong></p>
+<p>概率推断的核心任务就是计算某分布下的某个函数的期望、或者计算边缘概率分布、条件概率分布等等。这些任务往往需要积分或求和操作，但在很多情况下，计算这些东西往往不那么容易。因为，</p>
+<p>首先，积分中涉及的<strong>分布可能有很复杂的形式</strong>，这样就无法直接得到解析解；</p>
+<p>其次，我们要积分的<strong>变量空间可能有很高的维度</strong>，这样就把我们做数值积分的路都给堵死了。</p>
+<p>因此，进行精确计算往往是不可行的，需要引入一些近似计算方法。</p>
+<h2 id="二-近似推断的方法"><a href="#二-近似推断的方法" class="headerlink" title="二 近似推断的方法"></a>二 近似推断的方法</h2><h3 id="2-1-随机方法"><a href="#2-1-随机方法" class="headerlink" title="2.1 随机方法"></a>2.1 随机方法</h3><p>Gibbs采样法，通过大量的样本估计真实的后验，以真实数据为基础来近似目标分布。优点如下：</p>
+<p>更精确；而且采样过程相对简单；易于操作，有着良好的理论收敛性，并且实现更加简单。但是收敛速度较慢，难以判断收敛程度的问题</p>
+<h3 id="2-2-确定近似法：变分法"><a href="#2-2-确定近似法：变分法" class="headerlink" title="2.2 确定近似法：变分法"></a>2.2 确定近似法：变分法</h3><p>用一些已知的简单的分布来近似后验分布。</p>
+<p><strong>优点</strong>： 有解析解、计算开销较小、速度快、易于在大规模问题中应用。</p>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li><p>推导过程相对复杂，对人的要求高，</p>
+</li>
+<li><p>推导出想要的形式比较困难，也就是说，这些简单的分布到底能多大程度生近似目标分布呢？很难衡量。</p>
+</li>
+<li><p>只是优化对应分布之间的KL散度得到最终的结果，变分下界小于等于目标函数，所以在近似分布难以拟合的时候，其结果是严格小于目标函数的。容易造成结果的不精确</p>
+</li>
+</ul>
+<h2 id="三-近似后验分布学习"><a href="#三-近似后验分布学习" class="headerlink" title="三 近似后验分布学习"></a>三 近似后验分布学习</h2><h3 id="3-1-最大期望算法（EM算法）"><a href="#3-1-最大期望算法（EM算法）" class="headerlink" title="3.1 最大期望算法（EM算法）"></a>3.1 最大期望算法（EM算法）</h3><p><strong>概念：</strong> 期望最大算法是一种从不完全数据或有数据丢失的数据集（存在隐含变量）中求解概率模型参数的最大估计方法。</p>
+<p>我们都知道似然估计，主要是用来估计未知参数$\theta$ ，通常我们<strong>已知服从某种分布的样本</strong> $\lbrace x_1,x_2,…x_n\rbrace$。但是<strong>不知道样本参数$\theta$</strong> 。 我们估计 $\theta$ 的思想是，取得使似然函数最大的 $\theta$。所谓的似然函数，即出现这一样本集合的概率函数：</p>
+<p>$$<br>   L(\theta) = \prod _{i=1} ^{n} p(x_i;\theta)<br>$$</p>
+<p>其中的 $p_i$ 为每个样本出现的概率。累乘为同时出现的概率。</p>
+<p>通常取对数，使连乘变累加。</p>
+<p>$$<br>   H(\theta) = ln(L(\theta)) =\sum _{i=1} ^n ln(p(x_i;\theta))<br>$$</p>
+<p>最后求使得$H(\theta)$ 最大的 $\theta$ 值。通常是求导数，令导数为0，得到似然方程，解似然方程，得到的参数即为所求。</p>
+<p>EM算法实际上与似然估计很相似，但有一条，就是它不能确定样本来自哪个分布（可能有好几个分布，这些分布产生的样本混合在一起，不能确定样本来自哪个分布）</p>
+<p><strong>所以EM算法比似然估计多了个过程就是，首先要估计样本来自哪个分布。</strong></p>
+<p>假设我们想估计知道A和B两个参数，在开始状态下二者都是未知的，但如果知道了A的信息就可以得到B的信息，反过来知道了B也就得到了A。可以考虑首先赋予A某种初值，以此得到B的估计值，然后从B的当前值出发，重新估计A的取值，这个过程一直持续到收敛为止。</p>
+<p><strong>算法流程</strong>：</p>
+<ol>
+<li><p>第一步是计算期望（E），利用对隐藏变量的现有估计值，计算其极大似然估计值；</p>
+</li>
+<li><p>第二步是最大化（M），最大化在 E 步上求得的最大似然值来计算参数的值。</p>
+</li>
+</ol>
+<p><strong>示例</strong>：已知200人的身高数据，性别未知，求不同性别的身高分布。</p>
+<blockquote>
+<p>我们是先随便猜一下男生（身高）的正态分布的参数：如均值和方差是多少。例如男生的均值是1米7，方差是0.1米（当然了，刚开始肯定没那么准），然后计算出每个人更可能属于第一个还是第二个正态分布中的（例如，这个人的身高是1米8，那很明显，他最大可能属于男生的那个分布），这个是属于Expectation一步。有了每个人的归属，或者说我们已经大概地按上面的方法将这200个人分为男生和女生两部分，我们就可以根据之前说的最大似然那样，通过这些被大概分为男生的n个人来重新估计第一个分布的参数，女生的那个分布同样方法重新估计。这个是Maximization。然后，当我们更新了这两个分布的时候，每一个属于这两个分布的概率又变了，那么我们就再需要调整E步……如此往复，直到参数基本不再发生变化为止。</p>
+</blockquote>
+<h4 id="3-1-1-EM算法的推导过程"><a href="#3-1-1-EM算法的推导过程" class="headerlink" title="3.1.1 EM算法的推导过程"></a>3.1.1 EM算法的推导过程</h4><p>假设我们有一个样本集 $\lbrace x_1,x_2,…,x_m\rbrace。包含m个独立的样本。但是<strong>每个样本$i$对应的类别未知</strong>，也即隐含变量。故我们需要估计概率模型 $p(x,z)$ 的参数 $\theta$ ，但是由于里面包含了隐含变量z，所以很难用最大似然求解。但是如果知道Z，就很容易求解了。</p>
+<p>对于参数估计，我们本质上还是想获得一个使似然函数最大化的那个参数$\theta$。现在与最大似然不同的只是似然函数式多了一个未知变量z。我们的目标变成找到合适的 $\theta$ 和 z，让$L(\theta)$ 最大。</p>
+<p>$$<br> \sum _i log P(x^{(i)};\theta)= \sum _i log\sum _{z^{(i)}}P(x^{(i)},z^{(i)};\theta) \<br> \sum _i log _{z^{(i)}}Q_i (z^{(i)})\frac{P(x^{(i)}),z^{(i)}\theta}{Q_i(z^{(i)})} \<br> \ge \sum _i\sum _{z^{(i)}} Q_i (z^{(i)}) log\frac{P(x^{(i)}),z^{(i)}\theta}{Q_i(z^{(i)})}<br>$$</p>
+<p>上式右边，第一行式子。这里z也是随机变量。对每一个样本i的所有可能类别z求等式右边的联合概率密度函数和，也就得到等式左边为随机变量x的边缘概率密度</p>
+<p>上式右边，第二行式子。只是分子分母同乘以一个相等的函数，还是有“和的对数”，无法求解。</p>
+<p>上式右边，第三行式子。变成了“对数的和”，那这样求导就容易，此处的等号变为不等号源于Jense不等式。</p>
+<h4 id="3-1-2-Jensen不等式"><a href="#3-1-2-Jensen不等式" class="headerlink" title="3.1.2 Jensen不等式"></a>3.1.2 Jensen不等式</h4><p>如果f是凸函数，X是随机变量，那么：E[f(X)]&gt;=f(E[X])</p>
+<p>特别地，如果f是严格凸函数，当且仅当X是常量时，上式取等号。</p>
+<p><img src="/images/blog/jensen_fourma.jpg" alt="公式"></p>
+<p>实线f是凸函数，X是随机变量，有0.5的概率是a，有0.5的概率是b。（就像掷硬币一样）。X的期望值就是a和b的中值了，图中可以看到E[f(X)]&gt;=f(E[X])成立。<strong>Jensen不等式应用于凹函数时，不等号方向反向。</strong></p>
+<p>回到EM算法推导的第二个式子，因为$f(x)=logx$ 为凹函数（其二次导数为 $-\frac{1}{x^2}&lt;0$  。式子中 $log _{z^{(i)}}Q_i (z^{(i)})\frac{P(x^{(i)}),z^{(i)}\theta}{Q_i(z^{(i)})}$ 是 $frac{p(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})}$的期望（考虑到 $E(x)=\sum x\star p(x)）$ ,则$E(f(x))=\sum f(x)\starp(x)$ )。 而 $\sum_zQ_i(z^{(i)})=1 $</p>
+<p>上式中，我们让 $Q_i$ 表示样本的隐含变量$z$ 的某种分布。$Q_i$满足的条件是 $\sum_z Q_i(z)=1,Q_i(z)\ge 0$。（如果z是连续性的，那么$Q_i$是概率密度函数，需要将求和符号换做积分符号）。比如要将班上学生聚类，假设隐藏变量z是身高，那么就是连续的高斯分布。如果按照隐藏变量是男女，那么就是伯努利分布了。</p>
+<p>参考:</p>
+<p><a href="http://blog.csdn.net/zouxy09/article/details/8537620/" target="_blank" rel="noopener">从最大似然到EM算法浅解</a></p>
+<p><a href="http://www.cnblogs.com/jerrylead/archive/2011/04/06/2006936.html" target="_blank" rel="noopener">JerryLead The EM algorithm</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2017-06-12-sim_predict/" data-id="ck4ifp1mb002x2wjedcbd2oif" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2017-04-20-texttospeech" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2017-04-20-texttospeech/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.515Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/23/2017-04-20-texttospeech/">语音合成步骤</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>译自：A beginners’ guide to statistical parametric speech synthesis</p>
+<h2 id="一-语音合成-Text-To-Speech-TTS-概述"><a href="#一-语音合成-Text-To-Speech-TTS-概述" class="headerlink" title="一  语音合成(Text-To-Speech)TTS 概述"></a>一  语音合成(Text-To-Speech)TTS 概述</h2><p>TTS系统的输入是文本，输出为语音waveform。TTS一般分为两部分。第一部分将文本转换为语言规范，第二部分使用此规范来生成waveform。这种划分带来的好处是，系统前端基本是语言规范相关的，而waveform生成可以独立于语言。</p>
+<p>文本转换为语言规范一般使用序列的分离处理和多种内部中间表征来完成。</p>
+<p>本文主要讨论的是使用统计参数方法来合成语音。</p>
+<h2 id="二-从声码到合成"><a href="#二-从声码到合成" class="headerlink" title="二  从声码到合成"></a>二  从声码到合成</h2><p>关于语音合成的描述一般是以一种程序式的眼光：通常将文本转换为语音转化为简单的pipeline结构。但是，其他方法认为语音合成是从声码器开始的，语音信号被转换为某些可以被传递的表征。声码器如下图</p>
+<p><img src="/images/blog/voice_encoder1.png" alt="声码1"></p>
+<p>我们可以将语音合成看做类似的架构，但是其中的参数化的语音的传递应该替换为存储。如下图:</p>
+<p><img src="/images/blog/voice_encoder2.png" alt="声码1"></p>
+<p> 后面再解释参数化和生成对应语音waveform。</p>
+<p>此系统包含训练和合成两个阶段。训练阶段，存储的form由语音库(训练数据)获得。通过以语言规范索引这些存储的form，可以实现仅以语言规范作为输入，语音waveform为输出的合成系统。</p>
+<p>存储的form可以是语音数据本身或者从数据中得到的统计模型。</p>
+<h2 id="2-1-语言规范"><a href="#2-1-语言规范" class="headerlink" title="2.1 语言规范"></a>2.1 语言规范</h2><p>由上文可知，输入为语言规范。这可以很简单，比如音素序列，但是为了更好的结果，它需要包含超分段信息，比如产生语音的韵律模式。换句话说，语言规范包含了全部的影响声学模型实现的音素。</p>
+<p>如何理解语言规范，我们可以以单词<code>speech</code>为例。语言规范需要涵盖可能影响这个原因声音的所有信息。即，它要包含出现此元音的全部上下文信息。此例子中，重要的情景因素包括前面的双边清音爆破（着会影响元音的共振峰轨迹）和此元音位于单音节词内（影响元音的存续时间）等等。</p>
+<p>情景自然会包含相同单词相同发音内的因素，比如周围音素，单词和韵律模式，但是可能会拓展到周围发声，并进一步到协同因素如讲话者的心情或者听者的身份。对话语料中，上下文可能需要包含与其他讲话者的因素。实际上，大部分系统只考虑发声内部的因素。下表列出了在典型系统中会考虑的上下文因素:</p>
+<table>
+<thead>
+<tr>
+<th>上下文因素</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Preceding and following phonemes</td>
+</tr>
+<tr>
+<td>Position of segment in syllable</td>
+</tr>
+<tr>
+<td>Position of syllable in word &amp; phrase</td>
+</tr>
+<tr>
+<td>Position of word in phrase</td>
+</tr>
+<tr>
+<td>Stress/accent/length features of current/preceding/following syllables</td>
+</tr>
+<tr>
+<td>Distance from stressed/accented syllable</td>
+</tr>
+<tr>
+<td>POS of current/preceding/following word</td>
+</tr>
+<tr>
+<td>Length of current/preceding/following phrase</td>
+</tr>
+<tr>
+<td>End tone of phrase</td>
+</tr>
+<tr>
+<td>Length of utterance measured in syllables/words/phrases</td>
+</tr>
+</tbody></table>
+<p>列出的因素对每个语音声音有潜在的影响。考虑到每个因素可能的取值数量（比如preceding phoneme可能有多达50个不同取值）以及排序的数量，很明显，即便只考虑语言学成立的组合，不同情景的数量巨大。但不是所有因素在所有时刻都有影响。实际上，我们希望少量因素在任意时刻都有显著影响。这可以显著减少情景。关键问题，我们会在第四节再看，它来决定哪个因素在何时比较重要。</p>
+<p>对每个将要合成的句子，前端需要做的是从文本预测语言规范。需要任务都需要由前端完成（比如，从拼写来预测发音），这些都是与特定语言相关的。</p>
+<h3 id="2-2-基于示例的模型"><a href="#2-2-基于示例的模型" class="headerlink" title="2.2 基于示例的模型"></a>2.2 基于示例的模型</h3><p>基于示例的语音合成系统简单的存储语音库，整个语料库或选择的一部分。使用语言规范来索引此类存储的form即给存储的语音数据打标签，使得其合适的部分得以被知晓，在合成阶段抽取、连接即可。<br>在典型的单元选取系统，打标签包含了对齐语音和韵律信息。恢复过程不是不重要，由于合成时所需的抽取规范在语料中不存在，所以需要在众多轻微的不匹配单元中做出选择。语音应该被存储为waveform或者其他适合拼接的表征形式，比如残差激活的LPC。</p>
+<h3 id="2-3-基于模型的系统"><a href="#2-3-基于模型的系统" class="headerlink" title="2.3 基于模型的系统"></a>2.3 基于模型的系统</h3><p>基于模型的系统并不存储任何语音。相反，它在训练期间将模型适配语音库，并存储模型。模型将按照独立的语音单元构建，比如情景依赖的音素：这样模型就能被语言规范索引。在合成阶段，合适的情景依赖模型序列被检索到并用来生成语音。由于只有有限数量的训练数据，某些模型的缺失，这可能没法检索到。因而有可能对任意所需语言规范创建on-the-fly(直接使用的)模型。这可以通过在足够多的相似模型间共享参数完成。</p>
+<h3 id="2-4-索引存储的form"><a href="#2-4-索引存储的form" class="headerlink" title="2.4 索引存储的form"></a>2.4 索引存储的form</h3><p>为了让存储的form，无论是语音或模型，能够被语言规范索引到，有必要为语音语料库中的每个发声产生语言规范。人工标签可以，但是不现实，也太费钱。常见的方法是，使用与合成句子语音时相同的前端，基于文本对应的语音语料库来预测语言规范。这可能与讲话者不是最佳匹配。</p>
+<p>然而，一些从自动语音识别方法借鉴过来的基于强制对齐的技术，可以用来提高打标签的准确率，包括自动识别真的停顿位置和一些发音变化。</p>
+<h2 id="三-语音合成的统计参数模型"><a href="#三-语音合成的统计参数模型" class="headerlink" title="三 语音合成的统计参数模型"></a>三 语音合成的统计参数模型</h2><p>我们谈及基于模型的语音合成时，尤其指从数据中学习模型时，我们通常指的是统计参数模型。模型的<code>参数化</code>是因为它使用参数来描述语音，而不是存储的模板。称为<code>统计</code>是因为使用统计项来描述这些参数(比如，概率密度函数的均值和方差)，这些统计项是从训练数据中的参数值分布习得的。</p>
+<p>站在历史的角度上看，统计参数语音合成源于HMM在语音识别中的成功。没人可以说HMM就是语音的真实模型。但是其有效的学习算法(EM)，模型复杂度控制(parameter tying)的自动方法和高效计算的搜索算法(Viterbi search)使得HMM称为一个非常强力的算法。至于评估模型的性能，语音识别使用的是单词错误率，而在语音合成通过听力测试，这非常依赖于合适的配置。这个配置中两个重要的方面是语音信号的参数化(HMM术语中的模型的观察值)和建模单元的选取。由于建模单元基本是上下文依赖的音素，此选取即将哪些上下文因素考虑在内。下表概述了自动语音识别和语音合成的参数配置的差异:</p>
+<p><strong>Comparison of Hidden (Semi) Markov Model configurations for recognition vs. synthesis</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>recognition</th>
+<th>synthesis</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>observations</td>
+<td>spectral envelope represented using around 12 parameters</td>
+<td>spectral envelope represented using 40-60 parameters, plus source features</td>
+</tr>
+<tr>
+<td>modelling unit</td>
+<td>triphone, considering preceding and following phoneme</td>
+<td>full context, considering preceding two and succeeding two phonemes plus all other context features listed in Table 1</td>
+</tr>
+<tr>
+<td>duration model</td>
+<td>state self-transitions</td>
+<td>explicit parametric model of state duration</td>
+</tr>
+<tr>
+<td>parameter estimation</td>
+<td>Baum-Welch</td>
+<td>Baum-Welch, or Trajectory Training</td>
+</tr>
+<tr>
+<td>decoding</td>
+<td>Viterbi search</td>
+<td>not usually required</td>
+</tr>
+<tr>
+<td>generation</td>
+<td>not required</td>
+<td>Maximum-likelihood parameter generation</td>
+</tr>
+</tbody></table>
+<h3 id="3-1-信号表征"><a href="#3-1-信号表征" class="headerlink" title="3.1 信号表征"></a>3.1 信号表征</h3><p>语音信号由在固定帧率(frame rate)的声码器参数集表征。典型的表征可能对每个帧使用40-60个参数来代表频谱包装(envelope),F0（基准频率）的值和5个描述非周期激发的频谱包装的参数。训练模型之前，声码器的编码阶段用来抽取向量，该向量包含了语音信号中的声码参数，5秒的帧率。在合成阶段，整个向量由模型生成，然后用于驱动声码器的输出。</p>
+<p>从原理上讲，任何声码器都可以用于基于HMM的语音合成，只需要它能提供的参数足以高质量的重建语音信号并且这些参数可以在训练阶段自动抽取。这可能类似于一个共振峰。然而，由于参数可以被统计建模，一些声码器可以比其他的声码器表现的更好。出现在统计建模中的基本操作是平均训练阶段的声码器参数以及生成的新值（我们可以将其类比于在训练数据中获取的插值和外推法的值）。因此，在这种操作下声码器的参数值必须是表现较好并且不会导致不稳定的值。例如，线谱对可能比现行预测参数更好的表征，因为前者在插值下表现较好，而后者可能会导致不稳定的过滤。</p>
+<p>一种流行的广泛应用于HMM合成的声码器是STRAIGHT (Speech Transformation and Representation using Adaptive Interpolation of weiGHTed spectrum)。我们可以说，STRAIGHT可以处理上述所需属性并且在实际应用中表现较好。</p>
+<h3 id="3-2-术语"><a href="#3-2-术语" class="headerlink" title="3.2 术语"></a>3.2 术语</h3><h4 id="3-2-1-HSMMs而非HMMs"><a href="#3-2-1-HSMMs而非HMMs" class="headerlink" title="3.2.1 HSMMs而非HMMs"></a>3.2.1 HSMMs而非HMMs</h4><p>在统计参数合成语音中所使用的模型大部分其实完全不是HMMs。HMM中的持续时间模型(duration model,比如说自转换)相当简单，而且高质量的语音合成需要更好的持续时间模型。一旦加入一个明确的持续时间模型加入到HMM，它不再是一个马尔科夫模型了。模型现在是<strong>半马尔科夫</strong>–状态之间的转换依然存在，但是每个状态的明确的持续时间模型不是马尔科夫。此时模型为半隐马尔可夫模型(Hidden Semi-Markov Model)，或者说是HSMM。不过我们言及HMM语音合成时，一般实际指的是HSMM语音合成。</p>
+<h4 id="3-2-2-标签和上下文"><a href="#3-2-2-标签和上下文" class="headerlink" title="3.2.2 标签和上下文"></a>3.2.2 标签和上下文</h4><p>前面描述的语言规范是一个复杂的、结构化的表征；它可能包含列表、树、和其他有用于语言学的结构。基于HMM的语音合成即从模型的线性序列中生成语音，其中每个模型对应了一个指定的语言单元类型。<br>因此，有必要将结构化的语言规范flatten到线性序列的标签。可以通过附加其他所有的语言信息(关于音节结构，韵律等)到语言规范中的音素上，其结果是线性的上下文依赖的音素序列。根据这些全上下文标签，可以挖掘对应的HMMs序列，从这里可以生成语音。</p>
+<h4 id="3-2-3-Statics-deltas-and-delta-deltas"><a href="#3-2-3-Statics-deltas-and-delta-deltas" class="headerlink" title="3.2.3 Statics, deltas and delta-deltas"></a>3.2.3 Statics, deltas and delta-deltas</h4><p>声码器的输出阶段和产生语音仅需要声码器参数。然而，使用HMMs合成听起来自然的语音的关键取决于，不仅是给这些参数的统计分布建模，而且还有建模其变化频率，比如速度，声码器参数即static coefficients(静态系数)以及它们的一阶导数即delta系数。实际上，通过建模加速度(modelling acceleration)，可以获得delta-delta系数。</p>
+<p>这三种类型的参数被堆叠在一个观察向量中。训练期间，模型学习这些参数的分布。合成阶段，模型生成有合适统计属性的参数的轨迹。</p>
+<h3 id="3-3-训练"><a href="#3-3-训练" class="headerlink" title="3.3 训练"></a>3.3 训练</h3><p>如语音识别一样，HMMs合成必须在标签数据上训练。标签必须是如上文描述的全上下文标签，它们由2.4节所描述的方法产生。</p>
+<h3 id="3-4-合成"><a href="#3-4-合成" class="headerlink" title="3.4 合成"></a>3.4 合成</h3><p>合成阶段只给文本作为输入，如下处理。</p>
+<p>首先，输入文本被分析并产生全上下文标签的序列。模型的序列对应了此标签序列，然后连接成一个长的状态链。从这个模型，声码器参数使用下文算法生成。最终，生成的声码器参数被用来驱动声码器的输出阶段来产生语音waveform。</p>
+<p><strong>从模型中生成参数</strong>：最大似然概率被用作从模型中生成观测值序列。首先，我们考虑使用直白的方法来做这个，然后看到这会产生不自然的参数轨迹。然后，再使用实际所使用的方法。注意到<code>参数</code>项被指为模型的输出，而不是模型的参数（高斯分布的均值和方差）。</p>
+<p><strong>持续时间</strong>：在直白的方法和下文描述的 MLPG算法，其持续时间(比如，由模型的每个状态生成的参数的帧的数目)都是提前决定的，它们是简化的确定状态持续时间分布的均值。</p>
+<p><strong>直白方法的参数生成</strong>：此方法生成每个状态的最可能的观测值，它只考虑统计参数。最可能的观测值当然是那个状态的高斯均值。因此这个方法生成分段的常量参数轨迹，它会突兀的改变每个状态转换处的值。显然，当用做驱动声码器时，这听起来会不自然。这个问题将由MLPG算法解决。</p>
+<p><strong>MLP最大似然参数生成算法</strong>：上述方法忽略了自然语音中参数轨迹的非常重要的一个方面。它只考虑了静态(static)参数的统计属性。但是在自然语音中，它不仅是声码器参数以固定方式呈现的绝对值，它还包含了改变值的速度。我们需要将delta系数的统计属性也考虑在内。实际上，我们还可以考虑delta-delta系数的统计属性。下图演示了MLPG算法:</p>
+<p><img src="/images/blog/max_likehood_speech.png" alt="最大似然状态生成"></p>
+ <p align="Center">最大似然参数生成：从离散的分布序列，将delta系数和delta-delta系数统计属性考虑在内，来生成平滑的轨迹</p>
+
+<p>HMM已经被构建：是对全上下文标签序列的所对应的模型的拼接，其本身已经被前端工具从文本中预测。在生成参数之前，使用持续时间模型选取了状态序列。这会决定模型中每个状态将会生成多少帧。上图展示了每个状态的一帧一帧的输出分布的序列。MLPG根据静态参数、delta、delta-delta分布找到最大可能的生成的参数的序列。此图只给第0个倒谱系数($c(0)$ )，但是对所有由模型生成的参数使用相同的规律，比如<code>F0</code>。</p>
+<p>理解MLPG算法生成的东西的最简单的方法是，考虑一个例子：在图中找到一个$\delta c(0)$为正的区域：静态参数 $c(0)$在该点处于上升，它有正的斜率。因此，静态系数的统计属性是分段常量，最可能的参数轨迹是以一种合适的方式平滑变动的。</p>
+<h2 id="四-生成新语音：未预见的上下文"><a href="#四-生成新语音：未预见的上下文" class="headerlink" title="四 生成新语音：未预见的上下文"></a>四 生成新语音：未预见的上下文</h2><p>生成语音的关键问题在于生成我们没有在自然状态下录制的语音。这就需要从更小单元（从模型拼接或生成）来构建语音。由于我们未曾预见一模一样的上下文环境的此类单元，此问题可以被描述为，从由训练集数据观察到的有限上下文集合泛化为几乎无限的未出现的上下文。</p>
+<p>是否语料库够大就可以覆盖所有经常出现的上下文，不幸的是并不是这样。</p>
+<p>显而易见的原因是，从表1可以知道有极其丰富的上下文，这会导致两个问题。首先，由于上下文横跨整个语音，语音语料库中每个上下文依赖的单元的出现几乎是唯一的：它只会出现一次（假设不存在重复的句子）。其二，海量的大多数可能的上下文依赖的单元将永不会在语音语料库中出现：语料库对语言只有很稀疏的覆盖。</p>
+<p>即便暂时不考虑这种海量的上下文依赖，语料库中任意语言单元（比如，音素，音节，单词）分布远不能正态化。它有低频或0频率的长尾。换句话说，有很多类型的单元将会仅仅出现一次或者完全不在语料库中。此现象即大量稀有事件。尽管每种类型稀少，但是有太多的类型，这会导致还是很可能碰上。对于任意将要合成的语音，有很高的概率需要一些很稀有的单元类型（比如，上下文依赖的音素）。没有有限的语料库可以覆盖我们所需的全部的稀有类型，因此简单的增加语料库于事无补。</p>
+<p>我们可以将此问题看做 从有限训练数据中泛化的问题，这就形成了一种模型复杂度控制形式的方法。</p>
+<h3 id="4-1-泛化"><a href="#4-1-泛化" class="headerlink" title="4.1 泛化"></a>4.1 泛化</h3><p>常用方法，尤其是自然语言，是一个上文提到的长尾分布（类似Zipf分布）。即，数据中少量类型有较多实例，而大量类型仅有很少或者没有实例。这使得直接给稀有或者未观测到的类型建模不可能，因为实例太少无法学到任何东西。这在语音合成中必然会遇到，其中的类型是上下文中的音素。</p>
+<p>给数据打标签可以减少类型的数目进而转移这个问题，在语音合成中即减少考虑的情景因素的数目。但是，我们并没有先验知识知道哪些情景因素可以被移除，哪些应该被保留，因为它们对问题中的音素的实现有很大影响。更进一步说，哪些情景因素比较重要是随着复杂的交互结合变化的。</p>
+<p>一种较好的解决办法是继续使用大量的类型来给数据打标签并控制模型的复杂度，而不是控制标签的复杂度。 在常见的基于HMM的合成方法的控制模型复杂度的方法是借鉴自自动语音识别，并有关在相似模型中共享（或者tying）参数，以达到：</p>
+<ol>
+<li><p>合适的模型复杂度（例如，数据里合适数量的自由参数）</p>
+</li>
+<li><p>对那些仅有较少实例的更好的参数评估</p>
+</li>
+</ol>
+<p>3.对于完全没有的实例的参数评估方法。</p>
+<p>为了决定哪些模型足够相似（可用共享参数），再次考虑这些情景因素。由于（我们也这么期望）在任意时刻都只需要考虑少量因素，我们可以专注于一个情景依赖模型的集合，其中每个模型，只需要考虑相关情景。情景依赖的数量可能不同的模型也不一样。结果便是，只有被训练数据所支撑的上下文差异可以被建模。没有影响的上下文因素被丢弃，根据模型的偏差。一个简单示例，想象前音素的identity对于实现[S ]没有显著影响，但是接下来的音素的identity对其有影响。这种情况，模型组可以按照下述方式共享相同参数：对于所有上下文[…aft..],[…Ift…],[…eft..]来说是一个模型，对其他所有上下文如[..afe…],[…ife…],[…efe…]…来说是另外一个模型。</p>
+<p>决定不同上下文之间哪些模型可以共享参数的机制是由数据驱动的。模型的复杂度（或者说，有多么多或多么少的参数绑定）是自动选择以适应可用的训练数据的数量的：越多的数据模型越复杂。</p>
+<h3 id="4-2-使用参数绑定来控制模型复杂度"><a href="#4-2-使用参数绑定来控制模型复杂度" class="headerlink" title="4.2 使用参数绑定来控制模型复杂度"></a>4.2 使用参数绑定来控制模型复杂度</h3><p>模型复杂度控制即给模型选取合适数量的自由参数。在基于HMM的语音合成中，这意味着选取哪种情景分布值得去选取而哪些不重要。换句话说，对于两个不同的 情景，我们何时应该使用独立的模型，合适使用相同的模型。</p>
+<p>一种在自动语音识别中广泛应用的模型复杂度控制的技术牵连到相似模型的聚类。情景因素中指定了哪种模型可以聚为一类，并且实际被选取的聚类是那种可以最好的将训练数据和模型拟合的。此方法被基于HMM的语音合成方法采用，这其实在语音识别中更重要，仅仅因为有更多的大量的不同情景需要应对。有一种聚类用的决策树方法(Martin 2009)。</p>
+<p>模型被聚类之后，不同模型的数量远远小于不同情景的数量。对于指定数据，聚类过程会自动发现最优的情景差异。训练数据集越大，我们可以使用更多的模型并做出更多精细的差异。</p>
+<p>注意：实际上状态绑定和参数绑定是独立的，但是规律是一样的。</p>
+<h3 id="4-3-单元选取的关系"><a href="#4-3-单元选取的关系" class="headerlink" title="4.3 单元选取的关系"></a>4.3 单元选取的关系</h3><p>在单元选取合成中，情景因素在单元选取上的影响是由目标代价来衡量的。目标损失函数的最常见形式是简单的对每个不匹配的情景因素惩罚项加权求和。目标损失函数旨在在数据库中识别最不差的单元候选。一种可选形式的目标损失称为<code>clunits</code>，使用类似于上文描述的模型聚类方法的情景聚类树，但是树中的叶子节点代表的不是模型参数而是从数据库中获得的语音单元聚类。</p>
+<p>目标是一致的：从数据中已知的来泛化出未知的。这是通过自动发现哪些情景在效力上是可互换的达到的。在单元选取中即找到一组足够相似的候选单元来用在不在语音语料库中的目标情景中；在语音合成中意味着将一组情景均值化来训练单一模型。</p>
+<h2 id="五常见问题"><a href="#五常见问题" class="headerlink" title="五常见问题"></a>五常见问题</h2><p><strong>ASK1</strong>: 如何预测韵律</p>
+<p><strong>ANS2</strong>:这里分两部分。首先，韵律的符号表征是由前端预测的，与拼接合成中类似 。其二，此符号表征用作在生成语音的全情景模型的情景因素的一部分。假设<strong>(a)</strong>每个韵律有足够的训练样本<strong>(b)</strong>训练数据的真实韵律和韵律标签有一些一致性，然后每个不同的韵律情景有不同的模型并且在语音合成时模型会 生成合适的韵律。如果(a)或(b)有一个不满足，那么参数聚类将无法形成指定韵律情景模型。</p>
+<p><strong>ASK2</strong>什么导致了语音合成中的“嗡嗡”的问题</p>
+<p><strong>ANS2</strong>：因为语音时声码。“嗡嗡”主要源于声源的过度简化的模型。使用混合激发（韵律和非周期性源的混合）的声码而不是在二者之间切换，可以减少“嗡嗡”。</p>
+<p><strong>ASK3</strong> 什么导致了语音合成中的闷声</p>
+<p><strong>ANS3</strong>：均值化，这是统计模型的训练过程中不可避免的步骤，可能导致语音听起来闷闷的。多帧语音的均值，每个帧都有轻微不同的频谱属性，这会有拓宽共振峰带宽并减少频谱包装的动态范围的影响。类似的，均值化可能导致过度平滑的频谱包装(envelopes)和过度平滑的轨迹。一种常用的以抵消这种影响的方法是，调整生成的参数使得它们有在自然语音中相同的偏差。此方法称为Global Variance（GV，全局偏差）。</p>
+<p><strong>ASK4</strong>为什么持续时间要分开建模</p>
+<p><strong>ANS4</strong>：标准HMM中的持续时间模型源自每个状态的自转移。此模型下，大部分可能的持续时间总是一个状态一帧，在自然状态下显然不对。因而，明确的持续时间模型就很有必要。持续时间模型并不是真的从频谱包络(envelop)和源分离的。它们在模型结构上交互。然而，影响持续时间的情景因素在不同的频谱和源特征下不同，所以这些各种各样的模型参数组是分开聚类的。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2017-04-20-texttospeech/" data-id="ck4ifp1mc00312wje7ka46v2t" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2017-04-18-classic_cnn" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2017-04-18-classic_cnn/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.513Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/23/2017-04-18-classic_cnn/">经典卷积神经网络总结</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一-AlexNet"><a href="#一-AlexNet" class="headerlink" title="一  AlexNet"></a>一  AlexNet</h2><p>2012年由Hinton的学生Alex Krizhevsky提出。以Top-5的错误率为16.4%赢得ILSVRC 2012年的比赛。它做出了如下创新：</p>
+<ul>
+<li><p>首次使用ReLU作为CNN激活函数，解决了Sigmod激活函数的梯度弥散问题。</p>
+</li>
+<li><p>使用Dropout随机丢弃部分神经元，可以避免模型的过拟合。AlexNet的最后几个全连接层使用了Dropout</p>
+</li>
+<li><p>使用重叠的最大池化，之前使用的都是平均池化。最大池化可以避免平均池化的模糊效果。同时，步长比卷积核的尺寸小，这样池化层的输出之间会有重叠，提升了特征的丰富性。</p>
+</li>
+<li><p>提出了LRN层（局部相应一体化），对局部神经元的活动创建竞争机制，使得其中响应比较大的值变得相对较大，并抑制其他反馈较小的神经元，增强模型泛化能力。</p>
+</li>
+<li><p>使用CUDA加速深度卷积网络的训练，使用了GPU的并行计算能力。</p>
+</li>
+<li><p>数据增强，随机从256x256的原始图中截取224x224大小的区域，再做水平翻转，相当于增加了 $(256-224)^2\times 2=2048$ 倍的数据量。仅靠原始的数据量，参数众多的CNN会陷入过拟合。预测时，取图片四个角和中间共5个位置，再加上翻转，共10个位置，对它们的预测结果求均值。</p>
+</li>
+</ul>
+<p><strong>网络结构</strong></p>
+<p><img src="/images/blog/AlexNet_struct.jpg" alt="alexnet结构"></p>
+<p><strong>参数</strong></p>
+<p><img src="/images/blog/alexnet-params.jpg" alt="alexnet参数"></p>
+<h2 id="二-VGGNet"><a href="#二-VGGNet" class="headerlink" title="二  VGGNet"></a>二  VGGNet</h2><p>VGGNet是牛津大学计算机视觉组(Visual Geometry Group)和Google DeepMind一起研发的深度卷积神经网络。通过反复堆叠3x3的小型卷积核和2x2的最大池化层，VGG成功的构筑了16-19层卷积神经网络。获得 ILSVRC 2014分类项目第二名和定位项目第一名。整个网络使用了同样大小的卷积核尺寸(3x3)和最大池化尺寸(2x2)。</p>
+<p><strong>网络结构和参数</strong></p>
+<p><img src="/images/blog/VGGNet.png" alt="VGGNet参数"></p>
+<p>虽然从A到E每一级网络逐渐变深，但是网络参数数量没有太多增长，因为参数数量主要消耗在最后的三个全连接。前面卷积虽然很深，但是消耗的参数量不大，不过训练时比较耗时的还是卷积部分。上图中的D和E就是VGGNet-16和VGGNet-19.。</p>
+<p><strong>技巧</strong><br> 网络中经常出现的多个完全一样的3x3的卷积串联相当于1个5x5的卷积层，即一个像素跟周围5x5像素产生关联，可以输感受野大小为5x5.而3个3x3卷积串联效果等同于1个7x7的卷积层。同时3个串联的3x3的卷积拥有比1个7x7的卷积更少的参数量，只有后者的3x3x3/7x7=55%。同时3个3x3的卷积层拥有比一个7x7的卷积层更多的非线性变换（前者使用了3次ReLU激活，而后者只使用了一次），使得CNN对特征的学习能力更强。</p>
+<p><img src="/images/blog/vgg_3x3.jpg" alt="3x3的卷积比"></p>
+<p><strong>训练技巧</strong>，先训练级别A的简单网络再复用A网络的权重来初始化后面的几个复杂网络，这样收敛速度更快。<br><strong>预测时</strong>：VGG采用Multi-scale方法，将图像scale到一个尺寸Q，并将图片输入卷积网络计算，再将不同尺寸的Q的结果平均得到最后结果，这样可以提高图片数的利用率并提升预测准确率。</p>
+<p><strong>结论</strong></p>
+<ul>
+<li><p>LRN层作用不大</p>
+</li>
+<li><p>越深的网络效果越好</p>
+</li>
+<li><p>1x1的卷积也是有效的，但是没有3x3的卷积好，大的卷积核可以学习更大的空间特征。</p>
+</li>
+</ul>
+<h2 id="三-Google-Inception-Net"><a href="#三-Google-Inception-Net" class="headerlink" title="三 Google Inception Net"></a>三 Google Inception Net</h2><p>2014年ILSVRC 冠军，最大的特点是控制住计算量和参数量的同时，获得了很好的分类性能，top-5错误率 6.7%。Inception v1有22层，比AlexNet的8层或VGGNet的19层要深，但是 计算量只有15亿次，500万参数量，仅为AlexNet的1/12(6000万)。</p>
+<p><strong>特点</strong></p>
+<ul>
+<li><p>去除了最后的全连接层，用全局平均池化层（将图片尺寸变为1x1）来取代它。全连接层占据了AlexNet或VGGNet的90%的参数量，而且会引起过拟合。用全局平均池化层取代全连接层的做法借鉴了Network in Network。</p>
+</li>
+<li><p>其精心设计的Inception Module 提高了参数的利用率。一般来说，卷积层要提升表达能力，主要依靠增加输出通道数，但是副作用是计算量增大和过拟合。每个输出通道对应一个滤波器，同一个滤波器共享参数，只能提取一类特征，因此一个输出通道只能做一种特征处理。而NIN中的MLPConv则拥有更强大的能力，允许在输出通道之间组合信息。MLPConv基本等效于普通卷积层后再连接1x1的卷积和ReLU激活函数。</p>
+</li>
+</ul>
+<p>Inception Module的基本结构如下：</p>
+<p><img src="/images/blog/inception_module.jpg" alt="inception module结构"></p>
+<p> 其中的1x1卷积可以以很小的计算量就增加一层特征变换和非线性化，它可以跨通道组织信息，提高网络的表达能力，同时可以对输出通道升维和降维。</p>
+<p>人脑神经元是稀疏激活的，模拟的神经网络也是类似。应该把相关性高的一簇神经元节点连接在一起。图片数据中，临近区域的数据相关性高，因此相邻像素点被卷积操作连接在一起。因此，一个1x1的卷积就可以自然地把这些相关性很高的、在同一空间位置但是不同通道的特征连接在一起，这就是为什么1x1的卷积反复被应用在Inception Net中的原因。</p>
+<p>Inception Net是一个大家族，包括了以下系列。</p>
+<table>
+<thead>
+<tr>
+<th>网络</th>
+<th>年代</th>
+<th>错误率</th>
+<th>创新</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Inception V1</td>
+<td>2014年9月</td>
+<td>Top-5 6.67%</td>
+<td>使用了Network In Network的思想</td>
+</tr>
+<tr>
+<td>Inception V2</td>
+<td>2015年2月</td>
+<td>Top-5 4.8%</td>
+<td><strong>(1)</strong>使用了两个3x3来替代5x5的大卷积。<strong>(2)</strong>提出了Batch Normalization，正则化方法，加速大型卷积神经网络的训练速度，同时提升收敛后的分类准确率。</td>
+</tr>
+<tr>
+<td>Inception V3</td>
+<td>2015年12月</td>
+<td>Top-5 3.5%</td>
+<td><strong>(1)</strong>引入Factorization into small convolutions，将较大卷积拆分为两个小卷积，比如7x7拆成1x7和7x1卷积，节省了大量参数，加速运算同时减轻过拟合，同时增加一层非线性拓展模型表达能力<strong>(2)</strong>在Inception V3中使用了分之，还在分支之中使用了分支</td>
+</tr>
+<tr>
+<td>Inception V4</td>
+<td>2016年2月</td>
+<td>Top-5 3.08%</td>
+<td>结合了微软的ResNet</td>
+</tr>
+</tbody></table>
+<h2 id="四-ResNet"><a href="#四-ResNet" class="headerlink" title="四  ResNet"></a>四  ResNet</h2><p>ResNet(Residual Neural Network)由微软研究院Kaiming He等四位华人提出，通过使用Residual Unit成功训练152层深的神经网络，在ILSVRC 2015比赛中获得冠军，获得3.57%的Top-5准确率，同时参数量比VGGNet低。</p>
+<p>ResNet源于<strong>Highway Network</strong>，通常认为神经网络的深度对齐性能非常重要，但是网络越深其训练难度越大，Highway Network的目标就是解决极深网络的难以训练的问题。</p>
+<p>Highway Network相当于修改了每一层的激活函数，此前的激活函数只是对输入做一个非线性变换 $y=H(x,W_H)$，Highway Network则允许保留一定比例的原始输入 $x$ ,即 $y=H(x,W_H)\dot T(x,W_T)+x\dot C(x,W_C)$,其中T为变换系数，C为保留系数。论文中令$C=1-T$。这样前面一层的信息，有一定比率可以不经过矩阵乘法和非线性变换，直接传输到下一层，仿佛一条高速公路。</p>
+<p>假定某段神经网络的输入是x,期望输出是$H(x)$，如果直接把输入x传都输出作为初始结果，那么此时我们需要学习的目标就是$F(x)=H(x)-x$。如下图所示，这就是一个ResNet的残差学习单元(Residual Unit)，ResNet相当于将学习目标改变了，不再是学习一个完整的输出$H(x)$，只是输出和输入的差别$H(x)-x$即残差。</p>
+<p><img src="/images/blog/Residual_Unit.png" alt="残差单元"></p>
+<p>传统卷积层或全连接层在信息传递时，或多或少会存在信息丢失、损耗等问题。ResNet在某种程度上解决了这个问题，通过直接将输入信息绕道到输出，保护信息的完整性，整个网络则只需要学习输入、输出差别的那一部分，简化学习目标和难度。</p>
+<p>下图是两层或三层的ResNet残差学习模块。</p>
+<p><img src="/images/blog/resnet_block.jpg" alt="残差模块"></p>
+<p>下图是ResNet不同层数时的网络配置</p>
+<p><img src="/images/blog/resnet_architecture.png" alt="网络架构"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2017-04-18-classic_cnn/" data-id="ck4ifp1m9002t2wjefbfkc393" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2017-04-16-merlin-tts" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2017-04-16-merlin-tts/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.512Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/23/2017-04-16-merlin-tts/">使用merlin从头构建你的声音</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文参考自: <a href="http://www.speech.zone/exercises/build-a-unit-selection-voice/label-the-speech/" target="_blank" rel="noopener">http://www.speech.zone/exercises/build-a-unit-selection-voice/label-the-speech/</a><br>而该文章又参考自爱丁堡大学的一篇论文的思路，<a href="http://www.cstr.ed.ac.uk/downloads/publications/2004/clarkrichmondking_ssw504.pdf" target="_blank" rel="noopener">论文</a>,<a href="http://www.cstr.ed.ac.uk/downloads/festival/multisyn_build/" target="_blank" rel="noopener">论文实现工程文件</a> 。下面的教程中直接使用了很多此工程中的文件，如果在教程中没找到对应的文件夹，可能需要下载此工程。</p>
+<h2 id="一-需要的工具"><a href="#一-需要的工具" class="headerlink" title="一  需要的工具"></a>一  需要的工具</h2><ul>
+<li><p>python:2.7</p>
+</li>
+<li><p>Festival:一个语音合成工具 <a href="http://www.cstr.ed.ac.uk/projects/festival/" target="_blank" rel="noopener">Festival</a> </p>
+</li>
+<li><p>Edinburgh Speech Tools: 一些地方也称为Festival，下载之后为speech_tools/ 文件夹</p>
+</li>
+<li><p>其他依赖：详见Festival或Edinburgh Speech tools的说明文档。以及<code>lib32ncurses5-dev</code>和<code>libX11-dev</code>(linux安装)</p>
+</li>
+<li><p>HTK :语音识别工具，如果安装是3.4，需要修复这个 <a href="https://github.com/JoFrhwld/FAVE/wiki/HTK-3.4.1" target="_blank" rel="noopener">bug</a></p>
+</li>
+</ul>
+<h2 id="二-介绍"><a href="#二-介绍" class="headerlink" title="二  介绍"></a>二  介绍</h2><p>本文主要关注于合成流程中的波形生成器阶段，尽管可以在前端工具(festival和HTK)做对应的修改，即在发音词典中加入新的词。<br><strong>不要在windows上玩这个</strong></p>
+<h3 id="2-1-本文主要流程"><a href="#2-1-本文主要流程" class="headerlink" title="2.1 本文主要流程:"></a>2.1 本文主要流程:</h3><ol>
+<li>选取recording脚本</li>
+<li>在studio中做recording</li>
+<li>准备好workspace</li>
+<li>将录音转换为要求的格式，并仔细检查</li>
+<li>label 语音文件</li>
+<li>Pitchmark 语音</li>
+<li>创建声音</li>
+<li>评估声音文件</li>
+</ol>
+<h3 id="2-2-相关文章"><a href="#2-2-相关文章" class="headerlink" title="2.2 相关文章"></a>2.2 相关文章</h3><p>文字转语音的流程架构,<a href="http://www.speech.zone/pipeline-architecture-for-text-to-speech/" target="_blank" rel="noopener">TTS流程</a></p>
+<p><a href="http://www.speech.zone/forums/forum/speech-synthesis/" target="_blank" rel="noopener">speech论坛</a></p>
+<h2 id="三-准备好workspace"><a href="#三-准备好workspace" class="headerlink" title="三 准备好workspace"></a>三 准备好workspace</h2><p>假设所有的文件将放在<code>/workspace/merlin</code>文件夹下，下载并解压此文件<a href="http://www.speech.zone/wp-content/uploads/2015/12/ss.zip" target="_blank" rel="noopener">SS</a>,文件组织结构如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">xiatao@sjkxbgpu:~&#x2F;workspace&#x2F;merlin$ cd ss</span><br><span class="line">xiatao@sjkxbgpu:~&#x2F;workspace&#x2F;merlin&#x2F;ss$ tree .&#x2F;</span><br><span class="line">.&#x2F;</span><br><span class="line">├── pm</span><br><span class="line">├── recordings</span><br><span class="line">├── setup.sh</span><br><span class="line">├── utts.data</span><br><span class="line">├── utts.pauses</span><br><span class="line">└── wav</span><br><span class="line"></span><br><span class="line">3 directories, 3 files</span><br></pre></td></tr></table></figure>
+
+<p>如果所需工具都已经正确安装，现在需要编辑<code>setup.sh</code>文件中的两个变量<code>SSROOTDIR</code>和<code>FROOTDIR</code>，分别指向安装工具目录和festival安装目录。原文件的两个变量值为:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SSROOTDIR&#x3D;&#x2F;Volumes&#x2F;Network&#x2F;courses&#x2F;ss&#x2F;</span><br><span class="line">FROOTDIR&#x3D;&#x2F;Volumes&#x2F;Network&#x2F;courses&#x2F;ss&#x2F;festival&#x2F;festival_mac</span><br></pre></td></tr></table></figure>
+<p>修改为:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SSROOTDIR&#x3D;&#x2F;home&#x2F;xiatao&#x2F;my_soft_install&#x2F;merlin&#x2F;tools</span><br><span class="line">FROOTDIR&#x3D;&#x2F;home&#x2F;xiatao&#x2F;&#x2F;my_soft_install&#x2F;merlin&#x2F;tools</span><br></pre></td></tr></table></figure>
+<p>我对应的目录组织结构如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">xiatao@sjkxbgpu:~&#x2F;my_soft_install&#x2F;merlin&#x2F;tools&#x2F;festival$ ls</span><br><span class="line">ACKNOWLEDGMENTS  bin  config  config.cache  config.guess  config.log  config.status  config.sub  configure  configure.in  COPYING  doc  examples  INSTALL  install-sh  lib  Makefile  make.include  missing  mkinstalldirs  NEWS  README  src  testsuite</span><br><span class="line">xiatao@sjkxbgpu:~&#x2F;my_soft_install&#x2F;merlin&#x2F;tools&#x2F;festival$ cd ..</span><br><span class="line">xiatao@sjkxbgpu:~&#x2F;my_soft_install&#x2F;merlin&#x2F;tools$ ls</span><br><span class="line">bin  compile_tools.sh  festival  festvox  INSTALL  install_package_and_shell  readme  speech_tools  SPTK-3.9  WORLD  WORLD_v2</span><br></pre></td></tr></table></figure>
+<p>然后执行:<code>source setup.sh</code>。此命令不会有任何输出，但是相关变量会被配置。本文流程走完之后，会有如下目录以及其对应的内容:</p>
+<table>
+<thead>
+<tr>
+<th>Folder</th>
+<th>Contains</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>recordings</td>
+<td>speech recordings, copied from the studio</td>
+</tr>
+<tr>
+<td>wav</td>
+<td>individual wav files for each utterance</td>
+</tr>
+<tr>
+<td>pm</td>
+<td>pitch marks</td>
+</tr>
+<tr>
+<td>mfcc</td>
+<td>MFCCs for use in automatic alignment</td>
+</tr>
+<tr>
+<td>lab</td>
+<td>label files from automatic alignment</td>
+</tr>
+<tr>
+<td>utt</td>
+<td>Festival utterance structures</td>
+</tr>
+<tr>
+<td>f0</td>
+<td>Pitch contours</td>
+</tr>
+<tr>
+<td>coef</td>
+<td>MFCCs + f0, for the join cost</td>
+</tr>
+<tr>
+<td>coef2</td>
+<td>coef2, but stripped of unnecessary frames to save space, for the join cost</td>
+</tr>
+<tr>
+<td>lpc</td>
+<td>LPCs and residuals, for waveform generation</td>
+</tr>
+</tbody></table>
+<h2 id="四-recording脚本"><a href="#四-recording脚本" class="headerlink" title="四 recording脚本"></a>四 recording脚本</h2><p>鉴于单元(音素)选取极端依赖于数据库内容，我们需要仔细考虑应该做哪些recording。</p>
+<p>我们需要选取一个recording脚本。标准方法是一句句的贪心选取句子，从一个大的文本语料库（比如，小说或报纸）来尽可能覆盖最多的语音(以及可能的韵律)。本文不会直接走这一步骤，而是直接使用已经存在的<a href="http://festvox.org/cmu_arctic/" target="_blank" rel="noopener">CMU ARCTIC</a></p>
+<p>如果记录全部的内容（CMU语音所读的文本），大概会得到一个小时的语音。但是建议先从记录(读)A集合的593个prompts 开始，并创建对应的语音</p>
+<h3 id="4-1-关于CMU-ARCTIC数据库"><a href="#4-1-关于CMU-ARCTIC数据库" class="headerlink" title="4.1 关于CMU ARCTIC数据库"></a>4.1 关于CMU ARCTIC数据库</h3><p>数据库包含了从静心挑选的文本里录的1150个语音，包含了US English男性(bdl)和女性(slt)播音员。</p>
+<p><code>cmuarctic.data</code>包含了1132个句子-语音准备清单，其内容示例如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">( arctic_a0001 &quot;Author of the danger trail, Philip Steels, etc.&quot; )</span><br><span class="line">( arctic_a0002 &quot;Not at this particular case, Tom, apologized Whittemore.&quot; )</span><br><span class="line">( arctic_a0003 &quot;For the twentieth time that evening the two men shook hands.&quot; )</span><br><span class="line">( arctic_a0004 &quot;Lord, but I&#39;m glad to see you again, Phil.&quot; )</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>它既包含了16khz的波形(waveform)语音，同时也包含了EGG信号。全部的labeling由基于<code>Festvox</code>(festival依赖的一个工具)的labeling脚本完成。数据库中已经包含了完整的可运行的Festival Voices.</p>
+<p><strong>CMU ARCTIC Database</strong></p>
+<ul>
+<li>US Enlish bdl(male)(0.95)</li>
+<li>US English slt(female)(0.95)</li>
+<li>US English clb(female)(0.95)</li>
+<li>US English rms(male)(0.95)</li>
+</ul>
+<h3 id="4-2-使用说明"><a href="#4-2-使用说明" class="headerlink" title="4.2 使用说明"></a>4.2 使用说明</h3><p>建议下载上面的<code>ARCTIC</code>数据库中的<code>slt</code>，它们是完整的Festival Voices，所以需要删除其他的而只保留波形文件（wav）和<code>utts.data</code>。将这些文件(wav和utts.data)复制到workspace目录下。</p>
+<h4 id="4-2-1-utts-data文件"><a href="#4-2-1-utts-data文件" class="headerlink" title="4.2.1 utts.data文件"></a>4.2.1 utts.data文件</h4><p>utts.data文件是Festival用来定义unit(音素)选取的数据库。它的内容示例如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">( arctic_a0001 &quot;Author of the danger trail, Philip Steels, etc.&quot; )</span><br><span class="line">( arctic_a0002 &quot;Not at this particular case, Tom, apologized Whittemore.&quot; )</span><br><span class="line">( arctic_a0003 &quot;For the twentieth time that evening the two men shook hands.&quot; )</span><br></pre></td></tr></table></figure>
+
+<p>其中的每一行代表 了数据库中的一个utterance(语音)。格式如下:</p>
+<p>1.一个开的插入语,<code>(</code><br>2.一个唯一的识别码，被用作任何与此utterance（音素）相关的文件的文件名。ARTCTIC的文件名形式为 <code>arctic_lnnnn</code>，我们自己准备的材料可以以<code>yourname_nnnn</code>这种形式，其中<code>nnnn</code>以0001开始。<br>3. 文本，双引号内部<br>4.关闭的插入语<code>)</code></p>
+<h4 id="4-2-2-添加自己的素材"><a href="#4-2-2-添加自己的素材" class="headerlink" title="4.2.2 添加自己的素材"></a>4.2.2 添加自己的素材</h4><p>由于ARCTIC脚本给的是通用的双音，合成全部类型的句子并不完美。你可以通过添加特定领域的自己的声音来提高它的自然性，添加更多的素材到数据库。这一步并不是一定要做的。</p>
+<p>建议添加一些prompts 以包含如下：</p>
+<ol>
+<li>在不同上下文环境里包含了自己名字的5个句子（比如，句子的开始和结尾处）</li>
+<li>10个短的高频使用的短语集，比如”Hello””Hi””How are you”等等。</li>
+<li>大概50个可以覆盖某个很小领域的句子</li>
+</ol>
+<p>选择一个可以获取词汇表中所有单词的有限领域，其中每一项（单词）多次发音（不同的上下文和位置），并且在50句话内覆盖。根据这些，你可以合成更广泛的新句子。示例:</p>
+<ul>
+<li><p>时间和日期</p>
+</li>
+<li><p>街道地址，街道名很少。</p>
+</li>
+</ul>
+<p>设计完自己的领域素材之后，准备一份新的与utts.data相同的文件，包含了自己的句子。此文件将用于SpeechRecorder tool来记录这些句子。不必包含ARCTIC 脚本：它已经被包含入SpeechRecorder。除此之外，需要在utts.data的末尾添加自己的新句子。</p>
+<p><strong>注意：使用一个文本编辑器来创建这些文件，避免出现非ASCII字符</strong></p>
+<h2 id="4-2-3-自动文本选取"><a href="#4-2-3-自动文本选取" class="headerlink" title="4.2.3 自动文本选取"></a>4.2.3 自动文本选取</h2><p>这是一个可选的步骤，用以实现自己的贪心文本选取算法</p>
+<p>与从限定领域手工添加小集合的句子相比，我们可以实现一个简单的文本选取算法来选取其他素材。</p>
+<p>此步骤可以让我们选取与ARCTIC的A集合同等大小（记录的语音）的额外数据集来形成自己的素材。</p>
+<p>切记：仍然需要在studio中记录这些素材。</p>
+<p>你可以：</p>
+<ul>
+<li><p>抽取与ARCTIC文本选取算法完全一样的副本，或者自己实现</p>
+</li>
+<li><p>可以使用更新的文本数据源，而不是ARCTIC里的古老小说</p>
+</li>
+<li><p>如果你选取特定领域的源文本库，就可以创建一个较好的特定领域声音。其中的难点在于找到足够大的文本（比如，爬虫）</p>
+</li>
+</ul>
+<h2 id="5-make-the-recording"><a href="#5-make-the-recording" class="headerlink" title="5  make the recording"></a>5  make the recording</h2><p>即在录音棚中读文本，并录音。</p>
+<h2 id="6-准备录音"><a href="#6-准备录音" class="headerlink" title="6 准备录音"></a>6 准备录音</h2><p>16khz的波形文件即可。</p>
+<p>SpeechRecorder tool在 文件名前加 了前缀。需要移除，使得文件名完全匹配utts.data中的utterance 识别码（前缀无非是”_1”,”_2”等）。不要重复记录发音utterance </p>
+<p><strong>下采样</strong><br>下面的是下采样单个文件的示例，保存为所需的RIFF格式(Linux为wav格式)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash$ ch_wave -otype riff -F 16000 -o wav&#x2F;arctic_a0001.wav recordings&#x2F;arctic_a0001.wav</span><br></pre></td></tr></table></figure>
+<p>你需要些个shell脚本来处理所有的在<code>recording</code>目录的文件。如果你的record数据是24bit而非16bit，则需要使用<code>sox</code>来改变bit深度，并同时下采样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash$ sox recordings&#x2F;arctic_a0001.wav -b16 -r 16k wav&#x2F;arctic_a0001.wav</span><br></pre></td></tr></table></figure>
+
+<h2 id="7-标记语音"><a href="#7-标记语音" class="headerlink" title="7 标记语音"></a>7 标记语音</h2><p>使用text-to-speech（TTS） 系统的前端(front-end)工具从文本中来获取标签，接下来需要将它们 与已经记录的语音对齐，此处使用了自动语音识别处搬来一个技术。</p>
+<p>在继续之前，需要确保已经完成如下步骤：</p>
+<ol>
+<li>至少完成了recording ARCTIC中的”A”集合</li>
+<li>utts.data文件。</li>
+<li>包含了wav文件的目录，wav文件都在utts.data中有对应。</li>
+<li>确保文件名和数字是正确的。</li>
+</ol>
+<p>下一步是为语音创建时间对齐语音标签，使用强制对齐和HTK语音识别工具。首先得为HTK设置一个目录结构(安装HTK时会有个HTKDemo的目录，按照其目录创建对应的目录)，运行:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash$ setup_alignment</span><br></pre></td></tr></table></figure>
+
+<p>这一步骤会创建一个<code>alignment</code>目录包含了HTK相关的目录。脚本会告诉你需要创建其他文件，这在下一步。</p>
+<h3 id="7-1-选择词典和语音集"><a href="#7-1-选择词典和语音集" class="headerlink" title="7.1 选择词典和语音集"></a>7.1 选择词典和语音集</h3><p>选一种口音的英语。此处的选择将会决定对齐的余下部分所使用的词典和语音集。此处我们假设使用的是British English词典<strong>unilex-rpx</strong>，如果使用的是不同的词典，你需要在所有命令中替换”unilex-rpx”为下面的其他选项:</p>
+<ul>
+<li><p>unilex-gam – General American English</p>
+</li>
+<li><p>unilex-rpx – British English (RP)</p>
+</li>
+<li><p>unilex-edi – Scottish English (Edinburgh)</p>
+</li>
+</ul>
+<p><strong>定义语音集</strong></p>
+<p>将定义了语音集的文件复制到对齐(alignment)目录。注意变量<code>$MBDIR</code>来自<code>setup.sh</code>文件内定义，执行完<code>source setup.sh</code>即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bash$ cp $MBDIR&#x2F;resources&#x2F;phone_list.unilex-rpx alignment&#x2F;phone_list</span><br><span class="line">bash$ cp $MBDIR&#x2F;resources&#x2F;phone_substitutions.unilex-rpx alignment&#x2F;phone_substitutions</span><br></pre></td></tr></table></figure>
+<p>phone_list包含的是语音集的列表。包含了一些特殊的语音，这在自动语音识别中很常见。如果X是一个stop或者破擦音，那么X_cl被加进来来标记局部闭合。标签<code>sp</code>（short pause）加进来作为词中间的静音，<code>sil</code>代表更长时间的静音（每个utterance(语音)的开始和结束）。</p>
+<p>phone_substitutions文件包含了aligner允许的可能的替换列表。这些被限定为元音reduction（减少），比如规则<code>aa@</code>代表”aa”可以被标记为<code>@</code>(schwa),如果基于声学模型它是一个更可能的标签。</p>
+<p><strong>处理不在词典中的单词</strong></p>
+<p>鉴于强制对齐会从语音中产生语音标签以及它们的单词抄录(transcriptions),它需要知道每个单词的抄录。在语音合成中可以在所有未知单词中使用letter-to-sound规则，但是对于标记语音数据不精确。切记在语音记录数据库的任何错误会对语音合成产生直接的影响。</p>
+<p><strong>对着词典检查脚本</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bash$ festival $MBDIR&#x2F;scm&#x2F;build_unitsel.scm</span><br><span class="line">festival&gt;(check_script &quot;utts.data&quot; &#39;unilex-rpx)</span><br></pre></td></tr></table></figure>
+
+<p>festival会告诉你哪些不在词典里的单词，以及按照letter-to-sound的规则它该如何发音。找到不在词典中的单词之后，创建一个文件my_lexicon.scm，格式如下(注意第一行中的词典名称，不同的词典名称不一样):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(setup_phoneset_and_lexicon &#39;unilex-rpx)</span><br><span class="line"> </span><br><span class="line">(lex.add.entry &#39;(&quot;pimpleknuckle&quot; nn (((p i m) 1) ((p l!) 0) ((n uh) 1) ((k l!) 0))))</span><br><span class="line">(lex.add.entry &#39;(&quot;womble&quot; nn (((w aa m) 1) ((b l!) 0))))</span><br></pre></td></tr></table></figure>
+
+<p>为获得正确的单词发音，启动festival,并执行check_scipt脚本命令（参考上面），以确保正确的词典被载入。然后使用命令 <code>lex.lookup</code>找到近似发音单词来构建你的语音。如果有很强的非本地口音，别尝试匹配你所使用的真实声音，而尝试写与其他类似单词的发音一致的发音。如果此阶段没有添加任何发音，创建一个空白文档即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash$ touch my_lexicon.scm</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-2-时间对齐标签"><a href="#7-2-时间对齐标签" class="headerlink" title="7.2 时间对齐标签"></a>7.2 时间对齐标签</h3><p>数据库需要时间对齐标签。保持标签与前端在运行时做出的预测的一致性很重要， 因而我们需要使用相同的前端来创建初始标签序列，然后使用强制对齐在这些标签中加入时间戳。</p>
+<p>初始的用于强制对齐的语音序列来自Festival,通过运行前端脚本。如果使用不同的词典，注意修改<code>unilex-rpx</code>。</p>
+<p><strong>创建初始标签</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bash$ festival $MBDIR&#x2F;scm&#x2F;build_unitsel.scm .&#x2F;my_lexicon.scm</span><br><span class="line">festival&gt;(make_initial_phone_labs &quot;utts.data&quot; &quot;utts.mlf&quot; &#39;unilex-rpx)</span><br></pre></td></tr></table></figure>
+
+<p>输出文件utts.mlf，是一个包含了的utterances(语音)的语音转录(transcription)的HTK master label file(MLF)；其标签暂未与波形(waveform)时间对齐。</p>
+<p>如果想要设计自己的 脚本，以上命令是最简单的方式来将文本转换为语音序列，这样就可以衡量覆盖率。</p>
+<p>强制对齐涉及到训练 HMMs，正如自动语音识别。因此，语音需要参数化。我们所使用的特征是MFCCs。</p>
+<p><strong>抽取MFCC</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash$ make_mfccs alignment wav&#x2F;*.wav</span><br></pre></td></tr></table></figure>
+
+<p><strong>对齐</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bash$ cd alignment</span><br><span class="line">bash$ make_mfcc_list ..&#x2F;mfcc ..&#x2F;utts.data train.scp</span><br><span class="line">bash$ do_alignment .</span><br></pre></td></tr></table></figure>
+
+<p>(注意最后一个命令的空格和点号)</p>
+<p>do_aligner命令将会持续超过20分钟，取决于机器配置和记录的语音。对齐结束后，需要产生的MLF文件切分为Festival能使用的独立的标签文件，此时它已经为标签包含了正确的时间对齐。</p>
+<p><strong>切分MLF文件</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bash$ cd ..</span><br><span class="line">bash$ mkdir lab</span><br><span class="line">bash$ break_mlf alignment&#x2F;aligned.3.mlf lab</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-2-1-修改对齐脚本"><a href="#7-2-1-修改对齐脚本" class="headerlink" title="7.2.1 修改对齐脚本"></a>7.2.1 修改对齐脚本</h3><p>此步骤不是必须，最好是觉得合成结果比较差时回头参考此步骤来调整。</p>
+<p>修改do_alignment脚本会影响强制对齐的质量。修改脚本之前，首先得找到脚本位置，并复制一份。<code>which do_alignment</code> 。编辑此文件之后再运行。</p>
+<p><strong>在数据子集上训练，但在整个数据集上对齐</strong></p>
+<p>你需要创建一个train.scp文件，此文件中只包含了需要在模型上训练的MFCC文件列表。假设该文件名为train_subset.scp，执行如下命令:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HERest -C config -T 1023 -t 250.0 150.0 1000.0 -H hmm$&#123;i&#125;&#x2F;MMF -H hmm0&#x2F;vFloors -I aligned.0.mlf -M hmm$[$i +1] -S train_subset.scp phone_list</span><br></pre></td></tr></table></figure>
+
+<p><strong>改变混合组件的数量</strong></p>
+<p>默认模型的输出概率密度分布是8个组件的混合。HTK使用一个称为<code>mixing up</code>的方法逐步增加组件数量，此处我们从1到2，然后是3,5，最后到8个组件。可以修改脚本中的此行:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># Increase mixtures.</span><br><span class="line"> </span><br><span class="line">for m in 2 3 5 8 ; do</span><br></pre></td></tr></table></figure>
+
+<p><strong>改变元音reductions</strong></p>
+<p>不必修改do_alignment就可以达到，只需要修改phone_substitutions文件。尝试移除所有的”substitutions”（比如，创建phone_substitutions和空白文件）</p>
+<h2 id="8-Pitchmark语音"><a href="#8-Pitchmark语音" class="headerlink" title="8 Pitchmark语音"></a>8 Pitchmark语音</h2><p>用于波形连接的信号处理是音调(pitch)同步的，因此语音数据库必须包含独立的语调周期标记。<code>make_pm_wave</code>可以用来从波形语音生成音调标记，其中的<code>-[mf]</code>代表选择其一<code>-m</code>(男性)或<code>-f</code>(女性)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bash$ make_pm_wave -[mf] pm wav&#x2F;*.wav</span><br><span class="line">bash$ make_pm_fix pm&#x2F;*.pm</span><br></pre></td></tr></table></figure>
+
+<p><code>make_pm_fix</code>用于调整语调标记，使得他们在波形中对齐于一个peak极点，并且插值在语音的无声区域。</p>
+<p><strong>查看音调标记</strong></p>
+<p>为查看音调标记（精确检查），需要将他们转化为标签文件。这些可以在与波形对应的波浪中看到。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bash$ mkdir pm_lab</span><br><span class="line">bash$ make_pmlab_pm pm&#x2F;*.pm</span><br></pre></td></tr></table></figure>
+
+<p><strong>调整音调标签设置</strong></p>
+<p>在自己的声音上需要调整一些参数。此时需要复制脚本 <code>$MBDIR/bin/make_pm_wave</code>到当前<code>/ss</code>目录下，并对该文件做修改。记得对应的运行命令是，运行当前的<code>make_pm_wave</code>。</p>
+<p>找到脚本中的<code>DEFAULT_PM_ARGS</code>，其中的<code>min</code>和<code>max</code>是音调标签之间的最小和最大值(例如，音调周期(period)是1/F0)。<code>1x_1f</code>和<code>1x_hf</code>的是值单位为Hertz的频率以及一个控制过滤器，该过滤器移除在音调标签之前的高频和低频。</p>
+<p>如果决定修改默认值，需要找到你的声音的<code>F0</code>值域。可以使用<code>Praat</code>的编辑命令来检验一些音调轮廓的波形，并记录最大和最小值（剔除由Praat产生的明显纰漏）。如一段中设置高频和低频过滤器掉不在此音调范围内的值，同时为你的声音设置合适的max和min值。再次运行音调标记器并检查输出。需要将pitchmark转换为标签文件来查阅。</p>
+<p>在调整pitchmarker设置时， 删除<code>-fill</code>选项。</p>
+<h2 id="8-合成声音"><a href="#8-合成声音" class="headerlink" title="8  合成声音"></a>8  合成声音</h2><h3 id="8-1-Utterance-发声-结构"><a href="#8-1-Utterance-发声-结构" class="headerlink" title="8.1 Utterance(发声)结构"></a>8.1 Utterance(发声)结构</h3><p>Festival中的目标代价函数使用语言学信息来计算，所以我们需要提供语音数据库中所有候选单元的信息，这些信息存储在发声结构中。发声结构包括语音字符串，将这些语音和它们的parent（双亲）音节和单词连接的树形结构，等等。我们将由强制对齐获得的语音时间戳加入到这些结构中。</p>
+<p>首先，创建发声结构:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bash$ mkdir utt</span><br><span class="line">bash$ festival $MBDIR&#x2F;scm&#x2F;build_unitsel.scm my_lexicon.scm</span><br><span class="line">festival&gt;(build_utts &quot;utts.data&quot; &#39;unilex-rpx)</span><br></pre></td></tr></table></figure>
+
+<p>然后，运行和分析语音持续时间分布，并标记任何异常值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">bash$ mkdir dur</span><br><span class="line">bash$ phone_lengths dur lab&#x2F;*.lab</span><br><span class="line">bash$ festival $MBDIR&#x2F;scm&#x2F;build_unitsel.scm</span><br><span class="line">festival&gt;(add_duration_info_utts &quot;utts.data&quot; &quot;dur&#x2F;durations&quot;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="8-2-音调-pitch-追踪"><a href="#8-2-音调-pitch-追踪" class="headerlink" title="8.2 音调(pitch)追踪"></a>8.2 音调(pitch)追踪</h3><p>join cost(目标损失函数)的一个重要组件是基准频率，<code>F0</code>。这个从音调标记中独立抽取的，尽管二者很显然是紧密相关的。</p>
+<p>而音调标记是波形生成所使用的信号处理必备的，音调轮廓(更准确的说是，<code>F0</code>轮廓)是join cost必须的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bash$ mkdir f0</span><br><span class="line">bash$ make_f0 -[mf] wav&#x2F;*.wav</span><br></pre></td></tr></table></figure>
+
+<p>其中<code>-[mf]</code>,<code>-f</code>指女性，<code>-m</code>指男性。</p>
+<h3 id="8-3-join-cost系数"><a href="#8-3-join-cost系数" class="headerlink" title="8.3 join cost系数"></a>8.3 join cost系数</h3><p>join cost衡量的是数据库中的候选单元join处的潜在声音不匹配。为了在合成声音运行时更快，可以预处理用于计算join cost的声学特征。</p>
+<p>Festival的join cost衡量的是spectrum(范围)(即MFCCs)的不匹配和F0的不匹配。接下来是对每个发声utterance规范化并结合MFCCs和F0为单个文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bash$ mkdir coef</span><br><span class="line">bash$ make_norm_join_cost_coefs coef f0 mfcc &#39;.*.mfcc&#39;</span><br></pre></td></tr></table></figure>
+
+<p>并且由于join cost仅使用每个候选单元的第一和最后一帧来评估，这些文件可以被剥离掉所有不在双音边界附近的值了，这使得文件变得更小、更快地载入到Festival。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bash$ mkdir coef2</span><br><span class="line">bash$ strip_join_cost_coefs coef coef2 utt&#x2F;*.utt</span><br></pre></td></tr></table></figure>
+
+<h3 id="8-4-波形表征"><a href="#8-4-波形表征" class="headerlink" title="8.4 波形表征"></a>8.4 波形表征</h3><p>尽管单元选取对于预先记录的波形片段的拼接至关重要，我们仍然可以为源过滤模型参数存储这些波形文件。</p>
+<p>Festival在语音合成时所使用的语音表征是残差激励线性预测系数(RELP)。这样就可以操作spectrum(范围)和F0（比如，在拼接处）以及持续时间。然而，实际上Festival的Multisyn引擎没有做任何操作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bash$ mkdir lpc</span><br><span class="line">bash$ make_lpc wav&#x2F;*.wav</span><br></pre></td></tr></table></figure>
+
+<h2 id="9-运行声音"><a href="#9-运行声音" class="headerlink" title="9 运行声音"></a>9 运行声音</h2><p>为了运行声音，启动Festival并载入声音(将的rpx修改为合适的名称)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bash$ festival</span><br><span class="line">festival&gt;(voice_localdir_multisyn-rpx)</span><br><span class="line">festival&gt;(SayText &quot;Hello world.&quot;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="10-提高"><a href="#10-提高" class="headerlink" title="10 提高"></a>10 提高</h2><p>前面的步骤已经完成声音的构建，接下来是如何提升声音质量了，我们所使用的办法是合成多版本的声音，然后对比和测试。</p>
+<p>构建多版本声音的方法就是完全复制一份<code>ss</code>文件夹，同时对<code>wav</code>,<code>mfcc</code>,<code>lpc</code>文件夹建立软链接。</p>
+<p>第一件事是重温构建声音的每个步骤，并查看是否有可以提高的地方。比如，可以调整 pitchmarking参数以适应你的声音。然后，尝试以下部分或全部变更。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2017-04-16-merlin-tts/" data-id="ck4ifp1ma002v2wjeg6b0htlu" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2017-04-01-voice-basic" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2017-04-01-voice-basic/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.500Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/23/2017-04-01-voice-basic/">语音处理0：基础</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一-语音的基础概念"><a href="#一-语音的基础概念" class="headerlink" title="一 语音的基础概念"></a>一 语音的基础概念</h2><h3 id="1-1-什么是语音"><a href="#1-1-什么是语音" class="headerlink" title="1.1 什么是语音"></a>1.1 什么是语音</h3><p>语音是一个连续的音频流，它是由大部分的稳定态和部分动态改变的状态混合构成</p>
+<h3 id="1-2-声音如何产生"><a href="#1-2-声音如何产生" class="headerlink" title="1.2 声音如何产生"></a>1.2 声音如何产生</h3><p><img src="/images/blog/voice_produce.png" alt="声音产生"></p>
+<p>声音由肺部气流并经过声带，此为声源。当我们发<strong>元音</strong>时，声带被气流震动并生成<strong>脉冲序列</strong>。此脉冲决定了语音的<strong>基准频率</strong>。</p>
+<p>当我们发出<strong>辅音</strong>时，声带没有被震动，并产生<strong>噪音</strong>。然后脉冲或噪声被声带转换或者个性化。</p>
+<h3 id="1-3-语音的组成"><a href="#1-3-语音的组成" class="headerlink" title="1.3 语音的组成"></a>1.3 语音的组成</h3><p>最小单元是<strong>音素</strong>，音素组合为<strong>音节</strong>。</p>
+<h4 id="1-3-1-音素"><a href="#1-3-1-音素" class="headerlink" title="1.3.1 音素"></a>1.3.1 音素</h4><p>音素是最小的语音单位，它是从音色的角度划分出来的。例如，汉语里的 ɑ、i、u都是音素。一种语言的语音系统大都是由几十个不同的音素组成的</p>
+<p>音素分为元音和辅音</p>
+<ul>
+<li><p><strong>元音</strong>： 如ɑ、o、e、i、u。</p>
+</li>
+<li><p><strong>辅音</strong>：如b、p、d、t、ɡ、k、s、r。</p>
+</li>
+</ul>
+<p><strong>元音和辅音的区别</strong></p>
+<ol>
+<li>元音发音时，气流不受阻碍；辅音发音时，气流通过口腔、鼻腔时要受到阻碍</li>
+</ol>
+<p>2．元音发音时，发音器官各部位保持均衡的紧张状态；辅音发音时，构成阻碍的部位比较紧张，其他部位比较松弛</p>
+<p>3．元音发音时，气流较弱；辅音发音时，气流较强。</p>
+<p>4．元音发音时，声带要颤动，发出的声音比较响亮；辅音发音时，有的声带颤动，声音响亮，如m、n、l、r，有的不颤动，声音不响亮，如b、t、z、c。</p>
+<h4 id="1-3-2-音节（只适用于汉语）"><a href="#1-3-2-音节（只适用于汉语）" class="headerlink" title="1.3.2 音节（只适用于汉语）"></a>1.3.2 音节（只适用于汉语）</h4><p>音节是由音素构成的。如啊”（ā）（1个音素），“地”（dì）（2个音素），“民”（mín）（3个音素）。</p>
+<p>音节示例：如“建设”是两个音节，“图书馆”是三个音节，“社会主义”是四个音节。汉语音节和汉字基本上是一对一，一个汉字也就是一个音节。</p>
+<p>音节包含了<strong>声母</strong>、<strong>韵母</strong>、<strong>音调</strong>三个部分。</p>
+<ul>
+<li><p><strong>声母</strong>： 声母指音节开头的辅音，共有23个。如dā（搭）的声母是d</p>
+</li>
+<li><p><strong>韵母</strong>： 韵母指音节里声母后面的部分，共38。jiǎ（甲）的韵母是iǎ</p>
+</li>
+<li><p><strong>音节</strong>： 声调指整个音节的高低升降的变化。普通话里dū（督）、dú（毒）、dǔ（赌）、dù（度）</p>
+</li>
+</ul>
+<p>根据《现代汉语词典》，汉语标准音节共 418 个</p>
+<h2 id="2-音频的表示"><a href="#2-音频的表示" class="headerlink" title="2 音频的表示"></a>2 音频的表示</h2><h3 id="2-1-波形表示"><a href="#2-1-波形表示" class="headerlink" title="2.1 波形表示"></a>2.1 波形表示</h3><p>波形表示是大家很熟悉的波形表示，就是直接表示出在观测点上所测量到的振幅和时间的关系。当然为了能够将连续的波形记录为数字形式，我们需要对这个波形进行采样（每隔一个固定的时间采取一次测量）和数字化（将连续的数字转化为可用二进制表达的格式）。</p>
+<p><img src="/images/blog/voice_wave_represtation.jpg" alt="音频的波形表示"></p>
+<p>在上面的图中，展示了一秒钟的人声音频片段，以及截取其中一毫秒的数据的放大图</p>
+<p><img src="/images/blog/voice_wave_represtation1ms.jpg" alt="音频的波形表示"></p>
+<p>我们最熟悉的CD音频，每秒钟采样44100次（这是因为，根据Nyquist采样定理，如果要完美重现20kHz的音频，那么我们最少需要每秒采样40k次，而20kHz是人类的听觉上限），而每个样本都用16位的二进制来表示。</p>
+<p>这样每一个样本可以表示最多65,536种不同的振幅。如果假定每一个时间点采用8位的二进制数字来表示，那么总共可能会有256种可能的值，我们就用一个256位的one－hot向量来表示它，最后在计算机中保存的声音片段，就可能是这样的。</p>
+<p><img src="/images/blog/voice_wave_represtation_onehot.jpg" alt="音频的波形表示">  </p>
+<h3 id="2-2-频域表示"><a href="#2-2-频域表示" class="headerlink" title="2.2 频域表示"></a>2.2 频域表示</h3><p>如果对输入的波形做一次傅立叶变换，会发现，一个复杂的sine波形，实际上在转换后的“频谱”上，可以被很简单的表示出来。</p>
+<p>转换后的音频，是一种频率的表示——我们只关心这个波形到底是以什么样的频率在震动，而恰好，我们人类对于声音的认知，也是基于频率而不是振幅的——实际上这样的表示，更加符合人类对于声音的认知，也更容易对其进行数字处理（DSP）。</p>
+<p><img src="/images/blog/voice_wave_represtation_fluir.jpg" alt="音频的傅里叶变换"> </p>
+<h2 id="3-语音的初步处理"><a href="#3-语音的初步处理" class="headerlink" title="3 语音的初步处理"></a>3 语音的初步处理</h2><p>我们知道声音实际上是一种波。常见的mp3等格式都是压缩格式，必须转成非压缩的纯波形文件来处理，比如Windows PCM文件，也就是俗称的wav文件。wav文件里存储的除了一个文件头以外，就是声音波形的一个个点了。下图是一个波形的示例。</p>
+<p><img src="/images/blog/voice_wave_example.jpg" alt="音频的傅里叶变换">  </p>
+<p>在开始语音识别之前，有时需要把首尾端的静音切除，降低对后续步骤造成的干扰。这个静音切除的操作一般称为VAD，需要用到信号处理的一些技术。要对声音进行分析，需要对声音分帧，也就是把声音切开成一小段一小段，每小段称为一帧。分帧操作一般不是简单的切开，而是使用移动窗函数来实现。帧与帧之间一般是有交叠的，就像下图这样：</p>
+<p><img src="/images/blog/voice_wave_segmentation.jpg" alt="音频的傅里叶变换">  </p>
+<p>图中，每帧的长度为25毫秒，每两帧之间有25-10=15毫秒的交叠。我们称为以帧长25ms、帧移10ms分帧。</p>
+<p>分帧后，语音就变成了很多小段。但波形在时域上几乎没有描述能力，因此必须将波形作变换。常见的一种变换方法是提取MFCC特征，根据人耳的生理特性，把每一帧波形变成一个多维向量，可以简单地理解为这个向量包含了这帧语音的内容信息。这个过程叫做声学特征提取。实际应用中，这一步有很多细节，声学特征也不止有MFCC这一种，具体这里不讲。</p>
+<p>至此，声音就成了一个12行（假设声学特征是12维）、N列的一个矩阵，称之为观察序列，这里N为总帧数。观察序列如下图所示，图中，每一帧都用一个12维的向量表示，色块的颜色深浅表示向量值的大小。</p>
+<p><img src="/images/blog/voice_mfcc.jpg" alt="音频的处理MFCC">  </p>
+<p>接下来就要介绍怎样把这个矩阵变成文本了。首先要介绍两个概念：</p>
+<ul>
+<li><p>音素：单词的发音由音素构成。对英语，一种常用的音素集是卡内基梅隆大学的一套由39个音素构成的音素集，参见The CMU Pronouncing Dictionary‎。汉语一般直接用全部声母和韵母作为音素集，另外汉语识别还分有调无调，不详述。</p>
+</li>
+<li><p>状态：这里理解成比音素更细致的语音单位就行啦。通常把一个音素划分成3个状态。</p>
+</li>
+</ul>
+<p><img src="/images/blog/voice_frames.jpg" alt="音频的处理MFCC">  </p>
+<p>图中，每个小竖条代表一帧，若干帧语音对应一个状态，每三个状态组合成一个音素，若干个音素组合成一个单词。也就是说，只要知道每帧语音对应哪个状态了，语音识别的结果也就出来了。</p>
+<p><strong>参考</strong></p>
+<p><a href="https://zhuanlan.zhihu.com/p/25784028" target="_blank" rel="noopener">Emotibot Tech | WaveNet语音合成与深度生成模型解析 - 知乎专栏</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2017-04-01-voice-basic/" data-id="ck4ifp1m9002r2wje1ct3ccle" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2017-04-01-mevislab" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2017-04-01-mevislab/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.498Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/23/2017-04-01-mevislab/">医疗软件Mevislab使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在阅读肺结节CT图像处理的相关论文时，注意到很多作者都使用的是一款软件Mevislab。Mevislab是一款用于图像处理，尤其是医疗CT图像领域的，快速原型开发平台，做学术研究和个人学习是免费自由使用的（可自由开发的模块有限），<br>商业环境下使用时收费的。我曾发邮件咨询过，大概每年2万2(2017年3月份)。下图是工作台样例:</p>
+<p><img src="/images/blog/mevislab_looks.jpg" alt="mevislab工作台"></p>
+<p>官网地址：<a href="http://www.mevislab.de/mevislab/" target="_blank" rel="noopener">Mevislab</a></p>
+<p>论坛地址:<a href="https://forum.mevis.fraunhofer.de/" target="_blank" rel="noopener">Mevislab论坛</a> ，很多问题自这里可以咨询，论坛活跃用户不多，一般可能要隔两天才有人回，可能是时差。</p>
+<h2 id="一-特点"><a href="#一-特点" class="headerlink" title="一 特点"></a>一 特点</h2><ul>
+<li><p>多平台支持：Mac,Linux,Windows</p>
+</li>
+<li><p>模块多：当前有920多标准模块，总共有3000多（包括360多ITK模块、1470个VTK模块、），基本涵盖了所有的图像处理模块，比如腐蚀、膨胀、阈值分割、区域增长等。在实际做图像处理时，直接拉模块连起来就可以。</p>
+</li>
+<li><p>支持脚本:目前支持python和C++，可以在工作台里直接调用python(使用RunPythonScripts模块)。C++ 可以直接重新定义mevislab内置的模块，或者自己重写一个模块。</p>
+</li>
+<li><p>自由高效：摸熟之后，你会发现它的高效、简洁，模块之间自由组合（流程上下衔接）</p>
+</li>
+<li><p>强大：强大的体现是，2D，3D(官方说法可以支持6D)都可以处理。尤其是3D渲染，简直神器，即刻呈现处理效果。</p>
+</li>
+</ul>
+<h2 id="二-使用"><a href="#二-使用" class="headerlink" title="二 使用"></a>二 使用</h2><h3 id="2-1-基本使用"><a href="#2-1-基本使用" class="headerlink" title="2.1 基本使用"></a>2.1 基本使用</h3><p>首先，构建一个最基本的图像处理流程</p>
+<p><img src="/images/blog/mevislab_basicpipeline.png" alt="基本流程"></p>
+<p>其中<code>ImageLoad</code>,<code>Threshold</code>,<code>SoView2D</code>这三个模块可以在任务栏的<code>module</code>中搜索找到，或者直接搜索框里输入即可得到。我们可以在图中看到不同的module有不同的颜色，接口处的形状也不同，有尖三角，有半圆形，它们代表不同的意义。具体的请参考官方文档，本文重点不讨论这个。</p>
+<p>常规的图像处理流程包括，载入图像，处理算法，展现模块。其中载入图像模块如上图<code>ImageLoad</code>，可以载入普通JPEG</p>
+<h3 id="2-2-基本模块"><a href="#2-2-基本模块" class="headerlink" title="2.2 基本模块"></a>2.2 基本模块</h3><p><strong>模块类型</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>外形</th>
+<th>特征</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ML模块(蓝色)</td>
+<td><img src="/images/blog/ml_module.png" alt="ML module"></td>
+<td>基于分页的，命令驱动的体素处理</td>
+</tr>
+<tr>
+<td>开放的素材模块(可以用来组合和协助构建处理过程)(绿色)</td>
+<td><img src="/images/blog/inventor_module.png" alt="inventor module"></td>
+<td>视觉场景图(3D),名称转换，所有模块以So(scene object)开头</td>
+</tr>
+<tr>
+<td>宏模块(棕色)</td>
+<td><img src="/images/blog/macro_module.png" alt="macro"></td>
+<td>组合其他模块类型，允许层次继承和脚本交互</td>
+</tr>
+</tbody></table>
+<p><strong>连接器</strong></p>
+<table>
+<thead>
+<tr>
+<th>外观</th>
+<th>形状</th>
+<th>定义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><img src="/images/blog/triangle_look.png" alt="三角形"></td>
+<td>三角形</td>
+<td>ML 图像</td>
+</tr>
+<tr>
+<td><img src="/images/blog/circle_look.png" alt="半圆形"></td>
+<td>半圆形</td>
+<td>场景素材</td>
+</tr>
+<tr>
+<td><img src="/images/blog/square_look.png" alt="方形"></td>
+<td>方形</td>
+<td>基本对象：指向数据结构的指针</td>
+</tr>
+</tbody></table>
+<p><strong>链接</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>外观</th>
+<th>特征</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据链接(连接器链接)</td>
+<td><img src="/images/blog/data_connect.png" alt="数据链接"></td>
+<td>连接器之间的直接链接。不同的连接器会有不同的颜色,蓝色的为ML，绿色的为开放素材，棕色的为基本类型</td>
+</tr>
+<tr>
+<td>参数链接(域链接)</td>
+<td><img src="/images/blog/parameter_connect.png" alt="参数链接"></td>
+<td>模块之间或模块内部的参数的链接形成的链接</td>
+</tr>
+</tbody></table>
+<h2 id="三-实现一个轮廓过滤"><a href="#三-实现一个轮廓过滤" class="headerlink" title="三 实现一个轮廓过滤"></a>三 实现一个轮廓过滤</h2><p>假设我们的轮廓过滤步骤为: 载入图像a–&gt;均值化[b]–&gt;形态学膨胀操作[c]–&gt;求差值[b,c]–&gt;查看图像</p>
+<p>在Mevislab的工作台新建网络，并载入模块<code>LoadImage</code>,<code>Convolution</code>,<code>Morphology</code>,<code>Arithmetic2</code>。这些模块可以直接在搜索框搜索到。将这些模块按照如下图连接起来，连接操作鼠标左键点击模块的连接点，然后拖到下一个模块，松开即可。</p>
+<p><img src="/images/blog/sample_filter_network.png" alt="网络流程"></p>
+<p><strong>参数调整</strong></p>
+<p>调整参数时，双击模块面板，有些隐含的参数需要右击面板–&gt;<code>show autopanel</code>。如果想让模块A中的参数param_a赋值给模块B中的参数param_b，在A面板中点击param_a拖住(可以看到此时面板中的param_a处出现了一个蓝色的箭头)，拉到面板B中的参数param_b处(也看到蓝色箭头激活)。如何保持参数同步(模块之间参数赋值)，示例如下:</p>
+<p><img src="/images/blog/sync_params.png" alt="模块间参数同步"></p>
+<p>其他参数设置参考下图:</p>
+<p><img src="/images/blog/network_params_setting.png" alt="模块间参数同步"></p>
+<h2 id="四-图像操作和处理"><a href="#四-图像操作和处理" class="headerlink" title="四 图像操作和处理"></a>四 图像操作和处理</h2><h3 id="4-1-图像操作"><a href="#4-1-图像操作" class="headerlink" title="4.1 图像操作"></a>4.1 图像操作</h3><ul>
+<li><p><code>ImageLoad</code>:打开图像，格式可以为<code>DICOM</code>,<code>TIFF</code>,<code>DICOM/TIFF</code>,<code>RAW</code>,<code>LUMISYS</code>,<code>PNM</code>,<code>Analyze</code>,<code>PNG</code>,<code>JPEG</code></p>
+</li>
+<li><p><code>LocalImage</code>:与<code>ImageLoad</code>类似，载入的是相对于Mevislab安装位置或当前网络位置的图像</p>
+</li>
+<li><p><code>ImageSave</code>:存储图像，以<code>DICOM</code>,<code>TIFF</code>,<code>DICOM/TIFF</code>,<code>RAW</code>,<code>LUMISYS</code>,<code>PNM</code>,<code>Analyze</code>,<code>PNG</code>,<code>JPEG</code>这些格式</p>
+</li>
+</ul>
+<h3 id="4-2-图像属性"><a href="#4-2-图像属性" class="headerlink" title="4.2 图像属性"></a>4.2 图像属性</h3><ul>
+<li><p><code>Info</code>:展示当前连接的输入图像的信息，比如图像尺寸，page size，体素size，总容积，世界矩阵等。</p>
+</li>
+<li><p><code>MinMaxScan</code>:扫描输入并更新输出图像的最大最小值，可以改变数据类型。</p>
+</li>
+<li><p><code>ImagePropertyConvert</code>:允许自由改变图像的page size，最大、最小值、数据类型、世界矩阵</p>
+</li>
+<li><p><code>ImageStatistics</code>:计算输入图像体素的一些统计特性。</p>
+</li>
+</ul>
+<h3 id="4-3-基本图像处理"><a href="#4-3-基本图像处理" class="headerlink" title="4.3 基本图像处理"></a>4.3 基本图像处理</h3><ul>
+<li><p><code>SubImage</code>:从输入图像中基于体素、世界坐标的起止，尺寸抽取子图。也可以用于抽取比输入图像更大的区域</p>
+</li>
+<li><p><code>Resample3D</code>:在3D图像的任意平面抽样，有17个filter可以使用。</p>
+</li>
+<li><p><code>Reformat</code>:将图像重新格式化为一副引用图像，或者通过<code>SoView2D/SoOrthoView2D</code>创建重新格式化的叠加。</p>
+</li>
+<li><p><code>Scale</code>:将图像缩放到一个指定间隔，来源和目标缩放间隔可以自定义。</p>
+</li>
+<li><p><code>Arithmetic1</code>:对一副图像做算术运算。比如<code>Add</code>操作，则是对图像中体素的每个值加上一个常量。</p>
+</li>
+<li><p><code>Arithmetic2</code>:对两幅图像做算数运算。比如<code>Add</code>操作，则是将图像1中每个体素的值加到图像2上。</p>
+</li>
+<li><p><code>Mask</code>: 用图像2中的mask对图像1进行mask操作。(有Mask模块中有不同选项)</p>
+</li>
+<li><p><code>TestPattern</code> :基于指定的尺寸，page size，数据类型和模式生成一副测试图像</p>
+</li>
+<li><p><code>AddNoise</code>: 基于标量输入图像产生噪音数据，比如高斯噪音、盐粒噪音等。</p>
+</li>
+</ul>
+<h3 id="4-4-过滤器"><a href="#4-4-过滤器" class="headerlink" title="4.4 过滤器"></a>4.4 过滤器</h3><ul>
+<li><p><code>Convolution</code>：标准卷积，比如均值卷积，高斯卷积，拉普拉斯卷积和Sobel。</p>
+</li>
+<li><p><code>ExtendedConvolution</code>:提供与标准卷积类似的过滤器，但是更加灵活的Kernel size和kernel geometry</p>
+</li>
+<li><p><code>Rank</code>: 基于秩的卷积，比如最小、最大、中值、Rank、index</p>
+</li>
+<li><p><code>Morphology</code>: 形态学操作，比如腐蚀和膨胀</p>
+</li>
+<li><p><code>CalculateGradient</code>:计算输入图像每个体素周围的值得坡度(梯度)</p>
+</li>
+</ul>
+<h3 id="4-5-分割"><a href="#4-5-分割" class="headerlink" title="4.5 分割"></a>4.5 分割</h3><ul>
+<li><p><code>Threshold</code>: 将图像转换为二值图像，根据阈值</p>
+</li>
+<li><p><code>IntervalThreshold</code>: 通过过滤掉在指定值域范围的像素值来处理一副图像，在值域范围外的可以指定其他值或者为0。</p>
+</li>
+<li><p><code>RegionGrowing</code>:区域增长算法，提供简单的基于阈值或间隔的 1D/2D/3D/4D的区域增长算法。需要设置阈值或间隔和最少一个种子节点。</p>
+</li>
+<li><p><code>RegionGrowingMacro</code>:是<code>RegionGrowing</code>的宏拓展，添加了自定义的marker 编辑。</p>
+</li>
+<li><p><code>ComputeConnectedComponents</code>:在2D/3D灰度图上进行连通组件分析。</p>
+</li>
+</ul>
+<h3 id="4-6-可视化"><a href="#4-6-可视化" class="headerlink" title="4.6 可视化"></a>4.6 可视化</h3><p><strong>2D可视化</strong></p>
+<ul>
+<li><p><code>View2D</code>: 以2D切片的形式查看3D图像。</p>
+</li>
+<li><p><code>View2DExtensions</code>: 封装了一系列的viewer，这些viewer都是常用于连接2D viewer的拓展，包括以切片形式查看、放大缩小、窗口调整。</p>
+</li>
+<li><p><code>SoView2D</code>: 在2D viewer中呈现一个容积(volume)图像的一个切片。</p>
+</li>
+<li><p><code>SoRenderArea</code>:提供一个开放的Inventor(素材)渲染器和Mevislab窗口内部的事件处理机制。</p>
+</li>
+<li><p><code>SoView2DOverlay</code>: 将一副2D图像与另外一副混合。</p>
+</li>
+<li><p><code>SoView2DPosition</code>: 显示2Dviewer 中最近点击的位置，显示形式可以自定义为圆形、空间矩形或叉叉。</p>
+</li>
+<li><p><code>SoView2DRectangle</code> : 在2D viewer中交互式的绘制或调整一个2D矩形。虽然此模块名称带2D，其实也可以操作3D。</p>
+</li>
+<li><p><code>SoMouseGrabber</code> :抓取Inventor sence中的鼠标事件并将其转化为float类型的x，y域。</p>
+</li>
+<li><p><code>SoKeyGrabber</code> :监听Inventor sence种的键盘事件，并触发依赖于不同键盘key按压操作的field。</p>
+</li>
+<li><p><code>OrthoView2D</code>: 提供一个2D view来展现三个正交视图方向的输入图像。</p>
+</li>
+<li><p><code>SoOrthoView2D</code>: 在2D viewer中渲染一副体素(volume)图像的正交切片</p>
+</li>
+<li><p><code>SynchroView2D</code>: 提供两个2D viewer，它们通过其世界坐标轴同步。</p>
+</li>
+</ul>
+<p><strong>3D 视图</strong></p>
+<ul>
+<li><p><code>SoGVRVolumeRenderer</code>:一个基于八卦的渲染器，允许3D/4D图像的高质量体素渲染。此模块继承自允许设置渲染参数的拓展模块集合。</p>
+</li>
+<li><p><code>SoExaminerViewer</code> : 提供开放的Inventor渲染和Mevislab窗口内部的时间操作。开放Inventor渲染比如背景色、透明度类型、绘画风格等。</p>
+</li>
+<li><p><code>View3D</code> :直接3D查看图像。</p>
+</li>
+<li><p><code>SoBackground</code>: 渲染开放Inventor sence中背景色的颜色坡度。</p>
+</li>
+</ul>
+<h3 id="4-7-LookUp-Table"><a href="#4-7-LookUp-Table" class="headerlink" title="4.7 LookUp Table"></a>4.7 LookUp Table</h3><p>此模块用于编辑网络中其他模块的参数（此模块后续再补充，没怎么用）</p>
+<ul>
+<li><p><code>ApplyLUT</code> :在输入图像上应用lookup table(LUT)。输入图像中的体素值用作LUT索引值，LUT实体值被缩放到最大实体参数，并存储到输出图像。</p>
+</li>
+<li><p><code>SoLUTEditor</code>:允许编辑RGBA LUT 并输出MLLut对象。</p>
+</li>
+</ul>
+<h3 id="4-8-Markers"><a href="#4-8-Markers" class="headerlink" title="4. 8 Markers"></a>4. 8 Markers</h3><ul>
+<li><p><code>XMarkerListContainer</code>:存储了XMarker对象列表为XMarkerList对象。其内容可以呈现，编辑和保存。一个XMarker对象由一个6D Position，一个3D Vector，一个Type，一个Name属性组成。</p>
+</li>
+<li><p><code>SoView2DMarkerEditor</code>: 允许在2D 视图上交互式放置、编辑和展现markers。</p>
+</li>
+<li><p><code>So3DMarkerEditor</code>: 在3D中呈现markers并提供可能的交互式编辑markers。</p>
+</li>
+</ul>
+<h3 id="4-9-Curves"><a href="#4-9-Curves" class="headerlink" title="4.9 Curves"></a>4.9 Curves</h3><ul>
+<li><p><code>ProfileCurve</code>:从一副图像的任意数据维度抽取概要轮廓，通过沿着指定的线路读取输入图像的体素值。</p>
+</li>
+<li><p><code>SoDiagram2D</code>:呈现2D曲线，比如时间序列，灰度缩放概要，直方图等。</p>
+</li>
+</ul>
+<h3 id="4-10-Contours"><a href="#4-10-Contours" class="headerlink" title="4.10 Contours"></a>4.10 Contours</h3><ul>
+<li><p><code>CSOManager</code>:允许编辑CSOs和CSOGroup设置参数和默认参数，以及维持CSO和CSOGroup的整齐度。</p>
+</li>
+<li><p><code>SoCSO3DVis</code>:在3D中某个CSOList中的CSOs以Open Inventor sence开启可视化。需要对input可用的CSOList(比如通过CSOManager)</p>
+</li>
+<li><p><code>CSOIsoGenerator</code>:允许以固定的ISO值对整幅图生成iso轮廓。需要一个可用填充值的CSOList(比如CSOManager)</p>
+</li>
+<li><p><code>SoView2DCSOExtensibleEditor</code>:允许编辑和拖拽CSOs。与CSOManager，一个CSO子编辑器和输出用的2D Viewer结合使用，</p>
+</li>
+<li><p><code>SoCSOSplineEditor</code>:允许徒手或一个点一个点的生成CSOs。</p>
+</li>
+<li><p><code>SoCSOEllipseEditor</code>:允许生成椭圆或圆形CSO。</p>
+</li>
+</ul>
+<h3 id="4-10-Surface-objects"><a href="#4-10-Surface-objects" class="headerlink" title="4.10 Surface objects"></a>4.10 Surface objects</h3><ul>
+<li><p><code>SoWEMRenderer</code>:将一个WEM渲染为一个Open Inventor sence</p>
+</li>
+<li><p><code>WEMIsoSurface</code>:以固定阈值生成标量体积图像的ISO表面</p>
+</li>
+<li><p><code>WEMSmooth</code>: 使用一个表面平滑(拉普拉斯)来平滑WEM，或者表面的平滑。</p>
+</li>
+<li><p><code>SoView2DWEMEditor</code>: 在特定球形范围交互式WEM表面变形。</p>
+</li>
+</ul>
+<h2 id="五-创建-Open-Inventor-Scene"><a href="#五-创建-Open-Inventor-Scene" class="headerlink" title="五 创建 Open Inventor Scene"></a>五 创建 Open Inventor Scene</h2><p>此模块主要利用Mevislab提供的各种自木块来构建各类视图模型，Open Inventor是一个面向对象的3D开发工具。Inventor scenes以场景图的形式组织。一个场景图由代表即将绘制的3D对象的节点，3D对象的属性，与其他节点结合的节点组成层次树，其他如摄像机、灯光等组成。</p>
+<p>注意Open Inventor中的遍历路径如下，这对于如何构建场景图很关键。</p>
+<p><img src="/images/blog/open_inventor_travel_path.jpg" alt="遍历路径"></p>
+<p>Open Inventor模块的函数有:</p>
+<ul>
+<li><p><code>Draggers and manipulators</code></p>
+</li>
+<li><p><code>Group nodes</code></p>
+</li>
+<li><p><code>Light sources</code></p>
+</li>
+<li><p><code>Transformations</code></p>
+</li>
+<li><p><code>Cameras</code></p>
+</li>
+<li><p><code>3D viewers</code></p>
+</li>
+<li><p><code>Geometric objects (Spheres, Cones, 3D Text, Nurbs, Triangle Meshes, etc.)</code></p>
+</li>
+<li><p><code>Object properties (Textures, Colors, Materials, etc.)</code></p>
+</li>
+</ul>
+<p>注意：在ML模块中模块的域值更新是同步的，但是在Open Inventor中是异步的，更改值之后会先存储在延迟队列中。</p>
+<p>关于如何构建这些场景，示例图如下:</p>
+<p> <img src="/images/blog/open_inventor_sample1.jpg" alt="遍历路径"></p>
+<p> <img src="/images/blog/open_inventor_sample2.jpg" alt="遍历路径"></p>
+<p>你可以将Mevislab当做一个3D建模工具玩。</p>
+<h2 id="六-构建宏模块"><a href="#六-构建宏模块" class="headerlink" title="六  构建宏模块"></a>六  构建宏模块</h2><p>宏模块可以通过MDL(Mevislab Definition Lanague)和python或JavaScript脚本实现。宏的功能与其他模块类似，可以理解为一系列完成某种功能的模块的集合被封装成了一个模块。</p>
+<p>构建一个宏模块，你需要走如下三步。</p>
+<h3 id="6-1-构建宏"><a href="#6-1-构建宏" class="headerlink" title="6.1 构建宏"></a>6.1 构建宏</h3><p>首先，你得把一系列用于完成特定任务的模块串起来定义好，放入工作台。如下图:</p>
+<p> <img src="/images/blog/mevislab_macro1.jpg" alt="宏定义模块"></p>
+<p>定义好之后将网络存储在某个位置，比如命名为test_macro.mlab。</p>
+<p>然后选择<code>File</code> → <code>Project Wizard</code> 并选择 <code>Macro</code>。然后设置宏的一些参数，其中打星号的是必须的。</p>
+<p> <img src="/images/blog/mevislab_macro2.jpg" alt="宏定义模块"></p>
+<p> 然后下一步，选择<code>Network File name</code>时选择刚保存test_macro.mlab。点击创建之后会自动创建如下文件</p>
+<p><img src="/images/blog/mevislab_macro3.jpg" alt="宏定义模块"></p>
+<p>此时，即可在搜索栏搜到刚刚定义的宏模块。</p>
+<h3 id="6-2-给宏添加宏参数和面板"><a href="#6-2-给宏添加宏参数和面板" class="headerlink" title="6.2 给宏添加宏参数和面板"></a>6.2 给宏添加宏参数和面板</h3><p>右键点击刚刚创建的宏的面板选择related files,选择mevislab_macro.script编辑此脚本。此脚本包含了区域:</p>
+<ul>
+<li><p><strong><em>interface</em></strong>:定义宏的输入输出。</p>
+</li>
+<li><p><strong><em>Commands</em></strong>:定义在此宏的某些field活动时要执行的脚本文件</p>
+</li>
+<li><p><strong><em>window</em></strong>: 定义了宏的面板，在面板上设置参数。</p>
+</li>
+</ul>
+<p>参考示例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">Interface &#123;</span><br><span class="line">Inputs &#x3D; &quot;&quot;</span><br><span class="line">Outputs &#123;</span><br><span class="line">Field Scene &#123; internalName &#x3D; &quot;Applicator.self&quot; &#125;</span><br><span class="line">&#125;</span><br><span class="line">Parameters &#123;</span><br><span class="line">Field length &#123;</span><br><span class="line">type &#x3D; float</span><br><span class="line">value &#x3D; 20</span><br><span class="line">min &#x3D; 1</span><br><span class="line">max &#x3D; 50</span><br><span class="line">&#125;</span><br><span class="line">Field diameter &#123;</span><br><span class="line">type &#x3D; float</span><br><span class="line">value &#x3D; 3</span><br><span class="line">min &#x3D; 0.1</span><br><span class="line">max &#x3D; 10</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">Commands &#123;</span><br><span class="line">source &#x3D; $(LOCAL)&#x2F;test_macro.py</span><br><span class="line">FieldListener length &#123; command &#x3D; AdjustLength &#125;</span><br><span class="line">FieldListener diameter &#123; command &#x3D; AdjustDiameter &#125;</span><br><span class="line">&#125;</span><br><span class="line">Window &#123;</span><br><span class="line">Category &#123;</span><br><span class="line">Field length &#123; step &#x3D; 1 &#125;</span><br><span class="line">Field diameter &#123; step &#x3D; 0.1 &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">下图为定义之后的面板效果</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> ![宏定义模块](&#x2F;images&#x2F;blog&#x2F;mevislab_macro4.jpg)</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-3-python脚本"><a href="#6-3-python脚本" class="headerlink" title="6.3 python脚本"></a>6.3 python脚本</h3><p>上一步的scipt脚本中，Command所使用的test_macro.py需要编写。示例如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># -----------------------------------------------------------------------------</span><br><span class="line">## This file implements scripting functions for the ApplicatorMacro module</span><br><span class="line">#</span><br><span class="line"># \file ApplicatorMacro.py</span><br><span class="line"># \author JDoe</span><br><span class="line"># \date 01&#x2F;2009</span><br><span class="line">#</span><br><span class="line"># -----------------------------------------------------------------------------</span><br><span class="line"># MeVis module import</span><br><span class="line">from mevis import *</span><br><span class="line">def AdjustLength():</span><br><span class="line">overallLength &#x3D; ctx.field(&quot;length&quot;).value</span><br><span class="line">tipLength &#x3D; ctx.field(&quot;SoCone.height&quot;).value</span><br><span class="line">shaftLength &#x3D; overallLength - tipLength</span><br><span class="line">ctx.field(&quot;SoCylinder.height&quot;).value &#x3D; shaftLength</span><br><span class="line">def AdjustDiameter():</span><br><span class="line">        diameter &#x3D; ctx.field (&quot;diameter&quot;).value</span><br></pre></td></tr></table></figure>
+<p>注意观察，python脚本中如何调用和控制参数。其中的<code>ctx</code>是默认的上下文，它可以访问当前网络中任何其他模块的任何field。比如此处的<code>SoCone.height</code>，其中的<code>SoCone</code>是一个模块，height是该模块的一个field，如果它有其他实例名example_name，则使用example_name.height也可以直接访问。 此处通过<code>ctx.field(&quot;SoCone.height&quot;).value</code>访问值，而<code>ctx.field(&quot;SoCylinder.height&quot;).value = shaftLength</code>来改变值。</p>
+<h2 id="七-渲染"><a href="#七-渲染" class="headerlink" title="七 渲染"></a>七 渲染</h2><p>其实Mevislab用起来只是快速实现模型，但是无法用于生产环境，处理速度太慢。平常用它来做渲染还是不错的，做3D渲染几乎不逊色于一般的3D建模软件。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2017-04-01-mevislab/" data-id="ck4ifp1m8002p2wjeh8ov1lby" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2017-03-11-autoseg-bylungvolumne" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2017-03-11-autoseg-bylungvolumne/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.491Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/23/2017-03-11-autoseg-bylungvolumne/">Morphological Segmentation and Partial Volume of Solid Pulmonary Lesions in Thoracic CT Scans</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>本文基于形态学处理方法提出了一个快速的、自动肺分割方法，并适用于病变的大结节和小结节。除此之外，提出的方法称述了容积评估的一些挑战，比如图像协议的多样性，或者通过引入一种基于分割方法的部分容积分析(segmentation-based partial volume analysis (SPVA))的灵感状态(inspiration state)。</p>
+<h2 id="一-分割方法"><a href="#一-分割方法" class="headerlink" title="一 分割方法"></a>一 分割方法</h2><h3 id="1-1-描述"><a href="#1-1-描述" class="headerlink" title="1.1 描述"></a>1.1 描述</h3><p>算法基于立方块输入容积VOI(Volume of interest)。下面的集合V代表了所有位于输入容积内的体素。强度值区间范围为 -1024HU到3071HU。在各向异性的情形中，在分割之前需要将体素重新取样为各向同性以允许3D体素矩阵中获得一致的图像处理过程。VOI的假设先决条件是</p>
+<ul>
+<li><p>P1):种子节点S位于结节内</p>
+</li>
+<li><p>P2):结节完全位于VOI内部，并且没有触碰到VOI边缘</p>
+</li>
+</ul>
+<p>按照标准图像处理的流程来做，阈值、区域增长、相连组件分析、凸壳和欧几里得距离转换。</p>
+<p>下一节中，新的分割方法是逐步描述的。首先，初始阈值分割创建了目标结节mask的超集。接着，在完成边界细化步骤之前，到胸壁的连接和血管组织的连接被移除。</p>
+<h3 id="1-2-初始化"><a href="#1-2-初始化" class="headerlink" title="1.2 初始化"></a>1.2 初始化</h3><p>初始分割使用的是区域增长算法，从种子点S开始的，固定阈值。阈值-400HU选为结节放射强度的经验值，它是50个HU值的算术均值，以及-850作为薄壁组织的经验值。此步骤的结果是一个初始的体素 $N_0$ 集合，第一个结节区域评估如下图2b。</p>
+<p> 接着，在 $N_0$ 上执行相连组件分析。最大的相连的，非分割区域P被抽取。它对应了环绕目标结节的VOI里面的肺薄壁组织的最大的连接区域（上图2c）。对于分割，P以两种方式使用：其一，对于没有胸壁关联的结节，P基本上就是 $N_0$ 的补充，除了结节内部的一些暗的区域（比如坏死或噪声）。我们定义了一个 $N_0$ 的超集 $N_1 = V-P$ ，最终 $N_0$ 中的孔洞闭合。其二，对于包含胸壁黏连的结节，P对接下来的分离步骤至关重要。</p>
+<p><img src="/images/blog/lungvolumne1.png" alt=""></p>
+<h3 id="1-3-从胸壁分离"><a href="#1-3-从胸壁分离" class="headerlink" title="1.3 从胸壁分离"></a>1.3 从胸壁分离</h3><p>如上图所示，不仅邻接脉管组织，同时胸壁的部分也可能会被包含在初始的分割集 $N_0$中。通过衡量V中的由 $N_0$ 覆盖的边界体素的占比，来决定是否需要进一步的胸壁分离算法。边界占比10%经验上可作为合适的阈值，并被用在小节IV中。由于结果在没有胸壁连接的情形中不会受到影响，此检测步骤可以被抹去并且仅仅使用于避免不必要的时间消耗中。</p>
+<p>CT图像中通常在结节与胸壁黏连之间并不表现出可见的强度对比。因此，此步骤仅重现使用形态学操作从胸壁分离的结节。</p>
+<h3 id="1-4-从黏连的脉管组织分离"><a href="#1-4-从黏连的脉管组织分离" class="headerlink" title="1.4 从黏连的脉管组织分离"></a>1.4 从黏连的脉管组织分离</h3><p>由于肺分离仅能够mask out不属于肺的部分结构，邻接组织依然被包含在$N_2$ 中。算法特地关注大结节转移的容积，因此与脉管组织相连的拓展连接也是在期望之内(上图的c和d)。CT图像上的强度信息不足以允许基于强度的分割步骤，但是结节和血管组织在形态学上区别明显。结节与外部脉管组织的连接通常比结节自身的连接要纤细。因此，可以使用形态学开运算(先腐蚀后膨胀)完成结构分离。但是形态学开运算不适于移除完全被病变结节包围的脉管组织的部分。因而，我们仅分离那些部分与脉管组织相连的并且容易被形态学特征清晰区分的。</p>
+<p>有多种方法实现二分形态学操作。相比于经典方法，kernel-based的形态学操作，使用球形结构元素的腐蚀和膨胀操作可以以计算mask的内部或者外部边界的欧式距离以及紧接的在结果距离map上的过滤体素操作来模拟。距离转换被用来实现形态学操作。距离转换操作方法被用于一些相关问题，如从血管组织中分离动脉瘤。</p>
+<p>对于当前任务，从紧凑病变邻接的血管移除血管，对形态学开运算使用距离map的主要原因是，一旦它们被计算，它们包含了仅仅使用阈值获得的任意腐蚀和膨胀的结果的形态学信息。除此之外的一些参数，比如血管半径可以直接从距离map中获得。接下来描述的是如何有效的计算这些特征</p>
+<ol>
+<li><p><strong>基本距离转换</strong> ：为实现腐蚀和接下来的膨胀操作，使用两个相反的距离变换。首先是一个基本的3D欧几里得距离转换，从 $E:V\rightarrow R$ ,计算 $N_2$ 中每个体素到背景的最小距离。世界坐标用来计       算体素的各向异性：</p>
+<p>$$<br> E(v):=min\lbrace||world(v)-world(v’)||_2:v’\notin N_2\rbrace<br>$$<br>接着在距离map中再使用低阈值 $threshold$ 来实现形态学腐蚀操作，称为腐蚀阈值。此操作的关键部分是找到合适的 $threshold$ ，在切除不想要的邻接结构时无须切除显著的结节边界特征。</p>
+</li>
+<li><p><strong>种子优化</strong>：为了优化初始种子节点<code>S</code>，目标病变区域的中心需要被近似。基本距离map E对 $N_2$ 中的每个体素到最邻近的体素的距离做了编码。从初始的定义的结节上的种子节点<code>S</code>出发，E上的局部最大搜索可以近似得到病变区域中心，如下图。</p>
+</li>
+</ol>
+<p><img src="/images/blog/lungvolumne2.png" alt=""></p>
+<p>  这并不仅仅提供了一个新的种子节点<code>S&#39;</code>，同时也为得到了其边界距离 $E(S’)$（实际的结节半径） ，一个很好的近似 </p>
+<p>  $$<br>    \tilde{r}:=E(S’)<br>  $$</p>
+<p>  通过构造，新的种子节点 <code>S&#39;</code>位于局部边界距离最大点，同时由于结节大部分是凸的，局部最大值很可能就是全局最大。使用一个大于 $\tilde{r}$ 的腐蚀阈值会导致所有的结节体素在腐蚀时被根除。因而，腐蚀   阈值  $\tilde{r}$  对应了100%的腐蚀强度，使得我们可以更加公式化的定义这一项，关于边界距离的腐蚀比例。由于腐蚀强度的定义使得我们可以对决定方法定义个更加启发式的描述，并且腐蚀阈值的绝对值    对于方法描述是不显著的，我们对任意 $e\in R$ 定义了归一化距离 $\phi$  </p>
+<p> $$<br>   \phi (e):=\frac{e}{\tilde{r}}<br>  $$</p>
+<p> 并在接下来检验归一化距离map $E_{\phi}$ ，其定义如下</p>
+<p> $$<br>  E_{\phi} :=\phi(E(v))<br> $$</p>
+<p> 为最小化体素误差，每个将从病变组织分离的黏连结构尽可能地在靠近病变组织切除，这对于分割处理是至关重要的。在归一化的距离map $E_{\phi}$上 使用阈值来实现腐蚀操作。 如果腐蚀强度值存在如下:</p>
+<ul>
+<li><p><strong>C1</strong>:大到足以切除所有靠近连接点的邻接结构</p>
+<ul>
+<li><strong>C2</strong>: 与边界上限 $E_{\phi}(S’)$ 一致</li>
+</ul>
+<p>其中最小的接着会被称为<strong>最优腐蚀强度 $\theta_{\star}$ ** ，在满足条件 **C1</strong> 和 <strong>C2</strong>的同时尽可能保留病变组织的原始形状。它是接下来提出的模型的最优。我们需要研究的是，在何种情况下存在此类最  优强度，以及如何高效地计算。</p>
+</li>
+</ul>
+<ol start="3">
+<li><strong>血管连接性模型</strong>：这些问题的答案取决于邻接结构和目标病变区域本身的形态学特征。我们为此提出了一个讨论框架，我们定义为<strong>血管连接性模型</strong>，对血管黏连做了如下两个假设：</li>
+</ol>
+<ul>
+<li><p><strong>A1</strong>：每个肺组织最终源于肺门区域</p>
+</li>
+<li><p><strong>A2</strong>：每个组织的半径随着其到肺门距离的增加而单调递减。</p>
+</li>
+</ul>
+<p>鉴于模型以及其他约束，总是存在一个最优强度的，并且也是可以高效计算的。</p>
+<ol start="4">
+<li><strong>最优强度存在</strong>：由于我们期望算法能够区分非常规结节边界特征和邻接组织，我们需要利用先决条件P2:结节本身完全位于VOI内部并且没有触及其边界。由于假设A2，组织的半径在从肺门进入VOI之后不会增加。最终，它要么衰退为一个无法再追踪的度，要么再次离开了VOI。两种情况下，以特定腐蚀强度腐蚀的后果是，如果组织在某些点被腐蚀操作根除，此点之外的组织部分将会消失。</li>
+</ol>
+<p>如果一个或多个组织连接到一个结节，会出现两种情况（如上图）：组织在结节内部完结，或者穿过结节继续拓展。两种情况下，实体点的组织的半径需待确定，由于任意大于此半径的腐蚀强度不仅会在实体点将结节从组织打断，而且由于假设A2，完全抹去留在结节中的组织部分。这暗含了一个约束：如果VOI与模型一致，但是在实体点结节半径小于组织半径，条件C2无法满足，并且最优腐蚀强度不存在。换句话说，基于脉管组织模型 假设A1和A2，当且仅当结节内的实体点处任意黏连组织半径都小于 $\tilde{r}$ 时从黏连的脉管组织分离结节才有可能。由于这些情形非常少，（700例中不到5例）,所以有理由认为可以通过全局形态学腐蚀操作完成从脉管组织分离。</p>
+<ol start="5">
+<li><strong>最优腐蚀强度计算</strong>：下一步是高效的计算最优强度。利用 $E_{\phi}$ ，条件可以以最优种子节点S’到VOI边界的路径来表述。以 $P_{N_2}^{\gamma}$表示 $N_2$ 中任意长度 $n$ 的所有的路径集合 $(v_0,v_1,v_2,…v_n)$ ，从 $v_0=S’$ 开始在VOI边界上（基于3D邻居关系 $\gamma$）的体素 $v_n$ 终止。那么最优腐蚀强度 $\theta_{\star}$ 可以被定义为 :</li>
+</ol>
+<p>$$<br> \theta <em>{\star} = max\lbrace min\lbrace E</em>{\phi}(v):v\in p \rbrace :p\in P^{\gamma}_{N_2}\rbrace<br>$$</p>
+<p>换句话说，$\theta <em>{\star}$ 沿着 $P^{\gamma}</em>{N_2}$ 路径中所有最小半径的最大半径。为了高效的计算 $\theta <em>{\star}$ ，在 $E</em>{\phi}$ 使用 一个动态的阈值区域增长方法 。从S’开始，阈值无上限，下限为1，达到VOI边界后一次递减。最优的腐蚀强度即为终止之前的最后一个阈值下限。</p>
+<p>考虑到现实生活中的一些场景，离散效应，运动伪影，噪声和解剖异常。这可能会导致与假设A1（出现非常小的组织）和假设A2（关于半径单调性）的不符合。因而，在现实中原理上最优的腐蚀强度并不一定有最佳效果。为解决极小组织触及病变组织但无法全路径追踪到VOI边界的，结果值不仅仅aganist上限1剪切（确保腐蚀操作不会完全剔除病变组织），而且aganist人工下限 $\epsilon$ 。作为一种可能出现的单调性不一致的妥协，腐蚀强度值一般会比计算得到的最优值稍微高一点，如果检测到连接则加上一个偏移 $\mu$ ，从实际方法出发，有如下定义:</p>
+<p>$$<br>  \theta _ := \lbrace\quad 1,\quad \theta_{\star}\gt 1\ \epsilon ,\quad \theta <em>{\star} \lg \epsilon \ \theta</em>{\star} +\mu,\quad otherwise<br>$$</p>
+<p>参数 $\mu$ 和 $\epsilon$ 是一种百分比形式独立定义于实际病变组织半径，由于它们会与腐蚀强度比如归一化的腐蚀阈值关联。$\mu$ 的一般值是 10%到30%之间，对于 $\epsilon$ 经验设置的最优值为25%。</p>
+<ol start="6">
+<li><strong>腐蚀：</strong>既然已经决定了合适的强度，在移除距离低于绝对腐蚀阈值 $\circleddash _:=\phi ^{-1}(\theta_)$的非归一化、基本距离mapE上可以做腐蚀操作。第一张图的图e显示了在距离map上使用阈值 $\circleddash _$之后的结果，结果得到的腐蚀过后的结节mask $N_$定义如下</li>
+</ol>
+<p>$$<br>  N_:= \lbrace v\in N_2|E(v)\ge \circleddash _<br>$$<br>注意到，此形态学操作通常无法成功将结节从胸壁上分离，由于肺连接通常更广，以及任意以必要强度完成的腐蚀操作要么会抹去任意非常规结节形态，要么移除整个结节。</p>
+<p>鉴于腐蚀操作的目标是在连接点切除每个组织，组织的更远部分可能在膨胀操作之后然与结节相连。然而，通过重建这些阈值，这些组织部分以邻近关系 $\gamma$ 从结节部件中断开。考虑到目标结节部件是由修改后的种子点 <code>S&#39;</code> 唯一定义的，可以通过 $\gamma$ 连接性分析轻易得到。</p>
+<ol start="7">
+<li><strong>二次距离变换</strong>：从 $N_$ 开始，开运算的第二步，膨胀操作使用了一个二次距离变换map D，将每个体素映射到其到腐蚀结节mask $N _$ 的距离：</li>
+</ol>
+<p>$$<br> D(v):= min \lbrace ||world(v)-world(v’)||<em>2:v’ \in N\</em><br>$$</p>
+<p>为了获得较好的结节近似，腐蚀阈值 $\circleddash _$ 本身初看起来是个在D上实现膨胀操作的上限阈值。然而，基于腐蚀强度，此结果可能会得到不精确的分割边界和在剪切得更精细的边界特征（下图左图）</p>
+<p><img src="/images/blog/lungvolumne3.png" alt=""></p>
+<p> 为避免这种欠分割，需要额外的边界重修，可以重现上图右边的精确的边界。</p>
+<h3 id="1-5-边界重修"><a href="#1-5-边界重修" class="headerlink" title="1.5 边界重修"></a>1.5 边界重修</h3><p>为了纳入被前面步骤中腐蚀操作抹去的结节边界更小的不规则性，膨胀阈值 $\circleddash <em>{+}$ 的选择会比 $\circleddash \</em>$ 稍大。即 $\circleddash <em>{+}:=\circleddash \</em>+\delta$ 。膨胀操作的mask $N_+$ 定义为：</p>
+<p>$$<br> N_+:= \lbrace v\in V:D(v)\lg \circleddash \rbrace<br>$$</p>
+<p>此步骤不仅添加了一些肺周围的薄壁组织和胸壁，这很容易通过与 $N_2$ 的交集运算来移除，同时也会无意将之前步骤已经移除过的组织纳入。我们因此接着计算初始分割和膨胀mask的交集，$I:=N_0\cap \partial  N_+$ 。用 结果 $I_{\partial}$ 中的 $\partial$ 来膨胀I，用来移除不需要的结构。最终的分割结果集 $N_{\star}$  定义为 </p>
+<p>$$<br> N_{\star} := (N_+\cap N_2) /I_{\partial}<br>$$</p>
+<h3 id="1-6-交互式校验"><a href="#1-6-交互式校验" class="headerlink" title="1.6 交互式校验"></a>1.6 交互式校验</h3><p>分割步骤基于一些假设。一些特殊情况下，比如解剖异常，成像或运动伪影，或者与其他疾病相关的条件可能会导致不好的结果。这些情况下，需要医生的专业知识来交互式地纠正。为方便纠正，需要预定义一个带有启发式值域范围的形状参数。更新后的结果应该立即呈现，以完成交互式优化。</p>
+<p>在提出的分割框架中，腐蚀强度参数满足这些条件。自动分割过程之后，初始值 $\theta_$ 可以在指定步骤迭代的增加或减少，可能的值域为0到100%之间。由于预处理，胸壁分割以及最优腐蚀阈值的计算，可以在交互式地腐蚀强度修改之后留出，腐蚀步骤之后仅需要对所有处理步骤的进行一次更新。因而，与初始分割步骤相比，更新所需的时间后续被减少。</p>
+<h2 id="二-基于分割的部分体积分析方法（SPVA）"><a href="#二-基于分割的部分体积分析方法（SPVA）" class="headerlink" title="二 基于分割的部分体积分析方法（SPVA）"></a>二 基于分割的部分体积分析方法（SPVA）</h2><p>不使用分割和仅仅引用手工画在中心slice的结节中心的区域，意味着纯粹结节组织和周围薄壁组织的强度（密度）是可以从数据评估。对每个slice，通过累加每个slice内的体素强度和用纯粹的组织均值为权重，来计算容积。现存的一些研究证明，在CT图像上的海量的潜在的密度分析，并不适用于体内结节评估，由于黏连的高密度结构可能被算入结节容积。除此之外，结节和薄壁组织减去平均衰减需要完全自动化，同时保持鲁棒性和可靠性，以及在VOI内不被其他肺结构干扰。</p>
+<p>为克服这些问题，我们的方法结合了先前的使用强度直方图分析的分割得到的形态学信息。某篇论文的模型中，假设暗示着所有体素的平均强度对于扫描和重建的变化是不变的参数。在一个已知强度的两种组织的双峰设置中，这种假设使得出现在任意容积内的组织容积均值变得可重现计算，使用平均频率直方图分析。为避免部分容积分析上的VOI中的脉管组织和胸壁区域的影响，使用分割结果。首先，由于容积均值只出现在结节边界，足以将部分容积分析限制在其直接的邻近。其次，所有连接到结节的高密度结构都在分割步骤被确定，并且可以在分析步骤明确的剔除。</p>
+<p>SPVA分析定义如下：基于最终分析结果 $N_{\star}$ ，三个不同的区域，结节中心(nodule core NC)，薄壁组织区域(parenchyma area PC)，以及部分容积区域(partial volume PV)可以通过它们到最终mask $N_{\star}$ 边界的距离来自动确定。如下图</p>
+<p><img src="/images/blog/lungvolumne4.png" alt=""></p>
+<p>参数 $\triangle <em>{PC}$ 描述了PV内任意体素到分割边界的最大距离，然后定义区域PV，必须足够大来纳入所有结节组织非零比例的体素，必须足够小而不包含邻接的高密度结构的部分容积。同时，这些直接黏在结节上的结构在分割步骤已经确定，没有与结节相连的结构没有被删除。因此，如果位于PV区域内部，它们无法从容积上剔除。但是可以通过对每个scan和重构协议调整 $\triangle _{PC}$获得更加精确的结果，固定经验值2mm被证明是一个调和两方面的较好的折中。从NC和PC中减去平均衰减 $\mu _{SC}$ 和 $\mu</em> {PC}$，为PV内的体素对整个结节容积有个权重化的贡献，其中体素v的权重w被定义为</p>
+<p>$$<br>  w(v):= \lbrace 1\quad v\in NC \ \frac{i(v)-\mu _{PC}}{\mu _{NC}-\mu _{pc}},\quad v \in PV \ 0 ,\quad otherwise<br>$$</p>
+<p>其中 $i(v)$ 代表了在输入VOI中体素v的密度值。接着，最终结节容积通过累加所有VOI内的体素权重乘以体素容积得到。 </p>
+<p>对重要的场合，区域NC太小二无法减去均值 $\mu _{NC}$ ，没办法决定纯粹的结节组织衰减。由于 增加NC会导致一些不纯的体素被纳入，在欠评估的结节密度和过度评估的结节容积中，对solid结节使用预定义的密度值来替代 $\mu _{SC}$。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2017-03-11-autoseg-bylungvolumne/" data-id="ck4ifp1m7002n2wje5iev1odp" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2017-03-09-lungseg-bignodule-detect" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2017-03-09-lungseg-bignodule-detect/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.479Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/23/2017-03-09-lungseg-bignodule-detect/">肺部CT大结节检测</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="0-摘要"><a href="#0-摘要" class="headerlink" title="0 摘要"></a>0 摘要</h2><p><strong>目的</strong>：当前使用CAD系统检测对肺结节检测时，只在较小结节上有很好性能，通常不能检测更少的更大的结节的，这些可能是癌性。我们专门为大于10mm的solid结节检测设计了算法。</p>
+<p><strong>方法</strong>：我们提出的检测流程，初始时由三维肺分割算法，通过形态学操作包含入黏着在肺壁上的大结节。额外的处理是mask out肺空间的外部结构，以确保肺和实质结节有着相似的轮廓。接着，通过多阶段的阈值和形态学操作获得结节候选，以检测大结节和小结节。对每个候选分割之后，计算出一个基于强度、形状、blobness、和空间结构的24个特征的集合。使用一个径向偏置SVM分类器对结节候选分类，在完全公开的肺部图像数据集上使用10折交叉验证评估性能。</p>
+<p><strong>结果</strong>：本文提出的CAD系统弄获得了98.3%(234/238)的灵敏度，94.1%(224/238)大结节的准确率，平均4.0和1.0 FPs/scan。</p>
+<h2 id="一-数据集"><a href="#一-数据集" class="headerlink" title="一  数据集"></a>一  数据集</h2><p>本论文中，使用的是LIDC-IDRI数据集。数据集包含了来自7个机构的1018个病例异构数据。在第一轮盲读阶段，每个可疑病变被标注同时被分类为 $non-nodule,nodeul&lt;3mm,nodule\ge 3mm$ 。对于 $nodules\ge 3mm$ 的被充分表征为3D分割，会提供其半径和形态学特征描述。</p>
+<p>我们使用区域厚度小于等于2.5mm的，比这更厚的区域数据被丢弃，因为我们将这些数据定义为质量不足。尽管slice厚度为3mm的大结节依然可以被检测到，最近的临床指南推荐使用thin-slice,因而我们也使用thin-slice CT scan。除此之外，包含不连通的slice空间的也被丢弃，最后获得了888个适于分析的CT scan。</p>
+<p>下表是数据概况</p>
+<table>
+<thead>
+<tr>
+<th>Aggrement levels</th>
+<th>Nodules $\ge 3mm$</th>
+<th>Nodules $\ge 10mm$</th>
+<th>solid nodules $\ge 10mm$</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>At least 1</td>
+<td>2290</td>
+<td>393</td>
+<td>322</td>
+</tr>
+<tr>
+<td>At least 2</td>
+<td>1602</td>
+<td>325</td>
+<td>277</td>
+</tr>
+<tr>
+<td>At least 3</td>
+<td>1186</td>
+<td>269</td>
+<td>238</td>
+</tr>
+<tr>
+<td>At least 4</td>
+<td>777</td>
+<td>199</td>
+<td>172</td>
+</tr>
+</tbody></table>
+<p>从888个scan中制作了36378个标注。由于结节可能被多个读者标注，不同的读者的标注在近似位置（小于标注的半径之和）的会被合并。只对 $nodule\gt 3mm$的结节标注做合并，因为这个作为引用标准。其半径、容积、和坐标都平均化。我们仅仅选择被分类为潜在恶性结节的作为大结节的引用标准。根据Dutch-Belgian NELSON肺癌实验，潜在恶性结节指的是容积大于$500mm^3$的，其对应的半径为近似 10mm。然后，选择被大多数读者(4个中的3个)接受的结节，获得了269个结节。并且设计CAD系统只关注 solid 结节的。由读者打分的各种各样的形态学特征用来定义结节类型。本文中，只有当大多数读者给出的上下文特征分数高于3(1=ground-glass/nonsolid,3=part-solid,5=solid)结节被认为是solid。最终获得了238个solid结节，这形成了分析所用的最终结节集合。</p>
+<p>评估过程中，CAD标记的位置在标注半径范围内的可被认为是命中了。如果CAD标记命中了引用集中的结节，则被分类为正样本(True  Positive)。不在病变引用集上的标记(即$nodule\ge 10mm$只被一两个放射医师接受，$nodules\gt 10mm$,subsolid nodules,non-nodules)被认为是不相关的，且没有被记入为假阳性(False Positive).</p>
+<h2 id="三-方法"><a href="#三-方法" class="headerlink" title="三 方法"></a>三 方法</h2><p>算法的主要流程如下，算法的开始时肺分割。肺分割被细化以将那些与肺壁相连的结节包含进来。</p>
+<p><img src="/images/blog/lung_bignodule1.png" alt=""></p>
+<p> 之后的后续处理步骤是移除肺外部的背景并重新将图像抽样为各向同性分辨率。候选检测阶段确认大结节候选的位置并为每个候选构建segmentation。使用特征抽取来获得候选的判别特征，这在分类阶段将被用来将候选分为结节和非结节。</p>
+<h3 id="3-1-肺分割"><a href="#3-1-肺分割" class="headerlink" title="3.1 肺分割"></a>3.1 肺分割</h3><p>CAD系统的第一步的肺分割用来决定肺的ROI(region of interest)。主流的算法依赖于一种基于阈值的方法。由于相似的强度特征，粘附在肺壁的结节通常无法包含入肺分割内。</p>
+<p>我们使用Rikxoort提出的算法作为初始的肺分割segmentation。方法由这些组成：大气道抽取、肺分割、左右肺分割和segmentation 平滑。当肺分割算法失败时，我们通过手动衡量输入参数，比如气管的seed point来更正肺分割。</p>
+<p>为了在肺分割segmentation包含入大的肺结节，使用了额外的细化的肺分割segmentation。肺结节被剔除的区域通常看起来像在肺segmentation的表面上有个洞。我们实验了两种方法<strong>(1)</strong>使用形态学逻辑滚球rolling-ball操作<strong>(2)</strong>在rolling-ball操作之后做扩张操作。所有的形态学操作使用的是球形结构元素。结构元素的半径$d_{struct}$设置为一个x维度在输入scan中的比率。我们评估了$d_{struct}=\lbrace 2%,3%,4%,6%,8%\rbrace $ 的rolling-ball操作和$d_{struct}=\lbrace 1%,2%\rbrace $ 的扩张操作。</p>
+<h3 id="3-2-预处理"><a href="#3-2-预处理" class="headerlink" title="3.2 预处理"></a>3.2 预处理</h3><p>肺segmentation用作mask，segmentation之外的区域被设置为肺组织的平均强度(-900HU)。这可以避免肺病变看起来与其内部的结节非常不同，这就要求有不同的或者额外的特征来准确检测这些结节。肺segmentation使用高斯过滤器重新取样为1.0mm的    各向同性分辨率(isotropic resolution)。</p>
+<h3 id="3-3-候选检测"><a href="#3-3-候选检测" class="headerlink" title="3.3 候选检测"></a>3.3 候选检测</h3><p>候选检测步骤旨在局部化所有肺内部的结节。这个任务之所以艰难，是因为结节在形态上、尺寸上和强度上变化范围太广。本文中，候选检测由三部分组成:初始候选检测，连通组件分析，结节检测细化。</p>
+<h4 id="3-3-1-初始候选检测"><a href="#3-3-1-初始候选检测" class="headerlink" title="3.3.1 初始候选检测"></a>3.3.1 初始候选检测</h4><p>与其他相似度密度较高的结构(主要是血管)相比，大结节通常有着十分不同的形态学特征，一个简单的阈值和形态学开运算就足够充分检测大部分大结节。然后，由于它们的尺寸，与其他非密度结构（大部分是胸膜壁和脉管系统）相比大结节倾向于内部相连。这使得检测器的参数选取变得复杂，尤其是形态学开运算的结构元素的尺寸。相连结构的尺寸可能变化范围广。举一个例子，一个大的结构元素需要移除结节上的大结构的黏着(attachment of large structure)，但是会导致小结节无法检测。</p>
+<p>为检测不同尺寸的候选，使用多阶段阈值和形态开运算。强度阈值为-300HU来区分solid nodule。每个阶段，顺序使用半径为9,7,5或者3mm的球形结构的扩张操作，并产生了中间候选mask。候选检测始于大结构半径并渐渐使用更小的半径。为防止先前候选与新候选合并，在处理下一阶段之前先前候选使用了一个3mm的保障边界。在阶段n计算候选检测，新的中间mask与阶段n-1的输出mask合并，使用逻辑与操作。下图示意了候选检测的输出。每一阶段使用不同的阈值和形态扩张操作，mask的结果与上一阶段的mask合并。第一行是检测大结节，第二行是小一点的结节检测过程。</p>
+<p><img src="/images/blog/lung_bignodule2.png" alt=""></p>
+<h4 id="3-3-2-连通组件分析"><a href="#3-3-2-连通组件分析" class="headerlink" title="3.3.2 连通组件分析"></a>3.3.2 连通组件分析</h4><p>使用初始候选检测之后，所有相连体素使用连通组件分析聚合为候选。为了移除cluster size超出目标范围的，我们丢弃了cluster容积小于 $268mm^3$的和大于 $33524mm^3$的，其分别对应的完美球形半径为8mm和40mm。</p>
+<h4 id="3-3-3-结节segmentation"><a href="#3-3-3-结节segmentation" class="headerlink" title="3.3.3 结节segmentation"></a>3.3.3 结节segmentation</h4><p>初始候选指示了候选cluster的坐标。作为候选的一个准确的容积和形态学评估，量化结节特性尤为重要，我们使用了由Kuhnigk提出的robust结节分割方法。给定cluster上的立方块输入容积和seed point，算法进行区域增长并使用有效的形态学开运算来从血脉组织和胸腔壁分离结节。对每个候选cluster，从cluster的主轴(major axis)上获得seed point。VOI(volume of interest)被定义为初始边长为60mm的在cluster附近的立方块。立方块的尺寸是自动适应的，必要的话，推荐更大的结节。</p>
+<p>为进一步移除大于或小于预定目标的候选，我们使用3.3.2节中相同的阈值。为避免结节中出现重复结节，与任何已经被接受的segmentation位置小于10mm的都被丢弃。结节segmentation的结果集合将进一步用作特征抽取和分类。</p>
+<h3 id="3-4-特征抽取"><a href="#3-4-特征抽取" class="headerlink" title="3.4 特征抽取"></a>3.4 特征抽取</h3><p>特征抽取用来获得可以区分结节和非结节的特征。定义了四个不同集合的特征：强度、cluster、blobness、和上下文特征。下表展示了所有特征的概览</p>
+<p><strong>强度特征</strong></p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>强度特征</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1-3</td>
+<td>Density inside candidate segmentation (mean,stdev, entropy)</td>
+<td></td>
+</tr>
+<tr>
+<td>4-6</td>
+<td>Density inside bounding box (mean, stdev, entropy)</td>
+<td></td>
+</tr>
+<tr>
+<td>7-9</td>
+<td>Density around candidate segmentation (mean,stdev, entropy)</td>
+<td>within 8mm outside segmentation</td>
+</tr>
+</tbody></table>
+<p><strong>cluster feature</strong></p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>cluster feature</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>10</td>
+<td>Volume of candidate segmentation $V_{cand}$</td>
+<td></td>
+</tr>
+<tr>
+<td>11</td>
+<td>Diameter of candidate segmentation $D_{cand}$</td>
+<td>The longest diameter on axial plane</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Sphericity: ratio of candidate’s volume inside sphere S to the volume of sphere S</td>
+<td>Sphere S is centered at the candidate location with diameter $D_{cand}$</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Compactness1: $V_{cand}/(dim_x ·dim_y ·dim_z)$</td>
+<td>$dim_i$ is the width of bounding box indimension i</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Compactness2: $V_{cand}/((max(dim_x, dim_y, dim_z))^3$)</td>
+<td></td>
+</tr>
+</tbody></table>
+<p><strong>Blobness feature</strong></p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Blobness feature</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>15</td>
+<td>Maximum flter response</td>
+<td>Features are computed using the flter</td>
+</tr>
+<tr>
+<td>16-17</td>
+<td>Filter response inside candidate segmentation(mean, stdev)</td>
+<td>response of Li blobness flter(scale: 2, 5, and 8 mm)</td>
+</tr>
+<tr>
+<td>18-19</td>
+<td>Filter response inside bounding box (mean, stdev)</td>
+<td></td>
+</tr>
+</tbody></table>
+<p><strong>Context feature</strong></p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Context feature</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>20</td>
+<td>Distance to pleural wall</td>
+</tr>
+<tr>
+<td>21-23</td>
+<td>Distance to carina in X, Y, and Z</td>
+</tr>
+<tr>
+<td>24</td>
+<td>Distance to top of the lung in Z</td>
+</tr>
+</tbody></table>
+<h4 id="3-4-1-强度特征"><a href="#3-4-1-强度特征" class="headerlink" title="3.4.1 强度特征"></a>3.4.1 强度特征</h4><p>强度特征用来量化候选segmentation内外区域的强度特征。特征集直接计算自各向同性（isotropically）重新取样的CT scan。使用了三个不同的区域<strong>(1)</strong>候选segmentation内的区域<strong>(2)</strong>候选segmentation的bounding box内的区域<strong>(3)</strong>在候选segmentation周围距离小于8mm的区域。每个区域，计算均值、标准差和体素强度熵。</p>
+<h4 id="3-4-2-cluster特征"><a href="#3-4-2-cluster特征" class="headerlink" title="3.4.2 cluster特征"></a>3.4.2 cluster特征</h4><p>cluster 特征从候选segmentation中计算得来。这些特征集由半径、容积、球形性、紧凑性1(compactness1)和紧凑性2(compactness2)。</p>
+<p>半径是通过segmentation的轴状位的部分最长的轴得到。容积通过计算cluster size的$mm^3$。为计算球形性，与候选有着相同容积的球S在候选质心处构建。球形性定义为候选容积在球S内与球形S的容积的比例。紧凑性为候选容积与候选segmentation周围的bounding box容积的比例。使用了两个不同的boundiing box。紧凑性1使用的bounding box为在全部x,y,z维度包容候选segmentation的最小box。紧凑性2使用的bounding box定义为立方块，其尺寸为候选segmentation的最大维度的大小。</p>
+<h4 id="3-4-3-blobness特征"><a href="#3-4-3-blobness特征" class="headerlink" title="3.4.3 blobness特征"></a>3.4.3 blobness特征</h4><p>blobness特征广泛用于增强结节结构和提高结节检测的灵敏度。我们使用的是由<strong>Li,Sone 和 Doi</strong>开发出来的结节增强过滤器，并偶从过滤图中抽取blobness特征。</p>
+<p>算法通过对输入图像进行高斯kernel的二阶导数做卷积来计算Hessian矩阵。给定Hessian矩阵，三个特征值，定义为 $\lambda_1=f_{xx},\lambda_2=f_{y},\lambda_3 = f_{xy}$，其中 $\lambda _1&gt;\lambda _2&gt;\lambda _3$。增强过滤器的最终输出是通过计算 $Z(\lambda _1,\lambda _2,\lambda_3)=|\lambda _3|^3/|\lambda _1|\quad if\quad \lambda _1&lt;0,\lambda _2&lt;0,\lambda _3&lt;0$；否则为0。为了获得范围分布广泛的结节尺寸，使用来了多尺寸增强过滤器。我们对高斯kernel定义了三种(2mm,5mm,8mm)，这是基于要增强的目标结节的经验值。结果会有三种不同的输出图像，是一种从所有图像中选择最大值的结合。</p>
+<p>blobness特征的抽取通过衡量<strong>(1)</strong>过滤器的最大输出<strong>(2)</strong>结节segmentation内部的输出的均值和标准差<strong>(3)</strong>bounding box内部输出的均值和标准差。</p>
+<h4 id="3-4-4-上下文特征"><a href="#3-4-4-上下文特征" class="headerlink" title="3.4.4 上下文特征"></a>3.4.4 上下文特征</h4><p>上下文特征描述了候选与其他肺结构如胸膜壁，隆突和肺上部的相对位置。根据它们的位置，肺结节和假阳性候选可能有着不同的形态学特征和恶性概率。结节粘附于更加刚性的结构上时，结节更可能是细长的。<strong>Horeweg</strong>的研究表明，大部分病变结节位于costal-hilar半径的外部的三分之一的上叶（at outer one-third of the costal-hilar diameter and at upper lobes ）。意味着这些区域应该引起注意。到carina的距离和肺的顶部区域需要给予更多的权重。</p>
+<p>为计算相对于胸膜壁的距离，我们做了在肺分割内做了距离变换并抽取候选质心中心的值。carina点的检测方法是，找到轴向(axial)区域中气管被一分为二的地方，在分叉处周围选取气管区域，并抽取其质心。从carina到坐标轴的相对X，Y，Z距离作为特征。从候选到肺顶部的相对距离的计算方法为，计算候选的Z轴世界坐标到肺分割的top slice的Z轴世界坐标的距离。</p>
+<h4 id="3-4-5-分类器"><a href="#3-4-5-分类器" class="headerlink" title="3.4.5 分类器"></a>3.4.5 分类器</h4><p>对特征向量的分类器，使用了径向偏置核函数SVM-RBF。其中的C和伽马参数在训练集上的网格搜索的10折交叉验证得到的。C定义了正则化参数，伽马定义了RBF核函数的宽度。搜索区间为 $C={2^1,2^2,2^3,…2^12}$，并且$\Gamma ={2^{-12},2^{-11},…2^{-5}}$。本文使用的是LIBSVM实现。分类之前先对所有特征进行正则化，均值为0，单位标准差。</p>
+<h2 id="四-结果"><a href="#四-结果" class="headerlink" title="四 结果"></a>四 结果</h2><p>评估CAD系统检测大结节的性能。在病人级别的10折交叉验证，分类器在嵌套的交叉验证中优化得到。</p>
+<h3 id="4-1-肺分割"><a href="#4-1-肺分割" class="headerlink" title="4.1 肺分割"></a>4.1 肺分割</h3><p>888个scan中有12个分割失败，因为气管处的seed point没有被正确检测到。这可以通过手动提供seed point来修正。下表显示了在CAD系统上使用细化的肺分割之后的影响。肺结节的位置坐标如果在segmentation内部，则其分类为包含在肺segmentation内。算法的评估方法为，被检测到的结节的数量和候选的数量。</p>
+<p><strong>Without additional lung segmentation refinement</strong></p>
+<table>
+<thead>
+<tr>
+<th>Rolling ball(kernel size (% of image))</th>
+<th>Dilation(kernel size (% of image))</th>
+<th>Inside segmentation (%)</th>
+<th>After candidate detection(%)</th>
+<th>Candidates/Scan</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-</td>
+<td>-</td>
+<td>84.9</td>
+<td>87.8</td>
+<td>39.5</td>
+</tr>
+</tbody></table>
+<p><strong>With additonal lung segmentation refinement</strong></p>
+<table>
+<thead>
+<tr>
+<th>Rolling ball(kernel size (% of image))</th>
+<th>Dilation(kernel size (% of image))</th>
+<th>Inside segmentation (%)</th>
+<th>After candidate detection(%)</th>
+<th>Candidates/Scan</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2</td>
+<td>-</td>
+<td>84.9</td>
+<td>87.8</td>
+<td>39.5</td>
+</tr>
+<tr>
+<td>4</td>
+<td>-</td>
+<td>97.1</td>
+<td>98.3</td>
+<td>47.4</td>
+</tr>
+<tr>
+<td>6</td>
+<td>-</td>
+<td>98.3</td>
+<td>99.2</td>
+<td>56.6</td>
+</tr>
+<tr>
+<td>8</td>
+<td>-</td>
+<td>99.6</td>
+<td>98.7</td>
+<td>63.2</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1</td>
+<td>88.7</td>
+<td>95.4</td>
+<td>120.7</td>
+</tr>
+<tr>
+<td>4</td>
+<td>1</td>
+<td>99.6</td>
+<td>97.9</td>
+<td>133.1</td>
+</tr>
+<tr>
+<td>6</td>
+<td>1</td>
+<td>100.0</td>
+<td>96.6</td>
+<td>145.5</td>
+</tr>
+</tbody></table>
+<p>上表显示没有使用额外的细化算法时，肺分割只有84.9%的大结节被包含入。使用额外的细化算法时可以减少被排除的结节数直至所有的结节都被包含入内。但是也可以看到，细化算法会增大肺segmentation，它可能会引入不相关区域(比如肺壁,hilar)，这会恶化候选检测的性能。因而，我们同时评估了候选检测的灵敏度。数据集中至少3个放射医师标注的，包含全部 $nodules\ge 10mm$的287个scan的数据集。实验表明，初始肺分割之后，使用 $d_{struct}=6%$ rolling-ball操作和 $d_{struct}=0%$的扩张操作，可以使得候选检测获得最高的灵敏度和差不多数目的 candidates/scan。此配置应用于后续的实验中。</p>
+<h3 id="4-2-候选检测"><a href="#4-2-候选检测" class="headerlink" title="4.2 候选检测"></a>4.2 候选检测</h3><p>888个 CTscan中，候选检测平均生成48.3 candidates/scan，包括了99.2%（236/238）的全部大结节。此集合用作进一步的分类 任务。不同准入水平的候选检测性能如下表。结节的候选检测的灵敏度随着放射医师的准入水平的上升而增加。</p>
+<table>
+<thead>
+<tr>
+<th>Aggrement levels</th>
+<th>Solid nodules &gt;10mm</th>
+<th>Detected nodules (%)</th>
+<th>Candidates/scan</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>At least 1</td>
+<td>322</td>
+<td>97.2</td>
+<td>48.3</td>
+</tr>
+<tr>
+<td>At least 2</td>
+<td>277</td>
+<td>98.9</td>
+<td>48.3</td>
+</tr>
+<tr>
+<td>At least 3</td>
+<td>238</td>
+<td>99.2</td>
+<td>48.3</td>
+</tr>
+<tr>
+<td>At least 4</td>
+<td>182</td>
+<td>100.0</td>
+<td>48.3</td>
+</tr>
+</tbody></table>
+<h3 id="4-3-特征抽取和分类"><a href="#4-3-特征抽取和分类" class="headerlink" title="4.3 特征抽取和分类"></a>4.3 特征抽取和分类</h3><p>CAD系统在包含大结节数据集上的不同准入水平的FROC曲线如下图左图所示，右图表示的 是CAD系统包含或不包含不相关的发现(被当做false positive假阳性的)时的性能。假阳性的数目现实的是求对数之后的结果。</p>
+<p><img src="/images/blog/lung_bignodule3.png" alt=""></p>
+<p>为了量化比较，不同假阳性率的平均灵敏度如下表。CAD系统识别分别在 1FPs/scan和 4FPs/scan时识别了94.1%(224/238)和98.3%(234/238)的大结节。注意到分类阶段的最大灵敏度收敛到候选检测阶段的灵敏度，为99.2%(236/238)。这意味着与检测到的候选相关的，分类阶段的准确分类率在 1FP/scan和4FPs/scan分别为 94.9%和99.1%。</p>
+<table>
+<thead>
+<tr>
+<th>Agreement levels</th>
+<th>1/8</th>
+<th>1/4</th>
+<th>1/2</th>
+<th>1</th>
+<th>2</th>
+<th>4</th>
+<th>8</th>
+<th>Average</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>At least 1</td>
+<td>0.773</td>
+<td>0.804</td>
+<td>0.842</td>
+<td>0.879</td>
+<td>0.913</td>
+<td>0.950</td>
+<td>0.960</td>
+<td>0.874</td>
+</tr>
+<tr>
+<td>At least 2</td>
+<td>0.841</td>
+<td>0.866</td>
+<td>0.895</td>
+<td>0.924</td>
+<td>0.949</td>
+<td>0.978</td>
+<td>0.982</td>
+<td>0.920</td>
+</tr>
+<tr>
+<td>At least 3</td>
+<td>0.874</td>
+<td>0.895</td>
+<td>0.916</td>
+<td>0.941</td>
+<td>0.962</td>
+<td>0.983</td>
+<td>0.992</td>
+<td>0.938</td>
+</tr>
+<tr>
+<td>At least 4</td>
+<td>0.929</td>
+<td>0.940</td>
+<td>0.956</td>
+<td>0.978</td>
+<td>0.995</td>
+<td>1.000</td>
+<td>1.000</td>
+<td>0.971</td>
+</tr>
+</tbody></table>
+<h3 id="4-4-与已有的CAD系统对比"><a href="#4-4-与已有的CAD系统对比" class="headerlink" title="4.4 与已有的CAD系统对比"></a>4.4 与已有的CAD系统对比</h3><p>ISICAD系统获得了ANODE09的最高排名，用作对比。两个CAD系统的FROC曲线如下图，候选检测阶段检测到99.2%(236/238)(本文算法)和84.9%(202/238)(ISICAD)。在 1FP/scan时，63.0%(150/238)更多的大结节被本文提出的算法正确分类。不过要注意的是两个CAD系统为不同类型的结节设计的。</p>
+<p><img src="/images/blog/lung_bignodule4.png" alt=""></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2017-03-09-lungseg-bignodule-detect/" data-id="ck4ifp1m7002l2wjeb7jehweg" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2017-03-08-lungseg-localfeature" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2017-03-08-lungseg-localfeature/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.469Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/23/2017-03-08-lungseg-localfeature/">肺结节自动分割:使用图像局部特征【论文笔记】</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>算法使用图像的局部特征，如shape index和弯曲度，用以检测肺体积内的候选结构，然后再使用两个后续的KNN分类器来剔除假阳性样本。</p>
+<p>肺结节检测系统在三个数据集上训练和测试，这三个数据集来源于一个大规模筛选实验。数据集的构建，为了评估算法既考虑挑选的随机性，又考虑到较高概率出现结节的需求。此系统在随机挑选的813scans中灵敏度为80%，平均一个scans4.2个假阳性。</p>
+<h2 id="二-处理方法"><a href="#二-处理方法" class="headerlink" title="二 处理方法"></a>二 处理方法</h2><p>下图展示了结节检测的大体流程</p>
+<p><img src="/images/blog/lungseg_local1.png" alt="大体流程"></p>
+<p> 需要注意的是，结节检测步骤需要很多经验阈值，这些经验阈值基于一个完全独立的小测试集。</p>
+<h2 id="2-预训练"><a href="#2-预训练" class="headerlink" title="2 预训练"></a>2 预训练</h2><h3 id="2-1-图像数据子抽样"><a href="#2-1-图像数据子抽样" class="headerlink" title="2.1 图像数据子抽样"></a>2.1 图像数据子抽样</h3><p>第一步是下采样以提高算法速度。使用整副图像对最终结果帮助极小，反而非常消耗计算。下采样利用了block-average，比如图像的矩阵尺寸是512x512，减小到256x256，slices的数目减少以形成各向同性采样数据。线性插值用来体素位置(一个scans其实是个立方体数据)的灰度值。下采样scans的slices数目从149到428不等，平均每个scans有223个slices。</p>
+<h3 id="2-2-肺容积切割"><a href="#2-2-肺容积切割" class="headerlink" title="2.2 肺容积切割"></a>2.2 肺容积切割</h3><p>第二个步骤是将肺部从周围组织中分割出，此步骤是紧接上一步骤，从子抽样中进行的。此切割获得的mask可用来确保结节检测仅限于肺容积内部。这个过程有两个好处，其一是减小计算时间，其二是避免在肺容积外去检测。</p>
+<h2 id="3-初始候选检测"><a href="#3-初始候选检测" class="headerlink" title="3 初始候选检测"></a>3 初始候选检测</h2><p>初始候选检测的流程图如下</p>
+<p><img src="/images/blog/lungseg_local2.png" alt="初始候选检测"></p>
+<h3 id="3-1-shape-index-and-curvedness"><a href="#3-1-shape-index-and-curvedness" class="headerlink" title="3.1 shape index and curvedness"></a>3.1 shape index and curvedness</h3><p>结节检测使用了<code>shape index(SI)</code>和<code>curvedness</code>特征来检测初始结节候选(Koenderink, 1990)  。这些是逐个体素计算的3D局部图像特征，基于局部衰减值和图像容积内每个点的表面拓扑性。SI和CV从主曲率 $k_1$ 和 $k_2$ 中得出，但是有去耦拓扑形状和曲率大小的优势。结节检测中我们感兴趣的是那些<strong>明显球形的体素</strong>和<strong>球体半径在合适范围</strong>的。每个体素上的shape index和curvedness，使用主曲率 $k_1$ 和 $k_2$ 的计算方式如下</p>
+<p>$$<br> SI =\frac{2}{\pi} arctan(\frac{k_1+k_2}{k_1-k_2}) \<br>CV = \sqrt{k_1^2+k_2^2}<br>$$</p>
+<p>$$<br> K = \frac{F_{xx}\cdot F_{yy}-{F_{xy}}^2}{(1+{F_x}^2+{F_y}^2)^2}<br>$$</p>
+<p>肺容积内部所有的体素都要计算主曲率 $k_1$ 和 $k_2$ 都要计算，使用图像高斯过滤器 $\sigma =1$模糊的一阶和二阶导数。这个 $\sigma$ 的值是经验设置的以减少噪声同时不移除重要的结构细节。</p>
+<h3 id="3-2-seed-point检测"><a href="#3-2-seed-point检测" class="headerlink" title="3.2 seed point检测"></a>3.2 seed point检测</h3><p>一旦知道了图像的SI和CV值，就可以获得其seed point点集合，这可以根据下表经验阈值来得到。在SI和CV阈值范围内的体素将会被选为seeds。这些seed points代表体素可能位于结节表面，并且其局部性值得进一步分析。胸膜表面的5个体素位置的SI阈值将会小一些，是为了增加肺部边缘的seed检测数目。这么做是因为胸膜结节的表面区域不明显，难以检查，并且其区域内的SI和CV值可能会受到邻接胸膜表面的拓扑结构影响。<br><strong>初始seed阈值</strong></p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Upper threshold</th>
+<th>Lower threshold</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SI</td>
+<td>1</td>
+<td>0.8(near pleural surface)</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>0.9(elsewhere)</td>
+</tr>
+<tr>
+<td>CV</td>
+<td>1</td>
+<td>0.3</td>
+</tr>
+</tbody></table>
+<h3 id="3-3-cluster-信息"><a href="#3-3-cluster-信息" class="headerlink" title="3.3 cluster 信息"></a>3.3 cluster 信息</h3><p>如今seed point扩大到形成VOI (voxels of interest)cluster。此扩张基于滞后阈值，使用下表中的边缘阈值。因此最终cluster包含的voxels(体素)，其SI和CV值都落在阈值范围区间内，并且是可使用链式的此类体素连接（使用six-connectively）到一个seedpoint。</p>
+<p><strong>Hysteresis阈值</strong></p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Upper threshold</th>
+<th>Lower threshold</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SI</td>
+<td>1</td>
+<td>0.7(near pleural surface)</td>
+</tr>
+<tr>
+<td>CV</td>
+<td>1.3</td>
+<td>0.2</td>
+</tr>
+</tbody></table>
+<p>应当注意到一个完美的球形结构，最终cluster中的体素位于球形模糊表面。大量的cluster中心被当做这一阶段的兴趣点。</p>
+<p>若某个cluster的原始seedpoint位于胸膜表面的5个体素之内，可以作为一个胸候选(?不是肺)。此阶段的cluster，若其容积(volumn)低于一个预先设置的阈值 $t_{vol}$ 则会被丢弃，因为如果不丢弃，后续的处理将会及其耗时，同时可能会引入假阳性样本。胸膜区域的候选 $t_{vol}$ 设置为4体素，剩下的候选中设置为15体素。</p>
+<h3 id="3-4-cluster-merge"><a href="#3-4-cluster-merge" class="headerlink" title="3.4 cluster merge"></a>3.4 cluster merge</h3><p>此阶段，已经检测到大量的cluster。每一个代表图像中的一个区域表面，并且有理由假设一个真实的结构，比如结节可能有不止一个cluster 代表它。除非是那种特别大的结节，或者其形状怪异，这些结节彼此十分靠近。位置在三个体素内的cluster会被递归地合并，直至无法再合并为止。这个合并过程在那些相距7个体素的cluster之间会不断重复。下图展示了候选结构的合并过程。可以看到这个合并过程在几个后续point上重复。尽管后续阶段，只有少部分结构需要合并，这个过程主要有两个目的：<strong>(1)</strong>可以确保单个结节只会被单个检测，而不是被相邻的两个检测。<strong>(2)</strong>合并候选是假阳性的话，会产生奇怪的形状结构，这可以很容易被后续的分类步骤剔除。</p>
+<p><img src="/images/blog/lungseg_local3.png" alt="大体流程"> </p>
+<h3 id="3-5-候选位置调整"><a href="#3-5-候选位置调整" class="headerlink" title="3.5 候选位置调整"></a>3.5 候选位置调整</h3><p>此处候选位置会被检查并调整以确保它们处于局部最明亮的位置。这十分重要，因为结节的位置由大量的voxels(体素) cluster中心定义的，并且也不经常是结节中心。尤其是胸膜结节或者体素cluster在结节表面的中心位置的。位置调整过程使用原始候选位置的三个体素的最大距离检查所有的局部点。每个局部点，计算它与周围6个相连邻居(six-connectively)点的平均灰度值。有最高平均灰度值的位置将会被选为新的候选位置。局部平均有利于避免选择了高亮的噪音体素。</p>
+<h2 id="4-假阳性剔除"><a href="#4-假阳性剔除" class="headerlink" title="4 假阳性剔除"></a>4 假阳性剔除</h2><p>假阳性剔除由两个连续使用KNN分类器分类步骤组成。数据的属性表明其并没有很好的线性分类性能，使用SVM分类器得到的结果比KNN要差。所有情况中，$k$ 设置为训练集样本数目的(奇数)平方根。对 $k$ 值的实验并不能再开发阶段获得性能提升(K值应该就确定为样本平方根)。分类之前，尽可能生成较好的训练集。生成过程如下图</p>
+<p><img src="/images/blog/lungseg_local4.png" alt="假阳性剔除"></p>
+<p> 对于初始分类器，使用小量的足够计算的特征是为了进一步减小候选数目，而不至于过头。初始分类之后剩下的候选已经足够小，可以使得最终分类器计算大量复杂特征。两个分类步骤的特征选择是Sequential Forward Floating Selection’ (SFFS)(Pudil et al.1994)。SFFS过程仅在训练集上使用留一法（从训练集里留出训练集和测试集），ROC曲线下的区域作为优化标准。第一个分类器选择的最大特征数定为15，第二个分类器为50。训练集上的留一法也用来决定第一个分类器的软分类器的后验概率阈值。这个阈值用来选择第一个分类器的哪些项会作为候选送到第二个分类步骤。这个阈值的选择要使得训练集中90%的真结节都可以正确的被分类器区分。</p>
+<p>最终分类器也有个类似的后验概率，也是使得训练集上90%的真结节可以被 区分。结节检测完之后，这些结果会被保存，减小此阈值可以使得系统低灵敏度性能。论文的余下工作是此系统的<code>操作点</code>的变化。</p>
+<h3 id="4-1-训练集和测试集的生成"><a href="#4-1-训练集和测试集的生成" class="headerlink" title="4.1 训练集和测试集的生成"></a>4.1 训练集和测试集的生成</h3><p>生成训练集的关键是应该收集哪种条件下的数据集，使得它们在测试阶段尽可能靠近。例如第二个分类阶段的训练集，应该是由被训练好的初始KNN分类器标记为正的候选组成。因此，我们使用了一个三步训练集生成过程，   最终训练集中<code>Steps123_c1</code>作为第一个分类器，<code>Steps123_c2</code>作为第二个分类器的训练集。过程如上图。</p>
+<p>用于训练的scans随机分为三个差不多大小的组，<code>Scans_Step1</code>,<code>Scans_Step2</code>和<code>Scans_Step3</code>。第一步我们在<code>Scans_Steps</code>的图片上做的初始候选检测，并使用生成的候选(有ground-truth信息的)来创建第一步分类所需的特征。由于没有先验训练数据集，所以没法在<code>Scans_Step1</code>的数据集上训练KNN分类器。</p>
+<p>第二步，我们使用<code>Scans_Step2</code>中的图像，如第一步一样，我们检测初始候选并构建第一个分类器的合适的训练集。接着，使用第一步构建的训练集来训练KNN分类器并做一个初始分类来减少假阳性样本数。第一个分类器之后剩余的候选合并之后用于构建一个训练集，该训练集包含了第二步分类所需的全部特征。</p>
+<p>第三步使用<code>Scans_Step3</code>的图像，并重复第二步的过程。不同之处在于，第一个分类器所使用的训练集来自第一步和第二步处理之后的数据的融合。将第三步独立出来而不是将第二、三步合并的原因是，在第三步融合的数据上训练时可以获得比第二步骤中的第一个分类器更精确的输出结果。</p>
+<p>这种方式产生的训练集将包含更多的假样本，真样本较少。为此，我们在每个训练步骤的最后减小了阴性(假)数据分类，比如每个数据集中的阴性：阳性比例大致为3:1。这个比例被证明可以在测试阶段获得较优的结果。移除阴性样本使用的是缩合方法(Mitra etal 2002)，为了不改变样本分布。此方法从一个较大的数据中从多种尺寸选择点来产生了一个小的表征子集。子集表征的准确率以原始数据集和缩减之后的数据集的密度评估误差来衡量。参数$K$值决定了浏览哪种尺寸的数据。本论文中 $K$ 的初始值设置为15，阴性样本集不断缩减直至目标数目(3倍的阳性样本数)。然后参数 $K$ 再次衰减。此循环至 $k\le 2$ 或者数据集已经达到了目标数量。</p>
+<h3 id="4-2-初始KNN分类器"><a href="#4-2-初始KNN分类器" class="headerlink" title="4.2 初始KNN分类器"></a>4.2 初始KNN分类器</h3><p>第一个KNN分类器，总共18个特征需要在特征选取之前计算。整个需要计算的特征列表如表下表</p>
+<p>下表是 Features of the voxel cluster</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Description</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>a1</td>
+<td>Cluster size (number of voxels)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>a2</td>
+<td>Compactness1,$\frac{ClusterSize}{(dim_x)(dim_y)(dim_z)}$</td>
+<td>$dim_i=width\quad in \quad dim.i$</td>
+</tr>
+<tr>
+<td>a3</td>
+<td>Compactness2,$\frac{ClusterSize}{max_dim^3}$</td>
+<td>$max_dim=max_i(dim_i)$</td>
+</tr>
+<tr>
+<td>a4</td>
+<td>Ratio max_dim:min_dim</td>
+<td>min_dim = mini(dimi)</td>
+</tr>
+<tr>
+<td>a5</td>
+<td>Ratio max_dim:med_dim</td>
+<td>med_dim = mediani(dimi)</td>
+</tr>
+<tr>
+<td>a6</td>
+<td>Ratio Amed:Amax where Amax, Amed and Amin are the eigenvalues for the eigenvectors of the cluster data by principal component analysis</td>
+<td>-</td>
+</tr>
+<tr>
+<td>a7</td>
+<td>Ratio Amin:Amax</td>
+<td>as for a6 above</td>
+</tr>
+<tr>
+<td>a8</td>
+<td>Sphericity, $\frac{num_cluster_voxels_in_sphere_S}{vol_sphere_s}$ where sphere_S is a sphere at the candidate location with radius r</td>
+<td>-</td>
+</tr>
+<tr>
+<td>a9</td>
+<td>Ratio Sphericity:r</td>
+<td>-</td>
+</tr>
+</tbody></table>
+<p>下表是 Features of voxels in spherical kernels at the candidate location</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Description</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>a10-a18</td>
+<td>On grey-values over spherical kernels K: Average, Median, Standard-Deviation</td>
+<td>Halfsizes of K: 1 (a10-a12), 3 (a13-a15), r (a16-a18)</td>
+</tr>
+</tbody></table>
+<p>上面两张表其实是一张表，由于markdown不支持表合并。</p>
+<p>，其ID将会在此文后续引用。详细的关于那个特征会被SFFS选取在不同的实验里面不相同，如下表</p>
+<p>分类器一</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>a1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>a2</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>a3</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>a4</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>a7</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>a8</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>a9</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>a10</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>a11</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>a12</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>a13</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>a14</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>a15</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>a16</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>a17</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>a18</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Total</td>
+<td>10</td>
+<td>8</td>
+<td>10</td>
+</tr>
+</tbody></table>
+<p> 分类器二</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>b1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b5</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b7</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b8</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b12</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>b13</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b21</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b22</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>b24</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b25</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>b26</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b27</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b28</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b29</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>b36</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b39</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b40</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b41</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b44</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b45</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b46</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b49</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b52</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>b54</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b55</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>b56</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>b57</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b58</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b62</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b64</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b65</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b66</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b67</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>b68</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>b70</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>b72</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b75</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b79</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>b83</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b90</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b92</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b93</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b94</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b103</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b107</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b113</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>b115</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b116</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b120</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>b122</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>b123</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b124</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b125</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b126</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b129</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b130</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b131</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>b134</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>b135</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Total</td>
+<td>20</td>
+<td>19</td>
+<td>44</td>
+</tr>
+</tbody></table>
+<p>此阶段计算的特征与初始候选检测(a1-a9)步骤的体素cluster几何属性相关，也与候选位置周围区域的灰度值(a10-a18)。体素cluster的形状提供了一个线索，即其结构是细长(比如，像血管)还是类似球状，同时其尺寸在不同的阴性和阳性候选也是极有价值的。灰度值特征都是使用候选位置周围的球形体素kernel校验过的，以移除不在不在不够明亮区域的结构。注意，表中体素cluster的半径以<code>r</code>表述。此半径的计算是用X，Y，Z轴三个方向的cluster的最大半径的除以3得到的均值为平均直径，除以2得到平均半径。其中的<code>kernel halfsize</code>指的是问题中的球形kernel体素半径。</p>
+<p>第一个分类器结束之后，候选需要合并(4.4节)。尽管原始的合并步骤已经很详细了，后续的位置调整步骤(4.5节)意味着进一步的合并成为可能。尤其当位置调整过程中将两个候选置于相同位置时，需要检查合并的可能性。只有当第一分类器结束之后合并才可以做，因为此阶段的假阳性数目已经缩减了，同时阴性和阳性样本之间的非法合并的概率也大幅度缩减。4.5节讲述的是结节位置合并之后需要再次调整最明亮的局部点。</p>
+<h3 id="4-3-最终KNN分类器"><a href="#4-3-最终KNN分类器" class="headerlink" title="4.3 最终KNN分类器"></a>4.3 最终KNN分类器</h3><p>最终分类器需要计算的135个特征全集在下表，其指明了ID。</p>
+<p><img src="/images/blog/lungseg_local5.png" alt="KNN分类器"></p>
+<p> 其中 $r_{reg}$指的是使用相同方式计算的包含结节切割体素的半径。</p>
+<p>所有在第一个分类器中计算的特征都被重弄使用(<code>b1-b18</code>)，并且被第一个分类器计算的结构为真结节的后验概率，成为第二阶段的计算特征。</p>
+<p>除了结构(<code>b47-b106</code>)中心假象球面中心的梯度方向和大小外，候选位置的球形kernel的SI和SV值特征此次会被相加(<code>b27-b46</code>)。大部分真结节，其形状是大致球形并且梯度范围也是大致对称的。对于真阳性，我们期望其梯度大小在生成的球形表面所有点都是差不多的，同时梯度方向类似于一个正常的球面。这些特征都是在不同尺寸的球面上随机挑选的点来计算的。特定尺寸的球面随机抽样的点的数目是预先经验值设置的。梯度方向是径向的一部分，并且在点p处被定义为 $r\dot g/|r||g|$，其中g是点p处的梯度向量，r是从球状中心到点p的半径向量。</p>
+<p>我们使用文章(Kostis et al 2003)提出的一种算法切割候选结构，为了计算切割对象的特征。为了提高切割准确率，此切割过程只在候选位置的感兴趣区域ROI，但是注意是直接从全分辨率图像中抽取的而不是subsample版本的数据集中。之所以这么做是因为在subsample中切割更容易失败，为后续处理的方便起见切割体素的坐标被转换为subsample图像的等同的值。被计算的切割的体素特征与初始检测的体素cluster的大体相似。这些特征用来决定被切割的对象的尺寸和形状与真实结节是否相称，同时我们期望好的切割应该比从初始体素cluster获得更准确的特征信息。</p>
+<p>最后，候选合并过程将不止一次地被执行（如前面描述的，第一步的KNN分类之后进行位置调整后可能需要进行新的合并操作），最终位置将会被调整到局部最亮点。此步骤主要是确保每个标注只找到一个检测（这样就不用将剩余准确检测算为假阳性了）</p>
+<h2 id="5-结果"><a href="#5-结果" class="headerlink" title="5 结果"></a>5 结果</h2><h3 id="5-1-数据集A"><a href="#5-1-数据集A" class="headerlink" title="5.1 数据集A"></a>5.1 数据集A</h3><p>数据集A的训练集已经在上文有提及。初始的750个scans随机分为三组，每组250个，被用在训练集生成的三个步骤。移除scans中肺部切割失败的，三组分别包含了242，243，237个scans。</p>
+<p>初始分类器的训练集包含5776个样本，1351个是真结节，第一个分类器的训练集包含3436个样本，819个真结节。</p>
+<p>测试阶段开始于SFFS特征选取过程，如上表（ 分类器二）中为每个分类器选取的特征。第一个分类器处理了10个选取的特征，最终分类器使用了全部的20个特征。测试集中移除切割失败的scans之后还有813个。</p>
+<p>数据集A中的结节检测结果如下表，其中的FROC曲线通过改变如下图的最终分类器的操作点得到的。</p>
+<p>检测结果表</p>
+<table>
+<thead>
+<tr>
+<th>Number of Scans</th>
+<th>813</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Number of annotations</td>
+<td>1525</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Sensitivity</td>
+<td>FP per scan</td>
+</tr>
+<tr>
+<td>After initial candidate detection</td>
+<td>97.2%</td>
+<td>649.0</td>
+</tr>
+<tr>
+<td>After first classification</td>
+<td>92.3%</td>
+<td>77.3</td>
+</tr>
+<tr>
+<td>After final classification</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>-At around 4 FP per scan</td>
+<td>80.0%</td>
+<td>4.2</td>
+</tr>
+</tbody></table>
+<p>最终分类器的操作点变化图</p>
+<p><img src="/images/blog/lungseg_local5.png" alt="分类器"></p>
+<h3 id="5-2-数据集B"><a href="#5-2-数据集B" class="headerlink" title="5.2 数据集B"></a>5.2 数据集B</h3><p>此数据集包含了的scans至少包含了一个结节(根据其尺寸和物理属性)。这些scans中的大部分包含了其他更小的或者不明显的结节，即此数据集的结节尺寸变化很广。</p>
+<p>训练集的构造上文已经提及。600个训练scans被分为3组，每组200个scans，用于三个生成步骤。这个划分是完全随机的，除了有确定的14个病人被划分到第三个数据集<code>Scans_Step3</code>。去除肺切割失败的样本之后，三个数据集分别包含192,196和193个样本。</p>
+<p>初始分类器的训练集包含了7868个样本，1715个是真结节，最终分类器包含4490个样本，其中1090个真正样本。样本分布如下:</p>
+<p><img src="/images/blog/lungseg_local6.png" alt="样本分布"></p>
+<p> 测试阶段的开始时进行SFFS特征选取，SFFS选取的特征遵循上面的表(分类器二)，用于给每个分类器。给初始分类器8个特征，给最终分类器19个特征。测试数据集在移除了非切割失败的样本之后有541个scans。</p>
+<p>表8演示了数据集B的结节检测结果，并在上图Fig8中展示了FROC曲线。从数据集B中选取的结节如下图。这些结节都是由系统以不同程度的概率(后验概率)检测到的。</p>
+<p><img src="/images/blog/lungseg_local7.png" alt="FROC"></p>
+<p> 基于上图这样的小数据集很难概括，尤其是结节的3D结构信息很难从这些图像中获取。但是可以看到首行的结节是使用0.9的先验概率检测到的，通常有差不多的球形外形并且在局部有很明显的特征。第二行的结节先验概率为[0.45,0.9],它们有着相似的特征，并且平均每个scans有4个假阳性的灵敏度可以检测到。第三行的结节先验概率范围是[0.35,0.45]，边界线上的点周围检测准确率是每个scans有4个假阳性。球状外形不明显或者/同时结构或表面相靠近的结节较难检测到。最底层的一行结节是每个scans4个假阳性时无法检测到的，先验概率为小于0.35。可以看到这些结节有着怪异的形状或者位于混杂的结构或外形中，或者处于病理区域内。</p>
+<h3 id="5-3-数据集C"><a href="#5-3-数据集C" class="headerlink" title="5.3 数据集C"></a>5.3 数据集C</h3><p>此数据集有着与数据集B十分相似的图像，但是只有容积大于$50mm^3$ 的结节被放入训练集和测试集。数据分组如5.2节一样，只不过只使用容积大于 $50mm^3$ 。初始分类器的训练集包含了3127个样本，748个真结节。最终分类器的训练集包含了1900个样本，465个真结节。</p>
+<p>测试阶段，SFFS特征选取过程也是按照上表(分类器二)。初始分类器使用10个特征，最终分类器使用全部的44个特征。测试阶段的scans数目，在移除肺切割失败样本之后包含了541个scans。</p>
+<p>其检测结果如下表，FROC如上图</p>
+<table>
+<thead>
+<tr>
+<th>Number of Scans</th>
+<th>541</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Number of annotations</td>
+<td>768</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Sensitivity</td>
+<td>FP per scan</td>
+</tr>
+<tr>
+<td>After initial candidate detection</td>
+<td>98.2%</td>
+<td>752.1</td>
+</tr>
+<tr>
+<td>After first classification</td>
+<td>92.2%</td>
+<td>51.2</td>
+</tr>
+<tr>
+<td>After final classification</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>-At around 4 FP per scan</td>
+<td>77.7%</td>
+<td>4.2</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2017-03-08-lungseg-localfeature/" data-id="ck4ifp1m5002h2wje506i8zic" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/page/4/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/6/">Next &amp;raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

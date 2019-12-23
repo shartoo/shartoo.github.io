@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>tensorflow:CIFAR-10 图像处理源码.input.py | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="tensorflow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tensorflow:CIFAR-10 图像处理源码.input.py">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2016-08-22-tensorflow-sourcecode-input/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="tensorflow">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-12-23T10:45:59.320Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.198Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2016-08-22-tensorflow-sourcecode-input" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2016-08-22-tensorflow-sourcecode-input/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.320Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      tensorflow:CIFAR-10 图像处理源码.input.py
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="源码解读"><a href="#源码解读" class="headerlink" title="源码解读"></a>源码解读</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">from __future__ import absolute_import</span><br><span class="line">from __future__ import division</span><br><span class="line">from __future__ import print_function</span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line">from six.moves import xrange  # pylint: disable&#x3D;redefined-builtin</span><br><span class="line">import tensorflow as tf</span><br><span class="line"></span><br><span class="line"># 处理当前尺寸大小的图像，注意这与CIFAR-10图像的32x32尺寸不同。如果更新了这个数，那么整个模型架构都需要改变，并且模型需要重新训练</span><br><span class="line">IMAGE_SIZE &#x3D; 24</span><br><span class="line"></span><br><span class="line"># 描述 CIFAR-10 数据集的全局常量</span><br><span class="line">NUM_CLASSES &#x3D; 10</span><br><span class="line">NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN &#x3D; 50000</span><br><span class="line">NUM_EXAMPLES_PER_EPOCH_FOR_EVAL &#x3D; 10000</span><br></pre></td></tr></table></figure>
+
+<p>  ‘’’<br>   作用： 读取并解析CIFAR10数据文件抽样数据。<br>   注意:  如果需要N路并行读取，N次调用此函数即可。它会返回N个读取不同文件和位置的独立的reader</p>
+<pre><code>@param  filename_queue  要读取的文件名队列
+@return 某个对象，具有以下字段:
+        height: 结果中的行数 (32)
+        width:  结果中的列数 (32)
+        depth:  结果中颜色通道数(3)
+        key:    一个描述当前抽样数据的文件名和记录数的标量字符串
+        label:  一个 int32类型的标签，取值范围 0..9.
+        uint8image: 一个[height, width, depth]维度的图像数据</code></pre><p>  ‘’’</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">def read_cifar10(filename_queue):</span><br><span class="line">  class CIFAR10Record(object):</span><br><span class="line">    pass</span><br><span class="line">  result &#x3D; CIFAR10Record()</span><br><span class="line"></span><br><span class="line">  # CIFAR-10图像数据集维度</span><br><span class="line">  # 输入格式详见 http:&#x2F;&#x2F;www.cs.toronto.edu&#x2F;~kriz&#x2F;cifar.html</span><br><span class="line">  label_bytes &#x3D; 1  # 2 for CIFAR-100</span><br><span class="line">  result.height &#x3D; 32</span><br><span class="line">  result.width &#x3D; 32</span><br><span class="line">  result.depth &#x3D; 3</span><br><span class="line">  image_bytes &#x3D; result.height * result.width * result.depth</span><br><span class="line">  # 每行记录由 图像+标签组成 ，并且每行的长度固定</span><br><span class="line">  record_bytes &#x3D; label_bytes + image_bytes</span><br><span class="line">  # 读取一行记录，从filename_queue队列中获取文件名。CIFAR-10格式没有header和footer。默认设置为0</span><br><span class="line">  reader &#x3D; tf.FixedLengthRecordReader(record_bytes&#x3D;record_bytes)</span><br><span class="line">  result.key, value &#x3D; reader.read(filename_queue)</span><br><span class="line"></span><br><span class="line">  # 将一个长度为record_bytes的字符串转换为uint8的向量</span><br><span class="line">  record_bytes &#x3D; tf.decode_raw(value, tf.uint8)</span><br><span class="line">  # 第一个字节代表了标签，将其类型由 uint8转换为 int32</span><br><span class="line">  result.label &#x3D; tf.cast(tf.slice(record_bytes, [0], [label_bytes]), tf.int32)</span><br><span class="line">  # 标签之后的字节代表了图像数据，并且将其维度从[depth * height * width]转换为 [depth, height, width].</span><br><span class="line">  depth_major &#x3D; tf.reshape(tf.slice(record_bytes, [label_bytes], [image_bytes]),</span><br><span class="line">                           [result.depth, result.height, result.width])</span><br><span class="line">  # 将 [depth, height, width] 转换为[height, width, depth].</span><br><span class="line">  result.uint8image &#x3D; tf.transpose(depth_major, [1, 2, 0])</span><br><span class="line">  return result</span><br></pre></td></tr></table></figure>
+
+
+<p>   作用： 构建一队列的批量图像和标签</p>
+<p>   @param  image :             维度为[height, width, 3]的3D张量<br>   @param  label :             图像标签<br>   @param  min_queue_examples: int32类型,从提供批量样本的队列中最小抽样数量.<br>   @param  batch_size:         每一批量的图像数量Number of images per batch.<br>   @param  shuffle:            boolean类型，决定是否使用混排队列</p>
+<p>   @return<br>          images:              图像. 维度为 [batch_size, height, width, 3] 的4D张量<br>          labels:              一维标签，尺寸为 [batch_size]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br></pre></td><td class="code"><pre><span class="line">  def _generate_image_and_label_batch(image, label, min_queue_examples,</span><br><span class="line">                                    batch_size, shuffle):</span><br><span class="line"></span><br><span class="line">  # 创建一个混排样本的队列，然后从样本队列中读取 &#39;batch_size&#39;数量的 images + labels数据（每个样本都是由images + labels组成）</span><br><span class="line">  num_preprocess_threads &#x3D; 16</span><br><span class="line">  if shuffle:</span><br><span class="line">    images, label_batch &#x3D; tf.train.shuffle_batch(</span><br><span class="line">        [image, label],</span><br><span class="line">        batch_size&#x3D;batch_size,</span><br><span class="line">        num_threads&#x3D;num_preprocess_threads,</span><br><span class="line">        capacity&#x3D;min_queue_examples + 3 * batch_size,</span><br><span class="line">        min_after_dequeue&#x3D;min_queue_examples)</span><br><span class="line">  else:</span><br><span class="line">    images, label_batch &#x3D; tf.train.batch(</span><br><span class="line">        [image, label],</span><br><span class="line">        batch_size&#x3D;batch_size,</span><br><span class="line">        num_threads&#x3D;num_preprocess_threads,</span><br><span class="line">        capacity&#x3D;min_queue_examples + 3 * batch_size)</span><br><span class="line"></span><br><span class="line">  # Display the training images in the visualizer.</span><br><span class="line">  tf.image_summary(&#39;images&#39;, images)</span><br><span class="line"></span><br><span class="line">  return images, tf.reshape(label_batch, [batch_size])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#39;&#39;&#39;</span><br><span class="line">作用： 使用Reader操作构建扭曲的输入(图像)用作CIFAR训练</span><br><span class="line"></span><br><span class="line">@param  data_dir:   CIFAR-10数据目录</span><br><span class="line">        batch_size: 每一批量的图像数</span><br><span class="line">@Returns:</span><br><span class="line">      images: Images. 尺寸为 [batch_size, IMAGE_SIZE, IMAGE_SIZE, 3] 的4D张量</span><br><span class="line">      labels: Labels. 大小为[batch_size] 的一维张量</span><br><span class="line">&#39;&#39;&#39;</span><br><span class="line">def distorted_inputs(data_dir, batch_size):</span><br><span class="line"></span><br><span class="line">  filenames &#x3D; [os.path.join(data_dir, &#39;data_batch_%d.bin&#39; % i)</span><br><span class="line">               for i in xrange(1, 6)]</span><br><span class="line">  for f in filenames:</span><br><span class="line">    if not tf.gfile.Exists(f):</span><br><span class="line">      raise ValueError(&#39;Failed to find file: &#39; + f)</span><br><span class="line"></span><br><span class="line">  #创建一个先进先出的文件名队列，文件阅读器需要它来读取数据</span><br><span class="line">  filename_queue &#x3D; tf.train.string_input_producer(filenames)</span><br><span class="line">  # 从文件名队列中读取样本</span><br><span class="line">  read_input &#x3D; read_cifar10(filename_queue)</span><br><span class="line">  reshaped_image &#x3D; tf.cast(read_input.uint8image, tf.float32)</span><br><span class="line"></span><br><span class="line">  height &#x3D; IMAGE_SIZE</span><br><span class="line">  width &#x3D; IMAGE_SIZE</span><br><span class="line">  # 用于训练神经网络的图像处理，注意对图像进行了很多随机扭曲处理</span><br><span class="line">  # 随机修建图像的某一块[height, width]区域</span><br><span class="line">  distorted_image &#x3D; tf.random_crop(reshaped_image, [height, width, 3])</span><br><span class="line">  #随机水平翻转图像</span><br><span class="line">  distorted_image &#x3D; tf.image.random_flip_left_right(distorted_image)</span><br><span class="line">  # 由于这些操作都是不可累积的，考虑随机这些操作的顺序</span><br><span class="line">  distorted_image &#x3D; tf.image.random_brightness(distorted_image,</span><br><span class="line">                                               max_delta&#x3D;63)</span><br><span class="line">  distorted_image &#x3D; tf.image.random_contrast(distorted_image,</span><br><span class="line">                                             lower&#x3D;0.2, upper&#x3D;1.8)</span><br><span class="line"></span><br><span class="line">  # 减去均值并处以像素的方差 (标准化)</span><br><span class="line">  float_image &#x3D; tf.image.per_image_whitening(distorted_image)</span><br><span class="line"></span><br><span class="line">  # 确保随机混排有很好的混合性</span><br><span class="line">  min_fraction_of_examples_in_queue &#x3D; 0.4</span><br><span class="line">  min_queue_examples &#x3D; int(NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN *</span><br><span class="line">                           min_fraction_of_examples_in_queue)</span><br><span class="line">  print (&#39;Filling queue with %d CIFAR images before starting to train. &#39;</span><br><span class="line">         &#39;This will take a few minutes.&#39; % min_queue_examples)</span><br><span class="line"></span><br><span class="line">  # 通过构建一个样本队列来生成一批量的图像和标签</span><br><span class="line">  return _generate_image_and_label_batch(float_image, read_input.label,</span><br><span class="line">                                         min_queue_examples, batch_size,</span><br><span class="line">                                         shuffle&#x3D;True)</span><br><span class="line"></span><br><span class="line">&#39;&#39;&#39;</span><br><span class="line">  作用： 使用Reader ops操作构建CIFAR评估的输入</span><br><span class="line"></span><br><span class="line">  @param:</span><br><span class="line">         eval_data: boolean类型, 是否使用训练或评估数据集</span><br><span class="line">         data_dir: CIFAR-10数据目录.</span><br><span class="line">    batch_size: 每一批的图像数量</span><br><span class="line">  Returns:</span><br><span class="line">        images: Images. 尺寸为[batch_size, IMAGE_SIZE, IMAGE_SIZE, 3]的4D张量.</span><br><span class="line">        labels: Labels. 大小为[batch_size]的一维张量.</span><br><span class="line">&#39;&#39;&#39;</span><br><span class="line">def inputs(eval_data, data_dir, batch_size):</span><br><span class="line"></span><br><span class="line">  if not eval_data:</span><br><span class="line">    filenames &#x3D; [os.path.join(data_dir, &#39;data_batch_%d.bin&#39; % i)</span><br><span class="line">                 for i in xrange(1, 6)]</span><br><span class="line">    num_examples_per_epoch &#x3D; NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN</span><br><span class="line">  else:</span><br><span class="line">    filenames &#x3D; [os.path.join(data_dir, &#39;test_batch.bin&#39;)]</span><br><span class="line">    num_examples_per_epoch &#x3D; NUM_EXAMPLES_PER_EPOCH_FOR_EVAL</span><br><span class="line"></span><br><span class="line">  for f in filenames:</span><br><span class="line">    if not tf.gfile.Exists(f):</span><br><span class="line">      raise ValueError(&#39;Failed to find file: &#39; + f)</span><br><span class="line"></span><br><span class="line">  #创建一个先进先出的文件名队列，文件阅读器需要它来读取数据</span><br><span class="line">  filename_queue &#x3D; tf.train.string_input_producer(filenames)</span><br><span class="line"></span><br><span class="line">  # 从文件名队列中读取抽样</span><br><span class="line">  read_input &#x3D; read_cifar10(filename_queue)</span><br><span class="line">  reshaped_image &#x3D; tf.cast(read_input.uint8image, tf.float32)</span><br><span class="line"></span><br><span class="line">  height &#x3D; IMAGE_SIZE</span><br><span class="line">  width &#x3D; IMAGE_SIZE</span><br><span class="line"></span><br><span class="line">  # 用于做评估的图像处理</span><br><span class="line">  # 裁减图像的中心 [height, width] Crop the central [height, width] of the image.</span><br><span class="line">  resized_image &#x3D; tf.image.resize_image_with_crop_or_pad(reshaped_image,</span><br><span class="line">                                                         width, height)</span><br><span class="line"></span><br><span class="line">  # 减去均值并处以像素的方差（标准化）</span><br><span class="line">  float_image &#x3D; tf.image.per_image_whitening(resized_image)</span><br><span class="line"></span><br><span class="line">  # 确保良好的随机性</span><br><span class="line">  min_fraction_of_examples_in_queue &#x3D; 0.4</span><br><span class="line">  min_queue_examples &#x3D; int(num_examples_per_epoch *</span><br><span class="line">                           min_fraction_of_examples_in_queue)</span><br><span class="line"></span><br><span class="line">  # Generate a batch of images and labels by building up a queue of examples.</span><br><span class="line">  return _generate_image_and_label_batch(float_image, read_input.label,</span><br><span class="line">                                         min_queue_examples, batch_size,</span><br><span class="line">                                         shuffle&#x3D;False)</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2016-08-22-tensorflow-sourcecode-input/" data-id="ck4ifp1ln00132wje0o952srz" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2016-08-24-network-imageclassify/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          深度学习：卷积神经网络与图像识别基本概念
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2016-08-22-tensorflow-cnn/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">tensorflow：卷积神经网络的理解</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

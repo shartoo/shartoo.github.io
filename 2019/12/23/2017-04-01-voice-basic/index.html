@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>语音处理0：基础 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="语音处理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="语音处理0：基础">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2017-04-01-voice-basic/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="语音处理">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/voice_produce.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/voice_wave_represtation.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/voice_wave_represtation1ms.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/voice_wave_represtation_onehot.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/voice_wave_represtation_fluir.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/voice_wave_example.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/voice_wave_segmentation.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/voice_mfcc.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/voice_frames.jpg">
+<meta property="article:published_time" content="2019-12-23T10:45:59.500Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.214Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/voice_produce.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2017-04-01-voice-basic" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2017-04-01-voice-basic/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.500Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      语音处理0：基础
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一-语音的基础概念"><a href="#一-语音的基础概念" class="headerlink" title="一 语音的基础概念"></a>一 语音的基础概念</h2><h3 id="1-1-什么是语音"><a href="#1-1-什么是语音" class="headerlink" title="1.1 什么是语音"></a>1.1 什么是语音</h3><p>语音是一个连续的音频流，它是由大部分的稳定态和部分动态改变的状态混合构成</p>
+<h3 id="1-2-声音如何产生"><a href="#1-2-声音如何产生" class="headerlink" title="1.2 声音如何产生"></a>1.2 声音如何产生</h3><p><img src="/images/blog/voice_produce.png" alt="声音产生"></p>
+<p>声音由肺部气流并经过声带，此为声源。当我们发<strong>元音</strong>时，声带被气流震动并生成<strong>脉冲序列</strong>。此脉冲决定了语音的<strong>基准频率</strong>。</p>
+<p>当我们发出<strong>辅音</strong>时，声带没有被震动，并产生<strong>噪音</strong>。然后脉冲或噪声被声带转换或者个性化。</p>
+<h3 id="1-3-语音的组成"><a href="#1-3-语音的组成" class="headerlink" title="1.3 语音的组成"></a>1.3 语音的组成</h3><p>最小单元是<strong>音素</strong>，音素组合为<strong>音节</strong>。</p>
+<h4 id="1-3-1-音素"><a href="#1-3-1-音素" class="headerlink" title="1.3.1 音素"></a>1.3.1 音素</h4><p>音素是最小的语音单位，它是从音色的角度划分出来的。例如，汉语里的 ɑ、i、u都是音素。一种语言的语音系统大都是由几十个不同的音素组成的</p>
+<p>音素分为元音和辅音</p>
+<ul>
+<li><p><strong>元音</strong>： 如ɑ、o、e、i、u。</p>
+</li>
+<li><p><strong>辅音</strong>：如b、p、d、t、ɡ、k、s、r。</p>
+</li>
+</ul>
+<p><strong>元音和辅音的区别</strong></p>
+<ol>
+<li>元音发音时，气流不受阻碍；辅音发音时，气流通过口腔、鼻腔时要受到阻碍</li>
+</ol>
+<p>2．元音发音时，发音器官各部位保持均衡的紧张状态；辅音发音时，构成阻碍的部位比较紧张，其他部位比较松弛</p>
+<p>3．元音发音时，气流较弱；辅音发音时，气流较强。</p>
+<p>4．元音发音时，声带要颤动，发出的声音比较响亮；辅音发音时，有的声带颤动，声音响亮，如m、n、l、r，有的不颤动，声音不响亮，如b、t、z、c。</p>
+<h4 id="1-3-2-音节（只适用于汉语）"><a href="#1-3-2-音节（只适用于汉语）" class="headerlink" title="1.3.2 音节（只适用于汉语）"></a>1.3.2 音节（只适用于汉语）</h4><p>音节是由音素构成的。如啊”（ā）（1个音素），“地”（dì）（2个音素），“民”（mín）（3个音素）。</p>
+<p>音节示例：如“建设”是两个音节，“图书馆”是三个音节，“社会主义”是四个音节。汉语音节和汉字基本上是一对一，一个汉字也就是一个音节。</p>
+<p>音节包含了<strong>声母</strong>、<strong>韵母</strong>、<strong>音调</strong>三个部分。</p>
+<ul>
+<li><p><strong>声母</strong>： 声母指音节开头的辅音，共有23个。如dā（搭）的声母是d</p>
+</li>
+<li><p><strong>韵母</strong>： 韵母指音节里声母后面的部分，共38。jiǎ（甲）的韵母是iǎ</p>
+</li>
+<li><p><strong>音节</strong>： 声调指整个音节的高低升降的变化。普通话里dū（督）、dú（毒）、dǔ（赌）、dù（度）</p>
+</li>
+</ul>
+<p>根据《现代汉语词典》，汉语标准音节共 418 个</p>
+<h2 id="2-音频的表示"><a href="#2-音频的表示" class="headerlink" title="2 音频的表示"></a>2 音频的表示</h2><h3 id="2-1-波形表示"><a href="#2-1-波形表示" class="headerlink" title="2.1 波形表示"></a>2.1 波形表示</h3><p>波形表示是大家很熟悉的波形表示，就是直接表示出在观测点上所测量到的振幅和时间的关系。当然为了能够将连续的波形记录为数字形式，我们需要对这个波形进行采样（每隔一个固定的时间采取一次测量）和数字化（将连续的数字转化为可用二进制表达的格式）。</p>
+<p><img src="/images/blog/voice_wave_represtation.jpg" alt="音频的波形表示"></p>
+<p>在上面的图中，展示了一秒钟的人声音频片段，以及截取其中一毫秒的数据的放大图</p>
+<p><img src="/images/blog/voice_wave_represtation1ms.jpg" alt="音频的波形表示"></p>
+<p>我们最熟悉的CD音频，每秒钟采样44100次（这是因为，根据Nyquist采样定理，如果要完美重现20kHz的音频，那么我们最少需要每秒采样40k次，而20kHz是人类的听觉上限），而每个样本都用16位的二进制来表示。</p>
+<p>这样每一个样本可以表示最多65,536种不同的振幅。如果假定每一个时间点采用8位的二进制数字来表示，那么总共可能会有256种可能的值，我们就用一个256位的one－hot向量来表示它，最后在计算机中保存的声音片段，就可能是这样的。</p>
+<p><img src="/images/blog/voice_wave_represtation_onehot.jpg" alt="音频的波形表示">  </p>
+<h3 id="2-2-频域表示"><a href="#2-2-频域表示" class="headerlink" title="2.2 频域表示"></a>2.2 频域表示</h3><p>如果对输入的波形做一次傅立叶变换，会发现，一个复杂的sine波形，实际上在转换后的“频谱”上，可以被很简单的表示出来。</p>
+<p>转换后的音频，是一种频率的表示——我们只关心这个波形到底是以什么样的频率在震动，而恰好，我们人类对于声音的认知，也是基于频率而不是振幅的——实际上这样的表示，更加符合人类对于声音的认知，也更容易对其进行数字处理（DSP）。</p>
+<p><img src="/images/blog/voice_wave_represtation_fluir.jpg" alt="音频的傅里叶变换"> </p>
+<h2 id="3-语音的初步处理"><a href="#3-语音的初步处理" class="headerlink" title="3 语音的初步处理"></a>3 语音的初步处理</h2><p>我们知道声音实际上是一种波。常见的mp3等格式都是压缩格式，必须转成非压缩的纯波形文件来处理，比如Windows PCM文件，也就是俗称的wav文件。wav文件里存储的除了一个文件头以外，就是声音波形的一个个点了。下图是一个波形的示例。</p>
+<p><img src="/images/blog/voice_wave_example.jpg" alt="音频的傅里叶变换">  </p>
+<p>在开始语音识别之前，有时需要把首尾端的静音切除，降低对后续步骤造成的干扰。这个静音切除的操作一般称为VAD，需要用到信号处理的一些技术。要对声音进行分析，需要对声音分帧，也就是把声音切开成一小段一小段，每小段称为一帧。分帧操作一般不是简单的切开，而是使用移动窗函数来实现。帧与帧之间一般是有交叠的，就像下图这样：</p>
+<p><img src="/images/blog/voice_wave_segmentation.jpg" alt="音频的傅里叶变换">  </p>
+<p>图中，每帧的长度为25毫秒，每两帧之间有25-10=15毫秒的交叠。我们称为以帧长25ms、帧移10ms分帧。</p>
+<p>分帧后，语音就变成了很多小段。但波形在时域上几乎没有描述能力，因此必须将波形作变换。常见的一种变换方法是提取MFCC特征，根据人耳的生理特性，把每一帧波形变成一个多维向量，可以简单地理解为这个向量包含了这帧语音的内容信息。这个过程叫做声学特征提取。实际应用中，这一步有很多细节，声学特征也不止有MFCC这一种，具体这里不讲。</p>
+<p>至此，声音就成了一个12行（假设声学特征是12维）、N列的一个矩阵，称之为观察序列，这里N为总帧数。观察序列如下图所示，图中，每一帧都用一个12维的向量表示，色块的颜色深浅表示向量值的大小。</p>
+<p><img src="/images/blog/voice_mfcc.jpg" alt="音频的处理MFCC">  </p>
+<p>接下来就要介绍怎样把这个矩阵变成文本了。首先要介绍两个概念：</p>
+<ul>
+<li><p>音素：单词的发音由音素构成。对英语，一种常用的音素集是卡内基梅隆大学的一套由39个音素构成的音素集，参见The CMU Pronouncing Dictionary‎。汉语一般直接用全部声母和韵母作为音素集，另外汉语识别还分有调无调，不详述。</p>
+</li>
+<li><p>状态：这里理解成比音素更细致的语音单位就行啦。通常把一个音素划分成3个状态。</p>
+</li>
+</ul>
+<p><img src="/images/blog/voice_frames.jpg" alt="音频的处理MFCC">  </p>
+<p>图中，每个小竖条代表一帧，若干帧语音对应一个状态，每三个状态组合成一个音素，若干个音素组合成一个单词。也就是说，只要知道每帧语音对应哪个状态了，语音识别的结果也就出来了。</p>
+<p><strong>参考</strong></p>
+<p><a href="https://zhuanlan.zhihu.com/p/25784028" target="_blank" rel="noopener">Emotibot Tech | WaveNet语音合成与深度生成模型解析 - 知乎专栏</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2017-04-01-voice-basic/" data-id="ck4ifp1m9002r2wje1ct3ccle" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2017-04-16-merlin-tts/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          使用merlin从头构建你的声音
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2017-04-01-mevislab/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">医疗软件Mevislab使用</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

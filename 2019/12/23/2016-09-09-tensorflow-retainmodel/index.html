@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>tensorflow：如何重新训练Inception模型的最后一层，以应对新分类 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="tensorflow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tensorflow：如何重新训练Inception模型的最后一层，以应对新分类">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2016-09-09-tensorflow-retainmodel/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="tensorflow">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/retain_flowers.jpg">
+<meta property="article:published_time" content="2019-12-23T10:45:59.329Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.200Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/retain_flowers.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2016-09-09-tensorflow-retainmodel" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2016-09-09-tensorflow-retainmodel/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.329Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      tensorflow：如何重新训练Inception模型的最后一层，以应对新分类
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文整理自 <a href="https://www.tensorflow.org/versions/r0.10/how_tos/image_retraining/index.html" target="_blank" rel="noopener">retrain network</a></p>
+<h2 id="在Flowers数据集上重新训练"><a href="#在Flowers数据集上重新训练" class="headerlink" title="在Flowers数据集上重新训练"></a>在Flowers数据集上重新训练</h2><p><img src="/images/blog/retain_flowers.jpg" alt="flowers数据集"></p>
+<p>训练开始之前你需要一些数据集，以告诉网络，你有哪些新分类需要学习。后面的部分会道明如何准备自己的数据，首先按照如下操作下载一些数据集</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd ~</span><br><span class="line">curl -O http:&#x2F;&#x2F;download.tensorflow.org&#x2F;example_images&#x2F;flower_photos.tgz</span><br><span class="line">tar xzf flower_photos.tgz</span><br></pre></td></tr></table></figure>
+<p>等图片下载好，可以按照如下方式重新训练，在tensorflow源码的根目录下执行:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bazel build tensorflow&#x2F;examples&#x2F;image_retraining:retrain</span><br></pre></td></tr></table></figure>
+<p>然后继续执行如下操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bazel-bin&#x2F;tensorflow&#x2F;examples&#x2F;image_retraining&#x2F;retrain --image_dir ~&#x2F;flower_photos</span><br></pre></td></tr></table></figure>
+<p>注意：<code>image_dir</code>参数需要指定你的flowers数据下载目录。<br>此脚本会载入预训练的Inception v3模型，移除原先模型中的最后一层，然后在flowers数据集上重新训练。flowers数据集的分类信息在原始的ImageNet网络中并不存在 ，转换学习的神奇之处在于网络的前几层用来训练识别物体之间的差别，这可以在做任何更新的情况下重用于新的分类任务。</p>
+<h2 id="Bottlenecks"><a href="#Bottlenecks" class="headerlink" title="Bottlenecks"></a>Bottlenecks</h2><p>  脚本运行可能消耗半小时或者更多，这取决于你的硬件。脚本的第一阶段会分析所有图像并计算每张图像的Bottleneck.<code>bottleneck</code>是我们经常用于描述网络最后一层之前的那些实际完成分类任务的网络层的一种非正式称谓。倒数第二层的输出结果对于描述区分需要分类的类别已经足够.这意味着它必须有信息丰富并且关于图像信息也足够紧凑，因为它必须包含足够的信息来在一小撮数值（标签值）中完成分类。重新训练最后一层就可以完成新的分类任务，为何？因为在ImageNet数据上完成1000个分类任务的信息通常也可用于区分新的物体。</p>
+<p>  由于每张图像在训练和计算bottleneck值的过程中重复使用多次，这极为耗时，将这些数据缓存在磁盘上有助于加速整个过程以避免重复计算。</p>
+<h2 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h2><p> 一旦bottleneck完成，网络最后一层的训练就开始了。你将会看到训练步骤的一系列的输出，每一个会输出训练准确率，验证准确率和交叉熵。训练准确率显示的当前批次的图像中正确分类的准确率。验证准确率显示的是从一组不同数据中随机选择的一组图像的精度。这其中的关键区别在于，训练的准确率是基于网络已经能够学习的图像集，因为网络</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2016-09-09-tensorflow-retainmodel/" data-id="ck4ifp1lq00192wje99nbbgnl" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2016-09-20-batch_sizesetup/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          深度学习：batch_size的设置与影响
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2016-09-02-tensorflow-inputpipeline/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">tensorflow：理解tensorflow中的输入管道</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

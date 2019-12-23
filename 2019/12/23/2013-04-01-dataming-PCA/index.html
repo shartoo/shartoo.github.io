@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>数据挖掘方法之一：主成份分析 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="数据挖掘专题之一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据挖掘方法之一：主成份分析">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2013-04-01-dataming-PCA/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="数据挖掘专题之一">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-12-23T10:45:59.200Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.189Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2013-04-01-dataming-PCA" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2013-04-01-dataming-PCA/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.200Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      数据挖掘方法之一：主成份分析
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一-概念"><a href="#一-概念" class="headerlink" title="一 概念"></a>一 概念</h2><p>主成分分析（principle componentsanalysis,PCA）是指将多个变量通过线性组合，选出较少个数的重要变量集合来描述相关结构的额一种统计分析方法，这些线性组合被称为“成分”。由m个变量组成的数据集的总变异，可以由k个线性组合变量组成的子集来标示（k&lt;m）。这意味着k个变量与原来的变量反应了几乎同样多的信息  </p>
+<h2 id="二-步骤"><a href="#二-步骤" class="headerlink" title="二 步骤"></a>二 步骤</h2><ol>
+<li><p>原始指标数据的标准化采集p维随机向量</p>
+<p>$$x = (x_1,x_2,…x_p)^T$$</p>
+<p>$n$个样本<br>$x_i= (x_{i1},x_{i2},x_{i3},…x_{ip})^T,i=1,2..n, n&gt;p$</p>
+<p>构造样本阵，对样本元素进行如下标准化变换</p>
+</li>
+</ol>
+<p>$$Z_{ij}=\frac{x_{ij}-\bar x_j}{s_J},i =1,2,..\pi, j =1,2,…p$$</p>
+<p>其中$$\bar x_j =\frac{\sum^n_{i-1}x_{ij}}{n},s^2_j=\frac{\sum^n_{i-1}(x_{ij}-\bar x_j)^2}{n-1}$$</p>
+<p>   得标准化矩阵Z。</p>
+<ol start="2">
+<li><p>对标准化矩阵Z求相关系数矩阵    </p>
+<p> $$R = [r_{ij}] xp =\frac{Z^TZ}{n-1}其中r_{ij}=\frac{\sum z_{kj}\cdot z_{kj}}{n-1}, i,j = 1,2…p$$</p>
+</li>
+<li><p>求解样本相关矩阵R的特征方程</p>
+<p>$R-\lambda I_p =0$ 得 $p$ 个特征根，按<br>$$\frac{sum^m_{j-1}\lambda <em>j}{\sum^p</em>{j-1}\lambda _j}\geq 0.85<br>确定n的值，使信息的利用率达85%以上。对每个 $\lambda_j,i=1,2,..m$ 解方程组$R_b= \lambda_jb$得单位特征向量$b^0_j$$</p>
+</li>
+<li><p>将标准化后的指标变量转换成主成分。</p>
+<p>$U_{ij}=z^Tb^0_j,j=1,2,…m$</p>
+<p>$U_1$称为第一主成分，$U_2$称为第二主成分，$U_3$称为第三主成分，…</p>
+<p>对n个主成份进行综合评价。对n个主成份进行加权求和，即得最终评价值，权数为每个主成份的方差贡献率。</p>
+</li>
+</ol>
+<h2 id="三-关键性结论"><a href="#三-关键性结论" class="headerlink" title="三 关键性结论"></a>三 关键性结论</h2><p>以下结论对主成份分析非常重要</p>
+<p><strong>结论1</strong>：标准化数据集州农工的总体变动性等于所有Z向量方差之和，等于每个成分方差之和，等于特征权值之和，等于变量的个数。即<br>$$<br>  \sum^m_{i-1}Var(Y_i)=\sum^m_{i-1}Var(Z_i)=\sum^m_{i-1}\lambda _i=m<br>$$</p>
+<p><strong>结论2</strong>：给定成分与给定变量间的偏相关性是特征向量与特征值的函数。</p>
+<p>具体来说<br>$$Corr(Y_i,Z_i)=e_{ii}\sqrt\lambda _i,i,j=1,2,..m,\lambda _1\gt\lambda _2\geq\lambda _3…\geq\lambda _m$$<br>其中 $(\lambda _1,e_1),(\lambda _2,e_2),(\lambda _3,e_3),..(\lambda _m,e_m)$<br>是相关系数矩阵p的<font color="gray">特征值-特征向量</font>对，并且偏相关系数包括了所有变量之间的影响。</p>
+<p><strong>结论3</strong>：Z中第i个主成份解释了变量的总体变异的百分比，等于第i个特征根与变量个数之间的比率 $\frac{\lambda _i}{m}$</p>
+<h2 id="四-应用于实际数据"><a href="#四-应用于实际数据" class="headerlink" title="四 应用于实际数据"></a>四 应用于实际数据</h2><table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>最小值</th>
+<th>最大值</th>
+<th>均值</th>
+<th>标准差</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>房屋价值中位数</td>
+<td>Range</td>
+<td>14999</td>
+<td>500001</td>
+<td>206918.067</td>
+<td>115485.040</td>
+</tr>
+<tr>
+<td>收入中位数</td>
+<td>Range</td>
+<td>0.500</td>
+<td>15.000</td>
+<td>3.873</td>
+<td>1.906</td>
+</tr>
+<tr>
+<td>平均房龄中位数</td>
+<td>Range</td>
+<td>1</td>
+<td>52</td>
+<td>28.656</td>
+<td>12.582</td>
+</tr>
+<tr>
+<td>总房间数</td>
+<td>Range</td>
+<td>2</td>
+<td>37937</td>
+<td>2621.653</td>
+<td>2131.644</td>
+</tr>
+<tr>
+<td>总卧室数</td>
+<td>Range</td>
+<td>1</td>
+<td>6445</td>
+<td>535.096</td>
+<td>413.541</td>
+</tr>
+<tr>
+<td>人口数</td>
+<td>Range</td>
+<td>3</td>
+<td>35682</td>
+<td>1418.971</td>
+<td>1122.534</td>
+</tr>
+<tr>
+<td>家庭数</td>
+<td>Range</td>
+<td>1</td>
+<td>6082</td>
+<td>479.332</td>
+<td>377.378</td>
+</tr>
+<tr>
+<td>北纬</td>
+<td>Range</td>
+<td>32.540</td>
+<td>41.950</td>
+<td>35.630</td>
+<td>2.137</td>
+</tr>
+<tr>
+<td>西经</td>
+<td>Range</td>
+<td>-124.350</td>
+<td>-114.310</td>
+<td>-119.567</td>
+<td>2.003</td>
+</tr>
+</tbody></table>
+<p>1.使用上图的均值和标准差对变量进行标准化，得到Z向量。<br>2.研究下图中变量矩阵图以检验变量间是否存在相关性。<br> 可以看到 总房数、卧室数、人口数和家庭数之间表现出正相关性，西经和北纬表现出负相关性。再来观察变量的相关性矩阵：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>平均收入</th>
+<th>平均房龄</th>
+<th>总房数</th>
+<th>总卧室数</th>
+<th>人口数</th>
+<th>家庭数</th>
+<th>北纬</th>
+<th>西经</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>平均收入</td>
+<td>1.000</td>
+<td>-0.117</td>
+<td>0.199</td>
+<td>-0.012</td>
+<td>0.002</td>
+<td>0.010</td>
+<td>-0.083</td>
+<td>-0.012</td>
+</tr>
+<tr>
+<td>平均房龄</td>
+<td>-0.117</td>
+<td>1.000</td>
+<td>-0.360</td>
+<td>-0.318</td>
+<td>-0.292</td>
+<td>-0.300</td>
+<td>0.011</td>
+<td>-0.107</td>
+</tr>
+<tr>
+<td>总房数</td>
+<td>0.199</td>
+<td>-0.360</td>
+<td>1.000</td>
+<td>0.928</td>
+<td>0.856</td>
+<td>0.919</td>
+<td>-0.035</td>
+<td>0.041</td>
+</tr>
+<tr>
+<td>总卧室数</td>
+<td>-0.012</td>
+<td>-0.318</td>
+<td>0.928</td>
+<td>1.000</td>
+<td>0.878</td>
+<td>0.981</td>
+<td>-0.064</td>
+<td>0.064</td>
+</tr>
+<tr>
+<td>人口数</td>
+<td>0.002</td>
+<td>-0.292</td>
+<td>0.856</td>
+<td>0.878</td>
+<td>1.000</td>
+<td>0.907</td>
+<td>-0.107</td>
+<td>0.097</td>
+</tr>
+<tr>
+<td>家庭数</td>
+<td>0.010</td>
+<td>-0.300</td>
+<td>0.919</td>
+<td>0.981</td>
+<td>0.907</td>
+<td>1.000</td>
+<td>-0.069</td>
+<td>0.051</td>
+</tr>
+<tr>
+<td>北纬</td>
+<td>-0.083</td>
+<td>0.011</td>
+<td>-0.035</td>
+<td>-0.064</td>
+<td>-0.107</td>
+<td>-0.069</td>
+<td>1.000</td>
+<td>-0.925</td>
+</tr>
+<tr>
+<td>西经</td>
+<td>-0.012</td>
+<td>-0.107</td>
+<td>0.041</td>
+<td>0.064</td>
+<td>0.097</td>
+<td>0.051</td>
+<td>-0.925</td>
+<td>1.000</td>
+</tr>
+</tbody></table>
+<p> 矩阵图和相关矩阵式常用的两种方法，用来观察预测变量之间的相关性结构。<br>  如果完成一次住房价预测的多元回归分析，但不考虑数据集中的多重共线性将导致回归结果非常不稳定，预测值的微小变化将会导致回归系数的极大变化，而得不到任何结论。此时需要用主成分分析，其可以通过相关化结构，确定相关变量的基本组成部分<br>3. 采用主成分分析对房屋数据集进行分析，该要素矩阵（下图）中每个栏目代表成分Yi=e’Z中的一项。栏目中元素为成分的权重，代表了变量与成分的偏相关。结论2 表明这些成分的权重等于Corr(Yi,Zi),成分涉及第i个特征向量和特征值</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>平均收入</td>
+<td>0.086</td>
+<td>-0.058</td>
+<td>0.922</td>
+<td>0.370</td>
+<td>-0.02</td>
+<td>-0.018</td>
+<td>0.037</td>
+<td>-0.004</td>
+</tr>
+<tr>
+<td>平均房龄</td>
+<td>-0.429</td>
+<td>0.025</td>
+<td>-0.407</td>
+<td>0.806</td>
+<td>0.014</td>
+<td>0.026</td>
+<td>0.009</td>
+<td>-0.001</td>
+</tr>
+<tr>
+<td>总房数</td>
+<td>0.956</td>
+<td>0.100</td>
+<td>0.102</td>
+<td>0.104</td>
+<td>0.120</td>
+<td>0.162</td>
+<td>-0.119</td>
+<td>0.015</td>
+</tr>
+<tr>
+<td>总卧室数</td>
+<td>0.970</td>
+<td>0.083</td>
+<td>-0.121</td>
+<td>0.056</td>
+<td>0.144</td>
+<td>-0.068</td>
+<td>0.051</td>
+<td>-0.083</td>
+</tr>
+<tr>
+<td>人口数</td>
+<td>0.933</td>
+<td>0.034</td>
+<td>-0.121</td>
+<td>0.076</td>
+<td>-0.327</td>
+<td>0.034</td>
+<td>0.006</td>
+<td>-0.015</td>
+</tr>
+<tr>
+<td>家庭数</td>
+<td>0.972</td>
+<td>0.086</td>
+<td>-0.113</td>
+<td>0.087</td>
+<td>0.058</td>
+<td>-0.112</td>
+<td>0.061</td>
+<td>0.083</td>
+</tr>
+<tr>
+<td>北纬</td>
+<td>-0.140</td>
+<td>0.970</td>
+<td>0.017</td>
+<td>-0.088</td>
+<td>0.017</td>
+<td>0.132</td>
+<td>0.113</td>
+<td>0.005</td>
+</tr>
+<tr>
+<td>西经</td>
+<td>0.144</td>
+<td>-0.969</td>
+<td>-0.062</td>
+<td>-0.063</td>
+<td>0.037</td>
+<td>0.136</td>
+<td>0.109</td>
+<td>0.007</td>
+</tr>
+</tbody></table>
+<ol start="4">
+<li>结论3表明，Z的总变异种第i个主成分所占的比例是ri/m(其中ri是特征值)，即第i个特征值与变量数的比例。由下图可以看出，第一特征值是 3.091,因为有8个预测变量，第一主成分解释 $\frac{3.091}{8}=48.767$ 的变异。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>成分</th>
+<th>合计</th>
+<th>变化百分比</th>
+<th>累计百分比%</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>3.901</td>
+<td>48.767</td>
+<td>48.767</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1.910</td>
+<td>23.881</td>
+<td>72.648</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1.073</td>
+<td>13.409</td>
+<td>86.057</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0.825</td>
+<td>10.311</td>
+<td>96.368</td>
+</tr>
+<tr>
+<td>5</td>
+<td>0.148</td>
+<td>1.847</td>
+<td>98.215</td>
+</tr>
+<tr>
+<td>6</td>
+<td>0.082</td>
+<td>1.020</td>
+<td>99.235</td>
+</tr>
+<tr>
+<td>7</td>
+<td>0.047</td>
+<td>0.586</td>
+<td>99.821</td>
+</tr>
+<tr>
+<td>8</td>
+<td>0.014</td>
+<td>0.179</td>
+<td>100.00</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2013-04-01-dataming-PCA/" data-id="ck4ifp1kt00002wje1ffs9lh4" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2013-04-20-datamining-regression/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          数据挖掘方法之二：回归模型（简单线性回归）
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

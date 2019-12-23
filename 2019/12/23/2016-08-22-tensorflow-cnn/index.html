@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>tensorflow：卷积神经网络的理解 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="理解卷积神经网络">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tensorflow：卷积神经网络的理解">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2016-08-22-tensorflow-cnn/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="理解卷积神经网络">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/padding-example.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.318Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.198Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/padding-example.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2016-08-22-tensorflow-cnn" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2016-08-22-tensorflow-cnn/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.318Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      tensorflow：卷积神经网络的理解
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="基本概念理解"><a href="#基本概念理解" class="headerlink" title="基本概念理解"></a>基本概念理解</h1><ul>
+<li><p>图像中每个像素都想象成一个神经元</p>
+</li>
+<li><p>padding: 填充的意思。使用卷积对图像某部分做运算时，总会有部分没有覆盖到，需要决定是否填充以及使用什么填充方式。</p>
+</li>
+<li><p>stride： 移动切片的步长，影响取样的数量。每次将卷积核（矩阵）在图像上移动时，一次移动的位置量。</p>
+</li>
+<li><p>局部感知：图像的空间联系也是局部的像素联系较为紧密，而距离较远的像素相关性则较弱。因而，每个神经元其实没有必要对全局图像进行感知，只需要对局部进行感知，然后在更高层将局部的信息综合起来就得到了全局的信息。</p>
+</li>
+<li><p>其他理解：</p>
+<ul>
+<li>卷积核心。一个卷积是一个二维矩阵，卷积核心就是矩阵中心</li>
+<li>Patch/Kernel：一个局部切片</li>
+<li>Depth: 数据的深度(通道数)，图像数据是三维的，长宽和RGB，神经网络的预测输出也属于一维</li>
+<li>池化：就是在图像上采样，抽取部分数据。</li>
+</ul>
+<h2 id="误差函数"><a href="#误差函数" class="headerlink" title="误差函数"></a>误差函数</h2><p>  令$y_j(n)$记为在输出层第$j$个神经元输出产生的函数信号。相应的，神经元$j$输出所产生的误差信号定义为：</p>
+<p>  $$</p>
+<pre><code>e_j(n)=d_j(n)-y_j(n)</code></pre><p>  $$</p>
+<p>  其中$d_j(n)$是响应向量$d(n)$的第$j$个元素。那么<strong>瞬时误差能量</strong>(<em>instaneous error energy</em>)定义为:</p>
+<p>  $$</p>
+<pre><code>\Im _j(n)=\frac{1}{2}e^2_j(n)</code></pre><p>  $$</p>
+<p>  将所有输出层误差能量相加，得到整个网络的全部瞬时误差能量:</p>
+<p>  $$</p>
+<pre><code>\Im (n)=\sum _{j\epsilon C}\Im(n)=\frac{1}{2}\sum_{i\epsilon C}e^2_j(n)</code></pre><p>  $$</p>
+<p>其中集合C包括输出层的所有神经元。设训练样本中包含N个样例，训练样本上的<strong>平均误差能量(error energy averaged over the training sample)</strong>或者说经验风险(empirical risk)定义为:</p>
+<p>$$</p>
+<pre><code>\Im_{av}(N) = \frac{1}{N}\sum^N_{n=1}\Im (n)=\frac{1}{2N}\sum^N_{n=1}\sum_{j\epsilon C}e^2_j(n)</code></pre><p>$$</p>
+<h2 id="epoch-回合"><a href="#epoch-回合" class="headerlink" title="epoch 回合"></a>epoch 回合</h2><p>   epoch可以理解为回合，一回合代表全部输入数据都走了一遍训练过程，神经网络的训练可能需要经历m个回合。注意：虽然每个回合都是全部输入数据，但是每次输入的组合(即batch组合)是随机的，因为每个batch都是随机从输入样本中抽取固定数量的样本，因而每次的组合各不相同。</p>
+</li>
+</ul>
+<h2 id="padding的类别"><a href="#padding的类别" class="headerlink" title="padding的类别"></a>padding的类别</h2><p><img src="/images/blog/padding-example.png" alt="padding"></p>
+<p>用一个3x3的网格在一个28x28的图像上做切片并移动,移动到边缘上的时候，如果不超出边缘，3x3的中心就到不了边界，因此得到的内容就会缺乏边界的一圈像素点，只能得到26x26的结果。而可以越过边界的情况下，就可以让3x3的中心到达边界的像素点，超出部分的矩阵补零就行</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2016-08-22-tensorflow-cnn/" data-id="ck4ifp1ll000z2wjefo56b44y" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2016-08-22-tensorflow-sourcecode-input/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          tensorflow:CIFAR-10 图像处理源码.input.py
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2016-08-18-tensorflow-CIFAR10/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">tensorflow:使用tensorflow构建简单卷积神经网络</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

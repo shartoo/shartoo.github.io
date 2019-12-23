@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>李宏毅深度学习-六-HighwayNetwork和LSTM | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="李宏毅深度学习笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="李宏毅深度学习-六-HighwayNetwork和LSTM">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2018-02-03-LHYDeepLearning_highway/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="李宏毅深度学习笔记">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/LHY_RNN1.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/LHY_RNN2.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/LHY_GRU.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/LHY_GRU2.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/LHY_Highway.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/LHY_Highway2.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/LHY_Highway_loss1.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/LHY_Highway_loss2.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/LHY_GRIDLSTM1.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/LHY_GRIDLSTM2.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/LHY_GRIDLSTM3.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/LHY_GRIDLSTM4.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/LHY_GRIDLSTM5.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/LHY_3DGRIDLSTM.jpg">
+<meta property="article:published_time" content="2019-12-23T10:45:59.535Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.218Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/LHY_RNN1.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2018-02-03-LHYDeepLearning_highway" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2018-02-03-LHYDeepLearning_highway/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.535Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      李宏毅深度学习-六-HighwayNetwork和LSTM
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-前馈网络和循环神经网络-RNN"><a href="#1-前馈网络和循环神经网络-RNN" class="headerlink" title="1   前馈网络和循环神经网络(RNN)"></a>1   前馈网络和循环神经网络(RNN)</h2><p><strong>前馈网络示意图</strong></p>
+<p><img src="/images/blog/LHY_RNN1.jpg" alt="前馈网络示意图">    </p>
+<p>上图中，$f_1,f_2,f_3,f_4..$表示的是前馈网络的网络层，一个输入$x$，一个输出$y$。</p>
+<p><strong>循环神经网络</strong></p>
+<p><img src="/images/blog/LHY_RNN2.jpg" alt="RNN示意图">    </p>
+<p>对比可知，两者十分相似。不同之处是，</p>
+<ol>
+<li>循环神经网络每个网络层都有输入，而前馈网络只有一个输入</li>
+<li>循环神经网络的每一层的激活函数是同一个，而前馈网络的每一层的激活函数都不同。</li>
+</ol>
+<h2 id="2-如何把GRU改成Highway-Network"><a href="#2-如何把GRU改成Highway-Network" class="headerlink" title="2 如何把GRU改成Highway Network"></a>2 如何把GRU改成Highway Network</h2><p>GRU网络示意图如下：</p>
+<p><img src="/images/blog/LHY_GRU.jpg" alt="GRU示意图">   </p>
+<p>变成  </p>
+<p><img src="/images/blog/LHY_GRU2.jpg" alt="GRU示意图">    </p>
+<ol>
+<li>拿掉每个时间步的输入$x^t$,</li>
+<li>拿掉$y^t$,RNN每个时间步都会输出一个$y^t$,Highway network只有一个最后的输出$y^t$.</li>
+<li>把 $h^{t-1}$ 改成 $a^{t-1}$。其中$a^{t-1}$ 是第$t$层的输出</li>
+<li>拿掉<code>reset gate</code>。它的作用是让GRU忘记之前发生过的事情，但是Highway不应该忘记，它只有一个开始的。</li>
+</ol>
+<h2 id="3-Highway-Network"><a href="#3-Highway-Network" class="headerlink" title="3 Highway Network"></a>3 Highway Network</h2><p>一个常见的Highway Network的示意图如下：</p>
+<p><img src="/images/blog/LHY_Highway.jpg" alt="Highway示意图">   </p>
+<p>注意，它由两部分组成：Gate controller 部分和copy部分。其中的$z,h^{‘},a^{t-1}$（可以通过第二节看到这些详细的）分别如下计算：<br>$$<br> h^{‘}=\sigma (Wa^{t-1}) \<br>z=\sigma(W^{‘}a^{t-1}) \quad\quad  蓝色部分\<br>a^t = z\bigodot a^{t-1}+(1-z)\bigodot h  \quad\quad  黑色部分<br>$$</p>
+<p>一个较深的Highway Network示意图</p>
+<p><img src="/images/blog/LHY_Highway2.jpg" alt="Highway示意图">   </p>
+<p>它在训练过程中会自动给连接层之间的gate 赋予权重，会自动丢弃某些不重要的层，会自动决定需要多少层。</p>
+<p>事实上Highway Network的论文中有论证，通过不断丢弃某些层来评估对网络loss的影响。下图是在<code>MNIST</code>数据集上评测<code>ResNet</code>网络，下图中横轴代表的是网络层，纵轴代表的是网络loss。可以看到$15~45$层 这些层被丢弃之后对网络loss几乎没有影响。</p>
+<p><img src="/images/blog/LHY_Highway_loss1.jpg" alt="Highway示意图"> </p>
+<p>另外一张图是评测<code>ResNet</code>在CIFAR-10数据集上的结果，可以看到拿掉某些层对网络性能的影响非常大。CIFAR-10是个比较复杂的数据集。</p>
+<p><img src="/images/blog/LHY_Highway_loss2.jpg" alt="Highway示意图"> </p>
+<h2 id="4-Grid-LSTM"><a href="#4-Grid-LSTM" class="headerlink" title="4 Grid LSTM"></a>4 Grid LSTM</h2><p>它是一种既横着，又竖着的LSTM。它既有时间方向的记忆，又有深度方向的记忆（左边是<strong>LSTM</strong>，右边是<strong>Grid LSTM</strong>）：</p>
+<p><img src="/images/blog/LHY_GRIDLSTM1.jpg" alt="GridLSTM示意图"> </p>
+<p>原来的LSTM的输入是 $c$ 和 $h$，输出是$c’$和$h^t$，这些都是时间方向上的</p>
+<p>Grid LSTM时间方向上与传统的LSTM一致，<strong>多出了一个深度方向的输入输出.输入是$a$,$b$输出是$a’$,$b’$</strong></p>
+<h3 id="4-1-Grid-LSTM如何连接"><a href="#4-1-Grid-LSTM如何连接" class="headerlink" title="4.1 Grid LSTM如何连接"></a>4.1 Grid LSTM如何连接</h3><p><img src="/images/blog/LHY_GRIDLSTM2.jpg" alt="GridLSTM示意图"> </p>
+<h3 id="4-2-Grid-LSTM内部结构"><a href="#4-2-Grid-LSTM内部结构" class="headerlink" title="4.2  Grid LSTM内部结构"></a>4.2  Grid LSTM内部结构</h3><p><img src="/images/blog/LHY_GRIDLSTM3.jpg" alt="GridLSTM示意图"> </p>
+<p>其中</p>
+<ul>
+<li>$h$ 是<strong>输入</strong></li>
+<li>$z^f$ 是 <strong>遗忘门</strong></li>
+<li>$z^i$ 是<strong>输入门</strong></li>
+<li>$z$  是 <strong>输入信息</strong></li>
+<li>$z^o$ 是<strong>输出门</strong></li>
+<li>$c$  是<strong>记忆</strong></li>
+</ul>
+<p>我们 可以将上图右边做一个切分，分别是<strong>历史记忆</strong>，<strong>当前输入</strong>，<strong>准备输出</strong></p>
+<p><img src="/images/blog/LHY_GRIDLSTM4.jpg" alt="GridLSTM示意图"> </p>
+<h3 id="4-3-Grid-LSTM的输入输出"><a href="#4-3-Grid-LSTM的输入输出" class="headerlink" title="4.3 Grid LSTM的输入输出"></a>4.3 Grid LSTM的输入输出</h3><p>Grid LSTM 有<strong>两套记忆</strong>以及<strong>两套隐藏层输出</strong> ，如何结合并表现出来？</p>
+<p><img src="/images/blog/LHY_GRIDLSTM5.jpg" alt="GridLSTM示意图"> </p>
+<p>其中 $h$和$b$一起产生各类门(<code>遗忘门</code>,<code>输出门</code>,<code>输入门</code>,<code>输入信息</code>)， $c$和$a$组合成一串较长向量作为历史记忆。</p>
+<h3 id="4-4-3D-Grid-LSTM"><a href="#4-4-3D-Grid-LSTM" class="headerlink" title="4.4 3D Grid LSTM"></a>4.4 3D Grid LSTM</h3><p><img src="/images/blog/LHY_3DGRIDLSTM.jpg" alt="GridLSTM示意图"> </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2018-02-03-LHYDeepLearning_highway/" data-id="ck4ifp1mg003d2wje07h25a25" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2018-03-03-LHY_RNN/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          李宏毅深度学习-七-RNN
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2017-11-14-darknet_on_tx2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">darknet在nvidia tx2上的训练自己的数据</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

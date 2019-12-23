@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>window测试tensorflow object detection api | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="深度学习实战">
+<meta property="og:type" content="article">
+<meta property="og:title" content="window测试tensorflow object detection api">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2017-09-20-tensorflow_object_detection_api/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="深度学习实战">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/tf_obj_detect_struct1.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/tf_obj_detect_download1.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/tf_obj_detect_win_proto_bin.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/tf_obj_detect_win_var.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/tf_obj_detect_proto_effect.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/tf_obj_detect_copy_net.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/tf_obj_detect_test_code.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/tf_obj_detect_test_result.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.519Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.216Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/tf_obj_detect_struct1.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2017-09-20-tensorflow_object_detection_api" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2017-09-20-tensorflow_object_detection_api/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.519Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      window测试tensorflow object detection api
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="0-注意"><a href="#0-注意" class="headerlink" title="0 注意"></a>0 注意</h2><p>安装window版本的tensorflow时，如果tensorflow版本是1.3。需要安装 cudnn 6.0,但是貌似官网不让看了，windows端安装地址为： <a href="http://developer.download.nvidia.com/compute/redist/cudnn/v6.0/cudnn-8.0-windows10-x64-v6.0.zip" target="_blank" rel="noopener">windows cudnn6.0</a><br>window 端的为 <a href="http://developer.download.nvidia.com/compute/redist/cudnn/v6.0/cudnn-8.0-linux-x64-v6.0.tgz" target="_blank" rel="noopener">linux cudnn 6.0</a></p>
+<h2 id="1-预备"><a href="#1-预备" class="headerlink" title="1 预备"></a>1 预备</h2><h3 id="1-1-Tensorflow-Object-Detection-API-依赖："><a href="#1-1-Tensorflow-Object-Detection-API-依赖：" class="headerlink" title="1.1 Tensorflow Object Detection API 依赖："></a>1.1 Tensorflow Object Detection API 依赖：</h3><ul>
+<li>Protobuf 2.6(最新版本是3.4，下面会提到如何安装)</li>
+<li>Pillow 1.0 （从网站 <a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy" target="_blank" rel="noopener">python第三方包下载网站</a>）</li>
+<li>lxml（从网站 <a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy" target="_blank" rel="noopener">python第三方包下载网站</a>）</li>
+<li>tf Slim (<code>tensorflow/models</code>模块中包含了)</li>
+<li>Jupyter notebook(如果不运行官网的网页测试就不需要)</li>
+<li>Matplotlib</li>
+<li>Tensorflow</li>
+</ul>
+<h3 id="1-2-下载model"><a href="#1-2-下载model" class="headerlink" title="1.2 下载model"></a>1.2 下载model</h3><p>下载链接： <a href="https://github.com/tensorflow/models" target="_blank" rel="noopener">https://github.com/tensorflow/models</a></p>
+<p>将<code>models/object_detection</code>拷贝到一个新工程目录<code>object_detection</code>下（工程名和代码目录都叫object_detection,工程名可以是其他）。我的目录结构如下：</p>
+<p><img src="/images/blog/tf_obj_detect_struct1.jpg" alt="项目架构"></p>
+<p>之所以在弄两个object_detection，是要保留代码的引用逻辑，否则你要改一堆import 错误。而单独把object_detection抽出来是方便集成到其他工程里。</p>
+<h3 id="1-3-安装protoc"><a href="#1-3-安装protoc" class="headerlink" title="1.3 安装protoc"></a>1.3 安装protoc</h3><p>下载链接： <a href="https://github.com/google/protobuf/releases" target="_blank" rel="noopener">protoc</a></p>
+<p><img src="/images/blog/tf_obj_detect_download1.jpg" alt="protoc下载"></p>
+<p>我们在windows下使用，选择win32.下载后解压到某个目录下，解压 后的目录包含了<code>bin</code>目录：</p>
+<p><img src="/images/blog/tf_obj_detect_win_proto_bin.jpg" alt="protoc"></p>
+<p> 为了避免夜长梦多，我直接把这个路径加入到window环境变量</p>
+<p><img src="/images/blog/tf_obj_detect_win_var.png" alt="protoc环境变量"></p>
+<h3 id="1-4-将proto文件生成对应的代码"><a href="#1-4-将proto文件生成对应的代码" class="headerlink" title="1.4 将proto文件生成对应的代码"></a>1.4 将proto文件生成对应的代码</h3><p>虽然不太理解tensorflow的 <code>model/object_detection/protos/</code>目录下一堆<code>.proto</code>文件用处（proto貌似是谷歌文件传输数据格式），但是从安装过程大概可知，这些文件会被生成python文件。依赖的是一下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protoc object_detection&#x2F;protos&#x2F;*.proto --python_out&#x3D;.</span><br></pre></td></tr></table></figure>
+<p>注意该命令是在你的 <code>object_detection</code>文件夹的上一层目录下执行，默认是在<code>tensorflow/model</code>下。</p>
+<p><img src="/images/blog/tf_obj_detect_proto_effect.png" alt="protoc前后"></p>
+<h3 id="1-5-预知的错误"><a href="#1-5-预知的错误" class="headerlink" title="1.5 预知的错误"></a>1.5 预知的错误</h3><p>如果存在 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">from nets import xxx</span><br></pre></td></tr></table></figure>
+<p>错误，是因为官网教程中提到的一句，将<code>slim</code>要加入到python环境变量中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># From tensorflow&#x2F;models&#x2F;</span><br><span class="line">export PYTHONPATH&#x3D;$PYTHONPATH:&#96;pwd&#96;:&#96;pwd&#96;&#x2F;slim</span><br></pre></td></tr></table></figure>
+
+<p>windows下没法完成这句，所以我们在需要用到nets的时候，把对应的网络（位于<code>\models\slim\nets</code>）复制过去即可。比如 <code>faster_rcnn_inception_resnet_v2_feature_extractor</code>开始的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">from nets import inception_resnet_v2</span><br></pre></td></tr></table></figure>
+<p>这一句显然无法执行，我们可以替换为:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">from object_detection.nets import inception_resnet_v2</span><br></pre></td></tr></table></figure>
+
+<p>从<code>\models\slim\nets</code>下将<code>nets</code>文件夹拷贝到<code>object_detect/object_detection</code>工程下。</p>
+<p><img src="/images/blog/tf_obj_detect_copy_net.jpg" alt="工程结构"></p>
+<h2 id="2-编写测试代码"><a href="#2-编写测试代码" class="headerlink" title="2 编写测试代码"></a>2 编写测试代码</h2><p>测试代码基本复制自官方的 jupyter notebook脚本，名字为<code>object_detection_test.py</code> </p>
+<p><img src="/images/blog/tf_obj_detect_test_code.png" alt="测试demo"></p>
+<p>代码为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"># coding: utf-8</span><br><span class="line"></span><br><span class="line">import numpy as np</span><br><span class="line">import os</span><br><span class="line">import six.moves.urllib as urllib</span><br><span class="line">import sys</span><br><span class="line">import tarfile</span><br><span class="line">import tensorflow as tf</span><br><span class="line">import zipfile</span><br><span class="line"></span><br><span class="line">from collections import defaultdict</span><br><span class="line">from io import StringIO</span><br><span class="line">from matplotlib import pyplot as plt</span><br><span class="line">from PIL import Image</span><br><span class="line"></span><br><span class="line">import cv2  # add 20170825</span><br><span class="line"></span><br><span class="line">cap &#x3D; cv2.VideoCapture(0)  # add 20170825</span><br><span class="line">sys.path.append(&quot;..&quot;)</span><br><span class="line"></span><br><span class="line">from object_detection.utils import label_map_util</span><br><span class="line"></span><br><span class="line">from object_detection.utils import visualization_utils as vis_util</span><br><span class="line"></span><br><span class="line">MODEL_NAME &#x3D; &#39;ssd_mobilenet_v1_coco_11_06_2017&#39;</span><br><span class="line">MODEL_FILE &#x3D; MODEL_NAME + &#39;.tar.gz&#39;</span><br><span class="line">DOWNLOAD_BASE &#x3D; &#39;http:&#x2F;&#x2F;download.tensorflow.org&#x2F;models&#x2F;object_detection&#x2F;&#39;</span><br><span class="line">PATH_TO_CKPT &#x3D; MODEL_NAME + &#39;&#x2F;frozen_inference_graph.pb&#39;</span><br><span class="line"></span><br><span class="line"># List of the strings that is used to add correct label for each box.</span><br><span class="line">PATH_TO_LABELS &#x3D; os.path.join(&#39;data&#39;, &#39;mscoco_label_map.pbtxt&#39;)</span><br><span class="line"></span><br><span class="line">NUM_CLASSES &#x3D; 90</span><br><span class="line"></span><br><span class="line">opener &#x3D; urllib.request.URLopener()</span><br><span class="line">opener.retrieve(DOWNLOAD_BASE + MODEL_FILE, MODEL_FILE)</span><br><span class="line">tar_file &#x3D; tarfile.open(MODEL_FILE)</span><br><span class="line">for file in tar_file.getmembers():</span><br><span class="line">    file_name &#x3D; os.path.basename(file.name)</span><br><span class="line">    if &#39;frozen_inference_graph.pb&#39; in file_name:</span><br><span class="line">        tar_file.extract(file, os.getcwd())</span><br><span class="line"></span><br><span class="line">detection_graph &#x3D; tf.Graph()</span><br><span class="line">with detection_graph.as_default():</span><br><span class="line">    od_graph_def &#x3D; tf.GraphDef()</span><br><span class="line">    with tf.gfile.GFile(PATH_TO_CKPT, &#39;rb&#39;) as fid:</span><br><span class="line">        serialized_graph &#x3D; fid.read()</span><br><span class="line">        od_graph_def.ParseFromString(serialized_graph)</span><br><span class="line">        tf.import_graph_def(od_graph_def, name&#x3D;&#39;&#39;)</span><br><span class="line"></span><br><span class="line">label_map &#x3D; label_map_util.load_labelmap(PATH_TO_LABELS)</span><br><span class="line">categories &#x3D; label_map_util.convert_label_map_to_categories(label_map, max_num_classes&#x3D;NUM_CLASSES,</span><br><span class="line">                                                            use_display_name&#x3D;True)</span><br><span class="line">category_index &#x3D; label_map_util.create_category_index(categories)</span><br><span class="line"></span><br><span class="line">def load_image_into_numpy_array(image):</span><br><span class="line">    (im_width, im_height) &#x3D; image.size</span><br><span class="line">    return np.array(image.getdata()).reshape(</span><br><span class="line">        (im_height, im_width, 3)).astype(np.uint8)</span><br><span class="line"></span><br><span class="line">PATH_TO_TEST_IMAGES_DIR &#x3D; &#39;test_images&#39;</span><br><span class="line">TEST_IMAGE_PATHS &#x3D; [os.path.join(PATH_TO_TEST_IMAGES_DIR, &#39;image&#123;&#125;.jpg&#39;.format(i)) for i in range(1, 3)]</span><br><span class="line"></span><br><span class="line"># Size, in inches, of the output images.</span><br><span class="line">IMAGE_SIZE &#x3D; (12, 8)</span><br><span class="line"></span><br><span class="line"># In[10]:</span><br><span class="line"></span><br><span class="line">with detection_graph.as_default():</span><br><span class="line">    with tf.Session(graph&#x3D;detection_graph) as sess:</span><br><span class="line">        while True:  # for image_path in TEST_IMAGE_PATHS:    #changed 20170825</span><br><span class="line">            ret, image_np &#x3D; cap.read()</span><br><span class="line"></span><br><span class="line">            # Expand dimensions since the model expects images to have shape: [1, None, None, 3]</span><br><span class="line">            image_np_expanded &#x3D; np.expand_dims(image_np, axis&#x3D;0)</span><br><span class="line">            image_tensor &#x3D; detection_graph.get_tensor_by_name(&#39;image_tensor:0&#39;)</span><br><span class="line">            # Each box represents a part of the image where a particular object was detected.</span><br><span class="line">            boxes &#x3D; detection_graph.get_tensor_by_name(&#39;detection_boxes:0&#39;)</span><br><span class="line">            # Each score represent how level of confidence for each of the objects.</span><br><span class="line">            # Score is shown on the result image, together with the class label.</span><br><span class="line">            scores &#x3D; detection_graph.get_tensor_by_name(&#39;detection_scores:0&#39;)</span><br><span class="line">            classes &#x3D; detection_graph.get_tensor_by_name(&#39;detection_classes:0&#39;)</span><br><span class="line">            num_detections &#x3D; detection_graph.get_tensor_by_name(&#39;num_detections:0&#39;)</span><br><span class="line">            # Actual detection.</span><br><span class="line">            (boxes, scores, classes, num_detections) &#x3D; sess.run(</span><br><span class="line">                [boxes, scores, classes, num_detections],</span><br><span class="line">                feed_dict&#x3D;&#123;image_tensor: image_np_expanded&#125;)</span><br><span class="line">            # Visualization of the results of a detection.</span><br><span class="line">            vis_util.visualize_boxes_and_labels_on_image_array(</span><br><span class="line">                image_np,</span><br><span class="line">                np.squeeze(boxes),</span><br><span class="line">                np.squeeze(classes).astype(np.int32),</span><br><span class="line">                np.squeeze(scores),</span><br><span class="line">                category_index,</span><br><span class="line">                use_normalized_coordinates&#x3D;True,</span><br><span class="line">                line_thickness&#x3D;8)</span><br><span class="line">            cv2.imshow(&#39;object detection&#39;, cv2.resize(image_np, (1024, 800)))</span><br><span class="line">            if cv2.waitKey(25) &amp; 0xFF &#x3D;&#x3D; ord(&#39;q&#39;):</span><br><span class="line">                cv2.destroyAllWindows()</span><br><span class="line">                break</span><br></pre></td></tr></table></figure>
+
+<p>注意，启动程序之前得准备个摄像头。</p>
+<p>测试效果</p>
+<p><img src="/images/blog/tf_obj_detect_test_result.png" alt="测试demo效果"></p>
+<p>参考 :<a href="http://blog.csdn.net/c20081052/article/details/77608954" target="_blank" rel="noopener">http://blog.csdn.net/c20081052/article/details/77608954</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2017-09-20-tensorflow_object_detection_api/" data-id="ck4ifp1md00332wje3gfc40c1" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2017-09-21-tf_obj_detect_api_train_owndata/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          使用tensorflow object detection api训练自己的数据
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2017-07-12-fust_multi_view_face_detection/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Funnel-structured cascade for multi-view face detection with alignmentawareness 论文阅读笔记</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>spark 测试 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="spark计算框架">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spark 测试">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2015-09-25-mapreduce-introduce/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="spark计算框架">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://i.imgur.com/OWyTF1M.png">
+<meta property="og:image" content="http://i.imgur.com/rtY99ub.png">
+<meta property="og:image" content="http://i.imgur.com/nTBmin9.png">
+<meta property="og:image" content="http://i.imgur.com/UE5Od8S.png">
+<meta property="og:image" content="http://gitlab.hudoumiao.com/TopLevel/Knowledge_Base/uploads/ba527855ed3b360d8c82840c62b0b3ab/spark%E8%AE%A1%E7%AE%97code.png">
+<meta property="og:image" content="http://gitlab.hudoumiao.com/TopLevel/Knowledge_Base/uploads/e82db4ea22a47be62bc7355505d06ba2/spark%E8%AE%A1%E7%AE%97code%E4%BE%9D%E8%B5%96.png">
+<meta property="og:image" content="http://gitlab.hudoumiao.com/TopLevel/Knowledge_Base/uploads/8f0a48da38c9da65b84ed5af5262562f/spark%E6%8F%90%E4%BA%A4%E4%BD%9C%E4%B8%9A%E6%B5%81%E7%A8%8B.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.269Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.194Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://i.imgur.com/OWyTF1M.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2015-09-25-mapreduce-introduce" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2015-09-25-mapreduce-introduce/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.269Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      spark 测试
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="spark-overview"><a href="#spark-overview" class="headerlink" title="spark overview"></a>spark overview</h2><h3 id="UC-Berkeley-的spark数据分析栈"><a href="#UC-Berkeley-的spark数据分析栈" class="headerlink" title="UC Berkeley 的spark数据分析栈"></a>UC Berkeley 的spark数据分析栈</h3><p><img src="http://i.imgur.com/OWyTF1M.png" alt=""></p>
+<p>按使用方式划分</p>
+<ul>
+<li>离线批处理（Mlib，Graphs）</li>
+<li>交互式查询（spark SQL）</li>
+<li>时实计算（spark streaming）</li>
+</ul>
+<h3 id="spark资源调度"><a href="#spark资源调度" class="headerlink" title="spark资源调度"></a>spark资源调度</h3><p><img src="http://i.imgur.com/rtY99ub.png" alt=""></p>
+<ul>
+<li>stanalone</li>
+<li>mesos</li>
+<li>yarn</li>
+</ul>
+<p>  其中我们使用的是yarn资源调度，也就是运行spark job向集群申请资源的方式与hadoop是一样的，先向resourcemanger，然后在nodemanager，申请container启动applicationMaster,运行excutor</p>
+<p>  yarn的提交job方式client和cluster</p>
+<ul>
+<li>client提交方式，driver program运行在提交机器上</li>
+<li>cluster方式，driver program是运行在集群中的某个worker中</li>
+</ul>
+<h3 id="spark-VS-hadoop"><a href="#spark-VS-hadoop" class="headerlink" title="spark VS hadoop"></a>spark VS hadoop</h3><ul>
+<li><p>应用场景</p>
+<ul>
+<li>hadoop的mapreduce适合做大数据集的离线批处理，</li>
+<li>hadoop不是万能的，小数据集（单机能处理的小数据集杀鸡用牛刀），以及复杂的迭代运算，实时计算，在线分析等无能为力，而spark的出现很好的弥补了hadoop的不足之处，因为spark是基于内存的计算框架，适合复杂的迭代计算，spark streaming弥补实时计算的空缺（storm实时性更高，吞吐量，容错方面缺不如spark，稍后介绍spark的容错机制lineage和实时计算与storm的对比）</li>
+</ul>
+</li>
+<li><p>运行效率</p>
+<ul>
+<li>spark官网效率比较<br><img src="http://i.imgur.com/nTBmin9.png" alt=""></li>
+<li>咱门研究中心同事实际的测试报告</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">   Spark性性能能与与MR相相比比较较提提高高了了13.6% </span><br><span class="line">    结果分析 </span><br><span class="line">    之前的Hadoop版本的批处理作业，共有23个作业，作业之间的关联方式为，</span><br><span class="line"> 前一个作业的输出结果保存在特定目录中，作为之后作业的输入数据。其中有一定量的计算结果是仅作为中间的临时数据存在，</span><br><span class="line">所有作业结束后将会被清理。这是由于每个Hadoop作业仅能执行一个MapReduce过程，</span><br><span class="line">这个问 题通过Spark的编程结构可以改善为按功能模块进行作业划分，每个作业中实现多个原来MapReduce的功能，</span><br><span class="line">将中间数据输出到磁盘并在下一次作业中重新读入的过程简化为Spark中的中间缓存变量保存在内存中。</span><br><span class="line">这里性能的提升主要来自于此，即优化了中间数据的冗余磁盘IO时间。此外，对于省网的分析作业而言，</span><br><span class="line">有着如下的特点，导致了性能提升不能达到理论上提及的一个数量级的改善效果。 </span><br><span class="line">    第一，原始数据量大，输入的基础数据量过于巨大，导致大量的时间花费在第一次的磁盘数据读取上，</span><br><span class="line">这个时间只取决于磁盘IO速率和文件大 小，而与分布式计算模式无关。省网分析作业内容大多属于磁盘密集型，</span><br><span class="line">与数据读取的时间相比，计算的时间耗费比重较轻，使得Hadoop和Spark的性能表现差异不大。 </span><br><span class="line">    第二，省网数据分析的内容，大多数属于单次的计算分析，即统计次数和汇总的工作，</span><br><span class="line">这方面Hadoop的性能可以极好的发挥出来。Spark更优势 于对一组小规模输入数据的，反复迭代计算，输入文件的读取时间较小，</span><br><span class="line">而计算过程十分复杂，这样其基于内存的计算方法可以更充分的展现优势。这在前一阶段中，</span><br><span class="line">使用分布式对矩阵进行计算的过程中体现的尤为明显，效果可以接近理论中提及的一个数量级提升。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>开发效率比较<ul>
+<li>spark基于rdd的操作，是mapreduce的超集，提供我们基于rdd丰富的接口，如filter，disinct，reducebykey等等，而hadoop这些操作需要用户在map或reduce，combine自己编码实现，</li>
+<li>咱门写mapreduce程序，每个job都要写maper类，reducer类（当然有些job可以不写reducer类，如sqoop导入数据库就只需maper），可能还要写partition，combiner类，而且写完job后，需要构建job与job之间执行的顺序和依赖关系，输入输出的键值类型等；<ul>
+<li>而spark是不需要这么琐碎，对rdd执行多个transform后，当执行一个action动作后（后面将介绍rdd的操作），自动构建一个基于rdd的DAG有向无环执行作业图，使用过pig的同事有所体会，这点类似pig，pig的解释器会将基于数据集的流处理过程，转换为DAG的job链，但spark又优于pig，可以做到过程控制，pig作为一个数据流语言，缺乏过程控制，粗糙的过程控制需要一门动态的脚本语言如python，javascript来实现，而且pig，hive只适合做统计分析作业，面对复杂的处理，如dougelas参数区线的压缩，需要用mapreduce或spark处理。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="开发语言支持"><a href="#开发语言支持" class="headerlink" title="开发语言支持"></a>开发语言支持</h3><ul>
+<li>原生语言scala</li>
+<li>java</li>
+<li>python</li>
+<li>spark1.4后支持R语言</li>
+</ul>
+<h3 id="spark的核心RDD"><a href="#spark的核心RDD" class="headerlink" title="spark的核心RDD"></a>spark的核心RDD</h3><p>  大家可以理解弹性分布式集合就是一个数据集合，这个集合有多个partition组成，而这些partition分布到集群中各节点的worker</p>
+<ul>
+<li><p>创建RDD的方式</p>
+<ul>
+<li>基于内存集合<br>如1到100数字Range作为rdd，val data = sc.parallelize(1 to 100)</li>
+<li>外部存储系统，如hbase，cassandra，hdfs等， 如val data = sc.textfile(“dataPath”)</li>
+</ul>
+</li>
+<li><p>基于rdd的操作</p>
+<ul>
+<li><p>Transformations操作<br>如map，filter，groupbykey等等，更多操作可参考<a href="http://spark.apache.org/docs/latest/programming-guide.html#transformations" target="_blank" rel="noopener">spark官网</a></p>
+</li>
+<li><p>action操作<br>top，count，reducebykey，saveastexrfile等等，更多操作可参考<a href="http://spark.apache.org/docs/latest/programming-guide.html#actions" target="_blank" rel="noopener">spark官网</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<p>  transform是lazy执行的，也就是说直到遇到该rdd链执行action操作，才会启动job，执行计算，这种思想跟scala语言的lazy十分相似，下面通过一个简单的scala例子体会下这种思想</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">package com.haohandata.dnsApp</span><br><span class="line">import scala.io.Source._</span><br><span class="line">import scala.io.Source</span><br><span class="line">&#x2F;**</span><br><span class="line"> * @author xizhououyang@163.com</span><br><span class="line"> * @desription lazy deamon</span><br><span class="line"> *&#x2F;</span><br><span class="line">object LazyDeamon &#123;</span><br><span class="line">  &#x2F;*</span><br><span class="line">代码解释：当我们输入一个不存在的文件，如果不执行for循环对文件进行读取，program并不会抛异常，也就是说定义一个变量为lazy</span><br><span class="line">后，当我们对其引用求值时候，才会加载运行，这点类似于java的反射机制，动态加载</span><br><span class="line">*&#x2F;</span><br><span class="line">  def  main(args:Array[String])&#123;</span><br><span class="line">  lazy  val  file &#x3D; Source.fromFile(&quot;&#x2F;home&#x2F;osun&#x2F;pgadmin.logxx&quot;)</span><br><span class="line">  for(line&lt;- file.getLines)</span><br><span class="line">    println(line)</span><br><span class="line">  val word &#x3D;&quot;learning spark&quot;</span><br><span class="line">   println(word)</span><br><span class="line">  </span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="广播变量"><a href="#广播变量" class="headerlink" title="广播变量"></a>广播变量</h3><p>广播变量是分发到每个worker的只读变量不能修改，功能与hadoop的分布式缓存类似，</p>
+<p>  目前的dns项目实战使用到是做资源表关联（大数据集与小数据集的关联），存放广播变量中，通过map转换操作做关联，注意广播变量是一个只读变量，不能做修改。</p>
+<h3 id="计数器"><a href="#计数器" class="headerlink" title="计数器"></a>计数器</h3><p>作业中全局的一个计数器，与hadoop的计数器类似，并不陌生，我们平时跑完mr或者pig的时候会有三种类型计数器的统计，<br>Framkework计数器，job计数器，hdfs文件系统计数器，注意spark中的计数器是不能在task中求值，只能在driver program中求值</p>
+<p>  在dns项目中统计各用户群，各运营商，top10的icp，每个icp下统计top10 的host，可先在每个partition中统计top10的icp和top10的host，然后保存到计数器变量中，然后将聚合后结果话单过滤只保留掉计数器中的host和icp，这样可以避免多次迭代调用rdd.top（10）产生N<em>N个job；取五分钟小片数据，采用n</em>n迭代调用rdd.top方式生成库表需要两个小时，并产生了1800多个小job，跑了两个多小时，采用计数器过滤方式，4分多钟就能跑完库表实现入库postgresql</p>
+<h3 id="rdd依赖"><a href="#rdd依赖" class="headerlink" title="rdd依赖"></a>rdd依赖</h3><ul>
+<li>narrow依赖（父rdd的同一个partion最多只给子rdd一个partion依赖）</li>
+<li>wide依赖（父rdd的同一个partion被子rdd多个partion依赖）<br><img src="http://i.imgur.com/UE5Od8S.png" alt=""></li>
+</ul>
+<h3 id="小结，从计算，存储，容错谈谈rdd"><a href="#小结，从计算，存储，容错谈谈rdd" class="headerlink" title="小结，从计算，存储，容错谈谈rdd"></a>小结，从计算，存储，容错谈谈rdd</h3><ul>
+<li>计算</li>
+</ul>
+<p><img src="http://gitlab.hudoumiao.com/TopLevel/Knowledge_Base/uploads/ba527855ed3b360d8c82840c62b0b3ab/spark%E8%AE%A1%E7%AE%97code.png" alt="spark计算code"></p>
+<p>注意：由于时间关系，直接截了他人画的图，deamon中存在一点error，正确的代码应该是map(parts=&gt;(parts(0),parts(1).toInt)),第一次map的transform得到的是RDD[Array[String]],不是RDD[List[String]]</p>
+<p>code.png)<img src="http://gitlab.hudoumiao.com/TopLevel/Knowledge_Base/uploads/e82db4ea22a47be62bc7355505d06ba2/spark%E8%AE%A1%E7%AE%97code%E4%BE%9D%E8%B5%96.png" alt="spark计算code依赖"></p>
+<p>每个job划分不同的stage，每个stage就是一个Set[task]集合  </p>
+<p><img src="http://gitlab.hudoumiao.com/TopLevel/Knowledge_Base/uploads/8f0a48da38c9da65b84ed5af5262562f/spark%E6%8F%90%E4%BA%A4%E4%BD%9C%E4%B8%9A%E6%B5%81%E7%A8%8B.png" alt="spark提交作业流程"></p>
+<p>  spark的作业调度，分DAGshedule，和taskshedule二级，跟hadoop的jobtraker，tasktracker两级调度类似</p>
+<ul>
+<li><p>存储</p>
+<ul>
+<li>MEMORY_ONLY</li>
+<li>MEMORY_AND_DISK</li>
+<li>MEMORY_ONLY_SER</li>
+<li>MEMORY_AND_DISK_SER</li>
+<li>DISK_ONLY</li>
+<li>MEMORY_ONLY_2, MEMORY_AND_DISK_2</li>
+</ul>
+<p>上面是spark是rdd的各种存储策略，是spark计算框架中，默认认为重复计算rdd需要的时间会比从磁盘中读取数据进行的io操作效率高，<br>因此默认所有的rdd的persist方式都是存在内存中，当内存不足后，会丢弃掉这个rdd，需要时候再根据lineage<br>机制从新计算，实际开发中那如果认为计算出来的rdd代价远比进行io大，这时可根据情况选择其他持久化策略，如在dns项目中，需要关联ppp的result和record话单后的rdd，采取MEMORY_AND_DISK_SER方式的持久化</p>
+</li>
+<li><p>容错（lineage）</p>
+</li>
+</ul>
+<p>穿插一个小故事：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">  高帅富小明家有一个家传宝，祖训这个宝物得一代代往下传，每代人可能对这个传家宝，</span><br><span class="line">每代人需对这宝物进行雕塑改造，如嵌入宝石，或者砖石，某天小明炒股亏空了，于是他要变卖这个传家宝，</span><br><span class="line">可是造化弄人，当他要变卖时候，发现传家宝不见了，聪明的小明，首先会确认他爸爸是否已经把这件宝物传了给他，</span><br><span class="line">如果确定是，他会将在翻遍自己房子找，如果他父亲没传给他，直接去他父亲的住处找，按照这个步骤，</span><br><span class="line">如果祖父那还没找到，他会一直回溯到他曾祖父那，直到找到传家宝，然后再一代代地传给小明，</span><br><span class="line">小明得到宝物后最终把它变卖</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96; </span><br><span class="line"></span><br><span class="line">分析情景:</span><br><span class="line">- rdd就好比传家宝</span><br><span class="line">- 情景中的每个人物就好比不同时候集群中的计算节点中的worker</span><br><span class="line">-  小明变卖宝物，就好比执行了一个action，触发提交job</span><br><span class="line">-  而每代人对宝物加入一个宝石，就好比rdd的transform操作</span><br><span class="line">-  rdd的容错是lineage机制，如果当向spark提交job的时候，会构造基于rdd操作的DAG的作业流，这时会有基于rdd依赖链，如果计算过程中某个rdd丢失了，它会从父rdd那重新计算，如果父rdd不存在，会一直回溯上去直到找到父的rdd，然后再依照依赖链重新执行计算，最后执行action操作</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## spark在项目的实战应用</span><br><span class="line">### 架构图</span><br><span class="line">![](http:&#x2F;&#x2F;i.imgur.com&#x2F;VdB2LPU.png)</span><br><span class="line">### 项目代码</span><br><span class="line"></span><br><span class="line">http:&#x2F;&#x2F;gitlab.hudoumiao.com&#x2F;applications&#x2F;User_Mobility_Analysis&#x2F;tree&#x2F;master&#x2F;sparkcode&#x2F;src&#x2F;main&#x2F;scala&#x2F;com&#x2F;haohandata</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## spark streaming</span><br><span class="line"></span><br><span class="line">### spark streaming vs Storm（下面是引用研究中心同事的给出的两者对比的报告内容）</span><br></pre></td></tr></table></figure>
+<p> Storm和Spark Streaming都是分布式流处理的开源框架。虽然二者功能类似，但是也有着一定的区别。 </p>
+<ul>
+<li>处理模型 </li>
+</ul>
+<p>虽然这两个框架都提供可扩展性和容错性,它们根本的区别在于他们的处理模型。<br>Spark Streaming是将流式计算分解成一系列短小的批处理作业。这里的批处理引擎是Spark，<br>也就是把Spark Streaming的输入数据按照batch size  （如1秒）分成一段一段的数据 （Discretized Stream），<br>每一段数据都 转换成Spark中的RDD  （Resilient Distributed Dataset ），然后将Spark Streaming 中对DStream的Transformation操作变为针对Spark中对RDD的Transformation操作，将RDD经过操作变成中间结果保存在内存中。整个流式计算根据业务的需求可以对中间的结果进行叠加，或者存储到外部设备。 </p>
+<p>在Storm中，先要设计一个用于实时计算的图状结构，我们称之为拓扑 （topology ）。<br>这个拓扑将会被提交给集群，由集群中的主控节点 （masternode ）分发代码，将任务分配给工作节点 （worker node ）执行。<br>一个拓扑中包括spout和bolt两种角色，其中spout发送消息，负责将数据流以tuple元 组的形式发送出去；<br>而bolt则负责转发数据流，在bolt 中可以完成计算、过滤等操作，bolt 自身也可以随机将数据发送给其他bolt 。<br>在storm中，每个都是tuple是不可变数组，对应着固定的键值对。 简而言之，Storm是让数据面向计算，<br>而Spark Streaming是使计算面向数据。 </p>
+<ul>
+<li><p>延迟，storm更高<br>Spark Streaming，最小的Batch Size的选取在0.5~2秒钟之间，而Storm 目前最小的延迟是100ms左右，<br>所以Spark Streaming能，够满足除对实时性要求非常高 （如高频实时交易）之外的所有流式准实时计算场景，<br>而高实时性要求的场景则应该交给Storm来完成。 </p>
+</li>
+<li><p>容错，spark streaming更好 </p>
+</li>
+</ul>
+<p>在容错数据保证方面的权衡是，Spark Streaming提供了更好的支持容错状态计算。<br>在Storm中,每个单独的记录当它通过系统时必须被跟踪，所以 Storm能够至少保证每个记录将被处理一次，<br>但是在从错误中恢复过来时候允许出现重复记录。这意味着可变状态可能不正确地被更新两次。<br>另一方 面，Spark Streaming只需要在批级别进行跟踪处理，因此可以有效地保证每个mini-batch将完全被处理一次，<br>即便一个节点发生故障。 </p>
+<ul>
+<li>吞吐量，spark streaming更强<br> Spark 目前在EC2上已能够线性扩展到100个节点 （每个节点4Core ），可以以数秒的延迟处理6GB/s的数据量 （60M records/s ），其吞吐量也比流行的Storm高2～5倍。 </li>
+</ul>
+<p>使用选择 </p>
+<p>如果你想要的是一个允许增量计算的高速事件处理系统，Storm会是最佳选择。<br>它可以应对你在客户端等待结果的同时，进一步进行分布式计算的需求，使用开箱即用的分布式RPC  （DRPC）就可以了。<br>最后但同样重要的原因：Storm使用Apache Thrift ，你可以用任何编程语言来编写拓扑结构。<br>如果你需要状态持续，同时/或者达到恰好一次的传递效果，应当看看更高层面的Trdent API，它同时也提供了微批处理的方式。<br>如果你必须有状态的计算，恰好一次的递送，并且不介意高延迟的话，那么可以考虑Spark Streaming，<br>特别如果你还计划图形操作、机器学习或者访问SQL的话，ApacheSpark的stack允许你将一些library与数据流相结合<br>（Spark SQL，Mllib，GraphX），它们会提供便捷的一体化编程模型。<br>尤其是数据流算法 （例如：K均值流媒体）允许Spark实时决策的促进。 </p>
+<pre><code>
+### 核心DStream
+- Dstream简介
+  Dstream是一组以时间为轴连续的一组rdd
+![](http://i.imgur.com/H5GA2XL.png)
+- Dstream的输入源
+
+![](http://i.imgur.com/ya40qiL.png)
+
+- DStream的transformations操作
+- DSstream的action操作
+
+### 使用场景划分
+-  无状态
+
+每次批处理，receiver接收的数据都作为数据Dstream操作
+
+-  有状态updateStateByKey(func)
+
+  本次计算，需要用到上次批处理的结果。
+比如spark streaming的批处理时间是五分钟，但业务中，我需要统计话单中haohandata.com.cn从程序运行后，每五分钟后haohandata.com.cn这个域名的累加的访问数，这时我们会以上次批处理为key的访问次数，加上本次五分钟批处理得到结果
+
+-  windowns
+
+基于窗口的操作，批处理时间，滑动窗口，窗口大小
+DNS实时计算实验项目中，统计五分钟粒度各rcode的次分布，
+由于存在边界数据，解决的办法采取五分钟为批处理时间，滑动窗口为五分钟，窗口大小为10分钟，每次进行reduceByKeyAndWindow后，会进行过滤，只存这个windown中的中间五分钟数据，再入库cassandra
+
+## dns项目的spark streaming实时计算（实验性项目）
+### DNS项目处理流程图
+![](http://i.imgur.com/7EatbDK.png)
+
+### 项目代码
+
+
+
+
+
+
+
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2015-09-25-mapreduce-introduce/" data-id="ck4ifp1lf000l2wjegqldgncd" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2016-02-23-bigdata-kafka1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          kafka使用
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2014-05-17-bigdata-streamdata-introduce/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">大数据之流数据挖掘</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

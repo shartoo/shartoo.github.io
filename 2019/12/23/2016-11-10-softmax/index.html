@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>softmax函数 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="深度学习基础理论">
+<meta property="og:type" content="article">
+<meta property="og:title" content="softmax函数">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2016-11-10-softmax/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="深度学习基础理论">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-12-23T10:45:59.384Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.206Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2016-11-10-softmax" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2016-11-10-softmax/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.384Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      softmax函数
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文根据 <a href="http://blog.csdn.net/hejunqing14/article/details/48980321" target="_blank" rel="noopener">softmax函数定义</a><br>整理</p>
+<h2 id="softmax函数的定义"><a href="#softmax函数的定义" class="headerlink" title="softmax函数的定义"></a>softmax函数的定义</h2><p>softmax是sigmoid函数的普遍形式，用于多分类。用在输出层，作为一个分类器，表述为多个分类上的概率分布。 softmax函数的常见形式如下：</p>
+<p>$$<br>  P(i) =\frac{exp(\theta_i^Tx)}{\sum _{i=1}^Kexp(\theta_i^Tx)}<br>$$</p>
+<p>通过softmax函数，可以使得 $P(i)$ 的范围在[0,1]之间。在回归和分类问题中，通常θ是待求参数，通过寻找使得 $P(i)$ 最大的 $\theta_i$作为最佳参数。回顾logistic函数形式</p>
+<p>$$<br>  P(i)=\frac{1}{1+exp(-\theta^T_ix)}<br>$$</p>
+<p>这个函数的作用就是使得 $P(i)$ 在负无穷到0的区间趋向于0，在0到正无穷的区间趋向于1。同样，softmax函数加入了e的幂函数正是为了两极化：正样本的结果将趋近于1，而负样本的结果趋近于0。</p>
+<h2 id="softmax的可以作为最终概率的证明"><a href="#softmax的可以作为最终概率的证明" class="headerlink" title="softmax的可以作为最终概率的证明"></a>softmax的可以作为最终概率的证明</h2><p>虽然Softmax函数得到的是一个[0,1]之间的值，且 $\sum _{i=1}^KP(i)=1$ ，但是这个softmax求出的概率是否就是真正的概率？换句话说，这个概率是否严格等于期望呢？为此在这里进行推导。</p>
+<p>假设现在有K个类，样本属于类别 $i$ 的概率为 $ϕ(i),i=1,…,K$ ,由于 $\sum _{i=1}^KP(i)=1$ ,所以只需要 <strong>前K-1</strong>个参数即可：   </p>
+<p>$$<br> \phi <em>i =P(y=i,\phi),i=1,…K-1.\quad \phi _k=1-\sum</em>{i=1}^{K-1} \phi _i<br>$$</p>
+<p>先引入T(y)，它是一个k-1维的向量，如下所示：</p>
+<p>$$<br> T(1)=\begin {bmatrix}<br>  1\ 0\0\0\.\.\0\end{bmatrix}<br>  \quad<br>  T(2)=\begin {bmatrix}<br>   0\ 1\0\0\.\.\0\end{bmatrix}<br>   \quad<br>   …<br>   T(k-1)=\begin {bmatrix}<br>    0\ 0\0\0\.\.\1\end{bmatrix}<br>    \quad<br>    T(k)=\begin {bmatrix}<br>     0\ 0\0\0\.\.\0\end{bmatrix}<br>$$</p>
+<p>样本属于第i类则第 $i$ 行元素为1，其余为0，即：$(T(i))i=1$ (注意第i个列的第i行)。因为y只能属于1类，故(y不等于k时)T(y)只有一个元素为1，其余元素都为0，则y的期望为：</p>
+<p>$$<br>  E(T(y))_i=P(y=i)=\phi_i,i\neq K<br>$$</p>
+<p>令 $\beta_i=log\frac{\phi_i}{\phi_K},i=1,…,K$(同时除以     $\phi_K$ ),则有:</p>
+<p>$$<br>  e^{\beta_i}=\frac{\phi_i}{\phi_K}\Longrightarrow\phi_K=\frac{\phi_i}{\beta_i}\Longrightarrow\phi_K\sum_i^Ke^{\beta_i}=\sum_i^K\phi_i=1<br>$$</p>
+<p><strong>注意观察：第三个式子是在第一个式子的左右乘以 $\phi_K$ ,然后累加求和。（第二个式子用在第二步）</strong></p>
+<p>所以：</p>
+<p>$$<br>  \phi_k=\frac{1}{\sum_{i=1}Ke^{\beta _i}}<br>$$</p>
+<p>此时再将 $\phi_K=\frac{\phi_i}{\beta}$ 带入（上面推导的第二个式子），有：</p>
+<p>$$<br>  \phi_i=\frac{e^{\beta_i}}{\sum_{i=1}^Ke^{\beta_i}}<br>$$</p>
+<p>由于分母中是求和操作，可以将i换成K。得到</p>
+<p>$$<br>  \phi_i=\frac{e^{\beta_i}}{\sum_{k=1}^Ke^{\beta_k}}<br>$$</p>
+<p>所以实际的期望是具有softmax函数的形式的，当 $f_i(x)=\beta_i=log\frac{\phi_i}{\phi_k}$ 时实际期望与softmax函数严格相等，所求概率为真实值。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2016-11-10-softmax/" data-id="ck4ifp1lz001z2wje2nol567w" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2016-11-16-facedetect-paper-note/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          《漏斗形级联结构的多角度人脸检测算法》论文阅读笔记
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2016-11-06-deepfeedforwardnn/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">深度学习：深度前馈网络</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

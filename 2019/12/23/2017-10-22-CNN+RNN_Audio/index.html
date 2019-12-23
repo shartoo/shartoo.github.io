@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>CNN+RNN来做口语识别 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="深度学习实践">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CNN+RNN来做口语识别">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2017-10-22-CNN+RNN_Audio/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="深度学习实践">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/cnn+rnn_rnn1.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/cnn+rnn_cnn-multi-rnn.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/cnn+rnn_cnn-multi-rnn2.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.522Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.217Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/cnn+rnn_rnn1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2017-10-22-CNN+RNN_Audio" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2017-10-22-CNN+RNN_Audio/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.522Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      CNN+RNN来做口语识别
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>翻译自： <a href="https://yerevann.github.io/2016/06/26/combining-cnn-and-rnn-for-spoken-language-identification/" target="_blank" rel="noopener">combining-cnn-and-rnn-for-spoken-language-identificatio</a></p>
+<p>github：<a href="https://github.com/harvitronix/continuous-online-video-classification-blog" target="_blank" rel="noopener">源码</a></p>
+<p><strong>翻译的原因是觉得示意图很好</strong></p>
+<h2 id="输入和输出"><a href="#输入和输出" class="headerlink" title="输入和输出"></a>输入和输出</h2><p>正如以前一样，网络的输入是语音记录的图谱。图谱似乎是语音的作为深度学习系统的标准表征形式。</p>
+<p>一些网络使用多达11khz的频率(858x256的图像)，而其他使用5.5khz的频率(858x128)。通常情况下，使用5.5khz的结果要相对好一点（可能是因为更高的频率没有包含太多有用的信息，反倒更容易过拟合）。</p>
+<p>所有网络的输出层都是全连接的softmax层，176个神经元。</p>
+<h2 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h2><p>我们测试了几个网络结构。第一个是纯粹的类似Alex-Net的卷积网络。第二个没有使用任何卷积层，并将（语音）图谱的列作为RNN的序列输入。第三个使用的是，将卷积神经网络抽取出的特征输入到RNN。所有的网络都用Theano和Lasagne。</p>
+<p>几乎所有的网络都可以很轻易地在训练集上达到100%的准确率。下表描述的是在验证集上的准确率。</p>
+<h2 id="卷积网络"><a href="#卷积网络" class="headerlink" title="卷积网络"></a>卷积网络</h2><p>网络结构由6块(block) 2D卷积组成，Relu激活函数，2D maxpooling和BatchNormalization。第一个卷积层的kernel尺寸是 $7\times 7$，第二个是 $5\times 5$,剩下的都是 $3\times 3$。Pooling的尺寸一直都是 $3\times 3$，步长为2.</p>
+<p><strong>BatchNormalization</strong>可以显著提升训练速度。我们最后只在最后的一个Pooling层和softmax层之间使用了一个全连接层，并使用了50%的dropout。</p>
+<table>
+<thead>
+<tr>
+<th>网络</th>
+<th>准确率</th>
+<th>注意</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://github.com/YerevaNN/Spoken-language-identification/blob/master/theano/networks/tc_net.py" target="_blank" rel="noopener">tc_net</a></td>
+<td>&lt;80%</td>
+<td>此网络与前面描述的CNN的区别在于，这个网络只有一个全连接层。我们并没有怎么训练这个网络，因为<code>ignore_border=False</code>，这个会拖慢训练过程</td>
+</tr>
+<tr>
+<td><a href="https://github.com/YerevaNN/Spoken-language-identification/blob/master/theano/networks/tc_net_mod.py" target="_blank" rel="noopener">tc_net_mod</a></td>
+<td>97.14%</td>
+<td>与tc_net相同，只不过这里不是 <code>ignore_border=False</code>而是加入了<code>pad=2</code></td>
+</tr>
+<tr>
+<td>tc_net_mod_5khz_small</td>
+<td>96.49%</td>
+<td>是tc_net_mod的较小副本，使用的是5.5khz</td>
+</tr>
+</tbody></table>
+<p>Lasagne设置<code>ignore_border=False</code>  会使得Theano不使用CuDnn，将其设置为True，可以显著提升速度。</p>
+<p>下面是<code>tc_net_mod</code>的详细网络结构：</p>
+<table>
+<thead>
+<tr>
+<th>Nr</th>
+<th>Type</th>
+<th>Channel</th>
+<th>Width</th>
+<th>Height</th>
+<th>Kernel size/stride</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>input</td>
+<td>1</td>
+<td>858</td>
+<td>256</td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td>Conv</td>
+<td>16</td>
+<td>852</td>
+<td>250</td>
+<td>7x7/1</td>
+</tr>
+<tr>
+<td></td>
+<td>Relu</td>
+<td>16</td>
+<td>852</td>
+<td>250</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>MaxPooling</td>
+<td>16</td>
+<td>427</td>
+<td>126</td>
+<td>3x3/,pad=2</td>
+</tr>
+<tr>
+<td></td>
+<td>BatchNorm</td>
+<td>16</td>
+<td>427</td>
+<td>126</td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td>Conv</td>
+<td>16</td>
+<td>852</td>
+<td>250</td>
+<td>7x7/1</td>
+</tr>
+<tr>
+<td></td>
+<td>Relu</td>
+<td>16</td>
+<td>852</td>
+<td>250</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>MaxPooling</td>
+<td>16</td>
+<td>427</td>
+<td>126</td>
+<td>3x3/,pad=2</td>
+</tr>
+<tr>
+<td></td>
+<td>BatchNorm</td>
+<td>16</td>
+<td>427</td>
+<td>126</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Conv</td>
+<td>32</td>
+<td>423</td>
+<td>122</td>
+<td>5x5/1</td>
+</tr>
+<tr>
+<td></td>
+<td>Relu</td>
+<td>32</td>
+<td>423</td>
+<td>122</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>MaxPooling</td>
+<td>32</td>
+<td>213</td>
+<td>62</td>
+<td>3x3/2,pad=2</td>
+</tr>
+<tr>
+<td></td>
+<td>BatchNorm</td>
+<td>32</td>
+<td>213</td>
+<td>62</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Conv</td>
+<td>64</td>
+<td>211</td>
+<td>60</td>
+<td>3x3/1</td>
+</tr>
+<tr>
+<td></td>
+<td>Relu</td>
+<td>64</td>
+<td>211</td>
+<td>60</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>MaxPooling</td>
+<td>64</td>
+<td>107</td>
+<td>31</td>
+<td>3x3/2,pad=2</td>
+</tr>
+<tr>
+<td></td>
+<td>BatchNorm</td>
+<td>64</td>
+<td>107</td>
+<td>31</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Conv</td>
+<td>128</td>
+<td>105</td>
+<td>29</td>
+<td>3x3/1</td>
+</tr>
+<tr>
+<td></td>
+<td>Relu</td>
+<td>128</td>
+<td>105</td>
+<td>29</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>MaxPooling</td>
+<td>128</td>
+<td>54</td>
+<td>16</td>
+<td>3x3/,pad=2</td>
+</tr>
+<tr>
+<td></td>
+<td>BatchNorm</td>
+<td>128</td>
+<td>54</td>
+<td>16</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>Conv</td>
+<td>128</td>
+<td>52</td>
+<td>13</td>
+<td>3x3/1</td>
+</tr>
+<tr>
+<td></td>
+<td>Relu</td>
+<td>128</td>
+<td>52</td>
+<td>14</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>MaxPooling</td>
+<td>128</td>
+<td>27</td>
+<td>8</td>
+<td>3x3/2,pad=2</td>
+</tr>
+<tr>
+<td></td>
+<td>BatchNorm</td>
+<td>128</td>
+<td>27</td>
+<td>8</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>Conv</td>
+<td>256</td>
+<td>25</td>
+<td>6</td>
+<td>3x3/1</td>
+</tr>
+<tr>
+<td></td>
+<td>Relu</td>
+<td>256</td>
+<td>25</td>
+<td>6</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>MaxPooling</td>
+<td>256</td>
+<td>14</td>
+<td>3</td>
+<td>3x3/2,pad=2</td>
+</tr>
+<tr>
+<td></td>
+<td>BatchNorm</td>
+<td>256</td>
+<td>14</td>
+<td>3</td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td>Fully connected</td>
+<td>1024</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Relu</td>
+<td>1024</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>BatchNorm</td>
+<td>1024</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Dropout</td>
+<td>1024</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td>Fully Connected</td>
+<td>176</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Softmax Loss</td>
+<td>176</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="RNN"><a href="#RNN" class="headerlink" title="RNN"></a>RNN</h2><p>图谱可以看做列向量序列，其中列向量由256（或者128，如果只使用&lt;5.5khz）个数字组成。我们使用了RNN，其中每一层500个GRU Cell，结构图如下：</p>
+<p><img src="/images/blog/cnn+rnn_rnn1.png" alt="RNN"></p>
+<table>
+<thead>
+<tr>
+<th>网络</th>
+<th>准确率</th>
+<th>注意事项</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>rnn</td>
+<td>93.27</td>
+<td>在输入层上只有一个GRU层</td>
+</tr>
+<tr>
+<td>rnn_2layers</td>
+<td>95.66</td>
+<td>输入层上两个GRU层</td>
+</tr>
+<tr>
+<td>rnn_2layers_5khz</td>
+<td>98.42</td>
+<td>输入层上两个GRU层，最大频率是5.5khz</td>
+</tr>
+</tbody></table>
+<p>CNN和RNN都在几个epoch中使用了$adadelta$ 参数，然后再使用冲量SGD（0.003或0.0003）。如果从一开始就使用带冲量的SGD，收敛得很慢。带$adadelta$ 的收敛速度会快一点，但是一般不会得到很高的准确率。</p>
+<h2 id="结合CNN和RNN"><a href="#结合CNN和RNN" class="headerlink" title="结合CNN和RNN"></a>结合CNN和RNN</h2><p>CNN与RNN结合的框架一般是卷积抽取的特征作为输入，RNN作为输出，然后再在RNN的输出之后连接一个全连接层，最后是一个softmax层。</p>
+<p>CNN的输出是几个channel（即feature map）的集合。我们可以在每个channel上使用几个独立的GRU(可以使用或者不适用权值共享)，如下图：</p>
+<p><img src="/images/blog/cnn+rnn_cnn-multi-rnn.png" alt="CNN+RNN"></p>
+<p>另外一种做法是，将CNN的输出作为一个3D-tensor，然后在那个tensor的2D slice上运行<strong>单个</strong>GRU。</p>
+<p><img src="/images/blog/cnn+rnn_cnn-multi-rnn2.png" alt="CNN+RNN"></p>
+<p>后一个做法需要更多的参数，但是<strong>不同channel的信息会在GRU中混淆，这看起来会提升一点性能</strong>。这种架构类似于<a href="http://static.googleusercontent.com/media/research.google.com/en//pubs/archive/43455.pdf" target="_blank" rel="noopener">这篇语音识别论文</a>，除了他们会使用一些从输入到RNN和CNN到全连接层的残差(residual)连接。注意到类似的架构在<a href="http://arxiv.org/abs/1602.00367" target="_blank" rel="noopener">文本分类</a>上效果较好。</p>
+<p><strong>下面的网络对应的代码位于<a href="https://github.com/YerevaNN/Spoken-language-identification/tree/master/theano/networks" target="_blank" rel="noopener">网络</a></strong></p>
+<table>
+<thead>
+<tr>
+<th>网络</th>
+<th>准确率</th>
+<th>注意</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>tc_net_rnn</td>
+<td>92.4</td>
+<td>CNN由3个卷积块组成，输出32个channel，尺寸为104x13。每个channel以104个尺寸为13的向量序列输入喂入独立的GRU。GRU的输出会最终融合，然后输入到一个全连接层</td>
+</tr>
+<tr>
+<td>tc_net_rnn_nodense</td>
+<td>91.94</td>
+<td>与上一个网络一样，只是GRU之后没有全连接层，GRU的输出直接喂入softmax层</td>
+</tr>
+<tr>
+<td>fc_net_rnn_shared</td>
+<td>96.96</td>
+<td>与上一个网络一样。但是32个GRU单元之间共享权重，这可用于对抗过拟合</td>
+</tr>
+<tr>
+<td>tc_net_rnn_shared_pad</td>
+<td>98.11</td>
+<td>4个卷积块使用<code>pad=2</code>，而不是<code>ignore_border=False</code>.CNN的输出是32个尺寸为 $54\times 8$的channels。使用32个GRU（每个channel与一个GRU对应），同时共享权重，同时不使用全连接层</td>
+</tr>
+<tr>
+<td>tc_net_deeprnn_shared_pad</td>
+<td>96.57</td>
+<td>4个卷积块与上面的一样，但是在CNN的输出之后使用了2层共享权重的GRU。由于使用了2层，所以过拟合会严重一点</td>
+</tr>
+<tr>
+<td>tc_net_shared_pad_agum</td>
+<td>98.68</td>
+<td>与tc_net_rnn_shared_pad一样，但是网络会在输入上做随机裁剪，并间隔9秒。性能提升了一点</td>
+</tr>
+<tr>
+<td>tc_net_rnn_onernn</td>
+<td>99.2</td>
+<td>4个卷积块的输出被分组为一个 $32\time 54\times 8$ 的3D-tensor，单个GRU运行于54个尺寸为 $32\times 8$的序列上</td>
+</tr>
+<tr>
+<td>tc_net_rnn_onernn_notimepool</td>
+<td>99.24</td>
+<td>与上面的网络类似，但是pool层在时间轴上的步长设为1。因为CNN的输出是32个尺寸为 $852\times 8$的channels</td>
+</tr>
+</tbody></table>
+<p>第二层GRU并没有什么用，因为会产生过拟合。</p>
+<p>看起来<strong>在时间维度的子抽样并不是什么好办法。在子抽样过程中丢失的信息，被RNN用起来效果更好</strong>。在论文<a href="http://arxiv.org/abs/1602.00367v1" target="_blank" rel="noopener">文本分类</a>中，作者直接建议所有的池化层/子抽样层都可以用RNN层来代替。本文没有尝试这种方法，不过应该是蛮有前景的。</p>
+<p>这些网络都使用了带冲量的SGD。学习率在10个epoches左右时设置为0.003，然后手工缩减到0.001，然后到0.0003。平均大概需要35个epoches来训练这些网络。</p>
+<h2 id="Ensembling（集成学习）"><a href="#Ensembling（集成学习）" class="headerlink" title="Ensembling（集成学习）"></a>Ensembling（集成学习）</h2><p>最好的单模型在验证集上取得了99.24%的准确率。所有的这些模型做了33个预测（不同的epoches之后，一些模型不止预测一次），我们只是简单的累加预测概率，并获得99.67%的准确率。出乎意料之外的是，其他集成学习尝试，（只是在所有模型的某些子集上集成）并没有获得更好的结果。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>这些CNN+RNN混合模型的超参数数量十分之多。受限于硬件，我们只覆盖了很少一部分可能的配置。</p>
+<p>由于原始的<a href="https://apps.topcoder.com/forums/?module=Thread&threadID=866217&start=0&mc=3" target="_blank" rel="noopener">竞赛</a>是非公开的数据集，所以我们没法发布全部的源代码在<a href="https://github.com/YerevaNN/Spoken-language-identification/tree/master/theano" target="_blank" rel="noopener">Github</a>。</p>
+<p>参考：　<a href="http://blog.revolutionanalytics.com/2016/09/deep-learning-part-3.html" target="_blank" rel="noopener">http://blog.revolutionanalytics.com/2016/09/deep-learning-part-3.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2017-10-22-CNN+RNN_Audio/" data-id="ck4ifp1me00372wje7plyhgje" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2017-11-14-darknet_on_tx2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          darknet在nvidia tx2上的训练自己的数据
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2017-09-21-tf_obj_detect_api_train_owndata/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">使用tensorflow object detection api训练自己的数据</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

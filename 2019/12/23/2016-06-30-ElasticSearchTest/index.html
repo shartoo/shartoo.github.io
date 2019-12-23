@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>elastic search 性能测试 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="搜索&amp;NLP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="elastic search 性能测试">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2016-06-30-ElasticSearchTest/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="搜索&amp;NLP">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/%E7%B4%A2%E5%BC%95%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%97%B6%E9%97%B4.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.309Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.197Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/%E7%B4%A2%E5%BC%95%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2016-06-30-ElasticSearchTest" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2016-06-30-ElasticSearchTest/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.309Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      elastic search 性能测试
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="ElasticSearch性能测试"><a href="#ElasticSearch性能测试" class="headerlink" title="ElasticSearch性能测试"></a>ElasticSearch性能测试</h1><p>原文翻译自:<a href="https://benchmarks.elastic.co/index.html" target="_blank" rel="noopener">ElasticSearch官方性能测试</a></p>
+<hr>
+
+<h1 id="基准测试场景"><a href="#基准测试场景" class="headerlink" title="基准测试场景"></a>基准测试场景</h1><p>注：ES中的文档类似一条记录。<br><strong>数据</strong></p>
+<p> 测试使用了860万份文档，取自Geonames的POI数据。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>文档数</td>
+<td>860万</td>
+</tr>
+<tr>
+<td>数据大小</td>
+<td>2.8GB(JSON)</td>
+</tr>
+<tr>
+<td>客户端线程数</td>
+<td>8</td>
+</tr>
+<tr>
+<td>每个bulk请求</td>
+<td>5000份文档</td>
+</tr>
+<tr>
+<td>服务器数目</td>
+<td>1个或2个</td>
+</tr>
+</tbody></table>
+<p><strong>服务器配置</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>核心数</td>
+<td>36个real cores,使用超线程可达72个</td>
+</tr>
+<tr>
+<td>RAM</td>
+<td>256</td>
+</tr>
+<tr>
+<td>SSD</td>
+<td>Intel 750 PCIe/NVMe</td>
+</tr>
+</tbody></table>
+<p><strong>默认设置</strong></p>
+<ul>
+<li>默认，2个节点都是追加，使用全部默认配置，2个节点运行在一个沙盒中（5个shards,1份拷贝）</li>
+<li>4GB heap(ES_HEAP_SIZE)</li>
+<li>refresh_interval: 30s</li>
+<li>index.number_of_shards: 6</li>
+<li>index.number_of_replicas:0</li>
+<li>index.translog.flush_threshold_size: 4g</li>
+</ul>
+<h2 id="索引性能"><a href="#索引性能" class="headerlink" title="索引性能"></a>索引性能</h2><p>以下图片展示的是ElasticSearch每晚基于master分支代码的性能测试结果。<br> <img src="/images/blog/%E7%B4%A2%E5%BC%95%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95.png" alt="索引性能测试"></p>
+<hr>
+## 时间消耗
+下图显示的是与索引性能使用相同数据时，索引时间（分钟），合并时间（分钟），刷新时间（分钟），Flush时间（分钟），Merge throttle 时间（分钟）。
+![时间消耗](/images/blog/时间消耗.png)
+<hr>
+## 合并时间，部分
+![合并时间，部分](/images/blog/合并时间部分.png)
+<hr>
+## 堆使用的总段数
+![栈使用](/images/blog/栈使用.png)
+<hr>
+## Indexing CPU utilization（默认）
+![索引CPU](/images/blog/索引CPU.png)
+<hr>
+## 索引磁盘使用
+![索引磁盘使用](/images/blog/索引磁盘使用.png)
+<hr>
+## 索引段数
+![索引段数](/images/blog/索引段数.png)
+<hr>
+## gradle测试时间
+gradle是一个基于Apache Ant和Apache Maven概念的项目自动化建构工具。它使用一种基于Groovy的特定领域语言(DSL)来声明项目设置。[gradle](http://baike.baidu.com/link?url=DTDzrjTMJX-D4eNPwemJ0RSqD1kmDvKmBVQc3x5WSYs0qEPTBni-rwmTugMtyAG1ukQlXC_m3BC0DkIbA0Uf6q)
+![gradle测试时间](/images/blog/gradle测试时间.png)
+<hr>
+<hr>
+## Search QPS(脚本)
+![Search QPS 脚本](/images/blog/SearchQPS.png)
+<hr>
+## Search QPS
+![search qps](/images/blog/SearchQPS1.png)
+<hr>
+## 请求时间统计
+![请求时间统计](/images/blog/请求时间统计.png)
+<hr>
+
+<h2 id="垃圾回收时间"><a href="#垃圾回收时间" class="headerlink" title="垃圾回收时间"></a>垃圾回收时间</h2><p><img src="/images/blog/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%97%B6%E9%97%B4.png" alt="垃圾回收时间"></p>
+<hr>
+
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2016-06-30-ElasticSearchTest/" data-id="ck4ifp1lk000x2wjebgod8x3t" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2016-08-18-tensorflow-CIFAR10/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          tensorflow:使用tensorflow构建简单卷积神经网络
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2016-06-13-GoogleTensorFlowBasicConcept/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">谷歌TensorFlow基本概念</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

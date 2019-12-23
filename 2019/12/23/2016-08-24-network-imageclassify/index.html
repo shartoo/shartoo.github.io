@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>深度学习：卷积神经网络与图像识别基本概念 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="神经网络基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习：卷积神经网络与图像识别基本概念">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2016-08-24-network-imageclassify/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="神经网络基础">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/cnn_consist.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/cnn_compute.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/cnn_maxpool.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/lrn.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/softmax_function.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/Softplus_function1.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.322Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.199Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/cnn_consist.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2016-08-24-network-imageclassify" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2016-08-24-network-imageclassify/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.322Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      深度学习：卷积神经网络与图像识别基本概念
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一-卷积神经网络的组成"><a href="#一-卷积神经网络的组成" class="headerlink" title="一 卷积神经网络的组成"></a>一 卷积神经网络的组成</h2><p> 图像分类可以认为是给定一副测试图片作为输入 $I \epsilon R^{W×H×C}$，输出该图片<br>属于哪一类。参数 W 是图像的宽度，H 是高度，C 是通道的个数；彩色图像中 C = 3，灰度图像<br>中 C = 1。一般的会设定总共类别的个数，例如在ImageNet竞赛中总共有 1000 个类别；在CIFAR10 中有 10 个类别。卷积神经网络则可以看成这样的黑匣子。输入是原始图片 I，输出是 L 维的向量 $v \epsilon R^L$。L表示预先设定的类别个数。向量 v 的每一个维度代表图像属于对应类别的可能性的大小。如果是<br>单类别识别问题，也就是说每一幅图像只分配 L 个标签中的一个标签，那么可以对 v 中的元素进行比较，选取最大的值对应的标签作为分类的结果。v 可以是一个概率分布的形式，即每一个元素$0 ≤ vi ≤ 1$，并且 $\sum_iv_i=1$ 。其中 $v_i$ 表示 v 的第 i 个元素。也可以是从负无穷大到正无穷大的实数，越大代表属于对应类别的可能性越大。在卷积神经网络的内部，是由很多的层构成。每一个层可以认为是一个函数，输入是信号 x，输出是信号 $y = f(x)$ 。输出的 y 又可以作为其他层的输入。以下从网络的前段，中端，末端的角度调研常用的层的定义。前端主要考虑对于图像的处理过程，中端是各种神经元，末端主要考虑与训练网络有关的损失函数。</p>
+<h2 id="二-网络的前段"><a href="#二-网络的前段" class="headerlink" title="二 网络的前段"></a>二 网络的前段</h2><p>  前段指 的是对图像数据的处理，可以称之为数据层。</p>
+<h3 id="2-1-数据裁减"><a href="#2-1-数据裁减" class="headerlink" title="2.1 数据裁减"></a>2.1 数据裁减</h3><p> 输入的图像的大小可能各不相同，有一些图像的分辨率较大，有一些比较小。而且长宽比也不一定会一样。对于这样的不一致性，理论上而言，可以不予处理，但是这要求网络中其他的层次支持这样的输入。目前大部分情况下采用的是通过裁剪的方法使得输出的图像是固定分辨率的。<br> 在网络训练的阶段，裁剪的位置从原始的图像上随机选择，只需要满足裁剪<br>的子图完全落在图像中即可。通过随机的方式，是因为相当于增加了额外的数据，能够缓解过拟合的问题。</p>
+<h3 id="2-2-颜色干扰"><a href="#2-2-颜色干扰" class="headerlink" title="2.2 颜色干扰"></a>2.2 颜色干扰</h3><p> 裁剪之后的原图，每一个像素的是 0 到 255 的固定的数值。进一步的处理，包括减去均值，以及等比例缩放像素值使得像素值的分部基本在 [−1, 1] 之间。除了这些常规的操作之外，也会对图像进行归一化，相当于图像增强，比如 [9, 18, 17] 中对 CIFAR10 的数据预处理中。比如，对于每一个像素，随机选择 RGB 三个通道中的一个，然后在原像素值的基础上，随机添加一个从 [-20,20] 之间的数值。</p>
+<h2 id="三-网络的中段"><a href="#三-网络的中段" class="headerlink" title="三 网络的中段"></a>三 网络的中段</h2><p>  以下介绍在卷及神经网络中常用的层的定义，即输入的数据 x 是什么维度，输出 y 是什么维度以及如何从输入得到输出。</p>
+<h3 id="3-1-卷积神经网络的基本组成"><a href="#3-1-卷积神经网络的基本组成" class="headerlink" title="3.1 卷积神经网络的基本组成"></a>3.1 卷积神经网络的基本组成</h3><p> 如下图：</p>
+<p>  <img src="/images/blog/cnn_consist.png" alt="卷积神经网络基本组成"></p>
+<h3 id="3-2-卷积层"><a href="#3-2-卷积层" class="headerlink" title="3.2 卷积层"></a>3.2 卷积层</h3><p>  卷积层输入表示为 $x \epsilon R^{W\times H\times C}$,是一个三维的数据。表示有C个矩阵,每个矩阵这里表示为 $x^c \epsilon R^{W\times H}$,也称之为特征图。输出 $y \epsilon R^{W_0\times H_0\times C_0}$，也是一个三维数据。特征图分辨率从$W\times H$变为$W_0\times H_0$,特征图的个数也从C变为$C_0$。<br>    从输入到输出的一般公式为：<br>  $$<br>     y^{c_1}=\sum_cX^c*W^{c,c_1}<br>  $$</p>
+<p>  矩阵 $w_{c,c_1}\epsilon R_{w\times h}$ 称之为卷积核。属于卷积层的参数，一般通过随机梯度下降更新。$x^c$ 为输入数据的第 c 个特征图，但在一些情况下，也会在图像的周围补白。符号 ∗ 表示二维数据的卷积运算。卷积定义为<br>  $$<br>    (X^c*W^{c,c_1})=\sum_{m,n}x^c_{m,n}w^{c,c_1}<em>{u-m,v-n}<br>  $$<br>符号 $()</em>{u,v}$ 表示对应矩阵的 u 行 v 列的元素值。在有一些的网络结构中，并不是选择所有的 (u, v)，而是每隔一定数量选择一个。<br>直观而言，卷积层相当于对图像进行滤波，希望能够抽象出来局部信息。局部信息通过较小的卷积核在图像不同的局部位置上扫描而得。<br><img src="/images/blog/cnn_compute.png" alt="卷积层计算"></p>
+<p>下图是是一个动态示例，来源于 <a href="https://cs231n.github.io/convolutional-networks/#conv" target="_blank" rel="noopener">convolutional-networks</a></p>
+<h3 id="3-3-池化层"><a href="#3-3-池化层" class="headerlink" title="3.3 池化层"></a>3.3 池化层</h3><p>输入的信号表示为 $x\epsilon R^{W\times H\times C}$，具有 C 个通道，每一个通道是一个特征图。输出 $y\epsilon R^{W_0\times H_0\times C}$ 具有的通道个数与输入相同，但是特征图的分辨率一般是降低。</p>
+<p>池化层是对每一个特征图单独进行操作并且输出一个对应的特征图。假设池化范围是 $w \times h$，那么输入的特征图提取出来 $w \times h$ 的小图，然后寻找子图的最大值，或者计算子图的均值，作为一个输出。签证一般称之为最大化池化，后者是均值池化。从图像中提出小图的方式可以是任意一个子图，也可以是每隔多个像素值得到一个子图。池化层的作用包括降低特征图的分辨率，从而减少计算量，以及增强网络的鲁棒性。比如对于最大化池化的方式，对于图像的平移具有一定的鲁棒性。</p>
+<p>池化层的作用包括降低特征图的分辨率，从而减少计算量，以及增强网络的鲁棒性。比如对于最大化池化的方式，对于图像的平移具有一定的鲁棒性。</p>
+<p>实例，对于如下特征图 4x4，使用最大池化效果如下：<br><img src="/images/blog/cnn_maxpool.png" alt="池化"><br>图中每个像素点的值是上面各个格子的数值，然后要对这张 4<em>4的图片进行池化；那么采用最大池化也就是对上面 4</em>4的图片分块，每块大小为2*2，然后统计每个块的最大值，作为下采样后图片的像素值。</p>
+<h3 id="3-4-CCCP"><a href="#3-4-CCCP" class="headerlink" title="3.4 CCCP"></a>3.4 CCCP</h3><p>CCCP层的输入是$x\epsilon R^{W\times H\times C}$，输出是$y\epsilon W\times H\times C$。特征层的分辨率保持不变，但是通道数有所改变。其定义为：<br>$$<br>   y^{c_0}<em>{u,v}=\sum_cx^c</em>{u,v}w^{c,c_0}<br>$$<br>等效于卷积核为 1x1的卷积层。<br>CCCP 层相当于在多个全连接层，每一个全连接将信号从 C 维度映射为$C_0$维度。</p>
+<h3 id="3-5-ReLU-层及相关变体"><a href="#3-5-ReLU-层及相关变体" class="headerlink" title="3.5 ReLU 层及相关变体"></a>3.5 ReLU 层及相关变体</h3><p>该层的输入认识是一个信号 x。ReLU 并不要求输入信号的维度必须是一维或者几维的，因为该层的操作是对输出的每一个元素单独操作。但依然可以认为输入的 $x\epsilon R^{W\times H\times C}$。输出是一个和输入维度一样的信号y。<br>   假设从输入到输出的一个示例为:<br>   $$<br> y_i =<br>\begin{cases}<br>    x_i,  &amp; \text{if $x_i\ge 0$ } \<br>    0, &amp; \text{if $x_i&lt;0$ }  \<br>\end{cases}<br>$$</p>
+<p>显然这是一个非线性操作，ReLU 的存在使得网络的表达更加丰富。同时从定义中容易得出，该操作非常简单，并且在不同的输入点之间进行并行。ReLU 在一定程度上也是 S 行函数的近似。<br>$$<br>   y_i=\frac{1}{1+e^{-x_i}}<br>$$<br>进一步将ReLU改进为：<br>$$<br>y_i =<br>\begin{cases}<br>x_i,  &amp; \text{if $x_i\ge 0$ } \<br>0.01x_i, &amp; \text{if $x_i&lt;0$ }  \<br>\end{cases}<br>$$<br>当元素值为负数的时候，通过 $y_i = 0.01x_i$ 的方式，避免了导数为 0，无法传播的情况。<br> 进一步使用修正的ReLu为：<br> $$<br>   y_i=<br>   \begin{cases}<br>   x_i,  &amp; \text{if $x_i\ge 0$ } \<br>   \alpha x_i, &amp; \text{if $x_i&lt;0$ }  \<br>   \end{cases}<br> $$<br> 其中斜率 $\alpha$ 不再是一个固定的数值，而是通过梯度下降的方式就行优化</p>
+<h3 id="3-6-Dropout层"><a href="#3-6-Dropout层" class="headerlink" title="3.6 Dropout层"></a>3.6 Dropout层</h3><p> Dropout层的输入为$x\epsilon R^{W\times H\times C}$。这里并不要求输入是三维的信号，任意可能的维度都是可以。Dropout 同样是针对每一个数据进行操作。输出 y 与输入的大小一致。在网路进行训练的时候，对于输入的每一个数值 $x_i$，按照概率 p 设置为 0，否则保留。数学形式可以写为:<br>   $$y_i=\epsilon x_i$$<br>   其中 $\epsilon$ 是随机变量，并且满足 $\epsilon = 0$的概率为 p，$\epsilon = 1$ 的概率为 1 − p。实际中，概率 p 往往设置<br>为 1。</p>
+<p>然而在进行测试的时候，计算公式更正为 $y_i=(1-p)x_i$相当于一个期望。</p>
+<p>Dropout层的引入主要是为了减少过拟合的问题，减少不同参数的耦合性。</p>
+<h3 id="3-7-全连接层"><a href="#3-7-全连接层" class="headerlink" title="3.7 全连接层"></a>3.7 全连接层</h3><p>输入时$x\epsilon R^D$。这里要求将输入认识是一个列向量。输出为 $y\epsilon R^P$。从输入到输出的关系是:<br>$$<br>   y= Wx+b<br>$$<br>其中$W\epsilon R^{P\times D},b\epsilon R^P$,是投影矩阵阵以及阈值，是该层的参数，通过随机梯度下降的方式更新优化。</p>
+<p>全连接层是一个非常常用的层，然而该层在一定程度上会损失图像的空间信息，故而在有一些网络中，抛弃了全连接层。</p>
+<h3 id="3-8-局部响应归一化-LRN"><a href="#3-8-局部响应归一化-LRN" class="headerlink" title="3.8 局部响应归一化(LRN)"></a>3.8 局部响应归一化(LRN)</h3><p>  LRN层做的事是对当前层的输出结果做平滑处理。下图是示例:</p>
+<p>  <img src="/images/blog/lrn.jpg" alt="LRN示例"><br> 前后几层（对应位置的点）对中间这一层做一下平滑约束。</p>
+<p>  输入时一个三维信号$x\epsilon R^{W\times H\times C}$，输出也是一个三维信号$y\epsilon R^{W\times H\times C}$ 局部响应一体化层（Local Response Normalization）通过如下公式计算：</p>
+<p>  $$<br>   y^c_{u,v}=x^c_{u,v}/(k+\alpha\sum^{C-1,i+n/2}<em>{j=max(0,i-n/2)}(x^c</em>{u,v})^2)^\beta<br>  $$</p>
+<p>  其中$x^c_{,v}$ 代表第 $c$ 个通道上位置是$(u,v)$的信号值。示例参数设置为: $k=2,n=5,\alpha =10^{-4},\beta =0.75$</p>
+<h3 id="3-9-批归一化层-Batch-Normalization"><a href="#3-9-批归一化层-Batch-Normalization" class="headerlink" title="3.9 批归一化层(Batch Normalization)"></a>3.9 批归一化层(Batch Normalization)</h3><p>  详细理解参考:<a href="http://blog.csdn.net/hjimce/article/details/50866313" target="_blank" rel="noopener">Batch Normalization</a></p>
+<p>  批归一化层的输入依然是三维的信号 $x\epsilon R^{W\times H\times C}$，输<br>  出 y 与输入具有相同的大小。其归一化的基本思路是对输入的每一个元素按照如下方式归一化:<br>  $$<br>     y_i=\alpha x_i+b<br>  $$<br>  使得输出的 $y_i$ 均值尽量的为 0，以及方差尽量为 1。通过这样的方式，每一层的数据分布基本上一致。该方法能够提升优化的速度。</p>
+<p> 其优点如下：</p>
+<ul>
+<li>可以选择比较大的初始学习率,此算法有快速训练收敛的特性。</li>
+<li>可以不用考虑过拟合中的 Dropout ,L2正则项选择问题，采用BN之后可以移除这两个参数，或者可以选择更小的L2正则约束参数了，因为BN具有提高网络泛化能力的特性。</li>
+<li>不再需要局部响应归一化层，因为BN本身就是一个归一化网络层。</li>
+<li>可以完全打乱训练数据，防止每批训练时某些样本经常被挑选到。</li>
+</ul>
+<h2 id="四-网络的末端"><a href="#四-网络的末端" class="headerlink" title="四  网络的末端"></a>四  网络的末端</h2><p>  从网络训练的角度，末端主要是损失函数。也就是将数据映射为一个标量。通过随机梯度下降的方式，使得损失函数逐渐的降低。目前使用比较广泛的是 Softmax 回归和 Hinge 损失函数。</p>
+<h3 id="4-1-Softmax回归"><a href="#4-1-Softmax回归" class="headerlink" title="4.1  Softmax回归"></a>4.1  Softmax回归</h3><p>较通俗易懂的理解Softmax回归的一篇博客是 <a href="http://www.cnblogs.com/BYRans/p/4905420.html" target="_blank" rel="noopener">Softmax回归</a></p>
+<p>输入时 $v \epsilon R^L$，表示输入图像在各个类别上的可能性；同时需要输入图像的标签 k。输出是损失值。首先将输入归一化到 [0, 1] 之间，通过 Softmax 函数：</p>
+<p>$$<br>   Z_i =\frac{exp{v_i}}{\sum_j exp{v_j}}<br>$$<br>然后通过交叉熵定义损失值，也就是：<br>$$<br>   y = -log(Z_k)<br>$$<br>该损失函数主要应用与单类别分类问题中。<br>下图是$softmax$函数的坐标轴图像:<br><img src="/images/blog/softmax_function.png" alt="softmax_function"><br>从数学上来看，非线性的Sigmoid函数对中央区的信号增益较大，对两侧区的信号增益小，在信号的特征空间映射上，有很好的效果。<br>从神经科学上来看，中央区酷似神经元的兴奋态，两侧区酷似神经元的抑制态，因而在神经网络学习方面，可以将重点特征推向中央区，将非重点特征推向两侧区。</p>
+<h3 id="4-2-近似神经激活函数-Softplus-amp-ReLu"><a href="#4-2-近似神经激活函数-Softplus-amp-ReLu" class="headerlink" title="4.2   近似神经激活函数:Softplus&amp;ReLu"></a>4.2   近似神经激活函数:Softplus&amp;ReLu</h3><p>2001年，神经科学家Dayan、Abott从生物学角度，模拟出了脑神经元接受信号更精确的激活模型，该模型如下图所示:<br><img src="/images/blog/Softplus_function1.png" alt="softplus"></p>
+<hr>
+
+<p>参考文章:</p>
+<ul>
+<li><a href="http://www.voidcn.com/blog/xbinworld/article/p-4966477.html" target="_blank" rel="noopener">卷积神经网络CNN经典模型整理</a></li>
+<li><a href="http://blog.csdn.net/hjimce/article/details/50866313" target="_blank" rel="noopener">Batch Normalization 学习笔记</a></li>
+<li><a href="http://blog.csdn.net/hjimce/article/details/51761865" target="_blank" rel="noopener">卷积神经网络入门学习2.0</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2016-08-24-network-imageclassify/" data-id="ck4ifp1lo00152wjed240exlw" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2016-09-02-tensorflow-inputpipeline/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          tensorflow：理解tensorflow中的输入管道
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2016-08-22-tensorflow-sourcecode-input/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">tensorflow:CIFAR-10 图像处理源码.input.py</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>数据挖掘方法之五：逻辑回归 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="数据挖掘专栏">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据挖掘方法之五：逻辑回归">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2013-05-12-datamining-logicregression/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="数据挖掘专栏">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/loginregression1.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/loginregression2.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/loginregression7.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.240Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.191Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/loginregression1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2013-05-12-datamining-logicregression" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2013-05-12-datamining-logicregression/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.240Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      数据挖掘方法之五：逻辑回归
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一-为何要有逻辑回归"><a href="#一-为何要有逻辑回归" class="headerlink" title="一 为何要有逻辑回归"></a>一 为何要有逻辑回归</h2><p>假设有如下关于患者年龄与患病情况的数据集：<br><img src="/images/blog/loginregression1.png"><br>我们查看数据：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&gt; edit(patient)  </span><br><span class="line">        patient_id age if_sick  </span><br><span class="line">   [1,]          1  25       0  </span><br><span class="line">   [2,]          2  29       0  </span><br><span class="line">   [3,]          3  30       0  </span><br><span class="line">   [4,]          4  31       0  </span><br><span class="line">   [5,]          5  32       0  </span><br><span class="line">   [6,]          6  41       0  </span><br><span class="line">   [7,]          7  41       0  </span><br><span class="line">   [8,]          8  42       0  </span><br><span class="line">   [9,]          9  44       1  </span><br><span class="line">   [10,]         10  49       1  </span><br><span class="line">   [11,]         11  50       0  </span><br><span class="line">   [12,]         12  59       1  </span><br><span class="line">   [13,]         13  60       0  </span><br><span class="line">   [14,]         14  62       0  </span><br><span class="line">   [15,]         15  68       1  </span><br><span class="line">   [16,]         16  72       0  </span><br><span class="line">   [17,]         17  79       1  </span><br><span class="line">   [18,]         18  80       0  </span><br><span class="line">   [19,]         19  81       1  </span><br><span class="line">   [20,]         20  84       1  </span><br><span class="line">   &gt; p&lt;-as.data.frame(patient)  </span><br><span class="line">   &gt; plot(p$if_sick~p$age,main&#x3D;&quot;20位患者年龄与患病情况&quot;,xlab&#x3D;&quot;年龄&quot;,ylab&#x3D;&quot;患病情况&quot;)</span><br></pre></td></tr></table></figure>
+
+<p>画出对照图看数据分布：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; plot(p$if_sick~p$age,main&#x3D;&quot;20位患者年龄与患病情况&quot;,xlab&#x3D;&quot;年龄&quot;,ylab&#x3D;&quot;患病情况&quot;)  </span><br><span class="line">&gt; lm&lt;-lm(if_sick~age,data&#x3D;p)  </span><br><span class="line">&gt; abline(lm)  </span><br><span class="line">&gt; legend(x&#x3D;65,y&#x3D;0.2,legend&#x3D;&quot;线性拟合&quot;,lty&#x3D;1)</span><br></pre></td></tr></table></figure>
+
+<p>结果图如下：<br><img src="/images/blog/loginregression2.png"><br>此时，我们发现线性拟合完全偏离了数据分布，即使使用如对数变换也难以取得理想结果，如上图所示数据分布（不是0就是1）提醒我们应该使用逻辑回归。</p>
+<h2 id="二-逻辑回归概念及认识"><a href="#二-逻辑回归概念及认识" class="headerlink" title="二 .  逻辑回归概念及认识"></a>二 .  逻辑回归概念及认识</h2><h3 id="2-1-对比线性回归"><a href="#2-1-对比线性回归" class="headerlink" title="2.1  对比线性回归"></a>2.1  对比线性回归</h3><p>线性回归是用来估计<font color="red">连续型</font>回应变量与一组预测变量之间关系的方法。<br><br>逻辑回归用来估计<font color="red">非连续型（分类型）</font>回应变量与一组预测变量之间关系的方法。</p>
+<h3 id="2-2-公式"><a href="#2-2-公式" class="headerlink" title="2.2 公式"></a>2.2 公式</h3><p>逻辑回归的条件均值（给定X=x的情况下Y的条件均值表示为：E(Y|x)，以下用π(x)表示）具体如下:</p>
+<p>$$<br>  \pi(x)= \frac{e^{b_0+b_1}}{1+e^{b_0+b_1}}<br>$$</p>
+<p>上式形成的图形成为反曲线，是非线性的S型。它的一种逻辑转换如下，它是一种有效的逻辑转换方法：</p>
+<p>$$<br>    g(x)=ln\frac{\pi(x)}{1-\pi(x)}=b_0+b_1x<br>$$</p>
+<p>转换函数g(x)表现了线性逻辑回归模型的几个很好的性质，如线性、连续性、取值范围无限性。</p>
+<p><strong>取值范围</strong>：$\pi(x)在 b_0+b_1x\backsim -\infty 时取最小值0，π(x)在 b_0+b_1x\backsim\infty时取最大值1$ 。</p>
+<p><strong>性质</strong>：π(x)可以看做一种概率形式，其取值范围为 (0,1).其中</p>
+<ul>
+<li>π(x) 可以看做X=x条件下的正效应（如疾病）发生的概率</li>
+<li>1-π(x) 可以看做是在这种条件下正效应没有发生的概率。</li>
+</ul>
+<h3 id="2-3-误差"><a href="#2-3-误差" class="headerlink" title="2.3 误差"></a>2.3 误差</h3><p>线性回归模型中，误差e服从均值为0、方差为常数的正态分布，而逻辑回归由于其回应变量的取值是二分的，其误差只有两种形式：</p>
+<ol>
+<li>X=x时，如果出现Y=1的情况，其概率为π(x)，误差为 e=1-π(x)</li>
+<li>X=x时， 如果Y=0，其概率为1-π(x),误差为 e=0-π(x)=-π(x)</li>
+</ol>
+因而，逻辑回归的误差服从二项分布，其方差为π(x)(1-π(x))，这样逻辑回归的回应变量Y=π(x)+e也服从概率为π(x)的二项分布。
+
+<h3 id="2-4-估值（最大似然估计）"><a href="#2-4-估值（最大似然估计）" class="headerlink" title="2.4 估值（最大似然估计）"></a>2.4 估值（最大似然估计）</h3><p>最大似然估计：在已经得到试验结果的情况下，我们应该寻找使这个结果出现 的可能性最大的那个  作为真的估计。</p>
+<p>线性回归中使用最小二乘法有可能得到回归系数最优值的闭合形式解，但在逻辑回归中不存在，我们采用的最大似然估计法，得到的观测数据的似然参数估计值是最大的。似然函数 $l(b|x)$ 是一个参数为 $b=b_0,b_1,….$ ，用来表示被观测数据x的概率的函数。在回应变量为正相关的情况下$(X=x_i,Y_i=1)$ ，观测值会影响概率π(x)的值，在回应变量为负相关的情况下 $(X=x_i,Y_i=0)$，观测值会影响概率1-π(x)的值。因此 $Y_i=0或1$，对第i个观测值概率的影响可以表示为 :$[\pi(x_i)]^{y_i}[1-\pi(x)^{1-y_i}]$</p>
+<p>假设观测值是独立的，可以把似然函数 $l(b|x)$ 表示为单个项的乘积：$(b|x)=\prod^n_{i=1}$<br>通过对 $l(b|x)$ 每个参数求微分，并令其微分等于零，可以得到最大似然估计。</p>
+<h3 id="2-5-衡量回归模型显著性"><a href="#2-5-衡量回归模型显著性" class="headerlink" title="2.5 衡量回归模型显著性"></a>2.5 衡量回归模型显著性</h3><p>先见下表,患病情况与年龄的逻辑回归分析结果<br><img src="/images/blog/loginregression7.png"></p>
+<h4 id="2-5-1-统计量G"><a href="#2-5-1-统计量G" class="headerlink" title="2.5.1 统计量G"></a>2.5.1 统计量G</h4><p>在简单线性回归模型中，检验统计量F=MSR/MSE 可以来判断回归模型的显著性。在逻辑回归模型中，检验的是带有某个预测变量的模型比不带该预测变量的模型是否能更好的回应变量匹配。</p>
+<ul>
+<li>饱和模型：包含了和数据点个数一样多的参数的模型（能完全正确估计回应变量，没有预测误差）</li>
+<li>拟合模型：带有少于数据点个数的参数</li>
+</ul>
+<p>偏差定义如下：</p>
+<p>$$<br>   偏差 D= -2ln[\frac{拟合模型似然值}{饱和模型似然值}]<br>$$</p>
+<p>上述检验称为似然比值检验，其中-2ln 部分是为了方便计算。将拟合模型中对π(x)的估计值表示为π(x)’，则偏差公式变为：</p>
+<p>$$<br>   偏差 D= -2ln\sum^n_{i=1}[y_iln\frac{\pi(x)’}{y_i}+(1-y_i)ln\frac{1-\pi(x)’}{1-y_i}]<br>$$</p>
+<p>该偏差表示考虑了预测变量后模型的误差，它类似于线性回归中的平方和误差。</p>
+<p>决定某个特定的预测变量是否重要的程序是计算出不带此预测变量模型的偏差，减去带有此预测变量模型的偏差，即:</p>
+<p>$$<br>   G= 偏差(非预测模型)-偏差(预测模型)= -ln[\frac{非预测似然值}{预测似然值}]<br>$$</p>
+<p><font color="blue">统计量G服从自由度为1的卡方分布</font><br><br>在患病情况例子中，从表格可以看到似然对数比是 -10.101，那么:</p>
+<p>G=2{-10.101-[7ln(7)+13ln(13)-20ln(20)]}=5.696</p>
+<h4 id="2-5-2-Wald检验"><a href="#2-5-2-Wald检验" class="headerlink" title="2.5.2 Wald检验"></a>2.5.2 Wald检验</h4><p>该比率为：</p>
+<p>$$<br>  Z_{wald}=\frac{b_1}{SE(b_1)}<br>$$<br>服从标准正态分布，由表1提供的系数估计值及标准差：b1=0.6696和 $SE(b_1)=0.03223$，于是有: $Z_{wald}=0.6696/0.3223=2.08$ <br><br>表中P值即为P(|Z|&gt;2.08)=0.038<br>通常可以为逻辑回归系数构建一个100(1-a)%的置信区间：</p>
+<p>$$<br>   [b_0-Z<em>SE(b_0),b_0</em>SE(b_0)]和[b_1-Z<em>SE(b_1),b_1+Z</em>SE(b_1)]<br>$$</p>
+<h4 id="2-5-3-发生比和让步比"><a href="#2-5-3-发生比和让步比" class="headerlink" title="2.5.3 发生比和让步比"></a>2.5.3 发生比和让步比</h4><ul>
+<li><strong>发生比</strong>：事件发生的概率与不发生的概率的比值。<ul>
+<li>发生比告诉我们一件事情发生或者不发生哪种情况更有可能.一件 事情发生的可能性大于不发生的可能性时，发生比大于1。</li>
+<li>一件事情发生的可能性小于不发生的可能性时，发生比大于1</li>
+<li>一件事情很有可能发生时，发生比等于1</li>
+</ul>
+</li>
+</ul>
+<p>例如，预测的一个72岁病人换用特定病例的概率为61%，不患此病的概率为39%。因此一个72岁病人患此病的发生比=0.61/0.39=1.56。</p>
+<p><strong>让步比</strong>：x=1时回应变量发生的发生比除以x=0时回应变量发生的发生比。它很简单的表达了让步比和斜率系数之间的关系<br><br>在二分预测变量的二元逻辑回归中，当x=1时，回应变量发生(y=1)的发生比为：$\frac{\pi(1)}{1-\pi(1)}=e^{b_0+b_1}$</p>
+<p>相应的，当x=0时，回应变量发生的发生比为：$\frac{\pi(0)}{1-\pi(0)}=e^{b_0}$</p>
+<p>则让步比公式如下：</p>
+<p>$$<br>  OR= \frac{\pi(1)/[1-\pi(1)]}{\pi(0)/[1-\pi(0)]}=e^{b_0+b_1}/e^{b_0}=e^{b_1}<br>$$</p>
+<p>例如：一个临床试验报告称，曾经使用过与从没有使用过雌性激素替换疗法的人中患子宫癌的让步比为5.0，这可以解释为使用雌性激素替换疗法的人得子宫癌的概率是未使用者的5倍。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2013-05-12-datamining-logicregression/" data-id="ck4ifp1l800082wjefb2gcdar" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2013-05-16-datamining-logicregressionsample/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          数据挖掘方法之六：解读逻辑回归
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2013-05-04-datamining-mutillinerandselect/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">数据挖掘方法之四：多重共线性及变量选择方法</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

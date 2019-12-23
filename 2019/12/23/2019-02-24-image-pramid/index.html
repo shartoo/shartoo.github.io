@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>图像中的各种金字塔 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="图像基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图像中的各种金字塔">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2019-02-24-image-pramid/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="图像基础">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/image_praid_example.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gauss_image_praid.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/lnea.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/image_pyramid_result.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/image_dog_result.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/image_dog_norm_result.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.687Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.228Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/image_praid_example.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2019-02-24-image-pramid" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2019-02-24-image-pramid/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.687Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      图像中的各种金字塔
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="0-定义"><a href="#0-定义" class="headerlink" title="0 定义"></a>0 定义</h2><p>问题：假设要进行人脸识别，但是人脸与摄像头之间距离忽远忽近，单一分辨率的识别算法无法识别所有距离下的人脸特征。</p>
+<p>图像金字塔是一种以多分辨率来解释图像的结构，通过对原始图像进行多尺度像素采样的方式，生成N个不同分辨率的图像。<br>把具有最高级别分辨率的图像放在底部，以金字塔形状排列，往上是一系列像素（尺寸）逐渐降低的图像，一直到金字塔的顶部只包含一个像素点的图像，这就构成了传统意义上的图像金字塔。</p>
+<p><strong>示例图形金字塔</strong></p>
+<p><img src="/images/blog/image_praid_example.png" alt="图像金字塔"></p>
+<p><strong>获取金字塔步骤</strong></p>
+<ol>
+<li>利用低通滤波器平滑图像</li>
+<li>对平滑图像进行采样。有两种采样方式：<code>上采样</code>（分辨率逐渐升高）,<code>下采样</code>(分辨率直接按降低)</li>
+</ol>
+<p><strong>图像金字塔层数与图像大小关系</strong></p>
+<p>以$512\times512$为例</p>
+<table>
+<thead>
+<tr>
+<th>金字塔层数</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>图像大小</td>
+<td>512</td>
+<td>216</td>
+<td>128</td>
+<td>64</td>
+<td>16</td>
+<td>8</td>
+<td>4</td>
+<td>2</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<p>尺寸变化时不够除的会进行四舍五入。</p>
+<p><strong>上采样和下采样</strong></p>
+<ul>
+<li><strong>上采样</strong>:如果想放大图像，则需要通过向上取样操作得到，具体做法如下<ol>
+<li>将图像在每个方向扩大为原来的俩倍，新增的行和列以0填充</li>
+<li>使用先前同样的内核（乘以4）与放大后的图像卷积，获得新增像素的近似值</li>
+</ol>
+</li>
+</ul>
+<p>在opencv中的代码很简单</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">src &#x3D; cv.pyrUp(src, dstsize&#x3D;(2 * cols, 2 * rows))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>下采样</strong>:为了获取层级为 $G_i+1$ 的金字塔图像，我们采用如下方法:<ol>
+<li>对图像G_i进行高斯内核卷积</li>
+<li>将所有偶数行和列去除</li>
+</ol>
+</li>
+</ul>
+<p>在opencv中的代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">src &#x3D; cv.pyrDown(src, dstsize&#x3D;(cols &#x2F; 2, rows &#x2F; 2))</span><br></pre></td></tr></table></figure>
+<p>显而易见，结果图像只有原图的四分之一。通过对输入图像$G_i$(原始图像)不停迭代以上步骤就会得到整个金字塔。同时我们也可以看到，向下取样会逐渐丢失图像的信息。 以上就是对图像的向下取样操作，即缩小图像</p>
+<p><strong>两种图像金字塔</strong></p>
+<ul>
+<li>高斯金字塔</li>
+<li>Laplace金字塔</li>
+</ul>
+<h2 id="2-SIFT中的高斯金字塔"><a href="#2-SIFT中的高斯金字塔" class="headerlink" title="2 SIFT中的高斯金字塔"></a>2 SIFT中的高斯金字塔</h2><p>高斯金字塔不是一个金字塔，而<strong>是很多组(Octave)金字塔,而且每组金字塔包含若干层</strong>。在opencv官方文档中的高斯金字塔看起来只是一上下采样，而且每一组只有一层。</p>
+<p>构建过程</p>
+<ol>
+<li>先将原图像扩大一倍之后作为高斯金字塔的第1组第1层，将第1组第1层图像经高斯卷积（其实就是高斯平滑或称高斯滤波）之后作为第1组金字塔的第2层，高斯卷积函数为：</li>
+</ol>
+<p>$$<br>G(x,y)=\frac{1}{2\pi \sigma ^2}e^{-\frac{(x-x_0)^2+(y-y_0)^2}{2\sigma ^2}}<br>$$</p>
+<p>对于参数σ，在Sift算子中取的是固定值1.6。</p>
+<ol start="2">
+<li><p>将σ乘以一个比例系数k,等到一个新的平滑因子σ=k*σ，用它来平滑第1组第2层图像，结果图像作为第3层。</p>
+</li>
+<li><p>如此这般重复，最后得到L层图像，在同一组中，每一层图像的尺寸都是一样的，只是平滑系数不一样。它们对应的平滑系数分别为：$0，σ，kσ，k^2σ,k^3σ……k^{L-2}σ$。</p>
+</li>
+<li><p>将第1组倒数第三层图像作比例因子为2的降采样，得到的图像作为第2组的第1层，然后对第2组的第1层图像做平滑因子为σ的高斯平滑，得到第2组的第2层，就像步骤2中一样，如此得到第2组的L层图像，同组内它们的尺寸是一样的，对应的平滑系数分别为：$0，σ，kσ，k^2σ,k^3σ……k^{(L-2)}σ$。但是在尺寸方面第2组是第1组图像的一半。</p>
+</li>
+</ol>
+<p>这样反复执行，就可以得到一共O组，每组L层，共计O*L个图像，这些图像一起就构成了高斯金字塔，结构如下：</p>
+<p><img src="/images/blog/gauss_image_praid.png" alt="图像金字塔"></p>
+<p>上图第一行的单独一副图像是原图经过了双线性插值做了上采样使得图像尺寸扩充了4倍(高度和宽度各扩充一倍)。图像一共4行6列，代表了图像金字塔有4层，6组(也称之为八度)。同一列，从上至下是降采样过程，可以看到图像尺寸不断缩小；同一行，从左往右是使用不同平滑系数进行高斯模糊过程，可以看到图像越来越模糊。【注意此图是灰度图演示过程，下面的图是在原图基础上做的，所以效果不一样】</p>
+<p><strong>代码示例</strong><br>我们以下图的lnea.jpg为例<br><img src="/images/blog/lnea.jpg" alt="图像金字塔"><br>得到的图像金字塔结果如下<br><img src="/images/blog/image_pyramid_result.png" alt="图像金字塔"></p>
+<p>代码位于 <a href="https://github.com/shartoo/BeADataScientist/blob/master/codes/4_4-image/image_pyramid.py" target="_blank" rel="noopener">python实现图像金字塔</a></p>
+<h2 id="3-差分金字塔DOG"><a href="#3-差分金字塔DOG" class="headerlink" title="3 差分金字塔DOG"></a>3 差分金字塔DOG</h2><p>DOG（差分金字塔）金字塔是在高斯金字塔的基础上构建起来的，其实生成高斯金字塔的目的就是为了构建DOG差分金字塔。</p>
+<p><strong>构建过程</strong></p>
+<p>差分金字塔的第1组第1层是由高斯金字塔的第1组第2层减第1组第1层得到的。以此类推，逐组逐层生成每一个差分图像，所有差分图像构成差分金字塔。</p>
+<p>概括为差分金字塔的第o组第l层图像是有高斯金字塔的第o组第l+1层减第o组第l层得到的。图示如下</p>
+<p><img src="/images/blog/image_dog_result.png" alt="图像金字塔"> </p>
+<p>可以看到结果都是黑的，人眼看不到效果。实际计算结果包含了大量信息点。<br>我们对结果进行归一化操作，此时就变成了laplace金字塔了。</p>
+<h2 id="4-laplace金字塔"><a href="#4-laplace金字塔" class="headerlink" title="4 laplace金字塔"></a>4 laplace金字塔</h2><p>之前一直没弄清楚，差分金字塔和laplace金字塔之间的关系。直到看到这个<a href="http://www.cse.yorku.ca/~kosta/CompVis_Notes/DoG_vs_LoG.pdf" target="_blank" rel="noopener">文档</a> </p>
+<p>我们先看差分金字塔的公式定义：</p>
+<p>$$<br>Dog(x,y,\sigma)=(G(x,y,k\sigma)-G(x,y,\sigma))<em>I(x,y) =L(x,y,k\sigma)-L(x,y,\sigma) \<br>其中 G(x,y,\sigma)代表了高斯核，G(x,y,\sigma)=\frac{1}{\sqrt{2\pi}}e^{\frac{x^2+y^2}{2\sigma ^2}},而L(x,y,\sigma)=G(x,y,\sigma)</em>I(x,y)<br>$$</p>
+<p>缩放之后的LoG表达式为：</p>
+<p>$$<br>LoG(x,y,\sigma)=\sigma ^2\bigtriangledown ^2 L(x,y,\sigma) \<br>= \sigma ^2(L_{xx}+L_{yy})<br>$$</p>
+<p>最终推导结果如下：<br>$$<br>(k-1)\sigma ^2LoG \approx =DoG<br>$$</p>
+<p>可以看到，DoG近似等于将LoG尺度缩放到一个常量$k-1$.</p>
+<p>我们来看实际效果，借助opencv的api</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cv2.normalize(im, None, alpha&#x3D;0, beta&#x3D;1, norm_type&#x3D;cv2.NORM_MINMAX, dtype&#x3D;cv2.CV_32F)</span><br></pre></td></tr></table></figure>
+<p>得到结果如下，可以看到清晰地特征。</p>
+<p><img src="/images/blog/image_dog_norm_result.png" alt="图像金字塔"> </p>
+<p>代码位于 <a href="https://github.com/shartoo/BeADataScientist/blob/master/codes/4_4-image/image_pyramid.py" target="_blank" rel="noopener">python实现图像金字塔</a></p>
+<p>此特征可以等价理解成Laplace特征。</p>
+<p><strong>参考</strong></p>
+<p><a href="https://blog.csdn.net/qq_27806947/article/details/80769339" target="_blank" rel="noopener">OpenCV(Python3)_16(图像金字塔)</a></p>
+<p><a href="http://www.10tiao.com/html/295/201609/2651988200/3.html" target="_blank" rel="noopener">IO头条 图像金字塔算法</a></p>
+<p><a href="https://blog.csdn.net/dcrmg/article/details/52561656" target="_blank" rel="noopener">csdn Sift中尺度空间、高斯金字塔、差分金字塔（DOG金字塔）、图像金字塔</a></p>
+<p><a href="https://docs.opencv.org/3.4/d4/d1f/tutorial_pyramids.html" target="_blank" rel="noopener">opencv 官方文档</a></p>
+<p><a href="https://www.uio.no/studier/emner/matnat/its/UNIK4690/v16/forelesninger/lecture_2_3_blending.pdf" target="_blank" rel="noopener">图像金字塔的算法构建图示(强烈推荐)</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2019-02-24-image-pramid/" data-id="ck4ifp1mw004j2wje5fgzc87b" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2019-03-02-img-haar-feature/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          图像处理基础Haar特征
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2019-01-08-merlin_mandarin_summary/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">merlin中文语音合成概览</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

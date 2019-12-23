@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>数据挖掘方法之三：多元回归模型 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="数据挖掘专栏">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据挖掘方法之三：多元回归模型">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2013-04-24-datamining-mutilregression/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="数据挖掘专栏">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-12-23T10:45:59.225Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.190Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2013-04-24-datamining-mutilregression" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2013-04-24-datamining-mutilregression/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.225Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      数据挖掘方法之三：多元回归模型
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一-概念"><a href="#一-概念" class="headerlink" title="一 概念"></a>一 概念</h2><p>  前面介绍了一个预测变量和一个回应变量的回归，但数据挖掘通常对一个回应变量和多个预测变量之间的关系更感兴趣，数据中可能有很多变量都与目标（回应）变量有线性关系，多元回归模型可以更加精确的预测这些关联。<br><br>多元回归模型如下：</p>
+<p>$$<br>y= b_0+b_1x_1+b_2x_2+….+e<br>$$</p>
+<p>其中 $b0，b1，b2…..$ 是模型参数，为常数，可以通过最小二乘法估计。关于误差项e和回应变量y的假设与简单线性回归模型一样。</p>
+<h2 id="二-多元回归的推断"><a href="#二-多元回归的推断" class="headerlink" title="二 多元回归的推断"></a>二 多元回归的推断</h2><p>主要有：</p>
+<ol>
+<li><p>t检验，用来对预测变量xi和回应变量y之间的关系进行推断</p>
+</li>
+<li><p>F检验，用来对整个回归模型的显著性进行检验</p>
+</li>
+<li><p>$b_i$ ,第i个预测变量系数的置信区间</p>
+</li>
+<li><p>回应变量y的均值的置信区间，用于预测变量 $x1,x2,x3,..$ 取特定值时，对回应变量y的均值进行估计</p>
+</li>
+</ol>
+<h3 id="2-1-y和-x-i-之间关系的t检验"><a href="#2-1-y和-x-i-之间关系的t检验" class="headerlink" title="2.1 y和 $x_i$之间关系的t检验"></a>2.1 y和 $x_i$之间关系的t检验</h3><p>假设检验如下：</p>
+<ul>
+<li>H0: bi=0</li>
+<li>H1:  bi!=0</li>
+</ul>
+<p>这些假设的模型的唯一区别是第i项是否存在，其他项都是相同的。</p>
+<p><strong>实例</strong>： 营养级别和糖之间关系的t检验</p>
+<ul>
+<li>H0: b1=0;模型 $y=b_0+b_2(纤维)+e$</li>
+<li>H1:b1!=0;模型：$y=b_0+b_1(糖)+b_2(纤维)+e$</li>
+</ul>
+<p>还是使用数据集：谷物(在本系列文章第二篇中有下载地址)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">#数据集存储在sugar中  </span><br><span class="line">#线性拟合  </span><br><span class="line">&gt;mutil_regre&lt;-lm(data&#x3D;sugar,rating~sugars+fiber)  </span><br><span class="line">#查看  </span><br><span class="line">&gt;summary(mutil_regre)    </span><br><span class="line">Call:  </span><br><span class="line">  lm(formula &#x3D; rating ~ sugars + fiber, data &#x3D; sugar)  </span><br><span class="line">  Residuals:  </span><br><span class="line">        Min      1Q  Median      3Q     Max   </span><br><span class="line">    -12.133  -4.247  -1.031   2.620  16.398   </span><br><span class="line"></span><br><span class="line">    Coefficients:  </span><br><span class="line">                Estimate Std. Error t value  </span><br><span class="line">    (Intercept)  51.6097     1.5463  33.376  </span><br><span class="line">    sugars       -2.1837     0.1621 -13.470  </span><br><span class="line">    fiber         2.8679     0.3023   9.486  </span><br><span class="line">                Pr(&gt;|t|)      </span><br><span class="line">    (Intercept)  &lt; 2e-16 ***  </span><br><span class="line">    sugars       &lt; 2e-16 ***  </span><br><span class="line">    fiber       2.02e-14 ***  </span><br><span class="line">    ---  </span><br><span class="line">    Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1  </span><br><span class="line"></span><br><span class="line">    Residual standard error: 6.219 on 74 degrees of freedom  </span><br><span class="line">    Multiple R-squared:  0.8092,    Adjusted R-squared:  0.804   </span><br><span class="line">    F-statistic: 156.9 on 2 and 74 DF,  p-value: &lt; 2.2e-16</span><br></pre></td></tr></table></figure>
+
+<p>可以得到，糖对应的稀疏为 $b_1=-2.1837$ ,对应的标准差为 $S_{bi}=0.1621$</p>
+<p>T对应的t统计量，也即检验的统计量为:<br> $t=\frac{b_1}{S_{b1}}=\frac{-2.1837}{0.1621}=-13.4713$</p>
+<p>P值对应的是t统计量的p值。也即:  $p=P(|t|&gt;tobs)=P(|t|&gt;-13.4713)$ 约等于0. 使用p值来检验假设，当p值很小时就可以拒绝原假设。</p>
+<h3 id="2-2-整体回归模型的显著性水平检验：F检验"><a href="#2-2-整体回归模型的显著性水平检验：F检验" class="headerlink" title="2.2 整体回归模型的显著性水平检验：F检验"></a>2.2 整体回归模型的显著性水平检验：F检验</h3><p><strong>检验</strong> 是分别对每个变量，糖，纤维，….逐个检验与回应变量线性关系。即{营养级别|糖}，{营养级别|纤维}，….</p>
+<p><strong>F检验</strong> 是对所有变量一起检测与回应变量关系，即{营养级别|糖，纤维，……}</p>
+<p>F检验的前提是</p>
+<ul>
+<li><p>H0: b0=b1=……=0   也即模型为：$y=b_0+e$</p>
+</li>
+<li><p>H1:至少存在一个bi不等于零</p>
+</li>
+</ul>
+<p>备选假设H1并不要求任何回归系数都不是零，而是当备选假设为真时，存在一个回归系数不是零。因此，F检验的备选假设并没有唯一确定一个模型，当一个、几个或者所有回归系数都不是零时，备选假设都是成立的。</p>
+<p>F统计量为：</p>
+<p>$$<br>    F= F_{obs}=\frac{MSR}{MSE} 服从F_{m,n-m-1}分布<br>$$</p>
+<p> <strong>如何理解</strong>：MSE（误差平方和均值）能很好的估计总体变异 $σ^2$（不论原假设是否为真），而MSR只有当原假设为真时才是 $σ^2$ 的优良统计量，因而只有在原假设为真的情况下MSR和MSE才会比较接近，也即F很小的时候，有足够的争取表明原假设为真。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&gt;#查看方差分析表  </span><br><span class="line">&gt;anova(mutil_regre)  </span><br><span class="line">Analysis of Variance Table  </span><br><span class="line"></span><br><span class="line">Response: rating  </span><br><span class="line">          Df Sum Sq Mean Sq F value    Pr(&gt;F)      </span><br><span class="line">sugars     1 8654.7  8654.7 223.774 &lt; 2.2e-16 ***  </span><br><span class="line">fiber      1 3480.0  3480.0  89.978 2.023e-14 ***  </span><br><span class="line">Residuals 74 2862.0    38.7                        </span><br><span class="line">---  </span><br><span class="line">Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span><br></pre></td></tr></table></figure>
+
+<p><font color="blue">注意：</font>方差分析表只给出了均方误差(MSE=Mean Sq=38.7) 而第一步中t检验中查看线性拟合时已经直接给出了F统计量：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">F-statistic: 156.9 on 2 and 74 DF,  p-value: &lt; 2.2e-16</span><br></pre></td></tr></table></figure>
+
+<p>其中的p值小于任何合理的显著性水平所要求的值，因而拒绝原假设。</p>
+<h3 id="2-3-特定回归系数的置信区间"><a href="#2-3-特定回归系数的置信区间" class="headerlink" title="2.3 特定回归系数的置信区间"></a>2.3 特定回归系数的置信区间</h3><p>可以为某个回归系数构造一个 100(1-a)%的置信区间，与简单线性回归无异。</p>
+<h3 id="2-4-给定x1-x2-x3-…-下，y均值的置信区间"><a href="#2-4-给定x1-x2-x3-…-下，y均值的置信区间" class="headerlink" title="2.4 给定x1,x2,x3,….下，y均值的置信区间"></a>2.4 给定x1,x2,x3,….下，y均值的置信区间</h3><p> 与简单线性回归类似，只不过变量增多。变为如：谷物为5.00克的糖和5.00克纤维时，营养级别的均值分布。</p>
+<h2 id="三-多元回归的三个重要参数"><a href="#三-多元回归的三个重要参数" class="headerlink" title="三 多元回归的三个重要参数"></a>三 多元回归的三个重要参数</h2><h3 id="3-1-调整-R-2-：对包含无用预测变量的惩罚模式"><a href="#3-1-调整-R-2-：对包含无用预测变量的惩罚模式" class="headerlink" title="3.1 调整 $R^2$ ：对包含无用预测变量的惩罚模式"></a>3.1 调整 $R^2$ ：对包含无用预测变量的惩罚模式</h3><p>往模型里增加一个变量会增加决定系数$R^2$ 的值，不管这个变量是否有用。为了模型的简洁性，需要找到某种方法来惩罚包含无用预测变量模型 $R^2$ 的值，此即通常所说的[调整 $R^2$ ],其表达式如下：</p>
+<p>$$<br>   R^2_{adj}= 1-(1-R^2)\frac{n-1}{n-m-1}<br>$$</p>
+<p>如果[<em>调整</em> $R^2$ ]比 $R^2$ 小很多，则表明模型中至少有一个变量是多余的，分析人员需要考虑剔除。</p>
+<h3 id="3-2-序贯的误差平方和-（sequential-sums-of-squares）"><a href="#3-2-序贯的误差平方和-（sequential-sums-of-squares）" class="headerlink" title="3.2 序贯的误差平方和 （sequential sums of squares）"></a>3.2 序贯的误差平方和 <em>（sequential sums of squares）</em></h3><p>序贯的误差平方和代表SSR中回归平方和的部分，SSR代表通过回应变量和一组预测变量的线性关系对总体变异解释的部分。序贯的误差平方和把SSR划分成各个唯一的SSR部分，分别由某个特定的预测变量来描述。因此，序贯的误差平方和的值取决于变量输入模型中的次序。下表是某种次序的序贯的武昌平方和，可以看出其实是对糖含量和营养级别的简单回归分析得到的SSR值。</p>
+<p>模型：</p>
+<p>$$<br>    y = b_0+b_1(糖)+b_2(纤维)+b_3(货架1)+b_4(货架4)+e<br>$$</p>
+<p>的序贯平方和</p>
+<table>
+<thead>
+<tr>
+<th>来源</th>
+<th>DF</th>
+<th>Seq SS</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>糖</td>
+<td>1</td>
+<td>8701.7</td>
+</tr>
+<tr>
+<td>纤维</td>
+<td>1</td>
+<td>3416.1</td>
+</tr>
+<tr>
+<td>货架1</td>
+<td>1</td>
+<td>0.3</td>
+</tr>
+<tr>
+<td>货架2</td>
+<td>1</td>
+<td>152.4</td>
+</tr>
+</tbody></table>
+<p>从表中可以看到第三个序贯误差平方和是对货架1的指示标量，值为0.3 ，它代表了营养级别中，在位置因素作用下货架1的变化率，这里糖和纤维的变化率已经被提取出来了，表示货架1的序贯平方和的值很小，表明这个变量很有可能是对估计营养级别是没有用的。</p>
+<h3 id="3-3-偏F检验"><a href="#3-3-偏F检验" class="headerlink" title="3.3 偏F检验"></a>3.3 偏F检验</h3><p>假设模型中已经有了p个变量， $x_1,x_2,x_3,….x_p,$ 一个新的变量x<em>是否应该包含在此模型中？应该计算将x*加入到给定含有p个变量的模型中所产生的额外序列平方和，这个值表示为:<br>$$<br> SS_{extra}=SS(x</em>|x_1,x_2,x_3,….x_p)。<br>$$</p>
+<p> 现在,额外序列平方和通过在全模型（包括 $x_1,x_2,x_3,….x_p$ 和x<em>）中的回归平方和计算得到，表示为 $SS_{full}=SS(x_1,x_2,x_3,….x_p,x</em>)$ ,从全模型的回归平方和中减速缩减模型（仅包含 $x_1,x_2,x_3,….x_p$）的回归平方和（表示为：$SS_{reduced}=SS(x_1,x_2,x_3,….x_p)$ ），也即：</p>
+<p> $$<br>      SS_{extra}=SS_{full}-SS_{reduced}<br> $$</p>
+<p>即：</p>
+<p>$$<br>   SS(x<em>|x_1,x_2,….x_p)= SS(x_1,x_2,….x_p,x^</em>)-SS(x_1,x_2,..x_p)<br>$$</p>
+<p>偏F检验的原假设如下：</p>
+<ul>
+<li><p>H0:否定 $SS_{extra}$与 $x^<em>$ 是相关的，对已经包含 $x_1,x_2,x_3,….x_p$ 的模型的回归平方和没有显著的共享。因此，模型中不应该包含 $x^</em>$ 。</p>
+</li>
+<li><p>H1:肯定SSextra与x<em>是相关的，对已经包含x1,x2,x3,….xp的模型的回归平方和有显著的贡献。因此，模型中应该包含x</em></p>
+</li>
+</ul>
+<p>偏F检验的测试统计量是:</p>
+<p>$$<br>  F(x^*|x_1,x_2,…x_p)=\frac{SS_{extra}}{MSE_{full}}</p>
+<p>  MSE_{full}代表全模型的均方误差，包括x_1,x_2,…x_p和x^*<br>$$</p>
+<p>当假设为真时，这个统计量服从 $F_{1,n-p-2}$ 的分布。因此，当 $F(x^*|x_1,x_2,x_3,….x_p)$ 值太大或者它像对应的p值太小时，有理由拒绝原假设。而偏F检验的一个可替代的方法是t检验。一个自由度为1和n-p-2的F检验等价于一个自由度为n-p-2的t检验。这是由他们之间的概率分布关系 $(F_{1,n-p-2}=(t_{n-p-2})^2)$</p>
+<p><font color="blue">注意：</font>序贯平方和与部分平方和的区别如下：</p>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>序贯平方和</th>
+<th>部分平方和</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$x_1$</td>
+<td>$SS(x_1)$</td>
+<td>$SS(x_1|x_2,x_3,x_4)$</td>
+</tr>
+<tr>
+<td>$x_2$</td>
+<td>$SS(x_2|x_1)$</td>
+<td>$SS(x_2|x_1,x_3,x_4)$</td>
+</tr>
+<tr>
+<td>$x_3$</td>
+<td>$SS(x_3|x_1,x_2)$</td>
+<td>$SS(x_2|x_1,x_2,x_4)$</td>
+</tr>
+<tr>
+<td>$x_4$</td>
+<td>$SS(x_4|x_1,x_2,x_3)$</td>
+<td>$SS(x_2|x_1,x_2,x_3)$</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2013-04-24-datamining-mutilregression/" data-id="ck4ifp1l100032wje47d6b1rh" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2013-05-04-datamining-mutillinerandselect/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          数据挖掘方法之四：多重共线性及变量选择方法
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2013-04-20-datamining-regression/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">数据挖掘方法之二：回归模型（简单线性回归）</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>图像质量评估 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="图像处理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图像质量评估">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2019-04-21-image-quality-assessment/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="图像处理">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-12-23T10:45:59.718Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.230Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2019-04-21-image-quality-assessment" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2019-04-21-image-quality-assessment/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.718Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      图像质量评估
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>参考 <a href="https://github.com/ocampor/notebooks/blob/master/notebooks/image/quality/brisque.ipynb?source=post_page-----391a6be52c11----------------------" target="_blank" rel="noopener">Image Quality Assessment</a></p>
+<h2 id="1-说明"><a href="#1-说明" class="headerlink" title="1 说明"></a>1 说明</h2><p>图像质量评估(Image Quality Assessment(IQA))看起来是个非常主观的事，但是可以借鉴一些方法，目前主流方法分两类</p>
+<ol>
+<li>基于引用比较的评估。</li>
+<li>无引用的评估</li>
+</ol>
+<p>主要区别是，基于引用的评估方法需要依赖一张高质量的图片作为评估源，来比较两张图之间的区别。常用的基于引用的评估方法是结构相似性索引(Structural Similarity Index(SSIM))。</p>
+<h2 id="2-无引用图片质量评估"><a href="#2-无引用图片质量评估" class="headerlink" title="2 无引用图片质量评估"></a>2 无引用图片质量评估</h2><p>它不需要引用图片，仅仅依赖于接收到的图片信息，称为盲测方法。分为两步(1)计算能够描述图片结构的特征(2)计算与人类对于图片质量观点相关的特征。TID2008是一个基于方法论的数据集，它描述了如何从引用图片中评估人类的观点，被广泛用于对比IQA算法的性能。</p>
+<h3 id="2-1-Blind-referenceless-image-spatial-quality-evaluator-BRISQUE"><a href="#2-1-Blind-referenceless-image-spatial-quality-evaluator-BRISQUE" class="headerlink" title="2.1 Blind/referenceless image spatial quality evaluator (BRISQUE)"></a>2.1 Blind/referenceless image spatial quality evaluator (BRISQUE)</h3><p>BRISQUE是一种仅使用图像像素来计算特征(其他方法都是基于图像转换到其他空间，比如wavelet 或者DCT)。非常高效，因为它不需要其他任何信息来计算其特征。</p>
+<p>它依赖于空间域中局部正规化的亮度系数的空间自然场景统计(Spatial Natural Scene Statistics(NSS))模型，以及这些系数的点与点之间的内积的模型。</p>
+<h3 id="2-2-方法论"><a href="#2-2-方法论" class="headerlink" title="2.2 方法论"></a>2.2 方法论</h3><h4 id="2-2-1-Natural-Scene-Statistics-in-the-Spatial-Domain"><a href="#2-2-1-Natural-Scene-Statistics-in-the-Spatial-Domain" class="headerlink" title="2.2.1 Natural Scene Statistics in the Spatial Domain"></a>2.2.1 Natural Scene Statistics in the Spatial Domain</h4><p>给定图像$I(i,j)$，首先通过减去局部均值$\mu (i,j)$，然后除以局部方差$\delta(i,j)$ 来计算局部亮度系数$\hat I(i,j)$。加上$C$是为了避免除以0.</p>
+<p>$$<br>\hat I(i,j) = \frac{I(i,j)-\mu(i,j)}{\delta(i,j)+c}\<br>其中如果I(i,j)\in [0,255]，则C=1,如果 \in [0,1]，那么C=1/255<br>$$<br>为了计算局部归一化的亮度，即平均减去的对比度归一化(MSCN)系数，首先，我们需要计算局部均值。<br>$$<br>\mu (i,j) = \sum <em>{k=-K} ^{K} \sum _{I=-k} ^L w</em>{k,l}I_{k,l}(i,j) \<br>其中w是尺寸为(K,L)的高斯核<br>$$<br>计算代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">def normalize_kernel(kernel):</span><br><span class="line">    return kernel &#x2F; np.sum(kernel)</span><br><span class="line"></span><br><span class="line">def gaussian_kernel2d(n, sigma):</span><br><span class="line">    Y, X &#x3D; np.indices((n, n)) - int(n&#x2F;2)</span><br><span class="line">    gaussian_kernel &#x3D; 1 &#x2F; (2 * np.pi * sigma ** 2) * np.exp(-(X ** 2 + Y ** 2) &#x2F; (2 * sigma ** 2)) </span><br><span class="line">    return normalize_kernel(gaussian_kernel)</span><br><span class="line"></span><br><span class="line">def local_mean(image, kernel):</span><br><span class="line">    return signal.convolve2d(image, kernel, &#39;same&#39;)</span><br></pre></td></tr></table></figure>
+<p>然后计算局部偏差<br>$$<br>\sigma(i,j)\sqrt{\sum_{k=-K} ^K \sum <em>{l=-L} ^L w</em>{k,l}(I_{k,l}(i,j)-\mu(i,j))^2 }<br>$$<br>代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">def local_deviation(image, local_mean, kernel):</span><br><span class="line">    &quot;Vectorized approximation of local deviation&quot;</span><br><span class="line">    sigma &#x3D; image ** 2</span><br><span class="line">    sigma &#x3D; signal.convolve2d(sigma, kernel, &#39;same&#39;)</span><br><span class="line">    return np.sqrt(np.abs(local_mean ** 2 - sigma)</span><br></pre></td></tr></table></figure>
+<p>最后，我们可以计算得到MSCN系数<br>$$<br>\hat I(i,j) = \frac{I(i,j)-\mu(i,j)}{\sigma(i,j)+C}<br>$$</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">def calculate_mscn_coefficients(image, kernel_size&#x3D;6, sigma&#x3D;7&#x2F;6):</span><br><span class="line">    C &#x3D; 1&#x2F;255</span><br><span class="line">    kernel &#x3D; gaussian_kernel2d(kernel_size, sigma&#x3D;sigma)</span><br><span class="line">    local_mean &#x3D; signal.convolve2d(image, kernel, &#39;same&#39;)</span><br><span class="line">    local_var &#x3D; local_deviation(image, local_mean, kernel)</span><br><span class="line">    </span><br><span class="line">    return (image - local_mean) &#x2F; (local_var + C)</span><br></pre></td></tr></table></figure>
+<p>作者发现一个扭曲的图片的MSCN系数服从一个广义高斯分布(GGD)<br>$$<br>f(x;\alpha,\sigma ^2)=\frac{\alpha}{2\beta T(1/\alpha)}e^{-(\frac{|x|}{\beta})^{\alpha}} \<br>其中 \beta = \sigma\sqrt{\frac{T(\frac{1}{\alpha})}{T(\frac{3}{\alpha})}},T是伽马函数，\alpha的形状控制形状以及\sigma ^2的方差<br>$$</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">def generalized_gaussian_dist(x, alpha, sigma):</span><br><span class="line">    beta &#x3D; sigma * np.sqrt(special.gamma(1 &#x2F; alpha) &#x2F; special.gamma(3 &#x2F; alpha))</span><br><span class="line">    coefficient &#x3D; alpha &#x2F; (2 * beta() * special.gamma(1 &#x2F; alpha))</span><br><span class="line">    return coefficient * np.exp(-(np.abs(x) &#x2F; beta) ** alpha)</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-2-相邻MSCN系数的点对内积"><a href="#2-2-2-相邻MSCN系数的点对内积" class="headerlink" title="2.2.2 相邻MSCN系数的点对内积"></a>2.2.2 相邻MSCN系数的点对内积</h4><p>邻接的系数的符号也代表了某种特定结构，可能是某种扭曲的分布。邻接MSCN系数点对内积的沿着四个方向</p>
+<ol>
+<li>水平方向</li>
+<li>垂直方向</li>
+<li>主对角(main-diagonal)D1</li>
+<li>次对角(secondary-diagonal)D2</li>
+</ol>
+<p>$$<br>D2(i,j) = \hat I(i,j)\hat I(i+1,j+1)<br>$$</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">def calculate_pair_product_coefficients(mscn_coefficients):</span><br><span class="line">    return collections.OrderedDict(&#123;</span><br><span class="line">        &#39;mscn&#39;: mscn_coefficients,</span><br><span class="line">        &#39;horizontal&#39;: mscn_coefficients[:, :-1] * mscn_coefficients[:, 1:],</span><br><span class="line">        &#39;vertical&#39;: mscn_coefficients[:-1, :] * mscn_coefficients[1:, :],</span><br><span class="line">        &#39;main_diagonal&#39;: mscn_coefficients[:-1, :-1] * mscn_coefficients[1:, 1:],</span><br><span class="line">        &#39;secondary_diagonal&#39;: mscn_coefficients[1:, :-1] * mscn_coefficients[:-1, 1:]</span><br><span class="line">    &#125;)</span><br></pre></td></tr></table></figure>
+<p>广义高斯分布不能很好的拟合系数内积的经验直方图。因此，又提出了 Asymmetric Generalized Gaussian Distribution (AGGD)[非对称广义高斯分布模型](Multiscale skewed heavy-tailed model for texture analysis. Proceedings - International Conference on Image Processing)</p>
+<p>$$<br>f(x;v,\sigma _l ^2,\sigma _r ^2) = \frac{v}{(\beta _l+\beta _r)T(\frac{1}{v})}e^{(-(\frac{-x}{\beta _l})^v)} \quad\quad x&lt;0 \<br>f(x;v,\sigma _l ^2,\sigma _r ^2) = \frac{v}{(\beta _l+\beta _r)T(\frac{1}{v})}e^{(-(\frac{-x}{\beta _r})^v)} \quad\quad x\gt 0 \<br>其中 \beta _{side} = \sigma _{side}\sqrt{\frac{T(\frac{1}{v})}{T(\frac{3}{v})}} ,side 可以是 r 或 l \<br>前面没有提到的参数是均值 m = (\beta _r-\beta_l)\frac{T(\frac{2}{v})}{T(frac{1}{v})}<br>$$</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">def asymmetric_generalized_gaussian(x, nu, sigma_l, sigma_r):</span><br><span class="line">    def beta(sigma):</span><br><span class="line">        return sigma * np.sqrt(special.gamma(1 &#x2F; nu) &#x2F; special.gamma(3 &#x2F; nu))</span><br><span class="line">    </span><br><span class="line">    coefficient &#x3D; nu &#x2F; ((beta(sigma_l) + beta(sigma_r)) * special.gamma(1 &#x2F; nu))</span><br><span class="line">    f &#x3D; lambda x, sigma: coefficient * np.exp(-(x &#x2F; beta(sigma)) ** nu)</span><br><span class="line">        </span><br><span class="line">    return np.where(x &lt; 0, f(-x, sigma_l), f(x, sigma_r))</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-3-拟合AGGD"><a href="#2-2-3-拟合AGGD" class="headerlink" title="2.2.3 拟合AGGD"></a>2.2.3 拟合AGGD</h4><ol>
+<li><p>计算$\hat \gamma，其中N_l$是负样本数量，而$N_r$是正样本数量.<br>$$<br>\hat \gamma = \frac{\sqrt{\frac{1}{N_l}\sum_{k=1,x_k&lt;0} ^{N_l}x_k ^2}}{\sqrt{\frac{1}{N_r}\sum_{k=1,x_k&lt;0} ^{N_r}x_k ^2}}<br>$$</p>
+</li>
+<li><p>计算$\hat r$<br>$$<br>\hat r = \frac{(\frac{\sum|x_k|}{N_l+N_r})^2}{\frac{\sum x_k ^2}{N_l+N_r}}<br>$$</p>
+</li>
+<li><p>使用$\hat \gamma ,\hat r$计算$\hat R$<br>$$<br>\hat R = \hat r\frac{(\hat \gamma ^3+1)(\hat \gamma +1)}{(\hat \gamma ^2+1)^2}<br>$$</p>
+</li>
+<li><p>使用反广义高斯比率计算$\alpha$<br>$$<br>\rho (\alpha) =\frac{T(2/\alpha)^2}{T(1/\alpha)T(3/\alpha)}<br>$$</p>
+</li>
+<li><p>评估左右scale参数<br>$$<br>\sigma _l = sqrt{\frac{1}{N_l-1}\sum _{k=l,x_k&lt;0} ^{N_l} x_k ^2} \<br>\sigma _r = sqrt{\frac{1}{N_r-1}\sum _{k=r,x_k\gt 0} ^{N_r} x_k ^2}<br>$$</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">def asymmetric_generalized_gaussian_fit(x):</span><br><span class="line">    def estimate_phi(alpha):</span><br><span class="line">        numerator &#x3D; special.gamma(2 &#x2F; alpha) ** 2</span><br><span class="line">        denominator &#x3D; special.gamma(1 &#x2F; alpha) * special.gamma(3 &#x2F; alpha)</span><br><span class="line">        return numerator &#x2F; denominator</span><br><span class="line"></span><br><span class="line">    def estimate_r_hat(x):</span><br><span class="line">        size &#x3D; np.prod(x.shape)</span><br><span class="line">        return (np.sum(np.abs(x)) &#x2F; size) ** 2 &#x2F; (np.sum(x ** 2) &#x2F; size)</span><br><span class="line"></span><br><span class="line">    def estimate_R_hat(r_hat, gamma):</span><br><span class="line">        numerator &#x3D; (gamma ** 3 + 1) * (gamma + 1)</span><br><span class="line">        denominator &#x3D; (gamma ** 2 + 1) ** 2</span><br><span class="line">        return r_hat * numerator &#x2F; denominator</span><br><span class="line"></span><br><span class="line">    def mean_squares_sum(x, filter &#x3D; lambda z: z &#x3D;&#x3D; z):</span><br><span class="line">        filtered_values &#x3D; x[filter(x)]</span><br><span class="line">        squares_sum &#x3D; np.sum(filtered_values ** 2)</span><br><span class="line">        return squares_sum &#x2F; ((filtered_values.shape))</span><br><span class="line"></span><br><span class="line">    def estimate_gamma(x):</span><br><span class="line">        left_squares &#x3D; mean_squares_sum(x, lambda z: z &lt; 0)</span><br><span class="line">        right_squares &#x3D; mean_squares_sum(x, lambda z: z &gt;&#x3D; 0)</span><br><span class="line"></span><br><span class="line">        return np.sqrt(left_squares) &#x2F; np.sqrt(right_squares)</span><br><span class="line"></span><br><span class="line">    def estimate_alpha(x):</span><br><span class="line">        r_hat &#x3D; estimate_r_hat(x)</span><br><span class="line">        gamma &#x3D; estimate_gamma(x)</span><br><span class="line">        R_hat &#x3D; estimate_R_hat(r_hat, gamma)</span><br><span class="line"></span><br><span class="line">        solution &#x3D; optimize.root(lambda z: estimate_phi(z) - R_hat, [0.2]).x</span><br><span class="line"></span><br><span class="line">        return solution[0]</span><br><span class="line"></span><br><span class="line">    def estimate_sigma(x, alpha, filter &#x3D; lambda z: z &lt; 0):</span><br><span class="line">        return np.sqrt(mean_squares_sum(x, filter))</span><br><span class="line">    </span><br><span class="line">    def estimate_mean(alpha, sigma_l, sigma_r):</span><br><span class="line">        return (sigma_r - sigma_l) * constant * (special.gamma(2 &#x2F; alpha) &#x2F; special.gamma(1 &#x2F; alpha))</span><br><span class="line">    </span><br><span class="line">    alpha &#x3D; estimate_alpha(x)</span><br><span class="line">    sigma_l &#x3D; estimate_sigma(x, alpha, lambda z: z &lt; 0)</span><br><span class="line">    sigma_r &#x3D; estimate_sigma(x, alpha, lambda z: z &gt;&#x3D; 0)</span><br><span class="line">    </span><br><span class="line">    constant &#x3D; np.sqrt(special.gamma(1 &#x2F; alpha) &#x2F; special.gamma(3 &#x2F; alpha))</span><br><span class="line">    mean &#x3D; estimate_mean(alpha, sigma_l, sigma_r)</span><br><span class="line">    </span><br><span class="line">    return alpha, mean, sigma_l, sigma_r</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-4-计算BRISQUE特征"><a href="#2-2-4-计算BRISQUE特征" class="headerlink" title="2.2.4 计算BRISQUE特征"></a>2.2.4 计算BRISQUE特征</h4><p>计算图像质量的特征即拟合MSCN系数的结果并移动shifted内积到广义高斯分布。首先，我们需要拟合MSCN系数到GDD，然后点对内积到AGGD。特征概要如下</p>
+<table>
+<thead>
+<tr>
+<th>FeatureID</th>
+<th>Feature Description</th>
+<th>Computation Procedure</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$f_1-f_2 $</td>
+<td>Shape and variance</td>
+<td>Fit GGD to MSCN coefficients</td>
+</tr>
+<tr>
+<td>$f_3-f_6$</td>
+<td>Shape, mean, left variance, right variance</td>
+<td>Fit AGGD to <strong>H</strong> pairwise products</td>
+</tr>
+<tr>
+<td>$f_7-f_{10}$</td>
+<td>Shape, mean, left variance, right variance</td>
+<td>Fit AGGD to <strong>V</strong> pairwise products</td>
+</tr>
+<tr>
+<td>$f_{11}-f_{14}$</td>
+<td>Shape, mean, left variance, right variance</td>
+<td>Fit AGGD to <strong>D1</strong> pairwise products</td>
+</tr>
+<tr>
+<td>$f_{15}-f_{18}$</td>
+<td>Shape, mean, left variance, right variance</td>
+<td>Fit AGGD to <strong>D2</strong> pairwise products</td>
+</tr>
+</tbody></table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">def calculate_brisque_features(image, kernel_size&#x3D;7, sigma&#x3D;7&#x2F;6):</span><br><span class="line">    def calculate_features(coefficients_name, coefficients, accum&#x3D;np.array([])):</span><br><span class="line">        alpha, mean, sigma_l, sigma_r &#x3D; asymmetric_generalized_gaussian_fit(coefficients)</span><br><span class="line"></span><br><span class="line">        if coefficients_name &#x3D;&#x3D; &#39;mscn&#39;:</span><br><span class="line">            var &#x3D; (sigma_l ** 2 + sigma_r ** 2) &#x2F; 2</span><br><span class="line">            return [alpha, var]</span><br><span class="line">        </span><br><span class="line">        return [alpha, mean, sigma_l ** 2, sigma_r ** 2]</span><br><span class="line">    </span><br><span class="line">    mscn_coefficients &#x3D; calculate_mscn_coefficients(image, kernel_size, sigma)</span><br><span class="line">    coefficients &#x3D; calculate_pair_product_coefficients(mscn_coefficients)</span><br><span class="line">    </span><br><span class="line">    features &#x3D; [calculate_features(name, coeff) for name, coeff in coefficients.items()]</span><br><span class="line">    flatten_features &#x3D; list(chain.from_iterable(features))</span><br><span class="line">    return np.array(flatten_features)</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-计算图像质量"><a href="#2-3-计算图像质量" class="headerlink" title="2.3 计算图像质量"></a>2.3 计算图像质量</h3><p>首先，我们需要两个辅助函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">def plot_histogram(x, label):</span><br><span class="line">    n, bins &#x3D; np.histogram(x.ravel(), bins&#x3D;50)</span><br><span class="line">    n &#x3D; n &#x2F; np.max(n)</span><br><span class="line">    plt.plot(bins[:-1], n, label&#x3D;label, marker&#x3D;&#39;o&#39;)</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>载入图像</li>
+<li>计算系数.计算完MSCN系数和点对的内积之后，我们可以确定其分布实际上是不同的。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mscn_coefficients &#x3D; calculate_mscn_coefficients(gray_image, 7, 7&#x2F;6)</span><br><span class="line">coefficients &#x3D; calculate_pair_product_coefficients(mscn_coefficients)</span><br><span class="line">for name, coeff in coefficients.items():</span><br><span class="line">    plot_histogram(coeff.ravel(), name)</span><br><span class="line">plt.axis([-2.5, 2.5, 0, 1.05])</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>拟合系数到广义高斯分布</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brisque_features &#x3D; calculate_brisque_features(gray_image, kernel_size&#x3D;7, sigma&#x3D;7&#x2F;6)</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>resize图像并计算BRISQUE特征</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ownscaled_image &#x3D; cv2.resize(gray_image, None, fx&#x3D;1&#x2F;2, fy&#x3D;1&#x2F;2, interpolation &#x3D; cv2.INTER_CUBIC)</span><br><span class="line">downscale_brisque_features &#x3D; calculate_brisque_features(downscaled_image, kernel_size&#x3D;7, sigma&#x3D;7&#x2F;6)</span><br><span class="line"></span><br><span class="line">brisque_features &#x3D; np.concatenate((brisque_features, downscale_brisque_features))</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>缩放特征并喂入SVR.作者提供了一个与训练的SVR模型来计算质量评估。但是，为了有个好的结果，我们需要将特征缩放到[-1,1]。对于后者，我们需要用预缩放特征向量相同的参数。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">def scale_features(features):</span><br><span class="line">    with open(&#39;normalize.pickle&#39;, &#39;rb&#39;) as handle:</span><br><span class="line">        scale_params &#x3D; pickle.load(handle)</span><br><span class="line">    </span><br><span class="line">    min_ &#x3D; np.array(scale_params[&#39;min_&#39;])</span><br><span class="line">    max_ &#x3D; np.array(scale_params[&#39;max_&#39;])</span><br><span class="line">    </span><br><span class="line">    return -1 + (2.0 &#x2F; (max_ - min_) * (features - min_))</span><br><span class="line"></span><br><span class="line">def calculate_image_quality_score(brisque_features):</span><br><span class="line">    model &#x3D; svmutil.svm_load_model(&#39;brisque_svm.txt&#39;)</span><br><span class="line">    scaled_brisque_features &#x3D; scale_features(brisque_features)</span><br><span class="line">    </span><br><span class="line">    x, idx &#x3D; svmutil.gen_svm_nodearray(</span><br><span class="line">        scaled_brisque_features,</span><br><span class="line">        isKernel&#x3D;(model.param.kernel_type &#x3D;&#x3D; svmutil.PRECOMPUTED))</span><br><span class="line">    </span><br><span class="line">    nr_classifier &#x3D; 1</span><br><span class="line">    prob_estimates &#x3D; (svmutil.c_double * nr_classifier)()</span><br><span class="line">    </span><br><span class="line">    return svmutil.libsvm.svm_predict_probability(model, x, prob_estimates)</span><br><span class="line">calculate_image_quality_score(brisque_features)</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-结论"><a href="#3-结论" class="headerlink" title="3 结论"></a>3 结论</h2><p>方法在TID2008数据集上测试，并且效果不错，即便与引用IQA方法比起来。后续可以用XGBoost,LightGBM方法来训练识别步骤来提高效率。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2019-04-21-image-quality-assessment/" data-id="ck4ifp1n0004v2wjeekp3bygm" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2019-04-22-Mask%20Embedding%20in%20conditional%20GAN/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Mask Embedding in conditional GAN for Guided Synthesis of High Resolution Images
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2019-03-12-yolo-v123/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">从yolov1到yolov3</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>GAN：论文笔记 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="深度学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GAN：论文笔记">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2016-12-27-gan-paper/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="深度学习">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/gan1.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.431Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.209Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/gan1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2016-12-27-gan-paper" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2016-12-27-gan-paper/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.431Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      GAN：论文笔记
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一-GAN网络"><a href="#一-GAN网络" class="headerlink" title="一 GAN网络"></a>一 GAN网络</h2><p>与一般的被用于Supervised Learning任务的深度神经网络不同，GAN同时要训练一个生成网络(Generator)和一个判别网络(Discriminator)，前者输入一个noise变量 z ，输出一个伪图片数据 $G(z;θ_g)$ ，后者输入一个图片(real image)／伪图片(fake image)数据 x ，输出一个表示该输入是自然图片或者伪造图片的二分类置信度 $D(x;θ_d)$ ，理想情况下，判别器 D 需要尽可能准确的判断输入数据到底是一个真实的图片还是某种伪造的图片，而生成器G又需要尽最大可能去欺骗D，让D把自己产生的伪造图片全部判断成真实的图片。</p>
+<p>根据上述训练过程的描述，我们可以定义一个损失函数：</p>
+<p>$$<br>  Loss = \frac{1}{m}\sum[logD(x^i)+log(1-D(G(z^i)))]<br>$$</p>
+<h2 id="二-DCGAN网络"><a href="#二-DCGAN网络" class="headerlink" title="二 DCGAN网络"></a>二 DCGAN网络</h2><h3 id="2-0-介绍"><a href="#2-0-介绍" class="headerlink" title="2.0 介绍"></a>2.0 介绍</h3><p>本论文做了以下贡献。</p>
+<ul>
+<li><p>提出并评估了一系列的加在卷积GAN网络拓扑结构的约束，使得卷积GAN网络在大部分设置中稳定的用于训练。给这种架构取名为深度卷积GAN(DCGAN)</p>
+</li>
+<li><p>对图像分类任务使用训练好的分类器，结合其他无监督学习算法，性能较好。</p>
+</li>
+<li><p>可视化了GAN学习到的过滤器(filter)，并且实验表明特定的过滤器已经学习到画特定的物体。</p>
+</li>
+<li><p>表明，生成器有些有趣的矢量算数性质，它可以很容易地完成生成模型的语义质量的操作。</p>
+</li>
+</ul>
+<h3 id="2-1-无标签数据中的表征学习"><a href="#2-1-无标签数据中的表征学习" class="headerlink" title="2.1 无标签数据中的表征学习"></a>2.1 无标签数据中的表征学习</h3><ul>
+<li><p>经典的无标签表征学习是在数据上做聚类（K均值聚类）。图像领域，可以在图像patches上做层次聚类，以此来学习表征</p>
+</li>
+<li><p>另外一个方法是训练自动编码器（卷积，堆叠），它可以分离编码的组件是什么以及组件位置。梯形结构将图像编码成压缩编码，然后解码编码来重构图像。</p>
+</li>
+</ul>
+<h3 id="2-2-生成自然图像"><a href="#2-2-生成自然图像" class="headerlink" title="2.2 生成自然图像"></a>2.2 生成自然图像</h3><p>  生成自然图像模型主要有两种：参数化和非参数化。</p>
+<ul>
+<li><p>非参数化模型一般是从已存在的数据库中做匹配，通常是匹配图像块(patches)。这种方法已经用在了<code>纹理合成</code>,<code>超分辨率</code>,<code>绘画</code>。</p>
+</li>
+<li><p>参数模型目前已经被研究得较充分（例如MNIST数据集或者纹理合成）。但是生成真实世界的自然图像还没有取得成功。一种<code>变分抽样方法</code>生成图像，生成的图像中容易有模糊干扰。另外一种方法是，使用迭代前向扩散方法生成图像。GAN生成网络生成的图像有噪音，并且可能产生无法理解的图像。一种拉普拉斯金字塔拓展方法的方法生成质量更高的图像，但是依然摆脱不了噪音。一种RNN和反卷积网络可以生成一些较好的自然图片。</p>
+</li>
+</ul>
+<h3 id="2-3-CNN内部的可视化"><a href="#2-3-CNN内部的可视化" class="headerlink" title="2.3 CNN内部的可视化"></a>2.3 CNN内部的可视化</h3><p> 使用反卷过滤最大激励，可以知道CNN中每个卷积过滤器（卷积核）的效果。</p>
+<h3 id="2-4-方法和模型架构"><a href="#2-4-方法和模型架构" class="headerlink" title="2.4 方法和模型架构"></a>2.4 方法和模型架构</h3><p> 经验表明：使用CNN来增大GAN的方法来给图像建模的方法是失败的。我们定义了一组架构，它可以在多个不同数据集上稳定训练，并且可以训练更高的分辨率和更深的生成模型。</p>
+<p> 方法的核心在于，采用并修改了CNN架构中三个方面。</p>
+<ol>
+<li><p>所有的用stride卷积替换确定性空间池化函数（例如最大池化）卷积网络，这允许网络学习它自己的空间下采样。我们在生成器中使用了这种方法，这使得它能够学习自己的空间下采样和分类器。</p>
+</li>
+<li><p>去掉顶层卷积特征上的全连接层。最好的例子是全局均值池化用在艺术图像分类模型。我们发现，全局均值池化增加了模型的稳定性，但是拖累了其收敛速度。一个中间层的生成器和分类器，分别直接将顶层的卷积特征链接到输入和输出，其结果较好。GAN的第一层，以正态噪音分布Z作为输入，可以称为全连接，因为它只是矩阵操作，但是结果被reshaped成一个4维tensor，并用作卷积堆叠的起始。对于分类器，最后的卷积层被平铺(flatten)并喂入单个sigmoid输出。</p>
+</li>
+<li><p>第三个是Batch Normalization，通过对每个输入神经元进行归一化（均值为0，方差是单位方差（1））来稳定学习。它可以避免由于poor initialization和深层模型中的梯度扩散问题。直接将batchnorm应用到所有层，将会导致抽样震荡和模型不稳定。因此，不要将batchnorm用在输出层的生成器和输入层的分类器。</p>
+<p>Relu激活函数用在生成器中，输出层使用Tanh激活函数的除外。我们发现使用收敛的激活函数可以让模型更快的饱和并覆盖训练分布的颜色空间。在分类器中，我们发现，使用leaky Retified 激活函数表现较好，尤其是高分辨率模型。这与原始的GAN模型相反，它用的是maxout激励函数。</p>
+</li>
+</ol>
+<p> <strong>总结</strong></p>
+<ul>
+<li><p>使用strided 卷积（分类器）和fractional-strided卷积（生成器）替换所有池化层。</p>
+</li>
+<li><p>分类器和生成器中都是用batchnorm</p>
+</li>
+<li><p>深层架构，移除全连接层</p>
+</li>
+<li><p>除了输出层使用Tanh激活函数，其他层都使用Relu</p>
+</li>
+<li><p>所有层的分类器都使用 LeakyRelu</p>
+</li>
+</ul>
+<h3 id="2-5-模型细节"><a href="#2-5-模型细节" class="headerlink" title="2.5 模型细节"></a>2.5 模型细节</h3><ul>
+<li><p>数据集：, Large-scale Scene Understanding (LSUN) (Yu et al., 2015),Imagenet-1k and a newly assembled Faces dataset</p>
+</li>
+<li><p>预处理：图像不做预处理，激活函数tanh范围拓展到[-1,1]</p>
+</li>
+<li><p>所有模型预训练都是使用mini-batch SGD，mini-batch 是128。</p>
+</li>
+<li><p>所有权重初始化是，均值为0，方差为0.02</p>
+</li>
+<li><p>LeakyRelu：the slope of the leak was set to 0.2 in all models</p>
+</li>
+<li><p>之前的GAN使用动量来加速训练，此文使用带超参数的Adam 优化器</p>
+</li>
+<li><p>学习率为 0.0002</p>
+</li>
+<li><p>动量项 $\beta _1 =0.5$ 更稳定（原始的是0.9）</p>
+<p><img src="/images/blog/gan1.png" alt="网络细节"></p>
+<p>一个100维的正态分布Z被投影到一个小的空间范围，许多特征maps的卷积表征。一系列的四fractionally-strided卷积（有些论文误称为反卷积），然后将这个高度表征表示为64x64像素的图像。注意：没有使用全连接层或池化层。</p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2016-12-27-gan-paper/" data-id="ck4ifp1m200292wje7vxj1684" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2017-01-13-RCNN-series/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          RCNN,Fast RCNN,Faster RCNN 总结
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2016-12-22-theano-deeplearning/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">theano 深度学习数据准备</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

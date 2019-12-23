@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Java基础笔记-Java内存区域 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="关于Java JVM的一些学习笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java基础笔记-Java内存区域">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2014-05-11-javafoundamention1/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="关于Java JVM的一些学习笔记">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/java-jvm-store-model.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/java-jvm-store-model2.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.254Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.192Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/java-jvm-store-model.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2014-05-11-javafoundamention1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2014-05-11-javafoundamention1/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.254Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java基础笔记-Java内存区域
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一-运行时的数据区组成"><a href="#一-运行时的数据区组成" class="headerlink" title="一 运行时的数据区组成"></a>一 运行时的数据区组成</h2><p><img src="/images/blog/java-jvm-store-model.png" alt="图示1">   </p>
+<ol>
+<li><p>程序计数器<br>当前线程执行的字节码的行号指示器。自己吗解释器通过改变程序计数器(PC)的值来选取下一条需要执行的字节码指令。分支、循环、跳转、线程回复等基础功能都依赖于它。<br>例如：Java多线程机制。线程轮流切换，分配CPU执行时间，任一时刻，一个CPU只会执行一条线程指令，每个线程都需要一个独立PC，以保证线程切换后能正确恢复。      </p>
+</li>
+<li><p><strong>虚拟机栈</strong>四点说明:</p>
+<ol>
+<li>生命周期随着线程存亡</li>
+<li>Java方法执行的内存模型：每个方法在执行的同时会创建一个线帧，用于存储局部变量表、操作数栈、动态链接、方法出口等信息。</li>
+<li>每个方法从调用直至执行完成的过程，就对应着一个线帧在虚拟机栈中从入栈到出栈的过程。</li>
+<li>能发生的两类异常:<ul>
+<li>I：线程的请求深度大于虚拟机所允许的深度，会抛出StackOverflowError。</li>
+<li>II：虚拟机栈可动态扩展时无法申请到足够的内存，就会抛出OutOfMemoryError。</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>本地方法栈<br>作用与虚拟机相同，不同的是虚拟机栈为虚拟机执行Java方法（即字节码）服务，而本地方法栈为虚拟机执行本地方法（Native）服务。    </p>
+</li>
+<li><p>Java堆<br>Java Heap是Java虚拟机所管理的内存中最大的一块，是所有线程共享的一块内存区域。在虚拟机启动时创建，此区域的唯一目的就是存放对象实例，几乎所有的对象实例都在这里分配内存。<br>说明：</p>
+<ul>
+<li>是垃圾收集器管理的主要目标(GC Garbage Collected).</li>
+<li>可以处于物理上不连续的内存空间中，只要逻辑上连续即可。</li>
+</ul>
+</li>
+</ol>
+<p>5.方法区<br>   与堆一样，是所有线程共享的内存区域。它用于存储已被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等数据。<br>  运行时常量池(Runtime Constannt Pool)：是方法区的一部分。Class文件中除了有类的版本、方法、字段、接口等描述信息外，还有一项是常量池，用于存放编译期间生成的各种字面两和符号引用，这部分内容将在类加载后进入方法区的运行时常量池中存放。<br><br>&nbsp;&nbsp;&nbsp;&nbsp;运行时常量池相对于class文件常量池的另外一个特征是动态性，Java语言并不要求常量一定是编译器才能产生。运行期间可将新的常量放入池中，比如String的intern()方法就是这种特性的直接应用。</p>
+<ol start="6">
+<li>直接内存<br>非虚拟机运行时数据区的一部分，但频繁使用<br>来源：JDK 1.4之后引入NIO类，引入一种基于通道（Channel）与缓冲区（Buffer）的I/O方式。它可以使用Native函数库直接分配堆外内存，然后通过一个存储在Java堆中的DirectByteBuffer对象作为这块内存的引用进行操作。由于避免在Java堆和Native堆中来回复制数据，在某些场合可显著提高性能。</li>
+</ol>
+<h2 id="二-Java内存模型与线程"><a href="#二-Java内存模型与线程" class="headerlink" title="二 Java内存模型与线程"></a>二 Java内存模型与线程</h2><ol>
+<li><strong>主要目标</strong><br>定义程序各个变量的访问规则，即在虚拟机中将变量存储到内存和从内存中取出变量的底层细节。注意：</li>
+</ol>
+<ul>
+<li>此处的主内存、工作内存与上面的Java堆、栈、方法区等不是同一层次的划分，两者没有关系</li>
+</ul>
+<p>2.内存模型与线程的对应关系如下图：<br><img src="/images/blog/java-jvm-store-model2.png" alt="图示2">  </p>
+<ol start="3">
+<li>说明<ul>
+<li>Java内存模型规定所有变量都存储在主内存中，此处主内存仅是虚拟机内存的一部分.</li>
+<li>每个线程还有自己的工作内存（作用类似于处理器告诉缓冲），线程的工作内存保存了被该线程使用到的变量的主内存副本拷贝，线程对变量的所有操作都必须在工作内存中进行，而不能直接读写主内存中的变量。</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2014-05-11-javafoundamention1/" data-id="ck4ifp1la000d2wjecwz1apuj" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2014-05-15-javafoundamention-newObjectAndRubCollection/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Java对象创建过程与垃圾回收机制
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2013-05-24-datamining-classfy-main/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">数据挖掘方法之分类</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>大数据：集群优化 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="大数据类总结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大数据：集群优化">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2016-03-09-bigdata-cluster-opt/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="大数据类总结">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-12-23T10:45:59.283Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.195Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2016-03-09-bigdata-cluster-opt" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2016-03-09-bigdata-cluster-opt/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.283Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      大数据：集群优化
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="0-集群优化"><a href="#0-集群优化" class="headerlink" title="0 集群优化"></a>0 集群优化</h1><p>  一个小集群:1个master,10个datanode。<br>  最开始使用pig脚本分析作业，后面作业运行时观察发现，pig脚本执行的小作业太多导致任务调度频繁，集群效率低。<br>  小作业太多的影响:    </p>
+<ol>
+<li>频繁新建和关闭task，频繁分配container会消耗资源。</li>
+<li>一个oozie action先会启动一个oozie laucher作业消耗一个container，然后再启动实际的job，启动的job首先会用个container启动application master，然后在启动计算的task<br>现在同时最多会有29个job，至少会有50个container不是在计算。</li>
+</ol>
+<h1 id="1-代码优化"><a href="#1-代码优化" class="headerlink" title="1 代码优化"></a>1 代码优化</h1><ol>
+<li><p>增加5分钟基础作业时间粒度，5分钟-&gt;15分钟，减少Job数</p>
+</li>
+<li><p>合并15分钟粒度作业，Pig-&gt;MR，grouping comparator，减少基础数据重复读取次数，减少Job数</p>
+</li>
+<li><p>合并5分钟基础作业，一个作业处理三种话单，去除冗余字段（各粒度时间），减少Job数，减少数据量</p>
+</li>
+</ol>
+<h1 id="2-集群参数配置"><a href="#2-集群参数配置" class="headerlink" title="2 集群参数配置"></a>2 集群参数配置</h1><h2 id="2-1-HDFS"><a href="#2-1-HDFS" class="headerlink" title="2.1 HDFS"></a>2.1 HDFS</h2><ul>
+<li><strong>HDFS块大小</strong>:从默认的128MB调整为256MB，更大的块大小(block)意味着更少的job，由于当前作业计算并不复杂，可以使用更大块。</li>
+<li><strong>复制因子</strong>:默认是3，现在修改为2。减少数据存储量，可以减小话单上传的时间消耗</li>
+<li><strong>DataNode处理程序计数</strong>:参数是<strong><em>dfs.datanode.handler.count</em></strong> 默认值是3，调整为30。datanode上用于处理RPC的线程数。默认为3，较大集群，可适当调大些，比如8。需要注意的是，每添加一个线程，需要的内存增加。</li>
+<li><strong>NameNode处理程序计数</strong>:参数是<strong><em>dfs.namenode.handler.count</em></strong> 默认是30，建议值是47，现在调整为60.namenode或者jobtracker中用于处理RPC的线程数，默认是10，较大集群，可调大些，比如64。</li>
+</ul>
+<p>   <strong>NameNode服务处理程序计数</strong>:参数是 <strong><em>dfs.namenode.service.handler.count</em></strong>，默认值是30，建议值是47，现在调整为60。NameNode 用于服务调用的服务器线程数量。</p>
+<ul>
+<li><strong>最大传输线程数</strong>:参数是一起配置的为:<strong><em>dfs.datanode.max.xcievers, dfs.datanode.max.transfer.threads</em></strong>对于datanode来说，就如同linux上的文件句柄的限制，当datanode 上面的连接数操作配置中的设置时，datanode就会拒绝连接。<br>一般都会将此参数调的很大，40000+左右。</li>
+</ul>
+<h2 id="2-2-YARN"><a href="#2-2-YARN" class="headerlink" title="2.2 YARN"></a>2.2 YARN</h2><ul>
+<li><strong>每个作业的 Reduce 任务的默认数量</strong>:参数为<strong><em>mapreduce.job.reduces</em></strong>默认值为1，现在调整为30。通过观察当前运行的job实例，观察其reduce执行时间，发现时间消耗不足1秒，故不必启用过多reduce。</li>
+<li><strong>启用 Ubertask 优化</strong>:Uber模式是Hadoop2.0针对MR小作业的优化机制。通过<strong><em>mapreduce.job.ubertask.enable</em></strong>来设置是否开启小作业优化，默认为false。<br>如果用Job足够小，则串行在的一个JVM完成该JOB，即MRAppMaster进程中，这样比为每一个任务分配Container性能更好。关于Ubertask的详细可以参考<a href="http://qianshangding.iteye.com/blog/2259421" target="_blank" rel="noopener">Ubertask模式</a>。</li>
+<li><strong>Map任务内存</strong>：参数为<strong><em>mapreduce.map.memory.mb</em></strong>，保持默认值1GB。</li>
+<li><strong>Reduce任务内存</strong>:参数为<strong><em>mapreduce.reduce.memory.mb</em></strong>，保持默认值1GB。</li>
+<li><strong>Map任务CPU虚拟内核</strong>：参数为<strong><em>mapreduce.map.cpu.vcores</em></strong>，为作业的每个 Map 任务分配的虚拟 CPU 内核数。默认每个map一个CPU，用户提交应用程序时，可以指定每个任务需要的虚拟CPU个数。在MRAppMaster中，每个Map Task和Reduce Task默认情况下需要的虚拟CPU个数为1。    </li>
+<li><strong>Reduce任务CPU虚拟内核</strong>:参数为<strong><em>mapreduce.reduce.cpu.vcores</em></strong>，说明 与Map任务CPU虚拟内核一致。</li>
+<li><strong>Map 任务最大堆栈</strong>:参数是<strong><em>mapreduce.map.java.opts.max.heap</em></strong>，Map 进程的最大 Java 堆栈（字节）。该参数与<strong><em>mapreduce.reduce.java.opts.max.heap</em></strong>一样，都是ClouderManager独有的，标准的hadoop参数是<strong><em>mapreduce.map.java.opts</em></strong>和<strong><em>mapreduce.reduce.java.opts</em></strong></li>
+<li><strong>Reduce 任务最大堆栈</strong>: 同Map 任务最大堆栈。</li>
+<li><strong>容器内存</strong>:参数是<strong><em>yarn.nodemanager.resource.memory-mb</em></strong>。表示该节点上YARN可使用的物理内存总量，默认是8192（MB），注意，如果你的节点内存资源不够8GB，则需要调减小这个值，而YARN不会智能的探测节点的物理内存总量。当前配置为24GB。</li>
+<li><strong>容器虚拟 CPU 内核</strong>:参数是<strong><em>yarn.nodemanager.resource.cpu-vcores</em></strong>可以为容器分配的虚拟CPU内核的数量。集群中每台服务器只有24个虚核，所以容器内存配24G内存就行，现在作业都小map、reduce都用不了太多内存，默认是1GB。多了也没用，因为每个container至少要1个核。</li>
+</ul>
+<h2 id="2-3-Oozie"><a href="#2-3-Oozie" class="headerlink" title="2.3 Oozie"></a>2.3 Oozie</h2><p>  <strong>Oozie Server 的 Java 堆栈大小</strong><br>    默认值为1GB，现在修改为4GB。</p>
+<h2 id="2-4-HBase"><a href="#2-4-HBase" class="headerlink" title="2.4 HBase"></a>2.4 HBase</h2><ul>
+<li><p><strong>HBaseMaster的Java堆栈大小</strong>:暂无调整。</p>
+</li>
+<li><p><strong>HBase Region Server处理程序计数</strong>:参数为<strong><em>hbase.regionserver.handler.count</em></strong>,默认值为30，调节至150.是RegionServer的请求处理IO线程数。较少的IO线程，适用于处理单次请求内存消耗较高的Big PUT场景（大容量单次PUT或设置了较大cache的scan，均属于Big PUT）或ReigonServer的内存比较紧张的场景。<br>较多的IO线程，适用于单次请求内存消耗低，TPS要求非常高的场景。设置该值的时候，以监控内存为主要参考。<br>这里需要注意的是如果server的region数量很少，大量的请求都落在一个region上，因快速充满memstore触发flush导致的读写锁会影响全局TPS，不是IO线程数越高越好。<br>压测时，开启Enabling RPC-level logging，可以同时监控每次请求的内存消耗和GC的状况，最后通过多次压测结果来合理调节IO线程数。</p>
+</li>
+<li><p><strong>HBase RegionServer的Java堆栈大小(字节）</strong>:HBase regionserver堆栈能多大就多大，计算方式是RegionServer java堆大小= 服务器总内存-已分配内存 （注意：此配置为优化索引入库）</p>
+</li>
+</ul>
+<h2 id="2-5-服务器参数"><a href="#2-5-服务器参数" class="headerlink" title="2.5 服务器参数"></a>2.5 服务器参数</h2><ul>
+<li>服务器时钟同步</li>
+<li>修改swappiness值<br> 在所有服务器上，使用root用户执行     <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># sysctl vm.swappiness&#x3D;0</span><br><span class="line"># echo &#39;vm.swappiness&#x3D;0&#39;&gt;&gt; &#x2F;etc&#x2F;sysctl.conf</span><br><span class="line"># sysctl -p</span><br></pre></td></tr></table></figure></li>
+<li>禁用透明巨页     <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># echo never &gt;&#x2F;sys&#x2F;kernel&#x2F;mm&#x2F;redhat_transparent_hugepage&#x2F;enabled</span><br></pre></td></tr></table></figure>
+ 关于透明巨页，参考<a href="http://blog.chinaunix.net/uid-26489617-id-3205109.html" target="_blank" rel="noopener">透明巨页</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2016-03-09-bigdata-cluster-opt/" data-id="ck4ifp1lf000n2wje6zdtho8q" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2016-03-10-kafkaquestion/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          大数据：kafka常见问题
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2016-03-05-me/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">个人简历</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

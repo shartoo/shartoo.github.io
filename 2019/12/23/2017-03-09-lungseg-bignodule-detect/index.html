@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>肺部CT大结节检测 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="图像处理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="肺部CT大结节检测">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2017-03-09-lungseg-bignodule-detect/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="图像处理">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/lung_bignodule1.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/lung_bignodule2.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/lung_bignodule3.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/lung_bignodule4.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.479Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.212Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/lung_bignodule1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2017-03-09-lungseg-bignodule-detect" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2017-03-09-lungseg-bignodule-detect/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.479Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      肺部CT大结节检测
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="0-摘要"><a href="#0-摘要" class="headerlink" title="0 摘要"></a>0 摘要</h2><p><strong>目的</strong>：当前使用CAD系统检测对肺结节检测时，只在较小结节上有很好性能，通常不能检测更少的更大的结节的，这些可能是癌性。我们专门为大于10mm的solid结节检测设计了算法。</p>
+<p><strong>方法</strong>：我们提出的检测流程，初始时由三维肺分割算法，通过形态学操作包含入黏着在肺壁上的大结节。额外的处理是mask out肺空间的外部结构，以确保肺和实质结节有着相似的轮廓。接着，通过多阶段的阈值和形态学操作获得结节候选，以检测大结节和小结节。对每个候选分割之后，计算出一个基于强度、形状、blobness、和空间结构的24个特征的集合。使用一个径向偏置SVM分类器对结节候选分类，在完全公开的肺部图像数据集上使用10折交叉验证评估性能。</p>
+<p><strong>结果</strong>：本文提出的CAD系统弄获得了98.3%(234/238)的灵敏度，94.1%(224/238)大结节的准确率，平均4.0和1.0 FPs/scan。</p>
+<h2 id="一-数据集"><a href="#一-数据集" class="headerlink" title="一  数据集"></a>一  数据集</h2><p>本论文中，使用的是LIDC-IDRI数据集。数据集包含了来自7个机构的1018个病例异构数据。在第一轮盲读阶段，每个可疑病变被标注同时被分类为 $non-nodule,nodeul&lt;3mm,nodule\ge 3mm$ 。对于 $nodules\ge 3mm$ 的被充分表征为3D分割，会提供其半径和形态学特征描述。</p>
+<p>我们使用区域厚度小于等于2.5mm的，比这更厚的区域数据被丢弃，因为我们将这些数据定义为质量不足。尽管slice厚度为3mm的大结节依然可以被检测到，最近的临床指南推荐使用thin-slice,因而我们也使用thin-slice CT scan。除此之外，包含不连通的slice空间的也被丢弃，最后获得了888个适于分析的CT scan。</p>
+<p>下表是数据概况</p>
+<table>
+<thead>
+<tr>
+<th>Aggrement levels</th>
+<th>Nodules $\ge 3mm$</th>
+<th>Nodules $\ge 10mm$</th>
+<th>solid nodules $\ge 10mm$</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>At least 1</td>
+<td>2290</td>
+<td>393</td>
+<td>322</td>
+</tr>
+<tr>
+<td>At least 2</td>
+<td>1602</td>
+<td>325</td>
+<td>277</td>
+</tr>
+<tr>
+<td>At least 3</td>
+<td>1186</td>
+<td>269</td>
+<td>238</td>
+</tr>
+<tr>
+<td>At least 4</td>
+<td>777</td>
+<td>199</td>
+<td>172</td>
+</tr>
+</tbody></table>
+<p>从888个scan中制作了36378个标注。由于结节可能被多个读者标注，不同的读者的标注在近似位置（小于标注的半径之和）的会被合并。只对 $nodule\gt 3mm$的结节标注做合并，因为这个作为引用标准。其半径、容积、和坐标都平均化。我们仅仅选择被分类为潜在恶性结节的作为大结节的引用标准。根据Dutch-Belgian NELSON肺癌实验，潜在恶性结节指的是容积大于$500mm^3$的，其对应的半径为近似 10mm。然后，选择被大多数读者(4个中的3个)接受的结节，获得了269个结节。并且设计CAD系统只关注 solid 结节的。由读者打分的各种各样的形态学特征用来定义结节类型。本文中，只有当大多数读者给出的上下文特征分数高于3(1=ground-glass/nonsolid,3=part-solid,5=solid)结节被认为是solid。最终获得了238个solid结节，这形成了分析所用的最终结节集合。</p>
+<p>评估过程中，CAD标记的位置在标注半径范围内的可被认为是命中了。如果CAD标记命中了引用集中的结节，则被分类为正样本(True  Positive)。不在病变引用集上的标记(即$nodule\ge 10mm$只被一两个放射医师接受，$nodules\gt 10mm$,subsolid nodules,non-nodules)被认为是不相关的，且没有被记入为假阳性(False Positive).</p>
+<h2 id="三-方法"><a href="#三-方法" class="headerlink" title="三 方法"></a>三 方法</h2><p>算法的主要流程如下，算法的开始时肺分割。肺分割被细化以将那些与肺壁相连的结节包含进来。</p>
+<p><img src="/images/blog/lung_bignodule1.png" alt=""></p>
+<p> 之后的后续处理步骤是移除肺外部的背景并重新将图像抽样为各向同性分辨率。候选检测阶段确认大结节候选的位置并为每个候选构建segmentation。使用特征抽取来获得候选的判别特征，这在分类阶段将被用来将候选分为结节和非结节。</p>
+<h3 id="3-1-肺分割"><a href="#3-1-肺分割" class="headerlink" title="3.1 肺分割"></a>3.1 肺分割</h3><p>CAD系统的第一步的肺分割用来决定肺的ROI(region of interest)。主流的算法依赖于一种基于阈值的方法。由于相似的强度特征，粘附在肺壁的结节通常无法包含入肺分割内。</p>
+<p>我们使用Rikxoort提出的算法作为初始的肺分割segmentation。方法由这些组成：大气道抽取、肺分割、左右肺分割和segmentation 平滑。当肺分割算法失败时，我们通过手动衡量输入参数，比如气管的seed point来更正肺分割。</p>
+<p>为了在肺分割segmentation包含入大的肺结节，使用了额外的细化的肺分割segmentation。肺结节被剔除的区域通常看起来像在肺segmentation的表面上有个洞。我们实验了两种方法<strong>(1)</strong>使用形态学逻辑滚球rolling-ball操作<strong>(2)</strong>在rolling-ball操作之后做扩张操作。所有的形态学操作使用的是球形结构元素。结构元素的半径$d_{struct}$设置为一个x维度在输入scan中的比率。我们评估了$d_{struct}=\lbrace 2%,3%,4%,6%,8%\rbrace $ 的rolling-ball操作和$d_{struct}=\lbrace 1%,2%\rbrace $ 的扩张操作。</p>
+<h3 id="3-2-预处理"><a href="#3-2-预处理" class="headerlink" title="3.2 预处理"></a>3.2 预处理</h3><p>肺segmentation用作mask，segmentation之外的区域被设置为肺组织的平均强度(-900HU)。这可以避免肺病变看起来与其内部的结节非常不同，这就要求有不同的或者额外的特征来准确检测这些结节。肺segmentation使用高斯过滤器重新取样为1.0mm的    各向同性分辨率(isotropic resolution)。</p>
+<h3 id="3-3-候选检测"><a href="#3-3-候选检测" class="headerlink" title="3.3 候选检测"></a>3.3 候选检测</h3><p>候选检测步骤旨在局部化所有肺内部的结节。这个任务之所以艰难，是因为结节在形态上、尺寸上和强度上变化范围太广。本文中，候选检测由三部分组成:初始候选检测，连通组件分析，结节检测细化。</p>
+<h4 id="3-3-1-初始候选检测"><a href="#3-3-1-初始候选检测" class="headerlink" title="3.3.1 初始候选检测"></a>3.3.1 初始候选检测</h4><p>与其他相似度密度较高的结构(主要是血管)相比，大结节通常有着十分不同的形态学特征，一个简单的阈值和形态学开运算就足够充分检测大部分大结节。然后，由于它们的尺寸，与其他非密度结构（大部分是胸膜壁和脉管系统）相比大结节倾向于内部相连。这使得检测器的参数选取变得复杂，尤其是形态学开运算的结构元素的尺寸。相连结构的尺寸可能变化范围广。举一个例子，一个大的结构元素需要移除结节上的大结构的黏着(attachment of large structure)，但是会导致小结节无法检测。</p>
+<p>为检测不同尺寸的候选，使用多阶段阈值和形态开运算。强度阈值为-300HU来区分solid nodule。每个阶段，顺序使用半径为9,7,5或者3mm的球形结构的扩张操作，并产生了中间候选mask。候选检测始于大结构半径并渐渐使用更小的半径。为防止先前候选与新候选合并，在处理下一阶段之前先前候选使用了一个3mm的保障边界。在阶段n计算候选检测，新的中间mask与阶段n-1的输出mask合并，使用逻辑与操作。下图示意了候选检测的输出。每一阶段使用不同的阈值和形态扩张操作，mask的结果与上一阶段的mask合并。第一行是检测大结节，第二行是小一点的结节检测过程。</p>
+<p><img src="/images/blog/lung_bignodule2.png" alt=""></p>
+<h4 id="3-3-2-连通组件分析"><a href="#3-3-2-连通组件分析" class="headerlink" title="3.3.2 连通组件分析"></a>3.3.2 连通组件分析</h4><p>使用初始候选检测之后，所有相连体素使用连通组件分析聚合为候选。为了移除cluster size超出目标范围的，我们丢弃了cluster容积小于 $268mm^3$的和大于 $33524mm^3$的，其分别对应的完美球形半径为8mm和40mm。</p>
+<h4 id="3-3-3-结节segmentation"><a href="#3-3-3-结节segmentation" class="headerlink" title="3.3.3 结节segmentation"></a>3.3.3 结节segmentation</h4><p>初始候选指示了候选cluster的坐标。作为候选的一个准确的容积和形态学评估，量化结节特性尤为重要，我们使用了由Kuhnigk提出的robust结节分割方法。给定cluster上的立方块输入容积和seed point，算法进行区域增长并使用有效的形态学开运算来从血脉组织和胸腔壁分离结节。对每个候选cluster，从cluster的主轴(major axis)上获得seed point。VOI(volume of interest)被定义为初始边长为60mm的在cluster附近的立方块。立方块的尺寸是自动适应的，必要的话，推荐更大的结节。</p>
+<p>为进一步移除大于或小于预定目标的候选，我们使用3.3.2节中相同的阈值。为避免结节中出现重复结节，与任何已经被接受的segmentation位置小于10mm的都被丢弃。结节segmentation的结果集合将进一步用作特征抽取和分类。</p>
+<h3 id="3-4-特征抽取"><a href="#3-4-特征抽取" class="headerlink" title="3.4 特征抽取"></a>3.4 特征抽取</h3><p>特征抽取用来获得可以区分结节和非结节的特征。定义了四个不同集合的特征：强度、cluster、blobness、和上下文特征。下表展示了所有特征的概览</p>
+<p><strong>强度特征</strong></p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>强度特征</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1-3</td>
+<td>Density inside candidate segmentation (mean,stdev, entropy)</td>
+<td></td>
+</tr>
+<tr>
+<td>4-6</td>
+<td>Density inside bounding box (mean, stdev, entropy)</td>
+<td></td>
+</tr>
+<tr>
+<td>7-9</td>
+<td>Density around candidate segmentation (mean,stdev, entropy)</td>
+<td>within 8mm outside segmentation</td>
+</tr>
+</tbody></table>
+<p><strong>cluster feature</strong></p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>cluster feature</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>10</td>
+<td>Volume of candidate segmentation $V_{cand}$</td>
+<td></td>
+</tr>
+<tr>
+<td>11</td>
+<td>Diameter of candidate segmentation $D_{cand}$</td>
+<td>The longest diameter on axial plane</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Sphericity: ratio of candidate’s volume inside sphere S to the volume of sphere S</td>
+<td>Sphere S is centered at the candidate location with diameter $D_{cand}$</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Compactness1: $V_{cand}/(dim_x ·dim_y ·dim_z)$</td>
+<td>$dim_i$ is the width of bounding box indimension i</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Compactness2: $V_{cand}/((max(dim_x, dim_y, dim_z))^3$)</td>
+<td></td>
+</tr>
+</tbody></table>
+<p><strong>Blobness feature</strong></p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Blobness feature</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>15</td>
+<td>Maximum flter response</td>
+<td>Features are computed using the flter</td>
+</tr>
+<tr>
+<td>16-17</td>
+<td>Filter response inside candidate segmentation(mean, stdev)</td>
+<td>response of Li blobness flter(scale: 2, 5, and 8 mm)</td>
+</tr>
+<tr>
+<td>18-19</td>
+<td>Filter response inside bounding box (mean, stdev)</td>
+<td></td>
+</tr>
+</tbody></table>
+<p><strong>Context feature</strong></p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Context feature</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>20</td>
+<td>Distance to pleural wall</td>
+</tr>
+<tr>
+<td>21-23</td>
+<td>Distance to carina in X, Y, and Z</td>
+</tr>
+<tr>
+<td>24</td>
+<td>Distance to top of the lung in Z</td>
+</tr>
+</tbody></table>
+<h4 id="3-4-1-强度特征"><a href="#3-4-1-强度特征" class="headerlink" title="3.4.1 强度特征"></a>3.4.1 强度特征</h4><p>强度特征用来量化候选segmentation内外区域的强度特征。特征集直接计算自各向同性（isotropically）重新取样的CT scan。使用了三个不同的区域<strong>(1)</strong>候选segmentation内的区域<strong>(2)</strong>候选segmentation的bounding box内的区域<strong>(3)</strong>在候选segmentation周围距离小于8mm的区域。每个区域，计算均值、标准差和体素强度熵。</p>
+<h4 id="3-4-2-cluster特征"><a href="#3-4-2-cluster特征" class="headerlink" title="3.4.2 cluster特征"></a>3.4.2 cluster特征</h4><p>cluster 特征从候选segmentation中计算得来。这些特征集由半径、容积、球形性、紧凑性1(compactness1)和紧凑性2(compactness2)。</p>
+<p>半径是通过segmentation的轴状位的部分最长的轴得到。容积通过计算cluster size的$mm^3$。为计算球形性，与候选有着相同容积的球S在候选质心处构建。球形性定义为候选容积在球S内与球形S的容积的比例。紧凑性为候选容积与候选segmentation周围的bounding box容积的比例。使用了两个不同的boundiing box。紧凑性1使用的bounding box为在全部x,y,z维度包容候选segmentation的最小box。紧凑性2使用的bounding box定义为立方块，其尺寸为候选segmentation的最大维度的大小。</p>
+<h4 id="3-4-3-blobness特征"><a href="#3-4-3-blobness特征" class="headerlink" title="3.4.3 blobness特征"></a>3.4.3 blobness特征</h4><p>blobness特征广泛用于增强结节结构和提高结节检测的灵敏度。我们使用的是由<strong>Li,Sone 和 Doi</strong>开发出来的结节增强过滤器，并偶从过滤图中抽取blobness特征。</p>
+<p>算法通过对输入图像进行高斯kernel的二阶导数做卷积来计算Hessian矩阵。给定Hessian矩阵，三个特征值，定义为 $\lambda_1=f_{xx},\lambda_2=f_{y},\lambda_3 = f_{xy}$，其中 $\lambda _1&gt;\lambda _2&gt;\lambda _3$。增强过滤器的最终输出是通过计算 $Z(\lambda _1,\lambda _2,\lambda_3)=|\lambda _3|^3/|\lambda _1|\quad if\quad \lambda _1&lt;0,\lambda _2&lt;0,\lambda _3&lt;0$；否则为0。为了获得范围分布广泛的结节尺寸，使用来了多尺寸增强过滤器。我们对高斯kernel定义了三种(2mm,5mm,8mm)，这是基于要增强的目标结节的经验值。结果会有三种不同的输出图像，是一种从所有图像中选择最大值的结合。</p>
+<p>blobness特征的抽取通过衡量<strong>(1)</strong>过滤器的最大输出<strong>(2)</strong>结节segmentation内部的输出的均值和标准差<strong>(3)</strong>bounding box内部输出的均值和标准差。</p>
+<h4 id="3-4-4-上下文特征"><a href="#3-4-4-上下文特征" class="headerlink" title="3.4.4 上下文特征"></a>3.4.4 上下文特征</h4><p>上下文特征描述了候选与其他肺结构如胸膜壁，隆突和肺上部的相对位置。根据它们的位置，肺结节和假阳性候选可能有着不同的形态学特征和恶性概率。结节粘附于更加刚性的结构上时，结节更可能是细长的。<strong>Horeweg</strong>的研究表明，大部分病变结节位于costal-hilar半径的外部的三分之一的上叶（at outer one-third of the costal-hilar diameter and at upper lobes ）。意味着这些区域应该引起注意。到carina的距离和肺的顶部区域需要给予更多的权重。</p>
+<p>为计算相对于胸膜壁的距离，我们做了在肺分割内做了距离变换并抽取候选质心中心的值。carina点的检测方法是，找到轴向(axial)区域中气管被一分为二的地方，在分叉处周围选取气管区域，并抽取其质心。从carina到坐标轴的相对X，Y，Z距离作为特征。从候选到肺顶部的相对距离的计算方法为，计算候选的Z轴世界坐标到肺分割的top slice的Z轴世界坐标的距离。</p>
+<h4 id="3-4-5-分类器"><a href="#3-4-5-分类器" class="headerlink" title="3.4.5 分类器"></a>3.4.5 分类器</h4><p>对特征向量的分类器，使用了径向偏置核函数SVM-RBF。其中的C和伽马参数在训练集上的网格搜索的10折交叉验证得到的。C定义了正则化参数，伽马定义了RBF核函数的宽度。搜索区间为 $C={2^1,2^2,2^3,…2^12}$，并且$\Gamma ={2^{-12},2^{-11},…2^{-5}}$。本文使用的是LIBSVM实现。分类之前先对所有特征进行正则化，均值为0，单位标准差。</p>
+<h2 id="四-结果"><a href="#四-结果" class="headerlink" title="四 结果"></a>四 结果</h2><p>评估CAD系统检测大结节的性能。在病人级别的10折交叉验证，分类器在嵌套的交叉验证中优化得到。</p>
+<h3 id="4-1-肺分割"><a href="#4-1-肺分割" class="headerlink" title="4.1 肺分割"></a>4.1 肺分割</h3><p>888个scan中有12个分割失败，因为气管处的seed point没有被正确检测到。这可以通过手动提供seed point来修正。下表显示了在CAD系统上使用细化的肺分割之后的影响。肺结节的位置坐标如果在segmentation内部，则其分类为包含在肺segmentation内。算法的评估方法为，被检测到的结节的数量和候选的数量。</p>
+<p><strong>Without additional lung segmentation refinement</strong></p>
+<table>
+<thead>
+<tr>
+<th>Rolling ball(kernel size (% of image))</th>
+<th>Dilation(kernel size (% of image))</th>
+<th>Inside segmentation (%)</th>
+<th>After candidate detection(%)</th>
+<th>Candidates/Scan</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-</td>
+<td>-</td>
+<td>84.9</td>
+<td>87.8</td>
+<td>39.5</td>
+</tr>
+</tbody></table>
+<p><strong>With additonal lung segmentation refinement</strong></p>
+<table>
+<thead>
+<tr>
+<th>Rolling ball(kernel size (% of image))</th>
+<th>Dilation(kernel size (% of image))</th>
+<th>Inside segmentation (%)</th>
+<th>After candidate detection(%)</th>
+<th>Candidates/Scan</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2</td>
+<td>-</td>
+<td>84.9</td>
+<td>87.8</td>
+<td>39.5</td>
+</tr>
+<tr>
+<td>4</td>
+<td>-</td>
+<td>97.1</td>
+<td>98.3</td>
+<td>47.4</td>
+</tr>
+<tr>
+<td>6</td>
+<td>-</td>
+<td>98.3</td>
+<td>99.2</td>
+<td>56.6</td>
+</tr>
+<tr>
+<td>8</td>
+<td>-</td>
+<td>99.6</td>
+<td>98.7</td>
+<td>63.2</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1</td>
+<td>88.7</td>
+<td>95.4</td>
+<td>120.7</td>
+</tr>
+<tr>
+<td>4</td>
+<td>1</td>
+<td>99.6</td>
+<td>97.9</td>
+<td>133.1</td>
+</tr>
+<tr>
+<td>6</td>
+<td>1</td>
+<td>100.0</td>
+<td>96.6</td>
+<td>145.5</td>
+</tr>
+</tbody></table>
+<p>上表显示没有使用额外的细化算法时，肺分割只有84.9%的大结节被包含入。使用额外的细化算法时可以减少被排除的结节数直至所有的结节都被包含入内。但是也可以看到，细化算法会增大肺segmentation，它可能会引入不相关区域(比如肺壁,hilar)，这会恶化候选检测的性能。因而，我们同时评估了候选检测的灵敏度。数据集中至少3个放射医师标注的，包含全部 $nodules\ge 10mm$的287个scan的数据集。实验表明，初始肺分割之后，使用 $d_{struct}=6%$ rolling-ball操作和 $d_{struct}=0%$的扩张操作，可以使得候选检测获得最高的灵敏度和差不多数目的 candidates/scan。此配置应用于后续的实验中。</p>
+<h3 id="4-2-候选检测"><a href="#4-2-候选检测" class="headerlink" title="4.2 候选检测"></a>4.2 候选检测</h3><p>888个 CTscan中，候选检测平均生成48.3 candidates/scan，包括了99.2%（236/238）的全部大结节。此集合用作进一步的分类 任务。不同准入水平的候选检测性能如下表。结节的候选检测的灵敏度随着放射医师的准入水平的上升而增加。</p>
+<table>
+<thead>
+<tr>
+<th>Aggrement levels</th>
+<th>Solid nodules &gt;10mm</th>
+<th>Detected nodules (%)</th>
+<th>Candidates/scan</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>At least 1</td>
+<td>322</td>
+<td>97.2</td>
+<td>48.3</td>
+</tr>
+<tr>
+<td>At least 2</td>
+<td>277</td>
+<td>98.9</td>
+<td>48.3</td>
+</tr>
+<tr>
+<td>At least 3</td>
+<td>238</td>
+<td>99.2</td>
+<td>48.3</td>
+</tr>
+<tr>
+<td>At least 4</td>
+<td>182</td>
+<td>100.0</td>
+<td>48.3</td>
+</tr>
+</tbody></table>
+<h3 id="4-3-特征抽取和分类"><a href="#4-3-特征抽取和分类" class="headerlink" title="4.3 特征抽取和分类"></a>4.3 特征抽取和分类</h3><p>CAD系统在包含大结节数据集上的不同准入水平的FROC曲线如下图左图所示，右图表示的 是CAD系统包含或不包含不相关的发现(被当做false positive假阳性的)时的性能。假阳性的数目现实的是求对数之后的结果。</p>
+<p><img src="/images/blog/lung_bignodule3.png" alt=""></p>
+<p>为了量化比较，不同假阳性率的平均灵敏度如下表。CAD系统识别分别在 1FPs/scan和 4FPs/scan时识别了94.1%(224/238)和98.3%(234/238)的大结节。注意到分类阶段的最大灵敏度收敛到候选检测阶段的灵敏度，为99.2%(236/238)。这意味着与检测到的候选相关的，分类阶段的准确分类率在 1FP/scan和4FPs/scan分别为 94.9%和99.1%。</p>
+<table>
+<thead>
+<tr>
+<th>Agreement levels</th>
+<th>1/8</th>
+<th>1/4</th>
+<th>1/2</th>
+<th>1</th>
+<th>2</th>
+<th>4</th>
+<th>8</th>
+<th>Average</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>At least 1</td>
+<td>0.773</td>
+<td>0.804</td>
+<td>0.842</td>
+<td>0.879</td>
+<td>0.913</td>
+<td>0.950</td>
+<td>0.960</td>
+<td>0.874</td>
+</tr>
+<tr>
+<td>At least 2</td>
+<td>0.841</td>
+<td>0.866</td>
+<td>0.895</td>
+<td>0.924</td>
+<td>0.949</td>
+<td>0.978</td>
+<td>0.982</td>
+<td>0.920</td>
+</tr>
+<tr>
+<td>At least 3</td>
+<td>0.874</td>
+<td>0.895</td>
+<td>0.916</td>
+<td>0.941</td>
+<td>0.962</td>
+<td>0.983</td>
+<td>0.992</td>
+<td>0.938</td>
+</tr>
+<tr>
+<td>At least 4</td>
+<td>0.929</td>
+<td>0.940</td>
+<td>0.956</td>
+<td>0.978</td>
+<td>0.995</td>
+<td>1.000</td>
+<td>1.000</td>
+<td>0.971</td>
+</tr>
+</tbody></table>
+<h3 id="4-4-与已有的CAD系统对比"><a href="#4-4-与已有的CAD系统对比" class="headerlink" title="4.4 与已有的CAD系统对比"></a>4.4 与已有的CAD系统对比</h3><p>ISICAD系统获得了ANODE09的最高排名，用作对比。两个CAD系统的FROC曲线如下图，候选检测阶段检测到99.2%(236/238)(本文算法)和84.9%(202/238)(ISICAD)。在 1FP/scan时，63.0%(150/238)更多的大结节被本文提出的算法正确分类。不过要注意的是两个CAD系统为不同类型的结节设计的。</p>
+<p><img src="/images/blog/lung_bignodule4.png" alt=""></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2017-03-09-lungseg-bignodule-detect/" data-id="ck4ifp1m7002l2wjeb7jehweg" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2017-03-11-autoseg-bylungvolumne/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Morphological Segmentation and Partial Volume of Solid Pulmonary Lesions in Thoracic CT Scans
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2017-03-08-lungseg-localfeature/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">肺结节自动分割:使用图像局部特征【论文笔记】</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>从yolov1到yolov3 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="深度学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从yolov1到yolov3">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2019-03-12-yolo-v123/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="深度学习">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/yolov123_1.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/yolov123_2.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/yolov123_3.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/yolov123_4.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/yolov123_5.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/yolov123_6.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/yolov123_7.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/yolov123_8.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/yolov123_9.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/yolov123_10.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/yolov123_11.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/yolov123_12.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/yolov123_13.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/yolov123_14.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/yolov123_15.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/yolov123_16.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/yolov123_17.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/yolov123_18.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.717Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.229Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/yolov123_1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2019-03-12-yolo-v123" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2019-03-12-yolo-v123/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.717Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      从yolov1到yolov3
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-YOLOv1"><a href="#1-YOLOv1" class="headerlink" title="1 YOLOv1"></a>1 YOLOv1</h2><p>我们先看yolov1的检测效果</p>
+<h3 id="1-1-Grid-Cell"><a href="#1-1-Grid-Cell" class="headerlink" title="1.1 Grid Cell"></a>1.1 Grid Cell</h3><p>YOLOv1把输入图片切分成$s\times s$个grid cell，<strong>每个grid cell只预测一个物体</strong>。比如下图中，黄色grid cell会预测中心坐标点落入其中的这个<code>person</code>物体。</p>
+<p>注意这里的grid cell只是在图像上看起来是一个方格，实际是原图在经过yolo网络之后会变成$s\times s$个feature map，下图中的一个grid cell经过网络变换之后到最后的特征层变成了一个坐标点。比如原图为$448\times 448$经过yolo最后抽取得到的feature map为$7\times 7\times 30$</p>
+<p><img src="/images/blog/yolov123_1.png" alt="yolov123"></p>
+<p>每个grid cell只预测固定数目的bbox，当前示例中黄色grid cell做了两个bbox(2个蓝色框)预测来定位person这个物体的位置</p>
+<p><img src="/images/blog/yolov123_2.png" alt="yolov123"></p>
+<p>然而，一个grid cell只预测一个物体的规则限制了YOLO的预测能力。如果几个物体密集紧邻(多个物体的中心坐标可能会落在一个grid cell里面)，yolo就会遗漏一些物体。如下图，左下方有9个圣诞老人，但是yolo只能检测出来5个。</p>
+<p><img src="/images/blog/yolov123_3.png" alt="yolov123"></p>
+<p>对于每个grid cell </p>
+<ul>
+<li>预测B个bbox，并且每个bbox有一个box置信度。</li>
+<li>即便上面预测了B个box，但实际<strong>只会检测一个物体</strong>(只保留一个)</li>
+<li>预测C个条件分类概率(每个目标分类的概率)</li>
+</ul>
+<p>比如，对<strong>VOC数据集，YOLO使用了$7\times 7$(S=7)的grids，每个grid cell预测2(B=2)个bbox，以及20个分类(C=20)。</strong></p>
+<p>每个bbox有个5元组$(x,y,w,h,conf)$，分别为bbox的坐标位置和置信度。这个置信度反映的是这个bbox包含目标(物体)的概率，以及此bbox的精确度。我们会对坐标位置进行归一化，变成0-1之间的比率（这一点，在准备yolo的训练数据时得到体现）。注意，<strong>其中的x,y是相对于当前cell的偏移量</strong>。每个grid cell有20个条件分类概率，此条件分类概率是检测到的物体属于20个分类里某一分类的概率(每个grid cell为会所有的分类都有一个概率,此处20个分类，会有20个概率)。因此，yolo最终的预测矩阵为</p>
+<p>$$<br>(S,S,B\times 5+c) = (7,7,2\times 5+20)=(7,7,30)<br>$$</p>
+<p>这样会产生非常多的bbox（下图中间），但是只保留置信度高于一定阈值(0.25)的bbox作为最终预测（下图右边）。</p>
+<p><img src="/images/blog/yolov123_4.png" alt="yolov123"></p>
+<p>每个预测bbox的分类置信度计算公式如下<br>$$<br>分类置信度= box置信度 \times 条件分类概率<br>$$<br><strong>它同时在分类和定位上衡量预测的bbox的置信度</strong></p>
+<p>上面的写法很容易混淆，一个详细的定义如下：</p>
+<ul>
+<li>$bbox置信度= P_r(object)\times IOU$</li>
+<li>$条件分类概率= P_r(class_i|object)$</li>
+<li>$分类置信度= P_r(class_i)\times IOU=bbox置信度\times 条件分类概率$</li>
+</ul>
+<p>其中</p>
+<ul>
+<li>$P_r(object)$是bbox包含物体的概率</li>
+<li>$IOU$是预测bbox和真实bbox之间的IOU</li>
+<li>$P_r(class_i|object)$为给定当前物体，预测其属于分类$class_i$的概率</li>
+<li>$P_r(class_i)$是物体属于分类$class_i$的概率<h3 id="1-2-网络架构设计"><a href="#1-2-网络架构设计" class="headerlink" title="1.2 网络架构设计"></a>1.2 网络架构设计</h3></li>
+</ul>
+<p><img src="/images/blog/yolov123_5.png" alt="yolov123"></p>
+<p>网络使用了24组卷积网络+2个全连接层。一些卷积层使用$1\times 1$以减小特征图深度。最后一个卷积层输出$7\times 7\times 1024$,<strong>再接2个全连接层实现一种线性回归</strong>，最终输出$(7,7,30)$。</p>
+<h3 id="1-3-损失函数"><a href="#1-3-损失函数" class="headerlink" title="1.3 损失函数"></a>1.3 损失函数</h3><p>YOLO的每个grid cell预测多（VOC中是2个）个bbox。为了计算正阳性样本的损失，我们只要求它们之中的一个bbox对物体负责。因此，我们选取与真实标注(ground truth)有最高IOU的一个。这种策略导致bbox的的预测的特殊性，即每个预测在物体尺寸和比率上更准。</p>
+<p>YOLO使用预测bbox和真实bbox的二次方差和来作为损失函数。损失函数由以下项组成</p>
+<ul>
+<li>分类损失</li>
+<li>定位损失：预测bbox和真实bbox之间的误差</li>
+<li>置信度损失：box包含物体的置信度</li>
+</ul>
+<h3 id="1-3-1-分类损失"><a href="#1-3-1-分类损失" class="headerlink" title="1.3.1 分类损失"></a>1.3.1 分类损失</h3><p>如果检测到物体，每个grid cell的分类损失是每个分类的条件概率的平方误差和。<br>$$<br>\sum _{i=0} ^{S^2}1 _i ^{obj} \sum _{c \in classes}(p_i(c)-\hat p_i(c))^2 \<br>其中如果在grid \quad cell\quad  i中出现物体，则1 _i ^{obj}=1，否则1 _i ^{obj}=0  \<br>\hat p_i(c) 代表grid\quad  cell\quad  i中分类c的条件分类概率<br>$$</p>
+<p>所以这个误差项可以这么理解：</p>
+<ol>
+<li>首先，当前这个grid cell–&gt;一共有 $7\times 7$个，中有物体的概率。此项有$49\times 2(每个grid \quad cell预测2个)=98$个</li>
+<li>其次，这个物体分别属于20个分类的概率</li>
+</ol>
+<h4 id="1-3-2-回归损失"><a href="#1-3-2-回归损失" class="headerlink" title="1.3.2 回归损失"></a>1.3.2 回归损失</h4><p>回归损失衡量的是，预测bbox的位置和尺寸的误差。YOLOv1只计算负责检测物体那个bbox的误差</p>
+<p>$$<br>\lambda <em>{coord}\sum _{i=0} ^{S^2}\sum _{j=0} ^B1</em>{ij} ^{obj}[(x_i-\hat x_i)^2+(y_i-\hat y_i)^2] \</p>
+<ul>
+<li>\lambda <em>{coord}\sum _{i=0} ^{S^2}\sum _{j=0} ^B1</em>{ij} ^{obj} [(\sqrt{w_i}-\sqrt{\hat w_i})^2+((\sqrt{h_i}-\sqrt{\hat {h_i}}))^2] \<br>其中 如果第i个grid \quad cell中的第j个bbox是负责检测物体的，则1_{ij} ^{obj}=1，否则1_{ij} ^{obj}=0. \<br>\lambda _{coord}增加bbox坐标的损失权重，默认为5<br>$$<br>在YOLO看来大的bbox和小的bbox的2个像素的误差是相等的，为刻意强调这一点，YOLO没有直接预测bbox的宽和高，而是宽的二次方根和高的二次方根。除此之外，对此loss乘以一个权重$\lambda _{coord}$以增加bbox的准确率。</li>
+</ul>
+<h4 id="1-3-3-置信度损失"><a href="#1-3-3-置信度损失" class="headerlink" title="1.3.3 置信度损失"></a>1.3.3 置信度损失</h4><p>如果某个物体在box中被检测到，其置信度损失（衡量的是box中的物体）为<br>$$<br>\sum <em>{i=0} ^{S^2}\sum</em>{j=0} ^B1_{ij} ^{obj}(C_i-\hat C_I)^2 \<br>其中</p>
+<ul>
+<li>\hat C_i是grid\quad cell\quad i中第j个box的置信度</li>
+<li>1_{ij} ^{obj}=1 如果第i个grid\quad cell的第j个box负责检测物体，否则为0<br>$$</li>
+</ul>
+<p>如果某个物体不在box中，其置信度损失为</p>
+<p>$$<br>\lambda <em>{noobj}\sum</em>{i=0} ^{S^2}\sum <em>{j=0} ^B1</em>{ij} ^{noobj}(C_i-\hat C_i)^2 \<br>其中</p>
+<ul>
+<li>1_{ij} ^{noobj}是对1_{ij} ^{noobj}的一种补充</li>
+<li>\hat C_i是第i个grid \quad cell的第j个box的置信度</li>
+<li>\lambda _{noobj}降低背景检测损失的权重(noobj即背景)<br>$$<br>由于大部分box不包含任何物体，这会导致分类(正负样本)的不均衡，因此，我们降低了背景检测损失的权重，即$\lambda _{noobj}$默认值为0.5</li>
+</ul>
+<h4 id="1-3-4-最终损失"><a href="#1-3-4-最终损失" class="headerlink" title="1.3.4 最终损失"></a>1.3.4 最终损失</h4><p>最终损失为前面三种损失之和<br>$$<br> Loss= \sum <em>{i=0} ^{S^2}1 _i ^{obj} \sum _{c \in classes}(p_i(c)-\hat p_i(c))^2 +\<br>\lambda _{coord}\sum _{i=0} ^{S^2}\sum _{j=0} ^B1</em>{ij} ^{obj}[(x_i-\hat x_i)^2+(y_i-\hat y_i)^2] +\<br> \lambda <em>{coord}\sum _{i=0} ^{S^2}\sum _{j=0} ^B1</em>{ij} ^{obj} [(\sqrt{w_i}-\sqrt{\hat w_i})^2+((\sqrt{h_i}-\sqrt{\hat {h_i}}))^2] +\<br>\sum <em>{i=0} ^{S^2}\sum</em>{j=0} ^B1_{ij} ^{obj}(C_i-\hat C_I)^2+ \<br>\lambda <em>{noobj}\sum</em>{i=0} ^{S^2}\sum <em>{j=0} ^B1</em>{ij} ^{noobj}(C_i-\hat C_i)^2<br>$$</p>
+<h3 id="1-4-yolo评价"><a href="#1-4-yolo评价" class="headerlink" title="1.4 yolo评价"></a>1.4 yolo评价</h3><ul>
+<li>优点 <ul>
+<li>快速，实时检测</li>
+<li>使用单一结构网络，可以端到端地训练</li>
+<li>通用。用自然图片训练得到的网络也可用于艺术图片的检测</li>
+<li>区域候选的方法限制了分类器识别特定区域。YOLO在预测边框时可以遍历整个图像。使用相关信息时，YOLO在背景区域检测更少的假阳性。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>YOLO每个grid cell只检测一个物体，这使得它在做预测时增加了空间多样性。</li>
+</ul>
+<h2 id="2-YOLOv2"><a href="#2-YOLOv2" class="headerlink" title="2 YOLOv2"></a>2 YOLOv2</h2><p>与基于区域候选的方法相比，YOLO有更高的定位损失以及更低的召回率。</p>
+<h3 id="2-1-准确率提升"><a href="#2-1-准确率提升" class="headerlink" title="2.1 准确率提升"></a>2.1 准确率提升</h3><h4 id="2-1-1-BatchNorm"><a href="#2-1-1-BatchNorm" class="headerlink" title="2.1.1 BatchNorm"></a>2.1.1 BatchNorm</h4><p>每个卷积层之后添加一层BN,可以去掉dropout，同时提升2%的map</p>
+<h4 id="2-1-2-高分辨率"><a href="#2-1-2-高分辨率" class="headerlink" title="2.1.2 高分辨率"></a>2.1.2 高分辨率</h4><p>我们先看看yolov1的训练步骤</p>
+<ol>
+<li>首先，训练一个类似VGG的分类网络【用的是$224\times 224$图片】</li>
+<li>然后，使用全连接层替换卷积层</li>
+<li>再端到端地训练目标检测【用的是$448\times 448$图片】</li>
+</ol>
+<p>YOLOv2的训练步骤</p>
+<ol>
+<li>训练一个分类器：先用$224\times 224$的图片训练，再用$448\times 448$图片接着训练（更少的epoch）<br>后续步骤一致。这使得yolov2的检测器更容易 训练，map也提升了4%。</li>
+</ol>
+<h4 id="2-1-3-anchor-box"><a href="#2-1-3-anchor-box" class="headerlink" title="2.1.3 anchor box"></a>2.1.3 anchor box</h4><p>从yolo的论文中，我们得知，训练阶段的早期会出现不稳定的梯度，因为yolo会随意预测物体尺度和位置。而实际中，一些物体的尺寸是有规律的。比如汽车的长宽比一般是0.41</p>
+<p><img src="/images/blog/yolov123_6.png" alt="yolov123"><br>由于我们只需要一个bbox猜测值是对的就可以，因而如果我们按照实际物体比率来初始化这些预测的初始值，训练阶段就会稳定得多。例如，我们可以按照如下步骤构建5个anchor box</p>
+<p><img src="/images/blog/yolov123_7.png" alt="yolov123"></p>
+<p><strong>YOLOv2不直接预测bbox，而是预测其相对于上面5个bbox的偏移量。</strong>如果限制偏移量的值，我们可以保持预测的多样性，并使得每个预测集中于特定尺度，这样一来初始训练阶段就会稳定许多。</p>
+<p>以下是对yolov1网络的改动</p>
+<ol>
+<li>移除了最后两个负责预测bbox的个全连接层</li>
+</ol>
+<p><img src="/images/blog/yolov123_8.png" alt="yolov123"></p>
+<ol start="2">
+<li>将分类预测从cell级转向bbox级。这样一来，每个预测包含了预测bbox的4个位置参数，一个box置信度（是否包含物体）以及20个分类概率。每个grid cell5个bbox，每个bbox25个参数，共125个参数。与yolov1一样，物体预测依旧是预测预测的bbox与真实bbox之间的IOU。</li>
+</ol>
+<p><img src="/images/blog/yolov123_9.png" alt="yolov123"><br>yolov1是如何做预测的</p>
+<p><img src="/images/blog/yolov123_10.png" alt="yolov123"></p>
+<p>yolov2是如何做预测的.注意与yolov1区别</p>
+<ol start="3">
+<li>为了生成$7\times7\times125$的预测，将网络的最后两层替换$3\times3$的卷积层，每个卷积层输出1024个通道，然后再用$1\times1$卷积将$7\times7\times1024$转换成$7\times7\times125$。</li>
+<li>将网络输入图像尺寸从$448\times 448$改为$416\times 416$.由于网络中心一般是大物体坐标中心，之前的$8\times8$会出现不确定性预测。输入图像尺寸从$448\times448$改为$416\times416$之后，输出的特征空间尺度从$8\times8$变成$7\times7$。</li>
+</ol>
+<p><img src="/images/blog/yolov123_11.png" alt="yolov123"><br>使用anchor box使得map从69.5下降到69.2%，但是召回率从81%提升到88%。</p>
+<h3 id="2-2-维度聚类"><a href="#2-2-维度聚类" class="headerlink" title="2.2 维度聚类"></a>2.2 维度聚类</h3><p>在诸多问题领域，bbox其实有很强的可识别模式。比如，自动驾驶领域，2个最常见的模式是汽车和行人。YOLOv2使用kmeans聚类在训练集上得到模式最多的K个bbox。</p>
+<p>由于需要处理的是bbox，而非点，其距离衡量指标使用的是IOU。</p>
+<p><img src="/images/blog/yolov123_12.png" alt="yolov123"></p>
+<p>上图左边是在真实bbox中使用不同聚类中心数目得到的平均IOU，增加聚类中心数目，准确率提升。使用5个聚类中心得到比较均衡的结果，右边是5个聚类中心时的bbox分布。</p>
+<h3 id="2-3-直接的位置预测"><a href="#2-3-直接的位置预测" class="headerlink" title="2.3 直接的位置预测"></a>2.3 直接的位置预测</h3><p><strong>预测的是位置相对于anchor左上角的偏移量。</strong>如果直接，无约束的预测会导致随机结果，YOLO预测的是5个参数$t_x,t_y,t_w,t_h$并使用sigma函数加以约束其取值范围。下图中蓝色框是预测的bbox，点线矩形框是anchor。左上角的$C_x,C_y$也是anchor的左上角位置，预测的是相对于此处的偏移。</p>
+<p><img src="/images/blog/yolov123_13.png" alt="yolov123"></p>
+<p>其中<br>$$<br>b_x=\sigma(t_x)+c_x \<br>b_y=\sigma(t_y)+c_y \<br>b_w=p_we^{t_w} \<br>b_h=p_he^{t_h} \<br>P_r(obj)*IOU(b,obj)=\sigma(t_0) \quad \sigma(t_0)是box的置信度\<br>其中\<br>t_x,t_y,t_w,t_h是直接由yolo预测得到的\<br>c_x,c_y是anchor的左上角坐标，p_w,p_h是anchor的宽度和高度\<br>c_x,c_y,p_w,p_h由宽度和高度归一化之后的结果\<br>b_x,b_y,b_w,b_h是最终的预测bbox<br>$$</p>
+<p>所以，需要知道的是</p>
+<ol>
+<li><strong>yolo网络只预测偏移量</strong></li>
+<li><strong>偏移量与默认的anchor box进行运算之后得到bbox</strong></li>
+<li><strong>bbox与真实box不是同一个</strong></li>
+</ol>
+<h3 id="2-4-修正的特征"><a href="#2-4-修正的特征" class="headerlink" title="2.4 修正的特征"></a>2.4 修正的特征</h3><p>yolo使用了一种称为通道的技术，将$28\times 28\times 512$层reshape到$14\times 14\times 1024$，然后将这两层的feature拼接起来做预测。</p>
+<p><img src="/images/blog/yolov123_14.png" alt="yolov123"><br>参考 </p>
+<h3 id="2-5-多尺度训练"><a href="#2-5-多尺度训练" class="headerlink" title="2.5 多尺度训练"></a>2.5 多尺度训练</h3><p>移除全连接层的yolo可以接收不同尺度输入图像，如果输入图像宽和高双倍之后，我们需要预测4倍的grid cell。由于yolo是按照32倍下采样的，所以输入图像是32的倍数即可。每10个batch之后，yolo会随机选取其他尺度的图像来训练网络。</p>
+<h3 id="2-6-使用不同优化方案之后的准确率比较"><a href="#2-6-使用不同优化方案之后的准确率比较" class="headerlink" title="2.6 使用不同优化方案之后的准确率比较"></a>2.6 使用不同优化方案之后的准确率比较</h3><p><img src="/images/blog/yolov123_15.png" alt="yolov123"></p>
+<h3 id="2-7-速度提升"><a href="#2-7-速度提升" class="headerlink" title="2.7 速度提升"></a>2.7 速度提升</h3><p><strong>darknet</strong><br>为了进一步简化CNN结构，设计了一个darknet网络。其在ImageNet上获取了72.9%的top-1准确率和91.2%的top-5准确率。darknet大部分使用的是$3\times 3$卷积</p>
+<p><img src="/images/blog/yolov123_16.png" alt="yolov123"></p>
+<p>在做目标检测时，最后红色框的最后的卷积层使用$3\times 3$的卷积层替换，然后再使用$1\times 1$的卷积将$7\times 7\times 1024$的输出转换成$7\times 7\times 125$</p>
+<h2 id="3-yolov3"><a href="#3-yolov3" class="headerlink" title="3 yolov3"></a>3 yolov3</h2><h3 id="3-1-类预测"><a href="#3-1-类预测" class="headerlink" title="3.1 类预测"></a>3.1 类预测</h3><p>大多数分类器认为目标分类是互斥的，所以yolov2用的是softmax，全部分类的概率之和为1，但是yolov3使用了多标签分类。比如，标签可能既是<code>行人</code>也可能是<code>小孩</code>。yolov3为每个分类使用独立的logistic分类器以计算输入属于特定分类的概率。yolov3给每个分类用的是二分交叉熵，而非MSE。此举同时降低了计算复杂度。</p>
+<h3 id="3-2-bbox预测和损失函数"><a href="#3-2-bbox预测和损失函数" class="headerlink" title="3.2 bbox预测和损失函数"></a>3.2 bbox预测和损失函数</h3><p>yolov3使用logistic回归来预测每个bbox的为物体的置信度。yolov3修改计算损失函数的方式，如果bbox与真实标签obj重叠区域大于其他所有的，其对应的obj(物体)置信度为1（即选取一个与ground truth有最多重叠的anchor，其对应的obj score为1）。其他与真实标签obj重叠区域超过阈值(默认为0.5)的anchor，它们不计算损失。每个ground truth obj只分配给一个bbox。如果某个bbox没有被分配ground truth，不计算其分类和定位损失，只计算物体置信度。只使用$t_x,t_y$而非$b_x,b_y$计算损失</p>
+<p>$$<br>b_x=\sigma(t_x)+c_x \<br>b_y=\sigma(t_y)+c_y \<br>b_w = p_we^{t_w} \<br>b_h = p_he^{t_h}<br>$$</p>
+<h3 id="3-3-特征金字塔-FPN网络"><a href="#3-3-特征金字塔-FPN网络" class="headerlink" title="3.3 特征金字塔(FPN网络)"></a>3.3 特征金字塔(FPN网络)</h3><p>yolov3在每个位置上得到3个预测，每个预测由<code>1个bbox</code>,<code>一个obj物体得分</code>,<code>80个分类得分</code>组成。即$=N\times N\times [3\times (4+1+80)]$ 。</p>
+<p>YOLOv3在三个不同尺度上预测</p>
+<ol>
+<li>最后一个特征map层</li>
+<li>从最后一层往回走2层，2倍上采样。yolov3采用了一个更高分辨率的特征图，并将它与上采样层得到的特征图进行逐元素相加。在这个特征融合层，yolov3再进行卷积得到第二个预测集。</li>
+<li>重复步骤2，得到的特征层有好的高层结构(语义级)信息和物体位置的空间信息。</li>
+</ol>
+<h3 id="3-4-特征抽取器"><a href="#3-4-特征抽取器" class="headerlink" title="3.4 特征抽取器"></a>3.4 特征抽取器</h3><p>使用一个新的darknet-53来替换前面的darknet-19，darknet主要由$3\times 3$和$1\times 1$卷积组成，以及一些类似ResNet的跳转连接。</p>
+<p><img src="/images/blog/yolov123_17.png" alt="yolov123"></p>
+<h3 id="3-5-准确率"><a href="#3-5-准确率" class="headerlink" title="3.5 准确率"></a>3.5 准确率</h3><p><img src="/images/blog/yolov123_18.png" alt="yolov123"></p>
+<h2 id="4-损失函数变化"><a href="#4-损失函数变化" class="headerlink" title="4 损失函数变化"></a>4 损失函数变化</h2><h3 id="4-1-YOLOv1损失函数"><a href="#4-1-YOLOv1损失函数" class="headerlink" title="4.1 YOLOv1损失函数"></a>4.1 YOLOv1损失函数</h3><p>先回顾下YOLOv1的损失函数</p>
+<p>$$<br> Loss= \sum <em>{i=0} ^{S^2}1 _i ^{obj} \sum _{c \in classes}(p_i(c)-\hat p_i(c))^2 +\<br>\lambda _{coord}\sum _{i=0} ^{S^2}\sum _{j=0} ^B1</em>{ij} ^{obj}[(x_i-\hat x_i)^2+(y_i-\hat y_i)^2] +\<br> \lambda <em>{coord}\sum _{i=0} ^{S^2}\sum _{j=0} ^B1</em>{ij} ^{obj} [(\sqrt{w_i}-\sqrt{\hat w_i})^2+((\sqrt{h_i}-\sqrt{\hat {h_i}}))^2] +\<br>\sum <em>{i=0} ^{S^2}\sum</em>{j=0} ^B1_{ij} ^{obj}(C_i-\hat C_I)^2+ \<br>\lambda <em>{noobj}\sum</em>{i=0} ^{S^2}\sum <em>{j=0} ^B1</em>{ij} ^{noobj}(C_i-\hat C_i)^2<br>$$</p>
+<h3 id="4-2-YOLOv2"><a href="#4-2-YOLOv2" class="headerlink" title="4.2 YOLOv2"></a>4.2 YOLOv2</h3><p>yolov2的损失函数只是在yolov1基础上改动了关于bbox的w和h的损失计算方式<br>即从<br>$$<br>\sum <em>{i=0} ^{S^2}\sum _{j=0} ^B1</em>{ij} ^{obj} [(\sqrt{w_i}-\sqrt{\hat w_i})^2+((\sqrt{h_i}-\sqrt{\hat {h_i}}))^2]<br>$$<br>改动到<br>$$<br>\sum <em>{i=0} ^{S^2}\sum _{j=0} ^B1</em>{ij} ^{obj} [(w_i-\hat {w_i})^2+(h_i-\hat {h_i})^2]<br>$$<br>去掉了w和h的二次根号，作者认为没有必要。</p>
+<h3 id="4-3-yolov3"><a href="#4-3-yolov3" class="headerlink" title="4.3 yolov3"></a>4.3 yolov3</h3><p>YOLOv3的损失函数是在yolov2基础上改动的，最大的变动是分类损失换成了二分交叉熵，这是由于yolov3中剔除了softmax改用logistic。不过在不同的框架中具体的修改不一致。</p>
+<p><strong>darknet</strong></p>
+<p>darknet源码中只修改了分类损失的计算方法。也即从yolov2的分类损失部分<br>$$<br>\sum <em>{i=0} ^{S^2}\sum</em>{j=0} ^B1_{ij} ^{obj}(C_i-\hat C_I)^2+ \<br>\lambda <em>{noobj}\sum</em>{i=0} ^{S^2}\sum <em>{j=0} ^B1</em>{ij} ^{noobj}(C_i-\hat C_i)^2<br>$$<br>修改到<br>$$<br>\sum <em>{i=0} ^{S^2}\sum</em>{j=0} ^B1_{ij} ^{obj} (C_i log \hat C_i+(1-C_i)log (1-\hat C_i) )+\<br>\lambda <em>{noobj}\sum</em>{i=0} ^{S^2}\sum <em>{j=0} ^B1</em>{ij} ^{noobj}(C_i-\hat C_i)^2<br>$$</p>
+<p><strong>Tensorflow</strong></p>
+<p>Tensorflow版本的<a href="https://github.com/qqwweee/keras-yolo3" target="_blank" rel="noopener">yolov3</a> 对以下部分都做了交叉熵损失</p>
+<ol>
+<li>坐标的x,y<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xy_loss &#x3D; object_mask * box_loss_scale * K.binary_crossentropy(raw_true_xy, raw_pred[..., 0:2], from_logits&#x3D;True)</span><br></pre></td></tr></table></figure></li>
+<li>置信度损失</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">confidence_loss &#x3D; object_mask * K.binary_crossentropy(object_mask, raw_pred[..., 4:5], from_logits&#x3D;True) + (1 - object_mask) * K.binary_crossentropy(object_mask, raw_pred[..., 4:5], from_logits&#x3D;True) * ignore_mask</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>分类损失</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">class_loss &#x3D; object_mask * K.binary_crossentropy(true_class_probs, raw_pred[..., 5:], from_logits&#x3D;True)</span><br></pre></td></tr></table></figure>
+<p><strong>没有对非目标的损失函数</strong></p>
+<h2 id="5-注意-bbox数目变化"><a href="#5-注意-bbox数目变化" class="headerlink" title="5 注意 bbox数目变化"></a>5 注意 bbox数目变化</h2><ul>
+<li><p>yolov1<br>$$<br>(S,S,B\times 5+c) = (7,7,2\times 5+20)=(7,7,30)<br>$$</p>
+</li>
+<li><p>yolov2<br>$$<br>7\times7\times (5(每个grid cell5个bbox)\times (4(位置)+1(box置信度)+20(20个分类概率)))<br>$$</p>
+</li>
+<li><p>yolov3</p>
+</li>
+</ul>
+<p>$$<br>(N\times N +2(上采样)\times N\times N +4(上采样)\times (N\times N))\times [3\times (4+1+80(分类))]<br>$$</p>
+<p><a href="https://medium.com/@jonathan_hui/real-time-object-detection-with-yolo-yolov2-28b1b93e2088" target="_blank" rel="noopener">Real-time Object Detection with YOLO, YOLOv2 and now YOLOv3</a><br><a href="https://www.tinymind.cn/articles/411" target="_blank" rel="noopener">从YOLOv1到YOLOv3，目标检测的进化之路</a><br><a href="https://blog.csdn.net/weixin_42078618/article/details/85005428" target="_blank" rel="noopener">yolov3 损失函数</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2019-03-12-yolo-v123/" data-id="ck4ifp1n0004t2wje0h3v7vvc" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2019-04-21-image-quality-assessment/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          图像质量评估
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2019-03-05-SIFT-feature/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">SIFT特征详解</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

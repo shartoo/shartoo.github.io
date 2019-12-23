@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>merlin语音合成讲义一：技术路线概览 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="语音">
+<meta property="og:type" content="article">
+<meta property="og:title" content="merlin语音合成讲义一：技术路线概览">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2018-08-11-merlin-tts-techmap1/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="语音">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch1.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch2.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch3.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch4.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch5.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch6.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch7.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch8.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch9.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch10.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch11.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch12.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch13.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch14.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch15.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch16.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch16_1.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch17.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch18.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch19.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch20.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch21.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch22.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch23.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch24.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch25.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch26.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch27.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch28.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch29.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch30.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch31.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.628Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.222Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/merlin_tts_tch1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2018-08-11-merlin-tts-techmap1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2018-08-11-merlin-tts-techmap1/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.628Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      merlin语音合成讲义一：技术路线概览
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一-概览"><a href="#一-概览" class="headerlink" title="一 概览"></a>一 概览</h2><p>经典的统计参数语音合成方法的三步</p>
+<p><img src="/images/blog/merlin_tts_tch1.png" alt="TTS merlin技术路线"></p>
+<p>单独看前端和后端</p>
+<p><img src="/images/blog/merlin_tts_tch2.png" alt="TTS merlin技术路线"></p>
+<p>那么统计模型的任务是</p>
+<p><img src="/images/blog/merlin_tts_tch3.png" alt="TTS merlin技术路线"></p>
+<p>可以看到其实统计模型的任务就是做一个sequence-to-sequence的回归</p>
+<p><img src="/images/blog/merlin_tts_tch4.png" alt="TTS merlin技术路线"></p>
+<p>即：输入序列(语义特征)回归到输出序列的声学特征。但是由于二者之间不同的声学始终频率而导致长度不一。</p>
+<p><img src="/images/blog/merlin_tts_tch5.png" alt="TTS merlin技术路线"></p>
+<h2 id="三-TTS的三个方向"><a href="#三-TTS的三个方向" class="headerlink" title="三 TTS的三个方向"></a>三 TTS的三个方向</h2><ul>
+<li><p>目前为止<br>将TTS问题设置为一个<strong>sequence-tosequence</strong>的回归问题。这是一个有意为之的通用方法，这样易于理解</p>
+<ul>
+<li>用不同的方法来做回归，神经网络或者机器学习方法</li>
+<li>选取不同的输入输出特征</li>
+</ul>
+</li>
+<li><p>接下来<br>TTS是如何完成的，使用一个pre-built系统。可以快速完成整个pipeline，从文本到波形输出</p>
+</li>
+<li><p>进一步<br>如何构建上面说的pre-built系统。一个缓慢的，一步一步的运行整个pipeline，关注在如何创造一个新系统（对任何语言）</p>
+</li>
+</ul>
+<h2 id="4-术语"><a href="#4-术语" class="headerlink" title="4 术语"></a>4 术语</h2><ol>
+<li>前端<br>即<code>text</code>$\rightarrow$ <code>linguistic specification</code></li>
+<li>统计模型回归<br><code>linguistic specification</code>$\rightarrow$<code>acoustic features</code></li>
+<li>waveform geneator（波形语音生成）<br><code>acoustic features</code>$\rightarrow$<code>waveform</code></li>
+<li>语言规范(Linguistic specification)<br>完整的事物</li>
+</ol>
+<p><img src="/images/blog/merlin_tts_tch6.png" alt="TTS merlin技术路线"></p>
+<ol start="5">
+<li>语言特征<br>独立的元素。</li>
+</ol>
+<p><img src="/images/blog/merlin_tts_tch7.png" alt="TTS merlin技术路线"></p>
+<ol start="6">
+<li>声学特征<br>帧序列<br><img src="/images/blog/merlin_tts_tch8.png" alt="TTS merlin技术路线"></li>
+</ol>
+<h2 id="4-从文本到语音"><a href="#4-从文本到语音" class="headerlink" title="4 从文本到语音"></a>4 从文本到语音</h2><ul>
+<li>文本处理<ul>
+<li>pipeline 架构</li>
+<li>语言规范</li>
+</ul>
+</li>
+<li>回归<ul>
+<li>时域模型</li>
+<li>声学特征</li>
+</ul>
+</li>
+<li>波形生成<ul>
+<li>声学特征</li>
+<li>信号处理</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-1-语言规范"><a href="#4-1-语言规范" class="headerlink" title="4.1 语言规范"></a>4.1 语言规范</h3><p><img src="/images/blog/merlin_tts_tch9.png" alt="TTS merlin技术路线"></p>
+<p>使用前端工具从文本中抽取特征</p>
+<p><img src="/images/blog/merlin_tts_tch10.png" alt="TTS merlin技术路线"></p>
+<h3 id="4-2-文本预处理"><a href="#4-2-文本预处理" class="headerlink" title="4.2 文本预处理"></a>4.2 文本预处理</h3><p>对应的文本处理pipeline为<br><img src="/images/blog/merlin_tts_tch11.png" alt="TTS merlin技术路线"></p>
+<p>而前端之中的文本预处理详细的划分为：<br><img src="/images/blog/merlin_tts_tch12.png" alt="TTS merlin技术路线"></p>
+<p>需要注意的是，<code>tokenize</code>,<code>POS tag</code>,<code>LTS</code>,<code>Phrase breaks</code>,<code>intonation</code>等都是从标记数据中独立学习得到的。</p>
+<h4 id="4-2-1-Tokenize-amp-Normalize"><a href="#4-2-1-Tokenize-amp-Normalize" class="headerlink" title="4.2.1 Tokenize &amp; Normalize"></a>4.2.1 Tokenize &amp; Normalize</h4><p><img src="/images/blog/merlin_tts_tch13.png" alt="TTS merlin技术路线"></p>
+<ol>
+<li><p>第一步：将输入流划分为token，即潜在的单词</p>
+<ul>
+<li>对于英语和其他语言</li>
+</ul>
+<ul>
+<li>基于规则</li>
+<li>空格和标点都是很好的特征</li>
+</ul>
+<ul>
+<li>对于许多其他语言，特别是没有使用空格的</li>
+</ul>
+<ul>
+<li>可能i更困难</li>
+<li>需要其他技术</li>
+</ul>
+</li>
+<li><p>第二步：对每个token分类，找到非标注词(Non-Standard Words)，需要做进一步预处理</p>
+</li>
+</ol>
+<p><img src="/images/blog/merlin_tts_tch14.png" alt="TTS merlin技术路线"><br>3. 第三步： 对每一类非标准词(NSW)，使用一些特殊模块来处理。<br><img src="/images/blog/merlin_tts_tch15.png" alt="TTS merlin技术路线"></p>
+<h4 id="4-2-2-POS-tagging-词性标注"><a href="#4-2-2-POS-tagging-词性标注" class="headerlink" title="4.2.2 POS tagging 词性标注"></a>4.2.2 POS tagging 词性标注</h4><p><img src="/images/blog/merlin_tts_tch16.png" alt="TTS merlin技术路线"></p>
+<ul>
+<li>Part-Of-Speech tagger</li>
+<li>准确率可能很高</li>
+<li>在标注过的数据集上训练</li>
+<li>类别是为文本设计的，而非语音</li>
+</ul>
+<p><img src="/images/blog/merlin_tts_tch16_1.png" alt="TTS merlin技术路线"></p>
+<h4 id="4-2-3-Pronuncication-LTS"><a href="#4-2-3-Pronuncication-LTS" class="headerlink" title="4.2.3  Pronuncication /LTS"></a>4.2.3  Pronuncication /LTS</h4><p><img src="/images/blog/merlin_tts_tch17.png" alt="TTS merlin技术路线"></p>
+<ul>
+<li><p>发音模型：</p>
+<ul>
+<li>查找词典，等等</li>
+<li>单词到声音的模型</li>
+</ul>
+</li>
+<li><p>但是：</p>
+<ul>
+<li>需要深层次的语言知识来设计发音集合</li>
+<li>需要人类专家来撰写词典</li>
+</ul>
+<p>发音词典示例</p>
+<p><img src="/images/blog/merlin_tts_tch18.png" alt="TTS merlin技术路线"></p>
+</li>
+</ul>
+<h4 id="4-2-4-语言规范"><a href="#4-2-4-语言规范" class="headerlink" title="4.2.4 语言规范"></a>4.2.4 语言规范</h4><p>得到语言规范如下</p>
+<p><img src="/images/blog/merlin_tts_tch19.png" alt="TTS merlin技术路线"></p>
+<h2 id="5-语言特征工程"><a href="#5-语言特征工程" class="headerlink" title="5 语言特征工程"></a>5 语言特征工程</h2><p><img src="/images/blog/merlin_tts_tch20.png" alt="TTS merlin技术路线"></p>
+<h3 id="5-1-术语"><a href="#5-1-术语" class="headerlink" title="5.1 术语"></a>5.1 术语</h3><ul>
+<li>Flatten：<code>语言规范</code>$\rightarrow$ <code>上下文依赖的音素序列</code></li>
+<li>Encode：<code>上下文依赖的音素序列</code>$\rightarrow$<code>向量序列</code></li>
+<li>Upsample： <code>向量序列</code>$\rightarrow$<code>在声学特征framerate帧率上的向量序列</code></li>
+</ul>
+<h3 id="5-2-Flatten-amp-encode-将语言规范转换为向量序列"><a href="#5-2-Flatten-amp-encode-将语言规范转换为向量序列" class="headerlink" title="5.2 Flatten &amp; encode:将语言规范转换为向量序列"></a>5.2 Flatten &amp; encode:将语言规范转换为向量序列</h3><p><img src="/images/blog/merlin_tts_tch21.png" alt="TTS merlin技术路线"></p>
+<h3 id="5-3-Upsample：添加时域信息"><a href="#5-3-Upsample：添加时域信息" class="headerlink" title="5.3 Upsample：添加时域信息"></a>5.3 Upsample：添加时域信息</h3><p><img src="/images/blog/merlin_tts_tch22.png" alt="TTS merlin技术路线"></p>
+<h2 id="6-统计模型"><a href="#6-统计模型" class="headerlink" title="6 统计模型"></a>6 统计模型</h2><h3 id="6-1-声学模型：一个简单的前馈神经网络"><a href="#6-1-声学模型：一个简单的前馈神经网络" class="headerlink" title="6.1  声学模型：一个简单的前馈神经网络"></a>6.1  声学模型：一个简单的前馈神经网络</h3><p><img src="/images/blog/merlin_tts_tch23.png" alt="TTS merlin技术路线"></p>
+<p>有向权重连接</p>
+<p>这些网络层的不同作用：</p>
+<p><img src="/images/blog/merlin_tts_tch24.png" alt="TTS merlin技术路线"></p>
+<h3 id="6-2-用神经网络来合成"><a href="#6-2-用神经网络来合成" class="headerlink" title="6.2 用神经网络来合成"></a>6.2 用神经网络来合成</h3><p><img src="/images/blog/merlin_tts_tch25.png" alt="TTS merlin技术路线"></p>
+<h2 id="7-波形生成（waveform-generator）"><a href="#7-波形生成（waveform-generator）" class="headerlink" title="7 波形生成（waveform generator）"></a>7 波形生成（waveform generator）</h2><h3 id="7-1-声学特征是什么"><a href="#7-1-声学特征是什么" class="headerlink" title="7.1 声学特征是什么"></a>7.1 声学特征是什么</h3><p><img src="/images/blog/merlin_tts_tch26.png" alt="TTS merlin技术路线"></p>
+<h2 id="8-使用神经网络的TTS系统"><a href="#8-使用神经网络的TTS系统" class="headerlink" title="8 使用神经网络的TTS系统"></a>8 使用神经网络的TTS系统</h2><p>如果我们把所有的这一切综合起来的示意图如下：</p>
+<p>第一步：<br><img src="/images/blog/merlin_tts_tch27.png" alt="TTS merlin技术路线"></p>
+<p>第二步：<br><img src="/images/blog/merlin_tts_tch28.png" alt="TTS merlin技术路线"><br>第三步：<br><img src="/images/blog/merlin_tts_tch29.png" alt="TTS merlin技术路线"><br>第四步<br><img src="/images/blog/merlin_tts_tch30.png" alt="TTS merlin技术路线"><br>第五步<br><img src="/images/blog/merlin_tts_tch31.png" alt="TTS merlin技术路线"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2018-08-11-merlin-tts-techmap1/" data-id="ck4ifp1ml003t2wjehj8d7bq3" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2018-08-12-merlin-tts-techmap2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          merlin语音合成讲义二：如何构建系统之数据准备
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2018-08-10-TTS_MSD_HMM/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">语音合成：MSD-HMM多空间概率分布HMM</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

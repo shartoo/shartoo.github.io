@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>李宏毅深度学习-八-RNN和GAN | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="李宏毅深度学习笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="李宏毅深度学习-八-RNN和GAN">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2018-03-18-LHY_RNN_and_GAN/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="李宏毅深度学习笔记">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/rnn_and_gan1.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/rnn_and_gan2.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/rnn_and_gan3.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/rnn_and_gan4.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/rnn_and_gan5.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/rnn_and_gan6.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/rnn_and_gan7.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/rnn_and_gan8.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/rnn_and_gan9.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/rnn_and_gan9.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/rnn_and_gan11.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/rnn_and_gan12.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/rnn_and_gan13.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/rnn_and_gan14.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/rnn_and_gan15.jpg">
+<meta property="og:image" content="http://shartoo.github.com/images/rnn_and_gan16.jpg">
+<meta property="article:published_time" content="2019-12-23T10:45:59.557Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.220Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/rnn_and_gan1.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2018-03-18-LHY_RNN_and_GAN" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2018-03-18-LHY_RNN_and_GAN/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.557Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      李宏毅深度学习-八-RNN和GAN
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-生成网络"><a href="#1-生成网络" class="headerlink" title="1 生成网络"></a>1 生成网络</h2><h3 id="1-1-生成文本"><a href="#1-1-生成文本" class="headerlink" title="1.1 生成文本"></a>1.1 生成文本</h3><p>我们需要知道的是，一个句子由字符或者单词组成。但是中文里面一个单词是一个有意义的单位。使用RNN生成句子时，每次由RNN生成一个字符或单词。</p>
+<p>假若我们要基于RNN生成一个句子，生成过程如下：</p>
+<ul>
+<li>向RNN中输入 <code>&lt;BOS&gt;</code>(begin of sentence)</li>
+<li>RNN会给出某个字符(或单词)的分布概率，根据这个概率分布抽样，可以得到一个词。比如说<code>床</code></li>
+<li>继续把<code>床</code>这个词输入到RNN，RNN继续输出字符（或词）的分布概率，根据其概率分布抽样得到下一个词，以此类推，下一个词比如为<code>前</code></li>
+</ul>
+<p><img src="/images/rnn_and_gan1.jpg" alt=""></p>
+<h3 id="1-2-生成图像"><a href="#1-2-生成图像" class="headerlink" title="1.2 生成图像"></a>1.2 生成图像</h3><p>图像都是由像素组成，可以由RNN每次生成一个像素。图像的二维结构转换为一个像素序列，如下图：</p>
+<p><img src="/images/rnn_and_gan2.jpg" alt=""></p>
+<p>序列处理过程如下：</p>
+<p><img src="/images/rnn_and_gan3.jpg" alt=""></p>
+<p>但是这种方式只有像素值的连续性，没有考虑图像中像素的局部关联性。一种更贴近的方式是下面的图，中间黑色像素块同时受上面的红色块以及左边的粉红色块的影响。</p>
+<p><img src="/images/rnn_and_gan4.jpg" alt=""></p>
+<p>但是要生成这种考虑空间特征的图像，可以使用Grid LSTM。如下图</p>
+<p><img src="/images/rnn_and_gan5.jpg" alt=""></p>
+<p>左下角黑框为一个filter。最开始时输入一个类似<code>BOS</code>的字符，由Grid LSTM生成第一个像素蓝色块，再将蓝色块输入到Grid LSTM(中间图第二个黑色箭头)，Grid LSTM会生成第二个红色块，第二个红色像素块在生成时会考虑输入<code>蓝色块</code>和之前的输入信息。</p>
+<p>如何产生空间信息，如下图</p>
+<p><img src="/images/rnn_and_gan6.jpg" alt=""></p>
+<p>上图中，注意红色箭头的位置，是一个空间中的第二层。</p>
+<p><strong>此方法可以生成 state of art 的图像。</strong></p>
+<h2 id="2-基于条件的生成"><a href="#2-基于条件的生成" class="headerlink" title="2  基于条件的生成"></a>2  基于条件的生成</h2><p>RNN只能生成一些随机的句子，我们想要基于条件生成想要的文本。比如在 image caption中，看到特定图像能生成对应的文本描述，在chatbot对话中会根据对话者所说的话来生成回应。</p>
+<h3 id="2-1-看图说话-image-caption"><a href="#2-1-看图说话-image-caption" class="headerlink" title="2.1 看图说话 image caption"></a>2.1 看图说话 image caption</h3><p>一般使用 <code>CNN+RNN</code>的方式生成，使用cnn来抽取图像特征，再将特征传入RNN即可生成对应描述，如下图示例。</p>
+<p><img src="/images/rnn_and_gan7.jpg" alt=""></p>
+<p>左边的CNN会将抽取出的特征vector传给右边的RNN，如果觉得只在开始的时候传入会导致RNN后续遗忘，可以每次都传入图像特征vector。</p>
+<h3 id="2-2-机器翻译"><a href="#2-2-机器翻译" class="headerlink" title="2.2 机器翻译"></a>2.2 机器翻译</h3><p>比如，我们想把中文<code>机器学习</code>翻译成对应的英文<code>machine learning</code>，即 <code>机器学习</code>$\Rightarrow$<code>machine learning</code>。此时二者之间毫无关联，但是我们把中文变成一个vector然后传入RNN。</p>
+<p><strong>将中文变成vector</strong></p>
+<p>同样可以使用RNN来完成，下图将<code>机器学习</code>这四个字用RNN抽取出一个vector代表整个句子的信息。</p>
+<p><img src="/images/rnn_and_gan8.jpg" alt=""></p>
+<p>然后再将抽取出的vector传入给另外一个RNN，如下图：</p>
+<p><img src="/images/rnn_and_gan9.jpg" alt=""></p>
+<p>其中红色的矩形块代表了中文部分抽取出的特征，可以三次重复传入右边的RNN，让右边的RNN分别输出对应的<code>machine</code>,<code>learning</code>以及句号(代表结束)。</p>
+<p>比如可以同样将类似的方法来做chatbot，比如我输入一句<code>你好吗</code>，用RNN生成一个vector然后传入右边的RNN，让其生成<code>我很好</code>，类似的对话。</p>
+<p>类似的设计在深度学习里面称之为<strong>Encoder-Decoder</strong></p>
+<p><img src="/images/rnn_and_gan9.jpg" alt=""></p>
+<p>它们二者可以联合训练。至于左边的encoder和右边的decoder是否一样，可以视情况而定，<strong>encoder和decoder可以一样，也可以不一</strong>。如果二者一样，可能容易导致过拟合。</p>
+<h2 id="3-Attention-Dynamic-Conditional-Generation"><a href="#3-Attention-Dynamic-Conditional-Generation" class="headerlink" title="3 Attention(Dynamic  Conditional Generation)"></a>3 Attention(Dynamic  Conditional Generation)</h2><p>在上一节里面的<code>机器学习</code>$\Rightarrow$<code>machine learning</code>时，左边的encoder每次传入到右边的decoder都是<strong>同样的vector</strong>。其实，我们可以使得每次传给右边的vector不一样。比如，我们想要右边的输出为<code>machine</code>时，关注左边的<code>机器</code>即可，此时RNN应该可以更好的掌握</p>
+<p><img src="/images/rnn_and_gan11.jpg" alt=""></p>
+<h3 id="3-1-机器翻译"><a href="#3-1-机器翻译" class="headerlink" title="3.1  机器翻译"></a>3.1  机器翻译</h3><p><strong>基于注意力的模型</strong></p>
+<ul>
+<li><strong>输入</strong>： 每个时间点的每次词汇都可以用一个vector来表示，这个vector是RNN hidden layer的输出</li>
+<li><strong>初始参数$z^0$</strong>： 有一个初始的vector $z^0$，可以当做RNN的一个参数，它可以根据训练数据集学习得到</li>
+<li><strong>匹配函数match</strong>: 假设有这样一个匹配函数<code>match</code>，此函数由自己设计。用来计算每个timestep，输入词汇与$z^n$的匹配程度。match的示例<ul>
+<li>余弦相似度: match函数可以是余弦相似度，来计算$z$和$h$ 的相似度。</li>
+<li>更小的神经网络：match函数可以是另外一个神经网络，输入是$z$和$h$,输出是一个标量（衡量匹配度）</li>
+<li>参数式: match函数里面有个矩阵参数$w$，此参数可以被学习。可以用$\alpha = h^TWz$来衡量匹配度。</li>
+</ul>
+</li>
+</ul>
+<p>例如：</p>
+<p><img src="/images/rnn_and_gan12.jpg" alt=""></p>
+<p>现在对所有的RNN的隐藏层输出$h^t$计算与$z^0$的匹配度，然后加个softmax（非必要），得到所有输入词汇的匹配程度，如下：</p>
+<p><img src="/images/rnn_and_gan13.jpg" alt=""></p>
+<p>经过匹配函数match之后，各个输入词汇的在$c^0$中所占比最发生变化，再将输出的$c^0$作为输入传给右边（decoder）的RNN，会使得decoder更加关注此示例中的<code>机器</code>这个单词，更容易学习输出对应的<code>machine</code>，如下图</p>
+<p><img src="/images/rnn_and_gan14.jpg" alt=""></p>
+<p>可以将此步骤右边decoder的rnn的hidden layer的输出$z^1$作为左边encoder的新的匹配函数（当然可以是其他各式各样的方法），来继续下一步的输出。</p>
+<p><img src="/images/rnn_and_gan15.jpg" alt=""></p>
+<h3 id="3-2-语音识别"><a href="#3-2-语音识别" class="headerlink" title="3.2 语音识别"></a>3.2 语音识别</h3><p>输入一段音频信号，可以将其抽取为一排vector，每个时间点大概0.01秒用一个vector来表示。神经网络会对所有的vector先计算匹配度，下图的下半部分黑色方格代表匹配度，颜色越深代表越匹配。</p>
+<p><img src="/images/rnn_and_gan16.jpg" alt=""></p>
+<p>如图，使用第一个红色方格标记的部分黑色方格代表此时RNN需要注意的输入，将此输入传入给一个decoder，会得到对应的输出，即左边横轴的音素<code>h</code>，不仅如此，decoder还会产生空白。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2018-03-18-LHY_RNN_and_GAN/" data-id="ck4ifp1mh003h2wjedixv5cut" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2018-04-02-LHY_GAN/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          李宏毅深度学习-15-生成网络
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2018-03-09-SSD_detail/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">SSD深入理解</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

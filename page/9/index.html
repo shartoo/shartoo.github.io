@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://shartoo.github.com/page/9/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-2016-06-13-GoogleTensorFlowBasicConcept" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2016-06-13-GoogleTensorFlowBasicConcept/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.306Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/23/2016-06-13-GoogleTensorFlowBasicConcept/">谷歌TensorFlow基本概念</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="start-up"><a href="#start-up" class="headerlink" title="start up"></a>start up</h1><h2 id="1-1-谷歌深度学习工具历史"><a href="#1-1-谷歌深度学习工具历史" class="headerlink" title="1.1 谷歌深度学习工具历史:"></a>1.1 谷歌深度学习工具历史:</h2><ol>
+<li>第一代：<strong>DistBelief</strong> 由 Dean于2011年发起，主要产品有：<ul>
+<li>Inception (图像识别领域)</li>
+<li>谷歌Search</li>
+<li>谷歌翻译</li>
+<li>谷歌照片</li>
+</ul>
+</li>
+<li>第二代：<strong>TensorFlow</strong> 由Dean于2015年11月发起，大部分DistBelief都转向了TensorFlow</li>
+</ol>
+<h2 id="1-2-产品特性"><a href="#1-2-产品特性" class="headerlink" title="1.2 产品特性"></a>1.2 产品特性</h2><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>编程模型</td>
+<td>类数据流的模型</td>
+</tr>
+<tr>
+<td>语言</td>
+<td>Python C++</td>
+</tr>
+<tr>
+<td>部署</td>
+<td>code once,run ererywhere</td>
+</tr>
+<tr>
+<td>计算资源</td>
+<td>cpu,gpu</td>
+</tr>
+<tr>
+<td>分布式处理</td>
+<td>本地实现，分布式实现</td>
+</tr>
+<tr>
+<td>数学表达式</td>
+<td>数学图表达式，自动分化</td>
+</tr>
+<tr>
+<td>优化</td>
+<td>自动消除，kernel 优化，通信优化，支持模式，数据并行</td>
+</tr>
+</tbody></table>
+<h2 id="1-3-计算图"><a href="#1-3-计算图" class="headerlink" title="1.3 计算图"></a>1.3 计算图</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line">b &#x3D; tf.Variable(tf.zeros([100]))                   # 100维的向量，都初始化为0</span><br><span class="line">w &#x3D; tf.Variable(tf.random_uniform([784,100],-1,1)) # 784x100的矩阵</span><br><span class="line">x &#x3D; tf.placeholder(name&#x3D;&quot;x&quot;)                       # 输入的占位符placeholder</span><br><span class="line">relu &#x3D; tf.nn.relu(tf.matmul(w,x)+b)                # Relu(Wx+b)</span><br><span class="line">C &#x3D;[...]                                           # 使用relu的一个函数计算代价</span><br></pre></td></tr></table></figure>
+<p>对应的计算图如下:<br><img src="/images/blog/tensorflow_basicconcept.png" alt="计算图"></p>
+<h2 id="1-4-Tensorflow的代码样例"><a href="#1-4-Tensorflow的代码样例" class="headerlink" title="1.4 Tensorflow的代码样例"></a>1.4 Tensorflow的代码样例</h2><ol>
+<li>构建数据流图的第一部分代码</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line">import numpy as np</span><br><span class="line"># 创建100个numpy的 x,y 假数据点，y &#x3D; x*0.1+0.3</span><br><span class="line">x_data &#x3D; np.random.rand(100).astype(&quot;float32&quot;)</span><br><span class="line">y_data &#x3D; x_data*0.1+0.3</span><br><span class="line"># 找出计算 y_data &#x3D;W*x_data+b的w和b的值，虽然我们知道w&#x3D;0.1,b&#x3D;0.3,但是tensorflow会找到并计算出来</span><br><span class="line">w &#x3D; tf.Variable(tf.random_uniform)</span><br></pre></td></tr></table></figure>
+
+<h1 id="2-tensorflow概览"><a href="#2-tensorflow概览" class="headerlink" title="2 tensorflow概览"></a>2 tensorflow概览</h1><p>要使用tensorflow的话，你需要理解以下概念:</p>
+<ul>
+<li>图代表了计算</li>
+<li>图需要在会话(Sessions)中执行</li>
+<li>张量(tensor)代表数据</li>
+<li>使用Variables来持有状态</li>
+<li>使用<strong>feeds</strong> 和 <strong>fetches</strong>来获得任何操作的输入输出数据</li>
+</ul>
+<p>tensorflow的概览</p>
+<ul>
+<li>一个将计算转化为图的编程系统</li>
+<li>图中的节点是：<ul>
+<li>操作(op):执行某些计算</li>
+<li>输入(input):一个或多个张量(tensorflow)</li>
+<li>Tensor张量：一个有类型的多维数组</li>
+</ul>
+</li>
+</ul>
+<h1 id="3-两个计算阶段"><a href="#3-两个计算阶段" class="headerlink" title="3 两个计算阶段"></a>3 两个计算阶段</h1><h2 id="3-1-在图中计算"><a href="#3-1-在图中计算" class="headerlink" title="3.1 在图中计算"></a>3.1 在图中计算</h2><ul>
+<li>图必须在Session中运行</li>
+<li>会话(Session)<ul>
+<li>将图操作放入到设备上，比如CPUs和GPUs</li>
+<li>提供执行方法</li>
+<li>返回操作产生的张量，比如python中的<strong>numpy ndarray对象</strong>，以及C和C++<strong>tensorflow::Tensor</strong>实例。</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-2-图中的两个计算阶段"><a href="#3-2-图中的两个计算阶段" class="headerlink" title="3.2 图中的两个计算阶段"></a>3.2 图中的两个计算阶段</h2><ol>
+<li><p>构建阶段</p>
+<ul>
+<li>形成图</li>
+<li>创建图来代表神经网络并训练这个神经网络</li>
+</ul>
+</li>
+<li><p>执行阶段</p>
+<ul>
+<li>使用会话执行途中的操作</li>
+<li>重复执行图中训练操作集合</li>
+</ul>
+</li>
+<li><p>构建图</p>
+</li>
+</ol>
+<ul>
+<li>开始那些不需要任何输入(source ops)的操作(op)，常量</li>
+<li>将它们的输出传入到其他做计算的操作</li>
+<li>操作构建者返回对象<ul>
+<li>代表了结构化操作的输出</li>
+<li>将这些输出传入其他操作构建者作为输入</li>
+</ul>
+</li>
+</ul>
+<ol start="4">
+<li><p>默认图</p>
+<p>将节点加入此图的操作构建者</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line"># 创建一个产生1x2的矩阵的常量操作，操作被作为节点加入到默认图</span><br><span class="line"># 构建者的返回值代表了常量操作的输出</span><br><span class="line">matrix1 &#x3D; tf.constant([[3,3.]])</span><br><span class="line"># 创建另外一个产生 2x1矩阵的常量操作</span><br><span class="line">matrix2 &#x3D; tf.constant([[2.0],[2.]])</span><br></pre></td></tr></table></figure>
+<p>   有三个节点：两个<strong>constant</strong>操作(ops)以及一个<strong>matmul</strong>操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 创建一个Matmul操作，将 matrix1和matrix2作为输入</span><br><span class="line"># 返回值，‘product’，代表了矩阵相乘的结果</span><br><span class="line">product &#x3D; tf.matmul(matrix1,matrix2)</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>在会话Session中运行图</li>
+</ol>
+<ul>
+<li>创建一个Session对象：应该在被关闭以释放资源</li>
+<li>没有参数，session构建者运行默认图</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 运行默认图</span><br><span class="line">sess &#x3D; tf.Session()</span><br><span class="line"># 要运行matmul操作，我们调用了session的‘run()’方法，传入&#39;producr&#39;代表了matmul操作的输出。这即回调了matmul操作的输出结果</span><br><span class="line"># 操作的输出以一个numpy的&#39;ndarray&#39;对象返回&#39;result&#39;</span><br><span class="line">result &#x3D; sess.run(product)</span><br><span class="line">print result</span><br><span class="line"># &#x3D;&#x3D;&gt;[[12.]]</span><br><span class="line">#关闭会话</span><br><span class="line">sess.close()</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>Session运行图，Session.run()方法执行操作</li>
+<li>一个Session块(block)<ul>
+<li>在块的结尾自动关闭<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">with tf.Session() as sess:</span><br><span class="line">    result &#x3D; sess.run([product])</span><br><span class="line">    print result</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>GPU的使用</li>
+</ol>
+<ul>
+<li>将图定义转换为分布在各种计算资源，比如CPU和GPU之间的可执行操作</li>
+<li>如果有GPU，tensorflow会有限使用GPU</li>
+</ul>
+<p>#4 交互使用</p>
+<ul>
+<li>在python环境中，比如Ipython,<strong>InteractiveSession</strong>类会被使用</li>
+<li><strong>Tensor.eval()</strong>和<strong>Operation.run()</strong></li>
+<li>这可以避免必须用一个变量来保持一个session</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># 进入一个交互的Tensorflow Session</span><br><span class="line">import tensorflow as tf</span><br><span class="line">sess &#x3D; tf.InteractiveSession()</span><br><span class="line"></span><br><span class="line">x &#x3D; tf.Variable([1.0,2.0])</span><br><span class="line">y &#x3D; tf.constant([3.0,3.0])</span><br><span class="line">#使用&#39;x&#39;的initializer的 run() 方法初始化</span><br><span class="line">x.initializer.run()</span><br><span class="line"></span><br><span class="line"># 添加一个操作从&#39;x&#39;中抽取&#39;a&#39;，执行并打印结果</span><br><span class="line">sub &#x3D; tf.sub(x,a)</span><br><span class="line">print sub.eval()</span><br><span class="line"># &#x3D;&#x3D;&gt;[-2,-1.]</span><br><span class="line"></span><br><span class="line"># 关闭session</span><br><span class="line">sess.close()</span><br></pre></td></tr></table></figure>
+
+<h1 id="5-张量-Tensors"><a href="#5-张量-Tensors" class="headerlink" title="5 张量(Tensors)"></a>5 张量(Tensors)</h1><ul>
+<li>Tensor(张量)数据结构代表了所有数据</li>
+<li>在计算图中只有张量在操作之间传递</li>
+<li>n维数组或者列表<ul>
+<li>静态类型，秩，或者 shape</li>
+</ul>
+</li>
+</ul>
+<p><strong>rank(秩)</strong></p>
+<table>
+<thead>
+<tr>
+<th>rank</th>
+<th>数学实体</th>
+<th>python示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>Scalar(大小)</td>
+<td>s =483</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Vector(大小和方向)</td>
+<td>v=[1.1,2.2,3.3]</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Matrix(数据表)</td>
+<td>m=[[1,2,3],[4,5,6],[7,8,9]]</td>
+</tr>
+<tr>
+<td>3</td>
+<td>3-Tensor(立方(cube)的数量)</td>
+<td>t=[[[2],[4],[6],[8]],[[10],[12]]]</td>
+</tr>
+<tr>
+<td>n</td>
+<td>n-Tensor</td>
+<td>同上</td>
+</tr>
+</tbody></table>
+<p><strong>shape</strong></p>
+<p>|Rank| Shape|维数|示例|<br>|—|—|—|<br>|0|[]|0-D|一个0-D张量，一个标量|<br>|1|[D0]|1-D|一个1-D张量，shape是[5]|<br>|2|[D0,D1]|2-D|一个2-D张量，shape是[3,4]|<br>|3|[D0,D1,D2]|3-D|一个3-D张量，shape[1,4,3]|<br>|n|[D0,D1,D2,…Dn]|n-D|一个n-D张量，shape是[D0,D1,…Dn]|</p>
+<p><strong>数据类型</strong></p>
+<table>
+<thead>
+<tr>
+<th>Data type</th>
+<th>python类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DT_FLOAT</td>
+<td>tf.float32</td>
+<td>32位浮点类型</td>
+</tr>
+<tr>
+<td>DT_DOUBLE</td>
+<td>tf.float64</td>
+<td>64位浮点类型</td>
+</tr>
+<tr>
+<td>DT_INT64</td>
+<td>tf.int64</td>
+<td>64位有符号整型</td>
+</tr>
+<tr>
+<td>DT_INT32</td>
+<td>tf.int32</td>
+<td>32位有符号整型</td>
+</tr>
+<tr>
+<td>DT_INT16</td>
+<td>tf.int16</td>
+<td>16位有符号整型</td>
+</tr>
+<tr>
+<td>DT_INt8</td>
+<td>tf.int8</td>
+<td>8位有符号整型</td>
+</tr>
+<tr>
+<td>DT_UINT</td>
+<td>tf.unit8</td>
+<td>8位无符号整型</td>
+</tr>
+<tr>
+<td>DT_STRING</td>
+<td>tf.string</td>
+<td>变量长度的字节数组，Tensor每个元素是一个字节数组</td>
+</tr>
+<tr>
+<td>DT_BOOL</td>
+<td>tf.bool</td>
+<td>Boolean</td>
+</tr>
+<tr>
+<td>DT_COMPLEX64</td>
+<td>tf.complex64</td>
+<td>由两个32位浮点数组成的复数，实数和大小部分</td>
+</tr>
+<tr>
+<td>DT_QINT32</td>
+<td>tf.qint32</td>
+<td>量化操作中32位有符号整型</td>
+</tr>
+<tr>
+<td>DT_QINT8</td>
+<td>tf.qint8</td>
+<td>量化操作中8位有符号整型</td>
+</tr>
+<tr>
+<td>DT_QUINT8</td>
+<td>tf.quint8</td>
+<td>量化操作中8位无符号整型</td>
+</tr>
+</tbody></table>
+<p>#6 变量<br>变量的创建、初始化、存储和载入</p>
+<ul>
+<li>为了持有和更新参数，在图中保持状态可以通过调用 <strong>run()</strong>方法</li>
+<li>内存buffer包含张量</li>
+<li>必须是明确初始化并且在训练期间和训练之后存储到磁盘上的</li>
+<li>类 <strong>tf.Variable</strong><ul>
+<li>构造器：变量的初始化值，一个任意类型和shape的张量</li>
+<li>构造之后，类型和shape都会固定</li>
+<li>使用<strong>assign</strong>操作op， validate_shape = False<h2 id="6-1-创建"><a href="#6-1-创建" class="headerlink" title="6.1 创建"></a>6.1 创建</h2></li>
+</ul>
+</li>
+<li>传入一个张量作为初始值到 Variable构造方法中</li>
+<li>初始值：常量constants,序列化和随机值<ul>
+<li>tf.zeros(),tf.linspace(),tf.random_normal()</li>
+</ul>
+</li>
+<li>固定shape：与操作的shape相同</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 创建两个变量</span><br><span class="line">weight &#x3D; tf.Variable(tf.random_normal([784,200],stddev&#x3D;0.35),name &#x3D;&quot;weights&quot;)</span><br><span class="line">biases &#x3D; tf.Variable(tf.zeros([200]),name &#x3D;&quot;biases&quot;)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>调用 tf.Variable() 加入操作到图中</li>
+</ul>
+<h2 id="6-2-初始化"><a href="#6-2-初始化" class="headerlink" title="6.2 初始化"></a>6.2 初始化</h2><ul>
+<li>添加一个操作并执行</li>
+<li>tf.initialize_all_variables()</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 添加一个操作来初始化变量</span><br><span class="line">init_op &#x3D; tf.initialize_all_variables()</span><br><span class="line"># 过后，执行model</span><br><span class="line">with tf.Session() as sess:</span><br><span class="line">    #运行初始化操作</span><br><span class="line">    sess.run（init_op）</span><br></pre></td></tr></table></figure>
+<h2 id="6-3-存储和恢复"><a href="#6-3-存储和恢复" class="headerlink" title="6.3 存储和恢复"></a>6.3 存储和恢复</h2><ul>
+<li><strong>tf.saver</strong></li>
+<li>检查点文件：Variables都存储在二进制文件中，该文件包含了一个变量名到张量值得map</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># 创建一些变量</span><br><span class="line">v1 &#x3D; tf.Variables(...,name &#x3D;&quot;v1&quot;)</span><br><span class="line">v2 &#x3D; tf.Variables(...,name&#x3D;&quot;v2&quot;)</span><br><span class="line">...</span><br><span class="line">#添加一个操作来初始化变量</span><br><span class="line">init_op &#x3D; tf.initialize_all_variables()</span><br><span class="line"></span><br><span class="line"># 添加操作来保存和恢复所有变量</span><br><span class="line">saver &#x3D; tf.train.Saver()</span><br><span class="line"># 然后，运行模型，初始化变量，做一些操作，保存变量到磁盘中</span><br><span class="line">with tf.Session() as sess:</span><br><span class="line">     sess.run(init_op)</span><br><span class="line">     # 对模型做一些操作</span><br><span class="line">    .....</span><br><span class="line">    #存储变量到磁盘中</span><br><span class="line">    save_path &#x3D; saver.save(sess,&quot;&#x2F;tmp&#x2F;model.ckpt&quot;)</span><br><span class="line">    print (&quot;Model saved in file: %s&quot;%save_path)</span><br></pre></td></tr></table></figure>
+<p>** 恢复**</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">with tf.Session() as sess:</span><br><span class="line">    # 从磁盘中恢复变量</span><br><span class="line">    saver.restore(sess,&quot;&#x2F;tmp&#x2F;model.ckpt&quot;)</span><br><span class="line">    print (&quot;Model restored&quot;)</span><br><span class="line">    # 做一些操作</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-4-选择哪些变量来存储和恢复"><a href="#6-4-选择哪些变量来存储和恢复" class="headerlink" title="6.4 选择哪些变量来存储和恢复"></a>6.4 选择哪些变量来存储和恢复</h2><ul>
+<li><p>在 ** tf.train.Saver()**中没有参数</p>
+<ul>
+<li>处理图中所有变量，每个变量都会被保存在该名字之下</li>
+</ul>
+</li>
+<li><p>存储和恢复变量的子集</p>
+<ul>
+<li>训练5层神经网络，想训练一个新的6层神经网络，从5层圣经网络中恢复参数</li>
+</ul>
+</li>
+<li><p>向<strong>tf.train.Saver()</strong>构造方法中传入一个Python词典:keys</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># 创建一些变量</span><br><span class="line">v1 &#x3D; tf.Variables(...,name &#x3D;&quot;v1&quot;)</span><br><span class="line">v2 &#x3D; tf.Variables(...,name &#x3D;&quot;v2&quot;)</span><br><span class="line"># 添加操作存储和恢复变量 v2,使用名字 &quot;my_v2&quot;</span><br><span class="line">saver &#x3D; tf.train.Saver(&#123;&quot;my_v2&quot;:v2&#125;)</span><br><span class="line"># 使用saver对象</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<h2 id="6-5-简单计数器的示例代码"><a href="#6-5-简单计数器的示例代码" class="headerlink" title="6.5 简单计数器的示例代码"></a>6.5 简单计数器的示例代码</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"># 创建一个变量，初始化为标量0</span><br><span class="line">state &#x3D; tf.Variables(0,name&#x3D;&quot;Counter&quot;)</span><br><span class="line"># 创建一个操作来给&quot;state&quot;加1</span><br><span class="line">one &#x3D; tf.constant(1)</span><br><span class="line">new_value &#x3D; tf.add(state,one)</span><br><span class="line">update &#x3D; tf.assign(state,new_value)</span><br><span class="line"></span><br><span class="line"># 在图被运行，变量必须是通过运行一个&quot;init&quot;操作被初始化。</span><br><span class="line"># 我们首先要将&quot;init&quot;操作加入到图中</span><br><span class="line">init_op &#x3D; tf.initialize_all_variables()</span><br><span class="line"></span><br><span class="line"># 运行图，和操作</span><br><span class="line">with tf.Session() as sess:</span><br><span class="line">    #运行 &#39;init&#39;操作</span><br><span class="line">    sess.run(init_op)</span><br><span class="line">    # 打印&#39;state&#39;的初始化值</span><br><span class="line">    print (sess.run(state))</span><br><span class="line">    # 运行更新&#39;state&#39;的操作，并打印&#39;state&#39;</span><br><span class="line">    for _ in range(3):</span><br><span class="line">        sess.run(update)</span><br><span class="line">        print (sess.run(state))</span><br><span class="line"># 输出</span><br><span class="line">#0</span><br><span class="line">#1</span><br><span class="line">#2</span><br><span class="line">#3</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-6-取数据Fetches"><a href="#6-6-取数据Fetches" class="headerlink" title="6.6 取数据Fetches"></a>6.6 取数据Fetches</h2><ul>
+<li>在Session对象中调用<strong>run()</strong>方法来执行图，并传入张量来取回数据</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">input1 &#x3D; tf.constant(3.0)</span><br><span class="line">input2 &#x3D; tf.constant(2.0)</span><br><span class="line">input3 &#x3D; tf.constant(5.0)</span><br><span class="line">intermed &#x3D; tf.add(input2,input3)</span><br><span class="line">mul &#x3D; tf.mul(input1,intermed)</span><br><span class="line"></span><br><span class="line">with tf.Session() as sess:</span><br><span class="line">     result &#x3D; sess.run([mul,intermed])</span><br><span class="line">     print (result)</span><br><span class="line"># 输出</span><br><span class="line"># [array([21.],dtype &#x3D; float32),array([7.],dtype &#x3D; float32)]</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-7-Feeds"><a href="#6-7-Feeds" class="headerlink" title="6.7 Feeds"></a>6.7 Feeds</h2><ul>
+<li>直接打包一个张量到图中的任何操作</li>
+<li>使用一个张量值临时替换一个操作的输出值</li>
+<li>feed数据作为<strong>run()</strong>方法的一个参数</li>
+<li>仅仅用来运行调用被传入值</li>
+<li><strong>tf.placeholder()</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">input1 &#x3D; tf.placeholder(tf.float32)</span><br><span class="line">input2 &#x3D;tf.placeholder(tf.float32)</span><br><span class="line">output &#x3D; tf.mul(input1,input2)</span><br><span class="line"></span><br><span class="line">with tf.Session() as sess:</span><br><span class="line">    print (sess.run([output],feed_dict &#x3D; &#123;input1:[7.],input2:[2.]&#125;))</span><br><span class="line"></span><br><span class="line">#输出</span><br><span class="line">#[array([14.],dtype&#x3D;float32)]</span><br></pre></td></tr></table></figure>
+
+<h1 id="7-操作"><a href="#7-操作" class="headerlink" title="7 操作"></a>7 操作</h1><table>
+<thead>
+<tr>
+<th>类别</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>逐元素数学运算</td>
+<td>Add,Sub,Mul,Div,Exp,Log,Greater,Less,Equal…</td>
+</tr>
+<tr>
+<td>数组操作</td>
+<td>Concat,Slice,Split,Constant,Rank,Shape,Shuffle..</td>
+</tr>
+<tr>
+<td>矩阵运算</td>
+<td>MatMul,MatrixInverse,MatrixDeterminant…</td>
+</tr>
+<tr>
+<td>状态操作</td>
+<td>Variable,Assign,AssignAdd…</td>
+</tr>
+<tr>
+<td>神经元构建块</td>
+<td>SoftMax,Sigmoid,ReLU,Convolution2D,MaxPool…</td>
+</tr>
+<tr>
+<td>检查点操作</td>
+<td>Save,Restore</td>
+</tr>
+<tr>
+<td>队列和同步操作</td>
+<td>Enqueue,Dequeue,MutexAcquire,MutexRelease,…</td>
+</tr>
+<tr>
+<td>控制流操作</td>
+<td>Merge,Switch,Enter,Leave,NextIteration</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2016-06-13-GoogleTensorFlowBasicConcept/" data-id="ck4ifp1lj000v2wjec7j2fhqq" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2016-03-16-bigdata-hadooplzo" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2016-03-16-bigdata-hadooplzo/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.296Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/23/2016-03-16-bigdata-hadooplzo/">hadoop lzo问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一-重要问题"><a href="#一-重要问题" class="headerlink" title="一 重要问题"></a>一 重要问题</h2><h2 id="1-1-hadoop-gpl-compression还是hadoop-lzo"><a href="#1-1-hadoop-gpl-compression还是hadoop-lzo" class="headerlink" title="1.1  hadoop-gpl-compression还是hadoop-lzo"></a>1.1  hadoop-gpl-compression还是hadoop-lzo</h2><p>  <strong>hadoop-lzo-xxx</strong> 的前身是<strong>hadoop-gpl-compression-xxx</strong>,之前是放在googlecode下管理,<a href="http://code.google.com/p/hadoop-gpl-compression/" target="_blank" rel="noopener">地址</a>但由于协议问题后来移植到github上,也就是现在的hadoop-lzo-xxx,github,<a href="https://github.com/kevinweil/hadoop-lzo" target="_blank" rel="noopener">链接地址</a>.<br>    网上介绍hadoop lzo压缩都是基于hadoop-gpl-compression的介绍.而hadoop-gpl-compression还是09年开发的,跟现在hadoop版本已经无法再完全兼容,会发生一些问题.而按照网上的方法,为了兼容hadoop,使用hadoop-lzo-xxx。</p>
+<p>  <strong>原理：</strong>因为hadoop lzo实际上得依赖C/C++开发的lzo去压缩,而他们通过JNI去调用.如果使用hadoop-gpl-compression下的Native,但使用hadoop-lzo-xxx的话,会导致版本不一致问题.所以正确的做法是,将hadoop-lzo-xxx下的Native放入到/usr/local/lib下.而你每升级一个hadoop-lzo-xxx版本,或许就得重复将新lzo版本下的native目录放入/usr/local/lib下.具体需要测试.<br>同时这里说下,hadoop-lzo-xxx的验证原理,让我们更系统的了解为什么使用hadoop-lzo会报的一系列错误.     </p>
+<ol>
+<li>首先Hadoop-lzo会通过JNI调用gplcompression,如果调取不到会报Could not load native gpl library异常.具体代码如下:    </li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">static &#123;   </span><br><span class="line">   try &#123;  </span><br><span class="line">       &#x2F;&#x2F;try to load the lib      </span><br><span class="line">         System.loadLibrary(&quot;gplcompression&quot;);</span><br><span class="line">         nativeLibraryLoaded &#x3D; true;  </span><br><span class="line">         LOG.info(&quot;Loaded native gpl library&quot;);  </span><br><span class="line">      &#125; catch (Throwable t) &#123;  </span><br><span class="line">	  LOG.error(&quot;Could not load native gpl library&quot;, t);  </span><br><span class="line">	  nativeLibraryLoaded &#x3D; false;  </span><br><span class="line">	 &#125;  </span><br><span class="line">&#96;&#96;&#96;      </span><br><span class="line">2. 获取了gplcompression后需要初始化加载以便可以调用,如果加载不成功,如我刚才说的版本冲突等也会报一系列错误.同时这里的加载和初始化分成两步,一步是压缩,对应Java的类是LzoCompressor.另一步解压缩,对应Java的类是LzoDecompressor.先看下LzoCompressor是如何加载初始化的,代码如下:          </span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;   </span><br><span class="line">	static &#123;  </span><br><span class="line">	  if (GPLNativeCodeLoader.isNativeCodeLoaded()) &#123;  </span><br><span class="line">	    &#x2F;&#x2F; Initialize the native library  </span><br><span class="line">	    try &#123;  </span><br><span class="line">	      initIDs();  </span><br><span class="line">	      nativeLzoLoaded &#x3D; true;  </span><br><span class="line">	    &#125; catch (Throwable t) &#123;  </span><br><span class="line">	      &#x2F;&#x2F; Ignore failure to load&#x2F;initialize native-lzo  </span><br><span class="line">	      LOG.warn(t.toString());  </span><br><span class="line">	      nativeLzoLoaded &#x3D; false;  </span><br><span class="line">	    &#125;  </span><br><span class="line">	    LZO_LIBRARY_VERSION &#x3D; (nativeLzoLoaded) ? 0xFFFF &amp; getLzoLibraryVersion()  </span><br><span class="line">	        : -1;  </span><br><span class="line">	  &#125; else &#123;  </span><br><span class="line">	    LOG.error(&quot;Cannot load &quot; + LzoCompressor.class.getName() +   </span><br><span class="line">	    &quot; without native-hadoop library!&quot;);  </span><br><span class="line">	    nativeLzoLoaded &#x3D; false;  </span><br><span class="line">	    LZO_LIBRARY_VERSION &#x3D; -1;  </span><br><span class="line">	  &#125;  </span><br><span class="line">	&#125;</span><br><span class="line">&#96;&#96;&#96;      </span><br><span class="line"></span><br><span class="line">   如我这里所报的警告    </span><br><span class="line">	&#96;WARN lzo.LzoCompressor: java.lang.NoSuchFieldError: workingMemoryBuf&#96;     </span><br><span class="line">  就是由这里的 **LOG.warn(t.toString())**所抛出.同时这里也会先加载gplcompression,加载不成功同样会报    </span><br><span class="line">	&#96;without native-hadoop library!&#96;    </span><br><span class="line">  错误.再看看解压缩LzoDecompressor,原理差不多,不再阐述,代码如下:</span><br></pre></td></tr></table></figure>
+<p>   static {<br>      if (GPLNativeCodeLoader.isNativeCodeLoaded()) {<br>        // Initialize the native library<br>        try {<br>          initIDs();<br>          nativeLzoLoaded = true;<br>        } catch (Throwable t) {<br>          // Ignore failure to load/initialize native-lzo<br>          LOG.warn(t.toString());<br>          nativeLzoLoaded = false;<br>        }<br>        LZO_LIBRARY_VERSION = (nativeLzoLoaded) ? 0xFFFF &amp; getLzoLibraryVersion()<br>            : -1;<br>      } else {<br>        LOG.error(“Cannot load “ + LzoDecompressor.class.getName() +<br>        “ without native-hadoop library!”);<br>        nativeLzoLoaded = false;<br>        LZO_LIBRARY_VERSION = -1;<br>      }<br>    }</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#  二 如何安装LZO    </span><br><span class="line"></span><br><span class="line">1.首先下载https:&#x2F;&#x2F;github.com&#x2F;kevinweil&#x2F;hadoop-lzo&#x2F;,我这里下载到</span><br><span class="line">			**&#x2F;home&#x2F;guoyun&#x2F;Downloads&#x2F;&#x2F;home&#x2F;guoyun&#x2F;hadoop&#x2F;kevinweil-hadoop-lzo-2dd49ec**    </span><br><span class="line">2. 去lzo源码根目录下执行</span><br></pre></td></tr></table></figure>
+<pre><code>wget https://download.github.com/kevinweil-hadoop-lzo-2ad6654.tar.gz  
+tar -zxvf kevinweil-hadoop-lzo-2ad6654.tar.gz  
+cd kevinweil-hadoop-lzo-2ad6654
+export CFLAGS=-m64
+export CXXFLAGS=-m64
+ant compile-native tar    </code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">2. 通过ant生成native和jar,命令如下:    </span><br><span class="line"></span><br><span class="line">  在build目录下生成对应的tar包,解压缩后,进入该目录可以看到对应的jar包hadoop-lzo-0.4.14.jar.同时将lib&#x2F;native&#x2F;Linux-amd64-64&#x2F;目录下所有文件拷贝到$HADOOP_HOME&#x2F;lib和&#x2F;usr&#x2F;local&#x2F;lib两个目录下.    </span><br><span class="line"></span><br><span class="line">  **注明:**拷贝到&#x2F;usr&#x2F;local&#x2F;lib是便于调试,如是生产环境则无需拷贝.    </span><br><span class="line">  **注意：**如果 Hadoop&#x2F;lib&#x2F;目录下没有native&#x2F;Linux-amd64-64&#x2F; 目录，需要手工创建。或者下载hadoop-gpl-compression。参考(http:&#x2F;&#x2F;guoyunsky.iteye.com&#x2F;blog&#x2F;1237327),安装步骤中的第四步，复制库文件到hadoop&#x2F;lib目录下的操作。     </span><br><span class="line"></span><br><span class="line">  &#96;&#96;&#96;mv hadoop-gpl-compression-0.1.0&#x2F;lib&#x2F;native&#x2F;Linux-amd64-64&#x2F;* $HADOOP_HOME&#x2F;lib&#x2F;native&#x2F;Linux-amd64-64&#x2F;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="三-如何确定是否已经安装好LZO"><a href="#三-如何确定是否已经安装好LZO" class="headerlink" title="三 如何确定是否已经安装好LZO"></a>三 如何确定是否已经安装好LZO</h1><p>  <a href="https://code.google.com/a/apache-extras.org/p/hadoop-gpl-compression/wiki/FAQ?redir=1" target="_blank" rel="noopener">参考</a><br> 执行命令:        </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> % ls -l &#x2F;usr&#x2F;lib*&#x2F;liblzo2*</span><br><span class="line">-rw-r--r--  1 root root 171056 Mar 20  2006 &#x2F;usr&#x2F;lib&#x2F;liblzo2.a</span><br><span class="line">lrwxrwxrwx  1 root root     16 Feb 17  2007 &#x2F;usr&#x2F;lib&#x2F;liblzo2.so -&gt; liblzo2.so.2.0.0*</span><br><span class="line">lrwxrwxrwx  1 root root     16 Feb 17  2007 &#x2F;usr&#x2F;lib&#x2F;liblzo2.so.2 -&gt; liblzo2.so.2.0.0*</span><br><span class="line">-rwxr-xr-x  1 root root 129067 Mar 20  2006 &#x2F;usr&#x2F;lib&#x2F;liblzo2.so.2.0.0*</span><br><span class="line">-rw-r--r--  1 root root 208494 Mar 20  2006 &#x2F;usr&#x2F;lib64&#x2F;liblzo2.a</span><br><span class="line">lrwxrwxrwx  1 root root     16 Feb 17  2007 &#x2F;usr&#x2F;lib64&#x2F;liblzo2.so -&gt; liblzo2.so.2.0.0*</span><br><span class="line">lrwxrwxrwx  1 root root     16 Feb 17  2007 &#x2F;usr&#x2F;lib64&#x2F;liblzo2.so.2 -&gt; liblzo2.so.2.0.0*</span><br><span class="line">-rwxr-xr-x  1 root root 126572 Mar 20  2006 &#x2F;usr&#x2F;lib64&#x2F;liblzo2.so.2.0.0*</span><br></pre></td></tr></table></figure>
+
+<p> lzo压缩已经广泛用于Hadoop中,至于为什么要在Hadoop中使用Lzo.这里不再重述.其中很重要的一点就是由于分布式计算,所以需要支持对压缩数据进行分片,也就是Hadoop的InputSplit,这样才能分配给多台机器并行处理.所以这里花了一天的时间,看了下Hadoop lzo的源码,了解下Hadooplzo是如何做到的.    </p>
+<p> 其实一直有种误解,就是以为lzo本身是支持分布式的,也就是支持压缩后的数据可以分片.我们提供给它分片的逻辑,由lzo本身控制.但看了Hadoop lzo源码才发现,lzo只是个压缩和解压缩的工具,如何分片,是由Hadooplzo(Javad代码里)控制.具体的分片算法写得也很简单,就是在内存中开一块大大的缓存,默认是256K,缓存可以在通过io.compression.codec.lzo.buffersize参数指定.数据读入缓存(实际上要更小一些),如果缓存满了,则交给lzo压缩,获取压缩后的数据,同时在lzo文件中写入压缩前后的大小以及压缩后的数据.所以这里,一个分片,其实就是&lt;=缓存大小.具体lzo文件格式(这里针对Lzop):</p>
+<p> 1.lzo文件头</p>
+<ul>
+<li><p>写入lzo文件标识： 此时长度9</p>
+</li>
+<li><p>写入版本    </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">LZOP_VERSION		lzo版本，short，此时长度11</span><br><span class="line">LZO_VERSION_LIBRARY	lzo压缩库版本，short，此时长度13</span><br><span class="line">LZOP_COMPAT_VERSION	最后lzo应该一直的版本，short，此时长度15</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>写入压缩策略    </p>
+</li>
+<li><p>LZO1X_1的话writeByte写入1和5，此时长度17</p>
+</li>
+<li><p>writeInt写入flag(标识)，此时长度21    </p>
+</li>
+<li><p>writeInt写入mode(模式)，此时长度25    </p>
+</li>
+<li><p>writeInt写入当前时间秒，此时长度29    </p>
+</li>
+<li><p>writeInt写入0,不知道做何用途，此时长度33   </p>
+</li>
+<li><p>writeBye写入0，不知道做何用途，此时长度34    </p>
+</li>
+<li><p>writeInt写入之前数据的checksum，此时长度38</p>
+</li>
+</ul>
+<ol start="2">
+<li>写入多个块,会有多个.循环处理,直到压缩完成<br>写入压缩前的数据长度,此时长度为39如果压缩前的长度小于压缩后的长度,则写入未压缩的数据长度,再写入未压缩的数据.反之则写入压缩后的数据长度,以及压缩后的数据    </li>
+<li>lzo文件尾,只是写入4个0,不知道做什么用途               同时如果你指定索引文件路径的话,则一个缓存写完后便会将写入的数据长度写到索引文件中.如此在Hadoop分布式时只要根据索引文件的各个长度,读取该长度的数据 ,便可交给map处理.<br>以上是hadoop lzo大概原理,同时LzopCodec支持在压缩时又生成对应的索引文件.而LzoCodec不支持.具体代码看下来,还不明确LzoCodec为何没法做到,也是一样的切片逻辑.具体待测试.</li>
+</ol>
+<h1 id="4-hadoop中使用lzo的压缩"><a href="#4-hadoop中使用lzo的压缩" class="headerlink" title="4 hadoop中使用lzo的压缩"></a>4 hadoop中使用lzo的压缩</h1><p> 在hadoop中使用lzo的压缩算法可以减小数据的大小和数据的磁盘读写时间，不仅如此，lzo是基于block分块的，这样他就允许数据被分解成chunk，并行的被hadoop处理。这样的特点，就可以让lzo在hadoop上成为一种非常好用的压缩格式。    </p>
+<p>   lzo本身不是splitable的，所以当数据为text格式时，用lzo压缩出来的数据当做job的输入是一个文件作为一个map。但是sequencefile本身是分块的，所以sequencefile格式的文件，再配上lzo的压缩格式，就可实现lzo文件方式的splitable。    </p>
+<p>   由于压缩的数据通常只有原始数据的1/4，在HDFS中存储压缩数据，可以使集群能保存更多的数据，延长集群的使用寿命。不仅如此，由于mapreduce作业通常瓶颈都在IO上，存储压缩数据就意味这更少的IO操作，job运行更加的高效。但是，在hadoop上使用压缩也有两个比较麻烦的地方：   </p>
+<ul>
+<li><p>第一，有些压缩格式不能被分块，并行的处理，比如gzip。    </p>
+</li>
+<li><p>第二，另外的一些压缩格式虽然支持分块处理，但是解压的过程非常的缓慢，使job的瓶颈转移到了cpu上，例如bzip2。比如我们有一个1.1GB的gzip文件，该文件 被分成128MB/chunk存储在hdfs上，那么它就会被分成9块。为了能够在mapreduce中并行的处理各个chunk，那么各个mapper之间就有了依赖。而第二个mapper就会在文件的某个随机的byte出进行处理。那么gzip解压时要用到的上下文字典就会为空，这就意味这gzip的压缩文件无法在hadoop上进行正确的并行处理。也就因此在hadoop上大的gzip压缩文件只能被一个mapper来单个的处理，这样就很不高效，跟不用mapreduce没有什么区别了。而另一种bzip2压缩格式，虽然bzip2的压缩非常的快，并且甚至可以被分块，但是其解压过程非常非常的缓慢，并且不能被用streaming来读取，这样也无法在hadoop中高效的使用这种压缩。即使使用，由于其解压的低效，也会使得job的瓶颈转移到cpu上去。    </p>
+<p>如果能够拥有一种压缩算法，即能够被分块，并行的处理，速度也非常的快，那就非常的理想。这种方式就是lzo。lzo的压缩文件是由许多的小的blocks组成（约256K），使的hadoop的job可以根据block的划分来splitjob。不仅如此，lzo在设计时就考虑到了效率问题，它的解压速度是gzip的两倍，这就让它能够节省很多的磁盘读写，它的压缩比的不如gzip，大约压缩出来的文件比gzip压缩的大一半，但是这样仍然比没有经过压缩的文件要节省20%-50%的存储空间，这样就可以在效率上大大的提高job执行的速度。以下是一组压缩对比数据，使用一个8.0GB的未经过压缩的数据来进行对比：    </p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">压缩格式</th>
+<th align="center">文件大小(GB)</th>
+<th align="center">压缩时间</th>
+<th align="center">解压时间</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">None</td>
+<td align="center">some_logs</td>
+<td align="center">8.0</td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td align="center">Gzip</td>
+<td align="center">some_logs.gz</td>
+<td align="center">1.3</td>
+<td align="center">241</td>
+</tr>
+<tr>
+<td align="center">LZO</td>
+<td align="center">some_logs.lzo</td>
+<td align="center">2.0</td>
+<td align="center">55</td>
+</tr>
+</tbody></table>
+<p>可以看出，lzo压缩文件会比gzip压缩文件稍微大一些，但是仍然比原始文件要小很多倍，并且lzo文件压缩的速度几乎相当于gzip的5倍，而解压的速度相当于gzip的两倍。lzo文件可以根据blockboundaries来进行分块，比如一个1.1G的lzo压缩文件，那么处理第二个128MBblock的mapper就必须能够确认下一个block的boundary，以便进行解压操作。lzo并没有写什么数据头来做到这一点，而是实现了一个lzoindex文件，将这个文件（foo.lzo.index）写在每个foo.lzo文件中。这个index文件只是简单的包含了每个block在数据中的offset，这样由于offset已知的缘故，对数据的读写就变得非常的快。通常能达到90-100MB/秒，也就是10-12秒就能读完一个GB的文件。一旦该index文件被创建，任何基于lzo的压缩文件就能通过load该index文件而进行相应的分块，并且一个block接一个block的被读取。也因此，各个mapper都能够得到正确的block，这就是说，可以只需要进行一个LzopInputStream的封装，就可以在hadoop的mapreduce中并行高效的使用lzo。如果现在有一个job的InputFormat是TextInputFormat，那么就可以用lzop来压缩文件，确保它正确的创建了index，将TextInputFormat换成LzoTextInputFormat，然后job就能像以前一样正确的运行，并且更加的快。有时候，一个大的文件被lzo压缩过之后，甚至都不用分块就能被单个mapper高效的处理了。<br>在hadoop集群中安装lzo<br>要在hadoop中搭建lzo使用环境非常简单：    </p>
+<ol>
+<li><p>安装lzop native libraries<br>例如：<code>sudo yum install lzop lzo2</code></p>
+</li>
+<li><p>从如下地址下载 hadooplzo支持到源代码：<a href="http://github.com/kevinweil/hadoop-lzo" target="_blank" rel="noopener">http://github.com/kevinweil/hadoop-lzo</a></p>
+</li>
+<li><p>编译从以上链接checkout下来到代码，通常为：ant compile-native tar</p>
+</li>
+<li><p>将编译出来到hadoop-lzo-*.jar部署到hadoop集群到各个slave到某个有效目录下，如$HADOOOP_HOME/lib</p>
+</li>
+<li><p>将以上编译所得到hadoop-lzo native libbinary部署到集群到某个有效目录下，如$HADOOP_HOME/lib/native/Linux-amd64-64。</p>
+</li>
+<li><p>将如下配置到 core-site.xml 中：    </p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">&lt;name&gt;io.compression.codecs&lt;&#x2F;name&gt;</span><br><span class="line">&lt;value&gt;org.apache.hadoop.io.compress.GzipCodec,org.apache.hadoop.io.compress.DefaultCodec,org.apache.hadoop.io.compress.BZip2Codec,com.hadoop.compression.lzo.LzoCodec,com.hadoop.compression.lzo.LzopCodec&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">&lt;name&gt;io.compression.codec.lzo.class&lt;&#x2F;name&gt;</span><br><span class="line">&lt;value&gt;com.hadoop.compression.lzo.LzoCodec&lt;&#x2F;value&gt;</span><br><span class="line">&lt;&#x2F;property&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>将如下配置到mapred-site.xml中：        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">	&lt;property&gt;</span><br><span class="line">     &lt;name&gt;mapred.child.env&lt;&#x2F;name&gt;</span><br><span class="line">	&lt;value&gt;JAVA_LIBRARY_PATH&#x3D;&#x2F;path&#x2F;to&#x2F;your&#x2F;native&#x2F;hadoop-lzo&#x2F;libs&lt;&#x2F;value&gt;</span><br><span class="line">	&lt;&#x2F;property&gt;</span><br><span class="line">	如果想要mapreduce再写中间结果时也使用压缩，可以将如下配置也写入到mapred-site.xml中。</span><br><span class="line">	&lt;property&gt;</span><br><span class="line">	&lt;name&gt;mapred.map.output.compression.codec&lt;&#x2F;name&gt;</span><br><span class="line">	&lt;value&gt;com.hadoop.compression.lzo.LzoCodec&lt;&#x2F;value&gt;</span><br><span class="line">	&lt;&#x2F;property&gt;</span><br><span class="line">&#96;&#96;&#96;    </span><br><span class="line"></span><br><span class="line">如果以上所有操作都成功，那么现在就可以尝试使用lzo了。比如打包一个lzo都压缩文件，如lzo_log文件，上传到hdfs中，然后用以下命令进行测试：</span><br></pre></td></tr></table></figure>
+hadoop jar /path/to/hadoop-lzo.jarcom.hadoop.compression.lzo.LzoIndexerhdfs://namenode:9000/lzo_logs<pre><code></code></pre></li>
+</ol>
+<p>如果要写一个job来使用lzo，可以找一个job，例如wordcount，将当中到TextInputFormat修改为LzoTextInputForma，其他都不用修改，job就能从hdfs上读入lzo压缩文件，进行分布式都分块并行处理。</p>
+<blockquote>
+<p>Using Hadoop and LZO<br>Reading and Writing LZO Data<br>The project provides LzoInputStream and LzoOutputStream wrapping regular streams, to allow you to easily read and write compressed LZO data.<br>Indexing LZO Files<br>At this point, you should also be able to use the indexer to index lzo files in Hadoop (recall: this makes them splittable, so that they can be analyzed in parallel in a mapreduce job). Imagine that big_file.lzo is a 1 GB LZO file. You have two options:<br>•    index it in-process via:<br>•    hadoop jar /path/to/your/hadoop-lzo.jar com.hadoop.compression.lzo.LzoIndexer big_file.lzo<br>•    index it in a map-reduce job via:<br>•    hadoop jar /path/to/your/hadoop-lzo.jar com.hadoop.compression.lzo.DistributedLzoIndexer big_file.lzo<br>Either way, after 10-20 seconds there will be a file named big_file.lzo.index. The newly-created index file tells the LzoTextInputFormat’s getSplits function how to break the LZO file into splits that can be decompressed and processed in parallel. Alternatively, if you specify a directory instead of a filename, both indexers will recursively walk the directory structure looking for .lzo files, indexing any that do not already have corresponding .lzo.index files.<br>Running MR Jobs over Indexed Files<br>Now run any job, say wordcount, over the new file. In Java-based M/R jobs, just replace any uses of TextInputFormat by LzoTextInputFormat. In streaming jobs, add “-inputformat com.hadoop.mapred.DeprecatedLzoTextInputFormat” (streaming still uses the old APIs, and needs a class that inherits from org.apache.hadoop.mapred.InputFormat). Note that to use the DeprecatedLzoTextInputFormat properly with hadoop-streaming, you should also set the jobconf propertystream.map.input.ignoreKey=true. That will replicate the behavior of the default TextInputFormat by stripping off the byte offset keys from the input lines that get piped to the mapper process. For Pig jobs, email me or check the pig list – I have custom LZO loader classes that work but are not (yet) contributed back.<br>Note that if you forget to index an .lzo file, the job will work but will process the entire file in a single split, which will be less efficient.</p>
+</blockquote>
+<p>参考资料    </p>
+<p><a href="http://blog.csdn.net/scorpiohjx2/article/details/18423529" target="_blank" rel="noopener">lzo本地压缩与解压缩实例</a><br><a href="http://share.blog.51cto.com/278008/549393/" target="_blank" rel="noopener">hadoop集群内lzo的安装与配置</a><br><a href="http://www.tuicool.com/articles/VVj6rm" target="_blank" rel="noopener">安装 Hadoop 2.0.0-cdh4.3.0 LZO 成功</a><br><a href="https://code.google.com/a/apache-extras.org/p/hadoop-gpl-compression/wiki/FAQ?redir=1" target="_blank" rel="noopener">hadoop-lzo源代码</a><br><a href="http://guoyunsky.iteye.com/blog/1237327" target="_blank" rel="noopener">Hadoop Could not load native gpl library异常解决</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2016-03-16-bigdata-hadooplzo/" data-id="ck4ifp1li000t2wje9bx36nsz" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2016-03-12-spark-envirnoment" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2016-03-12-spark-envirnoment/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.294Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/23/2016-03-12-spark-envirnoment/">spark环境部署</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一-spark安装和使用"><a href="#一-spark安装和使用" class="headerlink" title="一 spark安装和使用"></a>一 spark安装和使用</h2><h2 id="1-1-安装spark"><a href="#1-1-安装spark" class="headerlink" title="1.1 安装spark"></a>1.1 安装spark</h2><p>  我们主要以Windows环境为例介绍Spark的安装。<br>  整个安装过程主要分为四个步骤：安装JDK、安装Scala、安装Spark、安装WinUtil。在Linux和Mac OS X下<br>  安装Spark只需要完成前三步即可。</p>
+<h3 id="1-1-1-安装JDK"><a href="#1-1-1-安装JDK" class="headerlink" title="1.1.1 安装JDK"></a>1.1.1 安装JDK</h3><p>Spark采用Scala语言编写，而Scala程序是以JVM为运行环境的，因此需先安装JDK以支持Spark的运行。<br>Spark通常需要JDK 6.0以上版本，你可以在Oracle的JDK<a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_blank" rel="noopener">官网</a> 下载相应版本的JDK安装包，如<br>。需要注意的是，应选择下载“JDK”安装包，而不是“JRE”。在我们这个示例中，我们选择的是JDK 7.</p>
+<h3 id="1-1-2-安装scala"><a href="#1-1-2-安装scala" class="headerlink" title="1.1.2 安装scala"></a>1.1.2 安装scala</h3><p>刚才我们提到，Spark是采用Scala语言编写的，因此第二步是要安装Scala。Scala官网的<a href="http://www.scala-lang.org/download/" target="_blank" rel="noopener">下载页面</a>提供了多个版本的Scala下载，<br>但由于Scala各个版本之间兼容性并不好，因此在下载的时候一定要注意你要安装的Spark版本所依赖的Scala版本，以免遇到一些难以预知的问题。在我们的例子中，是要安装目前最新的Spark 1.3.0版本，因此<br>我们选择下载所需的Scala 2.10.4版本。选择之前的历史版本下载，需要先从如图2-2所示的下载页面中点击“All previous Scala Releases”链接，进入历史版本列表，然后选择“2.10.4”版本[下载](<a href="http://www.scala-lang.org/f" target="_blank" rel="noopener">http://www.scala-lang.org/f</a> iles/archive/scala-2.10.4.msi)<br>。下载后按照提示一步一步执行安装即可。</p>
+<p>  Scala安装后，要进行一个验证的过程以确认安装成功，其方法如下：          </p>
+<ul>
+<li>在Windows中执行命令cmd，启动Windows命令行环境。        </li>
+<li>在命令行环境中，输入scala，然后敲回车。        </li>
+<li>如果看到如图2-3所示成功启动Scala Shell环境，则说明安装成功，然后输入exit，退出Scala Shell环境。    </li>
+<li>如果启动Scala Shell环境失败，一般只需要在Windows环境变量设置界面配置SCALA_HOME环境变量为Scala的安装路径即可。<br><img src="/images/blog/sparkenvirnoment1.png" alt="windows启动scala界面">    </li>
+</ul>
+<h3 id="1-1-3-安装spark"><a href="#1-1-3-安装spark" class="headerlink" title="1.1.3 安装spark"></a>1.1.3 安装spark</h3><p> <a href="http://spark.apache.org/downloads.html" target="_blank" rel="noopener">Spark官网</a>提供了各个版本的安装包。为搭建学习试验环境，我们选择下载下载预编译好的包，例<br>如spark1.3.0binhadoop2.4.tgz<br> <img src="/images/blog/sparkenvirnoment2.png" alt="spark下载">    </p>
+<h3 id="1-1-4-安装winutils"><a href="#1-1-4-安装winutils" class="headerlink" title="1.1.4 安装winutils"></a>1.1.4 安装winutils</h3><p>由于Spark的设计和开发目标是在Linux环境下运行，因此在Windows单机环境（没有Hadoop集群的支撑）时运行会遇到winutils的问题（一个相关的Issue可以参见<br><a href="https://issues.apache.org/jira/browse/SPARK-2356" target="_blank" rel="noopener">参考</a> 。为了解决这一问题，我们需要安装winutils.exe，具体方法如下：    </p>
+<ol>
+<li>从一个可靠的网站下载winutils.exe（我们选择从Hadoop商业发行版Hortonworks提供的下载<a href="http://public-repo-1.hortonworks.com/hdp-win-alpha/winutils.exe" target="_blank" rel="noopener">链接</a></li>
+<li>将winutil.exe拷贝到一个目录，例如：E:\LearnSpark\win\bin。</li>
+<li>按照如图2-4、2-5的步骤，设置Windows系统的环境变量HADOOP_HOME为E:\LearnSpark\win（注意没有bin）<br><img src="/images/blog/sparkenvirnoment3.png" alt="设置环境变量"><br><img src="/images/blog/sparkenvirnoment4.png" alt="设置环境变量"><br>至此，Windows下安装Spark的过程全部完成。</li>
+</ol>
+<h2 id="1-2-使用spark-shell"><a href="#1-2-使用spark-shell" class="headerlink" title="1.2 使用spark shell"></a>1.2 使用spark shell</h2><p>  就像HelloWorld程序基本已成为学习某一门开发语言的第一个入门程序一样，WordCount程序就是试用大数据处理技术的HelloWorld。下面我们就以使用Spark统计一个文件中的单词出现次数为例，快速体验一下便捷的Spark使用方式。</p>
+<ul>
+<li><p>启动Spark Shell环境<br>在Windows文件管理器中，切换目录到Spark安装后生成的spark1.3.0binhadoop2.4目录下，按住Shift键的同时点击鼠标右键，然后使用左键点击在此处打开命令窗口。在打开一个命令行的窗口中，输入bin\sparkshell，就可以启动spark-shell环境，如图2-6所示。<br><img src="/images/blog/sparkenvirnoment5.png" alt="sparkshel"><br>如果不希望这么麻烦地切换目录，而是希望在打开一个命令行窗口中直接运行spark-shell，那么只需要在Windows环境变量中将上面的spark-shell所在的路径加入环境变量PATH中即可。</p>
+</li>
+<li><p>建立待统计的单词文件    </p>
+</li>
+</ul>
+<p>选择一个已存在的文本文件，或新建一个文本文件，作为待统计的单词文件E:\LearnSpark\word.txt，在这里我们新建一个文件,内容为：    </p>
+<figure class="highlight plain"><figcaption><span>banana</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">banana banana&#96;&#96;&#96;     </span><br><span class="line"></span><br><span class="line">+ 加载单词文件    </span><br><span class="line">执行Spark程序需要一个SparkContext类实例，在SparkShell中已经默认将SparkContext类初始化为对象实例sc。因此我们不需要再去初始化一个新的sc，直接输入以下命令使用即可。该行命令使用SparkContext类的textFile函数，加载待统计的单词文件，结果如图2-7所示。    </span><br><span class="line">  &#96;&#96;&#96;val file &#x3D; sc.textFile(&quot;E:\\LearnSpark\\word.txt&quot;)&#96;&#96;&#96;    </span><br><span class="line"></span><br><span class="line">  ![加载单词文件](&#x2F;images&#x2F;blog&#x2F;sparkenvirnoment6.png)     </span><br><span class="line"></span><br><span class="line">+ 统计单词出现次数    </span><br><span class="line">  如果你用MapReduce计算框架编写过WordCount程序，那你一定能体会到执行一个简单的单词统计功能需要数十行代码的不便。而利用Spark的函数式编程模式，我们只需要一行Scala语句即可完成单词统计功能，结果如图2-8所示。在这里我们暂时先不解释这行代码的具体含义，留待在后面的章节中慢慢</span><br><span class="line">学习。你只需要体会到Spark是如何大幅简化数据处理的工作的难度即可。    </span><br><span class="line">  &#96;&#96;&#96;val counts &#x3D; file.flatMap(line &#x3D;&gt; line.split(&quot; &quot;)).map(word &#x3D;&gt; (word, 1)).reduceByKey(_+_)&#96;&#96;&#96;    </span><br><span class="line">![统计单词次数](&#x2F;images&#x2F;blog&#x2F;sparkenvirnoment7.png)     </span><br><span class="line">+ 保存结果文件    </span><br><span class="line">在这里我们使用E:\LearnSpark\counts.txt作为输出文件。需要注意的是，要保证没有和输出文件同名的文件或者是文件夹，如果存在则需要手动删除</span><br><span class="line">该文件夹，否则会出错。保存结果文件的命令如下所示，运行过程如图2-9所示，在运行完成后打开E:\LearnSpark\counts.txt文件即可看到如图所示的单词统计结果。    </span><br><span class="line"></span><br><span class="line">  &#96;&#96;&#96;counts.saveAsTextFile(&quot;E:\\LearnSpark\\counts.txt&quot;)&#96;&#96;&#96;    </span><br><span class="line">  </span><br><span class="line">  ![保存结果](&#x2F;images&#x2F;blog&#x2F;sparkenvirnoment8.png)    </span><br><span class="line">  </span><br><span class="line">下面我们来看一下最后的输出结果，count.txt其实是个目录，在该目录下有好多个文件，其中part-00000和part-00001是我们需要的结果。</span><br></pre></td></tr></table></figure>
+<p>part00000<br>(apple,1)</p>
+<p>part00001<br>(banana,3)</p>
+<pre><code>
+## 1.3 了解Spark目录结构    
+
+Spark安装后，会在安装目录下生成一系列的目录，其结构如下:    
+
++ bin目录下是使用Spark时常用的一些执行程序，例如我们进行Spark命令交互环境使用的spark-shell。    
++ conf目录下存放的是运行Spark环境所需的配置文件。    
++ data目录mllib需要的一些测试数据    
++ ec2目录是在AWS上部署使用的一些相关文件    
++ examples目录中有一些例子的源代码和测试文件    
++ lib目录下存放的是Spark使用的一些库，我们之后开发spark应用，也是需要使用这些库的。    
++ python目录是使用python相关的一些资源    
++ sbin目录中是搭建spark集群所需要使用的一些脚本。
+
+
+
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2016-03-12-spark-envirnoment/" data-id="ck4ifp1lg000p2wje7o0lcgp0" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2016-03-10-kafkaquestion" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2016-03-10-kafkaquestion/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.292Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/23/2016-03-10-kafkaquestion/">大数据：kafka常见问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一-kafka如何处理消费过的数据"><a href="#一-kafka如何处理消费过的数据" class="headerlink" title="一 kafka如何处理消费过的数据"></a>一 kafka如何处理消费过的数据</h1><h2 id="1-1-如果想消费已经被消费过的数据"><a href="#1-1-如果想消费已经被消费过的数据" class="headerlink" title="1.1     如果想消费已经被消费过的数据"></a>1.1     如果想消费已经被消费过的数据</h2><ul>
+<li><p>consumer是底层采用的是一个阻塞队列，只要一有producer生产数据，那consumer就会将数据消费。当然这里会产生一个很严重的问题，如果你重启一消费者程序，那你连一条数据都抓不到，但是log文件中明明可以看到所有数据都好好的存在。换句话说，一旦你消费过这些数据，那你就无法再次用同一个groupid消费同一组数据了。    </p>
+</li>
+<li><p><strong>原因:</strong> 消费者消费了数据并不从队列中移除，只是记录了offset偏移量。同一个consumer group的所有consumer合起来消费一个topic，并且他们每次消费的时候都会保存一个offset参数在zookeeper的root上。如果此时某个consumer挂了或者新增一个consumer进程，将会触发kafka的负载均衡，暂时性的重启所有consumer，重新分配哪个consumer去消费哪个partition，然后再继续通过保存在zookeeper上的offset参数继续读取数据。注意:offset保存的是consumer 组消费的消息偏移。    </p>
+</li>
+<li><p>如何消费同一组数据：</p>
+<ol>
+<li>采用不同的group</li>
+<li>通过一些配置，就可以将线上产生的数据同步到镜像中去，然后再由特定的集群区处理大批量的数据。详见<a href="http://my.oschina.net/ielts0909/blog/110280" target="_blank" rel="noopener">详细</a><br><img src="/images/blog/kafka-question1.jpg" alt="图片"></li>
+</ol>
+</li>
+</ul>
+<h2 id="1-2-如何自定义去消费已经消费过的数据"><a href="#1-2-如何自定义去消费已经消费过的数据" class="headerlink" title="1.2    如何自定义去消费已经消费过的数据"></a>1.2    如何自定义去消费已经消费过的数据</h2><h3 id="1-2-1-Conosumer-properties配置文件中有两个重要参数"><a href="#1-2-1-Conosumer-properties配置文件中有两个重要参数" class="headerlink" title="1.2.1 Conosumer.properties配置文件中有两个重要参数:"></a>1.2.1 Conosumer.properties配置文件中有两个重要参数:</h3><ul>
+<li><strong>auto.commit.enable</strong>:如果为true，则consumer的消费偏移offset会被记录到zookeeper。下次consumer启动时会从此位置继续消费。</li>
+<li><strong>auto.offset.reset</strong>: 该参数只接受两个常量largest和Smallest,分别表示将当前offset指到日志文件的最开始位置和最近的位置。<br>如果进一步想控制时间，则需要调用Simple Consumer，自己去设置相关参数。比较重要的参数是 kafka.api.OffsetRequest.EarliestTime()和kafka.api.OffsetRequest.LatestTime()分别表示从日志（数据）的开始位置读取和只读取最新日志。    </li>
+</ul>
+<h3 id="1-2-2-如何使用SimpleConsumer"><a href="#1-2-2-如何使用SimpleConsumer" class="headerlink" title="1.2.2 如何使用SimpleConsumer"></a>1.2.2 如何使用SimpleConsumer</h3><ul>
+<li><p>首先，你必须知道读哪个topic的哪个partition<br>然后，找到负责该partition的broker leader，从而找到存有该partition副本的那个broker    </p>
+</li>
+<li><p>再者，自己去写request并fetch数据.      </p>
+</li>
+<li><p>最终，还要注意需要识别和处理broker leader的改变.    </p>
+<p><a href="http://stackoverflow.com/questions/14935755/how-to-get-data-from-old-offset-point-in-kafka" target="_blank" rel="noopener">参考1</a><br><a href="https://cwiki.apache.org/confluence/display/KAFKA/Committing+and+fetching+consumer+offsets+in+Kafka" target="_blank" rel="noopener">参考2</a><br><a href="https://cwiki.apache.org/confluence/display/KAFKA/0.8.0+SimpleConsumer+Example" target="_blank" rel="noopener">完整代码</a>        </p>
+</li>
+</ul>
+<h2 id="2-kafka-partition和consumer数目关系"><a href="#2-kafka-partition和consumer数目关系" class="headerlink" title="2    kafka partition和consumer数目关系"></a>2    kafka partition和consumer数目关系</h2><ol>
+<li><p>如果consumer比partition多，是浪费，因为kafka的设计是在一个partition上是不允许并发的，所以consumer数不要大于partition数 。</p>
+</li>
+<li><p>如果consumer比partition少，一个consumer会对应于多个partitions，这里主要合理分配consumer数和partition数，否则会导致partition里面的数据被取的不均匀 。最好partiton数目是consumer数目的整数倍，所以partition数目很重要，比如取24，就很容易设定consumer数目 。</p>
+</li>
+<li><p>如果consumer从多个partition读到数据，不保证数据间的顺序性，kafka只保证在一个partition上数据是有序的，但多个partition，根据你读的顺序会有不同 </p>
+</li>
+<li><p>增减consumer，broker，partition会导致rebalance，所以rebalance后consumer对应的partition会发生变化    </p>
+<p><a href="http://www.cnblogs.com/fxjwind/p/3794255.html" target="_blank" rel="noopener">详见</a>     </p>
+</li>
+</ol>
+<h2 id="3-kafka副本问题"><a href="#3-kafka副本问题" class="headerlink" title="3    kafka副本问题"></a>3    kafka副本问题</h2><p>   kafka尽量将所有的Partition均匀分配到整个集群上。一个典型的部署方式是一个Topic的Partition数量大于Broker的数量。    </p>
+<h2 id="3-1-如何分配副本"><a href="#3-1-如何分配副本" class="headerlink" title="3.1     如何分配副本"></a>3.1     如何分配副本</h2><p>   Producer在发布消息到某个Partition时，先通过ZooKeeper找到该Partition的Leader，然后无论该Topic的Replication Factor为多少（也即该Partition有多少个Replica），Producer只将该消息发送到该Partition的Leader。Leader会将该消息写入其本地Log。每个Follower都从Leader pull数据。这种方式上，Follower存储的数据顺序与Leader保持一致.    </p>
+<h2 id="3-2-Kafka分配Replica的算法如下"><a href="#3-2-Kafka分配Replica的算法如下" class="headerlink" title="3.2 Kafka分配Replica的算法如下"></a>3.2 Kafka分配Replica的算法如下</h2><p>   1.将所有Broker（假设共n个Broker）和待分配的Partition排序.<br>   2. 将第i个Partition分配到第（i mod n）个Broker上.<br>   3. 将第i个Partition的第j个Replica分配到第（(i + j) mode n）个Broker上.</p>
+<p>   <a href="http://www.haokoo.com/internet/2877400.html" target="_blank" rel="noopener">算法详细</a>    </p>
+<h2 id="4-kafka如何设置生存周期与清理数据"><a href="#4-kafka如何设置生存周期与清理数据" class="headerlink" title="4    kafka如何设置生存周期与清理数据"></a>4    kafka如何设置生存周期与清理数据</h2><p>   日志文件的删除策略非常简单:启动一个后台线程定期扫描log file列表,把保存时间超过阀值的文件直接删除(根据文件的创建时间).清理参数在server.properties文件中：<br>  <img src="/images/blog/kafka-question2.jpg" alt=""><br>  <a href="http://blog.csdn.net/lizhitao/article/details/25667831" target="_blank" rel="noopener">详见</a>或<a href="http://kafka.apache.org/documentation.html" target="_blank" rel="noopener">官网说明</a>    </p>
+<h2 id="5-zookeeper如何管理kafka"><a href="#5-zookeeper如何管理kafka" class="headerlink" title="5    zookeeper如何管理kafka"></a>5    zookeeper如何管理kafka</h2><ol>
+<li>Producer端使用zookeeper用来”发现”broker列表,以及和Topic下每个partition leader建立socket连接并发送消息.</li>
+<li>Broker端使用zookeeper用来注册broker信息,以及监测partition leader存活性.</li>
+<li>Consumer端使用zookeeper用来注册consumer信息,其中包括consumer消费的partition列表等,同时也用来发现broker列表,并和partition leader建立socket连接,并获取消息.    </li>
+</ol>
+<h2 id="6-补充问题，kafka能否自动创建topics"><a href="#6-补充问题，kafka能否自动创建topics" class="headerlink" title="6    补充问题，kafka能否自动创建topics"></a>6    补充问题，kafka能否自动创建topics</h2><p>  producer.properties配置文件中的一个参数:<strong><em>auto.create.topics.enable=true</em></strong><br>  是否自动创建<br>  如果broker中没有topic的信息,当producer/consumer操作topic时,是否自动创建.<br>  如果为false,则只能通过API或者command创建topic  </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2016-03-10-kafkaquestion/" data-id="ck4ifp1lh000r2wje9imh1qzf" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2016-03-09-bigdata-cluster-opt" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2016-03-09-bigdata-cluster-opt/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.283Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/23/2016-03-09-bigdata-cluster-opt/">大数据：集群优化</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="0-集群优化"><a href="#0-集群优化" class="headerlink" title="0 集群优化"></a>0 集群优化</h1><p>  一个小集群:1个master,10个datanode。<br>  最开始使用pig脚本分析作业，后面作业运行时观察发现，pig脚本执行的小作业太多导致任务调度频繁，集群效率低。<br>  小作业太多的影响:    </p>
+<ol>
+<li>频繁新建和关闭task，频繁分配container会消耗资源。</li>
+<li>一个oozie action先会启动一个oozie laucher作业消耗一个container，然后再启动实际的job，启动的job首先会用个container启动application master，然后在启动计算的task<br>现在同时最多会有29个job，至少会有50个container不是在计算。</li>
+</ol>
+<h1 id="1-代码优化"><a href="#1-代码优化" class="headerlink" title="1 代码优化"></a>1 代码优化</h1><ol>
+<li><p>增加5分钟基础作业时间粒度，5分钟-&gt;15分钟，减少Job数</p>
+</li>
+<li><p>合并15分钟粒度作业，Pig-&gt;MR，grouping comparator，减少基础数据重复读取次数，减少Job数</p>
+</li>
+<li><p>合并5分钟基础作业，一个作业处理三种话单，去除冗余字段（各粒度时间），减少Job数，减少数据量</p>
+</li>
+</ol>
+<h1 id="2-集群参数配置"><a href="#2-集群参数配置" class="headerlink" title="2 集群参数配置"></a>2 集群参数配置</h1><h2 id="2-1-HDFS"><a href="#2-1-HDFS" class="headerlink" title="2.1 HDFS"></a>2.1 HDFS</h2><ul>
+<li><strong>HDFS块大小</strong>:从默认的128MB调整为256MB，更大的块大小(block)意味着更少的job，由于当前作业计算并不复杂，可以使用更大块。</li>
+<li><strong>复制因子</strong>:默认是3，现在修改为2。减少数据存储量，可以减小话单上传的时间消耗</li>
+<li><strong>DataNode处理程序计数</strong>:参数是<strong><em>dfs.datanode.handler.count</em></strong> 默认值是3，调整为30。datanode上用于处理RPC的线程数。默认为3，较大集群，可适当调大些，比如8。需要注意的是，每添加一个线程，需要的内存增加。</li>
+<li><strong>NameNode处理程序计数</strong>:参数是<strong><em>dfs.namenode.handler.count</em></strong> 默认是30，建议值是47，现在调整为60.namenode或者jobtracker中用于处理RPC的线程数，默认是10，较大集群，可调大些，比如64。</li>
+</ul>
+<p>   <strong>NameNode服务处理程序计数</strong>:参数是 <strong><em>dfs.namenode.service.handler.count</em></strong>，默认值是30，建议值是47，现在调整为60。NameNode 用于服务调用的服务器线程数量。</p>
+<ul>
+<li><strong>最大传输线程数</strong>:参数是一起配置的为:<strong><em>dfs.datanode.max.xcievers, dfs.datanode.max.transfer.threads</em></strong>对于datanode来说，就如同linux上的文件句柄的限制，当datanode 上面的连接数操作配置中的设置时，datanode就会拒绝连接。<br>一般都会将此参数调的很大，40000+左右。</li>
+</ul>
+<h2 id="2-2-YARN"><a href="#2-2-YARN" class="headerlink" title="2.2 YARN"></a>2.2 YARN</h2><ul>
+<li><strong>每个作业的 Reduce 任务的默认数量</strong>:参数为<strong><em>mapreduce.job.reduces</em></strong>默认值为1，现在调整为30。通过观察当前运行的job实例，观察其reduce执行时间，发现时间消耗不足1秒，故不必启用过多reduce。</li>
+<li><strong>启用 Ubertask 优化</strong>:Uber模式是Hadoop2.0针对MR小作业的优化机制。通过<strong><em>mapreduce.job.ubertask.enable</em></strong>来设置是否开启小作业优化，默认为false。<br>如果用Job足够小，则串行在的一个JVM完成该JOB，即MRAppMaster进程中，这样比为每一个任务分配Container性能更好。关于Ubertask的详细可以参考<a href="http://qianshangding.iteye.com/blog/2259421" target="_blank" rel="noopener">Ubertask模式</a>。</li>
+<li><strong>Map任务内存</strong>：参数为<strong><em>mapreduce.map.memory.mb</em></strong>，保持默认值1GB。</li>
+<li><strong>Reduce任务内存</strong>:参数为<strong><em>mapreduce.reduce.memory.mb</em></strong>，保持默认值1GB。</li>
+<li><strong>Map任务CPU虚拟内核</strong>：参数为<strong><em>mapreduce.map.cpu.vcores</em></strong>，为作业的每个 Map 任务分配的虚拟 CPU 内核数。默认每个map一个CPU，用户提交应用程序时，可以指定每个任务需要的虚拟CPU个数。在MRAppMaster中，每个Map Task和Reduce Task默认情况下需要的虚拟CPU个数为1。    </li>
+<li><strong>Reduce任务CPU虚拟内核</strong>:参数为<strong><em>mapreduce.reduce.cpu.vcores</em></strong>，说明 与Map任务CPU虚拟内核一致。</li>
+<li><strong>Map 任务最大堆栈</strong>:参数是<strong><em>mapreduce.map.java.opts.max.heap</em></strong>，Map 进程的最大 Java 堆栈（字节）。该参数与<strong><em>mapreduce.reduce.java.opts.max.heap</em></strong>一样，都是ClouderManager独有的，标准的hadoop参数是<strong><em>mapreduce.map.java.opts</em></strong>和<strong><em>mapreduce.reduce.java.opts</em></strong></li>
+<li><strong>Reduce 任务最大堆栈</strong>: 同Map 任务最大堆栈。</li>
+<li><strong>容器内存</strong>:参数是<strong><em>yarn.nodemanager.resource.memory-mb</em></strong>。表示该节点上YARN可使用的物理内存总量，默认是8192（MB），注意，如果你的节点内存资源不够8GB，则需要调减小这个值，而YARN不会智能的探测节点的物理内存总量。当前配置为24GB。</li>
+<li><strong>容器虚拟 CPU 内核</strong>:参数是<strong><em>yarn.nodemanager.resource.cpu-vcores</em></strong>可以为容器分配的虚拟CPU内核的数量。集群中每台服务器只有24个虚核，所以容器内存配24G内存就行，现在作业都小map、reduce都用不了太多内存，默认是1GB。多了也没用，因为每个container至少要1个核。</li>
+</ul>
+<h2 id="2-3-Oozie"><a href="#2-3-Oozie" class="headerlink" title="2.3 Oozie"></a>2.3 Oozie</h2><p>  <strong>Oozie Server 的 Java 堆栈大小</strong><br>    默认值为1GB，现在修改为4GB。</p>
+<h2 id="2-4-HBase"><a href="#2-4-HBase" class="headerlink" title="2.4 HBase"></a>2.4 HBase</h2><ul>
+<li><p><strong>HBaseMaster的Java堆栈大小</strong>:暂无调整。</p>
+</li>
+<li><p><strong>HBase Region Server处理程序计数</strong>:参数为<strong><em>hbase.regionserver.handler.count</em></strong>,默认值为30，调节至150.是RegionServer的请求处理IO线程数。较少的IO线程，适用于处理单次请求内存消耗较高的Big PUT场景（大容量单次PUT或设置了较大cache的scan，均属于Big PUT）或ReigonServer的内存比较紧张的场景。<br>较多的IO线程，适用于单次请求内存消耗低，TPS要求非常高的场景。设置该值的时候，以监控内存为主要参考。<br>这里需要注意的是如果server的region数量很少，大量的请求都落在一个region上，因快速充满memstore触发flush导致的读写锁会影响全局TPS，不是IO线程数越高越好。<br>压测时，开启Enabling RPC-level logging，可以同时监控每次请求的内存消耗和GC的状况，最后通过多次压测结果来合理调节IO线程数。</p>
+</li>
+<li><p><strong>HBase RegionServer的Java堆栈大小(字节）</strong>:HBase regionserver堆栈能多大就多大，计算方式是RegionServer java堆大小= 服务器总内存-已分配内存 （注意：此配置为优化索引入库）</p>
+</li>
+</ul>
+<h2 id="2-5-服务器参数"><a href="#2-5-服务器参数" class="headerlink" title="2.5 服务器参数"></a>2.5 服务器参数</h2><ul>
+<li>服务器时钟同步</li>
+<li>修改swappiness值<br> 在所有服务器上，使用root用户执行     <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># sysctl vm.swappiness&#x3D;0</span><br><span class="line"># echo &#39;vm.swappiness&#x3D;0&#39;&gt;&gt; &#x2F;etc&#x2F;sysctl.conf</span><br><span class="line"># sysctl -p</span><br></pre></td></tr></table></figure></li>
+<li>禁用透明巨页     <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># echo never &gt;&#x2F;sys&#x2F;kernel&#x2F;mm&#x2F;redhat_transparent_hugepage&#x2F;enabled</span><br></pre></td></tr></table></figure>
+ 关于透明巨页，参考<a href="http://blog.chinaunix.net/uid-26489617-id-3205109.html" target="_blank" rel="noopener">透明巨页</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2016-03-09-bigdata-cluster-opt/" data-id="ck4ifp1lf000n2wje6zdtho8q" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2016-03-05-me" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2016-03-05-me/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.282Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/23/2016-03-05-me/">个人简历</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="this-is-my-profile"><a href="#this-is-my-profile" class="headerlink" title="this is my profile"></a>this is my profile</h2><h2 id="Well-this-is-not-the-right-time-to-introduce-myself"><a href="#Well-this-is-not-the-right-time-to-introduce-myself" class="headerlink" title="Well,this is not the right time to introduce myself."></a>Well,this is not the right time to introduce myself.</h2><h3 id="基本情况"><a href="#基本情况" class="headerlink" title="基本情况"></a>基本情况</h3><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>姓名</strong></td>
+<td>&nbsp;&nbsp; 夏涛 &nbsp;&nbsp;</td>
+<td><strong>性别</strong></td>
+<td>男 &nbsp;&nbsp;</td>
+<td><strong>出生年月</strong></td>
+<td>1989-05&nbsp;&nbsp;</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>民族</strong></td>
+<td>汉</td>
+<td><strong>籍贯</strong></td>
+<td>湖北&nbsp;黄冈&nbsp;&nbsp;</td>
+<td><strong>联系方式</strong></td>
+<td>17705694468&nbsp;&nbsp;</td>
+<td><strong>邮件</strong></td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2016-03-05-me/" data-id="ck4ifp1ld000j2wje869rfpsr" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2016-02-23-bigdata-kafka1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2016-02-23-bigdata-kafka1/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.281Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/23/2016-02-23-bigdata-kafka1/">kafka使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一-概述"><a href="#一-概述" class="headerlink" title="一 概述"></a>一 概述</h2><p>   Kafka是由LinkedIn开发的一个开源的分布式消息发布-订阅系统，使用Scala编写，它以可水平扩展和高吞吐率而被广泛使用的。</p>
+<h3 id="1-1-使用消息系统的目的"><a href="#1-1-使用消息系统的目的" class="headerlink" title="1.1 使用消息系统的目的"></a>1.1 使用消息系统的目的</h3><ul>
+<li>解耦：消息系统在处理过程中间插入了一个隐含的、基于数据的接口层，两边的处理过程都要实现这一接口。这允许你独立的扩展或修改两边的处理过程，只要  确保它们遵守同样的接口约束。</li>
+<li>冗余：有些情况下，处理数据的过程会失败。除非数据被持久化，否则将造成丢失。消息队列把数据进行持久化直到它们已经被完全处理，通过这一方式规避了数据丢失风险。</li>
+<li>扩展性：消息队列解耦了你的处理过程，所以增大消息入队和处理的频率是很容易的，只要另外增加处理过程即可。不需要改变代码、不需要调节参数</li>
+<li>可恢复性：系统的一部分组件失效时，不会影响到整个系统。消息队列降低了进程间的耦合度，所以即使一个处理消息的进程挂掉，加入队列中的消息仍然可以在系统恢复后被处理。</li>
+<li>顺序保证：在大多使用场景下，数据处理的顺序都很重要。大部分消息队列本来就是排序的，并且能保证数据会按照特定的顺序来处理。Kafka保证一个Partition内的消息的有序性。</li>
+<li>异步通信：消息队列提供了异步处理机制，允许用户把一个消息放入队列，但并不立即处理它.</li>
+</ul>
+<h3 id="1-2-kafka优点"><a href="#1-2-kafka优点" class="headerlink" title="1.2  kafka优点"></a>1.2  kafka优点</h3><ol>
+<li>时间复杂度低: 以时间复杂度为O(1)的方式提供消息持久化能力，即使对TB级以上数据也能保证常数时间复杂度的访问性能。</li>
+<li>高吞吐率: 即使在非常廉价的商用机器上也能做到单机支持每秒100K条以上消息的传输</li>
+<li>顺序性保障:支持Kafka Server间的消息分区，及分布式消费，同时保证每个Partition内的消息顺序传输。</li>
+<li>同时支持离线数据处理和实时数据处理。</li>
+<li>支持在线水平扩展</li>
+</ol>
+<h2 id="二-kafka-应用及组成"><a href="#二-kafka-应用及组成" class="headerlink" title="二 kafka 应用及组成"></a>二 kafka 应用及组成</h2><p> 应用场景<br> <img src="/images/blog/kafka-applysence.png" alt="kafka应用场景">    </p>
+ <h1>组成</h1>    
+
+<p> <img src="/images/blog/kafka-consist.png" alt="kafka组成">    </p>
+<ul>
+<li>Broker<br> Kafka集群包含一个或多个服务器，这种服务器被称为broker。    <ul>
+<li>Topic<br>每条发布到Kafka集群的消息都有一个类别，这个类别被称为Topic。（物理上不同Topic的消息分开存储，逻辑上一个Topic的消息虽然   保存于一个或多个broker上,消费数据而不必关心数据存于何处）    </li>
+<li>Partition<br>是物理上的概念，每个Topic包含一个或多个Partition       </li>
+<li>Producer<br>负责发布消息到Kafka broker    </li>
+<li>Consumer<br>消息消费者，向Kafka broker读取消息的客户端    </li>
+<li>Consumer Group<br>每个Consumer属于一个特定的Consumer Group（可为每个Consumer指定group name，若不指定group name则属于默认的group）。</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2016-02-23-bigdata-kafka1/" data-id="ck4ifp1ld000h2wje0fn0eml9" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2015-09-25-mapreduce-introduce" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2015-09-25-mapreduce-introduce/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.269Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/23/2015-09-25-mapreduce-introduce/">spark 测试</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="spark-overview"><a href="#spark-overview" class="headerlink" title="spark overview"></a>spark overview</h2><h3 id="UC-Berkeley-的spark数据分析栈"><a href="#UC-Berkeley-的spark数据分析栈" class="headerlink" title="UC Berkeley 的spark数据分析栈"></a>UC Berkeley 的spark数据分析栈</h3><p><img src="http://i.imgur.com/OWyTF1M.png" alt=""></p>
+<p>按使用方式划分</p>
+<ul>
+<li>离线批处理（Mlib，Graphs）</li>
+<li>交互式查询（spark SQL）</li>
+<li>时实计算（spark streaming）</li>
+</ul>
+<h3 id="spark资源调度"><a href="#spark资源调度" class="headerlink" title="spark资源调度"></a>spark资源调度</h3><p><img src="http://i.imgur.com/rtY99ub.png" alt=""></p>
+<ul>
+<li>stanalone</li>
+<li>mesos</li>
+<li>yarn</li>
+</ul>
+<p>  其中我们使用的是yarn资源调度，也就是运行spark job向集群申请资源的方式与hadoop是一样的，先向resourcemanger，然后在nodemanager，申请container启动applicationMaster,运行excutor</p>
+<p>  yarn的提交job方式client和cluster</p>
+<ul>
+<li>client提交方式，driver program运行在提交机器上</li>
+<li>cluster方式，driver program是运行在集群中的某个worker中</li>
+</ul>
+<h3 id="spark-VS-hadoop"><a href="#spark-VS-hadoop" class="headerlink" title="spark VS hadoop"></a>spark VS hadoop</h3><ul>
+<li><p>应用场景</p>
+<ul>
+<li>hadoop的mapreduce适合做大数据集的离线批处理，</li>
+<li>hadoop不是万能的，小数据集（单机能处理的小数据集杀鸡用牛刀），以及复杂的迭代运算，实时计算，在线分析等无能为力，而spark的出现很好的弥补了hadoop的不足之处，因为spark是基于内存的计算框架，适合复杂的迭代计算，spark streaming弥补实时计算的空缺（storm实时性更高，吞吐量，容错方面缺不如spark，稍后介绍spark的容错机制lineage和实时计算与storm的对比）</li>
+</ul>
+</li>
+<li><p>运行效率</p>
+<ul>
+<li>spark官网效率比较<br><img src="http://i.imgur.com/nTBmin9.png" alt=""></li>
+<li>咱门研究中心同事实际的测试报告</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">   Spark性性能能与与MR相相比比较较提提高高了了13.6% </span><br><span class="line">    结果分析 </span><br><span class="line">    之前的Hadoop版本的批处理作业，共有23个作业，作业之间的关联方式为，</span><br><span class="line"> 前一个作业的输出结果保存在特定目录中，作为之后作业的输入数据。其中有一定量的计算结果是仅作为中间的临时数据存在，</span><br><span class="line">所有作业结束后将会被清理。这是由于每个Hadoop作业仅能执行一个MapReduce过程，</span><br><span class="line">这个问 题通过Spark的编程结构可以改善为按功能模块进行作业划分，每个作业中实现多个原来MapReduce的功能，</span><br><span class="line">将中间数据输出到磁盘并在下一次作业中重新读入的过程简化为Spark中的中间缓存变量保存在内存中。</span><br><span class="line">这里性能的提升主要来自于此，即优化了中间数据的冗余磁盘IO时间。此外，对于省网的分析作业而言，</span><br><span class="line">有着如下的特点，导致了性能提升不能达到理论上提及的一个数量级的改善效果。 </span><br><span class="line">    第一，原始数据量大，输入的基础数据量过于巨大，导致大量的时间花费在第一次的磁盘数据读取上，</span><br><span class="line">这个时间只取决于磁盘IO速率和文件大 小，而与分布式计算模式无关。省网分析作业内容大多属于磁盘密集型，</span><br><span class="line">与数据读取的时间相比，计算的时间耗费比重较轻，使得Hadoop和Spark的性能表现差异不大。 </span><br><span class="line">    第二，省网数据分析的内容，大多数属于单次的计算分析，即统计次数和汇总的工作，</span><br><span class="line">这方面Hadoop的性能可以极好的发挥出来。Spark更优势 于对一组小规模输入数据的，反复迭代计算，输入文件的读取时间较小，</span><br><span class="line">而计算过程十分复杂，这样其基于内存的计算方法可以更充分的展现优势。这在前一阶段中，</span><br><span class="line">使用分布式对矩阵进行计算的过程中体现的尤为明显，效果可以接近理论中提及的一个数量级提升。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>开发效率比较<ul>
+<li>spark基于rdd的操作，是mapreduce的超集，提供我们基于rdd丰富的接口，如filter，disinct，reducebykey等等，而hadoop这些操作需要用户在map或reduce，combine自己编码实现，</li>
+<li>咱门写mapreduce程序，每个job都要写maper类，reducer类（当然有些job可以不写reducer类，如sqoop导入数据库就只需maper），可能还要写partition，combiner类，而且写完job后，需要构建job与job之间执行的顺序和依赖关系，输入输出的键值类型等；<ul>
+<li>而spark是不需要这么琐碎，对rdd执行多个transform后，当执行一个action动作后（后面将介绍rdd的操作），自动构建一个基于rdd的DAG有向无环执行作业图，使用过pig的同事有所体会，这点类似pig，pig的解释器会将基于数据集的流处理过程，转换为DAG的job链，但spark又优于pig，可以做到过程控制，pig作为一个数据流语言，缺乏过程控制，粗糙的过程控制需要一门动态的脚本语言如python，javascript来实现，而且pig，hive只适合做统计分析作业，面对复杂的处理，如dougelas参数区线的压缩，需要用mapreduce或spark处理。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="开发语言支持"><a href="#开发语言支持" class="headerlink" title="开发语言支持"></a>开发语言支持</h3><ul>
+<li>原生语言scala</li>
+<li>java</li>
+<li>python</li>
+<li>spark1.4后支持R语言</li>
+</ul>
+<h3 id="spark的核心RDD"><a href="#spark的核心RDD" class="headerlink" title="spark的核心RDD"></a>spark的核心RDD</h3><p>  大家可以理解弹性分布式集合就是一个数据集合，这个集合有多个partition组成，而这些partition分布到集群中各节点的worker</p>
+<ul>
+<li><p>创建RDD的方式</p>
+<ul>
+<li>基于内存集合<br>如1到100数字Range作为rdd，val data = sc.parallelize(1 to 100)</li>
+<li>外部存储系统，如hbase，cassandra，hdfs等， 如val data = sc.textfile(“dataPath”)</li>
+</ul>
+</li>
+<li><p>基于rdd的操作</p>
+<ul>
+<li><p>Transformations操作<br>如map，filter，groupbykey等等，更多操作可参考<a href="http://spark.apache.org/docs/latest/programming-guide.html#transformations" target="_blank" rel="noopener">spark官网</a></p>
+</li>
+<li><p>action操作<br>top，count，reducebykey，saveastexrfile等等，更多操作可参考<a href="http://spark.apache.org/docs/latest/programming-guide.html#actions" target="_blank" rel="noopener">spark官网</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<p>  transform是lazy执行的，也就是说直到遇到该rdd链执行action操作，才会启动job，执行计算，这种思想跟scala语言的lazy十分相似，下面通过一个简单的scala例子体会下这种思想</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">package com.haohandata.dnsApp</span><br><span class="line">import scala.io.Source._</span><br><span class="line">import scala.io.Source</span><br><span class="line">&#x2F;**</span><br><span class="line"> * @author xizhououyang@163.com</span><br><span class="line"> * @desription lazy deamon</span><br><span class="line"> *&#x2F;</span><br><span class="line">object LazyDeamon &#123;</span><br><span class="line">  &#x2F;*</span><br><span class="line">代码解释：当我们输入一个不存在的文件，如果不执行for循环对文件进行读取，program并不会抛异常，也就是说定义一个变量为lazy</span><br><span class="line">后，当我们对其引用求值时候，才会加载运行，这点类似于java的反射机制，动态加载</span><br><span class="line">*&#x2F;</span><br><span class="line">  def  main(args:Array[String])&#123;</span><br><span class="line">  lazy  val  file &#x3D; Source.fromFile(&quot;&#x2F;home&#x2F;osun&#x2F;pgadmin.logxx&quot;)</span><br><span class="line">  for(line&lt;- file.getLines)</span><br><span class="line">    println(line)</span><br><span class="line">  val word &#x3D;&quot;learning spark&quot;</span><br><span class="line">   println(word)</span><br><span class="line">  </span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="广播变量"><a href="#广播变量" class="headerlink" title="广播变量"></a>广播变量</h3><p>广播变量是分发到每个worker的只读变量不能修改，功能与hadoop的分布式缓存类似，</p>
+<p>  目前的dns项目实战使用到是做资源表关联（大数据集与小数据集的关联），存放广播变量中，通过map转换操作做关联，注意广播变量是一个只读变量，不能做修改。</p>
+<h3 id="计数器"><a href="#计数器" class="headerlink" title="计数器"></a>计数器</h3><p>作业中全局的一个计数器，与hadoop的计数器类似，并不陌生，我们平时跑完mr或者pig的时候会有三种类型计数器的统计，<br>Framkework计数器，job计数器，hdfs文件系统计数器，注意spark中的计数器是不能在task中求值，只能在driver program中求值</p>
+<p>  在dns项目中统计各用户群，各运营商，top10的icp，每个icp下统计top10 的host，可先在每个partition中统计top10的icp和top10的host，然后保存到计数器变量中，然后将聚合后结果话单过滤只保留掉计数器中的host和icp，这样可以避免多次迭代调用rdd.top（10）产生N<em>N个job；取五分钟小片数据，采用n</em>n迭代调用rdd.top方式生成库表需要两个小时，并产生了1800多个小job，跑了两个多小时，采用计数器过滤方式，4分多钟就能跑完库表实现入库postgresql</p>
+<h3 id="rdd依赖"><a href="#rdd依赖" class="headerlink" title="rdd依赖"></a>rdd依赖</h3><ul>
+<li>narrow依赖（父rdd的同一个partion最多只给子rdd一个partion依赖）</li>
+<li>wide依赖（父rdd的同一个partion被子rdd多个partion依赖）<br><img src="http://i.imgur.com/UE5Od8S.png" alt=""></li>
+</ul>
+<h3 id="小结，从计算，存储，容错谈谈rdd"><a href="#小结，从计算，存储，容错谈谈rdd" class="headerlink" title="小结，从计算，存储，容错谈谈rdd"></a>小结，从计算，存储，容错谈谈rdd</h3><ul>
+<li>计算</li>
+</ul>
+<p><img src="http://gitlab.hudoumiao.com/TopLevel/Knowledge_Base/uploads/ba527855ed3b360d8c82840c62b0b3ab/spark%E8%AE%A1%E7%AE%97code.png" alt="spark计算code"></p>
+<p>注意：由于时间关系，直接截了他人画的图，deamon中存在一点error，正确的代码应该是map(parts=&gt;(parts(0),parts(1).toInt)),第一次map的transform得到的是RDD[Array[String]],不是RDD[List[String]]</p>
+<p>code.png)<img src="http://gitlab.hudoumiao.com/TopLevel/Knowledge_Base/uploads/e82db4ea22a47be62bc7355505d06ba2/spark%E8%AE%A1%E7%AE%97code%E4%BE%9D%E8%B5%96.png" alt="spark计算code依赖"></p>
+<p>每个job划分不同的stage，每个stage就是一个Set[task]集合  </p>
+<p><img src="http://gitlab.hudoumiao.com/TopLevel/Knowledge_Base/uploads/8f0a48da38c9da65b84ed5af5262562f/spark%E6%8F%90%E4%BA%A4%E4%BD%9C%E4%B8%9A%E6%B5%81%E7%A8%8B.png" alt="spark提交作业流程"></p>
+<p>  spark的作业调度，分DAGshedule，和taskshedule二级，跟hadoop的jobtraker，tasktracker两级调度类似</p>
+<ul>
+<li><p>存储</p>
+<ul>
+<li>MEMORY_ONLY</li>
+<li>MEMORY_AND_DISK</li>
+<li>MEMORY_ONLY_SER</li>
+<li>MEMORY_AND_DISK_SER</li>
+<li>DISK_ONLY</li>
+<li>MEMORY_ONLY_2, MEMORY_AND_DISK_2</li>
+</ul>
+<p>上面是spark是rdd的各种存储策略，是spark计算框架中，默认认为重复计算rdd需要的时间会比从磁盘中读取数据进行的io操作效率高，<br>因此默认所有的rdd的persist方式都是存在内存中，当内存不足后，会丢弃掉这个rdd，需要时候再根据lineage<br>机制从新计算，实际开发中那如果认为计算出来的rdd代价远比进行io大，这时可根据情况选择其他持久化策略，如在dns项目中，需要关联ppp的result和record话单后的rdd，采取MEMORY_AND_DISK_SER方式的持久化</p>
+</li>
+<li><p>容错（lineage）</p>
+</li>
+</ul>
+<p>穿插一个小故事：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">  高帅富小明家有一个家传宝，祖训这个宝物得一代代往下传，每代人可能对这个传家宝，</span><br><span class="line">每代人需对这宝物进行雕塑改造，如嵌入宝石，或者砖石，某天小明炒股亏空了，于是他要变卖这个传家宝，</span><br><span class="line">可是造化弄人，当他要变卖时候，发现传家宝不见了，聪明的小明，首先会确认他爸爸是否已经把这件宝物传了给他，</span><br><span class="line">如果确定是，他会将在翻遍自己房子找，如果他父亲没传给他，直接去他父亲的住处找，按照这个步骤，</span><br><span class="line">如果祖父那还没找到，他会一直回溯到他曾祖父那，直到找到传家宝，然后再一代代地传给小明，</span><br><span class="line">小明得到宝物后最终把它变卖</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96; </span><br><span class="line"></span><br><span class="line">分析情景:</span><br><span class="line">- rdd就好比传家宝</span><br><span class="line">- 情景中的每个人物就好比不同时候集群中的计算节点中的worker</span><br><span class="line">-  小明变卖宝物，就好比执行了一个action，触发提交job</span><br><span class="line">-  而每代人对宝物加入一个宝石，就好比rdd的transform操作</span><br><span class="line">-  rdd的容错是lineage机制，如果当向spark提交job的时候，会构造基于rdd操作的DAG的作业流，这时会有基于rdd依赖链，如果计算过程中某个rdd丢失了，它会从父rdd那重新计算，如果父rdd不存在，会一直回溯上去直到找到父的rdd，然后再依照依赖链重新执行计算，最后执行action操作</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## spark在项目的实战应用</span><br><span class="line">### 架构图</span><br><span class="line">![](http:&#x2F;&#x2F;i.imgur.com&#x2F;VdB2LPU.png)</span><br><span class="line">### 项目代码</span><br><span class="line"></span><br><span class="line">http:&#x2F;&#x2F;gitlab.hudoumiao.com&#x2F;applications&#x2F;User_Mobility_Analysis&#x2F;tree&#x2F;master&#x2F;sparkcode&#x2F;src&#x2F;main&#x2F;scala&#x2F;com&#x2F;haohandata</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## spark streaming</span><br><span class="line"></span><br><span class="line">### spark streaming vs Storm（下面是引用研究中心同事的给出的两者对比的报告内容）</span><br></pre></td></tr></table></figure>
+<p> Storm和Spark Streaming都是分布式流处理的开源框架。虽然二者功能类似，但是也有着一定的区别。 </p>
+<ul>
+<li>处理模型 </li>
+</ul>
+<p>虽然这两个框架都提供可扩展性和容错性,它们根本的区别在于他们的处理模型。<br>Spark Streaming是将流式计算分解成一系列短小的批处理作业。这里的批处理引擎是Spark，<br>也就是把Spark Streaming的输入数据按照batch size  （如1秒）分成一段一段的数据 （Discretized Stream），<br>每一段数据都 转换成Spark中的RDD  （Resilient Distributed Dataset ），然后将Spark Streaming 中对DStream的Transformation操作变为针对Spark中对RDD的Transformation操作，将RDD经过操作变成中间结果保存在内存中。整个流式计算根据业务的需求可以对中间的结果进行叠加，或者存储到外部设备。 </p>
+<p>在Storm中，先要设计一个用于实时计算的图状结构，我们称之为拓扑 （topology ）。<br>这个拓扑将会被提交给集群，由集群中的主控节点 （masternode ）分发代码，将任务分配给工作节点 （worker node ）执行。<br>一个拓扑中包括spout和bolt两种角色，其中spout发送消息，负责将数据流以tuple元 组的形式发送出去；<br>而bolt则负责转发数据流，在bolt 中可以完成计算、过滤等操作，bolt 自身也可以随机将数据发送给其他bolt 。<br>在storm中，每个都是tuple是不可变数组，对应着固定的键值对。 简而言之，Storm是让数据面向计算，<br>而Spark Streaming是使计算面向数据。 </p>
+<ul>
+<li><p>延迟，storm更高<br>Spark Streaming，最小的Batch Size的选取在0.5~2秒钟之间，而Storm 目前最小的延迟是100ms左右，<br>所以Spark Streaming能，够满足除对实时性要求非常高 （如高频实时交易）之外的所有流式准实时计算场景，<br>而高实时性要求的场景则应该交给Storm来完成。 </p>
+</li>
+<li><p>容错，spark streaming更好 </p>
+</li>
+</ul>
+<p>在容错数据保证方面的权衡是，Spark Streaming提供了更好的支持容错状态计算。<br>在Storm中,每个单独的记录当它通过系统时必须被跟踪，所以 Storm能够至少保证每个记录将被处理一次，<br>但是在从错误中恢复过来时候允许出现重复记录。这意味着可变状态可能不正确地被更新两次。<br>另一方 面，Spark Streaming只需要在批级别进行跟踪处理，因此可以有效地保证每个mini-batch将完全被处理一次，<br>即便一个节点发生故障。 </p>
+<ul>
+<li>吞吐量，spark streaming更强<br> Spark 目前在EC2上已能够线性扩展到100个节点 （每个节点4Core ），可以以数秒的延迟处理6GB/s的数据量 （60M records/s ），其吞吐量也比流行的Storm高2～5倍。 </li>
+</ul>
+<p>使用选择 </p>
+<p>如果你想要的是一个允许增量计算的高速事件处理系统，Storm会是最佳选择。<br>它可以应对你在客户端等待结果的同时，进一步进行分布式计算的需求，使用开箱即用的分布式RPC  （DRPC）就可以了。<br>最后但同样重要的原因：Storm使用Apache Thrift ，你可以用任何编程语言来编写拓扑结构。<br>如果你需要状态持续，同时/或者达到恰好一次的传递效果，应当看看更高层面的Trdent API，它同时也提供了微批处理的方式。<br>如果你必须有状态的计算，恰好一次的递送，并且不介意高延迟的话，那么可以考虑Spark Streaming，<br>特别如果你还计划图形操作、机器学习或者访问SQL的话，ApacheSpark的stack允许你将一些library与数据流相结合<br>（Spark SQL，Mllib，GraphX），它们会提供便捷的一体化编程模型。<br>尤其是数据流算法 （例如：K均值流媒体）允许Spark实时决策的促进。 </p>
+<pre><code>
+### 核心DStream
+- Dstream简介
+  Dstream是一组以时间为轴连续的一组rdd
+![](http://i.imgur.com/H5GA2XL.png)
+- Dstream的输入源
+
+![](http://i.imgur.com/ya40qiL.png)
+
+- DStream的transformations操作
+- DSstream的action操作
+
+### 使用场景划分
+-  无状态
+
+每次批处理，receiver接收的数据都作为数据Dstream操作
+
+-  有状态updateStateByKey(func)
+
+  本次计算，需要用到上次批处理的结果。
+比如spark streaming的批处理时间是五分钟，但业务中，我需要统计话单中haohandata.com.cn从程序运行后，每五分钟后haohandata.com.cn这个域名的累加的访问数，这时我们会以上次批处理为key的访问次数，加上本次五分钟批处理得到结果
+
+-  windowns
+
+基于窗口的操作，批处理时间，滑动窗口，窗口大小
+DNS实时计算实验项目中，统计五分钟粒度各rcode的次分布，
+由于存在边界数据，解决的办法采取五分钟为批处理时间，滑动窗口为五分钟，窗口大小为10分钟，每次进行reduceByKeyAndWindow后，会进行过滤，只存这个windown中的中间五分钟数据，再入库cassandra
+
+## dns项目的spark streaming实时计算（实验性项目）
+### DNS项目处理流程图
+![](http://i.imgur.com/7EatbDK.png)
+
+### 项目代码
+
+
+
+
+
+
+
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2015-09-25-mapreduce-introduce/" data-id="ck4ifp1lf000l2wjegqldgncd" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2014-05-17-bigdata-streamdata-introduce" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2014-05-17-bigdata-streamdata-introduce/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.268Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/23/2014-05-17-bigdata-streamdata-introduce/">大数据之流数据挖掘</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一-流数据的特征"><a href="#一-流数据的特征" class="headerlink" title="一 流数据的特征"></a>一 流数据的特征</h2><ol>
+<li>分发速度非常快，必须及时处理，否则将永远丢失。</li>
+<li>即使分发速度较慢，同时多个数据流一起则超过了内存最大容量。</li>
+</ol>
+
+<h2 id="二-流数据的处理方法"><a href="#二-流数据的处理方法" class="headerlink" title="二 流数据的处理方法"></a>二 流数据的处理方法</h2><h3 id="2-1-流数据抽样"><a href="#2-1-流数据抽样" class="headerlink" title="2.1 流数据抽样"></a>2.1 流数据抽样</h3><p><B>问题描述：</B>过去的一个月中典型用户提交的重复查询比率是多少。假设我们只存储其中十分之一的流元素。<br><br><B>典型做法：</B>对每个搜索查询产生一个随机数（比如0-9中间的一个随机数），并当且仅当为0时才存储。如果用户提交的查询足够多，大数定律会保证大部分用户所存储的比例非常接近1/10.</p>
+<h4 id="2-1-1-误区"><a href="#2-1-1-误区" class="headerlink" title="2.1.1 误区"></a>2.1.1 误区</h4><p>&nbsp;&nbsp;&nbsp;如果想得到用户提交的平均重复查询数目，上述抽样会得到错误结果。<br><br>&nbsp;&nbsp;&nbsp;假设某个用户在你过去一个月中有s个查询只提交过一次，d个查询提交两次，不存在超过两次的提交。那么提交过一次查询数目达到我们所期望的s/10，而在出现过两次的d个查询中，只有d/100会在样本中出现2次，该值等于d乘以该查询两次出现在1/10样本中的概率。于是在整个中出现2次的d个查询中，有18d/100个查询样本在样本中出现一次。<br>   本来，在所有搜索查询中重复搜索查询的比率正确答案是d/(s+d).但是，如果采用上述方法，我们得到的值为 d/10+18d/100个查询出现一次。</p>
+<h4 id="2-1-2-正确思路"><a href="#2-1-2-正确思路" class="headerlink" title="2.1.2 正确思路"></a>2.1.2 正确思路</h4><p>&nbsp;&nbsp;&nbsp;我们不能从每个用户的搜索查询的抽样样本中得到正确答案。因此，必须要挑出1/10的用户并将它们所有的查询放入样本，而不考虑其他用户的搜索查询。每当一个新的查询到达流中时，我们会查找用户以判断其是否在已有样本中出现，若出现则放入样本，否则丢弃。如果没有出现该用户，我们产生一个0-9随机数，若为0则加入用户列表，并将其标记为”in”，否则，也加入用户列表，但是标记为”out”。<br><br>&nbsp;&nbsp;&nbsp;<font color="blue">注意：</font>引入哈希函数将每个用户哈希到编号0-9的10个桶中之一。但是桶中并不保存真正用户，事实上桶中没有任何数据。只是将哈希函数作为随机数生成器来使用。该哈希函数的一个重要特点就是，即使在相同用户上应用多次，其生成的随机数也相同。即，对任何用户都不需要存储其in/out决策，因为任何查询到来时都可以重构该决策。</p>
+<h3 id="2-2-流过滤"><a href="#2-2-流过滤" class="headerlink" title="2.2 流过滤"></a>2.2 流过滤</h3><p>&nbsp;&nbsp;主要讨论的是使用布隆过滤器。</p>
+<h4 id="2-2-1-布隆过滤器简介"><a href="#2-2-1-布隆过滤器简介" class="headerlink" title="2.2.1 布隆过滤器简介"></a>2.2.1 布隆过滤器简介</h4><p> 布隆过滤器也即Bloom Filter算法  一个布隆过滤器由以下几个部分组成</p>
+<ul>
+<li><p>n个位组成的数组，每个位初始值都是0。</p>
+</li>
+<li><p>一系列哈希哈书 $h_1,h_2,h_3…..h_k$ 组成的集合。每个哈希函数将“键”值映射到上述n个桶（对应于位数组的n个位）中。</p>
+</li>
+<li><p>m个键值组成的集合S</p>
+<p>布隆过滤器的目的是让所有键值在S中的流元素通过，而阻挡大部分键值不再S中的流元素，哈希函数hi及S中的键值K，将每个 $h_i(K)$对应的位置为1。</p>
+</li>
+</ul>
+<p>当键值为K的流元素到达时，检查所有的 $h_1(k)， h_2(k) ，h_3(k)….h_k(k)$ 对应的位是否全部都是1.如果是则允许该元素通过，如果有一位或多位为0，则认为K不可能在S中。则拒绝该元素通过。如果元素键值在S中出现一定会通过布隆过滤器，但是元素键值不在S中的元素也有可能会通过。我们需要了解如何基于位数组长度n，集合S的元素数目m及哈希函数的数目k来计算false positive概率。</p>
+<h4 id="2-2-1-Bloom-Filter算法思路"><a href="#2-2-1-Bloom-Filter算法思路" class="headerlink" title="2.2.1  Bloom Filter算法思路"></a>2.2.1  Bloom Filter算法思路</h4><ol>
+<li>我们有一个长度为n的比特数组，开始的时候将这个比特数组里所有的元素都初始化为0。<br><br>
+
+<p>00000000000000000000<br><br></p>
+<p>上面的比特数组n为20。</li></p>
+<li>然后选取k个哈希函数，这k个哈希函数产生的结果的值的范围在0到n-1之间（对于上面的比特数组，即0到19）。对每个要添加进集合的对象进行哈希运算，然后将哈希计算结果作为数组的索引，将索引位置的比特位设置为1（不管该比特位原先为0还是为1）。<br>
+比如我们选取三个哈希函数，对于对象A哈希值为0，5，7。那么比特数组就为：
+<br><br>10000101000000000000<br><br>
+
+<p>对象B的值为2，8，13，那么添加B后的比特数组为：<br><br></p>
+<p>10100101100001000000<br><br></p>
+<p>对象C为0，4，7（对象C的第一个哈希函数的值与对象A的相同了，没关系我们还是设置为1就可以了）：</p>
+<p><br><br>10101101100001000000<br><br></p>
+<p>现在我们的Bloom Filter里已经有3个元素了。现在我们要判断某元素X是否在该集合中。就相当于我们要实现一个contains方法。<br><br>对元素X采用相同的三个哈希函数哈希，然后以这三个哈希值为索引去比特数组里找。如果三个索引位置的比特位都为1我们就认为该元素在集合中，否则不是。</li></p>
+</ol>
+
+<h4 id="2-2-3-Bloom-Filter算法应用"><a href="#2-2-3-Bloom-Filter算法应用" class="headerlink" title="2.2.3 Bloom Filter算法应用"></a>2.2.3 Bloom Filter算法应用</h4><p>&nbsp;&nbsp;&nbsp;比如假设我们有一个缓存服务器集群，集群里的不同的服务器承担的缓存也不尽相同。如果一个用户请求过来了，我们如何能快速的判断出用户请求的这个url在集群里哪台服务器上呢？因为每台服务器上缓存的url对应的页面非常庞大，我们全部弄到内存里代价也很高。我们就可以在每台服务器上放一个Bloom Filter，里面添加的都是本服务器上有缓存的那些url。这样即使Bloom Filter误报了，那就是把一个url发到了一个并不持有该url对应的缓存的服务器上，结果就是缓存未命中，缓存服务器只需要将该url打到后端的上游服务器就好了。</p>
+<h2 id="三-独立元素数目估计"><a href="#三-独立元素数目估计" class="headerlink" title="三 独立元素数目估计"></a>三 独立元素数目估计</h2><h3 id="3-1-FM算法（Flajolet-Martin）"><a href="#3-1-FM算法（Flajolet-Martin）" class="headerlink" title="3.1 FM算法（Flajolet-Martin）"></a>3.1 FM算法（Flajolet-Martin）</h3><p>&nbsp;&nbsp;&nbsp;基本思想是：如果流中看到的不同元素越多，那么我们看到的不同的哈希值也越多。我们看到的不同哈希值越多时，哈希函数的性质是对同一个数哈希结果都是一样的。<br><br>&nbsp;&nbsp;&nbsp;理想中的是：对同一批数据使用多个哈希函数，每个哈希函数上得到不同的 $2^R$ 的值（对流元素a应用哈希函数h,h(a)的尾部将以一些0结束，尾部0的数目成为a和h的尾长，假设目前所有已有元素a的最大尾长为R， $2^R$  用来估计流中独立元素数目），然后求它们的平均值即可得到真实的m的近似值。</p>
+<h3 id="3-2-FM算法的问题"><a href="#3-2-FM算法的问题" class="headerlink" title="3.2 FM算法的问题"></a>3.2 FM算法的问题</h3><p>&nbsp;&nbsp;&nbsp;假设一个r，使得2^远大于m。存在某个概率p发现r是流中最大尾长，于是发现r+1是流中最大尾长的概率至少为p/2.因此，随着R的增长，每个可能的R对2^R的期望贡献也越大。2^R的期望值实际是无限大。</p>
+<h3 id="3-3-完美解决方案"><a href="#3-3-完美解决方案" class="headerlink" title="3.3 完美解决方案"></a>3.3 完美解决方案</h3><p>&nbsp;&nbsp;&nbsp;取所有估计值得中位数，由于中位数不会受到偶然极大的2^R影响。<B>缺陷是：</B>它永远都是2的幂值,不论用多少哈希函数，都是在两个2 的幂之间，那么小至少是log2(m)的一个小的倍数。<br><br>我们可以：首先将哈希函数分成小组，每个小组内取平均值。然后再所有平均值中取中位数，组间取中位数可以将中位数的缺陷的影响降低到几乎没有的地步。每个组的大小至少是log2(m)的一个小的倍数。</p>
+<h2 id="四-矩估计"><a href="#四-矩估计" class="headerlink" title="四 矩估计"></a>四 矩估计</h2><p>&nbsp;&nbsp;&nbsp;上述独立流元素计数推广到一般的问题，该问题称为矩计算，包括不同流元素出现的频率分布的计算。</p>
+<h3 id="4-1-矩定义"><a href="#4-1-矩定义" class="headerlink" title="4.1 矩定义"></a>4.1 矩定义</h3><p>&nbsp;&nbsp;&nbsp;假定一个流由选自某个全集的元素够成，并假定该全集中所有元素都排好序，这样我们通过整数 i 来标记该序列中的第i 个元素，假设该元素出现的次数为mi,则流的k 阶矩是所有 i 上的(mi)^k  之和。<br><br>&nbsp;&nbsp;&nbsp;流的一阶矩是所有元素mi之和，也即整个流的长度，当前流所有元素个数；二阶矩是所有元素mi的平方和。</p>
+<h3 id="4-2-二阶矩的AMS算法"><a href="#4-2-二阶矩的AMS算法" class="headerlink" title="4.2 二阶矩的AMS算法"></a>4.2 二阶矩的AMS算法</h3><p>&nbsp;&nbsp;&nbsp;假设没有足够空间来计算流中所有元素的mi。我们仍然可以使用有限空间来估计流的二阶矩，空间越多结果越精确。对每个变量X 我们保存一下内容。</p>
+<ol>
+<li>全集当中的一个特定元素，记为X.element。</li>
+<li>一个整数，记为X.value，它是变量X的值。在流中均匀的随机选择1到n之间的一个位置。将X.element置为该位置上的元素，X.value初始为1，每再看到一个X.element 就将其对应的X.value 值加1。</li>
+</ol>
+&nbsp;&nbsp;&nbsp;假定流  a,b,c,b,d,a,c,d,a,b,d,c,a,a,b,流长度为15。由于a  出现5次，b 出现4次，c和d各出现3次。<img src="/images/blog/bigdata-streamdata1.png">因此二阶矩为   $5^2+4^2+3^2+3^2=59$ .假定维护3个变量 $X_1,X_2,X_3$ .假定随机位置为3,8,13。当到达位置3时，对应的元素为c，于是   $X_1.element=c$ ,此时 $X_1.value=1$ ,而位置4为b，5为d，6为a，X1的值均不改变，在位置7元素c再次出现，继续往后的话，位置12再出现c，因此 $X_1.value=3$ 。据此可以得到 $X_2.value=2$ 和 $X_3.value=2$ (注意，他们都是从该元素第一次出现之后，往后出现的才算)。
+<br>基于任意一个变量X，我们可以导出二阶矩的一个估计值为： n*(2*X.value-1)<br>
+根据本例中的值，我们可以通过二阶矩估算值得平均值为：(15*(2*3-1)+15*(2*2-1)+15*(2*2-1))/3=55 可知与精确值 <font color="blue">59</font>相当接近了。
+
+<h3 id="4-3-无限流的处理"><a href="#4-3-无限流的处理" class="headerlink" title="4.3 无限流的处理"></a>4.3 无限流的处理</h3><p>&nbsp;&nbsp;&nbsp;对于二阶矩以及多阶矩的估计当中，我们是假定流长度n 是一个常数。实际应用当中，n 会不断随着时间增长。因此在变量位置选择的时候需要谨慎。</p>
+<ol><li>一方面，如果只对所有元素做一次选择，流不断增长时，计算会偏向早期的元素</li><li>另一发面，如果选择的等待时间太久，那么早期的元素位置上变量不多，从而造成估算的可靠性不高。</li><li>比较合理的选择是，任何时候都尽可能保持足够多的变量，并在流增长时丢弃某些变量（在选择某个位置的概率和其他位置的概率必须相等）。</li></ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2014-05-17-bigdata-streamdata-introduce/" data-id="ck4ifp1lb000f2wjeciq18a50" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2014-05-15-javafoundamention-newObjectAndRubCollection" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2014-05-15-javafoundamention-newObjectAndRubCollection/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.261Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/23/2014-05-15-javafoundamention-newObjectAndRubCollection/">Java对象创建过程与垃圾回收机制</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一-创建对象的步骤"><a href="#一-创建对象的步骤" class="headerlink" title="一 创建对象的步骤"></a>一 创建对象的步骤</h2><ol>
+<li>虚拟机遇到一条<B>new</B>指令<br></li>
+<li>检查指令的参数能否在常量池中定位到一个类的符号引用，并检查这个符号引用代表的类是否已被加载、解析和初始化过<br></li>
+<li>若没有，则必须首先执行相应的类加载过程<br></li>
+<li>类加载完成，虚拟机为新生对象分配内存。分配内存相当于从Java堆中划分出一块内存大小确定的块，分两种情况<br>(1)Java堆内存，属于绝对规整的那种。只需指针向空闲空间挪动一段举例即可<br>(2)不规整。空闲区和已分配区交错，需要一张“空闲列表”记录哪些区域是分配了的<br></li>
+<li>虚拟机对对象进行必要的设置。如，这个对象是哪个类的实例，如何才能找到类的元数据信息，对象的哈希码。此步骤为止<font color="blue">虚拟机步骤完成</font><br></li>
+<li><font color="blue">Java程序开始：</font>init方法还没有执行，所有字段仍然为0，new指令后，执行 init 方法。</li>
+</ol>
+
+<h2 id="二-垃圾回收的目标"><a href="#二-垃圾回收的目标" class="headerlink" title="二 垃圾回收的目标"></a>二 垃圾回收的目标</h2><p>Java运行期间的各个部分：程序计数器、虚拟机栈、本地方法栈，这三个区域随着线程而存亡。栈中的线帧随着方法的进入和退出而入栈、出栈。每个线帧分配多少内存在类的结构确定时也确定。这几个区域的内存分配和回收都是确定的，方法结束或线程结束时，内存就回收了。<br></p>
+<p>而Java堆和方法区就不一样了，一个接口的多个实现类所需要的内存都不一样，一个方法的各个分支所需内存也不一样，程序运行期间才能动态确认。<font color="blue">垃圾收集器关注的也是此部分</font>    <br></p>
+<h2 id="三-判断对象是否存活-堆中"><a href="#三-判断对象是否存活-堆中" class="headerlink" title="三 判断对象是否存活(堆中)"></a>三 判断对象是否存活(堆中)</h2><p>有以下方法：</p>
+<ol>
+<li><B>引用记数法：</B>给对象添加一个引育弄个计数器，有一个地方引用时该计数器加1，一个引用失效时，减一<br>
+<B>缺点：</B>无法应对循环引用，例如【objA.instance=objB和obj.instance=objA】</li>
+<li><B>可达性分析算法：</B>以一个称为"GC Root"的对象作为起始点，从这些节点往下搜索。当一个对象到"GC Root"的引用路径不可达时，证明该对象不可用。<font color="blue">java采用此方法</font><img src="/images/blog/java-jvm-obj-rubcollect1.png"></li>
+</ol>
+
+<h2 id="四-回收方法区"><a href="#四-回收方法区" class="headerlink" title="四 回收方法区"></a>四 回收方法区</h2><p>主要有两部分：(1)废弃的常量（2）无用的类</p>
+<ol>
+<li><B>废弃常量:</B>没有任何对象引用它</li>
+<li><B>无用的类：</B><br>(1)该类所有的实例都已被回收，也即Java堆中不存在该类的任何实例<br>(2)加载该类的classLoader已被回收<br>(3)该类对应的java.lang.Class对象没有任何地方被引用，无法在任何地方通过反射访问该类的方法</li>
+</ol>
+
+<h2 id="五-对象的访问定位"><a href="#五-对象的访问定位" class="headerlink" title="五 对象的访问定位"></a>五 对象的访问定位</h2><p>Java程序，需要通过栈上的reference数据来操作堆行的具体对象。reference类型在Java中只规定了一个指向该对象的引用，如何去定位，访问堆中的对象的具体对象。不同的虚拟机实现，分为使用句柄和直接指针两种。<br><br></p>
+<h3 id="5-1-句柄访问"><a href="#5-1-句柄访问" class="headerlink" title="5.1 句柄访问"></a>5.1 句柄访问</h3><p>Java堆中划分一块内存作为句柄池，reference中存储的即对象的句柄地址，而句柄包含了对象实例数据与类型数据各自的具体地址信息。<br><img src="/images/blog/java-jvm-obj-rubcollect2.png"><br><br><br><B>优点：</B>reference中存储的是稳定的句柄地址，对象被移动（垃圾回收时），只会改变句柄中的实例数据指针，而reference本身不需要移动</p>
+<h3 id="5-2-直接指针访问"><a href="#5-2-直接指针访问" class="headerlink" title="5.2 直接指针访问"></a>5.2 直接指针访问</h3><p>Java堆中对象的布局中就必须考虑如何放置访问类型数据相关信息，reference中存储的直接是对象地址<br><img src="/images/blog/java-jvm-obj-rubcollect3.png"><br><br><B>优点：</B>速度更快，节省了一次指针定位的时间开销。虚拟机Sun HotSpot即采用此方法。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2014-05-15-javafoundamention-newObjectAndRubCollection/" data-id="ck4ifp1l9000b2wje5r5d15w1" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/page/8/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/10/">Next &amp;raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>tensorflow：理解tensorflow中的输入管道 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="tensorflow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tensorflow：理解tensorflow中的输入管道">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2016-09-02-tensorflow-inputpipeline/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="tensorflow">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/tensorflow_partition.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.327Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.199Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/tensorflow_partition.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2016-09-02-tensorflow-inputpipeline" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2016-09-02-tensorflow-inputpipeline/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.327Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      tensorflow：理解tensorflow中的输入管道
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>原文翻译整理自： <a href="https://ischlag.github.io/2016/06/19/tensorflow-input-pipeline-example/" target="_blank" rel="noopener">理解tensorflow中输入管道</a></p>
+<h2 id="主要内容"><a href="#主要内容" class="headerlink" title="主要内容"></a>主要内容</h2><p>  本文旨在根据mnist数据集构建一个简单而有效的输入管道。</p>
+<h2 id="使用tensorflow加载数据"><a href="#使用tensorflow加载数据" class="headerlink" title="使用tensorflow加载数据"></a>使用tensorflow加载数据</h2><p> 有两种方式来加载数据，其一是使用<strong>feeding</strong>方法并在每一步提供<strong>data</strong>和<strong>label</strong>给<strong>feed_dict</strong>对象。这种方式在数据集太大而无法在内存中存放时将无能为力，因此tensorflow的作者提出了使用 <em>input pipelines</em>。下一步将描述 <em>pipelines</em>，但是，注意：只有在session操作之前启动队列runners才能激活pipelines并载入数据。<br> <em>input pipeline</em>将会处理读取csv文件，解析文件格式，重构数据，混洗数据，数据增强以及其他数据处理，然后在批处理中使用线程载入数据。</p>
+<h2 id="载入标签数据"><a href="#载入标签数据" class="headerlink" title="载入标签数据"></a>载入标签数据</h2><p> 假定我们有如下数据集：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> dataset_path      &#x3D; &quot;&#x2F;path&#x2F;to&#x2F;out&#x2F;dataset&#x2F;mnist&#x2F;&quot;</span><br><span class="line">test_labels_file  &#x3D; &quot;test-labels.csv&quot;</span><br><span class="line">train_labels_file &#x3D; &quot;train-labels.csv&quot;</span><br></pre></td></tr></table></figure>
+
+<p>首先要做的事情就是从生成的文本文件中载入图像和标签信息。<strong>注意，我们并不是要训练模型,所以不需要进行one-hot编码</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">def encode_label(label):</span><br><span class="line">  return int(label)</span><br><span class="line"></span><br><span class="line">def read_label_file(file):</span><br><span class="line">  f &#x3D; open(file, &quot;r&quot;)</span><br><span class="line">  filepaths &#x3D; []</span><br><span class="line">  labels &#x3D; []</span><br><span class="line">  for line in f:</span><br><span class="line">    filepath, label &#x3D; line.split(&quot;,&quot;)</span><br><span class="line">    filepaths.append(filepath)</span><br><span class="line">    labels.append(encode_label(label))</span><br><span class="line">  return filepaths, labels</span><br><span class="line"></span><br><span class="line"># reading labels and file path</span><br><span class="line">train_filepaths, train_labels &#x3D; read_label_file(dataset_path + train_labels_file)</span><br><span class="line">test_filepaths, test_labels &#x3D; read_label_file(dataset_path + test_labels_file)</span><br></pre></td></tr></table></figure>
+
+<h2 id="在字符串列表上选择性地做一些处理"><a href="#在字符串列表上选择性地做一些处理" class="headerlink" title="在字符串列表上选择性地做一些处理"></a>在字符串列表上选择性地做一些处理</h2><p>接下来，我们将图像数据的相对路径转换为绝对路径，同时将训练数据和测试数据拼接在一起。然后混洗数据并创建我们自己的训练和测试集合。为使脚本输出结果易于理解，我们将只从数据集中抽样20个样本。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># transform relative path into full path</span><br><span class="line">train_filepaths &#x3D; [ dataset_path + fp for fp in train_filepaths]</span><br><span class="line">test_filepaths &#x3D; [ dataset_path + fp for fp in test_filepaths]</span><br><span class="line"></span><br><span class="line"># for this example we will create or own test partition</span><br><span class="line">all_filepaths &#x3D; train_filepaths + test_filepaths</span><br><span class="line">all_labels &#x3D; train_labels + test_labels</span><br><span class="line"></span><br><span class="line"># we limit the number of files to 20 to make the output more clear!</span><br><span class="line">all_filepaths &#x3D; all_filepaths[:20]</span><br><span class="line">all_labels &#x3D; all_labels[:20]</span><br></pre></td></tr></table></figure>
+
+<h2 id="开始构建pipelines"><a href="#开始构建pipelines" class="headerlink" title="开始构建pipelines"></a>开始构建pipelines</h2><p>确保我们所使用 <em>tensor</em>的数据类型<em>dtype</em>与列表中的已有的数据是一致的。载入以下包可以创建我们的tensorflow对象</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">from tensorflow.python.framework import ops</span><br><span class="line">from tensorflow.python.framework import dtypes</span><br><span class="line"># convert string into tensors</span><br><span class="line">all_images &#x3D; ops.convert_to_tensor(all_filepaths, dtype&#x3D;dtypes.string)</span><br><span class="line">all_labels &#x3D; ops.convert_to_tensor(all_labels, dtype&#x3D;dtypes.int32)</span><br></pre></td></tr></table></figure>
+
+<h2 id="开始对数据分区"><a href="#开始对数据分区" class="headerlink" title="开始对数据分区"></a>开始对数据分区</h2><p>这一步是可选的。鉴于我们已经将我们的20个样本置于一个大集合之中，我们需要执行一些<em>partition</em>操作来构建测试机和训练集。tensorflow可以在tensors上即时完成，所以不必预先做。如果对 partition操作感到困惑，可以参考<a href="https://www.tensorflow.org/versions/r0.9/api_docs/python/array_ops.html#dynamic_partition" target="_blank" rel="noopener">tensorflow partition</a>.我们将 <em>test_set_size</em>设置为5个样本。下图显示了如何从数据集中随机选出训练集和测试集</p>
+<p>   <img src="/images/blog/tensorflow_partition.png" alt="tensorflow partition操作示例图"></p>
+<p>注意<em>partition</em>类似于位置因子或标签，数据某个位置上的不同标签将会将数据分成不同部分。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># create a partition vector</span><br><span class="line">partitions &#x3D; [0] * len(all_filepaths)</span><br><span class="line">partitions[:test_set_size] &#x3D; [1] * test_set_size</span><br><span class="line">random.shuffle(partitions)</span><br><span class="line"></span><br><span class="line"># partition our data into a test and train set according to our partition vector</span><br><span class="line">train_images, test_images &#x3D; tf.dynamic_partition(all_images, partitions, 2)</span><br><span class="line">train_labels, test_labels &#x3D; tf.dynamic_partition(all_labels, partitions, 2)</span><br></pre></td></tr></table></figure>
+
+<h2 id="构建输入队列并定义如何载入图像"><a href="#构建输入队列并定义如何载入图像" class="headerlink" title="构建输入队列并定义如何载入图像"></a>构建输入队列并定义如何载入图像</h2><p> <em>slice_input_producer</em>将tensors切分成许许多多的单个实例，并使用多线程将它们入队列。关于进一步的参数，比如线程数和队列容量等需要参考API文档。然后，我们使用路径信息将文件读入到 <em>pipelines</em>，然后使用<em>jpg decoder</em>解码（也可以使用其他解码器）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"> # create input queues</span><br><span class="line">train_input_queue &#x3D; tf.train.slice_input_producer(</span><br><span class="line">                                    [train_images, train_labels],</span><br><span class="line">                                    shuffle&#x3D;False)</span><br><span class="line">test_input_queue &#x3D; tf.train.slice_input_producer(</span><br><span class="line">                                    [test_images, test_labels],</span><br><span class="line">                                    shuffle&#x3D;False)</span><br><span class="line"></span><br><span class="line"># process path and string tensor into an image and a label</span><br><span class="line">file_content &#x3D; tf.read_file(train_input_queue[0])</span><br><span class="line">train_image &#x3D; tf.image.decode_jpeg(file_content, channels&#x3D;NUM_CHANNELS)</span><br><span class="line">train_label &#x3D; train_input_queue[1]</span><br><span class="line"></span><br><span class="line">file_content &#x3D; tf.read_file(test_input_queue[0])</span><br><span class="line">test_image &#x3D; tf.image.decode_jpeg(file_content, channels&#x3D;NUM_CHANNELS)</span><br><span class="line">test_label &#x3D; test_input_queue[1]</span><br></pre></td></tr></table></figure>
+
+<h2 id="分组抽样并汇成一批批"><a href="#分组抽样并汇成一批批" class="headerlink" title="分组抽样并汇成一批批"></a>分组抽样并汇成一批批</h2><p> 如果在<em>session</em>中执行<em>train_image</em>，你将会得到一张图片信息（比如,(28,28,1)），这是我们的mnist图像的维度。在一张图片上训练模型是十分低效的，因此我们将图像汇入队列中称为一批，并在这一批批的数据上训练。目前为止，我们没有开始 <em>runners</em>来载入图像，只是描述了 <em>pipelines</em>初步形象，此时tensorflow 尚不了解图像的形状。使用<strong>tf.train_batch</strong>之前，需要先定义图像张量的<em>shape</em>，以便于将图像汇成一批批数据。此示例中，我们使用的是5个样本作为一批数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"> # define tensor shape</span><br><span class="line">train_image.set_shape([IMAGE_HEIGHT, IMAGE_WIDTH, NUM_CHANNELS])</span><br><span class="line">test_image.set_shape([IMAGE_HEIGHT, IMAGE_WIDTH, NUM_CHANNELS])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># collect batches of images before processing</span><br><span class="line">train_image_batch, train_label_batch &#x3D; tf.train.batch(</span><br><span class="line">                                    [train_image, train_label],</span><br><span class="line">                                    batch_size&#x3D;BATCH_SIZE</span><br><span class="line">                                    #,num_threads&#x3D;1</span><br><span class="line">                                    )</span><br><span class="line">test_image_batch, test_label_batch &#x3D; tf.train.batch(</span><br><span class="line">                                    [test_image, test_label],</span><br><span class="line">                                    batch_size&#x3D;BATCH_SIZE</span><br><span class="line">                                    #,num_threads&#x3D;1</span><br><span class="line">                                    )</span><br></pre></td></tr></table></figure>
+
+<h2 id="运行-Queue-Runners并启动session"><a href="#运行-Queue-Runners并启动session" class="headerlink" title="运行 Queue Runners并启动session"></a>运行 Queue Runners并启动session</h2><p> 上面的步骤已经完成 <em>input pipelines</em>的构建。但是若此时去访问比如<em>test_image_batch</em>，将不会有任何数据，因为我们并没有启动载入队列并将数据注入到 tensorflowd对象中的线程。完成这一步之后，接下来是两个循环，其一是处理训练数据，其二是吹测试数据。<br> 你可能留意到循环次数比每个数据的抽样数据大</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">with tf.Session() as sess:</span><br><span class="line"></span><br><span class="line"> # initialize the variables</span><br><span class="line"> sess.run(tf.initialize_all_variables())</span><br><span class="line"></span><br><span class="line"> # initialize the queue threads to start to shovel data</span><br><span class="line"> coord &#x3D; tf.train.Coordinator()</span><br><span class="line"> threads &#x3D; tf.train.start_queue_runners(coord&#x3D;coord)</span><br><span class="line"></span><br><span class="line"> print &quot;from the train set:&quot;</span><br><span class="line"> for i in range(20):</span><br><span class="line">   print sess.run(train_label_batch)</span><br><span class="line"></span><br><span class="line"> print &quot;from the test set:&quot;</span><br><span class="line"> for i in range(10):</span><br><span class="line">   print sess.run(test_label_batch)</span><br><span class="line"></span><br><span class="line"> # stop our queue threads and properly close the session</span><br><span class="line"> coord.request_stop()</span><br><span class="line"> coord.join(threads)</span><br><span class="line"> sess.close()</span><br></pre></td></tr></table></figure>
+
+<p>但是从下面的输出结果看，你就会知道tensorflow不关心回合数(epochs)。我们不会混洗数据（查看input slicer的参数），同时 input pipelines只是在训练集上按照既定频率循环。你自己应该确保回合数(epochs)的准确性。尝试着调节 <em>batch size</em>和 <em>shuffle</em>并预测这将如何改变输出结果。你能预测到如果 <em>batch_size</em>改成4而不是5将会改变什么吗？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">  tf-env)worker1:~$ python mnist_feed.py</span><br><span class="line">I tensorflow&#x2F;stream_executor&#x2F;dso_loader.cc:105] successfully opened CUDA library libcublas.so locally</span><br><span class="line">I tensorflow&#x2F;stream_executor&#x2F;dso_loader.cc:105] successfully opened CUDA library libcudnn.so locally</span><br><span class="line">I tensorflow&#x2F;stream_executor&#x2F;dso_loader.cc:105] successfully opened CUDA library libcufft.so locally</span><br><span class="line">I tensorflow&#x2F;stream_executor&#x2F;dso_loader.cc:105] successfully opened CUDA library libcuda.so.1 locally</span><br><span class="line">I tensorflow&#x2F;stream_executor&#x2F;dso_loader.cc:105] successfully opened CUDA library libcurand.so locally</span><br><span class="line">input pipeline ready</span><br><span class="line">I tensorflow&#x2F;stream_executor&#x2F;cuda&#x2F;cuda_gpu_executor.cc:900] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero</span><br><span class="line">I tensorflow&#x2F;core&#x2F;common_runtime&#x2F;gpu&#x2F;gpu_init.cc:102] Found device 0 with properties:</span><br><span class="line">name: GeForce GTX 960</span><br><span class="line">major: 5 minor: 2 memoryClockRate (GHz) 1.253</span><br><span class="line">pciBusID 0000:01:00.0</span><br><span class="line">Total memory: 2.00GiB</span><br><span class="line">Free memory: 1.77GiB</span><br><span class="line">I tensorflow&#x2F;core&#x2F;common_runtime&#x2F;gpu&#x2F;gpu_init.cc:126] DMA: 0</span><br><span class="line">I tensorflow&#x2F;core&#x2F;common_runtime&#x2F;gpu&#x2F;gpu_init.cc:136] 0:   Y</span><br><span class="line">I tensorflow&#x2F;core&#x2F;common_runtime&#x2F;gpu&#x2F;gpu_device.cc:755] Creating TensorFlow device (&#x2F;gpu:0) -&gt; (device: 0, name: GeForce GTX 960, pci bus id: 0000:01:00.0)</span><br><span class="line">from the train set:</span><br><span class="line">[5 4 1 9 2]</span><br><span class="line">[1 3 1 3 6]</span><br><span class="line">[1 7 2 6 9]</span><br><span class="line">[5 4 1 9 2]</span><br><span class="line">[1 3 1 3 6]</span><br><span class="line">[1 7 2 6 9]</span><br><span class="line">[5 4 1 9 2]</span><br><span class="line">[1 3 1 3 6]</span><br><span class="line">[1 7 2 6 9]</span><br><span class="line">[5 4 1 9 2]</span><br><span class="line">[1 3 1 3 6]</span><br><span class="line">[1 7 2 6 9]</span><br><span class="line">[5 4 1 9 2]</span><br><span class="line">[1 3 1 3 6]</span><br><span class="line">[1 7 2 6 9]</span><br><span class="line">[5 4 1 9 2]</span><br><span class="line">[1 3 1 3 6]</span><br><span class="line">[1 7 2 6 9]</span><br><span class="line">[5 4 1 9 2]</span><br><span class="line">[1 3 1 3 6]</span><br><span class="line"></span><br><span class="line">from the test set:</span><br><span class="line"></span><br><span class="line">[0 4 5 3 8]</span><br><span class="line">[0 4 5 3 8]</span><br><span class="line">[0 4 5 3 8]</span><br><span class="line">[0 4 5 3 8]</span><br><span class="line">[0 4 5 3 8]</span><br><span class="line">[0 4 5 3 8]</span><br><span class="line">[0 4 5 3 8]</span><br><span class="line">[0 4 5 3 8]</span><br><span class="line">[0 4 5 3 8]</span><br><span class="line">[0 4 5 3 8]</span><br></pre></td></tr></table></figure>
+
+<p>由于我们混洗了 partition 向量，很显然你会得到不同的标签。但是注意，此处重点是理解tensorflow的载入机制是如何工作的。因为每我们的 <em>batch size</em>与测试集合的一样大。</p>
+<h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><p>完整代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># Example on how to use the tensorflow input pipelines. The explanation can be found here ischlag.github.io.</span><br><span class="line">import tensorflow as tf</span><br><span class="line">import random</span><br><span class="line">from tensorflow.python.framework import ops</span><br><span class="line">from tensorflow.python.framework import dtypes</span><br><span class="line"></span><br><span class="line">dataset_path      &#x3D; &quot;&#x2F;path&#x2F;to&#x2F;your&#x2F;dataset&#x2F;mnist&#x2F;&quot;</span><br><span class="line">test_labels_file  &#x3D; &quot;test-labels.csv&quot;</span><br><span class="line">train_labels_file &#x3D; &quot;train-labels.csv&quot;</span><br><span class="line"></span><br><span class="line">test_set_size &#x3D; 5</span><br><span class="line"></span><br><span class="line">IMAGE_HEIGHT  &#x3D; 28</span><br><span class="line">IMAGE_WIDTH   &#x3D; 28</span><br><span class="line">NUM_CHANNELS  &#x3D; 3</span><br><span class="line">BATCH_SIZE    &#x3D; 5</span><br><span class="line"></span><br><span class="line">def encode_label(label):</span><br><span class="line">  return int(label)</span><br><span class="line"></span><br><span class="line">def read_label_file(file):</span><br><span class="line">  f &#x3D; open(file, &quot;r&quot;)</span><br><span class="line">  filepaths &#x3D; []</span><br><span class="line">  labels &#x3D; []</span><br><span class="line">  for line in f:</span><br><span class="line">    filepath, label &#x3D; line.split(&quot;,&quot;)</span><br><span class="line">    filepaths.append(filepath)</span><br><span class="line">    labels.append(encode_label(label))</span><br><span class="line">  return filepaths, labels</span><br><span class="line"></span><br><span class="line"># reading labels and file path</span><br><span class="line">train_filepaths, train_labels &#x3D; read_label_file(dataset_path + train_labels_file)</span><br><span class="line">test_filepaths, test_labels &#x3D; read_label_file(dataset_path + test_labels_file)</span><br><span class="line"></span><br><span class="line"># transform relative path into full path</span><br><span class="line">train_filepaths &#x3D; [ dataset_path + fp for fp in train_filepaths]</span><br><span class="line">test_filepaths &#x3D; [ dataset_path + fp for fp in test_filepaths]</span><br><span class="line"></span><br><span class="line"># for this example we will create or own test partition</span><br><span class="line">all_filepaths &#x3D; train_filepaths + test_filepaths</span><br><span class="line">all_labels &#x3D; train_labels + test_labels</span><br><span class="line"></span><br><span class="line">all_filepaths &#x3D; all_filepaths[:20]</span><br><span class="line">all_labels &#x3D; all_labels[:20]</span><br><span class="line"></span><br><span class="line"># convert string into tensors</span><br><span class="line">all_images &#x3D; ops.convert_to_tensor(all_filepaths, dtype&#x3D;dtypes.string)</span><br><span class="line">all_labels &#x3D; ops.convert_to_tensor(all_labels, dtype&#x3D;dtypes.int32)</span><br><span class="line"></span><br><span class="line"># create a partition vector</span><br><span class="line">partitions &#x3D; [0] * len(all_filepaths)</span><br><span class="line">partitions[:test_set_size] &#x3D; [1] * test_set_size</span><br><span class="line">random.shuffle(partitions)</span><br><span class="line"></span><br><span class="line"># partition our data into a test and train set according to our partition vector</span><br><span class="line">train_images, test_images &#x3D; tf.dynamic_partition(all_images, partitions, 2)</span><br><span class="line">train_labels, test_labels &#x3D; tf.dynamic_partition(all_labels, partitions, 2)</span><br><span class="line"></span><br><span class="line"># create input queues</span><br><span class="line">train_input_queue &#x3D; tf.train.slice_input_producer(</span><br><span class="line">                                    [train_images, train_labels],</span><br><span class="line">                                    shuffle&#x3D;False)</span><br><span class="line">test_input_queue &#x3D; tf.train.slice_input_producer(</span><br><span class="line">                                    [test_images, test_labels],</span><br><span class="line">                                    shuffle&#x3D;False)</span><br><span class="line"></span><br><span class="line"># process path and string tensor into an image and a label</span><br><span class="line">file_content &#x3D; tf.read_file(train_input_queue[0])</span><br><span class="line">train_image &#x3D; tf.image.decode_jpeg(file_content, channels&#x3D;NUM_CHANNELS)</span><br><span class="line">train_label &#x3D; train_input_queue[1]</span><br><span class="line"></span><br><span class="line">file_content &#x3D; tf.read_file(test_input_queue[0])</span><br><span class="line">test_image &#x3D; tf.image.decode_jpeg(file_content, channels&#x3D;NUM_CHANNELS)</span><br><span class="line">test_label &#x3D; test_input_queue[1]</span><br><span class="line"></span><br><span class="line"># define tensor shape</span><br><span class="line">train_image.set_shape([IMAGE_HEIGHT, IMAGE_WIDTH, NUM_CHANNELS])</span><br><span class="line">test_image.set_shape([IMAGE_HEIGHT, IMAGE_WIDTH, NUM_CHANNELS])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># collect batches of images before processing</span><br><span class="line">train_image_batch, train_label_batch &#x3D; tf.train.batch(</span><br><span class="line">                                    [train_image, train_label],</span><br><span class="line">                                    batch_size&#x3D;BATCH_SIZE</span><br><span class="line">                                    #,num_threads&#x3D;1</span><br><span class="line">                                    )</span><br><span class="line">test_image_batch, test_label_batch &#x3D; tf.train.batch(</span><br><span class="line">                                    [test_image, test_label],</span><br><span class="line">                                    batch_size&#x3D;BATCH_SIZE</span><br><span class="line">                                    #,num_threads&#x3D;1</span><br><span class="line">                                    )</span><br><span class="line"></span><br><span class="line">print &quot;input pipeline ready&quot;</span><br><span class="line"></span><br><span class="line">with tf.Session() as sess:</span><br><span class="line"></span><br><span class="line">  # initialize the variables</span><br><span class="line">  sess.run(tf.initialize_all_variables())</span><br><span class="line"></span><br><span class="line">  # initialize the queue threads to start to shovel data</span><br><span class="line">  coord &#x3D; tf.train.Coordinator()</span><br><span class="line">  threads &#x3D; tf.train.start_queue_runners(coord&#x3D;coord)</span><br><span class="line"></span><br><span class="line">  print &quot;from the train set:&quot;</span><br><span class="line">  for i in range(20):</span><br><span class="line">    print sess.run(train_label_batch)</span><br><span class="line"></span><br><span class="line">  print &quot;from the test set:&quot;</span><br><span class="line">  for i in range(10):</span><br><span class="line">    print sess.run(test_label_batch)</span><br><span class="line"></span><br><span class="line">  # stop our queue threads and properly close the session</span><br><span class="line">  coord.request_stop()</span><br><span class="line">  coord.join(threads)</span><br><span class="line">  sess.close()</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2016-09-02-tensorflow-inputpipeline/" data-id="ck4ifp1lq00172wjeeewu0vuh" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2016-09-09-tensorflow-retainmodel/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          tensorflow：如何重新训练Inception模型的最后一层，以应对新分类
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2016-08-24-network-imageclassify/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">深度学习：卷积神经网络与图像识别基本概念</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

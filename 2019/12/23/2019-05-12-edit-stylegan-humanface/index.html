@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>使用StyleGAN训练自己的数据集.md | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="深度学习-GAN">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用StyleGAN训练自己的数据集.md">
+<meta property="og:url" content="http://shartoo.github.com/2019/12/23/2019-05-12-edit-stylegan-humanface/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="深度学习-GAN">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/stylegan_owndata_1.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/stylegan_owndata_2.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/stylegan_owndata_3.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/stylegan_owndata_4.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/stylegan_owndata_5.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/stylegan_owndata_6.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/stylegan_owndata_7.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/stylegan_owndata_8.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/stylegan_owndata_9.png">
+<meta property="og:image" content="http://shartoo.github.com/images/blog/stylegan_owndata_10.png">
+<meta property="article:published_time" content="2019-12-23T10:45:59.724Z">
+<meta property="article:modified_time" content="2019-12-23T09:55:14.232Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shartoo.github.com/images/blog/stylegan_owndata_1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://shartoo.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2019-05-12-edit-stylegan-humanface" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/23/2019-05-12-edit-stylegan-humanface/" class="article-date">
+  <time datetime="2019-12-23T10:45:59.724Z" itemprop="datePublished">2019-12-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/blog/">blog</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用StyleGAN训练自己的数据集.md
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>参考： <a href="https://www.gwern.net/Faces#compute" target="_blank" rel="noopener">https://www.gwern.net/Faces#compute</a></p>
+<h2 id="1-数据准备"><a href="#1-数据准备" class="headerlink" title="1 数据准备"></a>1 数据准备</h2><p>执行StyleGAN的最大难点在于准备数据集，不像其他的GAN可以接受文件夹输入，它只能接收<code>.tfrecords</code>作为输入，它将每张图片不同分辨率存储为数组。因此，输入文件必须是完美正态分布的，通过特定的dataset_tools.py工具将图片转成.tfrecords，这会导致实际存储尺寸达到原图的19倍。</p>
+<p>注意：</p>
+<ul>
+<li>StyleGAN的数据集必须由相同的方式组成，$512\times 512$ 或 $1024\times 1024$( $513\times 513$就不行)</li>
+<li>必须是相同的颜色空间，不能既有sRGB又有灰度图JPGs。</li>
+<li>文件类型必须是与你要重新训练的模型所使用的图像格式相同的，比如，你不能用PNG图片来重新训练一个用JPG格式图像的模型。</li>
+<li>不可以有细微的错误，比如CRC校验失败。</li>
+</ul>
+<h2 id="2-准备脸部数据"><a href="#2-准备脸部数据" class="headerlink" title="2 准备脸部数据"></a>2 准备脸部数据</h2><ol>
+<li>下载原始数据集 <a href="https://www.gwern.net/Danbooru2018#download" target="_blank" rel="noopener">Danbooru2018</a></li>
+<li>从Danbooru2018的metadata的JSON文件中抽取所有的图像子集的ID，如果需要指定某个特定的Danbooru标签,使用<code>jq</code>以及shell脚本</li>
+<li>将原图裁剪。可以使用<a href="https://github.com/nagadomi/lbpcascade_animeface" target="_blank" rel="noopener">nagadomi</a>的人脸裁剪算法，普通的人脸检测算法无法适用于这个卡通人脸。</li>
+<li>删除空文件，单色图，灰度图，删掉重名文件</li>
+<li>转换成JPG格式</li>
+<li>将所有图片上采样到目标分辨率即$512\times 512$，可以使用 <a href="https://github.com/nagadomi/waifu2x" target="_blank" rel="noopener">waifu2x</a></li>
+<li>将所有图像转换成 $512\times 512$的sRGB JPG格式图像</li>
+<li>可以人工筛选出质量高的图像，使用<code>findimagedupes</code>删除近似的图像，并用预训练的GAN Discriminator过滤掉部分。</li>
+<li>使用StyleGAN的<code>data_tools.py</code>将图片转换成tfrecords</li>
+</ol>
+<p>目标是将此图</p>
+<p><img src="/images/blog/stylegan_owndata_1.png" alt=""></p>
+<p>转换成</p>
+<p><img src="/images/blog/stylegan_owndata_2.png" alt=""></p>
+<p>下面使用了一些脚本进行数据处理，可以使用<a href="https://github.com/reidsanders/danbooru-utility" target="_blank" rel="noopener">danbooru-utility</a>协助。</p>
+<h3 id="2-1-裁剪"><a href="#2-1-裁剪" class="headerlink" title="2.1 裁剪"></a>2.1 裁剪</h3><p>原始的<a href="https://www.gwern.net/Danbooru2018#download" target="_blank" rel="noopener">Danbooru2018</a>可以使用磁链下载，提供了JSON的metadata，被压缩到<code>metadata/2*</code>和目录结构为<code>{original,512px}/{0-999}/$ID.{png,jpg}</code>。可以使用Danbooru2018<code>512像素</code>版本在整个SFW图像集上的训练，但是将所有图像缩放到512像素并非明智之举，因为会丢失大量面部信息，而保留高质量面部图像是个挑战。可以从<code>512px/</code>目录下的文件名中直接抽取SFW IDs，或者从metadata中抽取<code>id</code>和<code>rating</code>字段并存入某个文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">find .&#x2F;512px&#x2F; -type f | sed -e &#39;s&#x2F;.*\&#x2F;\([[:digit:]]*\)\.jpg&#x2F;\1&#x2F;&#39;</span><br><span class="line"># 967769</span><br><span class="line"># 1853769</span><br><span class="line"># 2729769</span><br><span class="line"># 704769</span><br><span class="line"># 1799769</span><br><span class="line"># ...</span><br><span class="line">tar xf metadata.json.tar.xz</span><br><span class="line">cat metadata&#x2F;* | jq &#39;[.id, .rating]&#39; -c | fgrep &#39;&quot;s&quot;&#39; | cut -d &#39;&quot;&#39; -f 2 # &quot;</span><br><span class="line"># ...</span><br></pre></td></tr></table></figure>
+<p>可以安装和使用<a href="https://github.com/nagadomi/lbpcascade_animeface" target="_blank" rel="noopener">lbpcascade_animeface</a>以及opencv，使用简单的一个脚本<a href="https://github.com/nagadomi/lbpcascade_animeface/issues/1#issue-205363706" target="_blank" rel="noopener">lbpcascade_animeface issue</a>来裁剪图像。在Danbooru图像上表现惊人，大概有90%的高质量面部图像，5%低质量的，以及5%的错误图像(没有脸部)。也可以通过给脚本更多的限制，比如要求$256\times 256px$区域，可以消除大部分低质量的面部和错误。以下是<code>crop.py</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">import cv2</span><br><span class="line">import sys</span><br><span class="line">import os.path</span><br><span class="line"></span><br><span class="line">def detect(cascade_file, filename, outputname):</span><br><span class="line">    if not os.path.isfile(cascade_file):</span><br><span class="line">        raise RuntimeError(&quot;%s: not found&quot; % cascade_file)</span><br><span class="line"></span><br><span class="line">    cascade &#x3D; cv2.CascadeClassifier(cascade_file)</span><br><span class="line">    image &#x3D; cv2.imread(filename)</span><br><span class="line">    gray &#x3D; cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)</span><br><span class="line">    gray &#x3D; cv2.equalizeHist(gray)</span><br><span class="line"></span><br><span class="line">    ## Suggested modification: increase minSize to &#39;(250,250)&#39; px,</span><br><span class="line">    ## increasing proportion of high-quality faces &amp; reducing</span><br><span class="line">    ## false positives. Faces which are only 50x50px are useless</span><br><span class="line">    ## and often not faces at all.</span><br><span class="line"></span><br><span class="line">    faces &#x3D; cascade.detectMultiScale(gray,</span><br><span class="line">                                     # detector options</span><br><span class="line">                                     scaleFactor &#x3D; 1.1,</span><br><span class="line">                                     minNeighbors &#x3D; 5,</span><br><span class="line">                                     minSize &#x3D; (50, 50))</span><br><span class="line">    i&#x3D;0</span><br><span class="line">    for (x, y, w, h) in faces:</span><br><span class="line">        cropped &#x3D; image[y: y + h, x: x + w]</span><br><span class="line">        cv2.imwrite(outputname+str(i)+&quot;.png&quot;, cropped)</span><br><span class="line">        i&#x3D;i+1</span><br><span class="line"></span><br><span class="line">if len(sys.argv) !&#x3D; 4:</span><br><span class="line">    sys.stderr.write(&quot;usage: detect.py &lt;animeface.xml file&gt; &lt;input&gt; &lt;output prefix&gt;\n&quot;)</span><br><span class="line">    sys.exit(-1)</span><br><span class="line"></span><br><span class="line">detect(sys.argv[1], sys.argv[2], sys.argv[3])</span><br></pre></td></tr></table></figure>
+
+<p>IDs可以和提供的<code>lbpcascade_animeface</code>脚本使用<code>xargs</code>结合起来，但是这样还是太慢，使用并行策略<code>xargs --max-args=1 --max-procs=16</code>或者参数<code>parallel</code>更有效。<code>lbpcascade_animeface</code>脚本似乎使用了所有的GPU显存，但是没有可见的提升，我发现可以通过设置<code>CUDA_VISIBLE_DEVICES=&quot;&quot;</code>来禁用GPU（此步骤还是使用多核CPU更有效）。</p>
+<p>一切就绪之后，可以按照如下方式在整个Danbooru2018数据子集上使用并行的面部图像切割</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">cropFaces() &#123;</span><br><span class="line">    BUCKET&#x3D;$(printf &quot;%04d&quot; $(( $@ % 1000 )) )</span><br><span class="line">    ID&#x3D;&quot;$@&quot;</span><br><span class="line">    CUDA_VISIBLE_DEVICES&#x3D;&quot;&quot; nice python ~&#x2F;src&#x2F;lbpcascade_animeface&#x2F;examples&#x2F;crop.py \</span><br><span class="line">     ~&#x2F;src&#x2F;lbpcascade_animeface&#x2F;lbpcascade_animeface.xml \</span><br><span class="line">     .&#x2F;original&#x2F;$BUCKET&#x2F;$ID.* &quot;.&#x2F;faces&#x2F;$ID&quot;</span><br><span class="line">&#125;</span><br><span class="line">export -f cropFaces</span><br><span class="line"></span><br><span class="line">mkdir .&#x2F;faces&#x2F;</span><br><span class="line">cat sfw-ids.txt | parallel --progress cropFaces</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-上采样和使用GAN的Discriminator进行数据清洗"><a href="#2-2-上采样和使用GAN的Discriminator进行数据清洗" class="headerlink" title="2.2 上采样和使用GAN的Discriminator进行数据清洗"></a>2.2 上采样和使用GAN的Discriminator进行数据清洗</h3><p>在训练GAN一段时间之后，重新用Disciminator对真实的数据点进行排序。通常情况下，被Disciminator判定最低得分的图片通常也是质量较差的，可以移除，这样也有助于提升GAN。然后GAN可以在新的干净数据集上重新训练，得以提升GAN。</p>
+<p>由于对图像排序是Disciminator默认会做的事，所有不需要额外的训练或算法。下面是一个简单的ranker.py脚本，载入StyleGAN的<code>.pkl</code>模型，然后运行图片名列表，并打印D得分</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import pickle</span><br><span class="line">import numpy as np</span><br><span class="line">import PIL.Image</span><br><span class="line">import dnnlib</span><br><span class="line">import dnnlib.tflib as tflib</span><br><span class="line">import config</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">def main():</span><br><span class="line">    tflib.init_tf()</span><br><span class="line">    _G, D, _Gs &#x3D; pickle.load(open(sys.argv[1], &quot;rb&quot;))</span><br><span class="line">    image_filenames &#x3D; sys.argv[2:]</span><br><span class="line"></span><br><span class="line">    for i in range(0, len(image_filenames)):</span><br><span class="line">        img &#x3D; np.asarray(PIL.Image.open(image_filenames[i]))</span><br><span class="line">        img &#x3D; img.reshape(1, 3,512,512)</span><br><span class="line">        score &#x3D; D.run(img, None)</span><br><span class="line">        print(image_filenames[i], score[0][0])</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &quot;__main__&quot;:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<p>使用示例如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">find &#x2F;media&#x2F;gwern&#x2F;Data&#x2F;danbooru2018&#x2F;characters-1k-faces&#x2F; -type f | xargs -n 9000 --max-procs&#x3D;1 \</span><br><span class="line">    python ranker.py results&#x2F;02086-sgan-portraits-2gpu&#x2F;network-snapshot-058662.pkl \</span><br><span class="line">    | tee portraitfaces-rank.txt</span><br><span class="line">fgrep &#x2F;media&#x2F;gwern&#x2F; 2019-04-22-portraitfaces-rank.txt | \</span><br><span class="line">    sort --field-separator &#39; &#39; --key 2 --numeric-sort | head -100</span><br><span class="line"># ...&#x2F;megurine.luka&#x2F;7853120.jpg -708.6835</span><br><span class="line"># ...&#x2F;remilia.scarlet&#x2F;26352470.jpg -707.39856</span><br><span class="line"># ...&#x2F;z1.leberecht.maass..kantai.collection.&#x2F;26703440.jpg -702.76904</span><br><span class="line"># ...&#x2F;suzukaze.aoba&#x2F;27957490.jpg -700.5606</span><br><span class="line"># ...&#x2F;jack.the.ripper..fate.apocrypha.&#x2F;31991880.jpg -700.0554</span><br><span class="line"># ...&#x2F;senjougahara.hitagi&#x2F;4947410.jpg -699.0976</span><br><span class="line"># ...&#x2F;ayase.eli&#x2F;28374650.jpg -698.7358</span><br><span class="line"># ...&#x2F;ayase.eli&#x2F;16185520.jpg -696.97845</span><br><span class="line"># ...&#x2F;illustrious..azur.lane.&#x2F;31053930.jpg -696.8634</span><br><span class="line"># ...</span><br></pre></td></tr></table></figure>
+
+<p>你可以选择删除一定数量，或者最靠近末尾的TOP N%的图片。同时也应该检查最靠前的TOP的图像，有些十分异常的也需要删除。可以使用ranker.py提高生成的样本质量，简单示例。</p>
+<h3 id="2-3-质量检测和数据增强"><a href="#2-3-质量检测和数据增强" class="headerlink" title="2.3 质量检测和数据增强"></a>2.3 质量检测和数据增强</h3><p>我们可以对图像质量进行人工校验，逐个浏览成百上千的图片，使用<code>findimagedupes -t 99%</code>来寻找近似相近的面部。在Danbooru2018中，可以有600-700000张脸，这已足够训练StyleGAN并且最终数据集有点大，会增加19倍。</p>
+<p>但是如果我们需要在单一特征的小数据集上做，数据增强就比较有必要了。不需要做上下/左右翻转了，StyleGAN内部有做。我们可以做的是，颜色变换，锐化，模糊，增加/减小对比度，裁剪等操作。</p>
+<h3 id="2-4-上采样和转换"><a href="#2-4-上采样和转换" class="headerlink" title="2.4 上采样和转换"></a>2.4 上采样和转换</h3><p>将图像转换成JPG可以大概节省33%的存储空间。但是切记，StyleGAN模型只接收在与其训练时所使用的相同的图片格式，像FFHQ数据集所使用的是PNG.</p>
+<p>鉴于<code>dataset_tool.py</code>脚本在转换图片到tfrecords时太诡异，最好是打印每个处理完的图片，一旦程序崩溃，可以排错。对<code>dataset_tool.py</code>的简单修改如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">with TFRecordExporter(tfrecord_dir, len(image_filenames)) as tfr:</span><br><span class="line">         order &#x3D; tfr.choose_shuffled_order() if shuffle else np.arange(len(image_filenames))</span><br><span class="line">         for idx in range(order.size):</span><br><span class="line">  print(image_filenames[order[idx]])</span><br><span class="line">             img &#x3D; np.asarray(PIL.Image.open(image_filenames[order[idx]]))</span><br><span class="line">             if channels &#x3D;&#x3D; 1:</span><br><span class="line">                 img &#x3D; img[np.newaxis, :, :] # HW &#x3D;&gt; CHW</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-训练模型"><a href="#3-训练模型" class="headerlink" title="3 训练模型"></a>3 训练模型</h2><p><strong>参数配置</strong></p>
+<ol>
+<li><p><code>train/training_loop.py</code>:关键配置参数是training_loop.py的112行起。关键参数</p>
+<ul>
+<li><code>G_smoothing_kimg</code> 和<code>D_repeats</code>(影响学习的动态learning dynamics),</li>
+<li><code>network_snapshot_ticks</code>(多久存储一次中间模型)</li>
+<li><code>resume_run_id</code>: 设置为<code>latest</code></li>
+<li><code>resume_kimg</code>.注意，它决定了模型训练的阶段，如果设置为0，模型会从头开始训练而无视之前的训练结果，即从最低分辨率开始。如果要做迁移学习，需要将其设置为一个足够高的数目，如10000，这样一来，模型就可以在最高分辨率，如$512\times 512$的阶段开始训练。</li>
+<li>建议将<code>minibatch_repeats = 5</code>改为<code>minibatch_repeats = 1</code>。此处我怀疑ProGAN/StyleGAN中的梯度累加的实现，这样会使得训练过程更加稳定、更快。</li>
+<li>注意，一些参数如学习率，会在<code>train.py</code>中被覆盖。最好是在覆盖的地方修改，</li>
+</ul>
+</li>
+<li><p><code>train.py</code> (以前是<code>config.py</code>):设置GPU的数目，图像分辨率，数据集，学习率，水平翻转/镜像数据增强，以及minibatch-size。(此文件包含了ProGAN的一些配置参数，你并不是突然开启了ProGAN)。学习率和minbatch通常不用管（除非你想在训练的末尾阶段降低学习率以提升算法能力）。图像分辨率/dataset/mirroring需要设置，如</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">desc +&#x3D; &#39;-faces&#39;; dataset &#x3D; EasyDict(tfrecord_dir&#x3D;&#39;faces&#39;, resolution&#x3D;512); train.mirror_augment &#x3D; True</span><br></pre></td></tr></table></figure>
+<p>此处设置了$512\times 512$的脸部数据集，我们前面创建的<code>datasets/faces</code>，启用mirror。假如没有8个GPU，必须修改<code>-preset</code>以匹配你的GPU数量，StyleGAN不会自动修改的。对于两块 2080ti，设置如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">desc +&#x3D; &#39;-preset-v2-2gpus&#39;; submit_config.num_gpus &#x3D; 2; sched.minibatch_base &#x3D; 8; sched.minibatch_dict &#x3D; \</span><br><span class="line">    &#123;4: 256, 8: 256, 16: 128, 32: 64, 64: 32, 128: 16, 256: 8&#125;; sched.G_lrate_dict &#x3D; &#123;512: 0.0015, 1024: 0.002&#125;; \</span><br><span class="line">    sched.D_lrate_dict &#x3D; EasyDict(sched.G_lrate_dict); train.total_kimg &#x3D; 99000</span><br></pre></td></tr></table></figure>
+<p>最后的结果会被保存到<code>results/00001-sgan-faces-2gpu</code>（<code>00001</code>代表递增ID,<code>sgan</code>因为使用的是StyleGAN而非ProGAN,<code>-faces</code>是训练的数据集,<code>-2gpu</code>即我们使用的多GPU）。</p>
+<h2 id="4-运行过程"><a href="#4-运行过程" class="headerlink" title="4 运行过程"></a>4 运行过程</h2><p>相比于训练其他GAN，StyleGAN更稳定更好训练，但是也容易出问题。</p>
+<h3 id="4-1-Crashproofing"><a href="#4-1-Crashproofing" class="headerlink" title="4.1 Crashproofing"></a>4.1 Crashproofing</h3><p>StyleGAN容易在混合GPU(1080ti+Titan V)上训练时崩溃，低版本的Tensorflow上也是，可以升级解决。如果崩溃了，代码无法自动继续上一次的训练迭代次数，需要手工在<code>training_loop.py</code>中修改<code>resume_run_id</code>为最后崩溃时的迭代次数。建议将此处的<code>resume_run_id</code>参数修改为<code>resume_run_id=latest</code>。</p>
+<h3 id="4-2-调节学习率"><a href="#4-2-调节学习率" class="headerlink" title="4.2 调节学习率"></a>4.2 调节学习率</h3><p>学习率这个是最重要的超参数之一：在小batch size数据过大的更新会极大破坏GAN的稳定性和最终结果。论文在FFHQ数据集上，8个GPU，32的batch size时使用的学习率是0.003，但是在我们的动画数据集上，batch size=8更低的学习率效果更好。学习率与batch size非常相关，越难的数据集学习率应该更小。</p>
+<h3 id="4-3-G-D的均衡"><a href="#4-3-G-D的均衡" class="headerlink" title="4.3 G/D的均衡"></a>4.3 G/D的均衡</h3><p>在后续的训练中，如果G没有产生很好的进步，没有朝着0.5的损失前进（而对应的D的损失朝着0.5大幅度缩减），并且在-1.0左右卡住或者其他的问题。此时，有必要调节G/D的均衡了。有几种方法可以完成此事，最简单的办法是在<code>train.py</code>中调节sched.G_lrate_dict的学习率参数。</p>
+<p><img src="/images/blog/stylegan_owndata_3.png" alt=""></p>
+<p>需要时刻关注G/D的损失，以及面部图像的perceptual质量，同时需要基于面部图像以及G/D的损失是否在爆炸或者严重不均衡而减小G和D的学习率（或者只减小D的学习率）。我们设想的是G/D的损失在一个确定的绝对损失值，同时质量有肉眼可见的提高，减小D的学习率有助于保持与G的均衡。当然如果超出你的耐心，或者时间不够，可以考虑同时减小D/G的学习率达到一个局部最优。</p>
+<p>默认的0.003的学习率可能在达到高质量的面部和肖像图像时变得太高，可以将其减小三分之一或十分之一。如果任然不能收敛，D可能太强，可以单独的将其能力降低。由于训练的随机性和损失的相对性，可能需要在修改参数之后的很多小时或者很多天之后才能看到效果。</p>
+<h3 id="4-4-跳过FID指标"><a href="#4-4-跳过FID指标" class="headerlink" title="4.4 跳过FID指标"></a>4.4 跳过FID指标</h3><p>一些指标用来计算日志。FID指标是ImageNet CNN的计算指标，可能在ImageNet中重要的特性在你的特定领域中其实是不相关的，并且一个大的FID如100是可以考虑的，FIDs为20或者增大都不太是个问题或者是个有用的指导，还不如直接看生成的样本呢。建议直接禁用FIDs指标（训练阶段并没有，所以直接禁用是安全的）。</p>
+<p>可以直接通过注释<code>metrics.run</code>的调用来禁用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@@ -261,7 +265,7 @@ def training_loop()</span><br><span class="line">        if cur_tick % network_snapshot_ticks &#x3D;&#x3D; 0 or done or cur_tick &#x3D;&#x3D; 1:</span><br><span class="line">            pkl &#x3D; os.path.join(submit_config.run_dir, &#39;network-snapshot-%06d.pkl&#39; % (cur_nimg &#x2F;&#x2F; 1000))</span><br><span class="line">            misc.save_pkl((G, D, Gs), pkl)</span><br><span class="line">            # metrics.run(pkl, run_dir&#x3D;submit_config.run_dir, num_gpus&#x3D;submit_config.num_gpus, tf_config&#x3D;tf_config)</span><br></pre></td></tr></table></figure>
+<h3 id="4-5-BLOB-斑块-和CRACK-裂缝-缺陷"><a href="#4-5-BLOB-斑块-和CRACK-裂缝-缺陷" class="headerlink" title="4.5 BLOB(斑块)和CRACK(裂缝)缺陷"></a>4.5 BLOB(斑块)和CRACK(裂缝)缺陷</h3><p>训练过程中，<code>blobs</code>(可以理解为斑块)时不时出现。这些blobs甚至出现在训练的后续阶段，在一些已经生成的高质量图像上，并且这些blob可能是与StyleGAN独有的(至少没有在其他GAN上出现过这个blob)。这些blob如此大并且刺眼。这些斑块出现的原因未知，据推测可能是$3\times 3$的卷积层导致的；可能使用额外的$1\times 1$卷积或者自相关层可以消除这个问题。</p>
+<p>如果斑块出现得太频繁或者想完全消除，降低学习率达到一个局部最优可能有用。</p>
+<p>训练动漫人物面部时，我看到了其他的缺陷，看起来像裂缝或者波浪或者皮肤上的皱纹，它们会一直伴随着训练直至最终。在小数据集做迁移学习时 会经常出现。与blob斑块相反，我目前怀疑裂缝的出现是过拟合的标识，而非StyleGAN的一种特质。当G开始记住最终的线条或像素上的精细细节的噪音时，目前的仅有的解决方案是要么停止训练要么增加数据。</p>
+<h3 id="4-6-梯度累加"><a href="#4-6-梯度累加" class="headerlink" title="4.6 梯度累加"></a>4.6 梯度累加</h3><p>ProGAN/StyleGAN的代码宣称支持梯度累加，这是一种形似大的minibatch训练(batch_size=2048)的技巧，它通过不向后传播每个minibatch，但是累加多个minibatch，然后一次执行的方式实现。这是一种保持训练稳定的有效策略，增加minibatch尺寸有助于提高生成图像的质量。</p>
+<p>但是ProGAN/StyleGAN的梯度累加的实现在Tensorflow或Pytorch中并没有类似的，<strong>以我个人的经验来看，最大可以加到4096，但是并没有看到什么区别，所以我怀疑这个实现是错误的。</strong></p>
+<p>下面是我训练的动漫人脸的模型，训练了21980步，在2100万张图像上，38个GPU一天，尽管还没完全收敛，但是效果很好。<br><a href="https://www.gwern.net/images/gan/2019-03-16-stylegan-facestraining.mp4" target="_blank" rel="noopener">训练效果</a></p>
+<h2 id="5-采样"><a href="#5-采样" class="headerlink" title="5 采样"></a>5 采样</h2><h3 id="5-1-PSI-Truncation-Trick"><a href="#5-1-PSI-Truncation-Trick" class="headerlink" title="5.1 PSI/Truncation Trick"></a>5.1 PSI/Truncation Trick</h3><p>截断技巧$\phi$  是所有StyleGAN生成器的最重要的超参数。它用在样本生成阶段，而非训练时。思路是，编辑latent 向量z，一个服从N(0,1)分布的向量，会自动删除所有大于特定值，比如0.5或1.0的变量。这看起来会避免极端的latent值，或者删除那些与G组合不太好的latent值。G不会生成与每个latent值在+1.5SD的点生成很多数据点。<br>代价便是这些依然是全部latent变量的何方区域，并且可以在训练期间被用来覆盖部分数据分布。因而，尽管latent变量接近0的均值才是最准确的模型，它们仅仅是全部可能的产生图像的数据空间上的一小部分。因而，我们可以从全部的无限制的正态分布$N(0,1)$上生成latent变量，也既可以截断如$+1SD或者+0.7SD$。</p>
+<p>$\omega =0$时，多样性为0，并且所有生成的脸都是同一个角度(棕色眼睛，棕色头发的校园女孩，毫无例外的)，在$\omega \pm 0.5$时有更多区间的脸，在$\omega \pm 1.2$时会看到大量的多样性的脸/发型/一致性,但是也能看到大量的伪造像/失真像.参数$\omega$会极大地影响原始的输出。$\omega =1.2$时，得到的是异常原始但是极度真实或者失真。$\omega =0.5$时，具备一致连贯性，但是也很无聊。我的大部分采样，设置$\omega =0.7$可以得到最好的均衡。(就个人来说$\omega =1.2$时，采样最有趣)</p>
+<h3 id="5-2-随机采样"><a href="#5-2-随机采样" class="headerlink" title="5.2 随机采样"></a>5.2 随机采样</h3><p>StyleGAN有个简单的脚本<code>prtrained_example.py</code>下载和生成单张人脸，为了复现效果，它在模型中指定了RNG随机数的种子，这样它会生成特定的人脸。然而，可以轻易地引入使用本地模型并生成，比如说1000张图像，指定参数$\omega =0.6$（此时会产生高质量图像，但是图像多样性较差）并保存结果到<code>results/example-{0-999}.png</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import os</span><br><span class="line">import pickle</span><br><span class="line">import numpy as np</span><br><span class="line">import PIL.Image</span><br><span class="line">import dnnlib</span><br><span class="line">import dnnlib.tflib as tflib</span><br><span class="line">import config</span><br><span class="line"></span><br><span class="line">def main():</span><br><span class="line">    tflib.init_tf()</span><br><span class="line">    _G, _D, Gs &#x3D; pickle.load(open(&quot;results&#x2F;02051-sgan-faces-2gpu&#x2F;network-snapshot-021980.pkl&quot;, &quot;rb&quot;))</span><br><span class="line">    Gs.print_layers()</span><br><span class="line"></span><br><span class="line">    for i in range(0,1000):</span><br><span class="line">        rnd &#x3D; np.random.RandomState(None)</span><br><span class="line">        latents &#x3D; rnd.randn(1, Gs.input_shape[1])</span><br><span class="line">        fmt &#x3D; dict(func&#x3D;tflib.convert_images_to_uint8, nchw_to_nhwc&#x3D;True)</span><br><span class="line">        images &#x3D; Gs.run(latents, None, truncation_psi&#x3D;0.6, randomize_noise&#x3D;True, output_transform&#x3D;fmt)</span><br><span class="line">        os.makedirs(config.result_dir, exist_ok&#x3D;True)</span><br><span class="line">        png_filename &#x3D; os.path.join(config.result_dir, &#39;example-&#39;+str(i)+&#39;.png&#39;)</span><br><span class="line">        PIL.Image.fromarray(images[0], &#39;RGB&#39;).save(png_filename)</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &quot;__main__&quot;:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-3-Karras-et-al-2018图像"><a href="#5-3-Karras-et-al-2018图像" class="headerlink" title="5.3 Karras et al 2018图像"></a>5.3 Karras et al 2018图像</h3><p>此图像展示了使用1024像素的FFHQ 脸部模型(以及其他)，使用脚本<code>generate_figure.py</code>生成随机样本以及style noise的方面影响。此脚本需要大量修改来运行我的512像素的动漫人像。</p>
+<ul>
+<li><p>代码使用$\omega=1.0$截断，但是面部在$\omega=0.7$的时候看起来更好(好几个脚本都是用了<code>truncation_psi=</code>,但是严格来说，图3的<code>draw_style_mixiing_figure</code>将参数$\omega$隐藏在全局变量<code>sythesis_kwargs</code>中)</p>
+</li>
+<li><p>载入模型需要被换到动漫面部模型</p>
+</li>
+<li><p>需要将维度$1024\rightarrow 512$，其他被硬编码(hardcoded)的区间(ranges)必须被减小到521像素的图像。</p>
+</li>
+<li><p>截断技巧图8并没有足够的足够的面部来展示latent空间的用处，所以它需要被扩充来展示随机种子和面部图像，以及更多的$\omega$值。</p>
+</li>
+<li><p><code>bedroom/car/cat</code>样本应该被禁用</p>
+</li>
+</ul>
+<p>代码改动如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"> url_cars &#x3D; &#39;https:&#x2F;&#x2F;drive.google.com&#x2F;uc?id&#x3D;1MJ6iCfNtMIRicihwRorsM3b7mmtmK9c3&#39; # karras2019stylegan-cars-512x384.pkl</span><br><span class="line"> url_cats &#x3D; &#39;https:&#x2F;&#x2F;drive.google.com&#x2F;uc?id&#x3D;1MQywl0FNt6lHu8E_EUqnRbviagS7fbiJ&#39; # karras2019stylegan-cats-256x256.pkl</span><br><span class="line"></span><br><span class="line">-synthesis_kwargs &#x3D; dict(output_transform&#x3D;dict(func&#x3D;tflib.convert_images_to_uint8, nchw_to_nhwc&#x3D;True), minibatch_size&#x3D;8)</span><br><span class="line">+synthesis_kwargs &#x3D; dict(output_transform&#x3D;dict(func&#x3D;tflib.convert_images_to_uint8, nchw_to_nhwc&#x3D;True), minibatch_size&#x3D;8, truncation_psi&#x3D;0.7)</span><br><span class="line"></span><br><span class="line"> _Gs_cache &#x3D; dict()</span><br><span class="line"></span><br><span class="line"> def load_Gs(url):</span><br><span class="line">- if url not in _Gs_cache:</span><br><span class="line">- with dnnlib.util.open_url(url, cache_dir&#x3D;config.cache_dir) as f:</span><br><span class="line">- _G, _D, Gs &#x3D; pickle.load(f)</span><br><span class="line">- _Gs_cache[url] &#x3D; Gs</span><br><span class="line">- return _Gs_cache[url]</span><br><span class="line">+ _G, _D, Gs &#x3D; pickle.load(open(&quot;results&#x2F;02051-sgan-faces-2gpu&#x2F;network-snapshot-021980.pkl&quot;, &quot;rb&quot;))</span><br><span class="line">+ return Gs</span><br><span class="line"></span><br><span class="line"> #----------------------------------------------------------------------------</span><br><span class="line"> # Figures 2, 3, 10, 11, 12: Multi-resolution grid of uncurated result images.</span><br><span class="line">@@ -85,7 +82,7 @@ def draw_noise_detail_figure(png, Gs, w, h, num_samples, seeds):</span><br><span class="line">     canvas &#x3D; PIL.Image.new(&#39;RGB&#39;, (w * 3, h * len(seeds)), &#39;white&#39;)</span><br><span class="line">     for row, seed in enumerate(seeds):</span><br><span class="line">         latents &#x3D; np.stack([np.random.RandomState(seed).randn(Gs.input_shape[1])] * num_samples)</span><br><span class="line">- images &#x3D; Gs.run(latents, None, truncation_psi&#x3D;1, **synthesis_kwargs)</span><br><span class="line">+ images &#x3D; Gs.run(latents, None, **synthesis_kwargs)</span><br><span class="line">         canvas.paste(PIL.Image.fromarray(images[0], &#39;RGB&#39;), (0, row * h))</span><br><span class="line">         for i in range(4):</span><br><span class="line">             crop &#x3D; PIL.Image.fromarray(images[i + 1], &#39;RGB&#39;)</span><br><span class="line">@@ -109,7 +106,7 @@ def draw_noise_components_figure(png, Gs, w, h, seeds, noise_ranges, flips):</span><br><span class="line">     all_images &#x3D; []</span><br><span class="line">     for noise_range in noise_ranges:</span><br><span class="line">         tflib.set_vars(&#123;var: val * (1 if i in noise_range else 0) for i, (var, val) in enumerate(noise_pairs)&#125;)</span><br><span class="line">- range_images &#x3D; Gsc.run(latents, None, truncation_psi&#x3D;1, randomize_noise&#x3D;False, **synthesis_kwargs)</span><br><span class="line">+ range_images &#x3D; Gsc.run(latents, None, randomize_noise&#x3D;False, **synthesis_kwargs)</span><br><span class="line">         range_images[flips, :, :] &#x3D; range_images[flips, :, ::-1]</span><br><span class="line">         all_images.append(list(range_images))</span><br><span class="line"></span><br><span class="line">@@ -144,14 +141,11 @@ def draw_truncation_trick_figure(png, Gs, w, h, seeds, psis):</span><br><span class="line"> def main():</span><br><span class="line">     tflib.init_tf()</span><br><span class="line">     os.makedirs(config.result_dir, exist_ok&#x3D;True)</span><br><span class="line">- draw_uncurated_result_figure(os.path.join(config.result_dir, &#39;figure02-uncurated-ffhq.png&#39;), load_Gs(url_ffhq), cx&#x3D;0, cy&#x3D;0, cw&#x3D;1024, ch&#x3D;1024, rows&#x3D;3, lods&#x3D;[0,1,2,2,3,3], seed&#x3D;5)</span><br><span class="line">- draw_style_mixing_figure(os.path.join(config.result_dir, &#39;figure03-style-mixing.png&#39;), load_Gs(url_ffhq), w&#x3D;1024, h&#x3D;1024, src_seeds&#x3D;[639,701,687,615,2268], dst_seeds&#x3D;[888,829,1898,1733,1614,845], style_ranges&#x3D;[range(0,4)]*3+[range(4,8)]*2+[range(8,18)])</span><br><span class="line">- draw_noise_detail_figure(os.path.join(config.result_dir, &#39;figure04-noise-detail.png&#39;), load_Gs(url_ffhq), w&#x3D;1024, h&#x3D;1024, num_samples&#x3D;100, seeds&#x3D;[1157,1012])</span><br><span class="line">- draw_noise_components_figure(os.path.join(config.result_dir, &#39;figure05-noise-components.png&#39;), load_Gs(url_ffhq), w&#x3D;1024, h&#x3D;1024, seeds&#x3D;[1967,1555], noise_ranges&#x3D;[range(0, 18), range(0, 0), range(8, 18), range(0, 8)], flips&#x3D;[1])</span><br><span class="line">- draw_truncation_trick_figure(os.path.join(config.result_dir, &#39;figure08-truncation-trick.png&#39;), load_Gs(url_ffhq), w&#x3D;1024, h&#x3D;1024, seeds&#x3D;[91,388], psis&#x3D;[1, 0.7, 0.5, 0, -0.5, -1])</span><br><span class="line">- draw_uncurated_result_figure(os.path.join(config.result_dir, &#39;figure10-uncurated-bedrooms.png&#39;), load_Gs(url_bedrooms), cx&#x3D;0, cy&#x3D;0, cw&#x3D;256, ch&#x3D;256, rows&#x3D;5, lods&#x3D;[0,0,1,1,2,2,2], seed&#x3D;0)</span><br><span class="line">- draw_uncurated_result_figure(os.path.join(config.result_dir, &#39;figure11-uncurated-cars.png&#39;), load_Gs(url_cars), cx&#x3D;0, cy&#x3D;64, cw&#x3D;512, ch&#x3D;384, rows&#x3D;4, lods&#x3D;[0,1,2,2,3,3], seed&#x3D;2)</span><br><span class="line">- draw_uncurated_result_figure(os.path.join(config.result_dir, &#39;figure12-uncurated-cats.png&#39;), load_Gs(url_cats), cx&#x3D;0, cy&#x3D;0, cw&#x3D;256, ch&#x3D;256, rows&#x3D;5, lods&#x3D;[0,0,1,1,2,2,2], seed&#x3D;1)</span><br><span class="line">+ draw_uncurated_result_figure(os.path.join(config.result_dir, &#39;figure02-uncurated-ffhq.png&#39;), load_Gs(url_ffhq), cx&#x3D;0, cy&#x3D;0, cw&#x3D;512, ch&#x3D;512, rows&#x3D;3, lods&#x3D;[0,1,2,2,3,3], seed&#x3D;5)</span><br><span class="line">+ draw_style_mixing_figure(os.path.join(config.result_dir, &#39;figure03-style-mixing.png&#39;), load_Gs(url_ffhq), w&#x3D;512, h&#x3D;512, src_seeds&#x3D;[639,701,687,615,2268], dst_seeds&#x3D;[888,829,1898,1733,1614,845], style_ranges&#x3D;[range(0,4)]*3+[range(4,8)]*2+[range(8,16)])</span><br><span class="line">+ draw_noise_detail_figure(os.path.join(config.result_dir, &#39;figure04-noise-detail.png&#39;), load_Gs(url_ffhq), w&#x3D;512, h&#x3D;512, num_samples&#x3D;100, seeds&#x3D;[1157,1012])</span><br><span class="line">+ draw_noise_components_figure(os.path.join(config.result_dir, &#39;figure05-noise-components.png&#39;), load_Gs(url_ffhq), w&#x3D;512, h&#x3D;512, seeds&#x3D;[1967,1555], noise_ranges&#x3D;[range(0, 18), range(0, 0), range(8, 18), range(0, 8)], flips&#x3D;[1])</span><br><span class="line">+ draw_truncation_trick_figure(os.path.join(config.result_dir, &#39;figure08-truncation-trick.png&#39;), load_Gs(url_ffhq), w&#x3D;512, h&#x3D;512, seeds&#x3D;[91,388, 389, 390, 391, 392, 393, 394, 395, 396], psis&#x3D;[1, 0.7, 0.5, 0.25, 0, -0.25, -0.5, -1])</span><br></pre></td></tr></table></figure>
+<p>修改完之后，可以得到一些有趣的动漫人脸样本。</p>
+<p><img src="/images/blog/stylegan_owndata_4.png" alt=""></p>
+<p>上图是随机样本</p>
+<p><img src="/images/blog/stylegan_owndata_5.png" alt=""></p>
+<p>上图是使用风格混合样本。展示了编辑和差值(第一行是风格，左边列代表了要转变风格的图像)</p>
+<p><img src="/images/blog/stylegan_owndata_6.png" alt=""></p>
+<p>上图展示了使用阶段技巧的。10张随机面部，$\omega$区间为$[1,0.7,0.5,0.25,-0.25,-0.5,-1]$展示了在多样性/质量/平均脸之间的妥协。</p>
+<h2 id="6-视频"><a href="#6-视频" class="headerlink" title="6 视频"></a>6 视频</h2><h3 id="6-1-训练剪辑"><a href="#6-1-训练剪辑" class="headerlink" title="6.1 训练剪辑"></a>6.1 训练剪辑</h3><p>最简单的样本时在训练过程中产生的中间结果，训练过程中由于分辨率递增和更精细细节的生成，样本尺寸也会增加，最后视频可能会很大(动漫人脸大概会有14MB)，所以有必要做一些压缩。使用工具<code>pngnq+advpng</code>或者将它们转成JPG格式(图像质量会降低)，在PNG图像上使用FFmpeg将训练过程中的图像转成视频剪辑。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">cat $(ls .&#x2F;results&#x2F;*faces*&#x2F;fakes*.png | sort --numeric-sort) | ffmpeg -framerate 10 \ # show 10 inputs per second</span><br><span class="line">    -i - # stdin</span><br><span class="line">    -r 25 # output frame-rate; frames will be duplicated to pad out to 25FPS</span><br><span class="line">    -c:v libx264 # x264 for compatibility</span><br><span class="line">    -pix_fmt yuv420p # force ffmpeg to use a standard colorspace - otherwise PNG colorspace is kept, breaking browsers (!)</span><br><span class="line">    -crf 33 # adequate high quality</span><br><span class="line">    -vf &quot;scale&#x3D;iw&#x2F;2:ih&#x2F;2&quot; \ # shrink the image by 2x, the full detail is not necessary &amp; saves space</span><br><span class="line">    -preset veryslow -tune animation \ # aim for smallest binary possible with animation-tuned settings</span><br><span class="line">    .&#x2F;stylegan-facestraining.mp4</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2-差值"><a href="#6-2-差值" class="headerlink" title="6.2 差值"></a>6.2 差值</h3><p>原始的ProGAN仓库代码提供了配置文件来生成差值视频的，但是在StyleGAN中被移除了，<a href="https://colab.research.google.com/gist/kikko/d48c1871206fc325fa6f7372cf58db87/stylegan-experiments.ipynb" target="_blank" rel="noopener">Cyril Diagne的替代实现</a>(已经没法打开了)提供了三种视频</p>
+<ol>
+<li><p><code>random_grid_404.mp4</code>:标准差值视频，在latent空间中简单的随机游走。修改这些所有变量变量并做成动画，默认会作出$2\times 2$一共4个视频。几个差值视频可以从<a href="https://www.gwern.net/Faces#examples" target="_blank" rel="noopener">这里</a>看到 </p>
+</li>
+<li><p><code>interpolate.mp4</code>:粗糙的风格混合视频。生成单一的<code>源</code>面部图，一个二流的差值视频，在生成之前在latent空间中随机游走，每个随机步，其<code>粗糙(coarse)/高级(high-level)风格</code>噪音都会从随机步复制到<code>源</code>面部风格噪音数据中。对于面部来说，<code>源</code>面部会被各式各样地修改，比如方向、面部表情，但是基本面部可以被识别。</p>
+</li>
+</ol>
+<p>下面是<code>video.py</code>代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import pickle</span><br><span class="line">import numpy as np</span><br><span class="line">import PIL.Image</span><br><span class="line">import dnnlib</span><br><span class="line">import dnnlib.tflib as tflib</span><br><span class="line">import config</span><br><span class="line">import scipy</span><br><span class="line"></span><br><span class="line">def main():</span><br><span class="line"></span><br><span class="line">    tflib.init_tf()</span><br><span class="line"></span><br><span class="line">    # Load pre-trained network.</span><br><span class="line">    # url &#x3D; &#39;https:&#x2F;&#x2F;drive.google.com&#x2F;uc?id&#x3D;1MEGjdvVpUsu1jB4zrXZN7Y4kBBOzizDQ&#39;</span><br><span class="line">    # with dnnlib.util.open_url(url, cache_dir&#x3D;config.cache_dir) as f:</span><br><span class="line">    ## NOTE: insert model here:</span><br><span class="line">    _G, _D, Gs &#x3D; pickle.load(open(&quot;results&#x2F;02047-sgan-faces-2gpu&#x2F;network-snapshot-013221.pkl&quot;, &quot;rb&quot;))</span><br><span class="line">    # _G &#x3D; Instantaneous snapshot of the generator. Mainly useful for resuming a previous training run.</span><br><span class="line">    # _D &#x3D; Instantaneous snapshot of the discriminator. Mainly useful for resuming a previous training run.</span><br><span class="line">    # Gs &#x3D; Long-term average of the generator. Yields higher-quality results than the instantaneous snapshot.</span><br><span class="line"></span><br><span class="line">    grid_size &#x3D; [2,2]</span><br><span class="line">    image_shrink &#x3D; 1</span><br><span class="line">    image_zoom &#x3D; 1</span><br><span class="line">    duration_sec &#x3D; 60.0</span><br><span class="line">    smoothing_sec &#x3D; 1.0</span><br><span class="line">    mp4_fps &#x3D; 20</span><br><span class="line">    mp4_codec &#x3D; &#39;libx264&#39;</span><br><span class="line">    mp4_bitrate &#x3D; &#39;5M&#39;</span><br><span class="line">    random_seed &#x3D; 404</span><br><span class="line">    mp4_file &#x3D; &#39;results&#x2F;random_grid_%s.mp4&#39; % random_seed</span><br><span class="line">    minibatch_size &#x3D; 8</span><br><span class="line"></span><br><span class="line">    num_frames &#x3D; int(np.rint(duration_sec * mp4_fps))</span><br><span class="line">    random_state &#x3D; np.random.RandomState(random_seed)</span><br><span class="line"></span><br><span class="line">    # Generate latent vectors</span><br><span class="line">    shape &#x3D; [num_frames, np.prod(grid_size)] + Gs.input_shape[1:] # [frame, image, channel, component]</span><br><span class="line">    all_latents &#x3D; random_state.randn(*shape).astype(np.float32)</span><br><span class="line">    import scipy</span><br><span class="line">    all_latents &#x3D; scipy.ndimage.gaussian_filter(all_latents, [smoothing_sec * mp4_fps] + [0] * len(Gs.input_shape), mode&#x3D;&#39;wrap&#39;)</span><br><span class="line">    all_latents &#x2F;&#x3D; np.sqrt(np.mean(np.square(all_latents)))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    def create_image_grid(images, grid_size&#x3D;None):</span><br><span class="line">        assert images.ndim &#x3D;&#x3D; 3 or images.ndim &#x3D;&#x3D; 4</span><br><span class="line">        num, img_h, img_w, channels &#x3D; images.shape</span><br><span class="line"></span><br><span class="line">        if grid_size is not None:</span><br><span class="line">            grid_w, grid_h &#x3D; tuple(grid_size)</span><br><span class="line">        else:</span><br><span class="line">            grid_w &#x3D; max(int(np.ceil(np.sqrt(num))), 1)</span><br><span class="line">            grid_h &#x3D; max((num - 1) &#x2F;&#x2F; grid_w + 1, 1)</span><br><span class="line"></span><br><span class="line">        grid &#x3D; np.zeros([grid_h * img_h, grid_w * img_w, channels], dtype&#x3D;images.dtype)</span><br><span class="line">        for idx in range(num):</span><br><span class="line">            x &#x3D; (idx % grid_w) * img_w</span><br><span class="line">            y &#x3D; (idx &#x2F;&#x2F; grid_w) * img_h</span><br><span class="line">            grid[y : y + img_h, x : x + img_w] &#x3D; images[idx]</span><br><span class="line">        return grid</span><br><span class="line"></span><br><span class="line">    # Frame generation func for moviepy.</span><br><span class="line">    def make_frame(t):</span><br><span class="line">        frame_idx &#x3D; int(np.clip(np.round(t * mp4_fps), 0, num_frames - 1))</span><br><span class="line">        latents &#x3D; all_latents[frame_idx]</span><br><span class="line">        fmt &#x3D; dict(func&#x3D;tflib.convert_images_to_uint8, nchw_to_nhwc&#x3D;True)</span><br><span class="line">        images &#x3D; Gs.run(latents, None, truncation_psi&#x3D;0.7,</span><br><span class="line">                              randomize_noise&#x3D;False, output_transform&#x3D;fmt)</span><br><span class="line"></span><br><span class="line">        grid &#x3D; create_image_grid(images, grid_size)</span><br><span class="line">        if image_zoom &gt; 1:</span><br><span class="line">            grid &#x3D; scipy.ndimage.zoom(grid, [image_zoom, image_zoom, 1], order&#x3D;0)</span><br><span class="line">        if grid.shape[2] &#x3D;&#x3D; 1:</span><br><span class="line">            grid &#x3D; grid.repeat(3, 2) # grayscale &#x3D;&gt; RGB</span><br><span class="line">        return grid</span><br><span class="line"></span><br><span class="line">    # Generate video.</span><br><span class="line">    import moviepy.editor</span><br><span class="line">    video_clip &#x3D; moviepy.editor.VideoClip(make_frame, duration&#x3D;duration_sec)</span><br><span class="line">    video_clip.write_videofile(mp4_file, fps&#x3D;mp4_fps, codec&#x3D;mp4_codec, bitrate&#x3D;mp4_bitrate)</span><br><span class="line"></span><br><span class="line">    # import scipy</span><br><span class="line">    # coarse</span><br><span class="line">    duration_sec &#x3D; 60.0</span><br><span class="line">    smoothing_sec &#x3D; 1.0</span><br><span class="line">    mp4_fps &#x3D; 20</span><br><span class="line"></span><br><span class="line">    num_frames &#x3D; int(np.rint(duration_sec * mp4_fps))</span><br><span class="line">    random_seed &#x3D; 500</span><br><span class="line">    random_state &#x3D; np.random.RandomState(random_seed)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    w &#x3D; 512</span><br><span class="line">    h &#x3D; 512</span><br><span class="line">    #src_seeds &#x3D; [601]</span><br><span class="line">    dst_seeds &#x3D; [700]</span><br><span class="line">    style_ranges &#x3D; ([0] * 7 + [range(8,16)]) * len(dst_seeds)</span><br><span class="line"></span><br><span class="line">    fmt &#x3D; dict(func&#x3D;tflib.convert_images_to_uint8, nchw_to_nhwc&#x3D;True)</span><br><span class="line">    synthesis_kwargs &#x3D; dict(output_transform&#x3D;fmt, truncation_psi&#x3D;0.7, minibatch_size&#x3D;8)</span><br><span class="line"></span><br><span class="line">    shape &#x3D; [num_frames] + Gs.input_shape[1:] # [frame, image, channel, component]</span><br><span class="line">    src_latents &#x3D; random_state.randn(*shape).astype(np.float32)</span><br><span class="line">    src_latents &#x3D; scipy.ndimage.gaussian_filter(src_latents,</span><br><span class="line">                                                smoothing_sec * mp4_fps,</span><br><span class="line">                                                mode&#x3D;&#39;wrap&#39;)</span><br><span class="line">    src_latents &#x2F;&#x3D; np.sqrt(np.mean(np.square(src_latents)))</span><br><span class="line"></span><br><span class="line">    dst_latents &#x3D; np.stack(np.random.RandomState(seed).randn(Gs.input_shape[1]) for seed in dst_seeds)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    src_dlatents &#x3D; Gs.components.mapping.run(src_latents, None) # [seed, layer, component]</span><br><span class="line">    dst_dlatents &#x3D; Gs.components.mapping.run(dst_latents, None) # [seed, layer, component]</span><br><span class="line">    src_images &#x3D; Gs.components.synthesis.run(src_dlatents, randomize_noise&#x3D;False, **synthesis_kwargs)</span><br><span class="line">    dst_images &#x3D; Gs.components.synthesis.run(dst_dlatents, randomize_noise&#x3D;False, **synthesis_kwargs)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    canvas &#x3D; PIL.Image.new(&#39;RGB&#39;, (w * (len(dst_seeds) + 1), h * 2), &#39;white&#39;)</span><br><span class="line"></span><br><span class="line">    for col, dst_image in enumerate(list(dst_images)):</span><br><span class="line">        canvas.paste(PIL.Image.fromarray(dst_image, &#39;RGB&#39;), ((col + 1) * h, 0))</span><br><span class="line"></span><br><span class="line">    def make_frame(t):</span><br><span class="line">        frame_idx &#x3D; int(np.clip(np.round(t * mp4_fps), 0, num_frames - 1))</span><br><span class="line">        src_image &#x3D; src_images[frame_idx]</span><br><span class="line">        canvas.paste(PIL.Image.fromarray(src_image, &#39;RGB&#39;), (0, h))</span><br><span class="line"></span><br><span class="line">        for col, dst_image in enumerate(list(dst_images)):</span><br><span class="line">            col_dlatents &#x3D; np.stack([dst_dlatents[col]])</span><br><span class="line">            col_dlatents[:, style_ranges[col]] &#x3D; src_dlatents[frame_idx, style_ranges[col]]</span><br><span class="line">            col_images &#x3D; Gs.components.synthesis.run(col_dlatents, randomize_noise&#x3D;False, **synthesis_kwargs)</span><br><span class="line">            for row, image in enumerate(list(col_images)):</span><br><span class="line">                canvas.paste(PIL.Image.fromarray(image, &#39;RGB&#39;), ((col + 1) * h, (row + 1) * w))</span><br><span class="line">        return np.array(canvas)</span><br><span class="line"></span><br><span class="line">    # Generate video.</span><br><span class="line">    import moviepy.editor</span><br><span class="line">    mp4_file &#x3D; &#39;results&#x2F;interpolate.mp4&#39;</span><br><span class="line">    mp4_codec &#x3D; &#39;libx264&#39;</span><br><span class="line">    mp4_bitrate &#x3D; &#39;5M&#39;</span><br><span class="line"></span><br><span class="line">    video_clip &#x3D; moviepy.editor.VideoClip(make_frame, duration&#x3D;duration_sec)</span><br><span class="line">    video_clip.write_videofile(mp4_file, fps&#x3D;mp4_fps, codec&#x3D;mp4_codec, bitrate&#x3D;mp4_bitrate)</span><br><span class="line"></span><br><span class="line">    import scipy</span><br><span class="line"></span><br><span class="line">    duration_sec &#x3D; 60.0</span><br><span class="line">    smoothing_sec &#x3D; 1.0</span><br><span class="line">    mp4_fps &#x3D; 20</span><br><span class="line"></span><br><span class="line">    num_frames &#x3D; int(np.rint(duration_sec * mp4_fps))</span><br><span class="line">    random_seed &#x3D; 503</span><br><span class="line">    random_state &#x3D; np.random.RandomState(random_seed)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    w &#x3D; 512</span><br><span class="line">    h &#x3D; 512</span><br><span class="line">    style_ranges &#x3D; [range(6,16)]</span><br><span class="line"></span><br><span class="line">    fmt &#x3D; dict(func&#x3D;tflib.convert_images_to_uint8, nchw_to_nhwc&#x3D;True)</span><br><span class="line">    synthesis_kwargs &#x3D; dict(output_transform&#x3D;fmt, truncation_psi&#x3D;0.7, minibatch_size&#x3D;8)</span><br><span class="line"></span><br><span class="line">    shape &#x3D; [num_frames] + Gs.input_shape[1:] # [frame, image, channel, component]</span><br><span class="line">    src_latents &#x3D; random_state.randn(*shape).astype(np.float32)</span><br><span class="line">    src_latents &#x3D; scipy.ndimage.gaussian_filter(src_latents,</span><br><span class="line">                                                smoothing_sec * mp4_fps,</span><br><span class="line">                                                mode&#x3D;&#39;wrap&#39;)</span><br><span class="line">    src_latents &#x2F;&#x3D; np.sqrt(np.mean(np.square(src_latents)))</span><br><span class="line"></span><br><span class="line">    dst_latents &#x3D; np.stack([random_state.randn(Gs.input_shape[1])])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    src_dlatents &#x3D; Gs.components.mapping.run(src_latents, None) # [seed, layer, component]</span><br><span class="line">    dst_dlatents &#x3D; Gs.components.mapping.run(dst_latents, None) # [seed, layer, component]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    def make_frame(t):</span><br><span class="line">        frame_idx &#x3D; int(np.clip(np.round(t * mp4_fps), 0, num_frames - 1))</span><br><span class="line">        col_dlatents &#x3D; np.stack([dst_dlatents[0]])</span><br><span class="line">        col_dlatents[:, style_ranges[0]] &#x3D; src_dlatents[frame_idx, style_ranges[0]]</span><br><span class="line">        col_images &#x3D; Gs.components.synthesis.run(col_dlatents, randomize_noise&#x3D;False, **synthesis_kwargs)</span><br><span class="line">        return col_images[0]</span><br><span class="line"></span><br><span class="line">    # Generate video.</span><br><span class="line">    import moviepy.editor</span><br><span class="line">    mp4_file &#x3D; &#39;results&#x2F;fine_%s.mp4&#39; % (random_seed)</span><br><span class="line">    mp4_codec &#x3D; &#39;libx264&#39;</span><br><span class="line">    mp4_bitrate &#x3D; &#39;5M&#39;</span><br><span class="line"></span><br><span class="line">    video_clip &#x3D; moviepy.editor.VideoClip(make_frame, duration&#x3D;duration_sec)</span><br><span class="line">    video_clip.write_videofile(mp4_file, fps&#x3D;mp4_fps, codec&#x3D;mp4_codec, bitrate&#x3D;mp4_bitrate)</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &quot;__main__&quot;:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><code>fine_503.mp4</code>：一个精细风格混合视频。</li>
+</ol>
+<h2 id="7-模型"><a href="#7-模型" class="headerlink" title="7 模型"></a>7 模型</h2><h3 id="7-1-动漫人脸"><a href="#7-1-动漫人脸" class="headerlink" title="7.1  动漫人脸"></a>7.1  动漫人脸</h3><p>训练的基准模型的数据来源是上面的数据预处理和训练阶段介绍过。是一个在218794张动漫人脸上，使用512像素的StyleGAN训练出来的，数据时所有Danboru2017数据集上裁剪的，清洗、上采样，并训练了21980次迭代，38个GPU天。</p>
+<p>下载（推荐使用最近的<a href="https://www.gwern.net/Faces#portrait-results" target="_blank" rel="noopener">portrait StyleGAN</a>,除非需要特别剪切的脸部）</p>
+<ul>
+<li><p><a href="https://mega.nz/#!2DRDQIjJ!JKQ_DhEXCzeYJXjliUSWRvE-_rfrvWv_cq3pgRuFadw" target="_blank" rel="noopener">随机样本</a> 在2019年2月14日随机生成的，使用了一个极大的$\omega=1.2$(165MB,JPG)</p>
+</li>
+<li><p><a href="https://mega.nz/#!aPRFDKaC!FDpQi_FEPK443JoRBEOEDOmlLmJSblKFlqZ1A1XPt2Y" target="_blank" rel="noopener">StyleGAN 模型 This Waifu Does Not Exist</a>(294MBm<code>.pkl</code>)</p>
+</li>
+<li><p><a href="https://mega.nz/#!vawjXISI!F7s13yRicxDA3QYqYDL2kjnc2K7Zk3DwCIYETREmBP4" target="_blank" rel="noopener">动漫人脸StyleGAN模型</a>最近训练的。</p>
+</li>
+</ul>
+<h2 id="8-迁移学习"><a href="#8-迁移学习" class="headerlink" title="8 迁移学习"></a>8 迁移学习</h2><p>特定的动漫人脸模型迁移学习到特定角色是很简单的：角色的图像太少，无法训练一个好的StyleGAN模型，同样的，采样不充分的StyleGAN的数据增强也不行，但是由于StyleGAN在所有类型的动漫人脸训练得到，StyleGAN学习到足够充分的特征空间，可以轻易地拟合到特定角色而不会出现过拟合。</p>
+<p>制作特定脸部模型时，图像数量越多越好，但是一般n=500-5000足矣，甚至n=50都可以。论文中的结论</p>
+<p><strong>尽管StyleGAN的 generator是在人脸数据集上训练得到的，但是其embeding算法足以表征更大的空间。论文中的图表示，虽然比不上生成人脸的效果，但是依然能获得不错的高质量的猫、狗甚至油画和车辆的表征</strong>如果说连如此不同的车辆都可以被成功编码进人脸的StyleGAN，那么很显然latent空间可以轻易地对一个新的人脸建模。因此，我们可以判断训练过程可能与学习新面孔不太相关，这样任务就简单许多。</p>
+<p>由于StyleGAN目前是非条件生成网络也没有在限定领域文本或元数据上编码，只使用了海量图片，所有需要做的就是将新数据集编码，然后简单地在已有模型基础上开始训练就可以了。</p>
+<ol>
+<li>准备新数据集</li>
+<li>编辑<code>train.py</code>,给<code>-desc</code>行重新赋值</li>
+<li>正确地给<code>resume_kimg</code>赋值，<code>resume_run_id=&quot;latest&quot;</code></li>
+<li>开始运行<code>python train.py</code>，就可以迁移学习了</li>
+</ol>
+<p>主要问题是，没法从头开始(第0次迭代)，我尝试过这么做，但是效果不好并且StyleGAN看起来可能直接忽视了预训练模型。我个人假设是，作为ProGAN的一部分，在额外的分辨率或网络层上增长或消退，StyleGAN简单的随机或擦除新的网络层并覆盖它们，这使得这么做没有意义。这很好避免，简单地跳过训练进程，直接到期望的分辨率。例如，开始一个512像素的数据集训练时，可以在<code>training_loop.py</code>中设置<code>resume_king=7000</code>。这会强行让StyleGAN跳过所有的progressing growing步骤，并载入全部的模型。如何校验呢？检查第一幅吐下你给(<code>fakes07000.png</code>或者其他的)，从之前的任何的迁移学习训练完成，它应当看起来像是原始模型在训练结束时的效果。接下来的训练样本应该表现出原始图像快速适应(变形到)新数据集（应该不会出现类似<code>fakes0000.png</code>的图像，因为这表明是从头开始训练）</p>
+<h3 id="8-1-动漫人脸模型迁移到特定角色人脸"><a href="#8-1-动漫人脸模型迁移到特定角色人脸" class="headerlink" title="8.1 动漫人脸模型迁移到特定角色人脸"></a>8.1 动漫人脸模型迁移到特定角色人脸</h3><p>第一个迁移的角色是 Holo，使用了从Danboru2017的数据集中筛选出来的Holo面部图像，使用<code>waifu2x</code>缩放到512像素，手工清理，并做数据增强，从3900张增强到12600张图像，同时使用了镜像翻转，因为Holo面部是对称的。使用的预训练模型是2019年2月9号的一个动漫人脸模型，尚未完全收敛。</p>
+<p>值得一提的是，这个数据集之前用ProGAN来训练的，但是几周的训练之后，ProGAN严重过拟合，并产生崩坏。<br>训练过程相当快，只有几百次迭代之后就可以看到肉眼可见的Holo的脸部图了。</p>
+<p>StyleGAN要成功得多，尽管有几个失败的点出现在动漫人脸上。事实上，几百次迭代之后，它开始过拟合这些裂缝/伪影/脏点。最终使用的是迭代次数为11370的模型，而且依然有些过拟合。我个人认为总数n(数据增强之后)，Holo应该训练训练更长时间(FFHQ数据集的1/7)，但是显然不是。可能数据增强并没有太大价值，又或者要么多样性编码并没那么有用，要么这些操作有用，但是StyleGAN已经从之前的训练中学习到，并且需要更多真实数据来理解Holo的面部。</p>
+<p>11370次迭代的<a href="https://mega.nz/#!afIjAAoJ!ATuVaw-9k5I5cL_URTuK2zI9mybdgFGYMJKUUHUfbk8" target="_blank" rel="noopener">模型下载</a></p>
+<h3 id="8-2-动漫人脸迁移到FFHQ人脸"><a href="#8-2-动漫人脸迁移到FFHQ人脸" class="headerlink" title="8.2 动漫人脸迁移到FFHQ人脸"></a>8.2 动漫人脸迁移到FFHQ人脸</h3><p>如果StyleGAN可以平滑地表征动漫人脸，并使用参数$\omega$承载了全局的如头发长度+颜色属性转换，参数$\omega$可能一种快速的方式来空值单一角色的大尺度变化。例如，性别变换，或者动漫到真人的变换？（给定图像/latent向量，可以简单地改变正负号来将其变成相反的属性，这可以每个随机脸相反的版本，而且如果有人有编码器，就可以自动地转换了）。</p>
+<p>数据来源：可以方便的使用FFHQ下载脚本，然后将图像下采样到512像素，甚至构建一个FFHQ+动漫头像的数据集。<br>最快最先要做的是，从动漫人脸到FFHQ真人脸的迁移学习。可能模型无法得到足够的动漫知识，然后去拟合，但是值得一试。早期的训练结果如下，有点像僵尸</p>
+<p><img src="/images/blog/stylegan_owndata_7.png" alt=""></p>
+<p>97次迭代(ticks)之后，模型收敛到一个正常的面孔，唯一可能保留的线索是一些训练样本中的过度美化的发型。</p>
+<p><img src="/images/blog/stylegan_owndata_8.png" alt=""></p>
+<h3 id="8-3-动漫脸–-gt-动漫脸-FFHQ脸"><a href="#8-3-动漫脸–-gt-动漫脸-FFHQ脸" class="headerlink" title="8.3 动漫脸–&gt;动漫脸+FFHQ脸"></a>8.3 动漫脸–&gt;动漫脸+FFHQ脸</h3><p>下一步是同时训练动漫脸和FFHQ脸模型，尽管开始时数据集的鲜明的不同，将会是正的VS负的$\omega$最终导致划分为真实VS动漫，并提供一个便宜并且简单的方法来转换任意脸部图像。</p>
+<p>简单的合并512像素的FFHQ脸部图像和521像素的动漫脸部，并从之前的FFHQ模型基础上训练（我怀疑，一些动漫图像数据仍然在模型中，因此这将会比从原始的动漫脸部模型中训练要快一点）。我训练了812次迭代，11359-12171张图像，超过2个GPU天。</p>
+<p>它确实能够较好地学习两种类型的面孔，清晰地分离样本如下</p>
+<p><img src="/images/blog/stylegan_owndata_9.png" alt=""></p>
+<p>但是，迁移学习和$\omega$采样的结果是不如意的，修改不同领域的风格混合，或者不同领域之间的转换的能力有限。截断技巧无法清晰地解耦期望的特征（事实上，多种$\omega$ 没法清晰对应什么）。</p>
+<p><img src="/images/blog/stylegan_owndata_10.png" alt=""></p>
+<p>StyleGAN的动漫+FFHQ的风格混合结果。</p>
+<h2 id="9-逆转StyleGAN来控制和修改图像"><a href="#9-逆转StyleGAN来控制和修改图像" class="headerlink" title="9 逆转StyleGAN来控制和修改图像"></a>9 逆转StyleGAN来控制和修改图像</h2><p>一个非条件GAN架构，默认是单向的：latent向量z从众多$N(0,1)$变量中随机生成得到的，喂入GAN，并输出图像。没有办法让非条件GAN逆向，即喂入图像输出其latent。</p>
+<p>最直接的方法是转向条件GAN架构，基于文本或者标签embeding。然后生成特定特征，戴眼镜，微笑。当前无法操作，因为生成一个带标签或者embedding并且训练的StyleGAN需要的不是一点半点的修改。这也不是一个完整的解决方案，因为它无法在现存的图像进行编辑。</p>
+<p>对于非条件GAN，有两种实现方式来逆转G。</p>
+<ol>
+<li>神经网络可以做什么，另外一个神经网络就可以学到逆操作。<a href="https://arxiv.org/abs/1907.02544" target="_blank" rel="noopener">Donahue 2016</a>,<a href="https://arxiv.org/abs/1907.02544" target="_blank" rel="noopener">Donahue Simonyan 2019</a>.如果StyleGAN学习到了$z$到图像的映射，那么训练第二个神经网络来监督学习从图像到$z$的映射，</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://shartoo.github.com/2019/12/23/2019-05-12-edit-stylegan-humanface/" data-id="ck4ifp1n400532wje7c9xbdqf" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/23/2019-09-24-outlier-detection/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          使用pyod做离群点检测
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/23/2019-04-28-cv-switch-face/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">使用传统方法换脸算法</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/blog/">blog</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/23/template/">博客题目</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-11-26-model-pruning/">模型剪枝和优化-torch和Tensorflow为例</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-10-28--understand-pytorch/">理解pytorch的计算逻辑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/2019-09-24-outlier-detection/">使用pyod做离群点检测</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 shartoo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
