@@ -642,7 +642,7 @@ livere_uid: # <your_uid>
 # For more information: https://gitalk.github.io, https://github.com/gitalk/gitalk
 gitalk:
   enable: true
-  github_id: shartoo# GitHub repo owner
+  github_id: shartoo # GitHub repo owner
   repo: shartoo.github.io # Repository name to store issues
   client_id: c656cd038e01f710e260 # GitHub Application Client ID
   client_secret: e6de2ccaaf0f7069292125b8f50e27f25b95810d # GitHub Application Client Secret
