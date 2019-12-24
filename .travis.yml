@@ -3,10 +3,16 @@ language: node_js
 node_js:
   - 10 # use nodejs v10 LTS
 cache: npm
+before_install:
+  - npm install -g hexo-cli
+install:
+  - npm install
 branches:
   only:
     - hexoProject # build master branch only
 script:
+  - hexo clean
+  - hexo generate
   - hexo generate # generate static files
 deploy:
   provider: pages
@@ -17,3 +23,8 @@ deploy:
   on:
     branch: hexoProject
   local-dir: public
+notifications:
+  email:
+    - 604135528@qq.com
+  on_success: change
+  on_failure: always
