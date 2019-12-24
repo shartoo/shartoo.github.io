@@ -5,7 +5,7 @@ node_js:
 cache: npm
 branches:
   only:
-    - master # build master branch only
+    - hexoPorject # build master branch only
 script:
   - hexo generate # generate static files
 deploy:
@@ -13,6 +13,7 @@ deploy:
   skip-cleanup: true
   github-token: $GH_TOKEN
   keep-history: true
+  target_branch: master
   on:
-    branch: master
+    branch: hexoPorject
   local-dir: public
