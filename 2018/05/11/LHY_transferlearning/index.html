@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://shartoo.github.io').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="深度学习基础理论">
+<meta property="og:type" content="article">
+<meta property="og:title" content="李宏毅深度学习：迁移学习">
+<meta property="og:url" content="https://shartoo.github.io/2018/05/11/LHY_transferlearning/index.html">
+<meta property="og:site_name" content="我的个人博客">
+<meta property="og:description" content="深度学习基础理论">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/transfer_learning1.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/transfer_learning2.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/transfer_learning3.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/transfer_learning4.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/transfer_learning5.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/transfer_learning6.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/transfer_learning7.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/transfer_learning8.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/transfer_learning9.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/transfer_learning10.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/transfer_learning11.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/transfer_learning12.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/transfer_learning13.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/transfer_learning14.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/transfer_learning15.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/transfer_learning16.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/transfer_learning17.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/transfer_learning18.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/transfer_learning19.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/transfer_learning20.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/transfer_learning21.jpg">
+<meta property="article:published_time" content="2018-05-11T00:00:00.000Z">
+<meta property="article:modified_time" content="2019-12-24T12:00:27.976Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shartoo.github.io/images/blog/transfer_learning1.jpg">
+
+<link rel="canonical" href="https://shartoo.github.io/2018/05/11/LHY_transferlearning/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>李宏毅深度学习：迁移学习 | 我的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="https://shartoo.github.io/2018/05/11/LHY_transferlearning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          李宏毅深度学习：迁移学习
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-05-11 00:00:00" itemprop="dateCreated datePublished" datetime="2018-05-11T00:00:00+00:00">2018-05-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-12-24 12:00:27" itemprop="dateModified" datetime="2019-12-24T12:00:27+00:00">2019-12-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>3.1k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>3 mins.</span>
+            </span>
+            <div class="post-description">深度学习基础理论</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>笔记视频：<a href="https://www.bilibili.com/video/av15889450/#page=26" target="_blank" rel="noopener">https://www.bilibili.com/video/av15889450/#page=26</a></p>
+<h2 id="1-基本概念"><a href="#1-基本概念" class="headerlink" title="1 基本概念"></a>1 基本概念</h2><p>迁移学习：当前训练的数据集与目标任务没有直接相关。此处的不直接相关特指以下情形：</p>
+<ul>
+<li>相同领域，但是不同任务。比如都是对动物分类的，但是分类的目标不同，比如只有猫和狗的图片数据，但是分类任务是对大象和老虎分类。</li>
+</ul>
+<p><img src="/images/blog/transfer_learning1.jpg" alt=""><br><img src="/images/blog/transfer_learning2.jpg" alt=""></p>
+<ul>
+<li>领域不同，但是任务相同。 比如同样是对猫和狗做分类，但是数据是真是相机拍摄的图像，而目标是招财猫和动漫狗，它们的数据分布不一致</li>
+</ul>
+<p><img src="/images/blog/transfer_learning3.jpg" alt=""></p>
+<h3 id="1-1-为何会考虑迁移学习"><a href="#1-1-为何会考虑迁移学习" class="headerlink" title="1.1 为何会考虑迁移学习"></a>1.1 为何会考虑迁移学习</h3><p>数据不充足的情况下，可能会考虑使用迁移学习，比如以下情况。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>目标领域</th>
+<th>目标任务</th>
+<th>不相关的数据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>语音识别</td>
+<td>对台湾语做识别</td>
+<td>从youtube上爬取英文、中文语音数据训练模型来迁移学习</td>
+</tr>
+<tr>
+<td>图像分类</td>
+<td>医疗数据极度缺乏，做医疗诊断时</td>
+<td>使用已有的海量图像数据(coco,imagenet等)</td>
+</tr>
+<tr>
+<td>文本分析</td>
+<td>特定领域，比如法律文件分析</td>
+<td>可以从其他领域的文本分析迁移</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="2-可以用迁移学习做什么"><a href="#2-可以用迁移学习做什么" class="headerlink" title="2 可以用迁移学习做什么"></a>2 可以用迁移学习做什么</h2><h3 id="2-1-模型fine-tuning"><a href="#2-1-模型fine-tuning" class="headerlink" title="2.1 模型fine-tuning"></a>2.1 模型fine-tuning</h3><p>当我们的特定任务所拥有的数据集非常少(比如识别某个人的声音，但是那个人的声音数据很少)，但是非相关的数据集很多(比如来自很多人的很多语音数据)，我们无法用某一个人的声音数据来训练一个语音识别模型，这种情况要做迁移学习，可以称之为<strong>one-shot</strong>。用许多人的语音数据训练模型，再来某个人的语音数据来fine-tuning。</p>
+<p><strong>问题</strong></p>
+<p>目标数据集太少，即便是用非直接相关数据训练出了一个初始模型，然后用目标数据集做迁移学习，很容易会导致<strong>过拟合</strong>。</p>
+<h2 id="3-迁移学习技巧"><a href="#3-迁移学习技巧" class="headerlink" title="3 迁移学习技巧"></a>3 迁移学习技巧</h2><h3 id="3-1-Conservation-Training"><a href="#3-1-Conservation-Training" class="headerlink" title="3.1 Conservation Training"></a>3.1 Conservation Training</h3><p>例如，已经有大量的source data数据（比如语音识别中大量的不同speaker的语音数据），以及target data(某个speaker的语音数据)。此时如果直接用source data训练出来的模型，再用target data做迁移学习，模型可能就会坏掉。 </p>
+<p>可以在training的时候，加一些限制(就是加一些非L1,L2的正则化)，使得训练完成之后，前后两次模型效果差不太多。</p>
+<p><img src="/images/blog/transfer_learning4.jpg" alt=""></p>
+<h3 id="3-2-Layer-transfer"><a href="#3-2-Layer-transfer" class="headerlink" title="3.2 Layer transfer"></a>3.2 Layer transfer</h3><p>先用源数据训练出一个模型，然后将这个模型的某些层网络直接复制到新的网络中，然后只用新数据训练网络的余下层网络。这样训练时只需要训练很少的参数。</p>
+<p><img src="/images/blog/transfer_learning5.jpg" alt=""></p>
+<p>但是，哪些层应该被transfer，哪些不应该被transfer? 不同的任务之中，需要transfer的网络层不同。</p>
+<ul>
+<li><p>语音识别中，通常只复制最后几层网络。然后重新训练输入层网络。(同样的发音方式，得到的结果不同)语音识别的结果，应该跟发音者没有关系的，所以最后几层是可以被复制的。而不同的地方在于，从声音信号到发音方式，每个人都不一样。</p>
+</li>
+<li><p>在图像任务中。通常只复制前面几层，而训练最后几层。通常前几层做的就是检测图像中有没有简单的几层图形，而这些是可以迁移到其他任务中。而通常最后几层通常是比较特异化的，这些是需要训练的。</p>
+</li>
+</ul>
+<p><img src="/images/blog/transfer_learning6.jpg" alt=""></p>
+<p><strong>网络层迁移学习的实验结果(图像任务)</strong></p>
+<p>ImageNet的数据120万图像分为source和target，按照分类数量划分，其中500个分类作为source，另外500个为target。其中横轴为transfer learning复制的网络层，其中0代表没有复制网络层，纵轴为分类准确率。可以发现，当我们只复制前面几个网络层时，效果有提升，但是复制得太多效果就开始变差。</p>
+<p><img src="/images/blog/transfer_learning7.jpg" alt=""></p>
+<p>上图中</p>
+<ul>
+<li><p>5 黄色线：代表在做了复制网络前几层之后，做了fine tuning之后的结果</p>
+</li>
+<li><p>3蓝色线：对照组。在目标领域上训练出一个模型，然后复制此模型的前面几层，然后固定住这几层，接着继续用<strong>目标数据</strong>训练剩下的几层。</p>
+</li>
+<li><p>2蓝色线：对照组。在目标领域上训练出一个模型，然后复制此模型的前面几层，然后固定住这几层，接着继续用<em>*新数据</em>训练剩下的几层。结果，有时候很差。在训练时，前面的层和后面的层其实是需要相互搭配的，否则后面的层的结果就很差。</p>
+</li>
+<li><p>4红色线：</p>
+</li>
+</ul>
+<p><strong>source和target不是同种分类数据时</strong></p>
+<p>如果source和target是不同的分类数据，比如source数据是自然风光，而target是人造物体，那么做transfer learning时，其准确率会大幅度降低。</p>
+<p><img src="/images/blog/transfer_learning8.jpg" alt=""></p>
+<p>如果只复制前面几层时，与没有复制没有太多区别。</p>
+<h3 id="3-3-多任务学习"><a href="#3-3-多任务学习" class="headerlink" title="3.3 多任务学习"></a>3.3 多任务学习</h3><p>一个成功的实例是，多语言语音识别。输入是不同语言的语音，前面的几层公用参数，后面的几层不同参数。</p>
+<p><img src="/images/blog/transfer_learning9.jpg" alt=""></p>
+<h2 id="4-progressive-neural-network"><a href="#4-progressive-neural-network" class="headerlink" title="4 progressive neural network"></a>4 progressive neural network</h2><p><img src="/images/blog/transfer_learning10.jpg" alt=""></p>
+<p>先训练一个Task1的网络，训练完成之后，固定其参数。再去训练一个Task2，它的每个隐藏层的都会去接 Task1的隐藏层输出。它的好处是，即便Task1和Task2完全不像，Task2的数据不会影响到Task1的模型参数，所以迁移的结果一定不会更差，最糟糕的情况就是直接训练Task2模型(此时Task1的输出设置为0)</p>
+<h2 id="5-labeled-source-data-amp-unlabeled-target-data"><a href="#5-labeled-source-data-amp-unlabeled-target-data" class="headerlink" title="5 labeled source data  &amp; unlabeled target data"></a>5 labeled source data  &amp; unlabeled target data</h2><p>源数据为标记数据$(x^s,y^s)$ 作为训练集，而目标数据为非标记数据$x^t$为测试集。比如下图的<code>MNIST</code>数据集为训练集，而<code>MNIST-M</code>为测试集，其中<code>MNIST-M</code>同样为手写字，不过其背景变为风景和彩色的。</p>
+<p><img src="/images/blog/transfer_learning11.jpg" alt=""></p>
+<p>我们分析下领域对抗训练，把CNN作为特征抽取工具，会发现source data有很明显的分类现象，而target data却没有。</p>
+<p><img src="/images/blog/transfer_learning12.jpg" alt=""></p>
+<p>如上图中，MNIST数据集很明显的分为10个团，而MNIST-M没有。此时对于MNIST-M无能为力。</p>
+<p>所以，我们希望CNN的feature extractor能够消除领域特性，就需要使用 <code>domain-adversarial training</code></p>
+<h3 id="5-1-domain-adversarial-training"><a href="#5-1-domain-adversarial-training" class="headerlink" title="5.1 domain-adversarial training"></a>5.1 domain-adversarial training</h3><p><img src="/images/blog/transfer_learning13.jpg" alt=""></p>
+<p>feature extractor与domain classifer做相反的事，domain classifer 极力区分当前数据的来源，而feature extractor希望domain classifer能够无视domain 的差异。</p>
+<p><img src="/images/blog/transfer_learning14.jpg" alt=""></p>
+<p>其实际做法是，在计算BP时，feature extractor 将domain classifer的梯度乘以负1，然后传给 domain classifer。</p>
+<p>以下是这种训练出来的实验结果</p>
+<p><img src="/images/blog/transfer_learning15.jpg" alt=""></p>
+<h2 id="6-zero-shot"><a href="#6-zero-shot" class="headerlink" title="6  zero-shot"></a>6  zero-shot</h2><p>即：测试集里面的分类数据是训练集中从未出现过的，比如训练集的分类是毛和狗，而测试集里面却有草泥马</p>
+<p><img src="/images/blog/transfer_learning16.jpg" alt=""></p>
+<p>这种任务，在语音识别中很常见，训练集中不可能出现所有的语音和词汇。在语音上的做法是，不去直接辨别一段声音属于哪个word，而是去辨别一段声音属于哪个音标，然后做一个音标和tab之间的对应关系表，即lexics。所以，即便某些词汇没有出现在训练集，也可以从音标和lexics表得到。</p>
+<p>那么，这个操作应用到图像中就是以每种分类的特定属性替代分类。比如狗这个分类，以<code>furry</code>,<code>4 legs</code>,<code>tail</code>这些属性来表示，切记这些属性必须足够丰富才可以。那么在训练时，就不直接识别分类，而是识别图像具备哪些属性。</p>
+<p><img src="/images/blog/transfer_learning17.jpg" alt=""></p>
+<p>测试集的时候，即便来了一个未出现的动物，也可以使用这些属性描述。</p>
+<p><img src="/images/blog/transfer_learning18.jpg" alt=""></p>
+<p>如果属性集太大，还可以做 attribute embedding。</p>
+<p><img src="/images/blog/transfer_learning19.jpg" alt=""></p>
+<p>其中$f(x^2)和g(y^2)$ 都可能是神经网络。</p>
+<h3 id="6-1-zero-shot的成功应用"><a href="#6-1-zero-shot的成功应用" class="headerlink" title="6.1 zero-shot的成功应用"></a>6.1 zero-shot的成功应用</h3><p>机器翻译</p>
+<p><img src="/images/blog/transfer_learning20.jpg" alt=""></p>
+<p>在没有日语翻译成韩文的数据集，由于有韩语翻译到英文、日文和英文翻译到日文，所以可以完成从日语翻译成韩文。根据学习好的encoder，把各种语言的词汇映射到空间中的向量，会出现下图的结果</p>
+<p><img src="/images/blog/transfer_learning21.jpg" alt=""></p>
+<p>上图中，不同颜色代表不同语言，处于相同位置的代表意义相同。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/04/02/LHY_GAN/" rel="prev" title="李宏毅深度学习-15-生成网络">
+      <i class="fa fa-chevron-left"></i> 李宏毅深度学习-15-生成网络
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/06/02/transfer-learning-pratice/" rel="next" title="迁移学习实践-Tensorflow分类任务">
+      迁移学习实践-Tensorflow分类任务 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-基本概念"><span class="nav-number">1.</span> <span class="nav-text">1 基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-为何会考虑迁移学习"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 为何会考虑迁移学习</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-可以用迁移学习做什么"><span class="nav-number">2.</span> <span class="nav-text">2 可以用迁移学习做什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-模型fine-tuning"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 模型fine-tuning</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-迁移学习技巧"><span class="nav-number">3.</span> <span class="nav-text">3 迁移学习技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-Conservation-Training"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 Conservation Training</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-Layer-transfer"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 Layer transfer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-多任务学习"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 多任务学习</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-progressive-neural-network"><span class="nav-number">4.</span> <span class="nav-text">4 progressive neural network</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-labeled-source-data-amp-unlabeled-target-data"><span class="nav-number">5.</span> <span class="nav-text">5 labeled source data  &amp; unlabeled target data</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-domain-adversarial-training"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 domain-adversarial training</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-zero-shot"><span class="nav-number">6.</span> <span class="nav-text">6  zero-shot</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-zero-shot的成功应用"><span class="nav-number">6.1.</span> <span class="nav-text">6.1 zero-shot的成功应用</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="Symbols count total">591k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">8:57</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'c656cd038e01f710e260',
+      clientSecret: 'e6de2ccaaf0f7069292125b8f50e27f25b95810d',
+      repo: 'shartoo.github.com',
+      owner: 'shartoo# GitHub repo owner',
+      admin: ['shartoo'],
+      id: '414458bb5b66472dde5ef78cb81093af',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

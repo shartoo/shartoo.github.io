@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://shartoo.github.io').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="图像特征">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图像处理基础Haar特征">
+<meta property="og:url" content="https://shartoo.github.io/2019/03/02/img-haar-feature/index.html">
+<meta property="og:site_name" content="我的个人博客">
+<meta property="og:description" content="图像特征">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/haar_1.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/haar_2.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/haar_3.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/haar_4.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/haar_5.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/haar_6.jpg">
+<meta property="article:published_time" content="2019-03-02T00:00:00.000Z">
+<meta property="article:modified_time" content="2019-12-24T12:00:27.976Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shartoo.github.io/images/blog/haar_1.jpg">
+
+<link rel="canonical" href="https://shartoo.github.io/2019/03/02/img-haar-feature/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>图像处理基础Haar特征 | 我的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="https://shartoo.github.io/2019/03/02/img-haar-feature/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          图像处理基础Haar特征
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-03-02 00:00:00" itemprop="dateCreated datePublished" datetime="2019-03-02T00:00:00+00:00">2019-03-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-12-24 12:00:27" itemprop="dateModified" datetime="2019-12-24T12:00:27+00:00">2019-12-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>2.7k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>2 mins.</span>
+            </span>
+            <div class="post-description">图像特征</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="1-Haar特征"><a href="#1-Haar特征" class="headerlink" title="1 Haar特征"></a>1 Haar特征</h2><p>Haar特征最早是由应用于人脸特征表示时提出的，此特征反映的是图像部分区域内灰度变化情况，如：眼睛要比脸颊颜色要深，鼻梁两侧比鼻梁颜色要深，嘴巴比周围颜色要深等。<br>Haar特征有4类: <code>边缘特征</code>,<code>线性特征</code>,<code>中心特征</code>,<code>对角线特征</code>，如下图示例，这些，组合成特征模板。特征模板内有白色和黑色两种矩形，并定义该模板的特征值为白色矩形像素和减去黑色矩形像素和。</p>
+<p><img src="/images/blog/haar_1.jpg" alt="haar特征"></p>
+<p><strong>如何计算上面特征</strong></p>
+<ul>
+<li>对于A和B ：$特征值=sum <em>白-sum</em>黑$</li>
+<li>对于C：$特征值=sum <em>白-2\times sum</em>黑$,白色乘以2的原因是，保持与黑色区域一样的像素数目。</li>
+</ul>
+<p>通过改变特征模板的大小和位置，可在图像子窗口中穷举出大量的特征。上图的特征模板称为“特征原型”。而特征类别、大小和位置的变化，使得很小的检测窗口含有非常多的矩形特征。这就带来了两个问题</p>
+<ol>
+<li>如何快速计算那么多的特征： <strong>积分图</strong></li>
+<li>哪些矩形特征才是对分类器分类最有效的：<strong>训练分类算法</strong>，如AdaBoost</li>
+</ol>
+<h2 id="2-积分图"><a href="#2-积分图" class="headerlink" title="2 积分图"></a>2 积分图</h2><p>积分图就是只遍历一次图像就可以求出图像中所有区域像素和的快速算法。核心思想是：将图像从起点开始到各个点所形成的矩形区域像素之和作为一个数组的元素保存在内存中，当要计算某个区域的像素和时可以直接索引数组的元素，不用重新计算这个区域的像素和，从而加快了计算。</p>
+<p>积分图是一种能够描述全局信息的<strong>矩阵表示</strong>方法。<strong>积分图的构造方式是位置（i,j）处的值ii(i,j)是原图像(i,j)左上角方向所有像素的和</strong>。</p>
+<p>积分图的构建算法</p>
+<ol>
+<li>用$s(i,j)$表示行方向的累加和，初始化$s(i,-1)=0$</li>
+<li>用$ii(i,j)$表示一个积分图像，初始化$ii(-1,i)=0$</li>
+<li>逐行扫描图像，递归计算每个像素$(i,j)$行方向的累加和$s(i,j)$和积分图像$ii(i,j)$的值。<script type="math/tex; mode=display">
+s(i,j)=s(i,j-1)+f(i,j) \\
+ii(i,j)=ii(i-1,j)+s(i,j)</script></li>
+<li>扫描图像一遍，当到达图像右下角像素时，积分图像ii就构造好了。</li>
+</ol>
+<p><strong>计算方块内的像素和</strong><br>计算好了积分图，我们接下来就可以利用积分图来加速计算某个方块内部的像素的和</p>
+<p><img src="/images/blog/haar_2.jpg" alt="haar特征"></p>
+<p>如上图，假设我们想计算区域D的像素和。上图中D的四个顶点分别是1,2,3,4。令$rectsum_n$代表顶点$n$左上角的所有像素和，那么区域D内的像素和为: $rectsum_4-rectsum_2-rectsum_3+rectsum_1，注意顶点1的坐上所有像素和被减了2次，所以要加一次$</p>
+<h2 id="3-Adaboost-算法"><a href="#3-Adaboost-算法" class="headerlink" title="3 Adaboost 算法"></a>3 Adaboost 算法</h2><p>opencv中关于adaboost训练过程参考 <a href="https://docs.opencv.org/3.3.0/dc/d88/tutorial_traincascade.html" target="_blank" rel="noopener">opencv tutorial_traincascade</a><br>后面再讲到 Adaboost算法时，再详细说明。</p>
+<h2 id="4-opencv-中使用haar特征检测人脸"><a href="#4-opencv-中使用haar特征检测人脸" class="headerlink" title="4 opencv 中使用haar特征检测人脸"></a>4 opencv 中使用haar特征检测人脸</h2><p>opencv已经预先包含了多种训练好的<code>人脸分类器</code>，<code>眼睛分类器</code>，<code>微笑分类器</code>等。可以自己定义和训练一个，此处直接使用opencv已经训练好的人脸级联分类器，它的算法原理就是使用了Haar特征+Adaboost算法训练出的级联分类器。</p>
+<p>首先，载入xml定义的分类器，载入的图像必须是灰度图<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">import cv2 as cv</span><br><span class="line">face_cascade &#x3D; cv.CascadeClassifier(&#39;haarcascade_frontalface_default.xml&#39;)</span><br><span class="line">eye_cascade &#x3D; cv.CascadeClassifier(&#39;haarcascade_eye.xml&#39;)</span><br><span class="line">img &#x3D; cv.imread(&#39;sachin.jpg&#39;)</span><br><span class="line">gray &#x3D; cv.cvtColor(img, cv.COLOR_BGR2GRAY)</span><br></pre></td></tr></table></figure><br>接着开始检测人脸，如果有检测到则画出矩形框，下图是检测结果(同时包含了眼睛检测)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">faces &#x3D; face_cascade.detectMultiScale(gray, 1.3, 5)</span><br><span class="line">for (x,y,w,h) in faces:</span><br><span class="line">    cv.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)</span><br><span class="line">    roi_gray &#x3D; gray[y:y+h, x:x+w]</span><br><span class="line">    roi_color &#x3D; img[y:y+h, x:x+w]</span><br><span class="line">    eyes &#x3D; eye_cascade.detectMultiScale(roi_gray)</span><br><span class="line">    for (ex,ey,ew,eh) in eyes:</span><br><span class="line">        cv.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)</span><br><span class="line">cv.imshow(&#39;img&#39;,img)</span><br><span class="line">cv.waitKey(0)</span><br><span class="line">cv.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+<p><img src="/images/blog/haar_3.jpg" alt="haar特征"></p>
+<h2 id="5-Haar特征拓展"><a href="#5-Haar特征拓展" class="headerlink" title="5 Haar特征拓展"></a>5 Haar特征拓展</h2><h3 id="5-1-ABH特征"><a href="#5-1-ABH特征" class="headerlink" title="5.1 ABH特征"></a>5.1 ABH特征</h3><p>为提高二分Haar特征的区分能力，我们提出 了一种多二分Haar特征，并使用它们的共现性作为新的特征，成为ABH(Asseming Binary Haar)特征。</p>
+<p>下图演示了ABH特征的一个例子。</p>
+<p><img src="/images/blog/haar_4.jpg" alt="haar特征"></p>
+<p>上图中ABH特征集成了三个二分Haar特征，当三个二分Haar特征值分别为1,1,0时，ABH特征为 a(b1,b2,b3)=(110)2=6<br>其中 a为三个二分Haar特征 b1,b2,b3 的ABH特征计算函数， (.)2 是一个从二进制转十进制的操作。特征值说明了对 2F个不同结合的index，其中F是结合的二分特征数。</p>
+<h3 id="5-2-LAB-Locally-Assembing-Binary-特征"><a href="#5-2-LAB-Locally-Assembing-Binary-特征" class="headerlink" title="5.2 LAB(Locally Assembing Binary)特征"></a>5.2 LAB(Locally Assembing Binary)特征</h3><p>ABH特征的数目巨大。为了枚举所有的特征，需要几个自由参数，比如二分Haar特征的集合数目，每个二分Haar特征的大小，每个二分Haar特征的坐标位置。从如此巨大的特征池中学习是不可逆的。我们发现了一种对应的用于人脸检测的缩减集合，称为LAB Haar特征。</p>
+<p>ABH特征之中，LAB特征是那些结合8个局部邻接2-矩形的二分Haar特征，它们大小相同并且共享同一个中心矩形。下图展示了一个8个二分Haar特征用以集合为一个LAB特征。</p>
+<p><img src="/images/blog/haar_5.jpg" alt="haar特征"></p>
+<p>下图是一个2个LAB特征的示例</p>
+<p><img src="/images/blog/haar_6.jpg" alt="haar特征"></p>
+<p>图中展示了两个不同的LAB特征，中心的黑色矩形被8个相邻的二分Haar特征共享，所有9个矩形都是相同的大小。</p>
+<p>从公式上看，一个LAB特征可以用一个四元组表示 l(x,y,w,h) ，其中 x,y 分别代表了左上角的x和y轴坐标，(w,h) 代表了矩形的宽和高。</p>
+<p>LAB特征保留了所有二分Haar特征的优势，同时又很强的区分能力，大小也很小。LAB特征抓取了图像的局部强度。计算LAB特征需要计算8个2-矩形Haar特征。LAB特征值区间为 {0,…255}，每个值对应了特别的局部结构。</p>
+<p><a href="https://docs.opencv.org/3.4.3/d7/d8b/tutorial_py_face_detection.html" target="_blank" rel="noopener">opencv haar特征进行人脸检测</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/02/24/image-pramid/" rel="prev" title="图像中的各种金字塔">
+      <i class="fa fa-chevron-left"></i> 图像中的各种金字塔
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/03/04/HOG-feature/" rel="next" title="HOG特征详解">
+      HOG特征详解 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Haar特征"><span class="nav-number">1.</span> <span class="nav-text">1 Haar特征</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-积分图"><span class="nav-number">2.</span> <span class="nav-text">2 积分图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Adaboost-算法"><span class="nav-number">3.</span> <span class="nav-text">3 Adaboost 算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-opencv-中使用haar特征检测人脸"><span class="nav-number">4.</span> <span class="nav-text">4 opencv 中使用haar特征检测人脸</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Haar特征拓展"><span class="nav-number">5.</span> <span class="nav-text">5 Haar特征拓展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-ABH特征"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 ABH特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-LAB-Locally-Assembing-Binary-特征"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 LAB(Locally Assembing Binary)特征</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="Symbols count total">591k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">8:57</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'c656cd038e01f710e260',
+      clientSecret: 'e6de2ccaaf0f7069292125b8f50e27f25b95810d',
+      repo: 'shartoo.github.com',
+      owner: 'shartoo# GitHub repo owner',
+      admin: ['shartoo'],
+      id: '61bb2b46537f73bf19a7b21867f84b7c',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

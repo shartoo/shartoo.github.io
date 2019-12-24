@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://shartoo.github.io').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="deep learning基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习：正则化">
+<meta property="og:url" content="https://shartoo.github.io/2016/10/09/regularization-deeplearning/index.html">
+<meta property="og:site_name" content="我的个人博客">
+<meta property="og:description" content="deep learning基础">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/regular1.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/regular2.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/regular3.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/regular4.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/regular9.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/regular5.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/regular6.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/regular7.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/regular8.png">
+<meta property="article:published_time" content="2016-10-09T00:00:00.000Z">
+<meta property="article:modified_time" content="2019-12-24T12:00:27.972Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shartoo.github.io/images/blog/regular1.png">
+
+<link rel="canonical" href="https://shartoo.github.io/2016/10/09/regularization-deeplearning/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>深度学习：正则化 | 我的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="https://shartoo.github.io/2016/10/09/regularization-deeplearning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深度学习：正则化
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-10-09 00:00:00" itemprop="dateCreated datePublished" datetime="2016-10-09T00:00:00+00:00">2016-10-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-12-24 12:00:27" itemprop="dateModified" datetime="2019-12-24T12:00:27+00:00">2019-12-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>13k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>12 mins.</span>
+            </span>
+            <div class="post-description">deep learning基础</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="7-1-概念"><a href="#7-1-概念" class="headerlink" title="7.1 概念"></a>7.1 概念</h2><p>  深度学习中用以减小测试误差，但可能会增加训练误差的策略称为正则化。</p>
+<p>  <strong>限制</strong>：有些正则化策略是<strong>机器学习模型</strong>上添加限制。有些在<strong>模型参数</strong>上，有些在<strong>目标函数</strong>上添加额外项。这些限制或惩罚部分被设计来对特定先验知识编码的，其余的则是为了提高模型泛化能力。</p>
+<p>  深度学习中大部分正则化策略都是基于估计正则化，而估计正则化则是通过增加偏置来减少方差。 一个估计的正则化的目标是在大幅度减小方差的同时，尽可能小的带来偏置的增加。我们在讨论泛化和过拟合问题时会遇到以下三种情形:</p>
+<p>  <img src="/images/blog/regular1.png" alt="拟合情况"></p>
+  <p align="Center">图7.1</p>
+
+<ul>
+<li><strong>欠拟合</strong>:实际的正例没有完全被包含在模型预测域。</li>
+<li><strong>绝佳</strong>：完全匹配了数据生成过程.</li>
+<li><p><strong>过拟合</strong>：模型的预测域包含了全部的正例，同时也包含了负例。</p>
+<p>正规化的目标就是将模型的<strong>过拟合</strong>情形改善至<strong>绝佳</strong>情形。</p>
+<p>现实情况中，即便是极端复杂的模型也没法完全拟合目标函数，因为大部分情况，我们并不知道目标函数具体是如何映射的。<br>这表明设计一个模型的复杂度极高(模型大小，参数等)。而在近些年的实际实验中，我们发现比较好的模型都是正规化处理过后的大模型。</p>
+</li>
+</ul>
+<h2 id="7-2-参数规范惩罚"><a href="#7-2-参数规范惩罚" class="headerlink" title="7.2 参数规范惩罚"></a>7.2 参数规范惩罚</h2><p> 目前许多正规化方法，如神经网络、线性回归、logistic回归通过在目标函数$J$上加一个参数规范惩罚项 $\Omega(\theta)$ 公式如下:</p>
+<script type="math/tex; mode=display">
+    \bar{J}(\theta;X,y) = J(\theta;X,y)+\alpha\Omega(\theta)\\\tag {7.1}
+
+ 其中 \alpha\epsilon [0,\infty)</script><p>其中，更大的 $\alpha$ 对应更强的正规化处理。</p>
+<p> 在神经网络中，使用参数规范惩罚，只是对每一层映射转换的权重，不对偏置使用。这是因为权重决定了两个变量如何交互，而偏置只作用于单一变量。同时正规化偏置容易引入欠拟合。</p>
+<p><strong>预定义</strong></p>
+<ul>
+<li>向量$w$代表所有需要被规范惩罚的权重</li>
+<li><p>向量 $\theta$代表所有参数，包括$w$和其他非正规化的参数</p>
+<p>尽管每一层使用独立的 $\alpha$参数的惩罚机制效果可能会更好，但是由于计算量太大。实际中所有层使用相同的权重衰减。</p>
+</li>
+</ul>
+<p><strong>如何理解正则化</strong></p>
+<p>从数学角度来看，成本函数增加了一个正则项 $\Omega(\theta)$ 后，成本函数不再唯一地与预测值与真实值的差距决定，还和参数 $\theta$ 的大小有关。有了这个限制之后，要实现成本函数最小的目的，$\theta$ 就不能随便取值了，比如某个比较大的 $\theta$ 值可能会让预测值与真实值的差距 $\left( h_\theta(x^{(i)}) - y^{(i)} \right)^2$ 值很小，但会导致 $\theta_j^2$ 很大，最终的结果是成本函数太大。这样，通过调节参数 $\lambda$ 就可以控制正则项的权重。从而避免算法过拟合</p>
+<h3 id="7-2-1-L-2-参数正规化"><a href="#7-2-1-L-2-参数正规化" class="headerlink" title="7.2.1 $L^2$ 参数正规化"></a>7.2.1 $L^2$ 参数正规化</h3><p>最简单最常见的正规惩罚莫过于$L^2$，有时候称为<em>权重衰减</em>，同时也称为<em>岭回归</em>或者<em>吉洪诺夫正规</em>。它是直接在目标函数后面添加一个正规项 $\Omega(\theta)=\frac{1}{2}|w|^2_2$</p>
+<p>L2范数是指向量各元素的平方和然后求平方根。我们让L2范数的规则项 $|W|_2$最小，可以使得W的每个元素都很小，都接近于0，但与L1范数不同，它不会让它等于0，而是接近于0。</p>
+<p>回头看式子 $(7.1)$，假设没有偏置参数，因此 $\theta$参数就是$w$,模型目标函数如下:</p>
+<script type="math/tex; mode=display">
+    \bar J(w;X,y) =\frac{\alpha}{2}w^Tw+J(w;X,y) \tag{7.2}</script><p>对应的参数梯度如下:</p>
+<script type="math/tex; mode=display">
+     \bigtriangledown\bar J_w(w;X,y)=\alpha w+\bigtriangledown_wJ(w;X,y)</script><p>使用梯度更新权重时:</p>
+<script type="math/tex; mode=display">
+    w\leftarrow w-\epsilon(\alpha w+\bigtriangledown_wJ(w;X,y))</script><p>   重写为:</p>
+<script type="math/tex; mode=display">
+    w\leftarrow (1-\epsilon\alpha)w -\epsilon\bigtriangledown_wJ(w;X,y))</script><p>可以看到新增权重衰减项最终反映出，它通过对每一步的权重向量乘以一个常数因子修改了学习规则。由于 $\epsilon$ ，$\alpha$都是正值，所以它实际是减小了$w$。这就是它被称为<strong>权重衰减</strong>的原因。</p>
+<h4 id="7-2-1-1-L-2-如何实现参数调整"><a href="#7-2-1-1-L-2-如何实现参数调整" class="headerlink" title="7.2.1.1 $L^2$如何实现参数调整"></a>7.2.1.1 $L^2$如何实现参数调整</h4><p>  假设没有进行正则化处理的模型的损失函数在权重 $w$ 更新为 $w^ <em>$ 时最小。我们通过在 $w^</em> $ 附近进行二次近似来简化分析（前提是损失函数是二次及以上）。此时对损失函数的近似为:</p>
+<script type="math/tex; mode=display">
+   \widetilde J(\theta)=J(w^*)+\frac{1}{2}(w-w^*)^TH(w-w^*) \\
+   其中H为w在w^*处的Hessian矩阵</script><p>当梯度</p>
+<script type="math/tex; mode=display">
+   \bigtriangledown_w\widetilde J(w)=H(w-w^*) \tag 7</script><p>为0时， $\widetilde J$ 最小。将式子(7)，增加权重衰减项并修改为：</p>
+<script type="math/tex; mode=display">
+   \alpha \widetilde w+H(\widetilde w-w^*)=0 \tag 8\\
+   (H+\alpha I)\widetilde w= Hw* \\
+   \widetilde w = (H+\alpha I)^{-1}Hw*</script><p>如果 $\alpha$ 趋近于0，正则化的解 $\widetilde w$趋近于 $w*$。但是如果 $\alpha$增加，由于 $H$ 是实数并且是对称的，我们将上式解构为如下（其中 $\Lambda$ 为对角矩阵，$Q$ 为特征向量的正交基向量使得 $H=Q\Lambda Q^T$）：</p>
+<script type="math/tex; mode=display">
+  \widetilde w =(Q\Lambda Q^T +\alpha I)^{-1}Q\Lambda Q^Tw*\\
+  =[Q(\Lambda +\alpha I)Q^T]^{-1}Q\Lambda Q^Tw*\\
+  =Q(\Lambda +\alpha I)^{-1}\Lambda Q^Tw*</script><p>我们可以看到权重衰减的效果是由 $H$ 的特征向量定义的轴上重新调整 $w*$ , $H$ 的第 $i$ 个特征向量由一个因子 $\frac{\lambda _i}{\lambda _i+\alpha}$ 重新调整。可以得知</p>
+<ul>
+<li>当 $\lambda _i\gg \alpha$ 时，正则化效果十分有限。</li>
+<li><p>当 $\lambda _i\ll \alpha$ 时，将极大地改变 $w*$，几乎可以得到$w\sim 0，但是不为0$。</p>
+<p><strong>如何防止过拟合</strong>:更小的权值w，从某种意义上说，表示网络的复杂度更低，对数据的拟合刚刚好,而在实际应用中，也验证了这一点，L2正则化的效果往往好于未经正则化的效果。</p>
+<p>过拟合的时候，拟合函数的系数往往非常大，为什么？如下图(图7.2)所示，过拟合，就是拟合函数需要顾及每一个点，最终形成的拟合函数波动很大。在某些很小的区间里，函数值的变化很剧烈。这就意味着函数在某些小区间里的导数值（绝对值）非常大，由于自变量值可大可小，所以只有系数足够大，才能保证导数值很大。</p>
+<p><img src="/images/blog/regular2.png" alt="L2正则化示例"></p>
+<p align="Center">图7.2</p>
+
+<p>而正则化是通过约束参数的范数使其不要太大，所以可以在一定程度上减少过拟合情况。</p>
+</li>
+</ul>
+<h3 id="7-2-2-L-1-正则化处理"><a href="#7-2-2-L-1-正则化处理" class="headerlink" title="7.2.2 $L^1$正则化处理"></a>7.2.2 $L^1$正则化处理</h3><p>对模型参数$w$上的$L^1$正归化是增加一个惩罚项</p>
+<script type="math/tex; mode=display">
+  \Omega(\theta) = \|w\|_1=\sum_i\|w_i\|</script><p>完整公式如下：</p>
+<script type="math/tex; mode=display">
+     \bar J(w;X,y) =\alpha\|w\|_1+J(w;X,y)</script><p> 对上式求梯度得到：</p>
+<script type="math/tex; mode=display">
+ \bigtriangledown _w \bar J(w;X,y) = \alpha sign(w)+\bigtriangledown _w J(X,y;w)</script><p> 可以看到，$L^1$正规化对梯度的影响不再与每个$w_i$线性相关，而是一个常量因子。符号只与$w$相关，当w为正时，更新后的w变小。当w为负时，更新后的w变大（因此它的效果就是让w往0靠，使网络中的权重尽可能为0，也就相当于减小了网络复杂度，防止过拟合。 当w为0时怎么办？当w等于0时，|W|是不可导的，所以我们只能按照原始的未经正则化的方法去更新w，这就相当于去掉 $\alpha sign(w)$ 这一项，所以我们可以规定$sgn(0)=0$，这样就把w=0的情况也统一进来了）。这种形式的梯度使得没有必要继续求 $J(X,u;w)$ 的二次近似。</p>
+<p> 简单的线性模型可以使用对应的<em>Taylor</em>级数来表述其二次损失函数。我们可以想象一个更复杂模型的损失函数的一个截断的泰勒级数。此时的梯度为:</p>
+<script type="math/tex; mode=display">
+\bigtriangledown _w\widetilde J(w)=H(w-w*)</script><p>此时 $H$ 依然为矩阵 $J$ 在 $w=w^<em>$ 处的</em>Hessian<em>矩阵。由于 $L^1$ 惩罚在完整的Hessian举证并没有清晰的代数表达式，我们可以作进一步的简化假设</em>Hessian*矩阵是对角矩阵（这个假设的前提是所有输入特征被移除了相关性）, $H=diag([H<em>{1,1},… H</em>{n,n}])$,其中每个 $H_{i,i}\gt 0$ 。</p>
+<p>此时使用 $L^1$ 正则化的目标函数的二次近似可以分解为如下参数:</p>
+<script type="math/tex; mode=display">
+\widetilde J(w;X,y) = J(w*;X,y)+\sum_i[\frac{1}{2}H_{i,i}(w_i-w^*_i)^2+\alpha \|w_i\|]</script><p>最小化上面的损失函数(对每个维度 $i$ )有一个如下形式的解析解:</p>
+<script type="math/tex; mode=display">
+ w_i =sign(w_i^*)max\{\|w^*_i\|-\frac{\alpha}{H_{i,i}},0\}</script><p>考虑到条件是，对每个 $i$ 都有 $w_i\gt0$,此时可能的结果为(下列公式中 $w_i$应该都是 $w^*_i$):</p>
+<ul>
+<li><p>$w<em>i\le\frac{\alpha}{H</em>{i,i}}$ 时， $w_i=0$ ,因为 $\widetilde J(w;X,y)$ 中的 $J(w;X,y)$ 在方向 $i$ 上完全被 $L^1$ 正则项覆盖。</p>
+</li>
+<li><p>$w<em>i\gt\frac{\alpha}{H</em>{i,i}}$ 时，正则项没有将 $w<em>i$ 的最优置于0，而只是在该方向上移动了距离 $\frac{\alpha}{H</em>{i,i}}$</p>
+</li>
+</ul>
+<p><strong>用途:</strong> 与 $L^2$ 正则化相比$L^1$ 会导致参数稀疏，参数稀疏指的是一些参数被优化到0。 $L^1$ 正则化产生的稀疏属性可被用作特征选取，参数被惩罚为0的特征可以被丢弃。</p>
+<h2 id="7-3-规范惩罚用作约束优化"><a href="#7-3-规范惩罚用作约束优化" class="headerlink" title="7.3 规范惩罚用作约束优化"></a>7.3 规范惩罚用作约束优化</h2><p>考虑一个使用了参数规范惩罚正则化的损失函数</p>
+<script type="math/tex; mode=display">
+  \bar J(\theta;X,y) = J(\theta;X,y)+\alpha \Omega(\theta)</script><p>我们可以通过构建一个拉格朗日函数求在约束条件下目标函数的最小值，构建函数即在原始目标函数上添加一些惩罚项。假若我们想要约束条件 $\Omega(\theta)$ 小于一个常量k,可以构建如下拉格朗日函数:</p>
+<script type="math/tex; mode=display">
+  L(\theta,\alpha;X,y) =J(\theta;X,y)+\alpha(\Omega(\theta)-k)</script><p>此问题的解为</p>
+<script type="math/tex; mode=display">
+  \theta^* =arg \quad min_{\theta}\quad max_{\alpha,alpha\ge 0}L(\theta,\alpha)</script><p>可以通过修改 $\theta$ 和 $\alpha$ 的来解此问题，一些使用梯度，一些使用解析解(梯度为0)，但是需保证有</p>
+<ul>
+<li>$\Omega (\theta)\gt k$时 $\alpha$ 增加</li>
+<li>$\Omega(\theta)&lt;k$时 $\alpha$ 减小</li>
+</ul>
+<p>所有的正 $\alpha$ 都会缩小 $\Omega(\theta)$ ，而最优的 $\alpha ^<em> $ 会缩小 $\Omega(\theta)$ 但是不会使得 $\Omega(\theta)$ 过于小于k。为了解受限条件的效果，我们可以固定 $\alpha ^</em> $，将问题转化为 $\theta$ 的函数。</p>
+<script type="math/tex; mode=display">
+  \theta ^* =arg\quad min_{\theta}L(\theta,\alpha ^*)=arg\quad min_{\theta}J(\theta;X,y)+\alpha ^*\Omega(\theta)</script><p>该式子与最小化 $\widetilde J$ 的正则化训练问题完全一致。可以将参数正则惩罚问题看做权重约束。通过系数 $\alpha ^<em> $ 的权重衰减，无法知晓约束区域，因为 $\alpha^</em> $ 并没有直接指明k的值。我们可以求解k,但k与 $\alpha^*$ 的关系依赖于 $J$ 的形式。</p>
+<p>虽然无法精确制导约束区间大小，但是可通过调整 $\alpha$ 来控制，$\alpha$ 增加，则约束区间减小，反之则增大（参照惩罚项）。</p>
+<h4 id="7-3-1-约束问题中精确约束"><a href="#7-3-1-约束问题中精确约束" class="headerlink" title="7.3.1 约束问题中精确约束"></a>7.3.1 约束问题中精确约束</h4><p>有时候我可能需要使用精确约束条件而不是惩罚项，此时需要通过修改算法如<strong><em>SGD</em></strong>在函数 $J(\theta)$ 上下降，并将 $\theta$ 投影回满足 $\Omega (\theta)&lt;k$的最邻近点。甚至如果我们知道何时的 $k$ ，而不想浪费时间继续搜索与 $k$ 相对应的 $\alpha$ ，此时将很有用。</p>
+<p>另一个使用精确约束和重映射，而不是惩罚约束的原因是，惩罚机制会导致非凸优化而使得目标函数陷入局部最优，导致神经网络僵死。</p>
+<p>最后，使用重新映射的精确约束可以在优化过程中增加稳定性。使用高学习率时会遇到正反馈循环问题，大权重将减小大梯度，进而大幅度更新权重。若不断更新权重，参数 $\theta$ 将从原始值更新到数值溢出。使用重新映射的精确约束可阻止反馈循环的权重无限增加。</p>
+<h2 id="7-4-正则化和受限问题"><a href="#7-4-正则化和受限问题" class="headerlink" title="7.4 正则化和受限问题"></a>7.4 正则化和受限问题</h2><p> 机器学习中正则化是十分必要的，许多线性模型依赖转置矩阵 $X^TX$ 如线性回归模型，主成分分析(PCA)模型，但是若 $X^TX$ 是奇异的（行列式为0，有无穷个解），就没法实现。当数据在某一些方向上没有方差（所有的值相同）时，矩阵是奇异的。此时需要进行相对应的正则化来保证矩阵是可逆的。</p>
+<p>当线性问题的相关矩阵是可逆时才有封闭解。欠定方程也可能没有封闭解。一个例子是，逻辑回归用于线性可分类问题时，如果权重 $w$ 可获得最佳分类结果，那么$2w$ 也可以，而且使用最大似然框架时，似然度更高。进行迭代优化如使用SGD(随机梯度下降)时将会导致 $w$ 不断增加，而算法不会停止（实际中会产生数值溢出）。</p>
+<p>大多数正则化可以保证迭代方法收敛，比如权重衰减( $L^2$ 正则化)中似然函数梯度等于权重衰减系数时停止。</p>
+<p><strong>（多元）线性回归问题的损失函数为：</strong></p>
+<script type="math/tex; mode=display">
+  (Xw-y)^T(Xw-y)</script><p>对应的解为:(参考附录)</p>
+<script type="math/tex; mode=display">
+w = (X^T X)^{-1} X^T y</script><p>（可以看到，如果 $X^TX$ 是奇异的，将无法求解）</p>
+<p>添加 $L^2$ 正则项之后的损失函数变为:</p>
+<script type="math/tex; mode=display">
+  (Xw-y)^T(Xw-y)+\frac{1}{2}\alpha w^Tw</script><p>此时的正则化解为：</p>
+<script type="math/tex; mode=display">
+w = (X^T X + \alpha I)^{-1} X^T y</script><p>其中，$I$ 是 (n + 1) x (n + 1) 矩阵</p>
+<script type="math/tex; mode=display">
+Z =
+\begin{bmatrix}
+0 \\
+& 1 \\
+& & 1 \\
+& & & \ddots \\
+& & & & 1
+\end{bmatrix}</script><p>正则化实际上解决了两个问题。一个是确保不发生过拟合，另外一个也解决了 $X^T X$ 的奇异矩阵问题。当 m &lt; n 时，$X^T X$ 将是一个奇异矩阵，从数学上可以证明，加上 $\alpha I$ 后，结果将是一个非奇异矩阵。</p>
+<h2 id="7-5-数据增强"><a href="#7-5-数据增强" class="headerlink" title="7.5 数据增强"></a>7.5 数据增强</h2><p>理论上来说，数据越多，模型训练得越充分，模型泛化能力越强。但是现实情况是，数据量总是有限的，解决此问题的一个方法是生成一部分的模拟数据。</p>
+<p>这对于分类问题最简单，它需要喂入复杂的高维度数据输入并映射到一个单一分类上。这说明，分类问题主要面临的是对于任意广度的输入其分类结果不变。我们可以简单的生成一个 $(x,y)$ 即可。但是对于很多其他问题，如密度估计问题，很难生成模拟数据，除非已经知道需要解决的密度估计问题。  </p>
+<p> <strong>图像识别</strong>：数据增强用于特定领域分类问题，如图像识别很有效。但是切记，转换数据的时候不要改变图像的正确分类。比如不要将手写字识别图像中的<code>6</code> 垂直转换成了<code>9</code>，<code>b</code>水平翻转成了<code>d</code>。    </p>
+<p> <strong>语音识别</strong>：语音识别问题中，网络输入数据中也会注入一些随机噪音干扰，这也是一种数据增强（现实生活中语音环境有噪音）。</p>
+<p>  神经网络对噪音鲁棒性并不好，所以我们在可以有一种提升网络性能的方法，即在训练时加入随机干扰。</p>
+<p>  由于数据增强的存在，我们在比较机器学习结果时应当考虑数据增强。手工设计的数据通常可以大幅度减少泛化错误。所以，在比较机器学习算法时，需要做对照试验，使用相同算法，一组使用没有应用数据增强的输入A，另一组使用应用了数据增强的B，如果A的性能很差，而B的性能很好，那么说明促使模型性能提升的不是算法而是数据。</p>
+<h2 id="7-6-噪声鲁棒"><a href="#7-6-噪声鲁棒" class="headerlink" title="7.6 噪声鲁棒"></a>7.6 噪声鲁棒</h2><p> 对于使用了数据增强的模型，噪音其实等同于在权重分布上增加了惩罚机制。通常，噪音注入比简单的收缩参数(正则化)更有用，尤其是噪音作用于隐藏神经元时，dropout就是专门在方面的进展。<br> 在RNN中，权重上增加噪声被证明是一种很有效的正则策略（书中论文）。接下来分析下标准前馈神经网络中权重噪音的实际影响。<br> 在回归问题中，假设损失函数是最小平方误差，如下:</p>
+<script type="math/tex; mode=display">
+   J = E_{p(x,y)}[(\bar y(x)-y)^2]</script><p> 假设输入中包含随机扰动 $\epsilon_w \sim N(\epsilon ;0,\eta I)$ ，此时对应的目标函数变成:</p>
+<script type="math/tex; mode=display">
+   \bar J_W=E_{p(x,y,\epsilon _w)}[(\bar y_{\epsilon_W}(x)-y)^2] \\
+   =E_{p(x,y,\epsilon_W)}[\bar y^2_{\epsilon_W}(x)-2y\bar y_{\epsilon_W}(x)+y^2]</script><p> 若 $\eta$ 很小,最小化 $J$ 等同于最小化 $J$ 外加一个正则项 $\eta E_{p(x,y)}[|\bigtriangledown_W\bar y(x)|^2]$<br>这种正则项使得模型对参数的轻微扰动不再敏感，此时的最优参数不在使得损失函数最小点而是在最小点附近。</p>
+<h3 id="7-6-1-在输出目标上注入噪音"><a href="#7-6-1-在输出目标上注入噪音" class="headerlink" title="7.6.1 在输出目标上注入噪音"></a>7.6.1 在输出目标上注入噪音</h3><p> 模型的错误分类将导致最大似然框架求得的 $logP(y|x)$ 并不是真正最大点。一种办法是在标签上加入噪音，例如常量 $\theta$ ，此时训练数据集x，其输出被分类到标签y的概率为 $1-\theta$ ，这种方法很容易并入到惩罚函数，而不需要引入噪声数据。这是一种平滑机制，比如标签正则模型基于有k个输出的 <em>softmax</em> ，将分类<code>0</code>,<code>1</code>替换为 $\frac{\theta}{k}$ 和 $1-\frac{k-1}{k}\theta$</p>
+<h2 id="7-7"><a href="#7-7" class="headerlink" title="7.7"></a>7.7</h2><p> 多任务学习</p>
+<p> 多任务学习可以看做一种从多个模型中抽象出一个汇总模型以提高泛化能力的方法。模型的某个部分的参数在多个任务间共享时，该部分将获得更好的泛化能力。</p>
+<p> 下图(图7.3)展示了一个多任务学习方法的常见形式，不同的监督学习任务(对于给定输入X预测输出Y)，共享了相同的输入X，以及一些中间表述层 $h^{shared}$ (捕获参数的一些平均特征)。</p>
+<p> <img src="/images/blog/regular3.png" alt=""></p>
+ <p align="Center">图7.3</p>
+
+<p> 通过提升这些共享参数的统计特性（更稳定），可以提高模型泛化能力和泛化边界。与单任务学习相比，其实是按比例增加了共享参数的输入样本。当然前提是，多个模型之间可以共享参数。</p>
+<p> 以深度学习的观点来看，这种方法的先验知识是：不同模型的输入数据有些解释了数据变动的参数是在多个任务中共享的。</p>
+<h2 id="7-8-提前终止"><a href="#7-8-提前终止" class="headerlink" title="7.8 提前终止"></a>7.8 提前终止</h2><p> 看一张图(图7.4)：</p>
+<p> <img src="/images/blog/regular4.png" alt=""></p>
+ <p align="Center">图7.4</p>
+
+<p> 我们可以看到随着时间或迭代次数的增加，训练误差不断减少，而验证误差最后会逐渐上升，呈U型。验证误差开始上升时，已经出现了过拟合。我们应当在验证误差有段时间没有下降时停止迭代，而不是等到验证误差达到某个极小值时。此策略即提前终止，是正则化策略中最常见，最有效的方法。</p>
+<p> <strong>如何确定何时终止:</strong></p>
+<ul>
+<li>在算法开始之前，先确定训练次数。</li>
+<li>在训练过程中定期地运行验证，验证集可以比训练集数据量小。</li>
+</ul>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>几乎不改变算法过程，易于使用</li>
+<li>提前终止可以很容易地与其他正则化方法结合使用。</li>
+</ul>
+<p><strong>代价</strong>：</p>
+<ul>
+<li>需要不断保存最优模型参数，这是可以接收的，可以直接存放在磁盘上。</li>
+<li>需要一个验证数据集，验证数据集不用于训练。</li>
+</ul>
+<p><strong>最大化利用所有数据</strong></p>
+<p>  为了更好的利用所有数据，可以在算法提前终止后再次训练。此时有两种策略</p>
+<ul>
+<li><p>重新初始化模型，在所有数据集上重新训练，但只训练提前终止训练的次数。此时可以增加一些参数，因为数据更多（个人认为，其实是分两步走，第一步是用提前终止找到最优训练次数，第二次再完全训练）</p>
+</li>
+<li><p>保存第一次训练时的所有参数，并在所有数据上继续训练。此时无法知晓算法何时停止，但是可以观察验证数据集上的平均Loss，当其低于第一次训练的loss时停止。此方法可以避免第一次的重复计算，但是表现一般。</p>
+</li>
+</ul>
+<p><strong>提前终止的内在机制</strong>：一些论文认为，它能将参数搜索空间限制在较小区间，进而加快模型训练。实际上在使用均方差作为损失函数和梯度下降更新参数的简单线性回归模型中，$L^2$ 正则等同于提前终止。</p>
+<h2 id="7-9-参数捆绑和参数共享"><a href="#7-9-参数捆绑和参数共享" class="headerlink" title="7.9 参数捆绑和参数共享"></a>7.9 参数捆绑和参数共享</h2><p>前面的部分讲的都是在固定区域或点对参数加约束或惩罚，例如 $L^2$ 从0点开始寻找最优参数。有时候我们的先验知识需要其他表现形式，或者有时候无法确定精确值，但是知道参数之间的依赖。</p>
+<p>前面讲到的参数规范惩罚是一种让参数近似另外一个参数的正则化方法，一种更常见的形式是:<strong>强制让一群参数相等</strong>，此方法称为<strong>参数共享</strong>。其优势在于，可以大幅度减少需要存储和更新的参数。该方法在卷积神经网络中尤其有效。</p>
+<p>一个图像处理的例子如下图所示:</p>
+<p><img src="/images/blog/regular9.png" alt="卷积图像"></p>
+<p>上图左图为全连接，右图为局部连接。在上右图中，假如每个神经元（隐藏层100万个神经元）只和10×10个像素值相连，那么权值数据为1000000×100个参数，减少为原来的万分之一。而那10×10个像素值对应的10×10个参数，其实就相当于卷积操作。但其实这样的话参数仍然过多，再使用权值共享。在上面的局部连接中，每个神经元都对应100个参数，一共1000000个神经元，如果这1000000个神经元的100个参数都是相等的，那么参数数目就变为100（100万个神经元每个神经元与100个(10x10像素)参数相关，现在这100个参数一样了）了。</p>
+<p>怎么理解权值共享呢？我们可以这100个参数（也就是卷积操作）看成是提取特征的方式，该方式与位置无关。这其中隐含的原理则是：图像的一部分的统计特性与其他部分是一样的。这也意味着我们在这一部分学习的特征也能用在另一部分上，所以对于这个图像上的所有位置，我们都能使用同样的学习特征。</p>
+<p>更直观一些，当从一个大尺寸图像中随机选取一小块，比如说 8x8 作为样本，并且从这个小块样本中学习到了一些特征，这时我们可以把从这个 8x8 样本中学习到的特征作为探测器，应用到这个图像的任意地方中去。特别是，我们可以用从 8x8 样本中所学习到的特征跟原本的大尺寸图像作卷积，从而对这个大尺寸图像上的任一位置获得一个不同特征的激活值。</p>
+<h2 id="7-10-稀疏表述"><a href="#7-10-稀疏表述" class="headerlink" title="7.10 稀疏表述"></a>7.10 稀疏表述</h2><p> 权重衰减是通过在权重参数上增加惩罚项，另一种策略是在网络神经元上施加惩罚。</p>
+<p> $L^1$ 正则化带来了稀疏项，是通过使得部分参数为0，而稀疏表述则直接让其中的表述元素直接为0.举例线性回归来说明这种差别:</p>
+<p> <strong>参数稀疏的表述：</strong></p>
+<script type="math/tex; mode=display">
+   \begin{bmatrix}
+   18\\
+   5\\
+   15\\
+   -9\\
+   -3
+   \end{bmatrix}=\begin{bmatrix}
+    4\quad0\quad0\quad-2\quad0\quad0\\
+    0\quad0\quad-1\quad0\quad3\quad0\\
+    0\quad5\quad0\quad0\quad0\quad0\\
+    1\quad0\quad0\quad-1\quad0\quad-4
+   \end{bmatrix}
+
+   \quad\begin{bmatrix}
+    2\\
+    3\\
+    -2\\
+    -5\\
+    1\\
+    4
+   \end{bmatrix}\\
+   y\epsilon R^m \quad\quad\quad \quad \quad A\epsilon R^{m\times n}\quad\quad\quad\quad x \epsilon R^m</script><p> <strong>表述稀疏的</strong>:</p>
+<script type="math/tex; mode=display">
+   \begin{bmatrix}
+   -14\\
+   1\\
+   19\\
+   2\\
+   23
+   \end{bmatrix}=\begin{bmatrix}
+    3\quad-1\quad2\quad-5\quad4\quad1\\
+    4\quad2\quad-3\quad-1\quad1\quad3\\
+    -1\quad5\quad4\quad2\quad-3\quad-2\\
+    3\quad1\quad2\quad-3\quad0\quad-3\\
+    -5\quad4\quad-2\quad2\quad-5\quad-1\\
+   \end{bmatrix}
+
+   \quad\begin{bmatrix}
+    0\\
+    2\\
+    0\\
+    0\\
+    -3\\
+    0
+   \end{bmatrix}\\
+   y\epsilon R^m \quad\quad\quad \quad \quad B\epsilon R^{m\times n}\quad\quad\quad\quad h \epsilon R^m</script><p> 稀疏表述的 规范惩罚是在损失函数 $J$ 上加一个惩罚项 $\Omega (h)$</p>
+<script type="math/tex; mode=display">
+   \bar J(\theta;X,y) = J(\theta;X,y)+\alpha \Omega (h) \\
+   其中 \alpha \epsilon [0,\infty)</script><h2 id="7-11-集成学习方法"><a href="#7-11-集成学习方法" class="headerlink" title="7.11 集成学习方法"></a>7.11 集成学习方法</h2><p>  主要思想：独立训练多个模型然后所有模型对测试样本投票来减少泛化错误。依据是，不同模型不会在测试样本上犯同样错误。</p>
+<p>  考虑k个回归模型集合，每个模型在每个(单个)样本上误差为 $\epsilon _i$，模型误差来自多变量正太分布，方差为 $E[\epsilon _i^2]=v$ ，协方差期望为 $E[\epsilon _i,\epsilon _j]=c$ ，则所有集成模型的平均误差是 $\frac{1}{k}\sum_i\epsilon _i$ ,期望方差为:</p>
+<script type="math/tex; mode=display">
+   E[(\frac{1}{k}\sum_i \epsilon _i)]=\frac{1}{k^2}E[\sum(\epsilon _i^2+\sum_{j\ne i}\epsilon _i\epsilon _j)] \\
+   =\frac{1}{k}v+\frac{k-1}{k}c</script><p>有些情况下，误差完全相关，$c=v$ ，此时平均模型没用。<br>集成学习的期望均方误差与集成规模呈线性递减，也就是集成学习最终至少有其中一个模型的性能。</p>
+<p>集成学习方法的简单示例:</p>
+<p> <img src="/images/blog/regular5.png" alt="拟合情况"></p>
+  <p align="Center">图7.5</p>
+
+<p> 图中第一行是原始数据，进行一些随机替换和重复（如第二行9替换为8，第三行重复9）分别进行训练。其运行机制就是，每个模型使用的数据集大小相同，但是内容不一，会有部分替换和重复。这样来看，每个单独的模型是相对脆弱的，但是平均化输出，整个模型又是健壮的（上图中只有两个模型的输出都是8时，才会有最大置信度）。</p>
+<p> 平均模型是极其有效可靠的减少泛化误差的方法，它经常被应用到机器学习竞赛中。BVLC的googlenet使用了6个模型，但是不鼓励在论文中使用，因为可以通过以存储空间换取模型泛化能力。</p>
+<h2 id="7-12-dropout"><a href="#7-12-dropout" class="headerlink" title="7.12 dropout"></a>7.12 dropout</h2><p> dropout提供了一种计算量不大，但是强大的正则化方法。它是对一个<strong>模型</strong>族进行正则化处理。</p>
+<p> 集成学习方法需要训练多个模型，如果模型巨大，无法实现。dropout训练的是从基础（原始）网络中移除非输出单元构成的全部子网的集合。下图（图7.6）展示了此过程。</p>
+<p> <img src="/images/blog/regular6.png" alt="dropout训练过程"></p>
+<p align="Center">图7.6</p>
+
+<p>集成学习定义了k个模型，k个从训练数据集中抽样的自集。dropout的目标就是模拟这一过程。训练dropout过程中，我们使用了一个基于<em>mini-batch</em>的学习算法，如<strong>SGD</strong>(随机梯度下降)。每载入一个样本到<em>mini-batch</em>时，对网络中所有输入和隐藏神经元应用一个二进制掩码，决定每个神经元是否被纳入（二进制掩码为1时），每个神经元取掩码值得过程是独立抽样。掩码取值为1的概率在训练之前就固定的，一般取值是，输入神经元0.8，隐藏神经元0.5。下图是一个前馈网络示例:</p>
+<p>   <img src="/images/blog/regular7.png" alt="dropout训练过程"><br>  <p align="Center">图7-7</p></p>
+<p>集成学习的模型都是独立的(每个模型参数和训练数据)，dropout的每个模型的参数都是原网络参数的一个子集，这种共享机制使得dropout 网络有能力表述指数级的特征。<strong>集成学习</strong>每个子模型分别在其训练子集中收敛，而在dropout中，大部分模型并没有得到完全训练（不是每个模型都达到了收敛状态），其模型太大无法穷尽。dropout网络中，子网的某些部分在迭代中一步步训练，同时参数共享机制使得剩余子网的参数达到一个较好的状态。</p>
+<p>使用集成学习模型进行预测时，需要所有模型对预测结果投票，我称此过程为<em>inference</em>。无论是集成学习或者dropout，我们都没有要求模型的精确概率,假设模型是输出一个概率分布，那么集成学习即输出所有概率分布的均值。</p>
+<script type="math/tex; mode=display">
+    \frac{1}{k}\sum_{i=1}^kp^{(i)}(y\|x)</script><p>  dropout模型中每个由掩码向量 $\mu$ 定义的子模型定义了一个概率分布 $p(y|x,\mu)$，其<em>inference</em>是所有掩码概率分布的均值。所有掩码的算术均值如下:</p>
+<script type="math/tex; mode=display">
+   \sum_{\mu}p(\mu)p(y|x,\mu)</script><p>  由于求和公式包含太多项（指数级），当模型经过一些简化之后很难估计其输出期望（目前为止，深度神经网络的都有不可知的简化）。我们可以通过抽样来模拟<em>inference</em>，即平均多个掩码的输出。一般10-20个掩码足以获得较好的表现。</p>
+<p>  然而，有一种更好的方法，一次前向传播即可获得较好的模拟整个集成学习，即使用<strong>几何平均</strong>替换<strong>算术平均</strong>(所有子模型的)。（论文）</p>
+<p>  多概率分布的几何均值并不一定是概率分布，为保证多概率的结果依然是概率分布，所有子模型不得使任何事件出现的概率为0，然后使结果呈正态分布。几何均值的非标准(<em>unnormalizalized</em>)概率分布如下:</p>
+<script type="math/tex; mode=display">
+    \widetilde p_{ensemble}(y|x) =\sqrt[2^d]{\prod_{\mu}p(y|x,\mu)} \\
+    其中d为可能被dropout的神经元数</script><p>  此处使用一个 $\mu$ 的正太分布简化表述，其实非正太分布也是可能的。如果要预测输出，需要对模型集合重新标准化:</p>
+<script type="math/tex; mode=display">
+    P(y|x) =\frac{\widetilde P(y|x)}{\sum_{y^{'}}\widetilde P(y^{'}|x)}</script><p>  dropout中可以通过估计一个模型的 $p(y|x)$ 来近似 $p_{ensemble}$ ，该模型包含了所有的神经元，但是每个神经元输出要乘以该神经元被保留的概率。此方法可以获得该神经元的期望输出。我们称此方法为<em>scale inference rule</em>，此方法只是一种经验上的技巧，并没有学术论证，但是实际效果很好。</p>
+<h3 id="7-12-1-dropout的优点和注意"><a href="#7-12-1-dropout的优点和注意" class="headerlink" title="7.12.1 dropout的优点和注意"></a>7.12.1 dropout的优点和注意</h3><p>  <strong>优点一:</strong> 计算量小，训练时每次更新每个样本的时间复杂度为 $O(n)$，其中 $n$ 为要生成的随机二进制数</p>
+<p>  <strong>优点二:</strong> 对模型类型和训练过程没有太大限制。几乎对所有使用分布式表述(<em>distribute representation</em>)并使用SGD的模型都可以很好。</p>
+<p>  <strong>注意:</strong> 尽管dropout的每一步代价不高，但是整体权衡下来还是会比较高，作为一种正则化技术，会削弱模型性能，增大模型可以一定程度上抵消这种削弱，但是切记勿得不偿失。一般标签分类任务中，如果样本较少，比如少于5000时，dropout性能一般。</p>
+<h2 id="7-13-对抗训练"><a href="#7-13-对抗训练" class="headerlink" title="7.13 对抗训练"></a>7.13 对抗训练</h2><p>在独立同分布(<strong><em>i.i.d</em></strong>)测试中，神经网络已经基本达到人类的分辨能力。为了测试一个神经网络对于隐藏任务的理解能力，我们可以搜寻模型误分类的样本。论文(2010b)发现，即便是达到人类同层次理解能力的神经网络，对使用<strong>优化过程构造</strong>的临界样本（输入相近，但是输出不同）依然会100%犯错。在很多情况下，与输入<code>x</code>十分相近的点<code>x&#39;</code>，人都无法区分对照样本和原始样本的区别，但是网络可以得到完全不同的预测。下图(图7.8)展示了这种差异：</p>
+<p>   <img src="/images/blog/regular8.png" alt="对照训练"></p>
+<p>一组对照样本应用到GoogLeNet，测试ImageNet。在原始图上添加一个很小的向量，该向量的值是对应输入的损失函数梯度的符号，我们可以改变GoogLeNet对于图像的分类。</p>
+<p> 产生这些临街对照样本的基本原因是过度线性化，由线性单元构建的神经网络，其结果也呈高度线性相关，这些线性函数很容易优化。但是，如果输入值是数值的话，线性函数的值可能会产生巨大变化，尤其是高维场合。假若每个维度的输入改变 $\epsilon$，那么权重为w的线性函数会被改变 $\epsilon ||w||_1$，高维场合此值会极大。对照训练可以使得训练数据集中相邻数据具有局部不变性，进而抑制这种高度敏感的局部线性行为。</p>
+<p> 纯粹的线性模型无法应对对照训练样本的干扰的，因为它们被强行线性化。神经网络可以表述的函数范围从近线性到局部不变性，因而具有较好稳定性，即可以在学习到训练数据的线性趋势的同时能够有效对抗局部干扰。</p>
+<p> <strong>其他用途：</strong> 对照样本可以用来完成半监督学习。数据集中点<code>x</code>没有打标签，模型可能会给它标签 $\widetilde y$,假若模型较好，那么数据点<code>x</code>标签即为 $\widetilde y$ 的概率较高。我们可以搜寻一个对照样本<code>x&#39;</code>使得分类器输出标签为<code>y&#39;</code>，其中 $y’\ne \widetilde y$。对照样本不是使用真实的标签，而是由一个称为<strong>虚拟对照样本</strong> 模型生成的。分类器可能会被训练为给<code>x</code>和<code>x&#39;</code>相同的标签。这会使得分类器逐渐具备对较小变动的未分类数据分类的能力。<strong>motivating</strong>:认为不同类别之间通常不连通，较小扰动不足以使得一种类别与另外一种类别产生关联。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/10/02/spark-python-example/" rel="prev" title="大数据：spark mllib python使用示例">
+      <i class="fa fa-chevron-left"></i> 大数据：spark mllib python使用示例
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/10/19/optimization-deep-models/" rel="next" title="深度学习：训练模型的优化">
+      深度学习：训练模型的优化 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#7-1-概念"><span class="nav-number">1.</span> <span class="nav-text">7.1 概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-2-参数规范惩罚"><span class="nav-number">2.</span> <span class="nav-text">7.2 参数规范惩罚</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-1-L-2-参数正规化"><span class="nav-number">2.1.</span> <span class="nav-text">7.2.1 $L^2$ 参数正规化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#7-2-1-1-L-2-如何实现参数调整"><span class="nav-number">2.1.1.</span> <span class="nav-text">7.2.1.1 $L^2$如何实现参数调整</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-2-L-1-正则化处理"><span class="nav-number">2.2.</span> <span class="nav-text">7.2.2 $L^1$正则化处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-3-规范惩罚用作约束优化"><span class="nav-number">3.</span> <span class="nav-text">7.3 规范惩罚用作约束优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#7-3-1-约束问题中精确约束"><span class="nav-number">3.0.1.</span> <span class="nav-text">7.3.1 约束问题中精确约束</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-4-正则化和受限问题"><span class="nav-number">4.</span> <span class="nav-text">7.4 正则化和受限问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-5-数据增强"><span class="nav-number">5.</span> <span class="nav-text">7.5 数据增强</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-6-噪声鲁棒"><span class="nav-number">6.</span> <span class="nav-text">7.6 噪声鲁棒</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-6-1-在输出目标上注入噪音"><span class="nav-number">6.1.</span> <span class="nav-text">7.6.1 在输出目标上注入噪音</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-7"><span class="nav-number">7.</span> <span class="nav-text">7.7</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-8-提前终止"><span class="nav-number">8.</span> <span class="nav-text">7.8 提前终止</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-9-参数捆绑和参数共享"><span class="nav-number">9.</span> <span class="nav-text">7.9 参数捆绑和参数共享</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-10-稀疏表述"><span class="nav-number">10.</span> <span class="nav-text">7.10 稀疏表述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-11-集成学习方法"><span class="nav-number">11.</span> <span class="nav-text">7.11 集成学习方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-12-dropout"><span class="nav-number">12.</span> <span class="nav-text">7.12 dropout</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-12-1-dropout的优点和注意"><span class="nav-number">12.1.</span> <span class="nav-text">7.12.1 dropout的优点和注意</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-13-对抗训练"><span class="nav-number">13.</span> <span class="nav-text">7.13 对抗训练</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="Symbols count total">591k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">8:57</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'c656cd038e01f710e260',
+      clientSecret: 'e6de2ccaaf0f7069292125b8f50e27f25b95810d',
+      repo: 'shartoo.github.com',
+      owner: 'shartoo# GitHub repo owner',
+      admin: ['shartoo'],
+      id: '49f9594f4955cab93f9e6b49c9d812f9',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

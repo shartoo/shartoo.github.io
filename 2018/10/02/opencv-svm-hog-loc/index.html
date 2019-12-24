@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://shartoo.github.io').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="图像处理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用HOG+SVM+滑窗+NMS完成目标定位分类">
+<meta property="og:url" content="https://shartoo.github.io/2018/10/02/opencv-svm-hog-loc/index.html">
+<meta property="og:site_name" content="我的个人博客">
+<meta property="og:description" content="图像处理">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/hog_svm_loc1.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/hog_svm_loc2.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/hog_svm_loc3.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/hog_svm_loc4.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/hog_svm_loc5.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/hog_svm_loc6.jpg">
+<meta property="article:published_time" content="2018-10-02T00:00:00.000Z">
+<meta property="article:modified_time" content="2019-12-24T12:00:27.976Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shartoo.github.io/images/blog/hog_svm_loc1.jpg">
+
+<link rel="canonical" href="https://shartoo.github.io/2018/10/02/opencv-svm-hog-loc/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>使用HOG+SVM+滑窗+NMS完成目标定位分类 | 我的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="https://shartoo.github.io/2018/10/02/opencv-svm-hog-loc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用HOG+SVM+滑窗+NMS完成目标定位分类
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-10-02 00:00:00" itemprop="dateCreated datePublished" datetime="2018-10-02T00:00:00+00:00">2018-10-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-12-24 12:00:27" itemprop="dateModified" datetime="2019-12-24T12:00:27+00:00">2019-12-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>20k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>18 mins.</span>
+            </span>
+            <div class="post-description">图像处理</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="0-概览"><a href="#0-概览" class="headerlink" title="0  概览"></a>0  概览</h2><p>整个过程如下:</p>
+<ol>
+<li>数据标注</li>
+<li>抽取HOG</li>
+<li>训练SVM</li>
+<li>预测（滑窗，分类）</li>
+<li>NMS</li>
+</ol>
+<h2 id="1-数据标注"><a href="#1-数据标注" class="headerlink" title="1 数据标注"></a>1 数据标注</h2><p>使用的是<code>extract_feature_from_fasterrcnn_labeled.py</code></p>
+<p>本文直接使用了 YOLO的数据标注格式。YOLO的标注格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># 一个有9个物体，9个物体总共属于3个分类</span><br><span class="line">9,3</span><br><span class="line"># 分类yinliao的类别是0，xmin,ymin,xmax,ymax分别是56,103,261,317</span><br><span class="line">56,103,261,317,0,yinliao</span><br><span class="line">261,0,442,120,2,kele</span><br><span class="line">465,16,645,180,2,kele</span><br><span class="line">209,138,345,266,2,kele</span><br></pre></td></tr></table></figure>
+<p>根据此标注文件可以从图片中抠取目标物体的ROI。如下图，根据标注的文件可以抽取的ROI示例，左上角为提取的ROI：</p>
+<p><img src="/images/blog/hog_svm_loc1.jpg" alt="yolov123"> </p>
+<h2 id="2-抽取特征"><a href="#2-抽取特征" class="headerlink" title="2 抽取特征"></a>2 抽取特征</h2><h3 id="2-1-抽取HOG特征"><a href="#2-1-抽取HOG特征" class="headerlink" title="2.1 抽取HOG特征"></a>2.1 抽取HOG特征</h3><p>注意：</p>
+<ul>
+<li>我最开始使用的是 Opencv的<code>hog = cv2.HOGDescriptor</code>的方式，后来修改为<code>skimage.feature</code>。</li>
+<li>hog特征如果想要固定长度的话，提取对象(ROI)必须也是固定长度的，所以需要做个resize。否则的话在训练时，会出现数据维度不一致的问题。我之前以为HOG会把任意尺寸的图像转换为相同长度的特征，发现并不是。提取完之后检查输出文件的大小是否一样。</li>
+<li>提取ROI的时候注意 y在前，x在后。比如<code>roi = gray[int(rec[1]):int(rec[3]),int(rec[0]):int(rec[2])]</code>,rec里面是顺序的(xmin,ymin,xmax,ymax)</li>
+<li>使用 <code>sklearn.externals.joblib.dump(hog特征，保存路径)</code>的方式存储提取的HOG特征</li>
+</ul>
+<p>ROI和其HOG特征示例如下（左边为ROI，右边为对应的HOG）：</p>
+<p><img src="/images/blog/hog_svm_loc2.jpg" alt="yolov123"> </p>
+<p>当前的做法是每次提取一个正样本，就生成5个或者10个负样本。使用<code>generate_neg_box</code>方法。</p>
+<h3 id="2-2-SURF特征"><a href="#2-2-SURF特征" class="headerlink" title="2.2 SURF特征"></a>2.2 SURF特征</h3><p>参考</p>
+<p> <a href="https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_feature2d/py_surf_intro/py_surf_intro.html" target="_blank" rel="noopener">opencv3.0+的 surf特征使用</a></p>
+<p><a href="http://www.dummies.com/programming/big-data/data-science/how-to-visualize-the-classifier-in-an-svm-supervised-learning-model/" target="_blank" rel="noopener">使用SVM对图像数据分类</a></p>
+<p><a href="https://docs.opencv.org/3.4.0/d5/df7/classcv_1_1xfeatures2d_1_1SURF.html" target="_blank" rel="noopener">opencv surf特征一些参数的解释</a></p>
+<p>代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">def extract_surf(img,pca &#x3D; 100,visual &#x3D;False):</span><br><span class="line">    image &#x3D; cv2.imread(im)</span><br><span class="line">    image &#x3D; cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)</span><br><span class="line">    surf &#x3D; cv2.xfeatures2d.SURF_create(1000, extended&#x3D;False)</span><br><span class="line">    (kps, descs) &#x3D; surf.detectAndCompute(image, None)</span><br><span class="line">    if visual:</span><br><span class="line">        print(len(kps),descs.shape)</span><br><span class="line">        print(&quot;&#x3D;&#x3D;&quot; * 30)</span><br><span class="line">        print(descs)</span><br><span class="line">        img2 &#x3D; cv2.drawKeypoints(image, kps, None, (255, 0, 0), 4)</span><br><span class="line">        cv2.imshow(&quot;with surf feature&quot;, img2)</span><br><span class="line">        cv2.waitKey(0)</span><br><span class="line">    return kps, descs</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>SURF_create:第一个参数是Hessian矩阵阈值，此值越大，生成的特征点越少；第二个参数是extended是是否需要拓展，False时每个特征点维度是64，True时每个特征点维度是128.</p>
+</li>
+<li><p>detectAndCompute的结果：有两个值kps和descs。其实descs包含kps，descs是一个二维数组，行数即特征点数目（不固定），列数固定为64或128.如下图：</p>
+</li>
+</ul>
+<p><img src="/images/blog/hog_svm_loc3.jpg" alt="yolov123"> </p>
+<h2 id="3-训练SVM"><a href="#3-训练SVM" class="headerlink" title="3 训练SVM"></a>3 训练SVM</h2><p>代码在 <a href="">classifier.py</a>中。训练SVM很简单，如下：</p>
+<p><img src="/images/blog/hog_svm_loc4.jpg" alt="yolov123"> </p>
+<p>过程为：</p>
+<ol>
+<li><p>添加 <code>(正样本，正标签)</code>和<code>(负样本，负标签)</code>.</p>
+</li>
+<li><p>声明一个SVM分类器</p>
+</li>
+<li><p>拟合SVM分类器</p>
+</li>
+<li><p>保存模型</p>
+</li>
+</ol>
+<p>训练过程非常快。</p>
+<h2 id="4-预测-滑窗，分类"><a href="#4-预测-滑窗，分类" class="headerlink" title="4 预测(滑窗，分类)"></a>4 预测(滑窗，分类)</h2><p>测试过程相对麻烦。需要处理几个问题</p>
+<ol>
+<li>训练的时候的ROI都是固定尺寸的(做了resize)，但是测试的时候可能物体有<strong>尺寸变化</strong>，如何应对尺寸变换-&gt;对原图做图像<strong>金字塔缩放</strong>(会生成大约9张不同尺寸的图)</li>
+<li>如何在一张图中<strong>搜索物体</strong>-&gt;使用固定尺寸的<strong>滑窗遍历</strong>图像</li>
+<li>临近位置的ROI可能会预测<strong>多个结果</strong>，合并结果-&gt;<strong>NMS</strong></li>
+</ol>
+<p>代码<code>classifier.py</code>的<code>test_model</code>方法截图：</p>
+<p><img src="/images/blog/hog_svm_loc5.jpg" alt="yolov123"><br><img src="/images/blog/hog_svm_loc6.jpg" alt="yolov123"> </p>
+<h3 id="4-1-图像金字塔"><a href="#4-1-图像金字塔" class="headerlink" title="4.1 图像金字塔"></a>4.1 图像金字塔</h3><p>注意生成图像金字塔的时候并没有使用<code>skimage.transform.pyramid_gaussian</code>的，因为这种方法对使用HOG特征不太友好。所以此代码中重写了<code>pyramid</code></p>
+<h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5 总结"></a>5 总结</h2><ol>
+<li>不能使用opencv的hog描述子来计算和训练，否则在预测的时候会出现数据维度或格式错误’</li>
+<li>HOG特征的长度是跟图像的尺寸有关的，所以在计算HOG特征之前要统一resize到固定尺寸才行。虽然HOG特征计算时声称，只跟</li>
+<li>使用SVM做二分类的时候要注意，负样本可能需要多一点。不然在预测时会出现很多误判。我刚开始时使用另外一个分类的ROI作为负样本，事实表明效果很差，最后采取了随机在正样本周围取样，效果会变好一点。</li>
+</ol>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p><strong>classifier.py</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;usr&#x2F;bin&#x2F;env python</span><br><span class="line">#encoding:utf-8</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">@author:</span><br><span class="line">@time:2017&#x2F;3&#x2F;19 11:08</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">from sklearn.svm import LinearSVC</span><br><span class="line">from sklearn.externals import joblib</span><br><span class="line">import numpy as np</span><br><span class="line">import glob</span><br><span class="line">import os</span><br><span class="line">import cv2</span><br><span class="line">from skimage.transform import pyramid_gaussian</span><br><span class="line">import imutils</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">from skimage.io import imread</span><br><span class="line">from extract_feature_from_fasterrcnn_labeled import get_hog</span><br><span class="line">from skimage import feature</span><br><span class="line">import time</span><br><span class="line"></span><br><span class="line">def train_model(pos_feat_path,neg_feat_path,model_path):</span><br><span class="line">    fds &#x3D; []</span><br><span class="line">    labels &#x3D; []</span><br><span class="line">    # Load the positive features</span><br><span class="line">    for feat_path in glob.glob(os.path.join(pos_feat_path, &quot;*.feat&quot;)):</span><br><span class="line">        fd &#x3D; joblib.load(feat_path)</span><br><span class="line">        fds.append(fd)</span><br><span class="line">        labels.append(1)</span><br><span class="line"></span><br><span class="line">    # Load the negative features</span><br><span class="line">    for feat_path in glob.glob(os.path.join(neg_feat_path, &quot;*.feat&quot;)):</span><br><span class="line">        fd &#x3D; joblib.load(feat_path)</span><br><span class="line">        fds.append(fd)</span><br><span class="line">        labels.append(0)</span><br><span class="line"></span><br><span class="line">    clf &#x3D; LinearSVC()</span><br><span class="line">    print(&quot;Training a Linear SVM Classifier&quot;)</span><br><span class="line">    max_len &#x3D; 0</span><br><span class="line">    for fd in fds:</span><br><span class="line">        if len(fd)&gt;max_len:</span><br><span class="line">            max_len &#x3D;len(fd)</span><br><span class="line">    for i in range(len(fds)):</span><br><span class="line">        fd &#x3D; fds[i]</span><br><span class="line">        np.squeeze(fd[i],axis&#x3D;0)</span><br><span class="line">        if len(fd)&lt;max_len:</span><br><span class="line">            fds[i] &#x3D; np.concatenate((fds[i],np.array([0]*(max_len-len(fds[i])))),axis&#x3D;0)</span><br><span class="line">    clf.fit(fds, labels)</span><br><span class="line">    # If feature directories don&#39;t exist, create them</span><br><span class="line">    if not os.path.isdir(os.path.split(model_path)[0]):</span><br><span class="line">        os.makedirs(os.path.split(model_path)[0])</span><br><span class="line">    joblib.dump(clf, model_path)</span><br><span class="line">    print(&quot;Classifier saved to &#123;&#125;&quot;.format(model_path))</span><br><span class="line"></span><br><span class="line">def sliding_window(image, window_size, step_size):</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    This function returns a patch of the input image &#96;image&#96; of size equal</span><br><span class="line">    to &#96;window_size&#96;. The first image returned top-left co-ordinates (0, 0)</span><br><span class="line">    and are increment in both x and y directions by the &#96;step_size&#96; supplied.</span><br><span class="line">    So, the input parameters are -</span><br><span class="line">    * &#96;image&#96; - Input Image</span><br><span class="line">    * &#96;window_size&#96; - Size of Sliding Window</span><br><span class="line">    * &#96;step_size&#96; - Incremented Size of Window</span><br><span class="line"></span><br><span class="line">    The function returns a tuple -</span><br><span class="line">    (x, y, im_window)</span><br><span class="line">    where</span><br><span class="line">    * x is the top-left x co-ordinate</span><br><span class="line">    * y is the top-left y co-ordinate</span><br><span class="line">    * im_window is the sliding window image</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    for y in range(0, image.shape[0], step_size[1]):</span><br><span class="line">        for x in range(0, image.shape[1], step_size[0]):</span><br><span class="line">            yield (x, y, image[y:y + window_size[1], x:x + window_size[0]])</span><br><span class="line"></span><br><span class="line">def overlapping_area(detection_1, detection_2):</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    Function to calculate overlapping area&#39;si</span><br><span class="line">    &#96;detection_1&#96; and &#96;detection_2&#96; are 2 detections whose area</span><br><span class="line">    of overlap needs to be found out.</span><br><span class="line">    Each detection is list in the format -&gt;</span><br><span class="line">    [x-top-left, y-top-left, confidence-of-detections, width-of-detection, height-of-detection]</span><br><span class="line">    The function returns a value between 0 and 1,</span><br><span class="line">    which represents the area of overlap.</span><br><span class="line">    0 is no overlap and 1 is complete overlap.</span><br><span class="line">    Area calculated from -&gt;</span><br><span class="line">    http:&#x2F;&#x2F;math.stackexchange.com&#x2F;questions&#x2F;99565&#x2F;simplest-way-to-calculate-the-intersect-area-of-two-rectangles</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    # Calculate the x-y co-ordinates of the</span><br><span class="line">    # rectangles</span><br><span class="line">    x1_tl &#x3D; detection_1[0]</span><br><span class="line">    x2_tl &#x3D; detection_2[0]</span><br><span class="line">    x1_br &#x3D; detection_1[0] + detection_1[3]</span><br><span class="line">    x2_br &#x3D; detection_2[0] + detection_2[3]</span><br><span class="line">    y1_tl &#x3D; detection_1[1]</span><br><span class="line">    y2_tl &#x3D; detection_2[1]</span><br><span class="line">    y1_br &#x3D; detection_1[1] + detection_1[4]</span><br><span class="line">    y2_br &#x3D; detection_2[1] + detection_2[4]</span><br><span class="line">    # Calculate the overlapping Area</span><br><span class="line">    x_overlap &#x3D; max(0, min(x1_br, x2_br)-max(x1_tl, x2_tl))</span><br><span class="line">    y_overlap &#x3D; max(0, min(y1_br, y2_br)-max(y1_tl, y2_tl))</span><br><span class="line">    overlap_area &#x3D; x_overlap * y_overlap</span><br><span class="line">    area_1 &#x3D; detection_1[3] * detection_2[4]</span><br><span class="line">    area_2 &#x3D; detection_2[3] * detection_2[4]</span><br><span class="line">    total_area &#x3D; area_1 + area_2 - overlap_area</span><br><span class="line">    return overlap_area &#x2F; float(total_area)</span><br><span class="line"></span><br><span class="line">def nms(detections, threshold&#x3D;.5):</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    This function performs Non-Maxima Suppression.</span><br><span class="line">    &#96;detections&#96; consists of a list of detections.</span><br><span class="line">    Each detection is in the format -&gt;</span><br><span class="line">    [x-top-left, y-top-left, confidence-of-detections, width-of-detection, height-of-detection]</span><br><span class="line">    If the area of overlap is greater than the &#96;threshold&#96;,</span><br><span class="line">    the area with the lower confidence score is removed.</span><br><span class="line">    The output is a list of detections.</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    if len(detections) &#x3D;&#x3D; 0:</span><br><span class="line">        return []</span><br><span class="line">    # Sort the detections based on confidence score</span><br><span class="line">    detections &#x3D; sorted(detections, key&#x3D;lambda detections: detections[2],</span><br><span class="line">            reverse&#x3D;True)</span><br><span class="line">    # Unique detections will be appended to this list</span><br><span class="line">    new_detections&#x3D;[]</span><br><span class="line">    # Append the first detection</span><br><span class="line">    new_detections.append(detections[0])</span><br><span class="line">    # Remove the detection from the original list</span><br><span class="line">    del detections[0]</span><br><span class="line">    # For each detection, calculate the overlapping area</span><br><span class="line">    # and if area of overlap is less than the threshold set</span><br><span class="line">    # for the detections in &#96;new_detections&#96;, append the</span><br><span class="line">    # detection to &#96;new_detections&#96;.</span><br><span class="line">    # In either case, remove the detection from &#96;detections&#96; list.</span><br><span class="line">    for index, detection in enumerate(detections):</span><br><span class="line">        for new_detection in new_detections:</span><br><span class="line">            if overlapping_area(detection, new_detection) &gt; threshold:</span><br><span class="line">                del detections[index]</span><br><span class="line">                break</span><br><span class="line">        else:</span><br><span class="line">            new_detections.append(detection)</span><br><span class="line">            del detections[index]</span><br><span class="line">    return new_detections</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def pyramid(image, scale&#x3D;1.5, minSize&#x3D;(30, 30)):</span><br><span class="line">    # yield the original image</span><br><span class="line">    yield image</span><br><span class="line"></span><br><span class="line">    # keep looping over the pyramid</span><br><span class="line">    while True:</span><br><span class="line">        # compute the new dimensions of the image and resize it</span><br><span class="line">        w &#x3D; int(image.shape[1] &#x2F; scale)</span><br><span class="line">        image &#x3D; imutils.resize(image, width&#x3D;w)</span><br><span class="line"></span><br><span class="line">        # if the resized image does not meet the supplied minimum</span><br><span class="line">        # size, then stop constructing the pyramid</span><br><span class="line">        if image.shape[0] &lt; minSize[1] or image.shape[1] &lt; minSize[0]:</span><br><span class="line">            break</span><br><span class="line"></span><br><span class="line">        # yield the next image in the pyramid</span><br><span class="line">        yield image</span><br><span class="line"></span><br><span class="line">def test_model(model_path,image):</span><br><span class="line">    im &#x3D; cv2.cvtColor(cv2.imread(image), cv2.COLOR_RGB2GRAY)</span><br><span class="line">    min_wdw_sz &#x3D; (50, 100)</span><br><span class="line">    step_size &#x3D; (30, 30)</span><br><span class="line">    downscale &#x3D; 1.25</span><br><span class="line">    visualize_det &#x3D; True</span><br><span class="line">    # Load the classifier</span><br><span class="line">    clf &#x3D; joblib.load(model_path)</span><br><span class="line">    visualize_test &#x3D; True</span><br><span class="line">    # List to store the detections</span><br><span class="line">    detections &#x3D; []</span><br><span class="line">    # The current scale of the image</span><br><span class="line">    scale &#x3D; 0</span><br><span class="line">    fourcc &#x3D; cv2.VideoWriter_fourcc(*&#39;XVID&#39;)</span><br><span class="line">    video_out &#x3D; cv2.VideoWriter(&#39;D:&#x2F;data&#x2F;test_carmera&#x2F;svm&#x2F;hog_svm_slide_wid.avi&#39;, -1, 20.0, (480,600))</span><br><span class="line"></span><br><span class="line">    # Downscale the image and iterate</span><br><span class="line">    #for im_scaled in pyramid_gaussian(im, downscale&#x3D;downscale):</span><br><span class="line">    for (i, im_scaled) in enumerate(pyramid(im, scale&#x3D;1.25)):</span><br><span class="line">        # This list contains detections at the current scale</span><br><span class="line">        cd &#x3D; []</span><br><span class="line">        # If the width or height of the scaled image is less than</span><br><span class="line">        # the width or height of the window, then end the iterations.</span><br><span class="line">        if im_scaled.shape[0] &lt; min_wdw_sz[1] or im_scaled.shape[1] &lt; min_wdw_sz[0]:</span><br><span class="line">            break</span><br><span class="line">        for (x, y, im_window) in sliding_window(im_scaled, min_wdw_sz, step_size):</span><br><span class="line">            if im_window.shape[0] !&#x3D; min_wdw_sz[1] or im_window.shape[1] !&#x3D; min_wdw_sz[0]:</span><br><span class="line">               continue</span><br><span class="line">            #Calculate the HOG features</span><br><span class="line">            #fd &#x3D; get_hog(im_window)</span><br><span class="line">            #im_window &#x3D; imutils.auto_canny(im_window)</span><br><span class="line">            im_window &#x3D;  cv2.resize(im_window,(200,250))</span><br><span class="line">            fd &#x3D; feature.hog(im_window, orientations&#x3D;9, pixels_per_cell&#x3D;(10, 10),cells_per_block&#x3D;(2, 2), transform_sqrt&#x3D;True)</span><br><span class="line">            print(fd.shape)</span><br><span class="line">            if len(fd)&gt;1:</span><br><span class="line">                #fd &#x3D; np.transpose(fd)</span><br><span class="line">                fd &#x3D; fd.reshape(1, -1)</span><br><span class="line">                pred &#x3D; clf.predict(fd)</span><br><span class="line">                print(&quot;prediction:\t &quot;,pred)</span><br><span class="line">                if pred &#x3D;&#x3D; 1:# and clf.decision_function(fd)&gt;1:</span><br><span class="line">                    print(&quot;Detection:: Location -&gt; (&#123;&#125;, &#123;&#125;)&quot;.format(x, y))</span><br><span class="line">                    print(&quot;Scale -&gt;  &#123;&#125; | Confidence Score &#123;&#125; \n&quot;.format(scale, clf.decision_function(fd)))</span><br><span class="line">                    detections.append((x, y, clf.decision_function(fd),</span><br><span class="line">                                   int(min_wdw_sz[0] * (downscale ** scale)),</span><br><span class="line">                                   int(min_wdw_sz[1] * (downscale ** scale))))</span><br><span class="line"></span><br><span class="line">                    cd.append(detections[-1])</span><br><span class="line">                # If visualize is set to true, display the working</span><br><span class="line">                # of the sliding window</span><br><span class="line">                if visualize_det:</span><br><span class="line">                    clone &#x3D; im_scaled.copy()</span><br><span class="line">                    for x1, y1, _, _, _ in cd:</span><br><span class="line">                        # Draw the detections at this scale</span><br><span class="line">                        cv2.rectangle(clone, (x1, y1), (x1 + im_window.shape[1], y1 +</span><br><span class="line">                                                        im_window.shape[0]), (0, 0, 0), thickness&#x3D;2)</span><br><span class="line">                    cv2.rectangle(clone, (x, y), (x + im_window.shape[1], y +</span><br><span class="line">                                                  im_window.shape[0]), (255, 255, 255), thickness&#x3D;2)</span><br><span class="line">                    cv2.imshow(&quot;Sliding Window in Progress&quot;, clone)</span><br><span class="line">                    out_img_tempt&#x3D; cv2.resize(clone,(480,600))</span><br><span class="line">                    video_out.write(out_img_tempt)</span><br><span class="line">                    cv2.waitKey(10)</span><br><span class="line">        # Move the the next scale</span><br><span class="line">        scale +&#x3D; 1</span><br><span class="line"></span><br><span class="line">    # Display the results before performing NMS</span><br><span class="line">    clone &#x3D; im.copy()</span><br><span class="line">    for (x_tl, y_tl, _, w, h) in detections:</span><br><span class="line">        # Draw the detections</span><br><span class="line">        cv2.rectangle(im, (x_tl, y_tl), (x_tl + w, y_tl + h), (0, 0, 0), thickness&#x3D;2)</span><br><span class="line">    cv2.imshow(&quot;Raw Detections before NMS&quot;, im)</span><br><span class="line">    cv2.waitKey()</span><br><span class="line"></span><br><span class="line">    # Perform Non Maxima Suppression</span><br><span class="line">    detections &#x3D; nms(detections, 0.5)</span><br><span class="line"></span><br><span class="line">    # Display the results after performing NMS</span><br><span class="line">    for (x_tl, y_tl, _, w, h) in detections:</span><br><span class="line">        # Draw the detections</span><br><span class="line">        cv2.rectangle(clone, (x_tl, y_tl), (x_tl + w, y_tl + h), (0, 0, 0), thickness&#x3D;2)</span><br><span class="line">    cv2.imshow(&quot;Final Detections after applying NMS&quot;, clone)</span><br><span class="line">    out_img_tempt &#x3D; cv2.resize(clone,(480,600))</span><br><span class="line">    #out_img_tempt[0:clone.shape[0], 0:clone.shape[1]] &#x3D; clone[:, :]</span><br><span class="line">    video_out.write(out_img_tempt)</span><br><span class="line">    cv2.waitKey()</span><br><span class="line">    video_out.release()</span><br><span class="line">    cv2.destroyAllWindows()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &quot;__main__&quot;:</span><br><span class="line">    hog_svm_model &#x3D; r&quot;D:\data\imgs\hog_svm_model_kele.model&quot;</span><br><span class="line">    pos_feat_path &#x3D; r&quot;D:\data\imgs\hog_feats\2&quot;</span><br><span class="line">    neg_feat_path &#x3D; r&quot;D:\data\imgs\hog_feats\2_neg&quot;</span><br><span class="line"></span><br><span class="line">    # hog_svm_model &#x3D; r&quot;D:\data\test_carmera\svm\hog_svm_model.model&quot;</span><br><span class="line">    # pos_feat_path &#x3D; r&quot;D:\data\test_carmera\svm\hog_feats\0&quot;</span><br><span class="line">    # neg_feat_path &#x3D; r&quot;D:\data\test_carmera\svm\hog_feats\0_neg&quot;</span><br><span class="line"></span><br><span class="line">    train_model(pos_feat_path,neg_feat_path,hog_svm_model)</span><br><span class="line">    test_img &#x3D; &quot;D:&#x2F;data&#x2F;test_carmera&#x2F;svm&#x2F;images&#x2F;frmaes_2.jpg&quot;</span><br><span class="line">    test_img1 &#x3D; r&quot;D:\data\imgs\images\0b24fb0ee9947292ffbb88c6e7c22a08.jpg&quot;</span><br><span class="line">    test_model(hog_svm_model,test_img1)</span><br><span class="line"></span><br><span class="line">    # gray &#x3D; cv2.cvtColor(cv2.imread(test_img), cv2.COLOR_BGR2GRAY)</span><br><span class="line">    # edged &#x3D; imutils.auto_canny(gray)</span><br><span class="line">    # cv2.imshow(&quot;edges&quot;,edged)</span><br><span class="line">    # # find contours in the edge map, keeping only the largest one which</span><br><span class="line">    # # is presumed to be the car logo</span><br><span class="line">    # (a,cnts, _) &#x3D; cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)</span><br><span class="line">    # c &#x3D; max(cnts, key&#x3D;cv2.contourArea)</span><br><span class="line">    # # extract the logo of the car and resize it to a canonical width</span><br><span class="line">    # # and height</span><br><span class="line">    # (x, y, w, h) &#x3D; cv2.boundingRect(c)</span><br><span class="line">    # logo &#x3D; gray[y:y + h, x:x + w]</span><br><span class="line">    # cv2.imshow(&quot;rect&quot;,logo)</span><br><span class="line">    # cv2.waitKey(0)</span><br><span class="line">    # t0 &#x3D; time.time()</span><br><span class="line">    # clf_type &#x3D; &#39;LIN_SVM&#39;</span><br><span class="line">    # fds &#x3D; []</span><br><span class="line">    # labels &#x3D; []</span><br><span class="line">    # num &#x3D; 0</span><br><span class="line">    # total &#x3D; 0</span><br><span class="line">    # for feat_path in glob.glob(os.path.join(train_feat_path, &#39;*.feat&#39;)):</span><br><span class="line">    #     data &#x3D; joblib.load(feat_path)</span><br><span class="line">    #     fds.append(data[:-1])</span><br><span class="line">    #     labels.append(data[-1])</span><br><span class="line">    # if clf_type is &#39;LIN_SVM&#39;:</span><br><span class="line">    #     clf &#x3D; LinearSVC()</span><br><span class="line">    #     print(&quot;Training a Linear SVM Classifier.&quot;)</span><br><span class="line">    #     clf.fit(fds, labels)</span><br><span class="line">    #     # If feature directories don&#39;t exist, create them</span><br><span class="line">    #     # if not os.path.isdir(os.path.split(model_path)[0]):</span><br><span class="line">    #     #     os.makedirs(os.path.split(model_path)[0])</span><br><span class="line">    #     # joblib.dump(clf, model_path)</span><br><span class="line">    #     # clf &#x3D; joblib.load(model_path)</span><br><span class="line">    #     print(&quot;Classifier saved to &#123;&#125;&quot;.format(model_path))</span><br><span class="line">    #     for feat_path in glob.glob(os.path.join(test_feat_path, &#39;*.feat&#39;)):</span><br><span class="line">    #         total +&#x3D; 1</span><br><span class="line">    #         data_test &#x3D; joblib.load(feat_path)</span><br><span class="line">    #         data_test_feat &#x3D; data_test[:-1].reshape((1, -1))</span><br><span class="line">    #         result &#x3D; clf.predict(data_test_feat)</span><br><span class="line">    #         if int(result) &#x3D;&#x3D; int(data_test[-1]):</span><br><span class="line">    #             num +&#x3D; 1</span><br><span class="line">    #     rate &#x3D; float(num)&#x2F;total</span><br><span class="line">    #     t1 &#x3D; time.time()</span><br><span class="line">    #     print(&#39;The classification accuracy is %f&#39;%rate)</span><br><span class="line">    #     print(&#39;The cast of time is :%f&#39;%(t1-t0))</span><br><span class="line">    #</span><br></pre></td></tr></table></figure>
+<p><strong>extract_feature_from_fasterrcnn_labeled.py</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line">&#39;&#39;&#39;</span><br><span class="line">extract image hog feature from image labeled  for fasterrcnn</span><br><span class="line">&#39;&#39;&#39;</span><br><span class="line">import os</span><br><span class="line">import cv2</span><br><span class="line">import numpy as np</span><br><span class="line">from sklearn.externals import joblib</span><br><span class="line">from skimage import feature,exposure</span><br><span class="line">from config import *</span><br><span class="line">import imutils</span><br><span class="line">import time</span><br><span class="line">import random</span><br><span class="line"></span><br><span class="line">def read_label_info_from_file(txt_file):</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    read label information from txt file.</span><br><span class="line">    content of file should looks like:</span><br><span class="line">            9,3</span><br><span class="line">            56,103,261,317,0,yinliao</span><br><span class="line">            261,0,442,120,2,kele</span><br><span class="line">            ...</span><br><span class="line">    :param txt_file:</span><br><span class="line">    :return:</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    id_and_rect &#x3D; &#123;&#125;</span><br><span class="line">    with open(txt_file,&#39;r&#39;) as label_info:</span><br><span class="line">        lines &#x3D; label_info.readlines()</span><br><span class="line">        for line in lines[1:]:</span><br><span class="line">            infos &#x3D; line.split(&quot;,&quot;)</span><br><span class="line">            xmin,ymin,xmax,ymax,class_id &#x3D; int(infos[0].strip()),int(infos[1].strip()),int(infos[2].strip()),int(infos[3].strip()),str(infos[4].strip())</span><br><span class="line">            if not class_id  in id_and_rect:</span><br><span class="line">                id_and_rect[class_id] &#x3D; [(xmin,ymin,xmax,ymax)]</span><br><span class="line">            else:</span><br><span class="line">                id_and_rect[class_id].append([xmin, ymin, xmax, ymax])</span><br><span class="line">    return id_and_rect</span><br><span class="line"></span><br><span class="line">def generate_neg_box(im_width,im_height,pos_boxes,times &#x3D; 5):</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">        generate negative roi from image. negative roi should not in pos_boxes</span><br><span class="line"></span><br><span class="line">    :param im_height:   height of original image</span><br><span class="line">    :param im_width:    width of original image</span><br><span class="line">    :param pos_boxes:   positive roi boxes(xmin,ymin,xmax,ymax)</span><br><span class="line">    :param times:       times of negative vs positive boxes</span><br><span class="line">    :return:            a list of negative roi [(xmin,ymin,xmax,ymax),...]</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    neg_boxes &#x3D; []</span><br><span class="line">    min_size &#x3D; min(im_width,im_height)</span><br><span class="line">    mask &#x3D; np.ones((im_width,im_height))</span><br><span class="line">    for (xmin,ymin,xmax,ymax) in pos_boxes:</span><br><span class="line">        mask[xmin:xmax,ymin:ymax] &#x3D; 0</span><br><span class="line"></span><br><span class="line">    for (xmin,ymin,xmax,ymax) in pos_boxes:</span><br><span class="line">        tmp_width &#x3D;  xmax-xmin</span><br><span class="line">        tmp_height &#x3D; ymax-ymin</span><br><span class="line">        # get $times times of negative boxes for every positive box</span><br><span class="line">        for _ in range(times):</span><br><span class="line">            flag &#x3D; True</span><br><span class="line">            neg_x_min &#x3D; 0</span><br><span class="line">            neg_y_min &#x3D; 0</span><br><span class="line">            start_time &#x3D; time.time()</span><br><span class="line">            while flag:</span><br><span class="line">                neg_x_min &#x3D; random.randint(0,min_size-tmp_width)</span><br><span class="line">                neg_y_min &#x3D; random.randint(0,min_size-tmp_height)</span><br><span class="line">                tmp_rect &#x3D; mask[neg_x_min:(neg_x_min+tmp_width),neg_y_min:(neg_y_min+tmp_height)]</span><br><span class="line">                flag &#x3D; np.any(tmp_rect &#x3D;&#x3D; 0)   # overlap with positive boxes</span><br><span class="line">                end_time &#x3D; time.time()</span><br><span class="line">                #print(end_time-start_time)</span><br><span class="line">                if (end_time-start_time)&gt;5:        # if takes more than 10 seconds,this should be stop</span><br><span class="line">                    print(&quot;time takes more than 10 secs&quot;)</span><br><span class="line">                    flag &#x3D; False</span><br><span class="line"></span><br><span class="line">            neg_boxes.append((neg_x_min,neg_y_min,(neg_x_min+tmp_width),(neg_y_min+tmp_height)))</span><br><span class="line"></span><br><span class="line">    return neg_boxes</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def extract_hog_feature(img_file,label_info_file,feat_save_path,with_neg &#x3D; False):</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line">    extract hog feature from one image</span><br><span class="line">    attention: one image may contains several classes of object</span><br><span class="line"></span><br><span class="line">    :param img_file:        image to be extracted</span><br><span class="line">    :param label_info_file: object label information file</span><br><span class="line">    :param feat_save_path: where to save the hog feature file</span><br><span class="line">    :return:</span><br><span class="line">    &#39;&#39;&#39;</span><br><span class="line"></span><br><span class="line">    id_and_rect &#x3D; read_label_info_from_file(label_info_file)</span><br><span class="line">    im &#x3D; cv2.imread(img_file)</span><br><span class="line">    gray &#x3D; cv2.cvtColor(im,cv2.COLOR_RGB2GRAY)</span><br><span class="line">    print(gray.shape)</span><br><span class="line">    i &#x3D; 0</span><br><span class="line">    basename &#x3D; os.path.basename(img_file).split(&quot;.&quot;)[0]</span><br><span class="line">    for (id,rect) in id_and_rect.items():</span><br><span class="line">        print(&quot;id&#x3D; &quot;+ str(id))</span><br><span class="line">        target_path &#x3D; os.path.join(feat_save_path,str(id))</span><br><span class="line">        if not os.path.exists(target_path):</span><br><span class="line">            os.mkdir(target_path)</span><br><span class="line">        for rec in rect:</span><br><span class="line">            #print(rec[0],rec[1],rec[2],rec[3])</span><br><span class="line">            roi &#x3D; gray[int(rec[1]):int(rec[3]),int(rec[0]):int(rec[2])]  # caution : the array sequence</span><br><span class="line">            if with_neg and int(id)&lt;3:</span><br><span class="line">                neg_target_path &#x3D; os.path.join(feat_save_path, str(id) + &quot;_neg&quot;)</span><br><span class="line">                if not os.path.exists(neg_target_path):</span><br><span class="line">                    os.mkdir(neg_target_path)</span><br><span class="line">                neg_boxes &#x3D; generate_neg_box(gray.shape[0],gray.shape[1],rect)</span><br><span class="line">                for neg_box in neg_boxes:</span><br><span class="line">                    (xmin, ymin, xmax, ymax) &#x3D; neg_box</span><br><span class="line">                    neg_roi &#x3D; gray[ymin:ymax,xmin:xmax]   # cautious sequence of x and y</span><br><span class="line">                    # print(xmin, ymin, xmax, ymax)</span><br><span class="line">                    # cv2.imshow(&quot;neg_roi&quot;,neg_roi)</span><br><span class="line">                    # cv2.waitKey(0)</span><br><span class="line">                    neg_roi &#x3D; cv2.resize(neg_roi, (200, 250))</span><br><span class="line">                    feat &#x3D; feature.hog(neg_roi, orientations&#x3D;9, pixels_per_cell&#x3D;(10, 10),</span><br><span class="line">                                       cells_per_block&#x3D;(2, 2), transform_sqrt&#x3D;True)</span><br><span class="line">                    joblib.dump(feat, os.path.join(neg_target_path, basename + str(i) + &quot;.feat&quot;))</span><br><span class="line">                    cv2.imwrite(os.path.join(neg_target_path, basename + str(i) + &quot;.jpg&quot;),neg_roi)</span><br><span class="line">                    i &#x3D; i + 1</span><br><span class="line">            # for neg_box in neg_boxes:</span><br><span class="line">            #     (xmin,ymin,xmax,ymax) &#x3D; neg_box</span><br><span class="line">            #     cv2.rectangle(gray,(xmin,ymin),(xmax,ymax),(0,255,0))</span><br><span class="line">            cv2.rectangle(gray,(int(rec[0]),int(rec[1])),(int(rec[2]),int(rec[3])),(255,255,120))</span><br><span class="line">            cv2.imshow(&quot;samples &quot;,gray)</span><br><span class="line">            cv2.imshow(&quot;roi&quot;,roi)</span><br><span class="line">            cv2.waitKey(0)</span><br><span class="line">            roi &#x3D; cv2.resize(roi,(200,250))</span><br><span class="line">            print(&quot;lable is:\t&quot;,id)</span><br><span class="line">            #feat &#x3D; get_hog(roi)</span><br><span class="line">            feat &#x3D; feature.hog(roi, orientations&#x3D;9, pixels_per_cell&#x3D;(10, 10),</span><br><span class="line">                        cells_per_block&#x3D;(2, 2), transform_sqrt&#x3D;True)</span><br><span class="line">            joblib.dump(feat, os.path.join(target_path,basename+str(i)+&quot;.feat&quot;))</span><br><span class="line">            i &#x3D; i+1</span><br><span class="line"></span><br><span class="line">        # cv2.imshow(&quot;samples &quot;,gray)</span><br><span class="line">        # #cv2.imshow(&quot;roi&quot;,roi)</span><br><span class="line">        # cv2.waitKey(0)</span><br><span class="line"></span><br><span class="line">def get_hog(image):</span><br><span class="line">    winSize &#x3D; (64,64)</span><br><span class="line">    image &#x3D; cv2.resize(image,(200,250))</span><br><span class="line">    #winSize &#x3D; (image.shape[1], image.shape[0])</span><br><span class="line">    blockSize &#x3D; (8,8)</span><br><span class="line">    # blockSize &#x3D; (16,16)</span><br><span class="line">    blockStride &#x3D; (8,8)</span><br><span class="line">    cellSize &#x3D; (8,8)</span><br><span class="line">    nbins &#x3D; 9</span><br><span class="line">    derivAperture &#x3D; 1</span><br><span class="line">    winSigma &#x3D; 4.</span><br><span class="line">    histogramNormType &#x3D; 0</span><br><span class="line">    L2HysThreshold &#x3D; 2.0000000000000001e-01</span><br><span class="line">    gammaCorrection &#x3D; 0</span><br><span class="line">    nlevels &#x3D; 64</span><br><span class="line">    hog &#x3D; cv2.HOGDescriptor(winSize,blockSize,blockStride,cellSize,nbins,derivAperture,winSigma,</span><br><span class="line">                            histogramNormType,L2HysThreshold,gammaCorrection,nlevels)</span><br><span class="line">    winStride &#x3D; (8,8)</span><br><span class="line">    padding &#x3D; (8,8)</span><br><span class="line">    locations &#x3D; [] # (10, 10)# ((10,20),)</span><br><span class="line">    hist &#x3D; hog.compute(image,winStride,padding,locations)</span><br><span class="line">    return hist</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &#39;__main__&#39;:</span><br><span class="line">    # img_dir &#x3D; r&quot;D:\data\imgs\images&quot;</span><br><span class="line">    # feat_dir &#x3D; r&quot;D:\data\imgs\hog_feats&quot;</span><br><span class="line">    img_dir &#x3D; r&quot;D:\data\test_carmera\svm\images&quot;</span><br><span class="line">    feat_dir &#x3D; r&quot;D:\data\test_carmera\svm\hog_feats&quot;</span><br><span class="line">    for file in os.listdir(img_dir):</span><br><span class="line">        image &#x3D; os.path.join(img_dir,file)</span><br><span class="line">        txt_file &#x3D; image.replace(&quot;images&quot;,&quot;labels&quot;).replace(&quot;.jpg&quot;,&quot;.xml.txt&quot;)</span><br><span class="line">        extract_hog_feature(image,txt_file,feat_dir,with_neg &#x3D;True)</span><br><span class="line">        print(&quot;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;    extract hog feature from file %s  done..&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&quot;%image)</span><br><span class="line">    print(&quot;&#x3D;&#x3D;&#x3D;&#x3D;all file have extract done...&quot;)</span><br></pre></td></tr></table></figure>
+<p>参考:</p>
+<p><a href="http://blog.csdn.net/yjl9122/article/details/72765959" target="_blank" rel="noopener">http://blog.csdn.net/yjl9122/article/details/72765959</a></p>
+<p><a href="https://www.pyimagesearch.com/2014/11/10/histogram-oriented-gradients-object-detection/" target="_blank" rel="noopener">https://www.pyimagesearch.com/2014/11/10/histogram-oriented-gradients-object-detection/</a></p>
+<p><a href="https://www.pyimagesearch.com/2015/11/09/pedestrian-detection-opencv/" target="_blank" rel="noopener">https://www.pyimagesearch.com/2015/11/09/pedestrian-detection-opencv/</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/09/26/merlin-mandarin-text-process-work/" rel="prev" title="merlin语音合成中文前端处理2-实践">
+      <i class="fa fa-chevron-left"></i> merlin语音合成中文前端处理2-实践
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/10/11/merlin-mandarin-fronted-process/" rel="next" title="merlin语音合成过程中 中文前端处理过程详细">
+      merlin语音合成过程中 中文前端处理过程详细 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0-概览"><span class="nav-number">1.</span> <span class="nav-text">0  概览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-数据标注"><span class="nav-number">2.</span> <span class="nav-text">1 数据标注</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-抽取特征"><span class="nav-number">3.</span> <span class="nav-text">2 抽取特征</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-抽取HOG特征"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 抽取HOG特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-SURF特征"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 SURF特征</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-训练SVM"><span class="nav-number">4.</span> <span class="nav-text">3 训练SVM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-预测-滑窗，分类"><span class="nav-number">5.</span> <span class="nav-text">4 预测(滑窗，分类)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-图像金字塔"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 图像金字塔</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-总结"><span class="nav-number">6.</span> <span class="nav-text">5 总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码"><span class="nav-number">7.</span> <span class="nav-text">代码</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="Symbols count total">591k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">8:57</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'c656cd038e01f710e260',
+      clientSecret: 'e6de2ccaaf0f7069292125b8f50e27f25b95810d',
+      repo: 'shartoo.github.com',
+      owner: 'shartoo# GitHub repo owner',
+      admin: ['shartoo'],
+      id: '3348dadb21b5f54711220123b17b39f7',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

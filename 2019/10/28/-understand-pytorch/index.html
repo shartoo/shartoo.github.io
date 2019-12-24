@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://shartoo.github.io').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="pytorch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="理解pytorch的计算逻辑">
+<meta property="og:url" content="https://shartoo.github.io/2019/10/28/-understand-pytorch/index.html">
+<meta property="og:site_name" content="我的个人博客">
+<meta property="og:description" content="pytorch">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/understand_pytorch_1.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/understand_pytorch_2.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/understand_pytorch_3.png">
+<meta property="article:published_time" content="2019-10-28T00:00:00.000Z">
+<meta property="article:modified_time" content="2019-12-24T12:00:27.976Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shartoo.github.io/images/blog/understand_pytorch_1.png">
+
+<link rel="canonical" href="https://shartoo.github.io/2019/10/28/-understand-pytorch/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>理解pytorch的计算逻辑 | 我的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="https://shartoo.github.io/2019/10/28/-understand-pytorch/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          理解pytorch的计算逻辑
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-10-28 00:00:00" itemprop="dateCreated datePublished" datetime="2019-10-28T00:00:00+00:00">2019-10-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-12-24 12:00:27" itemprop="dateModified" datetime="2019-12-24T12:00:27+00:00">2019-12-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>10k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>9 mins.</span>
+            </span>
+            <div class="post-description">pytorch</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="1-线性回归问题"><a href="#1-线性回归问题" class="headerlink" title="1 线性回归问题"></a>1 线性回归问题</h2><p>假定我们以一个线性回归问题来逐步解释pytorch过程中的一些操作和逻辑。线性回归公式如下</p>
+<script type="math/tex; mode=display">
+ y = a+bx+e\quad \quad 此处假定a=1,b=2的一个线性回归函数</script><h3 id="1-1-先用普通的numpy来展示线性回归过程"><a href="#1-1-先用普通的numpy来展示线性回归过程" class="headerlink" title="1.1 先用普通的numpy来展示线性回归过程"></a>1.1 先用普通的numpy来展示线性回归过程</h3><p>我们随机生成100个数据，并以一定的随机概率扰动数据集，训练集和验证集八二分，如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># Data Generation</span><br><span class="line">np.random.seed(42)</span><br><span class="line">x &#x3D; np.random.rand(100, 1)</span><br><span class="line">y &#x3D; 1 + 2 * x + .1 * np.random.randn(100, 1)</span><br><span class="line"></span><br><span class="line"># Shuffles the indices</span><br><span class="line">idx &#x3D; np.arange(100)</span><br><span class="line">np.random.shuffle(idx)</span><br><span class="line"></span><br><span class="line"># Uses first 80 random indices for train</span><br><span class="line">train_idx &#x3D; idx[:80]</span><br><span class="line"># Uses the remaining indices for validation</span><br><span class="line">val_idx &#x3D; idx[80:]</span><br><span class="line"></span><br><span class="line"># Generates train and validation sets</span><br><span class="line">x_train, y_train &#x3D; x[train_idx], y[train_idx]</span><br><span class="line">x_val, y_val &#x3D; x[val_idx], y[val_idx]</span><br></pre></td></tr></table></figure>
+<p><img src="/images/blog/understand_pytorch_1.png" alt=""></p>
+<p>上面这是我们已经知道的是一个线性回归数据分布，并且回归的参数是$a=1,b=2$，如果我们只知道数据<code>x_train</code>和<code>y_train</code>，需要求这两个参数$a,b$呢，一般是使用梯度下降方法。</p>
+<p>注意，下面的梯度下降方法是全量梯度，一次计算了所有的数据的梯度，只是在迭代了1000个epoch，通常训练时会把全量数据分成多个batch，每次都是小批量更新。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># 初始化线性回归的参数 a 和 b</span><br><span class="line">np.random.seed(42)</span><br><span class="line">a &#x3D; np.random.randn(1)</span><br><span class="line">b &#x3D; np.random.randn(1)</span><br><span class="line">print(&quot;初始化的 a : %d 和 b : %d&quot;%(a,b))</span><br><span class="line">leraning_rate &#x3D; 1e-2</span><br><span class="line">epochs &#x3D; 1000</span><br><span class="line">for epoch in range(epochs):</span><br><span class="line">    pred &#x3D; a+ b*x_train</span><br><span class="line">    # 计算预测值和真实值之间的误差</span><br><span class="line">    error &#x3D; y_train-pred</span><br><span class="line">    # 使用MSE 来计算回归误差</span><br><span class="line">    loss &#x3D; (error**2).mean()</span><br><span class="line">    # 计算参数 a 和 b的梯度</span><br><span class="line">    a_grad &#x3D; -2*error.mean()</span><br><span class="line">    b_grad &#x3D; -2*(x_train*error).mean()</span><br><span class="line">    # 更新参数：用学习率和梯度</span><br><span class="line">    a &#x3D; a-leraning_rate*a_grad</span><br><span class="line">    b &#x3D; b -leraning_rate*b_grad</span><br><span class="line"></span><br><span class="line">print(&quot;最终获得参数为 a : %.2f, b :%.2f &quot;%(a,b))</span><br></pre></td></tr></table></figure>
+<p>得到的输出如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">初始化的 a : 0 和 b : 0</span><br><span class="line">最终获得参数为 a : 0.98, b :1.94</span><br></pre></td></tr></table></figure>
+<p>再验证下是否与sklearn的LinearRegression回归算法得到的结果相同。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 检查下，我们获得结果是否与sklearn的结果一致</span><br><span class="line">from sklearn.linear_model import LinearRegression</span><br><span class="line">linr &#x3D; LinearRegression()</span><br><span class="line">linr.fit(x_train,y_train)</span><br><span class="line">print(linr.intercept_,linr.coef_[0])</span><br></pre></td></tr></table></figure>
+<p>得到的参数如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[0.98312156] [1.94067463]</span><br></pre></td></tr></table></figure>
+<h2 id="2-pytorhc-来解决回归问题"><a href="#2-pytorhc-来解决回归问题" class="headerlink" title="2 pytorhc 来解决回归问题"></a>2 pytorhc 来解决回归问题</h2><h3 id="2-1-pytorch的一些基础问题"><a href="#2-1-pytorch的一些基础问题" class="headerlink" title="2.1 pytorch的一些基础问题"></a>2.1 pytorch的一些基础问题</h3><ul>
+<li>如果将numpy数组转化为pytorch的tensor呢？使用<code>torch.from_numpy(data)</code></li>
+<li>如果想将计算的数据放入GPU计算：<code>data.to(device)</code>(其中的device就是GPU或cpu)</li>
+<li>数据类型转换示例： <code>data.float()</code></li>
+<li>如果确定数据位于CPU还是GPU:<code>data.type()</code>会得到类似于<code>torch.cuda.FloatTensor</code>的结果，表明在GPU中</li>
+<li>从GPU中把数据转化成numpy：先取出到cpu中，再转化成numpy数组。<code>data.cpu().numpy()</code></li>
+</ul>
+<h3 id="2-2-使用pytorch构建参数"><a href="#2-2-使用pytorch构建参数" class="headerlink" title="2.2 使用pytorch构建参数"></a>2.2 使用pytorch构建参数</h3><p>如何区分普通数据和参数/权重呢？<strong>需要计算梯度的是参数，否则就是普通数据</strong>。参数需要用梯度来更新，我们需要选项<code>requires_grad=True</code>。使用了这个选项就是告诉pytorch，我们要计算此变量的梯度了。</p>
+<p>我们可以使用如下三种方式来构建参数</p>
+<ol>
+<li>此方法构建出来的参数全部都在cpu中<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a &#x3D; torch.randn(1, requires_grad&#x3D;True, dtype&#x3D;torch.float)</span><br><span class="line">b &#x3D; torch.randn(1, requires_grad&#x3D;True, dtype&#x3D;torch.float)</span><br><span class="line">print(a, b)</span><br></pre></td></tr></table></figure></li>
+<li>此方法尝试把tensor参数传入到gpu<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a &#x3D; torch.randn(1, requires_grad&#x3D;True, dtype&#x3D;torch.float).to(device)</span><br><span class="line">b &#x3D; torch.randn(1, requires_grad&#x3D;True, dtype&#x3D;torch.float).to(device)</span><br><span class="line">print(a, b)</span><br></pre></td></tr></table></figure>
+此时如果查看输出，会发现两个tensor ，$a和b$的梯度选项没了（没了requires_grad=True）<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tensor([0.5158], device&#x3D;&#39;cuda:0&#39;, grad_fn&#x3D;&lt;CopyBackwards&gt;) tensor([0.0246], device&#x3D;&#39;cuda:0&#39;, grad_fn&#x3D;&lt;CopyBackwards&gt;)</span><br></pre></td></tr></table></figure></li>
+<li>先将tensor传入gpu，然后再使用<code>requires_grad_()</code>选项来重构tensor的属性。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a &#x3D; torch.randn(1, dtype&#x3D;torch.float).to(device)</span><br><span class="line">b &#x3D; torch.randn(1, dtype&#x3D;torch.float).to(device)</span><br><span class="line"># and THEN set them as requiring gradients...</span><br><span class="line">a.requires_grad_()</span><br><span class="line">b.requires_grad_()</span><br><span class="line">print(a, b)</span><br></pre></td></tr></table></figure></li>
+<li>最佳策略当然是初始化的时候直接赋予<code>requires_grad=True</code>属性了<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># We can specify the device at the moment of creation - RECOMMENDED!</span><br><span class="line">torch.manual_seed(42)</span><br><span class="line">a &#x3D; torch.randn(1, requires_grad&#x3D;True, dtype&#x3D;torch.float, device&#x3D;device)</span><br><span class="line">b &#x3D; torch.randn(1, requires_grad&#x3D;True, dtype&#x3D;torch.float, device&#x3D;device)</span><br><span class="line">print(a, b)</span><br></pre></td></tr></table></figure>
+查看tensor的属性<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tensor([0.6226], device&#x3D;&#39;cuda:0&#39;, requires_grad&#x3D;True) tensor([1.4505], device&#x3D;&#39;cuda:0&#39;, requires_grad&#x3D;True)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="2-3-自动求导-Autograd"><a href="#2-3-自动求导-Autograd" class="headerlink" title="2.3 自动求导 Autograd"></a>2.3 自动求导 Autograd</h3><p>Autograd是Pytorch的自动求导包，有了它，我们就不必担忧偏导数和链式法则等一系列问题。Pytorch计算所有梯度的方法是<code>backward()</code>。计算梯度之前，我们需要先计算损失，那么需要调用对应(损失)变量的求导方法，如<code>loss.backward()</code>。</p>
+<ul>
+<li>计算所有变量的梯度(假设损失变量是loss): <code>loss.back()</code></li>
+<li>获取某个变量的实际的梯度值(假设变量为att):<code>att.grad</code></li>
+<li>由于梯度是累加的，每次用梯度更新参数之后，需要清零(假设梯度变量是att):<code>att.zero_()</code>,下划线是一种运算符，相当于直接作用于原变量上，等同于<code>att=0</code>(不要手动赋值，因为此过程可能涉及到GPU、CPU之间数据传输，容易出错)</li>
+</ul>
+<p>我们接下来尝试下手工更新参数和梯度</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">lr &#x3D; 1e-1</span><br><span class="line">n_epochs &#x3D; 1000</span><br><span class="line"></span><br><span class="line">torch.manual_seed(42)</span><br><span class="line">a &#x3D; torch.randn(1, requires_grad&#x3D;True, dtype&#x3D;torch.float, device&#x3D;device)</span><br><span class="line">b &#x3D; torch.randn(1, requires_grad&#x3D;True, dtype&#x3D;torch.float, device&#x3D;device)</span><br><span class="line"></span><br><span class="line">for epoch in range(n_epochs):</span><br><span class="line">    yhat &#x3D; a + b * x_train_tensor</span><br><span class="line">    error &#x3D; y_train_tensor - yhat</span><br><span class="line">    loss &#x3D; (error ** 2).mean()</span><br><span class="line"></span><br><span class="line">    # 这个是numpy的计算梯度的方式</span><br><span class="line">    # a_grad &#x3D; -2 * error.mean()</span><br><span class="line">    # b_grad &#x3D; -2 * (x_tensor * error).mean()</span><br><span class="line">    </span><br><span class="line">    # 告诉pytorch计算损失loss，计算所有变量的梯度</span><br><span class="line">    loss.backward()</span><br><span class="line">    # Let&#39;s check the computed gradients...</span><br><span class="line">    print(a.grad)</span><br><span class="line">    print(b.grad)  </span><br><span class="line">    </span><br><span class="line">    # 1. 手动更新参数，会出错 AttributeError: &#39;NoneType&#39; object has no attribute &#39;zero_&#39;</span><br><span class="line">    # 错误的原因是，我们重新赋值时会丢掉变量的 梯度属性</span><br><span class="line">    # a &#x3D; a - lr * a.grad</span><br><span class="line">    # b &#x3D; b - lr * b.grad</span><br><span class="line">    # print(a)</span><br><span class="line">    # 2. 再次手动更新参数，这次我们没有重新赋值，而是使用in-place的方式赋值  RuntimeError: a leaf Variable that requires grad has been used in an in- place operation.</span><br><span class="line">    # 这是因为 pytorch 给所有需要计算梯度的python操作以及依赖都纳入了动态计算图，稍后会解释</span><br><span class="line">    # a -&#x3D; lr * a.grad</span><br><span class="line">    # b -&#x3D; lr * b.grad        </span><br><span class="line"></span><br><span class="line">    # 3. 如果我们真想手动更新，不使用pytorch的计算图呢，必须使用no_grad来将此参数移除自动计算梯度变量之外。</span><br><span class="line">    # 这是源于pytorch的动态计算图DYNAMIC GRAPH，后面会有详细的解释</span><br><span class="line">    with torch.no_grad():</span><br><span class="line">        a -&#x3D; lr * a.grad</span><br><span class="line">        b -&#x3D; lr * b.grad</span><br><span class="line">    </span><br><span class="line">    # PyTorch is &quot;clingy&quot; to its computed gradients, we need to tell it to let it go...</span><br><span class="line">    a.grad.zero_()</span><br><span class="line">    b.grad.zero_()</span><br><span class="line">    </span><br><span class="line">print(a, b)</span><br></pre></td></tr></table></figure>
+<h3 id="2-4-动态计算图"><a href="#2-4-动态计算图" class="headerlink" title="2.4 动态计算图"></a>2.4 动态计算图</h3><p>如果想可视化计算图，可以使用辅助包<a href="https://github.com/szagoruyko/pytorchviz" target="_blank" rel="noopener">torchviz</a>，需要自己安装。使用其<code>make_dot(变量)</code>方法来可视化与当前给定变量相关的计算图。示例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">torch.manual_seed(42)</span><br><span class="line">a &#x3D; torch.randn(1, requires_grad&#x3D;True, dtype&#x3D;torch.float, device&#x3D;device)</span><br><span class="line">b &#x3D; torch.randn(1, requires_grad&#x3D;True, dtype&#x3D;torch.float, device&#x3D;device)</span><br><span class="line"></span><br><span class="line">yhat &#x3D; a + b * x_train_tensor</span><br><span class="line">error &#x3D; y_train_tensor - yhat</span><br><span class="line">loss &#x3D; (error ** 2).mean()</span><br><span class="line">make_dot(yhat)</span><br></pre></td></tr></table></figure>
+<p>使用<code>make_dot(yhat)</code>会得到相关的三个计算图如下</p>
+<p><img src="/images/blog/understand_pytorch_2.png" alt=""></p>
+<p>各个组件，解释如下</p>
+<ul>
+<li><strong>蓝色盒子</strong>：作为参数的tensor，需要pytorch计算梯度的</li>
+<li><strong>灰色盒子</strong>：与计算梯度相关的或者计算梯度依赖的，python操作</li>
+<li><strong>绿色盒子</strong>：与灰色盒子一样，区别是，它是计算梯度的起始点（假设<code>backward()</code>方法是需要可视化图的变量调用的）-计算图自底向上构建。</li>
+</ul>
+<p>上图的<code>error</code>(图中)和<code>loss</code>(图右)，与左图的唯一区别就是中间步骤(灰色盒子)的数目。看左边的绿色盒子，有两个箭头指向该绿色盒子，代表两个变量相加。<code>a</code>和<code>b*x</code>。再看该图中的灰色盒子，它执行的是乘法计算，即<code>b*x</code>，但是为啥只有一个箭头指向呢，只有来自蓝色盒子的参数<code>b</code>，为啥没有数据<code>x</code>?因为我们不需要为数据<code>x</code>计算梯度（<strong>不计算梯度的变量不会出现在计算图中</strong>）。那么，如果我们去掉变量的<code>requires_grad</code>属性(设置为False)会怎样？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a_nongrad &#x3D; torch.randn(1,requires_grad&#x3D;False,dtype&#x3D;torch.float,device&#x3D;device)</span><br><span class="line">b &#x3D; torch.randn(1,requires_grad&#x3D;True,dtype&#x3D;torch.float,device&#x3D;device)</span><br><span class="line">yhat &#x3D; a_nongrad+b*x_train_tensor</span><br></pre></td></tr></table></figure>
+<p><img src="/images/blog/understand_pytorch_3.png" alt=""></p>
+<p>可以看到，对应参数<code>a</code>的蓝色盒子没有了，所以很简单明了，<strong>不计算梯度，就不出现在计算图中</strong>。</p>
+<h2 id="3-优化器-Optimizer"><a href="#3-优化器-Optimizer" class="headerlink" title="3 优化器 Optimizer"></a>3 优化器 Optimizer</h2><p>到目前为止，我们都是手动计算梯度并更新参数的，如果有非常多的变量。我们可以使用pytorch的优化器，像<code>SGD</code>或者<code>Adam</code>。</p>
+<p>优化器需要指定需要优化的参数，以及学习率，然后使用<code>step()</code>方法来更新，此外，<strong>我们不必再一个个的去将梯度赋值为0了，只需要使用优化器的<code>zero_grad()</code>方法即可。</strong>。</p>
+<p>代码示例，使用SGD优化器更新参数<code>a</code>和<code>b</code>的梯度。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">torch.manual_seed(42)</span><br><span class="line">a &#x3D; torch.randn(1, requires_grad&#x3D;True, dtype&#x3D;torch.float, device&#x3D;device)</span><br><span class="line">b &#x3D; torch.randn(1, requires_grad&#x3D;True, dtype&#x3D;torch.float, device&#x3D;device)</span><br><span class="line">print(a, b)</span><br><span class="line"></span><br><span class="line">lr &#x3D; 1e-1</span><br><span class="line">n_epochs &#x3D; 1000</span><br><span class="line"></span><br><span class="line"># Defines a SGD optimizer to update the parameters</span><br><span class="line">optimizer &#x3D; optim.SGD([a, b], lr&#x3D;lr)</span><br><span class="line"></span><br><span class="line">for epoch in range(n_epochs):</span><br><span class="line">    # 第一步，计算损失</span><br><span class="line">    yhat &#x3D; a + b * x_train_tensor</span><br><span class="line">    error &#x3D; y_train_tensor - yhat</span><br><span class="line">    loss &#x3D; (error ** 2).mean()</span><br><span class="line">    # 第二步，后传损失</span><br><span class="line">    loss.backward()    </span><br><span class="line">    </span><br><span class="line">    # 不用再手动更新参数了</span><br><span class="line">    # with torch.no_grad():</span><br><span class="line">    # a -&#x3D; lr * a.grad</span><br><span class="line">    # b -&#x3D; lr * b.grad</span><br><span class="line">    # 使用优化器的step方法一步到位</span><br><span class="line">    optimizer.step()</span><br><span class="line">    </span><br><span class="line">    # 也不用告诉pytorch需要对哪些梯度清零操作了，优化器的zero_grad()一步到位</span><br><span class="line">    # a.grad.zero_()</span><br><span class="line">    # b.grad.zero_()</span><br><span class="line">    optimizer.zero_grad()</span><br><span class="line">    </span><br><span class="line">print(a, b)</span><br></pre></td></tr></table></figure>
+<h2 id="4-计算损失loss"><a href="#4-计算损失loss" class="headerlink" title="4  计算损失loss"></a>4  计算损失loss</h2><p>pytorch提供了很多损失函数，可以直接调用。简单使用如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">torch.manual_seed(42)</span><br><span class="line">a &#x3D; torch.randn(1, requires_grad&#x3D;True, dtype&#x3D;torch.float, device&#x3D;device)</span><br><span class="line">b &#x3D; torch.randn(1, requires_grad&#x3D;True, dtype&#x3D;torch.float, device&#x3D;device)</span><br><span class="line">print(a, b)</span><br><span class="line"></span><br><span class="line">lr &#x3D; 1e-1</span><br><span class="line">n_epochs &#x3D; 1000</span><br><span class="line"></span><br><span class="line"># 此处定义了损失函数为MSE</span><br><span class="line">loss_fn &#x3D; nn.MSELoss(reduction&#x3D;&#39;mean&#39;)</span><br><span class="line"></span><br><span class="line">optimizer &#x3D; optim.SGD([a, b], lr&#x3D;lr)</span><br><span class="line"></span><br><span class="line">for epoch in range(n_epochs):</span><br><span class="line">    yhat &#x3D; a + b * x_train_tensor</span><br><span class="line">    </span><br><span class="line">    # 不用再手动计算损失了</span><br><span class="line">    # error &#x3D; y_tensor - yhat</span><br><span class="line">    # loss &#x3D; (error ** 2).mean()</span><br><span class="line">    # 直接调用定义好的损失函数即可</span><br><span class="line">    loss &#x3D; loss_fn(y_train_tensor, yhat)</span><br><span class="line"></span><br><span class="line">    loss.backward()    </span><br><span class="line">    optimizer.step()</span><br><span class="line">    optimizer.zero_grad()</span><br><span class="line">    </span><br><span class="line">print(a, b)</span><br></pre></td></tr></table></figure>
+<h2 id="5-模型"><a href="#5-模型" class="headerlink" title="5 模型"></a>5 模型</h2><p>pytorch中模型由一个继承自<a href="https://pytorch.org/docs/stable/nn.html#torch.nn.Module" target="_blank" rel="noopener">Module</a>的Python类来定义。需要实现两个最基本的方法</p>
+<ol>
+<li><code>__init__(self)</code>:定义了模型由哪几部分组成，当前模型只有两个变量<code>a</code>和<code>b</code>。模型可以定义更多的参数，并且可以将其他模型或者网络层定义为其参数</li>
+<li><code>forwad(self,x)</code>:真实执行计算的方法，它对给定输入<code>x</code>输出模型预测值。不要显示调用此<code>forward(x)</code>方法，而是直接调用模型本身，即<code>model(x)</code>。</li>
+</ol>
+<p>简单的回归模型如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class ManualLinearRegression(nn.Module):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        super().__init__()</span><br><span class="line">        # To make &quot;a&quot; and &quot;b&quot; real parameters of the model, we need to wrap them with nn.Parameter</span><br><span class="line">        self.a &#x3D; nn.Parameter(torch.randn(1, requires_grad&#x3D;True, dtype&#x3D;torch.float))</span><br><span class="line">        self.b &#x3D; nn.Parameter(torch.randn(1, requires_grad&#x3D;True, dtype&#x3D;torch.float))</span><br><span class="line">        </span><br><span class="line">    def forward(self, x):</span><br><span class="line">        # Computes the outputs &#x2F; predictions</span><br><span class="line">        return self.a + self.b * x</span><br></pre></td></tr></table></figure>
+<p>在<code>__init__(self)</code>方法中，我们使用<code>Parameters()</code>类定义了两个参数<code>a</code>和<code>b</code>，告诉Pytorch，这两个tensor要被作为模型的参数的属性。这样，我们就可以使用模型的<code>parameters()</code>方法来找到模型每次迭代时的所有参数值了，即便模型是嵌套模型都可以找得到，这样就能将参数喂入优化器optimizer来计算了(而非手动维护一张参数表)。并且，我们可以使用模型的<code>state_dict()</code>方法来获取所有参数的当前值。</p>
+<p><strong>注意：模型应当与数据出于相同位置(GPU/CPU)，如果数据时GPU tensor，我们的模型也必须在GPU中</strong></p>
+<p>代码示例如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">torch.manual_seed(42)</span><br><span class="line"></span><br><span class="line"># Now we can create a model and send it at once to the device</span><br><span class="line">model &#x3D; ManualLinearRegression().to(device)</span><br><span class="line"># We can also inspect its parameters using its state_dict</span><br><span class="line">print(model.state_dict())</span><br><span class="line"></span><br><span class="line">lr &#x3D; 1e-1</span><br><span class="line">n_epochs &#x3D; 1000</span><br><span class="line"></span><br><span class="line">loss_fn &#x3D; nn.MSELoss(reduction&#x3D;&#39;mean&#39;)</span><br><span class="line">optimizer &#x3D; optim.SGD(model.parameters(), lr&#x3D;lr)</span><br><span class="line"></span><br><span class="line">for epoch in range(n_epochs):</span><br><span class="line">    #  注意，模型一般都有个train()方法，但是不要手动调用，此处只是为了说明此时是在训练，防止有些模型在训练模型和验证模型时操作不一致，训练时有dropout之类的</span><br><span class="line">    model.train()</span><br><span class="line"></span><br><span class="line">    # No more manual prediction!</span><br><span class="line">    # yhat &#x3D; a + b * x_tensor</span><br><span class="line">    yhat &#x3D; model(x_train_tensor)</span><br><span class="line">    </span><br><span class="line">    loss &#x3D; loss_fn(y_train_tensor, yhat)</span><br><span class="line">    loss.backward()    </span><br><span class="line">    optimizer.step()</span><br><span class="line">    optimizer.zero_grad()</span><br><span class="line">    </span><br><span class="line">print(model.state_dict())</span><br></pre></td></tr></table></figure>
+<h2 id="6-训练步"><a href="#6-训练步" class="headerlink" title="6 训练步"></a>6 训练步</h2><p>我们定义了<code>optimizer</code>,<code>loss function</code>,<code>model</code>为模型三要素，同时需要提供训练时用的特征(<code>feature</code>)和对应的标签(<code>label</code>)数据。一个完整的模型训练有以下组成</p>
+<ul>
+<li>模型三要素<ul>
+<li>优化器optimizer</li>
+<li>损失函数loss</li>
+<li>模型 model</li>
+</ul>
+</li>
+<li>数据<ul>
+<li>特征数据feature</li>
+<li>数据标签label</li>
+</ul>
+</li>
+</ul>
+<p>我们可以写一个包含模型三要素的通用的训练函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">def make_train_step(model, loss_fn, optimizer):</span><br><span class="line">    # Builds function that performs a step in the train loop</span><br><span class="line">    def train_step(x, y):</span><br><span class="line">        # Sets model to TRAIN mode</span><br><span class="line">        model.train()</span><br><span class="line">        # Makes predictions</span><br><span class="line">        yhat &#x3D; model(x)</span><br><span class="line">        # Computes loss</span><br><span class="line">        loss &#x3D; loss_fn(y, yhat)</span><br><span class="line">        # Computes gradients</span><br><span class="line">        loss.backward()</span><br><span class="line">        # Updates parameters and zeroes gradients</span><br><span class="line">        optimizer.step()</span><br><span class="line">        optimizer.zero_grad()</span><br><span class="line">        # Returns the loss</span><br><span class="line">        return loss.item()</span><br><span class="line">    </span><br><span class="line">    # Returns the function that will be called inside the train loop</span><br><span class="line">    return train_step</span><br></pre></td></tr></table></figure>
+<p>然后在每个epoch时迭代模型训练</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># Creates the train_step function for our model, loss function and optimizer</span><br><span class="line">train_step &#x3D; make_train_step(model, loss_fn, optimizer)</span><br><span class="line">losses &#x3D; []</span><br><span class="line"></span><br><span class="line"># For each epoch...</span><br><span class="line">for epoch in range(n_epochs):</span><br><span class="line">    # Performs one train step and returns the corresponding loss</span><br><span class="line">    loss &#x3D; train_step(x_train_tensor, y_train_tensor)</span><br><span class="line">    losses.append(loss)</span><br><span class="line">    </span><br><span class="line"># Checks model&#39;s parameters</span><br><span class="line">print(model.state_dict())</span><br></pre></td></tr></table></figure>
+<ul>
+<li><a href="https://towardsdatascience.com/understanding-pytorch-with-an-example-a-step-by-step-tutorial-81fc5f8c4e8e" target="_blank" rel="noopener">medium understand pytorch</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/09/24/outlier-detection/" rel="prev" title="使用pyod做离群点检测">
+      <i class="fa fa-chevron-left"></i> 使用pyod做离群点检测
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/11/26/model-pruning/" rel="next" title="模型剪枝和优化-torch和Tensorflow为例">
+      模型剪枝和优化-torch和Tensorflow为例 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-线性回归问题"><span class="nav-number">1.</span> <span class="nav-text">1 线性回归问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-先用普通的numpy来展示线性回归过程"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 先用普通的numpy来展示线性回归过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-pytorhc-来解决回归问题"><span class="nav-number">2.</span> <span class="nav-text">2 pytorhc 来解决回归问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-pytorch的一些基础问题"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 pytorch的一些基础问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-使用pytorch构建参数"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 使用pytorch构建参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-自动求导-Autograd"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 自动求导 Autograd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-动态计算图"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 动态计算图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-优化器-Optimizer"><span class="nav-number">3.</span> <span class="nav-text">3 优化器 Optimizer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-计算损失loss"><span class="nav-number">4.</span> <span class="nav-text">4  计算损失loss</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-模型"><span class="nav-number">5.</span> <span class="nav-text">5 模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-训练步"><span class="nav-number">6.</span> <span class="nav-text">6 训练步</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="Symbols count total">591k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">8:57</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'c656cd038e01f710e260',
+      clientSecret: 'e6de2ccaaf0f7069292125b8f50e27f25b95810d',
+      repo: 'shartoo.github.com',
+      owner: 'shartoo# GitHub repo owner',
+      admin: ['shartoo'],
+      id: '4994d69dfb1787eaadb2e576818f2563',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

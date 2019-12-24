@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://shartoo.github.io').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="经典神经网络">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SSD深入理解">
+<meta property="og:url" content="https://shartoo.github.io/2018/03/09/SSD_detail/index.html">
+<meta property="og:site_name" content="我的个人博客">
+<meta property="og:description" content="经典神经网络">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/ssd_structure1.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/ssd_structure2.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/ssd_3_clas_loc.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/ssd_4_map.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/ssd_5_code1.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/ssd_6_map.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/ssd_7_code2.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/ssd_8_bbox.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/ssd_9_code0.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/ssd_9_datashuffle.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/ssd_10_equal.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/ssd_11_brightness.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/ssd_12_flip.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/ssd_13_bbox.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/ssd_14_box.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/ssd_15_boxes.png">
+<meta property="article:published_time" content="2018-03-09T00:00:00.000Z">
+<meta property="article:modified_time" content="2019-12-24T12:00:27.976Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shartoo.github.io/images/blog/ssd_structure1.png">
+
+<link rel="canonical" href="https://shartoo.github.io/2018/03/09/SSD_detail/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>SSD深入理解 | 我的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="https://shartoo.github.io/2018/03/09/SSD_detail/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SSD深入理解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-03-09 00:00:00" itemprop="dateCreated datePublished" datetime="2018-03-09T00:00:00+00:00">2018-03-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-12-24 12:00:27" itemprop="dateModified" datetime="2019-12-24T12:00:27+00:00">2019-12-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>23k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>21 mins.</span>
+            </span>
+            <div class="post-description">经典神经网络</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="1-网络结构"><a href="#1-网络结构" class="headerlink" title="1  网络结构"></a>1  网络结构</h2><p> <img src="/images/blog/ssd_structure1.png" alt="网络结构图"><br>加的卷积层的 feature map 的大小变化比较大，允许能够检测出不同尺度下的物体： 在低层的feature map,感受野比较小，高层的感受野比较大，在不同的feature map进行卷积，可以达到多尺度的目的。</p>
+<p><strong>SSD去掉了全连接层</strong>，每一个输出只会感受到目标周围的信息，包括上下文。这样来做就增加了合理性。并且不同的feature map,预测不同宽高比的图像，这样比YOLO增加了预测更多的比例的box</p>
+<p><strong>横向流程图</strong></p>
+<p> <img src="/images/blog/ssd_structure2.jpg" alt="网络横向结构图"></p>
+<h3 id="1-1-网络结构-代码"><a href="#1-1-网络结构-代码" class="headerlink" title="1.1 网络结构(代码)"></a>1.1 网络结构(代码)</h3><p>basenet 以VGG-19为例。</p>
+<p>代码如下:</p>
+<p>第一段是 VGG-19</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"># Input image format</span><br><span class="line">  img_height, img_width, img_channels &#x3D; image_size[0], image_size[1], image_size[2]</span><br><span class="line"></span><br><span class="line">  ### Design the actual network</span><br><span class="line">  ###############################  这一段是basenet网络结构  用的是VGG-19   ######################################</span><br><span class="line">  x &#x3D; Input(shape&#x3D;(img_height, img_width, img_channels))</span><br><span class="line">  normed &#x3D; Lambda(lambda z: z&#x2F;127.5 - 1.0, # Convert input feature range to [-1,1]</span><br><span class="line">                  output_shape&#x3D;(img_height, img_width, img_channels),</span><br><span class="line">                  name&#x3D;&#39;lambda1&#39;)(x)</span><br><span class="line"></span><br><span class="line">  conv1_1 &#x3D; Conv2D(64, (3, 3), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv1_1&#39;)(normed)</span><br><span class="line">  conv1_2 &#x3D; Conv2D(64, (3, 3), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv1_2&#39;)(conv1_1)</span><br><span class="line">  pool1 &#x3D; MaxPooling2D(pool_size&#x3D;(2, 2), strides&#x3D;(2, 2), padding&#x3D;&#39;valid&#39;, name&#x3D;&#39;pool1&#39;)(conv1_2)</span><br><span class="line"></span><br><span class="line">  conv2_1 &#x3D; Conv2D(128, (3, 3), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv2_1&#39;)(pool1)</span><br><span class="line">  conv2_2 &#x3D; Conv2D(128, (3, 3), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv2_2&#39;)(conv2_1)</span><br><span class="line">  pool2 &#x3D; MaxPooling2D(pool_size&#x3D;(2, 2), strides&#x3D;(2, 2), padding&#x3D;&#39;valid&#39;, name&#x3D;&#39;pool2&#39;)(conv2_2)</span><br><span class="line"></span><br><span class="line">  conv3_1 &#x3D; Conv2D(256, (3, 3), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv3_1&#39;)(pool2)</span><br><span class="line">  conv3_2 &#x3D; Conv2D(256, (3, 3), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv3_2&#39;)(conv3_1)</span><br><span class="line">  conv3_3 &#x3D; Conv2D(256, (3, 3), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv3_3&#39;)(conv3_2)</span><br><span class="line">  pool3 &#x3D; MaxPooling2D(pool_size&#x3D;(2, 2), strides&#x3D;(2, 2), padding&#x3D;&#39;valid&#39;, name&#x3D;&#39;pool3&#39;)(conv3_3)</span><br><span class="line"></span><br><span class="line">  conv4_1 &#x3D; Conv2D(512, (3, 3), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv4_1&#39;)(pool3)</span><br><span class="line">  conv4_2 &#x3D; Conv2D(512, (3, 3), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv4_2&#39;)(conv4_1)</span><br><span class="line">  conv4_3 &#x3D; Conv2D(512, (3, 3), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv4_3&#39;)(conv4_2)</span><br><span class="line">  pool4 &#x3D; MaxPooling2D(pool_size&#x3D;(2, 2), strides&#x3D;(2, 2), padding&#x3D;&#39;valid&#39;, name&#x3D;&#39;pool4&#39;)(conv4_3)</span><br><span class="line"></span><br><span class="line">  conv5_1 &#x3D; Conv2D(512, (3, 3), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv5_1&#39;)(pool4)</span><br><span class="line">  conv5_2 &#x3D; Conv2D(512, (3, 3), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv5_2&#39;)(conv5_1)</span><br><span class="line">  conv5_3 &#x3D; Conv2D(512, (3, 3), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv5_3&#39;)(conv5_2)</span><br><span class="line">  pool5 &#x3D; MaxPooling2D(pool_size&#x3D;(3, 3), strides&#x3D;(1, 1), padding&#x3D;&#39;same&#39;, name&#x3D;&#39;pool5&#39;)(conv5_3)</span><br><span class="line">   ###############################  这一段是basenet网络结束      ######################################</span><br></pre></td></tr></table></figure>
+<p>第二段为SSD使用的6个额外的特征层(接上面的)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">fc6 &#x3D; Conv2D(1024, (3, 3), dilation_rate&#x3D;(6, 6), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;fc6&#39;)(pool5)</span><br><span class="line">fc7 &#x3D; Conv2D(1024, (1, 1), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;fc7&#39;)(fc6)</span><br><span class="line"></span><br><span class="line">conv6_1 &#x3D; Conv2D(256, (1, 1), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv6_1&#39;)(fc7)</span><br><span class="line">conv6_2 &#x3D; Conv2D(512, (3, 3), strides&#x3D;(2, 2), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv6_2&#39;)(conv6_1)</span><br><span class="line"></span><br><span class="line">conv7_1 &#x3D; Conv2D(128, (1, 1), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv7_1&#39;)(conv6_2)</span><br><span class="line">conv7_2 &#x3D; Conv2D(256, (3, 3), strides&#x3D;(2, 2), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv7_2&#39;)(conv7_1)</span><br><span class="line"></span><br><span class="line">conv8_1 &#x3D; Conv2D(128, (1, 1), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv8_1&#39;)(conv7_2)</span><br><span class="line">conv8_2 &#x3D; Conv2D(256, (3, 3), strides&#x3D;(1, 1), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;valid&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv8_2&#39;)(conv8_1)</span><br><span class="line"></span><br><span class="line">conv9_1 &#x3D; Conv2D(128, (1, 1), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;same&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv9_1&#39;)(conv8_2)</span><br><span class="line">conv9_2 &#x3D; Conv2D(256, (3, 3), strides&#x3D;(1, 1), activation&#x3D;&#39;relu&#39;, padding&#x3D;&#39;valid&#39;, kernel_initializer&#x3D;&#39;he_normal&#39;, name&#x3D;&#39;conv9_2&#39;)(conv9_1)</span><br></pre></td></tr></table></figure>
+<p>对conv4_3的输出做正则化处理</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># Feed conv4_3 into the L2 normalization layer</span><br><span class="line">conv4_3_norm &#x3D; L2Normalization(gamma_init&#x3D;20, name&#x3D;&#39;conv4_3_norm&#39;)(conv4_3)</span><br></pre></td></tr></table></figure>
+<p>接下来的步骤是基于basenet的结果做多层输出。 包含以下几个特征层</p>
+<ul>
+<li>conv4_3_norm</li>
+<li>fc7</li>
+<li>conv6_2</li>
+<li>conv7_2</li>
+<li>conv8_2</li>
+<li>conv9_2</li>
+</ul>
+<h2 id="2-分类和回归"><a href="#2-分类和回归" class="headerlink" title="2  分类和回归"></a>2  分类和回归</h2><p>顺着代码继续走。接下来是解析 上图中 <code>Detector &amp; classifier</code> 这部分的代码。</p>
+<p>需要了解的是上面的<code>Detector &amp; classifier</code> 这部分操作其实由三部分组成。以<code>Detector &amp; classifier 4</code>为例，如下图：</p>
+<p><img src="/images/blog/ssd_3_clas_loc.png" alt="网络横向结构图"></p>
+<p>做了 三个操作：</p>
+<ul>
+<li>生成 anchor box</li>
+<li>做卷积-&gt;定位(localization)</li>
+<li>做卷积-&gt;分类(confidence)</li>
+</ul>
+<p>注意上图默认是每个feature map上每个点生成3个 priorbox，所以一共生成了75个。</p>
+<h3 id="2-1-卷积-gt-分类"><a href="#2-1-卷积-gt-分类" class="headerlink" title="2.1 卷积-&gt;分类"></a>2.1 卷积-&gt;分类</h3><p>直接看源码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># we predict &#39;n_classes&#39; confidence values for each box,hence the confidence predictors have depth &#39;n_boxes*n_classes&#39;</span><br><span class="line"># Output shape of confidence layers : &#39; (batch,height,width,n_boxes*n_classes)</span><br><span class="line">conv4_3_mbox_conf &#x3D; Conv2D(n_boxes_fc7*n_classes,(3,3),padding&#x3D;&#39;same&#39;,kernel_initializer&#x3D;&#39;he_normal&#39;,name &#x3D; &#39;conv4_3_norm_mbox_conf&#39;)(conv4_3)</span><br><span class="line">fc7_mbox_conf &#x3D; Conv2D(n_boxes_fc7*n_classes,(3,3),padding &#x3D;&#39;same&#39;,kernel_initializer&#x3D;&#39;he_normal&#39;,name&#x3D;&#39;fc7_mbox_conf&#39;)(fc7)</span><br><span class="line">conv8_2_mbox_conf &#x3D; Conv2D(n_boxes_conv6_2*n_classes,(3,3),padding&#x3D;&#39;same&#39;,kernel_initializer&#x3D;&#39;he_normal&#39;,name&#x3D;&#39;conv8_2_mbox_conf&#39;)(conv8_2)</span><br><span class="line">conv9_2_mbox_conf &#x3D; Conv2D(n_boxes_conv7_2*n_classes,(3,3),padding&#x3D;&#39;same&#39;,kernel_initializer&#x3D;&#39;he_normal&#39;,name&#x3D;&#39;conv9_2_mbox_conf&#39;)(conv9_2)</span><br><span class="line">conv10_2_mbox_conf &#x3D; Conv2D(n_boxes_conv9_2*n_classes,(3,3),padding&#x3D;&#39;same&#39;,kernel_initializer&#x3D;&#39;he_normal&#39;,name&#x3D;&#39;conv9_2_mbox_conf&#39;)(conv10_2)</span><br></pre></td></tr></table></figure>
+<p>需要注意的是<strong>卷积核数目是跟分类数目相关</strong>。假设某一层feature map的size是 $m\times n$，通道数是 $p$。例如上面展示的 <code>Detector &amp; classifier4</code>就是  $m=5,n=5,p=256$。做分类时<strong>所有的卷积核都是3x3xp</strong>(上面的代码没有体现出p),而输出通道数是 $n<em>{boxes}\times n</em>{classes}$ （代码中的n_boxes和n_classes）<br>n_boxes代表的是default box(从feature map上自动生成的方框)。不同feautre map层的n_boxes不同，一般是4或6.</p>
+<h3 id="2-2-卷积-gt-回归-其实还是卷积"><a href="#2-2-卷积-gt-回归-其实还是卷积" class="headerlink" title="2.2 卷积-&gt;回归(其实还是卷积)"></a>2.2 卷积-&gt;回归(其实还是卷积)</h3><p>从feature map中回归得到 每个预测框的 $x(中心点x坐标),y(中心点y坐标),w(预测框的宽度),h(预测框的高度)$ 。同样使用 $3\times 3$的卷积核(理论上应该是 $3\times3\times p$)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">## predict 4 boxes for coordinates for each box,hence the localization predictors have depth &#39;n_boxes*4&#39;</span><br><span class="line">conv4_3_mbox_loc &#x3D; Conv2D(n_boxes_conv6_2*4,(3,3),padding&#x3D;&#39;same&#39;,kernel_initializer&#x3D;&#39;he_normal&#39;,name&#x3D;&#39;conv4_3_mbox_loc&#39;)(conv4_3_norm)</span><br><span class="line">fc7_mbox_loc &#x3D; Conv2D(n_boxes_fc7*4,(3,3),padding&#x3D;&#39;same&#39;,kernel_initializer&#x3D;&#39;he_normal&#39;,name&#x3D;&#39;fc7_mbox_loc&#39;)(fc7)</span><br><span class="line">conv8_2_mbox_loc &#x3D; Conv2D(n_boxes_conv7_2*4,(3,3),padding&#x3D;&#39;same&#39;,kernel_initializer&#x3D;&#39;he_normal&#39;,name&#x3D;&#39;conv8_2_mbox_loc&#39;)(conv8_2)</span><br><span class="line">conv9_2_mbox_loc &#x3D; Conv2D(n_boxes_conv8_2*4,(3,3),padding&#x3D;&#39;same&#39;,kernel_initializer&#x3D;&#39;he_normal&#39;,name&#x3D;&#39;conv9_2_mbox_loc&#39;)(conv9_2)</span><br><span class="line">conv10_2_mbox_loc &#x3D; Conv2D(n_boxes_conv9_2*4,(3,3),padding&#x3D;&#39;same&#39;,kernel_initializer&#x3D;&#39;he_normal&#39;,name&#x3D;&#39;conv10_2_mbox_loc&#39;)(conv10_2)</span><br></pre></td></tr></table></figure>
+<p>与上面的一致，只不过输出通道数变为 $n_{boxes}\times 4$，最后乘以4，代表的是对每个default box(从feature map上自动生成的方框)的位置信息。</p>
+<h3 id="2-4-生成prior-box-default-box"><a href="#2-4-生成prior-box-default-box" class="headerlink" title="2.4 生成prior box(default box)"></a>2.4 生成prior box(default box)</h3><p><strong>注意，此时已经有两个地方生成box了。一个来自2.2步的卷积，一个是这一步由新的keras层生成。这一步生成的box是模板形式的，而且最后一个维度是8（2.2步生成的是4）是4个location维度+4个偏置(回归所需的参数)。</strong></p>
+<p>论文中并没有提到prior box是基于什么生成的，看图的话会以为是直接从feature map中生成，从代码来看，<strong>prior box是从位置回归的feature map中生成</strong>，这一点与第二节开始的那个图(生成75个box)不太一致，此处暂时按照代码的思路走。代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">## Generate the anchor box(called &quot;priors&quot; in the original caffe&#x2F;c++ implemention )</span><br><span class="line"># output shape of anchor &#39;(batch,height,width,n_boxes,8)&#39;</span><br><span class="line">conv4_3_mbox_priorbox &#x3D; AnchorBoxes(img_height,img_width,this_scale &#x3D; scales[0],next_scale &#x3D; scales[1],</span><br><span class="line">                                        aspect_ratios &#x3D; aspect_ratios_conv4_3,two_boxes_for_ar1 &#x3D; two_boxes_for_ar1,</span><br><span class="line">                                        limit_boxes&#x3D; limit_boxes,variances&#x3D;variances,coords &#x3D; coords,normalize_coords&#x3D; normalize_coords,</span><br><span class="line">                                        name&#x3D;&#39;conv4_3_mbox_priorbox&#39;)(conv4_3_mbox_loc)</span><br><span class="line">fc7_mbox_priorbox &#x3D; AnchorBoxes(img_height, img_width, this_scale&#x3D;scales[1], next_scale&#x3D;scales[2],</span><br><span class="line">                                    aspect_ratios&#x3D;aspect_ratios_fc7,</span><br><span class="line">                                    two_boxes_for_ar1&#x3D;two_boxes_for_ar1, limit_boxes&#x3D;limit_boxes, variances&#x3D;variances,</span><br><span class="line">                                    coords&#x3D;coords, normalize_coords&#x3D;normalize_coords, name&#x3D;&#39;fc7_mbox_priorbox&#39;)(fc7_mbox_loc)</span><br><span class="line">conv8_2_mbox_priorbox &#x3D; AnchorBoxes(img_height, img_width, this_scale&#x3D;scales[3], next_scale&#x3D;scales[4],</span><br><span class="line">                                        aspect_ratios&#x3D;aspect_ratios_conv7_2,</span><br><span class="line">                                        two_boxes_for_ar1&#x3D;two_boxes_for_ar1, limit_boxes&#x3D;limit_boxes,</span><br><span class="line">                                        variances&#x3D;variances, coords&#x3D;coords, normalize_coords&#x3D;normalize_coords,</span><br><span class="line">                                        name&#x3D;&#39;conv7_2_mbox_priorbox&#39;)(conv8_2_mbox_loc)</span><br><span class="line">conv9_2_mbox_priorbox &#x3D; AnchorBoxes(img_height, img_width, this_scale&#x3D;scales[4], next_scale&#x3D;scales[5],</span><br><span class="line">                                        aspect_ratios&#x3D;aspect_ratios_conv8_2,</span><br><span class="line">                                        two_boxes_for_ar1&#x3D;two_boxes_for_ar1, limit_boxes&#x3D;limit_boxes,</span><br><span class="line">                                        variances&#x3D;variances, coords&#x3D;coords, normalize_coords&#x3D;normalize_coords,</span><br><span class="line">                                        name&#x3D;&#39;conv8_2_mbox_priorbox&#39;)(conv9_2_mbox_loc)</span><br><span class="line">conv10_2_mbox_priorbox &#x3D; AnchorBoxes(img_height, img_width, this_scale&#x3D;scales[5], next_scale&#x3D;scales[6],</span><br><span class="line">                                        aspect_ratios&#x3D;aspect_ratios_conv9_2,</span><br><span class="line">                                        two_boxes_for_ar1&#x3D;two_boxes_for_ar1, limit_boxes&#x3D;limit_boxes,</span><br><span class="line">                                        variances&#x3D;variances, coords&#x3D;coords, normalize_coords&#x3D;normalize_coords,</span><br><span class="line">                                        name&#x3D;&#39;conv9_2_mbox_priorbox&#39;)(conv10_2_mbox_loc)&#96;</span><br></pre></td></tr></table></figure>
+<p>注意 priorbox的输入是 box_loc。上面的 AnchorBoxes是重写了一个Keras的网络层。</p>
+<h3 id="2-5-如何生成prior-box"><a href="#2-5-如何生成prior-box" class="headerlink" title="2.5 如何生成prior box"></a>2.5 如何生成prior box</h3><h4 id="2-5-1-理论"><a href="#2-5-1-理论" class="headerlink" title="2.5.1 理论"></a>2.5.1 理论</h4><p>prior box是按照不同的 scale 和 ratio 生成，m(默认是6，但是有的层不一定，比如conv4_3层的是3(实际上因为对于ratio=1的会多生成一个，所以是4个))个 default boxes，这种结构有点类似于 Faster R-CNN 中的 Anchor。(此处m=6所以：$5\times 5\times 6$ = 150 boxes)。</p>
+<p><img src="/images/blog/ssd_4_map.png" alt="网络横向结构图"></p>
+<p>上图中从左到右依次是：原图，以特征图中一个像素点为中心生成的3个priorbox（不同宽和高），特征图(256x5x5)。</p>
+<ul>
+<li><p><strong>scale</strong>: 假定使用N个不同层的feature map 来做预测。最底层的 feature map 的 scale 值为 $s<em>{min}=0.2$，最高层的为$s</em>{max} = 0.9$ ，其他层通过下面公式计算得到 $s<em>k = s</em>{min}+\frac{s<em>{max}-s</em>{min}}{m-1}(k-1), k\in [1,N]$ (低层检测小目标，高层检测大目标)。当前$300\times3\times3$网络一共使用了6(N=6)个feature map，即网络结构图中的detector1..detector6。比如第一层<strong>detector1</strong>的$s_k=0.2$，第二层的<strong>detector2</strong>的$s_k=0.2+\frac{0.9-0.2}{6-1}(2-1)=0.34$,…第五层<strong>detector5</strong>的$s_k=0.2+\frac{0.9-0.2}{6-1}(5-1)=0.76$</p>
+</li>
+<li><p><strong>ratio</strong>: 使用不同的 ratio值 $a<em>r\in \lbrace 1,2,\frac{1}{2},3,\frac{1}{3}\rbrace$ 计算 default box 的宽度和高度： $w_K^{a} = s_k \sqrt{a_r} , h_k^{a} =s_k/\sqrt{a_r}$ 。另外对于 ratio = 1 的情况，额外再指定 scale 为 $s_k{`}=\sqrt{s_ks</em>{k+1}}$ 也就是总共有 6 中不同的 default box。比如示意图中的为<strong>detector4</strong>，其$s_k=0.62$,依据公式 $w_K^{a} = s_k \sqrt{a_r}$ 按照 $\lbrace 1,2,\frac{1}{2},3,\frac{1}{3}\rbrace$ 顺序可以有 $w_k^a$ : $[0.62\times300,0.62\times1.414\times300,0.62\times0.707\times300,0.62\times1.732\times300,0.62\times0.577\times300]$ 。<strong>与图中的168不一致</strong></p>
+</li>
+<li><p><strong>default box中心</strong>：上每个 default box的中心位置设置成 $(\frac{i+0.5}{\vert f_k \vert},\frac{j+0.5}{\vert f_k\vert})$ ，其中 $\vert f_k \vert$ 表示第k个特征图的大小 $i,j\in [0,\vert f_k\vert]$  。</p>
+</li>
+</ul>
+<p>注意：每一层的scale参数是</p>
+<p><strong>注意这些参数都是相对于原图的参数，不是最终值</strong></p>
+<h4 id="2-5-2-代码解析"><a href="#2-5-2-代码解析" class="headerlink" title="2.5.2 代码解析"></a>2.5.2 代码解析</h4><p>我把<code>ssd_box_encode_decode_utils.py</code>代码里面关于如何生成prior box的部分精简部分提取出来如下,注意生成prior box的代码是一个类<code>AnchorBoxes</code>：</p>
+<p>先看构造方法里面的参数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">def __init__(self,</span><br><span class="line">                img_height,</span><br><span class="line">                img_width,</span><br><span class="line">                this_scale,</span><br><span class="line">                next_scale,</span><br><span class="line">                aspect_ratios&#x3D;[0.5, 1.0, 2.0],</span><br><span class="line">                two_boxes_for_ar1&#x3D;True,</span><br><span class="line">                limit_boxes&#x3D;True,</span><br><span class="line">                variances&#x3D;[1.0, 1.0, 1.0, 1.0],</span><br><span class="line">                coords&#x3D;&#39;centroids&#39;,</span><br><span class="line">                normalize_coords&#x3D;False,</span><br><span class="line">                **kwargs)</span><br></pre></td></tr></table></figure>
+<p>依次解析参数。</p>
+<ul>
+<li>img_height：原始输入图像的尺寸</li>
+<li>img_width：</li>
+<li>this_scale：当前feature map的scale</li>
+<li>next_scale：下一个feature map的scale。至于用处，下面的代码会说明</li>
+<li>aspect_ratios=[0.5, 1.0, 2.0] :当前feature map即将生成的<strong>每个</strong>prior box的ratios，它的长度即当前feature map上<strong>每个特征点</strong>会生成的prior box数目。</li>
+<li>two_boxes_for_ar1=True：对于ratios=1的特征层是否多生成一个 prior box</li>
+<li>limit_boxes=True :是否限制boxes的数目</li>
+<li>variances=[1.0, 1.0, 1.0, 1.0]： 这个参数是用来和 two_boxes_for_ar1配合使用，用来处理如何多生成一个prior box的</li>
+<li>coords=’centroids’：坐标体系，是$(x,y,w,h)$还是$(x<em>{min},y</em>{min},x<em>{max},y</em>{max})$</li>
+<li>normalize_coords=False:是否归一化</li>
+</ul>
+<p>接下来看<code>call(self,x)函数</code>，该函数里面写明了如何处理数据，如何生成priorbox。</p>
+<h4 id="2-5-3-获取每个cell的尺寸"><a href="#2-5-3-获取每个cell的尺寸" class="headerlink" title="2.5.3 获取每个cell的尺寸"></a>2.5.3 获取每个cell的尺寸</h4><p>cell代表的是将<strong>原图</strong>切割成 <strong>feature_map_width * feature_map_height</strong>个小矩形格。代码<code>keras_layer_AnchorBoxes</code>的<code>call</code>方法中演示了如何根据每个特征层生成priorbox。代码做了两个操作</p>
+<ul>
+<li><p>获取每个cell的宽和高</p>
+</li>
+<li><p>获取每个cell的 起始坐标(左上角的x,y)</p>
+</li>
+</ul>
+<p>为了演示如何处理，我单独测试这个代码。假设测试的特征层为上图的 $5\times5\times5\times256$ ,让所有的值为1.</p>
+<p><img src="/images/blog/ssd_5_code1.png" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">input &#x3D; np.ones([16,5,5,512],dtype&#x3D;np.int16)</span><br></pre></td></tr></table></figure>
+<p>当前层feature map的ratios = [0.5,1,2]，根据公式$w_K^{a} = s_k \sqrt{a_r} , h_k^{a} =s_k/\sqrt{a_r}$。计算 priorbox的宽和高，注意中间都会乘以size(原图尺寸参考)。</p>
+<p>以下图的168为例，</p>
+<p><img src="/images/blog/ssd_6_map.png" alt=""></p>
+<p>然后将<strong>原图划分cell</strong>，依据是当前feature map大小。比如下面的代码中，feature map大小是 $5\times 5$，原图大小是 $300\times300$，那么每个cell尺寸是 $\frac{300}{5}\times \frac{300}{5}=60\times60$</p>
+<p><img src="/images/blog/ssd_7_code2.png" alt=""></p>
+<p>上面这一步做的其实是下图</p>
+<p><img src="/images/blog/ssd_8_bbox.png" alt="网络横向结构图"></p>
+<p>不同的feature map的cell宽和高不同。依据feature map将原图划分为等额的cell，<strong>红框部分是获取每个cell在原图里的起始坐标点(x,y)</strong>。</p>
+<p>注意boxes是如何产生的 <code>boxes_tensor = np.zeros((feature_map_height, feature_map_width, self.n_boxes, 4))</code> 创建了一个  <strong><em>size= [feature_map_height,feature_map_width,n_boxes,4]</em></strong> 的四维矩阵。代表的是每个feature map的每个特征点有n_boxes个priorbox，而每个priorbox有<code>x</code>,<code>y</code>,<code>w</code>，<code>h</code>四个参数来定义一个priorbox。</p>
+<p>接下来是把priorbox超出原图边界的修正下。</p>
+<p>然后再创建一个<code>variances_tensor</code>，它和上面的<code>boxes_tensor</code>维度一样，只不过它的值都为0加上variance(尺寸和n_boxes一样).然后将<code>variances_tensor</code>和<code>boxes_tensor</code>做连接（concatenate）操作。所以生成的priorbox 会变成 <strong><em>size= [feature_map_height,feature_map_width,n_boxes,8]</em></strong> (论文里面不会说得这么具体)</p>
+<p>下图可以看出，原图中两个动物分别在不同层次的<code>detector &amp; classifier</code> 被检测出来。<br><img src="/images/blog/ssd_9_code0.png" alt=""></p>
+<h3 id="2-6-Reshape"><a href="#2-6-Reshape" class="headerlink" title="2.6 Reshape"></a>2.6 Reshape</h3><p>接下来变换特征矩阵便于做统一处理。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># reshape the predict class predictoins,yield 3D tensor of shape &#39;(batch,height*width*n_boxes,n_classes)&#39;</span><br><span class="line"># we want the classes isolated in the last axis to perform softmax on the them</span><br><span class="line">conv4_3_mbox_conf_reshape &#x3D; Reshape((-1,n_classes),name &#x3D; &#39;conv4_3_mbox_conf_reshape&#39;)(conv4_3_mbox_conf)</span><br><span class="line">fc7_mbox_conf_reshape &#x3D; Reshape((-1,n_classes),name&#x3D; &#39;fc7_mbox_conf_reshape&#39;)(fc7_mbox_conf)</span><br><span class="line">conv8_2_mbox_conf_reshape &#x3D; Reshape((-1,n_classes),name &#x3D; &#39;conv8_2_mbox_conf_reshape&#39;)(conv8_2_mbox_conf)</span><br><span class="line">conv9_2_mbox_conf_reshape &#x3D; Reshape((-1,n_classes),name&#x3D; &#39;conv9_2_mbox_conf_reshape&#39;)(conv9_2_mbox_conf)</span><br><span class="line">conv10_2_mbox_conf_reshpe &#x3D; Reshape((-1,n_classes),name &#x3D; &#39;conv10_2_mbox_conf_reshape&#39;)(conv10_2_mbox_conf)</span><br><span class="line"></span><br><span class="line">conv4_3_mbox_loc_reshape &#x3D; Reshape((-1,4),name &#x3D; &#39;conv4_3_mbox_loc_reshape&#39;)(conv4_3_mbox_loc)</span><br><span class="line">fc7_mbox_loc_reshape &#x3D; Reshape((-1, 4), name&#x3D;&#39;fc7_mbox_loc_reshape&#39;)(fc7_mbox_loc)</span><br><span class="line">conv8_2_mbox_loc_reshape &#x3D; Reshape((-1, 4), name&#x3D;&#39;conv8_2_mbox_loc_reshape&#39;)(conv8_2_mbox_loc)</span><br><span class="line">conv9_2_mbox_loc_reshape &#x3D; Reshape((-1, 4), name&#x3D;&#39;conv9_2_mbox_loc_reshape&#39;)(conv9_2_mbox_loc)</span><br><span class="line">conv10_2_mbox_loc_reshpe &#x3D; Reshape((-1, 4), name&#x3D;&#39;conv10_2_mbox_loc_reshape&#39;)(conv10_2_mbox_loc)</span><br><span class="line"></span><br><span class="line">## Reshape the anchor box tensors ,yield 3D tensors of shape &#96;(batch,height*width*n_boxes,8)&#96;</span><br><span class="line">conv4_3_mbox_priorbox_conf_reshape &#x3D; Reshape((-1,8),name&#x3D;&#39;conv4_3_mbox_priorbox_conf_reshape&#39;)(conv4_3_mbox_priorbox)</span><br><span class="line">fc7_mbox_priorbox_conf_reshappe &#x3D; Reshape((-1,8),name&#x3D;&#39;fc7_mbox_priorbox_conf_reshappe&#39;)(fc7_mbox_priorbox)</span><br><span class="line">conv8_2_priorbox_conf_reshape &#x3D; Reshape((-1,8),name&#x3D; &#39;conv8_2_priorbox_conf_reshape&#39;)(conv8_2_mbox_priorbox)</span><br><span class="line">conv9_2_mbox_priorbox_reshape &#x3D; Reshape((-1, 8), name&#x3D;&#39;conv9_2_mbox_priorbox_reshape&#39;)(conv9_2_mbox_priorbox)</span><br><span class="line">conv10_2_mbox_priorbox_reshape &#x3D; Reshape((-1, 8), name&#x3D;&#39;conv10_2_mbox_priorbox_reshape&#39;)(conv10_2_mbox_priorbox)</span><br></pre></td></tr></table></figure>
+<p>如何理解这一步的操作？</p>
+<p>比如feature map为 $5\times 5\times 256$ (对应的是<code>conv8_2_mbox_conf</code>)这一层，如何运算到当前步骤(不考虑batch)。</p>
+<ol>
+<li>【分类】做$3\times3$卷积运算,输入通道数是 256，卷积数目是 <strong>n_boxes_conv6_2*n_classes</strong>(注意不是n_boxes_conv8_2<em>n_classes)【见2.1节，没有改变feature map大小】，那么输出矩阵是[n_boxes_conv6_2</em>n_classes,5,5] 。n_boxes_conf6_2 = 4，假设是20个分类(要加一个背景分类)，那么产生新的feature map尺寸为[21x4,5,5]。对应的会生成一共 $21\times4\times5\times5=2100$个priorbox</li>
+<li>【回归】做$3\times3$卷积运算,输入通道数是 256，卷积数目是 <strong>n_boxes_conv6_2*4</strong>(注意乘以的是4，不是分类数)【见<strong>2.2</strong>节，没有改变feature map大小】，那么输出矩阵是[n_boxes_conv6_2*4,5,5] 。n_boxes_conf6_2 = 4)，那么产生新的feature map尺寸为[4x4,5,5]。对应的会生成一共 $4\times4\times5\times5=400$个priorbox</li>
+<li>【生成priorbox】，从上一步【回归】的矩阵输出 $4\times4\times5\times5$,feature map大小是 $5\times5$，当前层每个特征点生成4个priorbox，每个priorbox有<code>x</code>,<code>y</code>,<code>w</code>,<code>h</code>四个参数。这一步才是真的填补priorbox的四个参数，并且添加了每个参数的偏置variance，变成8.(即$8\times4\times5\times5$)</li>
+<li>【reshape】<ul>
+<li>对【分类】步骤的结果reshape：[n_boxes_conv6_2*n_classes,5,5]（即[21x4,5,5]）—&gt;[-1,n_classes]（即[100,21]）</li>
+<li>对【回归】步骤的结果reshape: [n_boxes_conv6_2*4,5,5] （即[4x4,5,5])—&gt;[-1,4]（即[100,4]）</li>
+<li>对【priorbox】步骤的结果reshape:[n_boxes_conv6_2*8,5,5]（即[4x8,5,5]）—&gt;[-1,8]（即[100,8]）</li>
+</ul>
+</li>
+</ol>
+<h3 id="2-8-连接concatenate"><a href="#2-8-连接concatenate" class="headerlink" title="2.8 连接concatenate"></a>2.8 连接concatenate</h3><p>连接所有的分类，回归，priorbox</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">## Concatenate the prediction from different layers</span><br><span class="line"># Axis 0 (batch)  and axis 2 (n_classes or 4)  are identical for all layer predictions</span><br><span class="line"># so we want to concatenate along axis 1, the number of box per layer</span><br><span class="line"># Output shape of &#96;mbox_conf&#96;  :(batch,n_boxes_total,n_classes)</span><br><span class="line">mbox_conf &#x3D; Concatenate(axis&#x3D;1,name&#x3D;&#39;mbox_conf&#39;)([conv4_3_mbox_conf,fc7_mbox_conf_reshape,conv8_2_mbox_conf_reshape,conv9_2_mbox_conf_reshape,conv10_2_mbox_conf_reshpe])</span><br><span class="line"></span><br><span class="line"># output shape of mbox_loc (batch,n_boxes_total,4)</span><br><span class="line">mbox_loc &#x3D; Concatenate(axis&#x3D;1,name&#x3D;&#39;mbox_loc&#39;)([conv4_3_mbox_loc_reshape,fc7_mbox_loc_reshape,conv8_2_mbox_loc_reshape,conv9_2_mbox_loc_reshape,conv10_2_mbox_loc_reshpe])</span><br><span class="line"></span><br><span class="line"># Output shape of &#39;mbox_prior &#39;: (batch,n_boxes_total,8)</span><br><span class="line">mbox_priorbox &#x3D; Concatenate(axis&#x3D;1,name&#x3D;&#39;mbox_priorbox&#39;)([conv4_3_mbox_priorbox_conf_reshape,fc7_mbox_priorbox_conf_reshappe,conv8_2_priorbox_conf_reshape,conv9_2_mbox_priorbox_reshape,conv10_2_mbox_priorbox_reshape])</span><br></pre></td></tr></table></figure>
+<p>所以从代码上来看，所有的分类走一条线，回归走一条线，生成priorbox走一条线（中间是从回归那边过来）。一条线的意思是，从basenet开始到最后添加的所有的feature map层处理这一段流程。<strong>从论文来看回归即priorbox，但是代码上来看是分开的</strong></p>
+<p>回归<code>loc</code>和<code>priorbox</code>所生成的结果是相互独立的，而分类的结果之间是相互影响的(每个分类都有个单独的结果)，需要做一个softmax实现多分类。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mbox_conf_softmax &#x3D; Activation(&#39;softmax&#39;,name&#x3D;&#39;mbox_conf_softmax&#39;)(mbox_conf)</span><br></pre></td></tr></table></figure>
+<p>最后做个汇总，把分类、回归、priorbox连接起来。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># concatenate the class and box predictions and the anchor box</span><br><span class="line"># output shape is (batch,n_boxes_total,n_classes+8+4)</span><br><span class="line">prediction &#x3D; Concatenate(axis &#x3D; 1,name&#x3D;&#39;all_prediction&#39;)([mbox_conf_softmax,mbox_loc,mbox_priorbox])</span><br></pre></td></tr></table></figure>
+<p>注意是在最后一个维度连接，最后的维度是 <strong>n_classes+4+8</strong></p>
+<h2 id="3-数据生成generator"><a href="#3-数据生成generator" class="headerlink" title="3 数据生成generator"></a>3 数据生成generator</h2><p>从源代码来看，generator相当复杂。我们可以只关注<code>ssd_batch_generator.py</code>中的<code>generator</code>方法，可以看到里面做了大量的数据增强。我们顺序来看</p>
+<p><strong>数据混排</strong></p>
+<p><img src="/images/blog/ssd_9_datashuffle.png" alt=""></p>
+<p><strong>等值变换</strong>（增强对比度）</p>
+<p><img src="/images/blog/ssd_10_equal.png" alt=""></p>
+<p><strong>明暗度变换</strong></p>
+<p><img src="/images/blog/ssd_11_brightness.png" alt=""></p>
+<p><strong>水平翻转</strong></p>
+<p><img src="/images/blog/ssd_12_flip.png" alt=""></p>
+<p>等等。。</p>
+<h2 id="4-如何生成训练样本-正-负Box"><a href="#4-如何生成训练样本-正-负Box" class="headerlink" title="4 如何生成训练样本(正/负Box)"></a>4 如何生成训练样本(正/负Box)</h2><p>AnchorBox是FasterRCNN的叫法，SSD的是PriorBox。下面的代码是<code>ssd_box_encode_decode_utils</code>的<code>encode_y</code>方法。通过这个方法可以知道代码里面是如何生成正/负样本的。</p>
+<p>方法传入的是一张图片的所有真实bbox,即[(分类1，xmin,ymin,xmax,ymax),(分类2,xmin,ymin,xmax,ymax),…]。注意，从下面这段代码可以看出，<strong>没有直接使用真实的标注bbox，而是使用与真实bbox重叠超过一定比率的预设priorbox作为正样本，小于一定比率的为负样本</strong></p>
+<p>大概过程如下：</p>
+<ol>
+<li>先收集整个网络的PriorBox。包含了根据SSD所有特征层生成的PriorBox。作为全部正样本候选</li>
+<li>拷贝一份正样本，作为负样本的候选。</li>
+<li>计算每个正样本与全部真实标记框的IOU<ul>
+<li>1 如果所有的PriorBox与真实标记得IOU都没有高于阈值的，则将有最高IOU的PriorBox作为正样本。同时从负样本中剔除该PriorBox</li>
+<li>2 IOU高于阈值的PriorBox会作为正样本保留，同时将对应的priorbox从负样本中剔除</li>
+</ul>
+</li>
+</ol>
+<p><img src="/images/blog/ssd_13_bbox.png" alt=""></p>
+<h3 id="4-1-如何在矩阵中做变换的"><a href="#4-1-如何在矩阵中做变换的" class="headerlink" title="4.1 如何在矩阵中做变换的"></a>4.1 如何在矩阵中做变换的</h3><p>回顾2.8节，SSD网络的最后输出是  <strong>[box_feature,n_classes+4+8]</strong>。</p>
+<p>我们考虑下矩阵是如何变换的，下面的列表是依次说明每一列所代表的意义。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>index</th>
+<th>标记</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[0,..]</td>
+<td>box_feature</td>
+<td>所有的box</td>
+</tr>
+<tr>
+<td>1</td>
+<td>if_class</td>
+<td>背景分类的概率</td>
+</tr>
+<tr>
+<td>2</td>
+<td>if_class</td>
+<td>分类1的概率</td>
+</tr>
+<tr>
+<td>3</td>
+<td>if_class</td>
+<td>分类2的概率</td>
+</tr>
+<tr>
+<td>4</td>
+<td>if_class</td>
+<td>分类3的概率</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>分类n的概率</td>
+</tr>
+<tr>
+<td>n+1</td>
+<td>xmin</td>
+<td>SSD网络预测的可能的box的坐标xmin)</td>
+</tr>
+<tr>
+<td>n+2</td>
+<td>xmin</td>
+<td>SSD网络预测的可能的box的坐标ymin)</td>
+</tr>
+<tr>
+<td>n+3</td>
+<td>xmin</td>
+<td>SSD网络预测的可能的box的坐标xmax</td>
+</tr>
+<tr>
+<td>n+4</td>
+<td>xmin</td>
+<td>SSD网络预测的可能的box的坐标ymax</td>
+</tr>
+<tr>
+<td>n+5</td>
+<td>box_xmin</td>
+<td>生成的PriorBox的坐标xmin</td>
+</tr>
+<tr>
+<td>n+6</td>
+<td>box_ymin</td>
+<td>生成的PriorBox的坐标ymin</td>
+</tr>
+<tr>
+<td>n+7</td>
+<td>box_xmax</td>
+<td>生成的PriorBox的坐标xmax</td>
+</tr>
+<tr>
+<td>n+8</td>
+<td>box_ymax</td>
+<td>生成的PriorBox的坐标ymax</td>
+</tr>
+<tr>
+<td>n+9</td>
+<td>box_x_var</td>
+<td>将网络预测的xmin调整到真实xmin所需的参数</td>
+</tr>
+<tr>
+<td>n+10</td>
+<td>box_y_var</td>
+<td>将网络预测的ymin调整到真实ymin所需的参数</td>
+</tr>
+<tr>
+<td>n+11</td>
+<td>box_wth_var</td>
+<td>将网络预测的box的<strong>宽度</strong>调整到真实box<strong>宽度</strong>所需的参数</td>
+</tr>
+<tr>
+<td>n+12</td>
+<td>box_hgt_var</td>
+<td>将网络预测的box的<strong>高度</strong>调整到真实box<strong>高度</strong>所需的参数</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>注意：</p>
+<ul>
+<li><code>SSD网络预测的可能的box的坐标</code>: 这个结果你可以当做普通卷积的一个输出结果，跟PriorBox无关</li>
+<li><code>生成的PriorBox的坐标</code>:指的是在feature map参照下生成的各个priorbox坐标。这个是模板形式，任意图片进来都是相同的值。它的作用是产生正/负样本，真实坐标是没有直接参与训练的，priorbox坐标与真实坐标iou大于阈值的为正，小于另外一个阈值的为负。</li>
+</ul>
+<p>添加测试代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">aspect_ratios_per_layer &#x3D; [[0.5, 1.0, 2.0],</span><br><span class="line">                          [1.0 &#x2F; 3.0, 0.5, 1.0, 2.0, 3.0],</span><br><span class="line">                          [1.0 &#x2F; 3.0, 0.5, 1.0, 2.0, 3.0],</span><br><span class="line">                          [1.0 &#x2F; 3.0, 0.5, 1.0, 2.0, 3.0],</span><br><span class="line">                          [0.5, 1.0, 2.0],</span><br><span class="line">                          [0.5, 1.0, 2.0]]</span><br><span class="line">encoder &#x3D; SSDBoxEncoder(300,300,21,predictor_sizes &#x3D; [(20,50,120,150),(20,50,120,150),(20,50,120,150),(20,50,120,150)])</span><br><span class="line">ground_label &#x3D; [[np.array([1,20,50,120,150]),np.array([2,220,150,70,80])]]</span><br><span class="line">encoder.encode_y(ground_label)</span><br></pre></td></tr></table></figure>
+<p>我们先分析生成生成Box的数量问题。通过调试上面的测试代码，可以看到</p>
+<p><img src="/images/blog/ssd_14_box.png" alt=""></p>
+<p>下面再对shape的后一个size 33做出解释。</p>
+<p><img src="/images/blog/ssd_15_boxes.png" alt=""></p>
+<h2 id="4-损失函数"><a href="#4-损失函数" class="headerlink" title="4 损失函数"></a>4 损失函数</h2><p>损失函数的代码在<code>keras_ssd_loss.py</code>这个类中。</p>
+<h3 id="4-1-理论"><a href="#4-1-理论" class="headerlink" title="4.1 理论"></a>4.1 理论</h3><p>目标函数，和常见的 Object Detection 的方法目标函数相同，分为两部分：计算相应的 default box 与目标类别的 score(置信度)以及相应的回归结果（位置回归）。置信度是采用 Softmax Loss（Faster R-CNN是log loss），位置回归则是采用 Smooth L1 loss （与Faster R-CNN一样采用 offset_PTDF靠近 offset_GTDF的策略）。</p>
+<script type="math/tex; mode=display">
+ L(x,c,l,g) = \frac{1}{n}(L_{cof}(x,c)+\alpha L_{loc}(x,l,g))</script><p>其中N代表正样本数目。回归损失函数如下：</p>
+<script type="math/tex; mode=display">
+L_{loc}(x,l,g) =\sum ^N_{i\in Pos}\sum_{m\in \lbrace cx,cy,w,h\rbrace}x_{i,j}^k smooth_{L_1}(l_i^m-\hat g_j^m) \\
+\hat g_j^{cx}= \frac{(g_j^{cx}-d_i^{cx})}{d_i^w} \\
+\hat g_j^{cy}= \frac{(g_j^{cy}-d_i^{cy})}{d_i^h} \\
+\hat g_j^w= \frac{(g_j^w-d_i^w)}{d_i^w} \\
+\hat g_j^h= \frac{(g_j^h-d_i^h)}{d_i^h}</script><p>分类损失函数如下：</p>
+<script type="math/tex; mode=display">
+ L_{conf}(x,c) = \sum _{i\in Pos}^Nx_{ij}^plog(\hat c_i^p)-\sum_{i\in Neg}log(\hat c_i^0) \quad\quad 其中 \hat c_i^p = \frac{exp(c_i^p)}{\sum_pexp(c_i^p)}</script><h3 id="4-2-代码中的详细计算"><a href="#4-2-代码中的详细计算" class="headerlink" title="4.2 代码中的详细计算"></a>4.2 代码中的详细计算</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 1: Compute the losses for class and box predictions for every box</span><br><span class="line">classification_loss &#x3D; tf.to_float(self.log_loss(y_true[:,:,:-12], y_pred[:,:,:-12])) # Output shape: (batch_size, n_boxes)</span><br><span class="line">localization_loss &#x3D; tf.to_float(self.smooth_L1_loss(y_true[:,:,-12:-8], y_pred[:,:,-12:-8])) # Output shape: (batch_size, n_boxes)</span><br></pre></td></tr></table></figure>
+<p>可以看到计算loss的时候是分别取出对应部分值的。注意<strong>2.8节</strong>最后的维度是 <strong>n_classes+4+8</strong>,上面计算classification_loss的时候是取得<strong>n_classes</strong>部分，localization_loss取的是<code>4</code>(回归得到的priorbox的四个参数)。<strong>此处最后的<code>8</code>没有使用，这个<code>8</code>是生成的priorbox的4个参数和4个参数的偏置，只有在inference的时候需要使用</strong>。</p>
+<p><strong>生成模板</strong></p>
+<p><code>generate_encode_template</code>主要做了一下操作：</p>
+<ol>
+<li>给所有特征层生成box。包括宽、高、坐标、尺寸等。<strong>[batch_size,len(box),4]</strong> （这一步使用的是<code>generate_anchor_boxes</code>方法，不是keras新层AnchorBox，AnchorBox生成的box的最后一个维度是8，已经带了variance）</li>
+<li>生成与box同等数量的分类(one-hot形式)，初始都是0。 <strong>[batch_size,len(box),n_classes]</strong></li>
+<li>生成与box同等数量的variance。<strong>[batch_size,len(box),4]</strong><br>4.连接1+2+3步骤生成的矩阵，其中第一步生成的box重复一次(原本只是模板，只有初始值（为了保证与ssd网络的输出维度一致）)，所以尺寸是<strong>[batch_size,len(box),n_classes+4+4+4]</strong></li>
+</ol>
+<p><strong>匹配模板</strong></p>
+<p><code>encode_y</code>对传入的<code>ground_truth_labels</code></p>
+<h4 id="3-3-如何卷积"><a href="#3-3-如何卷积" class="headerlink" title="3.3 如何卷积"></a>3.3 如何卷积</h4><p>feature map 都会通过一些小的卷积核操作，得到每一个 default boxes 关于物体类别的21个置信度 $(c_1,c_2 ,\cdots, c_p$ 20个类别和1个背景) 和4偏移 (shape offsets) 。</p>
+<ul>
+<li><p>假设feature map 通道数为 p 卷积核大小统一为 3<em>3</em>p （此处p=256）。个人猜想作者为了使得卷积后的feature map与输入尺度保持一致必然有 padding = 1， stride = 1 。  $ \frac{inputFieldSize-kernelSize+2\times padding}{stride}+1 = \frac{5-3+2\times 1 }{1}+1 = 5$</p>
+</li>
+<li><p>假如feature map 的size 为 m<em>n, 通道数为 p，使用的卷积核大小为 3</em>3<em>p。每个 feature map 上的每个特征点对应 k 个 default boxes，物体的类别数为 c，那么一个feature map就需要使用 k(c+4)个这样的卷积滤波器，最后有 (m</em>n) <em>k</em> (c+4)个输出</p>
+</li>
+</ul>
+<p>参考 </p>
+<p><a href="https://zhuanlan.zhihu.com/p/24954433" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/24954433</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/03/03/LHY_RNN/" rel="prev" title="李宏毅深度学习-七-RNN">
+      <i class="fa fa-chevron-left"></i> 李宏毅深度学习-七-RNN
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/03/18/LHY_RNN_and_GAN/" rel="next" title="李宏毅深度学习-八-RNN和GAN">
+      李宏毅深度学习-八-RNN和GAN <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-网络结构"><span class="nav-number">1.</span> <span class="nav-text">1  网络结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-网络结构-代码"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 网络结构(代码)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-分类和回归"><span class="nav-number">2.</span> <span class="nav-text">2  分类和回归</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-卷积-gt-分类"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 卷积-&gt;分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-卷积-gt-回归-其实还是卷积"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 卷积-&gt;回归(其实还是卷积)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-生成prior-box-default-box"><span class="nav-number">2.3.</span> <span class="nav-text">2.4 生成prior box(default box)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-如何生成prior-box"><span class="nav-number">2.4.</span> <span class="nav-text">2.5 如何生成prior box</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5-1-理论"><span class="nav-number">2.4.1.</span> <span class="nav-text">2.5.1 理论</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5-2-代码解析"><span class="nav-number">2.4.2.</span> <span class="nav-text">2.5.2 代码解析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5-3-获取每个cell的尺寸"><span class="nav-number">2.4.3.</span> <span class="nav-text">2.5.3 获取每个cell的尺寸</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6-Reshape"><span class="nav-number">2.5.</span> <span class="nav-text">2.6 Reshape</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-8-连接concatenate"><span class="nav-number">2.6.</span> <span class="nav-text">2.8 连接concatenate</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-数据生成generator"><span class="nav-number">3.</span> <span class="nav-text">3 数据生成generator</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-如何生成训练样本-正-负Box"><span class="nav-number">4.</span> <span class="nav-text">4 如何生成训练样本(正&#x2F;负Box)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-如何在矩阵中做变换的"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 如何在矩阵中做变换的</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-损失函数"><span class="nav-number">5.</span> <span class="nav-text">4 损失函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-理论"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 理论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-代码中的详细计算"><span class="nav-number">5.2.</span> <span class="nav-text">4.2 代码中的详细计算</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-如何卷积"><span class="nav-number">5.2.1.</span> <span class="nav-text">3.3 如何卷积</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="Symbols count total">591k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">8:57</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'c656cd038e01f710e260',
+      clientSecret: 'e6de2ccaaf0f7069292125b8f50e27f25b95810d',
+      repo: 'shartoo.github.com',
+      owner: 'shartoo# GitHub repo owner',
+      admin: ['shartoo'],
+      id: 'c96ff61771938f8d9445309be66afce3',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

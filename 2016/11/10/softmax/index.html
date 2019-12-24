@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://shartoo.github.io').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="深度学习基础理论">
+<meta property="og:type" content="article">
+<meta property="og:title" content="softmax函数">
+<meta property="og:url" content="https://shartoo.github.io/2016/11/10/softmax/index.html">
+<meta property="og:site_name" content="我的个人博客">
+<meta property="og:description" content="深度学习基础理论">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2016-11-10T00:00:00.000Z">
+<meta property="article:modified_time" content="2019-12-24T12:00:27.972Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://shartoo.github.io/2016/11/10/softmax/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>softmax函数 | 我的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="https://shartoo.github.io/2016/11/10/softmax/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          softmax函数
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-11-10 00:00:00" itemprop="dateCreated datePublished" datetime="2016-11-10T00:00:00+00:00">2016-11-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-12-24 12:00:27" itemprop="dateModified" datetime="2019-12-24T12:00:27+00:00">2019-12-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>1.6k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>1 mins.</span>
+            </span>
+            <div class="post-description">深度学习基础理论</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文根据 <a href="http://blog.csdn.net/hejunqing14/article/details/48980321" target="_blank" rel="noopener">softmax函数定义</a><br>整理</p>
+<h2 id="softmax函数的定义"><a href="#softmax函数的定义" class="headerlink" title="softmax函数的定义"></a>softmax函数的定义</h2><p>softmax是sigmoid函数的普遍形式，用于多分类。用在输出层，作为一个分类器，表述为多个分类上的概率分布。 softmax函数的常见形式如下：</p>
+<script type="math/tex; mode=display">
+  P(i) =\frac{exp(\theta_i^Tx)}{\sum _{i=1}^Kexp(\theta_i^Tx)}</script><p>通过softmax函数，可以使得 $P(i)$ 的范围在[0,1]之间。在回归和分类问题中，通常θ是待求参数，通过寻找使得 $P(i)$ 最大的 $\theta_i$作为最佳参数。回顾logistic函数形式</p>
+<script type="math/tex; mode=display">
+  P(i)=\frac{1}{1+exp(-\theta^T_ix)}</script><p>这个函数的作用就是使得 $P(i)$ 在负无穷到0的区间趋向于0，在0到正无穷的区间趋向于1。同样，softmax函数加入了e的幂函数正是为了两极化：正样本的结果将趋近于1，而负样本的结果趋近于0。</p>
+<h2 id="softmax的可以作为最终概率的证明"><a href="#softmax的可以作为最终概率的证明" class="headerlink" title="softmax的可以作为最终概率的证明"></a>softmax的可以作为最终概率的证明</h2><p>虽然Softmax函数得到的是一个[0,1]之间的值，且 $\sum _{i=1}^KP(i)=1$ ，但是这个softmax求出的概率是否就是真正的概率？换句话说，这个概率是否严格等于期望呢？为此在这里进行推导。</p>
+<p>假设现在有K个类，样本属于类别 $i$ 的概率为 $ϕ(i),i=1,…,K$ ,由于 $\sum _{i=1}^KP(i)=1$ ,所以只需要 <strong>前K-1</strong>个参数即可：   </p>
+<script type="math/tex; mode=display">
+ \phi _i =P(y=i,\phi),i=1,...K-1.\quad \phi _k=1-\sum_{i=1}^{K-1} \phi _i</script><p>先引入T(y)，它是一个k-1维的向量，如下所示：</p>
+<script type="math/tex; mode=display">
+ T(1)=\begin {bmatrix}
+  1\\ 0\\0\\0\\.\\.\\0\end{bmatrix}
+  \quad
+  T(2)=\begin {bmatrix}
+   0\\ 1\\0\\0\\.\\.\\0\end{bmatrix}
+   \quad
+   ...
+   T(k-1)=\begin {bmatrix}
+    0\\ 0\\0\\0\\.\\.\\1\end{bmatrix}
+    \quad
+    T(k)=\begin {bmatrix}
+     0\\ 0\\0\\0\\.\\.\\0\end{bmatrix}</script><p>样本属于第i类则第 $i$ 行元素为1，其余为0，即：$(T(i))i=1$ (注意第i个列的第i行)。因为y只能属于1类，故(y不等于k时)T(y)只有一个元素为1，其余元素都为0，则y的期望为：</p>
+<script type="math/tex; mode=display">
+  E(T(y))_i=P(y=i)=\phi_i,i\neq K</script><p>令 $\beta_i=log\frac{\phi_i}{\phi_K},i=1,…,K$(同时除以     $\phi_K$ ),则有:</p>
+<script type="math/tex; mode=display">
+  e^{\beta_i}=\frac{\phi_i}{\phi_K}\Longrightarrow\phi_K=\frac{\phi_i}{\beta_i}\Longrightarrow\phi_K\sum_i^Ke^{\beta_i}=\sum_i^K\phi_i=1</script><p><strong>注意观察：第三个式子是在第一个式子的左右乘以 $\phi_K$ ,然后累加求和。（第二个式子用在第二步）</strong></p>
+<p>所以：</p>
+<script type="math/tex; mode=display">
+  \phi_k=\frac{1}{\sum_{i=1}Ke^{\beta _i}}</script><p>此时再将 $\phi_K=\frac{\phi_i}{\beta}$ 带入（上面推导的第二个式子），有：</p>
+<script type="math/tex; mode=display">
+  \phi_i=\frac{e^{\beta_i}}{\sum_{i=1}^Ke^{\beta_i}}</script><p>由于分母中是求和操作，可以将i换成K。得到</p>
+<script type="math/tex; mode=display">
+  \phi_i=\frac{e^{\beta_i}}{\sum_{k=1}^Ke^{\beta_k}}</script><p>所以实际的期望是具有softmax函数的形式的，当 $f_i(x)=\beta_i=log\frac{\phi_i}{\phi_k}$ 时实际期望与softmax函数严格相等，所求概率为真实值。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/11/06/deepfeedforwardnn/" rel="prev" title="深度学习：深度前馈网络">
+      <i class="fa fa-chevron-left"></i> 深度学习：深度前馈网络
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/11/16/facedetect-paper-note/" rel="next" title="《漏斗形级联结构的多角度人脸检测算法》论文阅读笔记">
+      《漏斗形级联结构的多角度人脸检测算法》论文阅读笔记 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#softmax函数的定义"><span class="nav-number">1.</span> <span class="nav-text">softmax函数的定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#softmax的可以作为最终概率的证明"><span class="nav-number">2.</span> <span class="nav-text">softmax的可以作为最终概率的证明</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="Symbols count total">591k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">8:57</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'c656cd038e01f710e260',
+      clientSecret: 'e6de2ccaaf0f7069292125b8f50e27f25b95810d',
+      repo: 'shartoo.github.com',
+      owner: 'shartoo# GitHub repo owner',
+      admin: ['shartoo'],
+      id: 'ff866c2243af9b2ca511f7c11997f9d0',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

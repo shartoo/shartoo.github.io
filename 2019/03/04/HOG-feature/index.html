@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://shartoo.github.io').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="图像特征">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HOG特征详解">
+<meta property="og:url" content="https://shartoo.github.io/2019/03/04/HOG-feature/index.html">
+<meta property="og:site_name" content="我的个人博客">
+<meta property="og:description" content="图像特征">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/hog_feature_1.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/hog_feature_2.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/hog_feature_3.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/hog_feature_4.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/hog_feature_5.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/hog_feature_6.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/hog_feature_7.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/hog_feature_8.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/hog_feature_9.gif">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/hog_feature_10.jpg">
+<meta property="article:published_time" content="2019-03-04T00:00:00.000Z">
+<meta property="article:modified_time" content="2019-12-24T12:00:27.976Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shartoo.github.io/images/blog/hog_feature_1.jpg">
+
+<link rel="canonical" href="https://shartoo.github.io/2019/03/04/HOG-feature/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>HOG特征详解 | 我的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="https://shartoo.github.io/2019/03/04/HOG-feature/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HOG特征详解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-03-04 00:00:00" itemprop="dateCreated datePublished" datetime="2019-03-04T00:00:00+00:00">2019-03-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-12-24 12:00:27" itemprop="dateModified" datetime="2019-12-24T12:00:27+00:00">2019-12-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>3.9k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>4 mins.</span>
+            </span>
+            <div class="post-description">图像特征</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="0-简介"><a href="#0-简介" class="headerlink" title="0 简介"></a>0 简介</h2><p>HOG特征即 Histogram of oriented gradients，源于2005年一篇<a href="https://hal.inria.fr/file/index/docid/548512/filename/hog_cvpr2005.pdf" target="_blank" rel="noopener">CVPR论文</a>，使用HOG+SVM做行人检测，由于效果良好而被广泛应用。大体效果如下，具体使用HOG+SVM做行人检测时再讨论详细代码。</p>
+<p><img src="/images/blog/hog_feature_1.jpg" alt="sift1"> </p>
+<p>算法计算步骤概览</p>
+<ol>
+<li>图像预处理。<code>伽马矫正</code>(减少光度影响)和<code>灰度化</code>(也可以在RGB图上做，只不过对三通道颜色值计算，取梯度值最大的)【可选步骤】</li>
+<li>计算图像像素点梯度值，得到梯度图(尺寸和原图同等大小)</li>
+<li>图像划分多个cell，统计cell内梯度直方向方图</li>
+<li>将$2\times 2$个cell联合成一个block,对每个block做块内梯度归一化</li>
+</ol>
+<h2 id="1-图像预处理"><a href="#1-图像预处理" class="headerlink" title="1 图像预处理"></a>1 图像预处理</h2><h3 id="1-1-gamma矫正和灰度化"><a href="#1-1-gamma矫正和灰度化" class="headerlink" title="1.1 gamma矫正和灰度化"></a>1.1 gamma矫正和灰度化</h3><p><strong>作用</strong>：gamma矫正通常用于电视和监视器系统中重现摄像机拍摄的画面．在图像处理中也可用于调节图像的对比度，减少图像的光照不均和局部阴影．<br><strong>原理</strong>： 通过非线性变换，让图像从暴光强度的线性响应变得更接近人眼感受的响应，即将漂白（相机曝光）或过暗（曝光不足）的图片，进行矫正</p>
+<p>gamma矫正公式： </p>
+<script type="math/tex; mode=display">
+f(x) =x^{\gamma}</script><p>即输出是输入的幂函数，指数为$\gamma$</p>
+<p>代码实现如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import cv2</span><br><span class="line">import numpy as np</span><br><span class="line"></span><br><span class="line">img &#x3D; cv2.imread(&#39;gamma0.jpg&#39;,0)</span><br><span class="line">img1 &#x3D; np.power(img&#x2F;float(np.max(img)), 1&#x2F;1.5)</span><br><span class="line">img2 &#x3D; np.power(img&#x2F;float(np.max(img)), 1.5)</span><br><span class="line"></span><br><span class="line">cv2.imshow(&#39;src&#39;,img)</span><br><span class="line">cv2.imshow(&#39;gamma&#x3D;1&#x2F;1.5&#39;,img1)</span><br><span class="line">cv2.imshow(&#39;gamma&#x3D;1.5&#39;,img2)</span><br><span class="line">cv2.waitKey(0)</span><br></pre></td></tr></table></figure>
+<p>下图分别代表了处理之后的<code>原图</code>,<code>灰度图</code>，<code>gamma=1/1.5矫正</code>,<code>gamma=1.5矫正</code></p>
+<p><img src="/images/blog/hog_feature_2.jpg" alt="sift1"> </p>
+<h2 id="2-计算图像像素梯度图"><a href="#2-计算图像像素梯度图" class="headerlink" title="2 计算图像像素梯度图"></a>2 计算图像像素梯度图</h2><p>我们需要同时计算图像的<code>水平梯度图</code>和<code>垂直梯度图</code> 。如下图，假设我们要计算下图中像素点A的梯度值，</p>
+<p><img src="/images/blog/hog_feature_3.jpg" alt="sift1"> </p>
+<p>计算方法为</p>
+<p><strong>梯度大小</strong></p>
+<ul>
+<li>水平梯度： $g_x=\sqrt {(L(x-1,y)-L(x+1,y))^2}=\sqrt{(30-20)^2}=\sqrt{10^2}=10$</li>
+<li>垂直梯度： $g_y=\sqrt {(L(,y+1)-L(x,y-1))^2}=\sqrt{(32-64)^2}=\sqrt{32^2}=32$</li>
+</ul>
+<p><strong>梯度方向</strong></p>
+<ul>
+<li><script type="math/tex; mode=display">
+\theta (x,y) = arctan [\frac{g_x}{g_y}] =arctan\frac{10}{32}</script></li>
+</ul>
+<p>梯度方向会取绝对值，因此得到的角度范围是 $[0,180°]$</p>
+<p>上面这些计算过程，在opencv中有对应的算子，称为Sobel算子，分别计算水平和垂直方向梯度的。</p>
+<p><img src="/images/blog/hog_feature_4.jpg" alt="sift1"> </p>
+<p>使用的python opencv代码为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">im &#x3D; cv2.imread(&#39;bolt.png&#39;)</span><br><span class="line">im &#x3D; np.float32(im) &#x2F; 255.0</span><br><span class="line"> </span><br><span class="line"># 计算梯度</span><br><span class="line">img &#x3D; cv2.G</span><br><span class="line">gx &#x3D; cv2.Sobel(img, cv2.CV_32F, 1, 0, ksize&#x3D;1)</span><br><span class="line">gy &#x3D; cv2.Sobel(img, cv2.CV_32F, 0, 1, ksize&#x3D;1)</span><br><span class="line"># 计算梯度幅度和方向</span><br><span class="line">mag, angle &#x3D; cv2.cartToPolar(gx, gy, angleInDegrees&#x3D;True)</span><br><span class="line">cv2.imshow(&quot;absolute x-gradient&quot;,gx)</span><br><span class="line">cv2.imshow(&quot;absolute y-gradient&quot;,gy)</span><br><span class="line">cv2.imshow(&quot;gradient magnitude&quot;,mag)</span><br><span class="line">cv2.imshow(&quot;gradient direction&quot;,angle)</span><br><span class="line">cv2.waitKey(0)</span><br></pre></td></tr></table></figure>
+<p>效果如下，分别为<code>原图</code>,<code>x方向梯度绝对值</code>,<code>y方向梯度绝对值图</code>,<code>梯度幅度图</code>,<code>梯度方向图</code><br><strong>下图是没有使用归一化效果</strong></p>
+<p><img src="/images/blog/hog_feature_5.jpg" alt="sift1"> </p>
+<p><strong>使用归一化之后的效果</strong></p>
+<p><img src="/images/blog/hog_feature_6.jpg" alt="sift1"> </p>
+<p>可以看到</p>
+<ul>
+<li>x方向梯度图会强化垂直方向的特征，可以观察到左侧白色斜线更加明显，但是底部一些水平线没有了。</li>
+<li>y方向梯度图会强化水平方向特征，底部水平线强化了，左侧垂直线不是那么明显了。</li>
+</ul>
+<p>梯度图移除了大量非显著性特征，并加强了显著特征。三通道的彩色图中，每个像素的梯度幅度是三个通道中最大的那个，而梯度方向是梯度幅度最大的那个通道上的方向。</p>
+<h2 id="3-计算梯度直方图"><a href="#3-计算梯度直方图" class="headerlink" title="3 计算梯度直方图"></a>3 计算梯度直方图</h2><p>经过上一步计算之后，每个像素点都会有两个值：<strong>梯度方向和梯度幅度</strong>。</p>
+<p>但是，也看到了，梯度幅度和梯度方向图与原图等同大小，实际如果使用这些特征，会存在两个问题</p>
+<ul>
+<li>计算量很大，基本就是原图</li>
+<li>特征稀疏。图中其实只有少量稀疏的显著特征，大部分可能是0</li>
+</ul>
+<p>以上是个人理解。</p>
+<p>HOG特征在此步骤选择联合一个$8\times 8$的小格子内部一些像素，计算其梯度幅度和梯度方向的统计直方图，这样一来就可以以这个梯度直方图来代替原本庞大的矩阵。每个像素有一个梯度幅度和梯度方向两个取值，那么一个$8\times 8$的小格子一共有$8\times 8\times 2=128$个取值。</p>
+<p>上面提到，梯度方向取值范围是$[0,180]$，以每20°为一个单元，所有的梯度方向可以划分为9组，这就是统计直方图的分组数目。如下图，我们选取划分格子之后的第二行第二列一个小单元，计算得到右边的<code>梯度方向图</code>和<code>梯度幅度图</code>，同时以以梯度方向为index，统计分组数量。</p>
+<p><img src="/images/blog/hog_feature_7.jpg" alt="sift1"> </p>
+<p>得到的统计频率直方图如下</p>
+<p><img src="/images/blog/hog_feature_8.jpg" alt="sift1"> </p>
+<p>从上图可以看到，更多的点的梯度方向是倾向于0度和160度，也就是说这些点的梯度方向是向上或者向下，表明图像这个位置存在比较明显的横向边缘。因此HOG是对边角敏感的，由于这样的统计方法，也是对部分像素值变化不敏感的，所以能够适应不同的环境。</p>
+<p>至于为什么选取$8\times 8$为一个单元格，是因为HOG特征当初设计时是用来做行人检测的。在行人图片中$8\times8$的矩阵被缩放成$64\times 128$的网格时，足以捕获一些特征，比如脸部或者头部特征等。</p>
+<h2 id="4-block归一化"><a href="#4-block归一化" class="headerlink" title="4 block归一化"></a>4 block归一化</h2><p>目的：降低光照的影响<br>方法：向量的每一个值除以向量的模长</p>
+<p>比如对于一个$(128,64,32)$的三维向量来说，模长是$ \sqrt{128^2+64^2+32^2}=146.64$,那么归一化后的向量变成了$(0.87,0.43,0.22)$。</p>
+<p>HOG在选取$8\times 8$为一个单元格的基础之上，再以$2\times 2$个单元格为一组，称为block。作者提出要对block进行归一化，由于每个单元格cell有9个向量，$2\times 2$个单元格则有36个向量，需要对这36个向量进行归一化。下图演示了如何在图像中抽取block</p>
+<p><img src="/images/blog/hog_feature_9.gif" alt="sift1"> </p>
+<h2 id="5-HOG特征描述"><a href="#5-HOG特征描述" class="headerlink" title="5  HOG特征描述"></a>5  HOG特征描述</h2><p>每一个$16\times 16$大小的block将会得到36大小的vector。那么对于一个$64\times128$大小的图像，按照上图的方式提取block，将会有7个水平位置和15个竖直位可以取得，所以一共有$7\times15=105$个block，所以我们整合所有block的vector，形成一个大的一维vector的大小将会是$36\times105=3780$。</p>
+<h2 id="6-参考代码"><a href="#6-参考代码" class="headerlink" title="6 参考代码"></a>6 参考代码</h2><p>计算图像HOG特征时，我们使用如下代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">from skimage.feature import hog</span><br><span class="line">from skimage import data, exposure</span><br><span class="line">image &#x3D; cv2.imread(&#39;C:&#x2F;Users&#x2F;dell&#x2F;Desktop&#x2F;123.png&#39;)</span><br><span class="line"></span><br><span class="line">fd, hog_image &#x3D; hog(image, orientations&#x3D;8, pixels_per_cell&#x3D;(16, 16),</span><br><span class="line">                    cells_per_block&#x3D;(1, 1), visualize&#x3D;True, multichannel&#x3D;True)</span><br><span class="line">fig, (ax1, ax2) &#x3D; plt.subplots(1, 2, figsize&#x3D;(8, 4), sharex&#x3D;True, sharey&#x3D;True)</span><br><span class="line">ax1.axis(&#39;off&#39;)</span><br><span class="line">ax1.imshow(image, cmap&#x3D;plt.cm.gray)</span><br><span class="line">ax1.set_title(&#39;Input image&#39;)</span><br><span class="line"># Rescale histogram for better display</span><br><span class="line">hog_image_rescaled &#x3D; exposure.rescale_intensity(hog_image, in_range&#x3D;(0, 10))</span><br><span class="line">ax2.axis(&#39;off&#39;)</span><br><span class="line">ax2.imshow(hog_image_rescaled, cmap&#x3D;plt.cm.gray)</span><br><span class="line">ax2.set_title(&#39;Histogram of Oriented Gradients&#39;)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>效果如下</p>
+<p><img src="/images/blog/hog_feature_10.jpg" alt="sift1"></p>
+<h2 id="7-参考"><a href="#7-参考" class="headerlink" title="7 参考"></a>7 参考</h2><p><a href="https://zhuanlan.zhihu.com/p/40960756" target="_blank" rel="noopener">知乎 图像HOG特征计算</a><br><a href="https://blog.csdn.net/akadiao/article/details/79679306" target="_blank" rel="noopener">图像gamma矫正</a><br><a href="https://www.learnopencv.com/histogram-of-oriented-gradients/" target="_blank" rel="noopener">梯度计算</a><br><a href="https://scikit-image.org/docs/dev/auto_examples/features_detection/plot_hog.html" target="_blank" rel="noopener">skimage 计算图像HOG特征</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/03/02/img-haar-feature/" rel="prev" title="图像处理基础Haar特征">
+      <i class="fa fa-chevron-left"></i> 图像处理基础Haar特征
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/03/05/SIFT-feature/" rel="next" title="SIFT特征详解">
+      SIFT特征详解 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0-简介"><span class="nav-number">1.</span> <span class="nav-text">0 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-图像预处理"><span class="nav-number">2.</span> <span class="nav-text">1 图像预处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-gamma矫正和灰度化"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 gamma矫正和灰度化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-计算图像像素梯度图"><span class="nav-number">3.</span> <span class="nav-text">2 计算图像像素梯度图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-计算梯度直方图"><span class="nav-number">4.</span> <span class="nav-text">3 计算梯度直方图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-block归一化"><span class="nav-number">5.</span> <span class="nav-text">4 block归一化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-HOG特征描述"><span class="nav-number">6.</span> <span class="nav-text">5  HOG特征描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-参考代码"><span class="nav-number">7.</span> <span class="nav-text">6 参考代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-参考"><span class="nav-number">8.</span> <span class="nav-text">7 参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="Symbols count total">591k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">8:57</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'c656cd038e01f710e260',
+      clientSecret: 'e6de2ccaaf0f7069292125b8f50e27f25b95810d',
+      repo: 'shartoo.github.com',
+      owner: 'shartoo# GitHub repo owner',
+      admin: ['shartoo'],
+      id: '4390a3741bea91a3778cb75cd6c5ce29',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

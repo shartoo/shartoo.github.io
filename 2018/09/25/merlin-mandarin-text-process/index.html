@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://shartoo.github.io').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="语音合成">
+<meta property="og:type" content="article">
+<meta property="og:title" content="merlin语音合成中文前端处理1-理论">
+<meta property="og:url" content="https://shartoo.github.io/2018/09/25/merlin-mandarin-text-process/index.html">
+<meta property="og:site_name" content="我的个人博客">
+<meta property="og:description" content="语音合成">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-09-25T00:00:00.000Z">
+<meta property="article:modified_time" content="2019-12-24T12:00:27.976Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://shartoo.github.io/2018/09/25/merlin-mandarin-text-process/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>merlin语音合成中文前端处理1-理论 | 我的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="https://shartoo.github.io/2018/09/25/merlin-mandarin-text-process/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          merlin语音合成中文前端处理1-理论
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-09-25 00:00:00" itemprop="dateCreated datePublished" datetime="2018-09-25T00:00:00+00:00">2018-09-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-12-24 12:00:27" itemprop="dateModified" datetime="2019-12-24T12:00:27+00:00">2019-12-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>4.1k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>4 mins.</span>
+            </span>
+            <div class="post-description">语音合成</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="0-概述"><a href="#0-概述" class="headerlink" title="0 概述"></a>0 概述</h2><p>语音合成过程，需要处理两部分内容，分别是：</p>
+<ul>
+<li><p>文本(Text)处理： 假设我们的输入是<code>你好看啊</code></p>
+</li>
+<li><p>音频(speech)处理： 对应<code>你好看啊.wav</code></p>
+</li>
+</ul>
+<h2 id="1-文本处理"><a href="#1-文本处理" class="headerlink" title="1 文本处理"></a>1 文本处理</h2><h3 id="1-1-规范化"><a href="#1-1-规范化" class="headerlink" title="1.1 规范化"></a>1.1 规范化</h3><p>对文本进行预处理，主要是去掉无用字符，全半角字符转化等</p>
+<p>有时候普通话文本中会出现简略词、日期、公式、号码等文本信息，这就需要通过文本规范化，对这些文本块进行处理以正确发音[7]。例如</p>
+<ul>
+<li>“小明体重是 128 斤”中的“128”应该规范为“一百二十八”，而“G128 次列车”中的“128” 应该规范为“一 二 八”；</li>
+<li>“2016-05-15”、“2016 年 5 月 15 号”、“2016/05/15”可以统一为一致的发音</li>
+</ul>
+<p>对于英文而言，如：</p>
+<ul>
+<li><strong>类别为年份（NYER）</strong>： 2011 $\rightarrow$ twenty eleven</li>
+<li><strong>类别为货币(MONEY)</strong>: £100 $\rightarrow$  one hundred pounds</li>
+<li><strong>类别为非单词，需要拟音(ASWD)</strong>:  IKEA $\rightarrow$  apply letter-to-sound</li>
+<li><strong>类别为数字(NUM)</strong> : 100 NUM $\rightarrow$ one hundred</li>
+<li><strong>类别为字母(LSEQ)</strong> :  DVD  $\rightarrow$ dee vee dee</li>
+</ul>
+<h3 id="1-2-转化为拼音"><a href="#1-2-转化为拼音" class="headerlink" title="1.2 转化为拼音"></a>1.2 转化为拼音</h3><p>参考<a href="http://www.moe.edu.cn/s78/A19/yxs_left/moe_810/s230/195802/t19580201_186000.html" target="_blank" rel="noopener">国家汉语拼音方案</a></p>
+<p>使用一个汉语拼音词典，将<code>你好看啊</code>转换为： <code>nǐ</code>,<code>hǎo</code>,<code>kàn</code>,<code>ā</code>。此过程需要注意有些多音词需要处理，可以只是使用python的<strong>pypinyin</strong></p>
+<h3 id="1-3-拼音转换为音调表示"><a href="#1-3-拼音转换为音调表示" class="headerlink" title="1.3 拼音转换为音调表示"></a>1.3 拼音转换为音调表示</h3><p>目前支持将汉语拼音中的<code>一</code>,<code>二</code>,<code>三</code>,<code>四</code>声转换为 <code>1</code>,<code>2</code>,<code>3</code>,<code>4</code>,<code>5</code>（5代表轻声）</p>
+<p> <code>nǐ</code>,<code>hǎo</code>,<code>kàn</code>,<code>ā</code>$\rightarrow$ <code>ni3</code>,<code>hao3</code>,<code>kan4</code>,<code>a1</code></p>
+<p>事实上<strong>pypinyin</strong>可以一步从<code>你好看啊</code>转换为 <code>ni3</code>,<code>hao3</code>,<code>kan4</code>,<code>a1</code></p>
+<h3 id="1-4-将音节分解为音素"><a href="#1-4-将音节分解为音素" class="headerlink" title="1.4  将音节分解为音素"></a>1.4  将音节分解为音素</h3><p>音素为汉语拼音的最小单元。包括<code>声母</code>,<code>韵母</code>,但是其中还会有一些整体认读音节。(注意：下面所列并非官方标准版，不同情形可以采取不同取舍，参考<a href="https://mtts.readthedocs.io/zh_CN/latest/text_analyse.html" target="_blank" rel="noopener">MTTS文本分析</a>)</p>
+<p><strong>整体认读音节</strong></p>
+<p>16个整体认读音节分别是：<code>zhi 、chi、shi、ri、zi、ci、si、yi、wu、yu、ye、yue、yuan、yin 、yun、ying</code>，但是要注意没有yan，因为yan并不发作an音</p>
+<p><strong>声母（23个）</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b p m f d t n l g k h j q x zh ch sh r z c s y w</span><br></pre></td></tr></table></figure>
+<p><strong>韵母（39个）</strong></p>
+<ul>
+<li>单韵母 a、o、e、 ê、i、u、ü、-i（前）、-i（后）、er</li>
+<li>复韵母 ai、ei、ao、ou、ia、ie、ua、uo、 üe、iao 、iou、uai、uei</li>
+<li>鼻韵母 an、ian、uan、 üan 、en、in、uen、 ün 、ang、iang、uang、eng、ing、ueng、ong、iong</li>
+</ul>
+<p><strong>韵母（39个）（转换标注后）</strong></p>
+<ul>
+<li>单韵母 a、o、e、ea、i、u、v、ic、ih、er</li>
+<li>复韵母 ai、ei、ao、ou、ia、ie、ua、uo、 ve、iao 、iou、uai、uei</li>
+<li>鼻韵母 an、ian、uan、 van 、en、in、uen、 vn 、ang、iang、uang、eng、ing、ueng、ong、iong</li>
+</ul>
+<h3 id="1-5-结果"><a href="#1-5-结果" class="headerlink" title="1.5 结果"></a>1.5 结果</h3><p>此步骤的结果为 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[(&#39;n&#39;, &#39;i3&#39;), (&#39;h&#39;, &#39;ao3&#39;), (&#39;k&#39;, &#39;an4&#39;), (&#39;a5&#39;,)]</span><br></pre></td></tr></table></figure>
+<h2 id="2-合成基元选取"><a href="#2-合成基元选取" class="headerlink" title="2 合成基元选取"></a>2 合成基元选取</h2><p>合成基元就是合成语音所需的最小单元。由大到小来说：</p>
+<ol>
+<li>可以选择每个汉字，一共有6万多，会导致需要很大的训练集</li>
+<li>可以选择所有拼音，数量会比汉字少很多</li>
+<li>也可以选择声韵母，声韵母是组成音节的单元，21个声母+39个韵母，数据量大幅度减少。</li>
+</ol>
+<p>在实际语音中除了这些文本上的内容之外，还会存在开始和结束的<strong>静音</strong>，标点符号之间存在的<strong>短暂停顿</strong>。所以我们可以采取以下这套合成基元方案。</p>
+<ul>
+<li><strong>声母</strong>：  21个声母+wy（共23个）</li>
+<li><strong>韵母</strong>： 39个韵母</li>
+<li><strong>静音</strong>：<code>sil</code>, <code>pau</code>, <code>sp</code>。sil(silence) 表示句首和句尾的静音，pau(pause) 表示由逗号，顿号造成的停顿，句中其他的短停顿为sp(short pause)</li>
+</ul>
+<h2 id="3-上下文相关标注"><a href="#3-上下文相关标注" class="headerlink" title="3  上下文相关标注"></a>3  上下文相关标注</h2><p>上下文相关标注的规则要综合考虑有哪些上下文对当前音素发音的影响，总的来说，需要考虑发音基元及其前后基元的信息，以及发音基元所在的音节、词、韵律词、韵律短语、语句相关的信息。</p>
+<p>此类标注对于不同任务可以自由设计，一种参考是<a href="https://github.com/Jackiexiao/MTTS/blob/master/docs/mddocs/mandarin_example_label.md" target="_blank" rel="noopener">MTTS普通话标注示例</a>。这里将参考中的一些内容作出一些解释：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>层级（由小到达）</th>
+<th>标注格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>声韵母层</td>
+<td>p1^p2-p3+p4=p5@p6_p7</td>
+</tr>
+<tr>
+<td>.</td>
+<td>/A:a1_a2-a3_a4#a5</td>
+</tr>
+<tr>
+<td>音节层</td>
+<td>/B:b1_b2!b3_b4#b5@b6!b7+b8@b9#b10_b11</td>
+</tr>
+<tr>
+<td>.</td>
+<td>/C:c1+c2-c3=c4#c5</td>
+</tr>
+<tr>
+<td>词层</td>
+<td>/D:d1-d2 /E:e1&amp;e2^e3_e4 /F:f1-f2</td>
+</tr>
+<tr>
+<td>韵律层</td>
+<td>/G:g1-g2 /H:h1-h2@h3+h4 /I:i1-i2</td>
+</tr>
+<tr>
+<td>韵律短语层</td>
+<td>/J:j1^j2=j3-j4 /K:k1=k2_k3^k4&amp;k5_k6 /L:l1^l2#l3-l4</td>
+</tr>
+<tr>
+<td>语句层</td>
+<td>/M:m1#m2+m3+m4!m5</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>下面的（发音）基元指的是声韵母，HMM建模选用的单元是音节</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>标号</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>p1</td>
+<td>前前基元</td>
+</tr>
+<tr>
+<td>p2</td>
+<td>前一基元</td>
+</tr>
+<tr>
+<td>p3</td>
+<td>当前基元</td>
+</tr>
+<tr>
+<td>p4</td>
+<td>后一基元</td>
+</tr>
+<tr>
+<td>p5</td>
+<td>后后基元</td>
+</tr>
+<tr>
+<td>p6</td>
+<td>当前基元在当前音节的位置（正序）</td>
+</tr>
+<tr>
+<td>p7</td>
+<td>当前基元在当前音节的位置（倒序） </td>
+</tr>
+<tr>
+<td>a1</td>
+<td>前一音节的首基元</td>
+</tr>
+<tr>
+<td>a2</td>
+<td>前一音节的末基元</td>
+</tr>
+<tr>
+<td>a3，a4</td>
+<td>前一音节的声调类型（词典和文本分析，下同）</td>
+</tr>
+<tr>
+<td>a5</td>
+<td>前一音节的基元数目</td>
+</tr>
+<tr>
+<td>b1</td>
+<td>当前音节的首基元</td>
+</tr>
+<tr>
+<td>b2</td>
+<td>当前音节的末基元</td>
+</tr>
+<tr>
+<td>b3，b4</td>
+<td>当前音节的声调类型（词典和文本分析，下同）</td>
+</tr>
+<tr>
+<td>a5</td>
+<td>当前音节的基元数目</td>
+</tr>
+<tr>
+<td>b6</td>
+<td>当前音节在词中的位置（正序）</td>
+</tr>
+<tr>
+<td>b7</td>
+<td>当前音节在词中的位置（倒序）</td>
+</tr>
+<tr>
+<td>b8</td>
+<td>当前音节在韵律词中的位置（正序）</td>
+</tr>
+<tr>
+<td>b9</td>
+<td>当前音节在韵律词中的位置（倒序）</td>
+</tr>
+<tr>
+<td>b10</td>
+<td>当前音节在韵律短语中的位置（正序）</td>
+</tr>
+<tr>
+<td>b11</td>
+<td>当前音节在韵律短语中的位置（倒序）</td>
+</tr>
+<tr>
+<td>c1</td>
+<td>后一音节的首基元</td>
+</tr>
+<tr>
+<td>c2</td>
+<td>后一音节的末基元</td>
+</tr>
+<tr>
+<td>c3，c4</td>
+<td>后一音节的声调类型（词典和文本分析，下同）</td>
+</tr>
+<tr>
+<td>c5</td>
+<td>后一音节的基元数目</td>
+</tr>
+<tr>
+<td>d1</td>
+<td>前一个词的词性</td>
+</tr>
+<tr>
+<td>d2</td>
+<td>前一个词的音节数目</td>
+</tr>
+<tr>
+<td>e1</td>
+<td>当前词的词性</td>
+</tr>
+<tr>
+<td>e2</td>
+<td>当前词中的音节数目</td>
+</tr>
+<tr>
+<td>e3</td>
+<td>当前词在韵律词中的位置（正序）</td>
+</tr>
+<tr>
+<td>e4</td>
+<td>当前词在韵律词中的位置（倒序）</td>
+</tr>
+<tr>
+<td>f1</td>
+<td>后一个词的词性</td>
+</tr>
+<tr>
+<td>f2</td>
+<td>后一个词的音节数目</td>
+</tr>
+<tr>
+<td>g1</td>
+<td>前一个韵律词的音节数目</td>
+</tr>
+<tr>
+<td>g2</td>
+<td>前一个韵律词的词数目</td>
+</tr>
+<tr>
+<td> —-</td>
+<td>——</td>
+</tr>
+<tr>
+<td>h1</td>
+<td>当前韵律词的音节数目</td>
+</tr>
+<tr>
+<td>h2</td>
+<td>当前韵律词的词数目</td>
+</tr>
+<tr>
+<td>h3</td>
+<td>当前韵律词在韵律短语的位置（正序）</td>
+</tr>
+<tr>
+<td>h4</td>
+<td>当前韵律词在韵律短语的位置（倒序）</td>
+</tr>
+<tr>
+<td> —-</td>
+<td>—</td>
+</tr>
+<tr>
+<td>i1</td>
+<td>后一个韵律词的音节数目</td>
+</tr>
+<tr>
+<td>i2</td>
+<td>后一个韵律词的词数目</td>
+</tr>
+<tr>
+<td> —</td>
+<td>—-</td>
+</tr>
+<tr>
+<td>j1</td>
+<td>前一韵律短语的语调类型</td>
+</tr>
+<tr>
+<td>j2</td>
+<td>前一韵律短语的音节数目</td>
+</tr>
+<tr>
+<td>j3</td>
+<td>前一韵律短语的词数目</td>
+</tr>
+<tr>
+<td>j4</td>
+<td>前一韵律短语的韵律词个数</td>
+</tr>
+<tr>
+<td> —-</td>
+<td>——</td>
+</tr>
+<tr>
+<td>k1</td>
+<td>当前韵律短语的语调类型</td>
+</tr>
+<tr>
+<td>k2</td>
+<td>当前韵律短语的音节数目</td>
+</tr>
+<tr>
+<td>k3</td>
+<td>当前韵律短语的词数目</td>
+</tr>
+<tr>
+<td>k4</td>
+<td>当前韵律短语的韵律词个数</td>
+</tr>
+<tr>
+<td>k5</td>
+<td>当前韵律短语在语句中的位置（正序）</td>
+</tr>
+<tr>
+<td>k6</td>
+<td>当前韵律短语在语句中的位置（倒序）</td>
+</tr>
+<tr>
+<td> —-</td>
+<td>—-</td>
+</tr>
+<tr>
+<td>l1</td>
+<td>后一韵律短语的语调类型</td>
+</tr>
+<tr>
+<td>l2</td>
+<td>后一韵律短语的音节数目</td>
+</tr>
+<tr>
+<td>l3</td>
+<td>后一韵律短语的词数目</td>
+</tr>
+<tr>
+<td>l4</td>
+<td>后一韵律短语的韵律词个数</td>
+</tr>
+<tr>
+<td> —-</td>
+<td>—-</td>
+</tr>
+<tr>
+<td>m1</td>
+<td>语句的语调类型</td>
+</tr>
+<tr>
+<td>m2</td>
+<td>语句的音节数目</td>
+</tr>
+<tr>
+<td>m3</td>
+<td>语句的词数目</td>
+</tr>
+<tr>
+<td>m4</td>
+<td>语句的韵律词数目</td>
+</tr>
+<tr>
+<td>m5</td>
+<td>语句的韵律短语数目</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="4-问题集设计"><a href="#4-问题集设计" class="headerlink" title="4 问题集设计"></a>4 问题集设计</h2><p>问题集(Question Set)即是决策树中条件判断的设计。问题集通常很大，由几百个判断条件组成。</p>
+<p>问题集的设计依赖于不同语言的语言学知识，而且<strong>与上下文标注文件相匹配，改变上下文标注方法也需要相应地改变问题集</strong>，对于中文语音合成而言，问题集的设计的规则有:</p>
+<ul>
+<li><strong>前前个，前个，当前，下个，下下个声韵母分别是某个合成基元吗</strong>，合成基元共有65个(23声母+39韵母+3静音)，例如判断是否是元音a QS “LL-a” QS “L-a” QS “C-a” QS “R-a” QS “RR-a”</li>
+<li><strong>声母特征划分</strong>，例如声母可以划分成塞音，擦音，鼻音，唇音等，声母特征划分24个</li>
+<li><strong>韵母特征划分</strong>，例如韵母可以划分成单韵母，复合韵母，分别包含aeiouv的韵母，韵母特征划分8个</li>
+<li><strong>其他信息划分</strong>，词性划分，26个词性; 声调类型，5个; 是否是声母或者韵母或者静音，3个</li>
+<li><strong>韵律特征划分</strong>，如是否是重音，重音和韵律词/短语的位置数量</li>
+<li><strong>位置和数量特征划分</strong></li>
+</ul>
+<p>对于三音素模型而言，对于每个划分的特征，都会产生3个判断条件，该音素是否满足条件，它的左音素（声韵母）和右音素（声韵母）是否满足条件，有时会扩展到左左音素和右右音素的情况，这样就有5个问题。其中，每个问题都是以 QS 命令开头，问题集的答案可以有多个，中间以逗号隔开，答案是一个包含通配符的字符串。当问题表达式为真时，该字符串成功匹配标注文件中的某一行标注。格式如：</p>
+<p>QS 问题表达式 {答案 1，答案 2，答案 3，……}</p>
+<p>QS “LL==Fricative” {f^<em>,s^</em>,sh^<em>,x^</em>,h^<em>,lh^</em>,hy^<em>,hh^</em>}</p>
+<p>对于3音素上下文相关的基元模型的3个问题，例如： <em> 判断当前，前接，后接音素/单元是否为擦音 </em> QS ‘C_Fricative’ <em> QS ‘L_Fricative’ </em> QS ‘R_Fricative’</p>
+<p>问题集示例参考 <a href="https://github.com/Jackiexiao/MTTS/blob/master/docs/mddocs/question.md" target="_blank" rel="noopener">MTTS问题集设计参考</a></p>
+<p>值得注意的是，merlin中使用的问题集和HTS中有所不同，Merlin中新增加了CQS问题，Merlin处理Questions Set 的模块在merlin/src/frontend/label_normalisation 中的Class HTSLabelNormalisation</p>
+<p><strong>Question Set 的格式是</strong></p>
+<p>QS + 一个空格 + “question<em>name” + 任意空格+ {Answer1, answer2, answer3…} # 无论是QS还是CQS的answer中，前后的**不用加，加了也会被去掉 CQS + 一个空格 + “question_name” + 任意空格+ {Answer} #对于CQS，这里只能有一个answer 比如 CQS C-Syl-Tone {</em>(d+)+} merlin也支持浮点数类型，只需改为CQS C-Syl-Tone {_([d.]+)+}</p>
+<p>参考 ：  <a href="https://mtts.readthedocs.io/zh_CN/latest/text_analyse.html" target="_blank" rel="noopener">https://mtts.readthedocs.io/zh_CN/latest/text_analyse.html</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/09/23/merlin-mandain-voice-op/" rel="prev" title="merlin语音合成方案mandarin_voice操作步骤">
+      <i class="fa fa-chevron-left"></i> merlin语音合成方案mandarin_voice操作步骤
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/09/26/merlin-mandarin-text-process-work/" rel="next" title="merlin语音合成中文前端处理2-实践">
+      merlin语音合成中文前端处理2-实践 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0-概述"><span class="nav-number">1.</span> <span class="nav-text">0 概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-文本处理"><span class="nav-number">2.</span> <span class="nav-text">1 文本处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-规范化"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 规范化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-转化为拼音"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 转化为拼音</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-拼音转换为音调表示"><span class="nav-number">2.3.</span> <span class="nav-text">1.3 拼音转换为音调表示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-将音节分解为音素"><span class="nav-number">2.4.</span> <span class="nav-text">1.4  将音节分解为音素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-结果"><span class="nav-number">2.5.</span> <span class="nav-text">1.5 结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-合成基元选取"><span class="nav-number">3.</span> <span class="nav-text">2 合成基元选取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-上下文相关标注"><span class="nav-number">4.</span> <span class="nav-text">3  上下文相关标注</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-问题集设计"><span class="nav-number">5.</span> <span class="nav-text">4 问题集设计</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="Symbols count total">591k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">8:57</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'c656cd038e01f710e260',
+      clientSecret: 'e6de2ccaaf0f7069292125b8f50e27f25b95810d',
+      repo: 'shartoo.github.com',
+      owner: 'shartoo# GitHub repo owner',
+      admin: ['shartoo'],
+      id: '6aed726cc23a3f57c1137a1d8b4d8600',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

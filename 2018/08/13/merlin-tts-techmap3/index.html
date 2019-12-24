@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://shartoo.github.io').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="语音">
+<meta property="og:type" content="article">
+<meta property="og:title" content="merlin语音合成讲义三：系统回归">
+<meta property="og:url" content="https://shartoo.github.io/2018/08/13/merlin-tts-techmap3/index.html">
+<meta property="og:site_name" content="我的个人博客">
+<meta property="og:description" content="语音">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_1.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_2.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_3.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_4.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_5.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_6.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_7.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_8.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_9.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_10.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_11.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_12.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_13.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_14.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_15.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_16.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_17.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_18.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_19.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_20.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_21.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_22.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_23.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_24.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_25.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_26.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_26.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_28.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_29.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_30.png">
+<meta property="article:published_time" content="2018-08-13T00:00:00.000Z">
+<meta property="article:modified_time" content="2019-12-24T12:00:27.976Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shartoo.github.io/images/blog/merlin_tts_tch3_1.png">
+
+<link rel="canonical" href="https://shartoo.github.io/2018/08/13/merlin-tts-techmap3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>merlin语音合成讲义三：系统回归 | 我的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="https://shartoo.github.io/2018/08/13/merlin-tts-techmap3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          merlin语音合成讲义三：系统回归
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-08-13 00:00:00" itemprop="dateCreated datePublished" datetime="2018-08-13T00:00:00+00:00">2018-08-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-12-24 12:00:27" itemprop="dateModified" datetime="2019-12-24T12:00:27+00:00">2019-12-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>5.4k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>5 mins.</span>
+            </span>
+            <div class="post-description">语音</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="1-概览"><a href="#1-概览" class="headerlink" title="1 概览"></a>1 概览</h2><p>前馈神经网络</p>
+<ul>
+<li>概念上直白的</li>
+<li>对每个输入帧frame<ul>
+<li>执行回归得到对应的输出特征</li>
+</ul>
+</li>
+<li>为避免更广(wider)的输入上下文，可以简单的将几个frame堆叠</li>
+<li>需要注意的是：语言特征已经跨越(span)了几个时间尺度(timescale)</li>
+</ul>
+<h3 id="1-1-方向"><a href="#1-1-方向" class="headerlink" title="1.1 方向"></a>1.1 方向</h3><ul>
+<li>前馈架构<ul>
+<li>没有记忆</li>
+</ul>
+</li>
+<li>简单的循环神经网络</li>
+<li>梯度消失现象</li>
+<li>LSTM神经元解决了梯度消失现象（其他类型的可能存在）</li>
+</ul>
+<p><strong>但是</strong></p>
+<ul>
+<li>输入和输出有相同的帧率(frame rate)</li>
+<li>需要一个额外的时钟或者对齐机制来对输入做上采样</li>
+</ul>
+<h3 id="1-2-sequence-to-sequence"><a href="#1-2-sequence-to-sequence" class="headerlink" title="1.2 sequence-to-sequence"></a>1.2 sequence-to-sequence</h3><ul>
+<li>下一步是，集成对齐机制到网络内部</li>
+<li><p>当前：输入序列长度可能与输出序列长度不一致</p>
+</li>
+<li><p>例如：</p>
+<ul>
+<li>输入：上下文依赖的音素序列<ul>
+<li>输出：声学帧(对于声码器vocoder)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>概念上</p>
+<ul>
+<li>读取整个输入序列；使用一个固定长度的表征来记忆</li>
+<li>给定表征，写输出序列</li>
+</ul>
+</li>
+<li><p>encoder（编码器）</p>
+</li>
+<li>是一个循环神经网络，读入整个输入序列，然后用固定长度表征来summarises或者memorises他们。</li>
+</ul>
+<p><img src="/images/blog/merlin_tts_tch3_1.png" alt="TTS merlin技术路线"></p>
+<ul>
+<li>encoder和decoder</li>
+</ul>
+<p><img src="/images/blog/merlin_tts_tch3_2.png" alt="TTS merlin技术路线"></p>
+<h3 id="1-3-sequence-to-sequence中的对齐"><a href="#1-3-sequence-to-sequence中的对齐" class="headerlink" title="1.3 sequence-to-sequence中的对齐"></a>1.3 sequence-to-sequence中的对齐</h3><ul>
+<li>基本模型，输入和输出之间没有对齐</li>
+<li>通过加入注意力模型来获得更好结果<ul>
+<li>decoder可以接近输入序列<ul>
+<li>decoder也可以在前一个时间步(time step)接近其输出</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>对齐像ASR模型。但是用声码器(vocoder)来做ASR效果不好<ul>
+<li>因而我们期望通过使用ASR样式的声学特征(仅仅是模型的对齐部分)来获得更好效果</li>
+</ul>
+</li>
+</ul>
+<p><code>04_prepare_conf_files.sh</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;preparing config files for acoustic, duration models...&quot;</span><br><span class="line">.&#x2F;scripts&#x2F;prepare_config_files.sh $global_config_file</span><br><span class="line">echo &quot;preparing config files for synthesis...&quot;</span><br><span class="line">.&#x2F;scripts&#x2F;prepare_config_files_for_synthesis.sh $global_config_file</span><br></pre></td></tr></table></figure></p>
+<p><code>05_train_duration_model.sh</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;scripts&#x2F;submit.sh $&#123;MerlinDir&#125;&#x2F;src&#x2F;run_merlin.py $duration_conf_file</span><br></pre></td></tr></table></figure><br><code>config files</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line">[DEFAULT]</span><br><span class="line">Merlin: &lt;path to Merlin root directory&gt;</span><br><span class="line">TOPLEVEL: &lt;path where experiments are created&gt;</span><br><span class="line">[Paths]</span><br><span class="line"># where to place work files</span><br><span class="line">work: &lt;path where data, log, models and generated data are stored and created&gt;</span><br><span class="line"># where to find the data</span><br><span class="line">data: %(work)s&#x2F;data</span><br><span class="line"># where to find intermediate directories</span><br><span class="line">inter_data: %(work)s&#x2F;inter_module</span><br><span class="line"># list of file basenames, training and validation in a single list</span><br><span class="line">file_id_list: %(data)s&#x2F;file_id_list.scp</span><br><span class="line">test_id_list: %(data)s&#x2F;test_id_list.scp</span><br><span class="line">in_mgc_dir: %(data)s&#x2F;mgc</span><br><span class="line">in_bap_dir : %(data)s&#x2F;bap</span><br><span class="line">[Labels]</span><br><span class="line">enforce_silence: False</span><br><span class="line">silence_pattern: [&#39;*-sil+*&#39;]</span><br><span class="line"># options: state_align or phone_align</span><br><span class="line">label_type: state_align</span><br><span class="line">label_align: &lt;path to labels&gt;</span><br><span class="line">question_file_name: &lt;path to questions set&gt;</span><br><span class="line">add_frame_features: True</span><br><span class="line"># options: full, coarse_coding, minimal_frame, state_only, frame_only, none</span><br><span class="line">subphone_feats: full</span><br><span class="line">[Outputs]</span><br><span class="line"># dX should be 3 times X</span><br><span class="line">mgc : 60</span><br><span class="line">dmgc : 180</span><br><span class="line">bap : 1</span><br><span class="line">dbap : 3</span><br><span class="line">lf0 : 1</span><br><span class="line">dlf0 : 3</span><br><span class="line">[Waveform]</span><br><span class="line">[Outputs]</span><br><span class="line"># dX should be 3 times X</span><br><span class="line">mgc : 60</span><br><span class="line">dmgc : 180</span><br><span class="line">bap : 1</span><br><span class="line">dbap : 3</span><br><span class="line">lf0 : 1</span><br><span class="line">dlf0 : 3</span><br><span class="line">[Waveform]</span><br><span class="line">test_synth_dir: None</span><br><span class="line"># options: WORLD or STRAIGHT</span><br><span class="line">vocoder_type: WORLD</span><br><span class="line">samplerate: 16000</span><br><span class="line">framelength: 1024</span><br><span class="line"># Frequency warping coefficient used to compress the spectral envelope into MGC (or MCEP)</span><br><span class="line">fw_alpha: 0.58</span><br><span class="line">minimum_phase_order: 511</span><br><span class="line">use_cep_ap: True</span><br><span class="line">[Architecture]</span><br><span class="line">switch_to_keras: False</span><br><span class="line">hidden_layer_size : [1024, 1024, 1024, 1024, 1024, 1024]</span><br><span class="line">hidden_layer_type : [&#39;TANH&#39;, &#39;TANH&#39;, &#39;TANH&#39;, &#39;TANH&#39;, &#39;TANH&#39;, &#39;TANH&#39;]</span><br><span class="line">model_file_name: feed_forward_6_tanh</span><br><span class="line">#if RNN or sequential training is used, please set sequential_training to True.</span><br><span class="line">sequential_training : False</span><br><span class="line">dropout_rate : 0.0</span><br><span class="line">batch_size : 256</span><br><span class="line"># options: -1 for exponential decay, 0 for constant learning rate, 1 for linear decay</span><br><span class="line">lr_decay : -1</span><br><span class="line">learning_rate : 0.002</span><br><span class="line"># options: sgd, adam, rprop</span><br><span class="line">optimizer : sgd</span><br><span class="line">warmup_epoch : 10</span><br><span class="line">training_epochs : 25</span><br><span class="line">[Processes]</span><br><span class="line"># Main processes</span><br><span class="line">AcousticModel : True</span><br><span class="line">GenTestList : False</span><br><span class="line"># sub-processes</span><br><span class="line">NORMLAB : True</span><br><span class="line">MAKECMP : True</span><br><span class="line">NORMCMP : True</span><br><span class="line">TRAINDNN : True</span><br><span class="line">DNNGEN : True</span><br><span class="line">GENWAV : True</span><br><span class="line">CALMCD : True</span><br></pre></td></tr></table></figure></p>
+<p><code>06_train_acoustic_model.sh</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;scripts&#x2F;submit.sh $&#123;MerlinDir&#125;&#x2F;src&#x2F;run_merlin.py $acoustic_conf_file</span><br></pre></td></tr></table></figure></p>
+<p><code>07_run_merlin.sh</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">inp_txt&#x3D;$1</span><br><span class="line">test_dur_config_file&#x3D;$2</span><br><span class="line">test_synth_config_file&#x3D;$3</span><br><span class="line">echo &quot;preparing full-contextual labels using Festival frontend...&quot;</span><br><span class="line">lab_dir&#x3D;$(dirname $inp_txt)</span><br><span class="line">.&#x2F;scripts&#x2F;prepare_labels_from_txt.sh $inp_txt $lab_dir $global_config_file</span><br><span class="line">echo &quot;synthesizing durations...&quot;</span><br><span class="line">.&#x2F;scripts&#x2F;submit.sh $&#123;MerlinDir&#125;&#x2F;src&#x2F;run_merlin.py $test_dur_config_file</span><br><span class="line">echo &quot;synthesizing speech...&quot;</span><br><span class="line">.&#x2F;scripts&#x2F;submit.sh $&#123;MerlinDir&#125;&#x2F;src&#x2F;run_merlin.py $test_synth_config_file</span><br></pre></td></tr></table></figure></p>
+<h2 id="2-设计选择：声学模型"><a href="#2-设计选择：声学模型" class="headerlink" title="2 设计选择：声学模型"></a>2 设计选择：声学模型</h2><ul>
+<li>直白的方式：如果输入和输出<strong>有相同长度并且是对齐的</strong></li>
+<li>前馈神经网络</li>
+<li>循环神经网络层</li>
+<li>不那么直白的方式：对非对齐输入和输出序列<ul>
+<li>使用sequence-to-sequence</li>
+</ul>
+</li>
+<li>唯一的实践限制是，是使用什么技术，比如Theano,Tensorflow</li>
+</ul>
+<h3 id="2-1-方向"><a href="#2-1-方向" class="headerlink" title="2.1 方向"></a>2.1 方向</h3><ul>
+<li>回归的输出是什么<ul>
+<li>声学特征<ul>
+<li>不是语音波形<br>所以还需要进一步</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>生成波形<ul>
+<li>输入时声学特征</li>
+<li>输出是语音波形</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-波形生成-waveform-generator"><a href="#3-波形生成-waveform-generator" class="headerlink" title="3 波形生成(waveform generator)"></a>3 波形生成(waveform generator)</h2><h3 id="3-1-从声学-acoustic-特征回到原始声码器-vocoder-特征"><a href="#3-1-从声学-acoustic-特征回到原始声码器-vocoder-特征" class="headerlink" title="3.1 从声学(acoustic)特征回到原始声码器(vocoder)特征"></a>3.1 从声学(acoustic)特征回到原始声码器(vocoder)特征</h3><p><img src="/images/blog/merlin_tts_tch3_3.png" alt="TTS merlin技术路线"></p>
+<h3 id="3-2-WORLD：periodic-excitation-using-a-pulse-train"><a href="#3-2-WORLD：periodic-excitation-using-a-pulse-train" class="headerlink" title="3.2 WORLD：periodic excitation using a pulse train"></a>3.2 WORLD：periodic excitation using a pulse train</h3><ul>
+<li>脉冲位置的计算<ul>
+<li>声音分割：每一个fundamental period(基本周期)创建一个脉冲，T0。从F0计算T0，其中F0之前被声学模型预测得到</li>
+<li>非声音分割：固定频率 $T0=5ms$<h3 id="3-3-WORLD-obtain-spectral-envelope-at-exact-pulse-locations-by-interpolation-插值法在每个确定的脉冲位置获取频谱包络"><a href="#3-3-WORLD-obtain-spectral-envelope-at-exact-pulse-locations-by-interpolation-插值法在每个确定的脉冲位置获取频谱包络" class="headerlink" title="3.3 WORLD:obtain spectral envelope at exact pulse locations, by interpolation(插值法在每个确定的脉冲位置获取频谱包络)"></a>3.3 WORLD:obtain spectral envelope at exact pulse locations, by interpolation(插值法在每个确定的脉冲位置获取频谱包络)</h3></li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/blog/merlin_tts_tch3_4.png" alt="TTS merlin技术路线"></p>
+<h3 id="3-4-WORLD：重构周期性和非周期性的幅度频谱-magnitude-spectra"><a href="#3-4-WORLD：重构周期性和非周期性的幅度频谱-magnitude-spectra" class="headerlink" title="3.4 WORLD：重构周期性和非周期性的幅度频谱(magnitude spectra)"></a>3.4 WORLD：重构周期性和非周期性的幅度频谱(magnitude spectra)</h3><p><img src="/images/blog/merlin_tts_tch3_5.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch3_6.png" alt="TTS merlin技术路线"></p>
+<h3 id="3-5-WORLD-生成波形"><a href="#3-5-WORLD-生成波形" class="headerlink" title="3.5 WORLD:生成波形"></a>3.5 WORLD:生成波形</h3><p><img src="/images/blog/merlin_tts_tch3_7.png" alt="TTS merlin技术路线"></p>
+<h2 id="4-拓展"><a href="#4-拓展" class="headerlink" title="4 拓展"></a>4 拓展</h2><ul>
+<li>混合语音合成<ul>
+<li>使用Merlin来预测声学特征，使用Festival来做单元选取(select unit)</li>
+</ul>
+</li>
+<li>声音转换<ul>
+<li>输入语音而非文本</li>
+<li>训练数据是对齐的输入和输出语音（而不是音素标签和语音）</li>
+</ul>
+</li>
+<li>讲话人调整<ul>
+<li>增强输入</li>
+<li>调整隐藏层</li>
+<li>转换输出</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-1-经典单元选取"><a href="#4-1-经典单元选取" class="headerlink" title="4.1 经典单元选取"></a>4.1 经典单元选取</h3><p>此处以音素单元为例，目标和join cost</p>
+<p><img src="/images/blog/merlin_tts_tch3_8.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch3_9.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch3_10.png" alt="TTS merlin技术路线"></p>
+<h3 id="4-2-独立特征形式-Independent-Feature-Formulation-IFF-目标损失"><a href="#4-2-独立特征形式-Independent-Feature-Formulation-IFF-目标损失" class="headerlink" title="4.2 独立特征形式(Independent Feature Formulation(IFF))目标损失"></a>4.2 独立特征形式(Independent Feature Formulation(IFF))目标损失</h3><p><img src="/images/blog/merlin_tts_tch3_11.png" alt="TTS merlin技术路线"></p>
+<h3 id="4-3-声学空间形式-Acoustic-Space-Formulation-目标损失"><a href="#4-3-声学空间形式-Acoustic-Space-Formulation-目标损失" class="headerlink" title="4.3 声学空间形式(Acoustic Space Formulation)目标损失"></a>4.3 声学空间形式(Acoustic Space Formulation)目标损失</h3><p><img src="/images/blog/merlin_tts_tch3_12.png" alt="TTS merlin技术路线"></p>
+<h3 id="4-4-混合语音合成就像使用Acoustic-Space-Formulation目标损失的单元选取"><a href="#4-4-混合语音合成就像使用Acoustic-Space-Formulation目标损失的单元选取" class="headerlink" title="4.4  混合语音合成就像使用Acoustic Space Formulation目标损失的单元选取"></a>4.4  混合语音合成就像使用Acoustic Space Formulation目标损失的单元选取</h3><p><img src="/images/blog/merlin_tts_tch3_13.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch3_14.png" alt="TTS merlin技术路线"></p>
+<h3 id="4-5-混合语音合成就像：统计参数语音合成，使用声码器-vocoder-的替换"><a href="#4-5-混合语音合成就像：统计参数语音合成，使用声码器-vocoder-的替换" class="headerlink" title="4.5 混合语音合成就像：统计参数语音合成，使用声码器(vocoder)的替换"></a>4.5 混合语音合成就像：统计参数语音合成，使用声码器(vocoder)的替换</h3><p><img src="/images/blog/merlin_tts_tch3_15.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch3_16.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch3_17.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch3_18.png" alt="TTS merlin技术路线"></p>
+<h3 id="4-6-混合语音合成就像：同时对目标和join-cost使用混合密度网络"><a href="#4-6-混合语音合成就像：同时对目标和join-cost使用混合密度网络" class="headerlink" title="4.6 混合语音合成就像：同时对目标和join cost使用混合密度网络"></a>4.6 混合语音合成就像：同时对目标和join cost使用混合密度网络</h3><p><img src="/images/blog/merlin_tts_tch3_19.png" alt="TTS merlin技术路线"></p>
+<h3 id="7-声音转换"><a href="#7-声音转换" class="headerlink" title="7 声音转换"></a>7 声音转换</h3><p>将源声转换为另外一个人的声音，而不改变声音内容</p>
+<p><img src="/images/blog/merlin_tts_tch3_20.png" alt="TTS merlin技术路线"></p>
+<p>使用神经网络完成</p>
+<p><img src="/images/blog/merlin_tts_tch3_21.png" alt="TTS merlin技术路线"></p>
+<h3 id="7-1-输入和输出的声学特征的抽取和工程"><a href="#7-1-输入和输出的声学特征的抽取和工程" class="headerlink" title="7.1 输入和输出的声学特征的抽取和工程"></a>7.1 输入和输出的声学特征的抽取和工程</h3><p><img src="/images/blog/merlin_tts_tch3_22.png" alt="TTS merlin技术路线"><br><img src="/images/blog/merlin_tts_tch3_23.png" alt="TTS merlin技术路线"></p>
+<h3 id="7-2-输入输出的对齐"><a href="#7-2-输入输出的对齐" class="headerlink" title="7.2 输入输出的对齐"></a>7.2 输入输出的对齐</h3><ul>
+<li>从波形waveform中声学特征</li>
+<li>使用动态时间封装(Dynamic Time Wraping(DTW))</li>
+</ul>
+<p><img src="/images/blog/merlin_tts_tch3_24.png" alt="TTS merlin技术路线"></p>
+<h3 id="7-3-最简单的方法：对齐输入和输出特征-逐帧回归"><a href="#7-3-最简单的方法：对齐输入和输出特征-逐帧回归" class="headerlink" title="7.3 最简单的方法：对齐输入和输出特征+逐帧回归"></a>7.3 最简单的方法：对齐输入和输出特征+逐帧回归</h3><p><img src="/images/blog/merlin_tts_tch3_25.png" alt="TTS merlin技术路线"></p>
+<h3 id="7-4-当然，我们也可以用前馈神经网络做得更好"><a href="#7-4-当然，我们也可以用前馈神经网络做得更好" class="headerlink" title="7.4 当然，我们也可以用前馈神经网络做得更好"></a>7.4 当然，我们也可以用前馈神经网络做得更好</h3><p><img src="/images/blog/merlin_tts_tch3_26.png" alt="TTS merlin技术路线"></p>
+<p>我们可以使用<code>Merlin/egs/voice_conversion/s1/</code>目录下的脚本完成这个工作</p>
+<p><code>03_align_src_with_target.sh</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">src_feat_dir&#x3D;$1</span><br><span class="line">tgt_feat_dir&#x3D;$2</span><br><span class="line">src_aligned_feat_dir&#x3D;$3</span><br><span class="line">src_mgc_dir&#x3D;$src_feat_dir&#x2F;mgc</span><br><span class="line">tgt_mgc_dir&#x3D;$tgt_feat_dir&#x2F;mgc</span><br><span class="line">echo &quot;Align source acoustic features with target acoustic features...&quot;</span><br><span class="line">python $&#123;MerlinDir&#125;&#x2F;misc&#x2F;scripts&#x2F;voice_conversion&#x2F;dtw_aligner_festvox.py $&#123;MerlinDir&#125;&#x2F;tools</span><br><span class="line">$&#123;src_feat_dir&#125; $&#123;tgt_feat_dir&#125; $&#123;src_aligned_feat_dir&#125; $&#123;bap_dim&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/blog/merlin_tts_tch3_26.png" alt="TTS merlin技术路线"></p>
+<h2 id="8-讲话人调整-Speaker-Adaptation"><a href="#8-讲话人调整-Speaker-Adaptation" class="headerlink" title="8 讲话人调整(Speaker Adaptation)"></a>8 讲话人调整(Speaker Adaptation)</h2><ul>
+<li>只使用了目标讲话人一小段录音来创造一个新的声音</li>
+</ul>
+<p><img src="/images/blog/merlin_tts_tch3_28.png" alt="TTS merlin技术路线"></p>
+<h3 id="8-1-使用DNN方法的讲话人调整"><a href="#8-1-使用DNN方法的讲话人调整" class="headerlink" title="8.1 使用DNN方法的讲话人调整"></a>8.1 使用DNN方法的讲话人调整</h3><ul>
+<li>需要额外的输入特征</li>
+<li>应用转换（声音转换）到输出特征</li>
+<li>学习一个模型参数的修改(LHUC)</li>
+<li>共享层(hat swapping)</li>
+<li>在目标讲述人数据上fine-tuning整个模型</li>
+</ul>
+<p><img src="/images/blog/merlin_tts_tch3_29.png" alt="TTS merlin技术路线"></p>
+<p>共享层和hot swapping</p>
+<p><img src="/images/blog/merlin_tts_tch3_30.png" alt="TTS merlin技术路线"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/08/12/merlin-tts-techmap2/" rel="prev" title="merlin语音合成讲义二：如何构建系统之数据准备">
+      <i class="fa fa-chevron-left"></i> merlin语音合成讲义二：如何构建系统之数据准备
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/09/23/merlin-mandain-voice-op/" rel="next" title="merlin语音合成方案mandarin_voice操作步骤">
+      merlin语音合成方案mandarin_voice操作步骤 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-概览"><span class="nav-number">1.</span> <span class="nav-text">1 概览</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-方向"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 方向</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-sequence-to-sequence"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 sequence-to-sequence</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-sequence-to-sequence中的对齐"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 sequence-to-sequence中的对齐</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-设计选择：声学模型"><span class="nav-number">2.</span> <span class="nav-text">2 设计选择：声学模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-方向"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 方向</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-波形生成-waveform-generator"><span class="nav-number">3.</span> <span class="nav-text">3 波形生成(waveform generator)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-从声学-acoustic-特征回到原始声码器-vocoder-特征"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 从声学(acoustic)特征回到原始声码器(vocoder)特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-WORLD：periodic-excitation-using-a-pulse-train"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 WORLD：periodic excitation using a pulse train</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-WORLD-obtain-spectral-envelope-at-exact-pulse-locations-by-interpolation-插值法在每个确定的脉冲位置获取频谱包络"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 WORLD:obtain spectral envelope at exact pulse locations, by interpolation(插值法在每个确定的脉冲位置获取频谱包络)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-WORLD：重构周期性和非周期性的幅度频谱-magnitude-spectra"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 WORLD：重构周期性和非周期性的幅度频谱(magnitude spectra)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-WORLD-生成波形"><span class="nav-number">3.5.</span> <span class="nav-text">3.5 WORLD:生成波形</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-拓展"><span class="nav-number">4.</span> <span class="nav-text">4 拓展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-经典单元选取"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 经典单元选取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-独立特征形式-Independent-Feature-Formulation-IFF-目标损失"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 独立特征形式(Independent Feature Formulation(IFF))目标损失</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-声学空间形式-Acoustic-Space-Formulation-目标损失"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 声学空间形式(Acoustic Space Formulation)目标损失</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-混合语音合成就像使用Acoustic-Space-Formulation目标损失的单元选取"><span class="nav-number">4.4.</span> <span class="nav-text">4.4  混合语音合成就像使用Acoustic Space Formulation目标损失的单元选取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-混合语音合成就像：统计参数语音合成，使用声码器-vocoder-的替换"><span class="nav-number">4.5.</span> <span class="nav-text">4.5 混合语音合成就像：统计参数语音合成，使用声码器(vocoder)的替换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-6-混合语音合成就像：同时对目标和join-cost使用混合密度网络"><span class="nav-number">4.6.</span> <span class="nav-text">4.6 混合语音合成就像：同时对目标和join cost使用混合密度网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-声音转换"><span class="nav-number">4.7.</span> <span class="nav-text">7 声音转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-输入和输出的声学特征的抽取和工程"><span class="nav-number">4.8.</span> <span class="nav-text">7.1 输入和输出的声学特征的抽取和工程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-输入输出的对齐"><span class="nav-number">4.9.</span> <span class="nav-text">7.2 输入输出的对齐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-3-最简单的方法：对齐输入和输出特征-逐帧回归"><span class="nav-number">4.10.</span> <span class="nav-text">7.3 最简单的方法：对齐输入和输出特征+逐帧回归</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-4-当然，我们也可以用前馈神经网络做得更好"><span class="nav-number">4.11.</span> <span class="nav-text">7.4 当然，我们也可以用前馈神经网络做得更好</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-讲话人调整-Speaker-Adaptation"><span class="nav-number">5.</span> <span class="nav-text">8 讲话人调整(Speaker Adaptation)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-1-使用DNN方法的讲话人调整"><span class="nav-number">5.1.</span> <span class="nav-text">8.1 使用DNN方法的讲话人调整</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="Symbols count total">591k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">8:57</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'c656cd038e01f710e260',
+      clientSecret: 'e6de2ccaaf0f7069292125b8f50e27f25b95810d',
+      repo: 'shartoo.github.com',
+      owner: 'shartoo# GitHub repo owner',
+      admin: ['shartoo'],
+      id: 'c34fef49c272bd8fdc16aae376d7fed2',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://shartoo.github.io').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="大数据类总结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大数据：集群优化">
+<meta property="og:url" content="https://shartoo.github.io/2016/03/09/bigdata-cluster-opt/index.html">
+<meta property="og:site_name" content="我的个人博客">
+<meta property="og:description" content="大数据类总结">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2016-03-09T00:00:00.000Z">
+<meta property="article:modified_time" content="2019-12-24T12:00:27.968Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://shartoo.github.io/2016/03/09/bigdata-cluster-opt/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>大数据：集群优化 | 我的个人博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="https://shartoo.github.io/2016/03/09/bigdata-cluster-opt/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的个人博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          大数据：集群优化
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-03-09 00:00:00" itemprop="dateCreated datePublished" datetime="2016-03-09T00:00:00+00:00">2016-03-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-12-24 12:00:27" itemprop="dateModified" datetime="2019-12-24T12:00:27+00:00">2019-12-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blog/" itemprop="url" rel="index">
+                    <span itemprop="name">blog</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>3k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>3 mins.</span>
+            </span>
+            <div class="post-description">大数据类总结</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="0-集群优化"><a href="#0-集群优化" class="headerlink" title="0 集群优化"></a>0 集群优化</h1><p>  一个小集群:1个master,10个datanode。<br>  最开始使用pig脚本分析作业，后面作业运行时观察发现，pig脚本执行的小作业太多导致任务调度频繁，集群效率低。<br>  小作业太多的影响:    </p>
+<ol>
+<li>频繁新建和关闭task，频繁分配container会消耗资源。</li>
+<li>一个oozie action先会启动一个oozie laucher作业消耗一个container，然后再启动实际的job，启动的job首先会用个container启动application master，然后在启动计算的task<br>现在同时最多会有29个job，至少会有50个container不是在计算。</li>
+</ol>
+<h1 id="1-代码优化"><a href="#1-代码优化" class="headerlink" title="1 代码优化"></a>1 代码优化</h1><ol>
+<li><p>增加5分钟基础作业时间粒度，5分钟-&gt;15分钟，减少Job数</p>
+</li>
+<li><p>合并15分钟粒度作业，Pig-&gt;MR，grouping comparator，减少基础数据重复读取次数，减少Job数</p>
+</li>
+<li>合并5分钟基础作业，一个作业处理三种话单，去除冗余字段（各粒度时间），减少Job数，减少数据量</li>
+</ol>
+<h1 id="2-集群参数配置"><a href="#2-集群参数配置" class="headerlink" title="2 集群参数配置"></a>2 集群参数配置</h1><h2 id="2-1-HDFS"><a href="#2-1-HDFS" class="headerlink" title="2.1 HDFS"></a>2.1 HDFS</h2><ul>
+<li><strong>HDFS块大小</strong>:从默认的128MB调整为256MB，更大的块大小(block)意味着更少的job，由于当前作业计算并不复杂，可以使用更大块。</li>
+<li><strong>复制因子</strong>:默认是3，现在修改为2。减少数据存储量，可以减小话单上传的时间消耗</li>
+<li><strong>DataNode处理程序计数</strong>:参数是<strong><em>dfs.datanode.handler.count</em></strong> 默认值是3，调整为30。datanode上用于处理RPC的线程数。默认为3，较大集群，可适当调大些，比如8。需要注意的是，每添加一个线程，需要的内存增加。</li>
+<li><strong>NameNode处理程序计数</strong>:参数是<strong><em>dfs.namenode.handler.count</em></strong> 默认是30，建议值是47，现在调整为60.namenode或者jobtracker中用于处理RPC的线程数，默认是10，较大集群，可调大些，比如64。<br><strong>NameNode服务处理程序计数</strong>:参数是 <strong><em>dfs.namenode.service.handler.count</em></strong>，默认值是30，建议值是47，现在调整为60。NameNode 用于服务调用的服务器线程数量。</li>
+<li><strong>最大传输线程数</strong>:参数是一起配置的为:<strong><em>dfs.datanode.max.xcievers, dfs.datanode.max.transfer.threads</em></strong>对于datanode来说，就如同linux上的文件句柄的限制，当datanode 上面的连接数操作配置中的设置时，datanode就会拒绝连接。<br>一般都会将此参数调的很大，40000+左右。</li>
+</ul>
+<h2 id="2-2-YARN"><a href="#2-2-YARN" class="headerlink" title="2.2 YARN"></a>2.2 YARN</h2><ul>
+<li><strong>每个作业的 Reduce 任务的默认数量</strong>:参数为<strong><em>mapreduce.job.reduces</em></strong>默认值为1，现在调整为30。通过观察当前运行的job实例，观察其reduce执行时间，发现时间消耗不足1秒，故不必启用过多reduce。</li>
+<li><strong>启用 Ubertask 优化</strong>:Uber模式是Hadoop2.0针对MR小作业的优化机制。通过<strong><em>mapreduce.job.ubertask.enable</em></strong>来设置是否开启小作业优化，默认为false。<br>如果用Job足够小，则串行在的一个JVM完成该JOB，即MRAppMaster进程中，这样比为每一个任务分配Container性能更好。关于Ubertask的详细可以参考<a href="http://qianshangding.iteye.com/blog/2259421" target="_blank" rel="noopener">Ubertask模式</a>。</li>
+<li><strong>Map任务内存</strong>：参数为<strong><em>mapreduce.map.memory.mb</em></strong>，保持默认值1GB。</li>
+<li><strong>Reduce任务内存</strong>:参数为<strong><em>mapreduce.reduce.memory.mb</em></strong>，保持默认值1GB。</li>
+<li><strong>Map任务CPU虚拟内核</strong>：参数为<strong><em>mapreduce.map.cpu.vcores</em></strong>，为作业的每个 Map 任务分配的虚拟 CPU 内核数。默认每个map一个CPU，用户提交应用程序时，可以指定每个任务需要的虚拟CPU个数。在MRAppMaster中，每个Map Task和Reduce Task默认情况下需要的虚拟CPU个数为1。    </li>
+<li><strong>Reduce任务CPU虚拟内核</strong>:参数为<strong><em>mapreduce.reduce.cpu.vcores</em></strong>，说明 与Map任务CPU虚拟内核一致。</li>
+<li><strong>Map 任务最大堆栈</strong>:参数是<strong><em>mapreduce.map.java.opts.max.heap</em></strong>，Map 进程的最大 Java 堆栈（字节）。该参数与<strong><em>mapreduce.reduce.java.opts.max.heap</em></strong>一样，都是ClouderManager独有的，标准的hadoop参数是<strong><em>mapreduce.map.java.opts</em></strong>和<strong><em>mapreduce.reduce.java.opts</em></strong></li>
+<li><strong>Reduce 任务最大堆栈</strong>: 同Map 任务最大堆栈。</li>
+<li><strong>容器内存</strong>:参数是<strong><em>yarn.nodemanager.resource.memory-mb</em></strong>。表示该节点上YARN可使用的物理内存总量，默认是8192（MB），注意，如果你的节点内存资源不够8GB，则需要调减小这个值，而YARN不会智能的探测节点的物理内存总量。当前配置为24GB。</li>
+<li><strong>容器虚拟 CPU 内核</strong>:参数是<strong><em>yarn.nodemanager.resource.cpu-vcores</em></strong>可以为容器分配的虚拟CPU内核的数量。集群中每台服务器只有24个虚核，所以容器内存配24G内存就行，现在作业都小map、reduce都用不了太多内存，默认是1GB。多了也没用，因为每个container至少要1个核。</li>
+</ul>
+<h2 id="2-3-Oozie"><a href="#2-3-Oozie" class="headerlink" title="2.3 Oozie"></a>2.3 Oozie</h2><p>  <strong>Oozie Server 的 Java 堆栈大小</strong><br>    默认值为1GB，现在修改为4GB。</p>
+<h2 id="2-4-HBase"><a href="#2-4-HBase" class="headerlink" title="2.4 HBase"></a>2.4 HBase</h2><ul>
+<li><p><strong>HBaseMaster的Java堆栈大小</strong>:暂无调整。</p>
+</li>
+<li><p><strong>HBase Region Server处理程序计数</strong>:参数为<strong><em>hbase.regionserver.handler.count</em></strong>,默认值为30，调节至150.是RegionServer的请求处理IO线程数。较少的IO线程，适用于处理单次请求内存消耗较高的Big PUT场景（大容量单次PUT或设置了较大cache的scan，均属于Big PUT）或ReigonServer的内存比较紧张的场景。<br>较多的IO线程，适用于单次请求内存消耗低，TPS要求非常高的场景。设置该值的时候，以监控内存为主要参考。<br>这里需要注意的是如果server的region数量很少，大量的请求都落在一个region上，因快速充满memstore触发flush导致的读写锁会影响全局TPS，不是IO线程数越高越好。<br>压测时，开启Enabling RPC-level logging，可以同时监控每次请求的内存消耗和GC的状况，最后通过多次压测结果来合理调节IO线程数。</p>
+</li>
+<li><p><strong>HBase RegionServer的Java堆栈大小(字节）</strong>:HBase regionserver堆栈能多大就多大，计算方式是RegionServer java堆大小= 服务器总内存-已分配内存 （注意：此配置为优化索引入库）</p>
+</li>
+</ul>
+<h2 id="2-5-服务器参数"><a href="#2-5-服务器参数" class="headerlink" title="2.5 服务器参数"></a>2.5 服务器参数</h2><ul>
+<li>服务器时钟同步</li>
+<li>修改swappiness值<br> 在所有服务器上，使用root用户执行     <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># sysctl vm.swappiness&#x3D;0</span><br><span class="line"># echo &#39;vm.swappiness&#x3D;0&#39;&gt;&gt; &#x2F;etc&#x2F;sysctl.conf</span><br><span class="line"># sysctl -p</span><br></pre></td></tr></table></figure></li>
+<li>禁用透明巨页     <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># echo never &gt;&#x2F;sys&#x2F;kernel&#x2F;mm&#x2F;redhat_transparent_hugepage&#x2F;enabled</span><br></pre></td></tr></table></figure>
+ 关于透明巨页，参考<a href="http://blog.chinaunix.net/uid-26489617-id-3205109.html" target="_blank" rel="noopener">透明巨页</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/03/05/me/" rel="prev" title="个人简历">
+      <i class="fa fa-chevron-left"></i> 个人简历
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/03/10/kafkaquestion/" rel="next" title="大数据：kafka常见问题">
+      大数据：kafka常见问题 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0-集群优化"><span class="nav-number">1.</span> <span class="nav-text">0 集群优化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-代码优化"><span class="nav-number">2.</span> <span class="nav-text">1 代码优化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-集群参数配置"><span class="nav-number">3.</span> <span class="nav-text">2 集群参数配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-HDFS"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 HDFS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-YARN"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 YARN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-Oozie"><span class="nav-number">3.3.</span> <span class="nav-text">2.3 Oozie</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-HBase"><span class="nav-number">3.4.</span> <span class="nav-text">2.4 HBase</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-服务器参数"><span class="nav-number">3.5.</span> <span class="nav-text">2.5 服务器参数</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="Symbols count total">591k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">8:57</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'c656cd038e01f710e260',
+      clientSecret: 'e6de2ccaaf0f7069292125b8f50e27f25b95810d',
+      repo: 'shartoo.github.com',
+      owner: 'shartoo# GitHub repo owner',
+      admin: ['shartoo'],
+      id: 'f688d653421def1b8e0f172c54d27603',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
