@@ -509,7 +509,7 @@ math:
   # hexo-renderer-pandoc (or hexo-renderer-kramed) required for full MathJax support.
   mathjax:
     enable: true
-    per_page: true
+    per_page: false
     # See: https://mhchem.github.io/MathJax-mhchem/
     mhchem: false
 
