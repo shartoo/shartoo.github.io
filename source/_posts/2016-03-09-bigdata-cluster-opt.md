@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      大数据：集群优化
-category: blog
+category: 大数据
 description: 大数据类总结
 ---
 # 0 集群优化
