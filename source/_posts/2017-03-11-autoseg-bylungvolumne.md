@@ -2,7 +2,7 @@
 layout: post
 title: Morphological Segmentation and Partial Volume of Solid Pulmonary Lesions in Thoracic CT Scans
 description: 图像处理
-category: blog
+category: 图像处理
 ---
 
 ## 摘要

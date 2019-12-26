@@ -2,7 +2,7 @@
 layout: post
 title: 大数据之流数据挖掘
 description: 流数据的概念及处理方法
-category: blog
+category: 大数据
 ---
 ## 一 流数据的特征  
 

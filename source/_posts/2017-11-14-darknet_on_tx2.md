@@ -2,7 +2,7 @@
 layout: post
 title: darknet在nvidia tx2上的训练自己的数据
 description: 深度学习实战
-category: blog
+category: 深度学习
 ---
 
 ## 一 准备数据

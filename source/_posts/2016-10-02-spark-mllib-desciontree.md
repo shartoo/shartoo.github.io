@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      大数据：spark mllib决策树
-category: blog
+category: 大数据
 description: 大数据
 ---
 

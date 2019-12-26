@@ -2,7 +2,7 @@
 layout: post
 title: 语音合成步骤
 description: 语音合成的指导思路
-category: blog
+category: 语音
 ---
 
 译自：A beginners’ guide to statistical parametric speech synthesis

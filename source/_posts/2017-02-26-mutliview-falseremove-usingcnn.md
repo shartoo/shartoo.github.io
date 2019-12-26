@@ -2,7 +2,7 @@
 layout: post
 title: CT图像中肺结节自动检测:使用CNN移除假阳性【论文笔记】
 description: 图像检测
-category: blog
+category: 深度学习
 ---
 
 ## 0 综述

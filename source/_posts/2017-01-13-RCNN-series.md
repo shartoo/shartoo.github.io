@@ -2,7 +2,7 @@
 layout: post
 title: RCNN,Fast RCNN,Faster RCNN 总结
 description: 深度学习
-category: blog
+category: 深度学习
 ---
 
 ## 一 背景知识

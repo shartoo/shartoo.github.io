@@ -2,7 +2,7 @@
 layout: post
 title: window测试tensorflow object detection api
 description: 深度学习实战
-category: blog
+category: 深度学习
 ---
 
 ## 0 注意

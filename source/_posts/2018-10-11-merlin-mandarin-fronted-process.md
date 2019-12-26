@@ -2,7 +2,7 @@
 layout: post
 title: merlin语音合成过程中 中文前端处理过程详细
 description: 语音
-category: blog
+category: 语音
 ---
 
 ## 0 概述

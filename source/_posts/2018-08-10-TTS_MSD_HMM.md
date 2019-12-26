@@ -2,7 +2,7 @@
 layout: post
 title: 语音合成：MSD-HMM多空间概率分布HMM
 description: 语音
-category: blog
+category: 语音
 ---
 
 ## 一  概念

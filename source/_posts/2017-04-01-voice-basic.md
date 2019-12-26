@@ -2,7 +2,7 @@
 layout: post
 title: 语音处理0：基础
 description: 语音处理
-category: blog
+category: 语音
 ---
 
 ## 一 语音的基础概念

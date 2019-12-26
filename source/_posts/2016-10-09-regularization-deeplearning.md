@@ -2,7 +2,7 @@
 layout: post
 title: 深度学习：正则化
 description: deep learning基础
-category: blog
+category: 深度学习
 ---
 
 ## 7.1 概念

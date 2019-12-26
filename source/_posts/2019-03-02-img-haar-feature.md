@@ -2,7 +2,7 @@
 layout: post
 title: 图像处理基础Haar特征
 description: 图像特征
-category: blog
+category: 图像处理
 ---
 
 ## 1 Haar特征

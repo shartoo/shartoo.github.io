@@ -2,7 +2,7 @@
 layout: post
 title: 使用pyspark做数据挖掘
 description: 大数据
-category: blog
+category: 大数据
 ---
 
 ## 一 环境准备

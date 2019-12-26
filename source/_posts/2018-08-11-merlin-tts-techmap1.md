@@ -2,7 +2,7 @@
 layout: post
 title: merlin语音合成讲义一：技术路线概览
 description: 语音
-category: blog
+category: 语音
 ---
 
 ## 一 概览

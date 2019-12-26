@@ -2,7 +2,7 @@
 layout: post
 title: 图像中的各种金字塔
 description: 图像基础
-category: blog
+category: 图像处理
 ---
 
 ## 0 定义

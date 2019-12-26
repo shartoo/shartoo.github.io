@@ -2,7 +2,7 @@
 layout: post
 title: pyspark机器学习库使用
 description: 大数据
-category: blog
+category: 大数据
 ---
 
 ## 示例：垃圾邮件分类器

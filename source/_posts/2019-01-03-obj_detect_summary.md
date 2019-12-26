@@ -2,7 +2,7 @@
 layout: post
 title: 深度学习目标检测网络汇总对比
 description: 深度学习
-category: blog
+category: 深度学习
 ---
 参考 ：https://medium.com/@jonathan_hui/object-detection-speed-and-accuracy-comparison-faster-r-cnn-r-fcn-ssd-and-yolo-5425656ae359
 

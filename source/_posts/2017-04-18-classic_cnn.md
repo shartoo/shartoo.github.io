@@ -2,7 +2,7 @@
 layout: post
 title: 经典卷积神经网络总结
 description: 深度学习
-category: blog
+category: 深度学习
 ---
 
 ## 一  AlexNet

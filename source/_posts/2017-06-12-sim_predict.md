@@ -2,7 +2,7 @@
 layout: post
 title: 近似推断
 description: 深度学习基础
-category: blog
+category: 深度学习
 ---
 
 ## 一  问题描述

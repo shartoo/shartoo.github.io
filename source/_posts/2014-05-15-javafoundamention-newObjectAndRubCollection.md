@@ -2,7 +2,7 @@
 layout: post
 title: Java对象创建过程与垃圾回收机制
 description: 关于Java JVM的一些学习笔记
-category: blog
+category: 编程基础
 ---
 ## 一 创建对象的步骤
 

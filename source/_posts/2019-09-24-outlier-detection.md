@@ -2,7 +2,7 @@
 layout: post
 title: 使用pyod做离群点检测
 description: 数据科学
-category: blog
+category: 机器学习
 ---
 
 https://www.analyticsvidhya.com/blog/2019/02/outlier-detection-python-pyod/

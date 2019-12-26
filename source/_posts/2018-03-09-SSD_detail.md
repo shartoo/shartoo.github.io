@@ -2,7 +2,7 @@
 layout: post
 title: SSD深入理解
 description: 经典神经网络
-category: blog
+category: 深度学习
 ---
 ## 1  网络结构
 

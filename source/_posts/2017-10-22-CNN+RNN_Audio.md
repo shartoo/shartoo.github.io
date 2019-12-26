@@ -2,7 +2,7 @@
 layout: post
 title: CNN+RNN来做口语识别
 description: 深度学习实践
-category: blog
+category: 语音
 ---
 
 翻译自： [combining-cnn-and-rnn-for-spoken-language-identificatio](https://yerevann.github.io/2016/06/26/combining-cnn-and-rnn-for-spoken-language-identification/)

@@ -2,7 +2,7 @@
 layout: post
 title: 语音合成：merlin使用概览
 description: 语音合成
-category: blog
+category: 语音
 ---
 
 ### 0 概览

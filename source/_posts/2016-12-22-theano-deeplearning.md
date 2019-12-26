@@ -2,7 +2,7 @@
 layout: post
 title: theano 深度学习数据准备
 description: 深度学习
-category: blog
+category: 深度学习
 ---
 
 ## 数据集

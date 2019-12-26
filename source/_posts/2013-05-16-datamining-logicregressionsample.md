@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      数据挖掘方法之六：解读逻辑回归
-category: blog
+category: 机器学习
 description: 数据挖掘专栏
 ---
 

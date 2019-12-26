@@ -2,7 +2,7 @@
 layout: post
 title: merlin中文语音合成概览
 description: 语音合成
-category: blog
+category: 语音
 ---
 
 ![merlin中文语音合成](/images/blog/merlin-mandarin1.png)

@@ -2,7 +2,7 @@
 layout: post
 title: hadoop lzo问题
 description: 大数据专题
-category: blog
+category: 大数据
 ---
 
 

@@ -2,7 +2,7 @@
 layout: post
 title: merlin语音合成方案mandarin_voice操作步骤
 description: 语音合成
-category: blog
+category: 语音
 ---
 
 ### 0 概览

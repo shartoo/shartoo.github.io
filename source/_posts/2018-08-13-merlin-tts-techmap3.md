@@ -2,7 +2,7 @@
 layout: post
 title: merlin语音合成讲义三：系统回归
 description: 语音
-category: blog
+category: 语音
 ---
 
 

@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      大数据：spark mllib python使用示例
-category: blog
+category: 大数据
 description: 大数据
 ---
 

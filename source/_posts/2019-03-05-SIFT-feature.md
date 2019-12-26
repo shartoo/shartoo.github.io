@@ -2,7 +2,7 @@
 layout: post
 title: SIFT特征详解
 description: 图像特征
-category: blog
+category: 图像处理
 ---
 
 

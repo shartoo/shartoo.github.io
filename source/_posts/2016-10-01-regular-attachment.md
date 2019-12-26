@@ -2,7 +2,7 @@
 layout: post
 title: 深度学习：参数正则化参考资料
 description: deep learning基础
-category: blog
+category: 深度学习
 ---
 
 ## Hessian矩阵

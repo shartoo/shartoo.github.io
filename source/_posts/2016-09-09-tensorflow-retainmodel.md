@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      tensorflow：如何重新训练Inception模型的最后一层，以应对新分类
-category: blog
+category: 深度学习
 description: tensorflow
 ---
 

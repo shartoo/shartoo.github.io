@@ -2,7 +2,7 @@
 layout: post
 title: 李宏毅深度学习-八-RNN和GAN
 description: 李宏毅深度学习笔记
-category: blog
+category: 深度学习
 ---
 ## 1 生成网络
 

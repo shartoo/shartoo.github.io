@@ -2,7 +2,7 @@
 layout: post
 title: spark 测试
 description: spark计算框架
-category: blog
+category: 大数据
 ---
 
 ## spark overview

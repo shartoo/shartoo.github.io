@@ -2,7 +2,7 @@
 layout: post
 title: tensorflow：卷积神经网络的理解
 description: 理解卷积神经网络
-category: blog
+category: 深度学习
 ---
 
 # 基本概念理解

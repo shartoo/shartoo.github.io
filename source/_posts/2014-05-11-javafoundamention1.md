@@ -2,7 +2,7 @@
 layout: post
 title: Java基础笔记-Java内存区域
 description: 关于Java JVM的一些学习笔记
-category: blog
+category: 编程基础
 ---
 ## 一 运行时的数据区组成   
 

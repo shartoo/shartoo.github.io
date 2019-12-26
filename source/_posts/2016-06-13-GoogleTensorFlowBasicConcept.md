@@ -2,7 +2,7 @@
 layout: post
 title: 谷歌TensorFlow基本概念
 description: 深度学习
-category: blog
+category: 深度学习
 ---
 
 # start up

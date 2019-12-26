@@ -2,7 +2,7 @@
 layout: post
 title: 深度学习：深度前馈网络
 description: 深度学习
-category: blog
+category: 深度学习
 ---
 
 ## 一 如何理解

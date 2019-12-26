@@ -2,7 +2,7 @@
 layout: post
 title: 理解pytorch的计算逻辑
 description: pytorch
-category: blog
+category: 深度学习
 ---
 
 

@@ -2,7 +2,7 @@
 layout: post
 title: Funnel-structured cascade for multi-view face detection with alignmentawareness 论文阅读笔记
 description: 人脸识别
-category: blog
+category: 图像处理
 ---
 
 ## 一 简介

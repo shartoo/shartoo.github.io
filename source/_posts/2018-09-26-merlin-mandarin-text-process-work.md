@@ -2,7 +2,7 @@
 layout: post
 title: merlin语音合成中文前端处理2-实践
 description: 语音合成
-category: blog
+category: 语音
 ---
 
 ## 0  数据示例

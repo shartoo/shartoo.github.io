@@ -2,7 +2,7 @@
 layout: post
 title: Mask Embedding in conditional GAN for Guided Synthesis of High Resolution Images
 description: 深度学习
-category: blog
+category: 深度学习
 ---
 
 [论文来源](https://arxiv.org/pdf/1907.01710.pdf)

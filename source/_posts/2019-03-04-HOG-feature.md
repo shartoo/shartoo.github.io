@@ -2,7 +2,7 @@
 layout: post
 title: HOG特征详解
 description: 图像特征
-category: blog
+category: 图像处理
 ---
 
 ## 0 简介

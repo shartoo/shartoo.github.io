@@ -2,7 +2,7 @@
 layout: post
 title: LAB特征和特征中心级联的快速、准确的人脸检测方法
 description: 图像处理
-category: blog
+category: 图像处理
 ---
 
 
