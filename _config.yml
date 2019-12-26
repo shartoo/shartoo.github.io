@@ -3,12 +3,12 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: 我的个人博客
+title: 数据与算法
 subtitle: ''
-description: ''
+description: '有数据有算法就能重构'
 keywords:
 author: shartoo
-language: en
+language: zh-CN
 timezone: ''
 
 # URL
