@@ -99,3 +99,9 @@ theme: next
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: ''
+  
+# 自动生成sitemap
+sitemap:
+  path: sitemap.xml
+baidusitemap:
+  path: baidusitemap.xml
