@@ -41,8 +41,8 @@ https://shartoo.github.io/2017/06/12/sim_predict/
 https://shartoo.github.io/2017/04/20/texttospeech/
 https://shartoo.github.io/2017/04/18/classic_cnn/
 https://shartoo.github.io/2017/04/16/merlin-tts/
-https://shartoo.github.io/2017/04/01/mevislab/
 https://shartoo.github.io/2017/04/01/voice-basic/
+https://shartoo.github.io/2017/04/01/mevislab/
 https://shartoo.github.io/2017/03/11/autoseg-bylungvolumne/
 https://shartoo.github.io/2017/03/09/lungseg-bignodule-detect/
 https://shartoo.github.io/2017/03/08/lungseg-localfeature/
@@ -72,8 +72,8 @@ https://shartoo.github.io/2016/09/20/batch_sizesetup/
 https://shartoo.github.io/2016/09/09/tensorflow-retainmodel/
 https://shartoo.github.io/2016/09/02/tensorflow-inputpipeline/
 https://shartoo.github.io/2016/08/24/network-imageclassify/
-https://shartoo.github.io/2016/08/22/tensorflow-sourcecode-input/
 https://shartoo.github.io/2016/08/22/tensorflow-cnn/
+https://shartoo.github.io/2016/08/22/tensorflow-sourcecode-input/
 https://shartoo.github.io/2016/08/18/tensorflow-CIFAR10/
 https://shartoo.github.io/2016/06/13/GoogleTensorFlowBasicConcept/
 https://shartoo.github.io/2016/03/16/bigdata-hadooplzo/
