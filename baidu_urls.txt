@@ -1,4 +1,3 @@
-https://shartoo.github.io/2019/12/27/baidu-verify-93f8r6fzoB/
 https://shartoo.github.io/2019/11/26/model-pruning/
 https://shartoo.github.io/2019/10/28/-understand-pytorch/
 https://shartoo.github.io/2019/09/24/outlier-detection/
@@ -42,8 +41,8 @@ https://shartoo.github.io/2017/06/12/sim_predict/
 https://shartoo.github.io/2017/04/20/texttospeech/
 https://shartoo.github.io/2017/04/18/classic_cnn/
 https://shartoo.github.io/2017/04/16/merlin-tts/
-https://shartoo.github.io/2017/04/01/voice-basic/
 https://shartoo.github.io/2017/04/01/mevislab/
+https://shartoo.github.io/2017/04/01/voice-basic/
 https://shartoo.github.io/2017/03/11/autoseg-bylungvolumne/
 https://shartoo.github.io/2017/03/09/lungseg-bignodule-detect/
 https://shartoo.github.io/2017/03/08/lungseg-localfeature/
