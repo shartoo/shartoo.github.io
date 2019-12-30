@@ -1159,7 +1159,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #ff5486;
+  background: #b3182e;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2148,6 +2148,117 @@ ul.breadcrumb li + li:last-child {
 }
 .gt-container .gt-popup .gt-action.is--active::before {
   top: 0.7em;
+}
+.search-pop-overlay {
+  background: rgba(0,0,0,0.3);
+  display: none;
+  height: 100%;
+  left: 0;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1400;
+}
+.search-popup {
+  background: #fff;
+  border-radius: 5px;
+  color: #333;
+  display: none;
+  height: 80%;
+  left: 50%;
+  margin-left: -350px;
+  padding: 0;
+  position: fixed;
+  top: 10%;
+  width: 700px;
+  z-index: 1500;
+}
+@media (max-width: 767px) {
+  .search-popup {
+    border-radius: 0;
+    height: 100%;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    width: 100%;
+  }
+}
+.search-popup .search-icon,
+.search-popup .popup-btn-close {
+  color: #999;
+  display: inline-block;
+  font-size: 18px;
+  height: 36px;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 18px;
+}
+.search-popup .popup-btn-close {
+  border-left: 1px solid #eee;
+  cursor: pointer;
+  float: right;
+}
+.search-popup .popup-btn-close:hover .fa {
+  color: #222;
+}
+.search-popup .search-header {
+  background: #f5f5f5;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  padding: 5px;
+}
+.search-loading-icon {
+  margin: 20% auto 0 auto;
+  text-align: center;
+}
+.search-popup ul.search-result-list {
+  margin: 0 5px;
+  padding: 0;
+}
+.search-popup p.search-result {
+  border-bottom: 1px dashed #ccc;
+  padding: 5px 0;
+}
+.search-popup a.search-result-title {
+  font-weight: bold;
+}
+.search-popup .search-keyword {
+  border-bottom: 1px dashed #ff2a2a;
+  color: #ff2a2a;
+  font-weight: bold;
+}
+.search-popup #search-result {
+  height: calc(100% - 55px);
+  overflow: auto;
+  padding: 5px 25px;
+  position: relative;
+}
+.search-popup .search-input-container {
+  display: inline-block;
+  height: 36px;
+  line-height: 36px;
+  padding: 0 5px;
+  position: absolute;
+  width: calc(100% - 90px);
+}
+.search-popup .search-input-container input {
+  background: transparent;
+  border: 0;
+  display: block;
+  height: 20px;
+  outline: 0;
+  padding: 8px 0;
+  vertical-align: middle;
+  width: 100%;
+}
+.search-popup #no-result {
+  color: #ccc;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 .has-jax {
   overflow-x: auto;
