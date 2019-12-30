@@ -115,3 +115,9 @@ baidu_url_submit:
   token: 7BCyaFxz9LhgznI6
   path: baidu_urls.txt # 文本文档的地址， 新链接会保存在此文本文档里
   xz_appid: default_god # 你的熊掌号 appid
+
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
