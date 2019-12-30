@@ -41,8 +41,8 @@ https://shartoo.github.io/2017/06/12/sim_predict/
 https://shartoo.github.io/2017/04/20/texttospeech/
 https://shartoo.github.io/2017/04/18/classic_cnn/
 https://shartoo.github.io/2017/04/16/merlin-tts/
-https://shartoo.github.io/2017/04/01/mevislab/
 https://shartoo.github.io/2017/04/01/voice-basic/
+https://shartoo.github.io/2017/04/01/mevislab/
 https://shartoo.github.io/2017/03/11/autoseg-bylungvolumne/
 https://shartoo.github.io/2017/03/09/lungseg-bignodule-detect/
 https://shartoo.github.io/2017/03/08/lungseg-localfeature/
@@ -61,8 +61,8 @@ https://shartoo.github.io/2016/11/06/deepfeedforwardnn/
 https://shartoo.github.io/2016/10/25/SVD-decomponent/
 https://shartoo.github.io/2016/10/19/optimization-deep-models/
 https://shartoo.github.io/2016/10/09/regularization-deeplearning/
-https://shartoo.github.io/2016/10/02/spark-python-example/
 https://shartoo.github.io/2016/10/02/spark-mllib-desciontree/
+https://shartoo.github.io/2016/10/02/spark-python-example/
 https://shartoo.github.io/2016/10/01/regular-attachment/
 https://shartoo.github.io/2016/09/26/pyspark-moiverecommand/
 https://shartoo.github.io/2016/09/25/sparkmllib/
