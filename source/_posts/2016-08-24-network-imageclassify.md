@@ -3,6 +3,7 @@ layout: post
 title: 深度学习：卷积神经网络与图像识别基本概念
 description: 神经网络基础
 category: 深度学习
+mathjax: true
 ---
 
 ## 一 卷积神经网络的组成

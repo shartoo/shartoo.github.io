@@ -3,6 +3,7 @@ layout: post
 title: 使用StyleGAN训练自己的数据集.md
 description: 深度学习-GAN
 category: 深度学习
+mathjax: true
 ---
 
 

@@ -3,6 +3,7 @@ layout: post
 title: 数据挖掘方法之一：主成份分析
 description: 数据挖掘专题之一
 category: 机器学习
+mathjax: true
 ---
 
 ## 一 概念

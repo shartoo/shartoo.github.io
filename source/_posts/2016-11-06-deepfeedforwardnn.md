@@ -3,6 +3,7 @@ layout: post
 title: 深度学习：深度前馈网络
 description: 深度学习
 category: 深度学习
+mathjax: true
 ---
 
 ## 一 如何理解

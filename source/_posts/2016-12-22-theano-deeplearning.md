@@ -3,6 +3,7 @@ layout: post
 title: theano 深度学习数据准备
 description: 深度学习
 category: 深度学习
+mathjax: true
 ---
 
 ## 数据集

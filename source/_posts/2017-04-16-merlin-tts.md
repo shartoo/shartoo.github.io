@@ -3,6 +3,7 @@ layout: post
 title: 使用merlin从头构建你的声音
 description: 语音合成
 category: 语音
+mathjax: true
 ---
 
 本文参考自: http://www.speech.zone/exercises/build-a-unit-selection-voice/label-the-speech/

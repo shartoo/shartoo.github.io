@@ -3,6 +3,7 @@ layout:     post
 title:      数据挖掘方法之分类
 category: 机器学习
 description: 数据挖掘专栏
+mathjax: true
 ---
 
 博文参考《数据挖掘概念与技术》：韩家威著（机械工业出版社）

@@ -3,6 +3,7 @@ layout: post
 title: spark 测试
 description: spark计算框架
 category: 大数据
+mathjax: true
 ---
 
 ## spark overview

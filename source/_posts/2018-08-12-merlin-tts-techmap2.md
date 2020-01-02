@@ -3,6 +3,7 @@ layout: post
 title: merlin语音合成讲义二：如何构建系统之数据准备
 description: 语音
 category: 语音
+mathjax: true
 ---
 
 一 前端部分

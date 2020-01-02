@@ -3,6 +3,7 @@ layout: post
 title: 李宏毅深度学习-六-HighwayNetwork和LSTM
 description: 李宏毅深度学习笔记
 category: 深度学习
+mathjax: true
 ---
 
 ## 1   前馈网络和循环神经网络(RNN)

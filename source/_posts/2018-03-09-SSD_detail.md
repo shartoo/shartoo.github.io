@@ -3,6 +3,7 @@ layout: post
 title: SSD深入理解
 description: 经典神经网络
 category: 深度学习
+mathjax: true
 ---
 ## 1  网络结构
 

@@ -3,6 +3,7 @@ layout: post
 title: 肺部CT大结节检测
 description: 图像处理
 category: 图像处理
+mathjax: true
 ---
 
 ## 0 摘要

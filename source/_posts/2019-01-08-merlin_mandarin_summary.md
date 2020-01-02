@@ -3,6 +3,7 @@ layout: post
 title: merlin中文语音合成概览
 description: 语音合成
 category: 语音
+mathjax: true
 ---
 
 ![merlin中文语音合成](/images/blog/merlin-mandarin1.png)

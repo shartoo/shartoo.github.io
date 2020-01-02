@@ -3,6 +3,7 @@ layout: post
 title: 深度学习：batch_size的设置与影响
 description: 神经网络基础
 category: 深度学习
+mathjax: true
 ---
 
 注意：本文根据知乎**程引**的[回答](https://www.zhihu.com/question/32673260)整理

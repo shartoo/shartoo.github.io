@@ -3,6 +3,7 @@ layout: post
 title: tensorflow：理解tensorflow中的输入管道
 description: tensorflow
 category: 深度学习
+mathjax: true
 ---
 
 原文翻译整理自： [理解tensorflow中输入管道](https://ischlag.github.io/2016/06/19/tensorflow-input-pipeline-example/)

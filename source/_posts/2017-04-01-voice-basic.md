@@ -3,6 +3,7 @@ layout: post
 title: 语音处理0：基础
 description: 语音处理
 category: 语音
+mathjax: true
 ---
 
 ## 一 语音的基础概念

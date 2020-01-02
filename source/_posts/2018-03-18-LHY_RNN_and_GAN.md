@@ -3,6 +3,7 @@ layout: post
 title: 李宏毅深度学习-八-RNN和GAN
 description: 李宏毅深度学习笔记
 category: 深度学习
+mathjax: true
 ---
 ## 1 生成网络
 

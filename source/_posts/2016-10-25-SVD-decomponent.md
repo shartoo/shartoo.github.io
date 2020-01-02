@@ -3,6 +3,7 @@ layout: post
 title: 深度学习基础：SVD奇异值分解及其意义【转】
 description: 深度学习基础
 category: 机器学习
+mathjax: true
 ---
 
 英文原文:[英文原文](http://blog.csdn.net/redline2005/article/details/24099377)

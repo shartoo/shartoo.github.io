@@ -3,6 +3,7 @@ layout: post
 title: 肺结节自动分割:使用图像局部特征【论文笔记】
 description: 图像分割
 category: 图像处理
+mathjax: true
 ---
 
 ## 摘要

@@ -3,6 +3,7 @@ layout: post
 title: 深度学习：训练模型的优化
 description: 深度学习
 category: 深度学习
+mathjax: true
 ---
 
 ## 一 概述

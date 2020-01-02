@@ -3,6 +3,7 @@ layout: post
 title: 迁移学习实践-Tensorflow分类任务
 description: 深度学习基础理论
 category: 深度学习
+mathjax: true
 ---
 
 摘自 : [medium transfer learning](https://towardsdatascience.com/a-comprehensive-hands-on-guide-to-transfer-learning-with-real-world-applications-in-deep-learning-212bf3b2f27a)

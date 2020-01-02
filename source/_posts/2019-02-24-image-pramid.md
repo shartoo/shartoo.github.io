@@ -3,6 +3,7 @@ layout: post
 title: 图像中的各种金字塔
 description: 图像基础
 category: 图像处理
+mathjax: true
 ---
 
 ## 0 定义

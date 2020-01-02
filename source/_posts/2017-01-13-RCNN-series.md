@@ -3,6 +3,7 @@ layout: post
 title: RCNN,Fast RCNN,Faster RCNN 总结
 description: 深度学习
 category: 深度学习
+mathjax: true
 ---
 
 ## 一 背景知识

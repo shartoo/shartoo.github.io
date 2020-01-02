@@ -3,6 +3,7 @@ layout: post
 title: 常见医疗扫描图像处理步骤
 description: 图像处理
 category: 图像处理
+mathjax: true
 ---
 
 

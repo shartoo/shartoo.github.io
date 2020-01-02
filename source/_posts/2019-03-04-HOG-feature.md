@@ -3,6 +3,7 @@ layout: post
 title: HOG特征详解
 description: 图像特征
 category: 图像处理
+mathjax: true
 ---
 
 ## 0 简介

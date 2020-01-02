@@ -3,6 +3,7 @@ layout: post
 title: 图像处理基础Haar特征
 description: 图像特征
 category: 图像处理
+mathjax: true
 ---
 
 ## 1 Haar特征

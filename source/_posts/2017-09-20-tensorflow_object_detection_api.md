@@ -3,6 +3,7 @@ layout: post
 title: window测试tensorflow object detection api
 description: 深度学习实战
 category: 深度学习
+mathjax: true
 ---
 
 ## 0 注意

@@ -3,6 +3,7 @@ layout: post
 title: tensorflow:使用tensorflow构建简单卷积神经网络
 description: tensorflow
 category: 深度学习
+mathjax: true
 ---
 
 本文翻译自: [使用tensorflow构建简单卷积神经网络](https://www.tensorflow.org/versions/r0.10/tutorials/deep_cnn/index.html)

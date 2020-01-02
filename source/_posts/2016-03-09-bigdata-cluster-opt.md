@@ -3,6 +3,7 @@ layout:     post
 title:      大数据：集群优化
 category: 大数据
 description: 大数据类总结
+mathjax: true
 ---
 # 0 集群优化
   一个小集群:1个master,10个datanode。    

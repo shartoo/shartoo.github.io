@@ -3,6 +3,7 @@ layout: post
 title: 语音合成：MSD-HMM多空间概率分布HMM
 description: 语音
 category: 语音
+mathjax: true
 ---
 
 ## 一  概念

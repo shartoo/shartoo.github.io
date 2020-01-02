@@ -3,6 +3,7 @@ layout: post
 title: spark环境部署
 description: 大数据专题
 category: 大数据
+mathjax: true
 ---
     
     

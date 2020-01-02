@@ -3,6 +3,7 @@ layout: post
 title: 图像处理：opencv的目标追踪方法总结
 description: 图像处理
 category: 图像处理
+mathjax: true
 ---
 
 参考自： https://www.learnopencv.com/object-tracking-using-opencv-cpp-python/ 和 https://www.pyimagesearch.com/2018/07/30/opencv-object-tracking/

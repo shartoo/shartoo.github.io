@@ -3,6 +3,7 @@ layout:     post
 title:      大数据：spark mllib集成学习
 category: 大数据
 description: 大数据
+mathjax: true
 ---
 
 此文可以参考[如何在MLlib中实现随机森林和梯度提升树（GBTs）](http://blog.jobbole.com/85408/)一起阅读

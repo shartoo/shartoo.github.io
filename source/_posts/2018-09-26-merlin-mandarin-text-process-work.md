@@ -3,6 +3,7 @@ layout: post
 title: merlin语音合成中文前端处理2-实践
 description: 语音合成
 category: 语音
+mathjax: true
 tags:
 - 语音合成
 - 中文前端

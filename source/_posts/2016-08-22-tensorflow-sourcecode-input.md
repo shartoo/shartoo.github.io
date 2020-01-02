@@ -3,6 +3,7 @@ layout: post
 title: tensorflow:CIFAR-10 图像处理源码.input.py
 description: tensorflow
 category: 深度学习
+mathjax: true
 ---
 
 # 源码解读

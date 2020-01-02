@@ -3,6 +3,7 @@ layout: post
 title: 模型剪枝和优化-torch和Tensorflow为例
 description: 深度学习
 category: 深度学习
+mathjax: true
 ---
 
 ## 1 基本概念

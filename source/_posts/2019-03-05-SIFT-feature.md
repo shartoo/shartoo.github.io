@@ -3,6 +3,7 @@ layout: post
 title: SIFT特征详解
 description: 图像特征
 category: 图像处理
+mathjax: true
 ---
 
 

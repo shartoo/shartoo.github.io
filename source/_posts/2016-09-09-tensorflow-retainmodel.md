@@ -3,6 +3,7 @@ layout:     post
 title:      tensorflow：如何重新训练Inception模型的最后一层，以应对新分类
 category: 深度学习
 description: tensorflow
+mathjax: true
 ---
 
 本文整理自 [retrain network](https://www.tensorflow.org/versions/r0.10/how_tos/image_retraining/index.html)

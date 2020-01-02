@@ -3,6 +3,7 @@ layout: post
 title: 使用pyspark做数据挖掘
 description: 大数据
 category: 大数据
+mathjax: true
 ---
 
 ## 一 环境准备

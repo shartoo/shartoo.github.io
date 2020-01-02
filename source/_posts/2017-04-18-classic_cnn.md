@@ -3,6 +3,7 @@ layout: post
 title: 经典卷积神经网络总结
 description: 深度学习
 category: 深度学习
+mathjax: true
 ---
 
 ## 一  AlexNet

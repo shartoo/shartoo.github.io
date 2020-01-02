@@ -3,6 +3,7 @@ layout: post
 title: 从胸椎中自动subsolid 病变结节检测方法【论文笔记】
 description: 图像处理
 category: 图像处理
+mathjax: true
 ---
 
 ## 0 摘要

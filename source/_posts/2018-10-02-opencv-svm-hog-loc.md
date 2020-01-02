@@ -3,6 +3,7 @@ layout: post
 title: 使用HOG+SVM+滑窗+NMS完成目标定位分类
 description: 图像处理
 category: 图像处理
+mathjax: true
 tags:
 - 特征工程
 - 图像

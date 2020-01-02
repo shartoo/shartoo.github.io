@@ -3,6 +3,7 @@ layout: post
 title: 使用传统方法换脸算法
 description: 图像处理
 category: 图像处理
+mathjax: true
 ---
 
 参考 [switch face with python](https://matthewearl.github.io/2015/07/28/switching-eds-with-python/)

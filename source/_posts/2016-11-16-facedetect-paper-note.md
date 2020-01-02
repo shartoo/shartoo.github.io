@@ -3,6 +3,7 @@ layout: post
 title: 《漏斗形级联结构的多角度人脸检测算法》论文阅读笔记
 description: 图像处理笔记
 category: 论文笔记
+mathjax: true
 ---
 
 ## 一 简介

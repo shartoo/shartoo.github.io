@@ -3,6 +3,7 @@ layout: post
 title: 谷歌TensorFlow基本概念
 description: 深度学习
 category: 深度学习
+mathjax: true
 ---
 
 # start up

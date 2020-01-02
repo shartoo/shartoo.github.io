@@ -3,6 +3,7 @@ layout: post
 title: 李宏毅深度学习：迁移学习
 description: 深度学习基础理论
 category: 深度学习
+mathjax: true
 ---
 
 

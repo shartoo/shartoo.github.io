@@ -3,6 +3,7 @@ layout: post
 title: 语音合成：merlin使用概览
 description: 语音合成
 category: 语音
+mathjax: true
 ---
 
 ### 0 概览

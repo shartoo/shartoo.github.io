@@ -3,6 +3,7 @@ layout: post
 title: 使用tensorflow object detection api训练自己的数据
 description: 深度学习实战
 category: 深度学习
+mathjax: true
 ---
 
 ## 一  数据准备

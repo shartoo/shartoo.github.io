@@ -3,6 +3,7 @@ layout: post
 title: 理解pytorch的计算逻辑
 description: pytorch
 category: 深度学习
+mathjax: true
 ---
 
 

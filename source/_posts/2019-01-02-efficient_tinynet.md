@@ -3,6 +3,7 @@ layout: post
 title: Mobilenet以及其变种网络高效的原因
 description: 深度学习
 category: 深度学习
+mathjax: true
 ---
 本文翻译自： https://medium.com/@yu4u/why-mobilenet-and-its-variants-e-g-shufflenet-are-fast-1c7048b9618d
 

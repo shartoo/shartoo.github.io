@@ -3,6 +3,7 @@ layout: post
 title: 深度学习：正则化
 description: deep learning基础
 category: 深度学习
+mathjax: true
 ---
 
 ## 7.1 概念

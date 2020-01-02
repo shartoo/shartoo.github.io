@@ -3,6 +3,7 @@ layout: post
 title: 卷积,深度分离卷积,空间分离卷积
 description: 深度学习
 category: 深度学习
+mathjax: true
 ---
 
 ## 1 常规卷积

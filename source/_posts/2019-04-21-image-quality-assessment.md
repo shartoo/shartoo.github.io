@@ -3,6 +3,7 @@ layout: post
 title: 图像质量评估
 description: 图像处理
 category: 图像处理
+mathjax: true
 ---
 
 参考 [Image Quality Assessment](https://github.com/ocampor/notebooks/blob/master/notebooks/image/quality/brisque.ipynb?source=post_page-----391a6be52c11----------------------)
