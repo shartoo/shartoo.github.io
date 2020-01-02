@@ -84,7 +84,7 @@
 <meta property="og:image" content="https://shartoo.github.io/images/blog/svd18.jpg">
 <meta property="og:image" content="https://shartoo.github.io/images/blog/svd19.jpg">
 <meta property="article:published_time" content="2016-10-25T00:00:00.000Z">
-<meta property="article:modified_time" content="2019-12-30T09:50:51.148Z">
+<meta property="article:modified_time" content="2020-01-02T04:42:14.803Z">
 <meta property="article:author" content="shartoo">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://shartoo.github.io/images/blog/svd1.jpg">
@@ -270,7 +270,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-30 09:50:51" itemprop="dateModified" datetime="2019-12-30T09:50:51+00:00">2019-12-30</time>
+                <time title="修改时间：2020-01-02 04:42:14" itemprop="dateModified" datetime="2020-01-02T04:42:14+00:00">2020-01-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -617,7 +617,7 @@ M=u_1σ_1 v_1^T + u_2σ_2 v_2^T + u_3σ_3 v_3^T</script><p>$v_i$ 具有15个元�
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -724,6 +724,54 @@ M=u_1σ_1 v_1^T + u_2σ_2 v_2^T + u_3σ_3 v_3^T</script><p>$v_i$ 具有15个元�
   
 
   
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
 
   
 
