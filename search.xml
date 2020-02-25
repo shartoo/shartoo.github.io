@@ -1,6 +1,463 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>论文:使用LSTM对MMORPG游戏中金融序列分析检测人机</title>
+    <url>/2020/02/08/paper_MMORPG-LSTM-fiance-sequence-analysis/</url>
+    <content><![CDATA[<p>特征工程有点用，模型构建基本没说</p>
+<h3 id="0-引言"><a href="#0-引言" class="headerlink" title="0 引言"></a>0 引言</h3><p>当前检测人机的方法分为两类，<code>客户端检测</code>和<code>服务端检测</code>。客户端的检测主要是图灵测试。但是图灵测试类，比如验证码识别无法应用于工业界，因为比较影响游戏体验，频繁的校验也容易导致系统崩溃。服务端的方法主要是识别人机的独特特征。过往的数据挖掘的方法有一些短板。首先，没有通用性，一个游戏的方法无法应用于另外一个游戏。再者，人机的开发者也会改变人机的行为策略绕过算法检测。<br>考虑到人机最终要将它们在游戏中的财富汇聚到特定RMTer，我们开发了基于金融数据分析的方法，分析游戏中金币和财产流动。这在两个方面很高效。首先，人机无法回避金融行为模式，如果人机之间不断进行交易特定的金融模式一定存在。其次，金融分析可以应用不同游戏。<br>使用RNN分析游戏Aion游戏中玩家日志，评估模型在检测人机金融模式的精确性，并表现出以下优势。</p>
+<ol>
+<li><strong>稳定性</strong>：因为角色的金融模式序列不可回避，即便其改变模式或者装成普通玩家，依然有被识别</li>
+<li><strong>通用性</strong>：可以应用于多种游戏</li>
+<li><strong>独立性</strong>：训练一次即可检测人机</li>
+<li><strong>安全性</strong>：神经网络是一类黑盒模型，人机开发者很难识别其中判定模式的阈值</li>
+</ol>
+<h3 id="1-过往检测方法梳理"><a href="#1-过往检测方法梳理" class="headerlink" title="1 过往检测方法梳理"></a>1 过往检测方法梳理</h3><p>以前的服务端检测方法主要集中在分析人机独特的行为模式，如下表所示，分为<code>充分条件</code>(可能由人机产生的但不绝对)和<code>必要条件</code>。由于充分条件包括了人机独特的行为模式，我们可以识别一段时间内的人机，但是充分条件的分析需要重复更新，因为这些条件是不连续的。如果人机的开发者发更新了策略，模型也需要跟着更新。而必要条件是人机一定会出现的特征，由于人机就是用来积累游戏财富的，特定行为如人机之间交易一定会发生。即便人机开发者改变了策略，财富积累模式也不会改变。<br>充分条件的分析检测方法分两种数据类型:<code>行为动作</code>和<code>社交动作</code>。行为动作描述的是角色的物理活动，比如移动、攻击、使用技能等。分析用户的动作序列要借助大数据平台。特定的行为序列和简单的积分算法和朴素贝叶斯算法可以检测人机。同时也可以根据角色行为的相似性来检测人机。它们将行为序列按照时间窗口划分，然后嵌入到特征向量中。论文表明，使用逻辑回归根据角色的自相似性可以判定人机在游戏中的行为模式由类似的行为模式。<br>社交动作也表现出独特的行为模式。玩家之间聊天，组团完成任务，创建公会等。论文1根据聊天内容分析文本的词法、语义来做文本挖掘。人机有相似的聊天模式来规避检测规则，<strong>使用机器学习做文本特征分析取得不错效果</strong>。论文2根据组团游戏日志分析来做人机检测，在一个短时间内人机与人类玩家在组团（party play）时的模式有较大差异。并发布了一些检测人机的阈值。<br>上述基于充分条件的方法有较好性能，但是稳定性不够。如果人机开发者改变算法，检测方法也需要跟着改变，而且现在的人机已经很智能，能有效模拟一些人类行为。所以，提出了使用必要条件的检测方法。金融特征，如角色资产等级和交易活动都可以使用。论文3分析了人机之间的交易地理位置，表明其显示出相似的模式。论文分析了一个地图内金融交易的特定坐标，使用Density-Based Spatial Clustering with Noise（基于密度的带噪音的频谱聚类方法）。论文4构建了虚拟世界中的交易的拓扑网络来识别人机之间的特定的交易模式，表明人机为了高效地采集游戏中地物资会出现不同地角色。<br>必要条件地分析表明金融特征对于区分人机是十分有意义地，但是如果人机地开发者改变了交易的场所。如果人机使用邮件交易物品、金币，那么将不会留下交易的位置坐标信息。拓扑网络虽然可以解释人机交易的宏观逻辑，但是没法揭示单个人机大的。构建一个网络需要大量资源，并且需要根据交易频繁更新。</p>
+<p>本文使用的是基于金融分析的方法，分析了角色的<strong>金融状态（如金币数量、拥有物品等）</strong>，人机活动的必要条件。使用金融状态而非其他特征，是因为这些金融状态本身不能被修改，是人机开发者无法规避的。为详细解释单个人机的金融数据，外面使用了LSTM算法。因为神经网络方法相比于拓扑网络需要更少的资源，使得经济模型易于构建。</p>
+<p>服务端人机检测方法<br>|类别|数据类型|模型|<br>|—-|—-|—-|<br>|充分条件|行为动作|$序列模式\自相似动作\动作序列$|<br>|充分条件|社交动作|$聊天日志分析\组团游戏日志分析$|<br>|必要条件|交易|网络分析|<br>|必要条件|游戏中资产增减的坐标|DBSCAN|</p>
+<h3 id="2-方法"><a href="#2-方法" class="headerlink" title="2  方法"></a>2  方法</h3><h4 id="2-1-数据收集"><a href="#2-1-数据收集" class="headerlink" title="2.1 数据收集"></a>2.1 数据收集</h4><p>使用的是游戏AION 2010年5月份第一周的数据集。</p>
+<ol>
+<li>特征选取。去掉不必要的信息，下表是我们从日志中抽取的金融相关信息，揭示了角色状态的金融信息。</li>
+</ol>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>详细特征</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ID</td>
+<td>角色ID，账户ID</td>
+</tr>
+<tr>
+<td>位置</td>
+<td>位置坐标，地图数量</td>
+</tr>
+<tr>
+<td>玩家信息</td>
+<td>血量，魔法值状态，经验点数</td>
+</tr>
+<tr>
+<td>社交信息</td>
+<td>$组团ID\盟友ID$</td>
+</tr>
+<tr>
+<td>金融信息</td>
+<td>金币状态，物品状态，库存状态</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol>
+<li>Ground-Truth确认：需要标记哪些是真人机，哪些是普通用户。真实表情由人工去确认疑似人机的账户。</li>
+</ol>
+<h4 id="2-2-特征工程"><a href="#2-2-特征工程" class="headerlink" title="2.2 特征工程"></a>2.2 特征工程</h4><p>特征工程分两步：</p>
+<ol>
+<li><p>剔除没有影响的特征：为使用神经网络方法，模型需要学习到人机和普通用户动态数据的差异。因此我们设定了下面一些规则来过滤掉不重要的特征。剔除之后的重要特征表2</p>
+<ul>
+<li>规则1表明，模型无法学习模式差异。如果人机和人类的某个特征值相同，它便是没有区分力的，可以删去。</li>
+<li>规则2证明，如果特征值为0，其标准差也为0，会带来训练数据集稀疏性。剔除满足规则2的特征，以减少稀疏性。<br>|序号|类型|特征|描述|<br>|—-|—-|—-|—-|<br>|1|物品|物品数量|一个角色拥有的全部物品数量|<br>|2|金币|$总金币数\账户中金币余额\角色银行中的金币\在供应商手里的金币$|$角色拥有的总金币数\角色在库存(inventory)中持有的总金币数\角色寄存在warehouse(账房)的总金币数\与供应商或者拍卖行交易的金币数量$|<br>|3|评估的资产值|$评估的资产值\邮件中资产估值\<em>角色</em>银行资产估值\<em>账户</em>银行资产估值$|$所有物品和金币的总价值估价\所有经过邮件发送和接受到的物品的估值\<em>角色</em>存储在warehouse中所有物品和金币总估值\<em>账户</em>存储在warehouse中所有物品和金币总估值$|</li>
+</ul>
+</li>
+<li><p>缩放的时间滑窗。日志级别的数据需要做一些处理来训练神经网络。神经网络擅长从固定长度的数据中学习规律，长的时间序列数据需要剪切。我们设定固定长度的时间窗口，并做不同缩放以不同规模的数据。根据公式$X_{normalization}=\frac{X_i-Min(X_i)}{Max(X_i)}$ ，我们将数据缩放到0-1之间。我们比较了特征的统计差异看它们是否与标签一致。如下表1，特征如总金币数，账户中金币数，物品数以相同缩放尺寸是表现出不同分布。考虑到这些差异，我们认为金融特征可以用来区分人机和普通玩家。</p>
+</li>
+</ol>
+<p><img src="/images/blog/paper_LSTM_MMORPG_finance_sequence_0.png" alt="game_bot_detection_0"></p>
+<h4 id="2-3-模型"><a href="#2-3-模型" class="headerlink" title="2.3 模型"></a>2.3 模型</h4><p>我们使用的是LSTM模型，使用固定batchsize，同时使用正则化技术防止过拟合。</p>
+<h4 id="2-4-实验结果"><a href="#2-4-实验结果" class="headerlink" title="2.4 实验结果"></a>2.4 实验结果</h4><p>为获得足够的训练数据，我们将每个月的数据按照周划分。我们随机混合数据，并进行10-折交叉验。下表是一些结果<br>|实验数据|准确率|精确率|召回率|F1-score|<br>|—-|—-|—-|—-|—-|<br>|第一周|0.9494|0.9385|0.9759|0.9490|<br>|第二周|0.9401|0.9168|0.9831|0.9488|<br>|第三周|0.9487|0.9237|0.9886|0.9551|<br>|第四周|0.9509|0.9103|0.9861|0.9476|<br>|平均|0.9473|0.9223|0.9834|0.9501|</p>
+<h4 id="参考论文"><a href="#参考论文" class="headerlink" title="参考论文"></a>参考论文</h4><ol>
+<li>Chatting pattern based game bot detection: do they talk like us?” KSII Transactions on Internet &amp; Information Systems,</li>
+<li>Online game bot detection based on party-play log analysis,” Computers &amp; Mathematicswith Applications</li>
+<li>H. M. Song and H. K. Kim, “Game-bot detection based on clustering of asset-varied location coordinates,” Journal of the Korea Institute of Information Security and Cryptology</li>
+<li>E. Lee, J. Woo, H. Kim, and H. K. Kim, “No silk road for online gamers!: Using social network analysis to unveil black markets in online games,” in Proceedings of the 2018 World Wide Web Conference on World Wide Web.</li>
+</ol>
+]]></content>
+      <categories>
+        <category>游戏安全</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>论文:在线游戏玩家坐标聚类分析</title>
+    <url>/2020/02/07/paper_onlinegame-player-landmark-cluster/</url>
+    <content><![CDATA[<h3 id="1-玩家聚类"><a href="#1-玩家聚类" class="headerlink" title="1 玩家聚类"></a>1 玩家聚类</h3><p>首先，我们提出一个方法来检测坐标，然后描述如何使用MDS(multidimensional scaling)和一个称为prefuse的方法计算坐标之间的转移权重概率(weighted transition probabilities between landmarks(WTPL))，这些用于可视化玩家聚类。研究证明，MDS在多维数据集聚类时中要优于SOM。在prefuse阶段，我们使用一种等价于MDS的力导向(force-directed)的模型。文中的<strong>坐标点(Landmark)</strong> 与普通的定义不同。</p>
+<h4 id="1-1-坐标-landmark-检测"><a href="#1-1-坐标-landmark-检测" class="headerlink" title="1.1 坐标(landmark)检测"></a>1.1 坐标(landmark)检测</h4><p>首先，要分析的地图划分为$m\times n$的网格，假设有N个玩家遍历地图。其中用户经过网格$(i,j)$的数目标识为$v<em>{i,k}(k)$，我们将大部分玩家都高频率经过的网格定义为坐标。对于网格$(i,j)$,玩家经过的分布可以用加权熵H来表示$H</em>{i,j}=-\frac{V<em>{i,j}}{\hat V}\sum </em>{k=1} ^N\frac{v<em>{i,j}(k)}{V</em>{i,j}}log(\frac{v<em>{i,j}(k)}{V</em>{i,j}}),其中V<em>{i,j}=\sum </em>{k=1} ^Nv<em>{i,j}(k)\quad ,\hat V = argmax</em>{i,j}V_{i,j}$ 。检测坐标L的算法如下</p>
+<ol>
+<li>所有的网格为未标记状态，所有坐标都是空</li>
+<li>在所有未标记网格中，将有最大H的网格标记为1，并将此网格加入到坐标集中。然后将其8个邻居也标记为1。 此处标记邻居是防止被连续标记。</li>
+<li>重复步骤2直至坐标集达到L个</li>
+</ol>
+<h4 id="1-2-坐标之间的加权转移概率"><a href="#1-2-坐标之间的加权转移概率" class="headerlink" title="1.2 坐标之间的加权转移概率"></a>1.2 坐标之间的加权转移概率</h4><p>对于上面算法检测到的L个坐标，用户k的加权概率转移矩阵$X(k)$如下</p>
+<script type="math/tex; mode=display">
+X(k) =
+\left[\begin{array}{cccc}
+p_{1,1}(k) & p_{1,2}(k) & ... p_{1,L}(k) \\
+p_{2,1}(k) & p_{2,2}(k) & ... p_{2,L}(k) \\
+... & ... & ...  \\
+p_{L,1}(k) & p_{L,2}(k) & ... p_{L,L}(k)
+\end{array}\right]</script><p>上式中，$P<em>{a,b}(k)$为玩家k从坐标a移动到坐标b的加权转移概率。其累加公式为$P</em>{a,b}(k)=\frac{c<em>{a,b}(k)}{\hat c</em>{a,b}}\frac{c<em>{a,b}(k)}{C(k)}\quad 其中c</em>{a,b}(k)为玩家从坐标a移动到坐标b的次数,\hat c<em>{a,b}(k)=argmax_kc</em>{a,b}(k)\quad C(k)=\sum <em>{i=1} ^L\sum </em>{j=1} ^Lc_{i,k}(k)$。</p>
+<p>当前版本中为计算$X(k)$中各个元素值，玩家所在位置(coordinate)由其轨迹的附近坐标(landmark)来表示。假设首先已经检测到5个坐标$(A,B,C,D,E)$，那么玩家的轨迹可能是$BBBAAAACEEEE$，其转移序列为$B\rightarrow A\rightarrow C\rightarrow E$。当前不考虑自循环转移序列，如$A\rightarrow A,B\rightarrow B$</p>
+<h4 id="1-3-Multildimensional-Scal-MDS-多维缩放"><a href="#1-3-Multildimensional-Scal-MDS-多维缩放" class="headerlink" title="1.3 Multildimensional Scal(MDS(多维缩放))"></a>1.3 Multildimensional Scal(MDS(多维缩放))</h4><p>为可视化基于其运动模式的玩家聚类，我们使用简单的分类MDS(CMDS(论文1))。CMDS的输入为矩阵D，给定一对玩家的差异性，然后输出一个坐标矩阵，矩阵以配置了最小损失函数来保留两点之间的距离。当前论文中矩阵D中的第$ij$个元素为$X(i)和X(j)$之间的欧氏距离。我们只选取结构坐标的前两个维度，并使用Matlab中的统计工具包中的$cmdscale$函数来计算CMDS。</p>
+<h4 id="1-4-prefuse-预测"><a href="#1-4-prefuse-预测" class="headerlink" title="1.4 prefuse(预测)"></a>1.4 prefuse(预测)</h4><p>我们同时在预测阶段中使用一个力导向的模型，其输出一个图分布，图中每个节点代表一个玩家，节点之间的连接长度与两个节点间距离成正比。为减少计算复杂度，我们提前删除节点间距离小于一定阈值的，当前可以设定为所有节点距离中值的0.5.在预测阶段用户可以交互地操作图节点布局来定位聚类簇</p>
+<h3 id="2-结果与讨论"><a href="#2-结果与讨论" class="headerlink" title="2 结果与讨论"></a>2 结果与讨论</h3><p>使用的是游戏ICE的玩家移动日志数据</p>
+<h4 id="2-1-游戏ICE"><a href="#2-1-游戏ICE" class="headerlink" title="2.1 游戏ICE"></a>2.1 游戏ICE</h4><p>游戏截图如下左，分析所使用的是图右（图中有7个固定位置的NPC），图尺寸为$600\times 600$像素。玩家可以通过点击目标点像素来移动，当前地图被划分为$50\times 50$的网格。</p>
+<p><img src="/images/blog/paper_onlinegame_player_landmark_cluster_0.jpg" alt="game_bot_detection_0"><br><img src="/images/blog/paper_onlinegame_player_landmark_cluster_1.jpg" alt="game_bot_detection_0"></p>
+<p>下图展示的是当$L=5$时，检测坐标(Landmark)的结果。坐标1：靠近Marlen和Lagi；坐标2：所有玩家进入地图的位置；坐标3：Gelda所在位置；坐标4：位于Amanda和Villege Master之间；坐标5：同时靠近Shop和Gelda。这些坐标对所有玩家都是重要的，因为他们要进入地图、接收任务、购买物品。</p>
+<p><img src="/images/blog/paper_onlinegame_player_landmark_cluster_2.jpg" alt="game_bot_detection_0"></p>
+<p>有20个玩家，17个男性，3个女性游戏时长45分钟，完成一些简单的任务，如与NPC交易物品、运送物品到NPC，从怪物那收集物品。下图画出了所有玩家在二维空间中由CMDS检测出来的结果，节点$p<em>i$代表第$i$个玩家。注意有个离群点$p</em>{11}$，因为所有玩家都在右边，我们剔除掉此玩家然后重新计算结果得到下图右边。<br><img src="/images/blog/paper_onlinegame_player_landmark_cluster_3.jpg" alt="game_bot_detection_0"><br><img src="/images/blog/paper_onlinegame_player_landmark_cluster_4.jpg" alt="game_bot_detection_0"></p>
+<p>上图右可以看出，大部分玩家可以被划分到4个聚类($A,B,C,D$)中.每个聚类都有不同的运动模式。每个聚类的运动模式由簇中每个元素的平均的$X$表示，并由一个与$X$的值成正比的箭头可视化。下图展示了这种可视化结果，聚类A中的玩家运动模式主要是在坐标2到5和3到5之间移动。聚类簇B中的玩家主要活动模式是2到4和1到2之间移动；聚类簇C中的玩家是在3到5和2到5，聚类簇D中玩家主要是1到2和2到5之间。</p>
+<p><img src="/images/blog/paper_onlinegame_player_landmark_cluster_5.jpg" alt="game_bot_detection_0"><br><img src="/images/blog/paper_onlinegame_player_landmark_cluster_6.jpg" alt="game_bot_detection_0"></p>
+<h4 id="2-2-游戏：天使之爱-Angle’s-Love"><a href="#2-2-游戏：天使之爱-Angle’s-Love" class="headerlink" title="2.2 游戏：天使之爱(Angle’s Love)"></a>2.2 游戏：天使之爱(Angle’s Love)</h4><p>下图7是游戏截图和对应的检测到的5个坐标点。图尺寸为$300\times 190$像素，图被划分为$10\times 10$网格。由397个玩家在此图中游戏，大部分从此图进入其他地图。这5个坐标中，其中的3个即1，2，3是障碍物，玩家遇到之后必须返回。这也解释了为什么它们会被检测为坐标点(Landmark)，因为玩家要在这三个点之间来回两次，过去、返回。</p>
+<p><img src="/images/blog/paper_onlinegame_player_landmark_cluster_7.jpg" alt="game_bot_detection_0"></p>
+<p>下图展示了预测结果的图布局。图中形成了一个大的聚类簇，表明大部分玩家都有类似的运动模式，但是也可以看到顶部和底部各有一个3个玩家和4个玩家组成的小得多得聚类。</p>
+<p><img src="/images/blog/paper_onlinegame_player_landmark_cluster_8.jpg" alt="game_bot_detection_0"></p>
+<p>进一步查看这两个小聚类簇，下图左边是顶部的三个玩家在坐标点之间的移动轨迹，右边是底部4个玩家坐标点之间的移动轨迹，可以看到它们的移动轨迹相似。</p>
+<p><img src="/images/blog/paper_onlinegame_player_landmark_cluster_9.jpg" alt="game_bot_detection_0"> <img src="/images/blog/paper_onlinegame_player_landmark_cluster_10.jpg" alt="game_bot_detection_0"></p>
+<h4 id="论文"><a href="#论文" class="headerlink" title="论文"></a>论文</h4><ol>
+<li>D. Ashbrook and T. Starner. Using GPS to learn significant locations and predict movement across multiple users, Personal and Ubiquitous Computing,</li>
+</ol>
+]]></content>
+      <categories>
+        <category>游戏安全</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>论文:游戏黑市中免费金币可以检测出什么</title>
+    <url>/2020/02/06/paper_game-bot-analysis-from-free-money/</url>
+    <content><![CDATA[<h3 id="0-简介"><a href="#0-简介" class="headerlink" title="0 简介"></a>0 简介</h3><p><code>Real money trading(真金交易(RMT))</code>或者<code>Gold farming（掘金）</code>指的是采集在线游戏中的虚拟货币换取真实钱财的活动。</p>
+<p>当前识别Gold farming的方法主要是数据挖掘的方法从玩家中筛选出人机。这些方法包括与人类交互的图灵测试（验证码）和人类行为观察对比。主要是区分游戏内人类和人机的对交互测试的不同反应。这也促使大量的类人的人机。</p>
+<p>与前面聚焦于独立人机行为的防御方法不同，本文使用的是整个网络中经济活动互动来整体检测和识别Gold farming。尤其是在起始阶段，我们经验地认为<code>免费金币网络</code>是一个轻量级的，易于检测掘金的。我们基于大量真实数据同时测量了免费金币网络大小，以及现金流。使用的是AION游戏的游戏内交易活动日志数据，时间超过一个月，2010年，41个独立服务器。</p>
+<h3 id="1-初步结果"><a href="#1-初步结果" class="headerlink" title="1 初步结果"></a>1 初步结果</h3><p>MMORPG游戏中的交易指的是使用游戏中的货币购买物品。我们推测免费金币交易活动是单方面地给与，没有用金币换取任何物品，或者某种程度上与gold farmer进行真实货币交易。下图a可视化了数据库中所有地交易活动，节点为角色，边为角色之间有交易活动。图b是一个子图，由免费金币交易组成。注意到AION社区中有两种角色部落（heavenly vs. diabolic）二者之间无法交易，所以每种角色有其内部交易社区。</p>
+<p><img src="/images/blog/paper_game_bot_free_money_0.jpg" alt="game_bot_detection_0"> </p>
+<p>出乎意料地是，虽然免费金币网络的节点数和边数目只占了全部网络的9.7%(2884/29612)和1.9%(4719/252859)，但是交易量占据了总体交易量的62.6%(62526/100593，如果换算成美元)。同时也可观测到图b中两个中央簇，清晰地暴露出它们地节点之间地互动非常类似于典型的gold farmer的N-1和1-N的互动模式(下图b)。gold farmer网络主要由以下</p>
+<ul>
+<li>采金者：不断地将金币免费发给少量固定的玩家(即broker中间商)</li>
+<li>中间商(broker)：从采金者那里收集大量的免费金币，然后不计报酬地转移买家</li>
+<li>买家：大量买家从中间商那里接收免费金币<br>这种三元组关系如下图<br><img src="/images/blog/paper_game_bot_free_money_1.jpg" alt="game_bot_detection_0"></li>
+</ul>
+<p>中间商处于采金者和买家之间最大化采金效率并保守它们这个交易网络的秘密。一些间接的交易也可能隐藏高阶采金者/人机的身份。</p>
+<p>上图（图2）a中显示的是图1b中最大的两个簇的2205个节点的入度/出度比例分布。发现，97.1%的节点要么只有入度边，要么只有出度边。其中10.8%的节点只有入度，86.3%的节点只有出度。这些单向边是典型的中间商和买家之间(上图2b)的交易网络模式。剩下的2.9%的节点有更多的出度边指向买家，更少的入度边来自中间商，这也是典型的中间商交易模式。</p>
+<p>总结来说，我们发现</p>
+<ol>
+<li>游戏内62.2%的货币流都是免费金币</li>
+<li>93.4%的免费金币与真实货币交易高度相关，例如通过虚拟黑市</li>
+</ol>
+]]></content>
+      <categories>
+        <category>游戏安全</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>l论文:MMORPG游戏中人机检测方法总结</title>
+    <url>/2020/02/05/paper_game-bot-detection-MMORPG/</url>
+    <content><![CDATA[<h3 id="0-背景"><a href="#0-背景" class="headerlink" title="0 背景"></a>0 背景</h3><ul>
+<li>此论文整理的是: Ah Reum Kang1, Seong Hoon Jeong2, Aziz Mohaisen1 and Huy Kang Kim :Multimodal game bot detection using user behavioral characteristics</li>
+</ul>
+<p>游戏中人机检测方法可以分为三类。</p>
+<ul>
+<li>客户端：大部分公司采用客户端，分析人机与普通玩家的显著区别。可以使用人机程序的名字，处理器信息，内存状态。工作原理类似于杀毒程序。但是此类方法很容易被人机程序开发者避开，所以此方法并非最优</li>
+<li>网络端：<code>网络通信监督</code>,<code>网络协议改变分析</code>,这些方法会导致网络过载或者游戏延迟，给游戏体验带来不好。</li>
+<li>服务端：主要是分析游戏日志数据，基于数据挖掘方法。游戏公司可以在服务端直接检测人机，不必在客户端部署程序。</li>
+</ul>
+<p>下表整理了一些服务端人机检测的关键论文，并做了一些分类。</p>
+<ul>
+<li><strong>动作频率分析</strong>：准确率高，但是只聚焦于短时窗口的观察，很容易被规避；只集中于有限特征空间，容易误分人机和重度玩家<ul>
+<li><a href="https://www.researchgate.net/publication/221391430_User_identification_based_on_game-play_activity_patterns" target="_blank" rel="noopener">User identification based on game-play activity patterns</a>玩家特定动作的动态性，证明了玩家的活跃和休息时间可以区分人机</li>
+<li><a href="https://www.researchgate.net/publication/220705240_Detection_of_MMORPG_Misconducts_Based_on_Action_Frequencies_Types_and_Time-Intervals" target="_blank" rel="noopener">Detection of MMORPG misconducts based on action frequencies, types and timeintervals</a>使用日志数据中动作频率、类别、间隔</li>
+<li><a href="https://arxiv.org/ftp/arxiv/papers/1509/1509.02458.pdf" target="_blank" rel="noopener">Game behavior pattern modeling for game bots detection in MMORPG</a>:选取六种游戏特征。<code>换地图</code>,<code>counter-turn（逆转）</code>,<code>休息状态</code>,<code>击杀时间</code>,<code>经验点</code>,<code>留在城镇内</code>。</li>
+<li><a href="https://onlinelibrary.wiley.com/doi/full/10.4218/etrij.13.2013.0049" target="_blank" rel="noopener">Game bot detection approach based on behavior analy‑ sis and consideration of various play styles.</a>根据玩家游戏风格划分为4种玩家类型：<code>杀手</code>，<code>成就者</code>,<code>探险者</code>,<code>社交爱好者</code>。</li>
+<li><a href="https://www.researchgate.net/publication/308850232_Detection_of_Illegal_Players_in_Massively_Multiplayer_Online_Role_Playing_Game_by_Classification_Algorithms" target="_blank" rel="noopener">Detection of illegal players in massively multiplayer online role playing game by classification algorithms</a>根据游戏时间划分游戏行为</li>
+</ul>
+</li>
+<li><strong>社交活动分析</strong>：无法检测游戏中不当行为<ul>
+<li><a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.165.4976&amp;rep=rep1&amp;type=pdf" target="_blank" rel="noopener">Second life: a social network of humans and bots</a>:聚焦于玩家社交网络中玩家之间连接分析</li>
+<li><a href="https://www.researchgate.net/publication/275653414_Chatting_pattern_based_game_BOT_detection_Do_they_talk_like_us" target="_blank" rel="noopener">Chatting pattern based game bot detection: do they talk like us?</a>:聊天日志分析玩家沟通模式。</li>
+<li><a href="https://www.researchgate.net/publication/261310404_Bot_detection_based_on_social_interactions_in_MMORPGs" target="_blank" rel="noopener">Bot detection based on social interactions in MMORPGs</a> 人机和人类倾向于各自相反的自有社交网络。</li>
+<li><a href="https://www.sciencedirect.com/science/article/pii/S0898122112000442" target="_blank" rel="noopener">Online game bot detection based on party‑play log analysis</a> 人机和玩家组团游戏的目标不同。</li>
+</ul>
+</li>
+<li><strong>掘金(Gold Farming group)组分析</strong>：分析游戏中虚拟经济，并追踪由金币农民、中间商、币商(banker)、买家形成的交易网络。尽管不是直接分析人机，但是有助于理解网络中每个玩家的角色。<ul>
+<li><a href="https://www.researchgate.net/publication/220982695_Exploiting_MMORPG_log_data_toward_efficient_RMT_player_detection" target="_blank" rel="noopener">Exploiting MMORPG log data toward efficient rmt player detection</a>:分析四种统计数据,<code>总动作数</code>,<code>活动时间(activity time)</code>,<code>总聊天次数</code>,<code>一段时间内游戏内总货币流通量</code>。</li>
+<li><a href="https://www.researchgate.net/publication/264033427_Detecting_gold-farmers&#39;_group_in_MMORPG_by_analyzing_connection_pattern" target="_blank" rel="noopener">Detecting gold‑farmers’ groups in MMORPG by connection information</a>使用路由和源定位信息分析了金币农民的连接模式。</li>
+<li><a href="https://www.researchgate.net/publication/269305755_Surgical_strike_A_novel_approach_to_minimize_collateral_damage_to_game_BOT_detection" target="_blank" rel="noopener">Surgical strike: a novel approach to minimize collateral damage to game bot detection.</a>调查了金币农民网络并检测到整个金币农民组的网络结构</li>
+</ul>
+</li>
+<li><strong>序列分析</strong>：分析用户游戏中动作序列，但是因为分析上欠缺场景上下文，很容易被人机设置操纵。<ul>
+<li><a href="https://www.researchgate.net/publication/220775532_Mining_for_Gold_Farmers_Automatic_Detection_of_Deviant_Players_in_MMOGs" target="_blank" rel="noopener">Mining for gold farmers: automatic detection of deviant players in MMOGs</a>研究了活动序列特征，定义玩家参与某个活动的次数，玩家击杀怪物次数和被怪物击杀次数。</li>
+<li><a href="https://sci-hub.tw/10.1109/ICICS.2011.6174239" target="_blank" rel="noopener">Sequence‑based bot detection in massive multiplayer online games</a>分析玩家在游戏中战斗(combat)序列</li>
+<li><a href="https://www.researchgate.net/publication/275653312_In-Game_Action_Sequence_Analysis_for_Game_BOT_Detection_on_the_Big_Data_Analysis_Platform" target="_blank" rel="noopener">In‑game action sequence analysis for game bot detection on the big data analysis<br>platform</a>基于大数据平台分析了用户的全部动作序列。</li>
+</ul>
+</li>
+<li><strong>相似度分析</strong>：基于一个事实，即人机有强烈的行为模式因为它们的目标是赚更多金币，需要大量的特定行为动作的数据。<ul>
+<li><a href="https://www.researchgate.net/publication/275653327_Self-similarity_based_Bot_Detection_System_in_MMORPG" target="_blank" rel="noopener">Self‑similarity based bot detection system in MMORPG</a>使用每个事件的频率(量化为向量)并计算与单位向量的的余弦相似度，人机会重复做高度重复的动作序列，所以其动作序列有非常高的自相似度。</li>
+<li><a href="https://pdfs.semanticscholar.org/444f/0ceb312e98609914faf886f2ff0dcfebd58c.pdf?_ga=2.54103150.790611450.1582517402-1588539036.1582517402" target="_blank" rel="noopener">You are a game bot!: uncovering game bots in MMORPGs via self-similarity in the wild.</a>提出了自相似度衡量方法并在几个主要MMOPRG游戏(“Lineage”,”AION”,”Blade &amp; Soul”)中测试</li>
+</ul>
+</li>
+<li><strong>移动路径分析</strong>：人机有特定的移动路径，而人类则有各种各样的路径。此类方法容易被噪音干扰或者被类人的行为模式规避。<ul>
+<li><a href="https://www.researchgate.net/publication/220222180_Detection_of_Landmarks_for_Clustering_of_Online-Game_Players" target="_blank" rel="noopener">Detection of landmarks for clustering of online‑game players</a>使用玩家角色在游戏地图中遍历位置的分布的加权熵来检测其坐标(landmark),基于坐标转移概率做了玩家聚类。</li>
+<li><a href="https://www.researchgate.net/publication/290512402_A_step_in_the_right_direction_Botdetection_in_MMORPGs_using_movement_analysis" target="_blank" rel="noopener">A step in the right direction: bot detection in MMORPGs using movement analysis</a>借由人机和人类移动模式的差异进行分类。</li>
+<li><a href="http://www.eurecom.fr/en/publication/2860/download/rs-publi-2860.pdf" target="_blank" rel="noopener">Server‑side bot detection in massively multiplayer online games</a>基于重复的运动模式检测出由脚本控制的人机。</li>
+<li><a href="https://www.iis.sinica.edu.tw/~swc/pub/bot_detection_trajectory.html" target="_blank" rel="noopener">Game bot detection via avatar trajectory analysis</a>使用玩家路径和一系列位置坐标的熵值，使用马尔科夫链模型来描述目标路径的行为。</li>
+<li><a href="https://www.researchgate.net/publication/262293070_Trajectory_analysis_for_user_verifcation_and_recognition" target="_blank" rel="noopener">Trajectory analysis for user verification and recognition</a>将它们的方法(上面这一篇马尔科夫链的论文)应用于各种各样的路径，包括手写字、鼠标、游戏路径</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-数据集"><a href="#1-数据集" class="headerlink" title="1  数据集"></a>1  数据集</h3><p>使用的是现实世界中游戏Aion的操作数据</p>
+<ul>
+<li>类型：游戏中动作日志</li>
+<li>持续事件：88天。 0.4/09/2010-07/05/2010</li>
+<li>角色数量：49739</li>
+<li>角色最小游戏时间: &gt;3小时</li>
+</ul>
+<h3 id="2-分析架构和工作流"><a href="#2-分析架构和工作流" class="headerlink" title="2 分析架构和工作流"></a>2 分析架构和工作流</h3><p>将游戏中人机识别当作一个<strong>二分类任务</strong>。总体流程如下</p>
+<p><img src="/images/blog/game_bot_detection_0.png" alt="game_bot_detection_0"> </p>
+<ul>
+<li><strong>数据采集</strong>： 从游戏日志和聊天内容中收集</li>
+<li><p><strong>数据探索</strong></p>
+<ul>
+<li>在特征表征阶段，我们遵循标准方法来统一数据来降维。例如，量化每个网络并使用k-means聚类成低、中、高三个不同值。</li>
+<li>在特征探索阶段，我们选取数据向量的组件并预处理。例如，我们决定了7种活动为社交互动，并使用香农多样性熵来量化社交互动的多样性。</li>
+<li>特征选取阶段，我们使用best-first搜索逐步贪婪搜索以及信息增益排序过滤来避免过拟合并减少特征的方法来选取显著特征。</li>
+</ul>
+</li>
+<li><p><strong>机器学习</strong>：选取算法（决策树、随机森林、逻辑回归和朴素贝叶斯等）和参数（k折交叉验证，特定算法参数等）</p>
+</li>
+<li><strong>评估</strong>：根据公司提供的已经被划入黑名单的账户列表来统计每个分类器的性能。统计精确度、召回率、F-score等。</li>
+<li><p><strong>已用特征和它们的差距</strong>：如下表，我们将使用过的特征分类为<code>个人</code>和<code>社交</code>。鉴于人机的目的是赚取更多利润，其个人特征与人类用户有区别。</p>
+</li>
+<li><p>个人特征</p>
+<ul>
+<li>玩家信息：登录频率，游戏时间，游戏金钱，IP地址数目</li>
+<li>玩家动作：端坐(玩家用以回复生命状态的动作（人机端坐更频繁以恢复生命值）)，挣经验点，获得物品项(其他玩家赠送)，挣游戏金币，挣玩家击杀点(人类玩家击杀越多，排名越高，人机不在乎排名)，收获物品(击杀boss掉落)，复活，restore经验点，被非玩家或非玩家角色击杀，使用门户(using portals)</li>
+</ul>
+</li>
+<li>社交特征(人机不热衷社交)<ul>
+<li>群组活动：组团游戏(人机可能也组团，但是他们更在乎高效打钱和掉落物品，人类玩家更在乎完成任务)，工会活动</li>
+<li>社交互动多样性：组团游戏，游戏，交易，私信，邮件，商铺，工会。人类为了在线游戏会执行多种任务，而人机只会集中在几个固定动作。</li>
+<li>网络度量：节点中心度(Degree centrality(与此节点连接的数目))，中间性(betweenness centrality(两个节点之间的最短路径)),亲密度(某节点与与其他所有节点越近代表越重要)，特征向量中心性(eigenvector centrality(好几个邻居节点的特征向量中心性值很高)),偏心度(eccentricity),authority(被很多好的hub指向的节点),hub（指向很多好的authority的节点）,PageRank,聚集系数(clustering coefficient(团体聚合程度))</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-结果和讨论"><a href="#3-结果和讨论" class="headerlink" title="3 结果和讨论"></a>3 结果和讨论</h3><ul>
+<li><p>行为特征</p>
+<ul>
+<li>玩家信息：人机会24小时一直在线，并且会在上班时间也在线。下图展示了人机是多么密集地玩游戏。下图图c展示了用户每天收获物品项地最大值地累计分布，用户每天要收获超过1000个物品基本不可能，但是60%的人机每天收获物品超过5000个。这是一个显著特征</li>
+<li><img src="/images/blog/game_bot_detection_1.png" alt="game_bot_detection_0"> </li>
+<li>玩家动作：下图展示了人机/人类玩家的活动比率,红色点代表人机，蓝色点代表人类。人机挣游戏币的比率基本接近人类。但是人机挣取经验点和获取物品项比率远超人类。人机的<code>挣取经验点</code>,<code>获得物品项</code>,<code>挣取游戏币</code>的累计比率都是0.5，而人类只有0.33。这表明人机集中于利润相关活动，而人类享受 各种各样的活动。相反的，人类玩家的击杀玩家点是人机的三倍。人机不太在乎排名。</li>
+<li><img src="/images/blog/game_bot_detection_2.png" alt="game_bot_detection_0"> </li>
+</ul>
+</li>
+<li><p>组团活动</p>
+<ul>
+<li>下图展示了人机和人类玩家的平均组团时间。人机组团的游戏模式比较异常，人机中间会配合不被怪物杀死。<strong>80%的人机组团时间超过4h10min，而80%人类组团不超过2h20min</strong>。即便异常困难的组团，人类时间也不如人机。</li>
+<li><img src="/images/blog/game_bot_detection_3.png" alt="game_bot_detection_0"> </li>
+</ul>
+</li>
+<li>社交多样性<ul>
+<li>下图展示了社交熵的累计分布。被定义为社交活动的有：组团，合伙，交易，私信，邮件，商店，工会。量化社交活动多样的方法是香浓多样性熵 $H^=-\sum _{i=1} ^n p_iln p_i\quad n为社交活动类型,p_i为第i个社交活动类型的相对比例$ 。人类玩家比人机更享受多种活动。</li>
+<li><img src="/images/blog/game_bot_detection_4.png" alt="game_bot_detection_0"> </li>
+</ul>
+</li>
+<li><p>网络度量</p>
+<ul>
+<li>下表分析了人机和人类玩家的组团行为。首先，我们可以看到玩家网络中<strong>人类组团的平均度是人机的18倍</strong>。因为人类玩家网络中会存在很多不认识的，而人机只跟特定其他人机玩。<strong>人类团体的网络友谊度差不多是人机的4倍</strong>。<strong>交易网络中人类玩家的平均度是人机的2.5倍</strong>。但是，人机网络的cluster coeffcient聚合系数是人类玩家的5倍。在邮件网络中，我们也看到人机之间会发送一些垃圾邮件，同时也注意到存在5个收集者从其他人机那里搜集到6000个物品。这表明存在其中存在掘金团体。同时，由于在商人模式下，玩家无法移动，所以人机很少处于商人模式。</li>
+<li><img src="/images/blog/game_bot_detection_5.png" alt="game_bot_detection_0"> </li>
+</ul>
+</li>
+<li><p>三角调查</p>
+<ul>
+<li>下图中的13个三角网络主题中的相对问题表明网络中更细节的互动模式。对于当前的Aion游戏网络，在图b以每个主题类型的比例和与空模型对比的Z-score($Z_i = \frac{N_i ^{real}-N_i ^{random}}{\sigma _i ^{random}}\quad 其中N_i ^{real}是真实观测到的主题i数目，N_i ^{random}是随机网络中的期望值,\sigma _i ^{random}是随机网络中主题数期望值的标准差$)分值展示了互动模式。</li>
+<li><strong>结论</strong>：我们发现，人机的好友网络、私信、邮件、商店网络，以及人类玩家的游戏和商店网络表现出一中主导类型的主题类型。例如，好友网络，类型7占据了90%的三元组关系，这充分展现了互动的倒数性质。相反的性质可以用于商店，低倒数反映出存在大商家。在人机的私信和邮件网络中，类型1的账户占据了80%的节点三元组关系。这表明，在私信网络中一些人机发送怪物的坐标信息给其他人机。</li>
+<li><img src="/images/blog/game_bot_detection_6.png" alt="game_bot_detection_0"> </li>
+<li>将主题的缺失与空模型的对比使得我们能够检测到由于随机值造成的损耗，这个可以通过Z-score值完成。这在其他两个网络(组团party和交易网络)也很有必要，将空网络考虑在内的时候，我们可以发现尽管多种主题可能是相似的丰富（上图b），但是一些可能是十分显著或者未被表达出来。在人类团体中，过度表达的主题类型5($\hat Z&gt;0.4，标准化的版本\hat Z=Z_i\sqrt{\sum_i(Z_i ^2)}$)实际上十分接近于三角形，这与组团party网络中的高聚合度趋势一致。在人机组团中，过度表示的类型13表明网络中观测到的主题数目与在随机网络中出现的主题数目的期望值之间存在巨大差距。这表明，人机内部存在自己的组团来帮助彼此并交易。</li>
+<li><img src="/images/blog/game_bot_detection_7.png" alt="game_bot_detection_0"> </li>
+</ul>
+</li>
+<li><p>网络重叠</p>
+<ul>
+<li>为研究配对网络之间的相关度，我们研究了人机和人类组团之间的网络相似度。例如，两个网络可能展示出相似的聚类值，但这并不能保证与某节点相连的其他节点在另外一个网络也与其相连，或者节点表现出相似的活跃度。有两种方式来衡量网络的重叠度。第一个是<strong>雅可比相似度</strong>，第二个是<strong>网络对(pairs)</strong>的节点度的<strong>Pearson相关系数</strong>。下图是人机和人类组团的10个网络对(pairs)的链接和度重叠的结果。通过链接重叠（图a），我们发现人机组团在party-friendship(组团-好友)网络对以及party-trade(组团-交易)网络对中有更高的雅可比相似度。这是因为人机的主要活动是组团游戏和交易物品。图b中节点度重叠是另外一种发现互动的关联。例如，人类团体的party-trade(组团-交易)网络表现出大于0.7的正的Pearson相关系数，这可以理解为人类的组团活动，例如在团战或者狩猎时需要交易物品。相反的，人机网络中的Pearson系数就非常低。</li>
+<li><img src="/images/blog/game_bot_detection_8.png" alt="game_bot_detection_0"> </li>
+</ul>
+</li>
+</ul>
+<h3 id="4-检测方法详述"><a href="#4-检测方法详述" class="headerlink" title="4 检测方法详述"></a>4 检测方法详述</h3><ul>
+<li>使用了一种<strong>判别式方法</strong>来学习人机和人类玩家的特征差异。使用了<strong>10-折交叉验证</strong>,将数据分为10份</li>
+<li>特征选取：我们对比了模型结果与公司提供的黑名单来评估选取的特征。进行特征选取的步骤是先使用best-first，逐步贪婪，以及信息增益排名过滤算法类提升选取过程。下图显示了使用了如下三种特征的分类算法的结果<ul>
+<li>Feature_Set1包含了上面<code>方法</code>小节提到的全部的特征114个</li>
+<li>Feature_Set2是由信息增益过滤器算法抽取的前62个特征,结果与Feature_Set1接近，但是特征数少很多。所以选取此特征集。</li>
+<li>Feature_Set3 是由best-first和逐步贪婪算法组合选取的6个特征。结果不如上面两个</li>
+<li><img src="/images/blog/game_bot_detection_9.png" alt="game_bot_detection_0"> </li>
+</ul>
+</li>
+<li>分类与评估：人机的行为模式检测结果如下表。四种分类器用于训练算法，<code>决策树</code>，<code>随机森林</code>，<code>逻辑回归</code>，<code>朴素贝叶斯</code>。使用的都是Feature_Set2的特征。其中随机森林表现最好。训练数据集中有85%人类玩家和15%的人机玩家，随机森林算法能应对数据不均衡<ul>
+<li><img src="/images/blog/game_bot_detection_10.png" alt="game_bot_detection_0"> </li>
+<li>尽管我们进行了特征选取，但是还是有很多相关特征。例如，获取物品数目，挣取经验点数目，最大收获物品数目，组团偏心性(party_eccentricity) ，游戏时间，获得物品比例都是不显著的特征。尽管这些特征不显著，但是他们天然相关，不可以简单地剔除掉。</li>
+<li>下表显示了分别类评估结果的相对相似性和差异性：TP,FP,FN,TN。为获得相对相似性，我们通过最低分类数目标准化所有分类，来比较相对结果。对除去最低分类的每个分类，计算其除以最低分类得到的比例。相对相似度的模式与大部分特征和分类是一致的，除了<code>mail_between_centrality(邮件网络的中介性)</code>和<code>mail_outdegree(邮件网络的节点出度)</code></li>
+<li><img src="/images/blog/game_bot_detection_11.png" alt="game_bot_detection_0"> </li>
+</ul>
+</li>
+</ul>
+<h4 id="其他数据"><a href="#其他数据" class="headerlink" title="其他数据"></a>其他数据</h4><p><img src="/images/blog/game_bot_detection_12.png" alt="game_bot_detection_0"><br><img src="/images/blog/game_bot_detection_13.png" alt="game_bot_detection_0"><br><img src="/images/blog/game_bot_detection_14.png" alt="game_bot_detection_0"> </p>
+]]></content>
+      <categories>
+        <category>游戏安全</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>论文:游戏中人机检测2017年之后论文概述</title>
+    <url>/2020/01/22/paper_game-bot-detection-after2017-summary/</url>
+    <content><![CDATA[<h3 id="0-相关网站"><a href="#0-相关网站" class="headerlink" title="0 相关网站"></a>0 相关网站</h3><ol>
+<li><a href="https://www.g2g.com/wow-us/Item-2299-19260" target="_blank" rel="noopener">魔兽世界中国区道具买卖</a></li>
+<li><a href="https://www.raccoonbot.com/" target="_blank" rel="noopener">上千种特征丰富的人机论坛</a></li>
+<li><p><a href="https://mybot.run/forums/" target="_blank" rel="noopener">人机使用心得交流论坛</a></p>
+<h3 id="1-引言"><a href="#1-引言" class="headerlink" title="1 引言"></a>1 引言</h3><h3 id="1-1-人机检测的逻辑和方法"><a href="#1-1-人机检测的逻辑和方法" class="headerlink" title="1.1 人机检测的逻辑和方法"></a>1.1 人机检测的逻辑和方法</h3></li>
+<li><p>文献搜索：可以搜索的关键词是<code>game bot detection</code>,<code>game bot security</code>,<code>game bot cheating detection</code>。分析了从谷歌学术搜索三个关键词各返回的前20篇论文。只保留2017年之后的论文，剩下35篇。</p>
+</li>
+<li>文献筛选：选取标准是根据 <a href="https://www.tsv.fi/julkaisufoorumi/haku.php?lang=en" target="_blank" rel="noopener">JUFO</a> 文章评分，0-3分，得分越高，质量越好。经过这次筛选，我们只得到12篇论文。</li>
+</ol>
+<p>论文列表如下</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>文章(大部分是ResearchGate)</th>
+<th>分析的数据类别</th>
+<th>游戏类别</th>
+<th>数据集</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://www.researchgate.net/publication/220851327_Game_Bot_Detection_Based_on_Avatar_Trajectory" target="_blank" rel="noopener">Game Bot detection based on avatar trajectory.</a></td>
+<td>角色轨迹</td>
+<td>FPS(雷神之锤2)</td>
+<td>在与游戏相关的5个网站公开</td>
+</tr>
+<tr>
+<td><a href="https://www.researchgate.net/publication/301640460_Multimodal_Game_Bot_Detection_using_User_Behavioral_Characteristics" target="_blank" rel="noopener">Multimodal Game Bot Detection using User Behavioral Characteristics</a></td>
+<td>动作频率和社交活动</td>
+<td>MMORPG(AION)</td>
+<td>公开的AION数据集</td>
+</tr>
+<tr>
+<td><a href="https://www.researchgate.net/publication/257313135_Online_game_bot_detection_based_on_party-play_log_analysis" target="_blank" rel="noopener">Online game bot detection based on party-play log analysis</a></td>
+<td>动作频率和社交活动</td>
+<td>MMORPG(AION)</td>
+<td>私有的AION数据集</td>
+</tr>
+<tr>
+<td><a href="https://www.researchgate.net/publication/220496922_Server-Side_Bot_Detection_in_Massively_Multiplayer_Online_Games" target="_blank" rel="noopener">Server-side bot detection in massively multiplayer online games</a></td>
+<td>角色轨迹</td>
+<td>MMORPG(魔兽世界)</td>
+<td>WOW私有数据集</td>
+</tr>
+<tr>
+<td><a href="https://www.researchgate.net/publication/318717059_A_time_series_classification_approach_to_game_bot_detection" target="_blank" rel="noopener">A time series classification approach to game bot detection</a></td>
+<td>动作频率和社交活动</td>
+<td>MMORPG(AION)</td>
+<td>公开的AION数据集</td>
+</tr>
+<tr>
+<td><a href="https://www.researchgate.net/publication/221609548_Battle_of_Botcraft_Fighting_bots_in_online_games_with_human_observational_proofs" target="_blank" rel="noopener">Battle of Botcraft: fighting bots in online games with human observational proofs</a></td>
+<td>动作频率</td>
+<td>MMORPG(魔兽世界WOW)</td>
+<td>私有数据集(鼠标和键盘事件)</td>
+</tr>
+<tr>
+<td><a href="https://sci-hub.tw/10.1109/cig.2013.6633617" target="_blank" rel="noopener">Behavioral-based cheating detection in online first person shooters using machine learning techniques</a></td>
+<td>动作频率</td>
+<td>FPS(特洛伊战争)</td>
+<td>私有数据集(游戏事件)</td>
+</tr>
+<tr>
+<td><a href="https://www.researchgate.net/publication/275653414_Chatting_pattern_based_game_BOT_detection_Do_they_talk_like_us" target="_blank" rel="noopener">Chatting pattern based game BOT detection: do they talk like us?</a></td>
+<td>社交活动</td>
+<td>MMORPG(AION)</td>
+<td>私有数据集（游戏事件和聊天活动）</td>
+</tr>
+<tr>
+<td><a href="https://sci-hub.tw/10.1109/TIFS.2016.2623586" target="_blank" rel="noopener">Crime scene reconstruction: online gold farming network analysis</a></td>
+<td>社交活动和网络边(network-side)</td>
+<td>MMORPG(AION)</td>
+<td>私有数据集(交易日志)</td>
+</tr>
+<tr>
+<td><a href="https://sci-hub.tw/10.1145/1501750.1501770" target="_blank" rel="noopener">Detection of MMORPG bots based on behavior analysis</a></td>
+<td>动作频率</td>
+<td>MMORPG(<a href="https://store.steampowered.com/app/253490/CABAL_Online/" target="_blank" rel="noopener">Cabal Online</a>)</td>
+<td>事件日志</td>
+</tr>
+<tr>
+<td><a href="https://www.researchgate.net/publication/326503248_NGUARD_A_Game_Bot_Detection_Framework_for_NetEase_MMORPGs" target="_blank" rel="noopener">NGUARD: A Game Bot Detection Framework for NetEase MMORPGs</a></td>
+<td>动作频率</td>
+<td>网易游戏MMORPG</td>
+<td>私有数据集(动作日志)</td>
+</tr>
+<tr>
+<td><a href="https://arxiv.org/abs/1509.02458" target="_blank" rel="noopener">Game Bot detection approach based on behavior analysis and consideration of various play styles</a></td>
+<td>动作频率</td>
+<td>MMORPG(热血江湖Yulgang Online)</td>
+<td>私有数据集(事件日志)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="1-2-研究的问题"><a href="#1-2-研究的问题" class="headerlink" title="1.2  研究的问题"></a>1.2  研究的问题</h4><p>本文研究如下问题</p>
+<ol>
+<li>哪类游戏的人机检测是科研社区关注度最低的。就是看看哪类游戏还有机会做出新的突破</li>
+<li>人机检测有哪些公开数据集。可以用于实验</li>
+<li>如何检测在线游戏。梳理人机检测的可靠方法</li>
+<li>人机检测的未来方向</li>
+</ol>
+<h3 id="2-研究的游戏类别"><a href="#2-研究的游戏类别" class="headerlink" title="2 研究的游戏类别"></a>2 研究的游戏类别</h3><p>类别之间可能相关，并且一个游戏也可能同时属于多个类别。有如下类别</p>
+<ul>
+<li><strong>角色扮演</strong>：玩家控制游戏中角色探索虚拟世界。此类游戏一般是玩家搜集物资来增强角色能力，其中一个子类是MMOPRG，例如魔兽世界。</li>
+<li><strong>动作游戏</strong>：玩家控制角色摧毁或者躲避游戏中障碍物，典型游戏是超级玛丽。</li>
+<li><strong>冒险游戏</strong>：控制角色解谜题类任务，角色任务相对固定。此类别游戏集中于故事线，例如<code>Syberia</code></li>
+<li><strong>策略游戏</strong>：玩家控制角色的人口并替这些角色做决定，比如星际争霸</li>
+<li><strong>音乐游戏</strong>：玩家需要完成音乐曲目或者跳舞来获得经验点，例如吉他英雄。</li>
+<li><strong>射击游戏</strong>：控制角色击杀其他玩家，一般是使用枪。典型的如FPS，如雷神之锤</li>
+<li><strong>格斗游戏</strong>：玩家控制角色与其他角色格斗，如真人快打</li>
+<li><strong>解谜游戏</strong>：玩家不需要控制任何角色，只需要解出游戏中各种谜题即可</li>
+<li><strong>赌博游戏</strong>：如轮盘赌博</li>
+</ul>
+<p>大部分论文集中于MMORPG和FPS游戏中的人机检测。但是一些其他策略手游如皇室战争(Clash Royale)有2700万玩家，有些人使用人机提升角色并在后续卖掉，这类并没有获得很高关注度。</p>
+<h3 id="3-数据集"><a href="#3-数据集" class="headerlink" title="3 数据集"></a>3 数据集</h3><p>下面列出一些公开的数据集，虽然研究者用了各种各样的数据集，但是大部分都无法公开访问。</p>
+<ul>
+<li><strong>Quake 2(雷神之锤2)数据集</strong>：游戏允许记录游戏日志，可以后面用以观看和分析。日志包括角色移动，和游戏事件如捡起物品、射击和摧毁角色。玩家分享了一些游戏日志，如<a href="http://q2scene.net/ds/" target="_blank" rel="noopener">Planet Quake</a>和<a href="http://ocslab.hksecurity.net/Datasets/game-bot-detection" target="_blank" rel="noopener">Demo Squad</a>。</li>
+<li><strong>AION数据集</strong>：数据集包含了49739个角色2010年4月9日到7月5号的动作日志，同时数据集包含一些人工排查被封号的用户列表。</li>
+</ul>
+<p>如果说一些公开数据据不符合研究者需要，它们就会自己按照如下思路构建一些数据集。</p>
+<ul>
+<li><strong>追踪事件</strong>：在游戏客户端可以追踪一些事件，如点击和键盘按键。</li>
+<li><strong>开发一个游戏</strong>：研究者可能自己开发一个游戏来研究并追踪游戏中的事件。</li>
+<li><strong>数据集生成</strong>：为了生成人机网络数据集，一些论文使用了分析真实数据包追踪来构建数据并生成真实数据集。通过探索多阶段场景生成了大量事务数据。</li>
+</ul>
+<h3 id="4-人机检测方法"><a href="#4-人机检测方法" class="headerlink" title="4 人机检测方法"></a>4 人机检测方法</h3><h4 id="4-1-无监督和有监督学习方法"><a href="#4-1-无监督和有监督学习方法" class="headerlink" title="4.1 无监督和有监督学习方法"></a>4.1 无监督和有监督学习方法</h4><p>如论文1，2，3，4所述方法，这些监督方法需要有标注的数据集，用户被标记为人机或者普通用户，使用这样的数据集就可以训练分类模型。<br>无监督学习方法不需要标注，典型的如异常检测算法用于检测人机的异常行为，也可以使用聚类算法。</p>
+<h4 id="4-2-基于用户行为的分类方法"><a href="#4-2-基于用户行为的分类方法" class="headerlink" title="4.2 基于用户行为的分类方法"></a>4.2 基于用户行为的分类方法</h4><p>基于用户行为的分类方法分为三种</p>
+<ul>
+<li>客户端的：有点类似于反病毒的，安装在客户端的程序，程序会检测用户是否有人机行为</li>
+<li>网络端(network-side)的：基于网络中收发的数据包分析</li>
+<li>服务端的<ul>
+<li>动作频率：角色执行特定行为动作的数量，例如FPS游戏中角色攻击目标的次数</li>
+<li>运动轨迹：角色在游戏中的移动轨迹</li>
+<li>社交活动：角色在游戏中的社交活动，交易等。</li>
+</ul>
+</li>
+</ul>
+<h4 id="论文"><a href="#论文" class="headerlink" title="论文"></a>论文</h4><ol>
+<li>Ahmad, M.A., Keegan, B., Srivastava, J., Williams, D., Contractor, N.: Mining for gold farmers: automatic detection of deviant players in MMOGs.</li>
+<li>Bernardi, M.L., Cimitile, M., Martinelli, F., Mercaldo, F.: A time series classification approach to game bot detection</li>
+<li>Kang, A.R., Jeong, S.H., Mohaisen, A., Kim, H.K.: Multimodal game bot detection using user behavioral characteristics</li>
+<li>Prasetya, K., Wu, Z.D.: Artificial neural network for bot detection system in MMOGs.</li>
+</ol>
+]]></content>
+      <categories>
+        <category>游戏安全</category>
+      </categories>
+  </entry>
+  <entry>
     <title>模型剪枝和优化-torch和Tensorflow为例</title>
     <url>/2019/11/26/model-pruning/</url>
     <content><![CDATA[<h2 id="1-基本概念"><a href="#1-基本概念" class="headerlink" title="1 基本概念"></a>1 基本概念</h2><h3 id="1-1-基本问题"><a href="#1-1-基本问题" class="headerlink" title="1.1 基本问题"></a>1.1 基本问题</h3><p>网络剪枝目标是</p>
@@ -6259,75 +6716,6 @@ min_F \sum_{i=1}^n \mid \mid F_c(\phi (x_i,\hat S_i))-y_i \mid \mid ^2+\lambda \
       </categories>
   </entry>
   <entry>
-    <title>语音处理0：基础</title>
-    <url>/2017/04/01/voice-basic/</url>
-    <content><![CDATA[<h2 id="一-语音的基础概念"><a href="#一-语音的基础概念" class="headerlink" title="一 语音的基础概念"></a>一 语音的基础概念</h2><h3 id="1-1-什么是语音"><a href="#1-1-什么是语音" class="headerlink" title="1.1 什么是语音"></a>1.1 什么是语音</h3><p>语音是一个连续的音频流，它是由大部分的稳定态和部分动态改变的状态混合构成</p>
-<h3 id="1-2-声音如何产生"><a href="#1-2-声音如何产生" class="headerlink" title="1.2 声音如何产生"></a>1.2 声音如何产生</h3><p><img src="/images/blog/voice_produce.png" alt="声音产生"></p>
-<p>声音由肺部气流并经过声带，此为声源。当我们发<strong>元音</strong>时，声带被气流震动并生成<strong>脉冲序列</strong>。此脉冲决定了语音的<strong>基准频率</strong>。</p>
-<p>当我们发出<strong>辅音</strong>时，声带没有被震动，并产生<strong>噪音</strong>。然后脉冲或噪声被声带转换或者个性化。</p>
-<h3 id="1-3-语音的组成"><a href="#1-3-语音的组成" class="headerlink" title="1.3 语音的组成"></a>1.3 语音的组成</h3><p>最小单元是<strong>音素</strong>，音素组合为<strong>音节</strong>。</p>
-<h4 id="1-3-1-音素"><a href="#1-3-1-音素" class="headerlink" title="1.3.1 音素"></a>1.3.1 音素</h4><p>音素是最小的语音单位，它是从音色的角度划分出来的。例如，汉语里的 ɑ、i、u都是音素。一种语言的语音系统大都是由几十个不同的音素组成的</p>
-<p>音素分为元音和辅音</p>
-<ul>
-<li><p><strong>元音</strong>： 如ɑ、o、e、i、u。</p>
-</li>
-<li><p><strong>辅音</strong>：如b、p、d、t、ɡ、k、s、r。</p>
-</li>
-</ul>
-<p><strong>元音和辅音的区别</strong></p>
-<ol>
-<li>元音发音时，气流不受阻碍；辅音发音时，气流通过口腔、鼻腔时要受到阻碍</li>
-</ol>
-<p>2．元音发音时，发音器官各部位保持均衡的紧张状态；辅音发音时，构成阻碍的部位比较紧张，其他部位比较松弛</p>
-<p>3．元音发音时，气流较弱；辅音发音时，气流较强。</p>
-<p>4．元音发音时，声带要颤动，发出的声音比较响亮；辅音发音时，有的声带颤动，声音响亮，如m、n、l、r，有的不颤动，声音不响亮，如b、t、z、c。</p>
-<h4 id="1-3-2-音节（只适用于汉语）"><a href="#1-3-2-音节（只适用于汉语）" class="headerlink" title="1.3.2 音节（只适用于汉语）"></a>1.3.2 音节（只适用于汉语）</h4><p>音节是由音素构成的。如啊”（ā）（1个音素），“地”（dì）（2个音素），“民”（mín）（3个音素）。</p>
-<p>音节示例：如“建设”是两个音节，“图书馆”是三个音节，“社会主义”是四个音节。汉语音节和汉字基本上是一对一，一个汉字也就是一个音节。</p>
-<p>音节包含了<strong>声母</strong>、<strong>韵母</strong>、<strong>音调</strong>三个部分。</p>
-<ul>
-<li><p><strong>声母</strong>： 声母指音节开头的辅音，共有23个。如dā（搭）的声母是d</p>
-</li>
-<li><p><strong>韵母</strong>： 韵母指音节里声母后面的部分，共38。jiǎ（甲）的韵母是iǎ</p>
-</li>
-<li><p><strong>音节</strong>： 声调指整个音节的高低升降的变化。普通话里dū（督）、dú（毒）、dǔ（赌）、dù（度）</p>
-</li>
-</ul>
-<p>根据《现代汉语词典》，汉语标准音节共 418 个</p>
-<h2 id="2-音频的表示"><a href="#2-音频的表示" class="headerlink" title="2 音频的表示"></a>2 音频的表示</h2><h3 id="2-1-波形表示"><a href="#2-1-波形表示" class="headerlink" title="2.1 波形表示"></a>2.1 波形表示</h3><p>波形表示是大家很熟悉的波形表示，就是直接表示出在观测点上所测量到的振幅和时间的关系。当然为了能够将连续的波形记录为数字形式，我们需要对这个波形进行采样（每隔一个固定的时间采取一次测量）和数字化（将连续的数字转化为可用二进制表达的格式）。</p>
-<p><img src="/images/blog/voice_wave_represtation.jpg" alt="音频的波形表示"></p>
-<p>在上面的图中，展示了一秒钟的人声音频片段，以及截取其中一毫秒的数据的放大图</p>
-<p><img src="/images/blog/voice_wave_represtation1ms.jpg" alt="音频的波形表示"></p>
-<p>我们最熟悉的CD音频，每秒钟采样44100次（这是因为，根据Nyquist采样定理，如果要完美重现20kHz的音频，那么我们最少需要每秒采样40k次，而20kHz是人类的听觉上限），而每个样本都用16位的二进制来表示。</p>
-<p>这样每一个样本可以表示最多65,536种不同的振幅。如果假定每一个时间点采用8位的二进制数字来表示，那么总共可能会有256种可能的值，我们就用一个256位的one－hot向量来表示它，最后在计算机中保存的声音片段，就可能是这样的。</p>
-<p><img src="/images/blog/voice_wave_represtation_onehot.jpg" alt="音频的波形表示">  </p>
-<h3 id="2-2-频域表示"><a href="#2-2-频域表示" class="headerlink" title="2.2 频域表示"></a>2.2 频域表示</h3><p>如果对输入的波形做一次傅立叶变换，会发现，一个复杂的sine波形，实际上在转换后的“频谱”上，可以被很简单的表示出来。</p>
-<p>转换后的音频，是一种频率的表示——我们只关心这个波形到底是以什么样的频率在震动，而恰好，我们人类对于声音的认知，也是基于频率而不是振幅的——实际上这样的表示，更加符合人类对于声音的认知，也更容易对其进行数字处理（DSP）。</p>
-<p><img src="/images/blog/voice_wave_represtation_fluir.jpg" alt="音频的傅里叶变换"> </p>
-<h2 id="3-语音的初步处理"><a href="#3-语音的初步处理" class="headerlink" title="3 语音的初步处理"></a>3 语音的初步处理</h2><p>我们知道声音实际上是一种波。常见的mp3等格式都是压缩格式，必须转成非压缩的纯波形文件来处理，比如Windows PCM文件，也就是俗称的wav文件。wav文件里存储的除了一个文件头以外，就是声音波形的一个个点了。下图是一个波形的示例。</p>
-<p><img src="/images/blog/voice_wave_example.jpg" alt="音频的傅里叶变换">  </p>
-<p>在开始语音识别之前，有时需要把首尾端的静音切除，降低对后续步骤造成的干扰。这个静音切除的操作一般称为VAD，需要用到信号处理的一些技术。要对声音进行分析，需要对声音分帧，也就是把声音切开成一小段一小段，每小段称为一帧。分帧操作一般不是简单的切开，而是使用移动窗函数来实现。帧与帧之间一般是有交叠的，就像下图这样：</p>
-<p><img src="/images/blog/voice_wave_segmentation.jpg" alt="音频的傅里叶变换">  </p>
-<p>图中，每帧的长度为25毫秒，每两帧之间有25-10=15毫秒的交叠。我们称为以帧长25ms、帧移10ms分帧。</p>
-<p>分帧后，语音就变成了很多小段。但波形在时域上几乎没有描述能力，因此必须将波形作变换。常见的一种变换方法是提取MFCC特征，根据人耳的生理特性，把每一帧波形变成一个多维向量，可以简单地理解为这个向量包含了这帧语音的内容信息。这个过程叫做声学特征提取。实际应用中，这一步有很多细节，声学特征也不止有MFCC这一种，具体这里不讲。</p>
-<p>至此，声音就成了一个12行（假设声学特征是12维）、N列的一个矩阵，称之为观察序列，这里N为总帧数。观察序列如下图所示，图中，每一帧都用一个12维的向量表示，色块的颜色深浅表示向量值的大小。</p>
-<p><img src="/images/blog/voice_mfcc.jpg" alt="音频的处理MFCC">  </p>
-<p>接下来就要介绍怎样把这个矩阵变成文本了。首先要介绍两个概念：</p>
-<ul>
-<li><p>音素：单词的发音由音素构成。对英语，一种常用的音素集是卡内基梅隆大学的一套由39个音素构成的音素集，参见The CMU Pronouncing Dictionary‎。汉语一般直接用全部声母和韵母作为音素集，另外汉语识别还分有调无调，不详述。</p>
-</li>
-<li><p>状态：这里理解成比音素更细致的语音单位就行啦。通常把一个音素划分成3个状态。</p>
-</li>
-</ul>
-<p><img src="/images/blog/voice_frames.jpg" alt="音频的处理MFCC">  </p>
-<p>图中，每个小竖条代表一帧，若干帧语音对应一个状态，每三个状态组合成一个音素，若干个音素组合成一个单词。也就是说，只要知道每帧语音对应哪个状态了，语音识别的结果也就出来了。</p>
-<p><strong>参考</strong></p>
-<p><a href="https://zhuanlan.zhihu.com/p/25784028" target="_blank" rel="noopener">Emotibot Tech | WaveNet语音合成与深度生成模型解析 - 知乎专栏</a></p>
-]]></content>
-      <categories>
-        <category>语音</category>
-      </categories>
-  </entry>
-  <entry>
     <title>医疗软件Mevislab使用</title>
     <url>/2017/04/01/mevislab/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在阅读肺结节CT图像处理的相关论文时，注意到很多作者都使用的是一款软件Mevislab。Mevislab是一款用于图像处理，尤其是医疗CT图像领域的，快速原型开发平台，做学术研究和个人学习是免费自由使用的（可自由开发的模块有限），<br>商业环境下使用时收费的。我曾发邮件咨询过，大概每年2万2(2017年3月份)。下图是工作台样例:</p>
@@ -6640,6 +7028,75 @@ min_F \sum_{i=1}^n \mid \mid F_c(\phi (x_i,\hat S_i))-y_i \mid \mid ^2+\lambda \
 ]]></content>
       <categories>
         <category>医疗</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>语音处理0：基础</title>
+    <url>/2017/04/01/voice-basic/</url>
+    <content><![CDATA[<h2 id="一-语音的基础概念"><a href="#一-语音的基础概念" class="headerlink" title="一 语音的基础概念"></a>一 语音的基础概念</h2><h3 id="1-1-什么是语音"><a href="#1-1-什么是语音" class="headerlink" title="1.1 什么是语音"></a>1.1 什么是语音</h3><p>语音是一个连续的音频流，它是由大部分的稳定态和部分动态改变的状态混合构成</p>
+<h3 id="1-2-声音如何产生"><a href="#1-2-声音如何产生" class="headerlink" title="1.2 声音如何产生"></a>1.2 声音如何产生</h3><p><img src="/images/blog/voice_produce.png" alt="声音产生"></p>
+<p>声音由肺部气流并经过声带，此为声源。当我们发<strong>元音</strong>时，声带被气流震动并生成<strong>脉冲序列</strong>。此脉冲决定了语音的<strong>基准频率</strong>。</p>
+<p>当我们发出<strong>辅音</strong>时，声带没有被震动，并产生<strong>噪音</strong>。然后脉冲或噪声被声带转换或者个性化。</p>
+<h3 id="1-3-语音的组成"><a href="#1-3-语音的组成" class="headerlink" title="1.3 语音的组成"></a>1.3 语音的组成</h3><p>最小单元是<strong>音素</strong>，音素组合为<strong>音节</strong>。</p>
+<h4 id="1-3-1-音素"><a href="#1-3-1-音素" class="headerlink" title="1.3.1 音素"></a>1.3.1 音素</h4><p>音素是最小的语音单位，它是从音色的角度划分出来的。例如，汉语里的 ɑ、i、u都是音素。一种语言的语音系统大都是由几十个不同的音素组成的</p>
+<p>音素分为元音和辅音</p>
+<ul>
+<li><p><strong>元音</strong>： 如ɑ、o、e、i、u。</p>
+</li>
+<li><p><strong>辅音</strong>：如b、p、d、t、ɡ、k、s、r。</p>
+</li>
+</ul>
+<p><strong>元音和辅音的区别</strong></p>
+<ol>
+<li>元音发音时，气流不受阻碍；辅音发音时，气流通过口腔、鼻腔时要受到阻碍</li>
+</ol>
+<p>2．元音发音时，发音器官各部位保持均衡的紧张状态；辅音发音时，构成阻碍的部位比较紧张，其他部位比较松弛</p>
+<p>3．元音发音时，气流较弱；辅音发音时，气流较强。</p>
+<p>4．元音发音时，声带要颤动，发出的声音比较响亮；辅音发音时，有的声带颤动，声音响亮，如m、n、l、r，有的不颤动，声音不响亮，如b、t、z、c。</p>
+<h4 id="1-3-2-音节（只适用于汉语）"><a href="#1-3-2-音节（只适用于汉语）" class="headerlink" title="1.3.2 音节（只适用于汉语）"></a>1.3.2 音节（只适用于汉语）</h4><p>音节是由音素构成的。如啊”（ā）（1个音素），“地”（dì）（2个音素），“民”（mín）（3个音素）。</p>
+<p>音节示例：如“建设”是两个音节，“图书馆”是三个音节，“社会主义”是四个音节。汉语音节和汉字基本上是一对一，一个汉字也就是一个音节。</p>
+<p>音节包含了<strong>声母</strong>、<strong>韵母</strong>、<strong>音调</strong>三个部分。</p>
+<ul>
+<li><p><strong>声母</strong>： 声母指音节开头的辅音，共有23个。如dā（搭）的声母是d</p>
+</li>
+<li><p><strong>韵母</strong>： 韵母指音节里声母后面的部分，共38。jiǎ（甲）的韵母是iǎ</p>
+</li>
+<li><p><strong>音节</strong>： 声调指整个音节的高低升降的变化。普通话里dū（督）、dú（毒）、dǔ（赌）、dù（度）</p>
+</li>
+</ul>
+<p>根据《现代汉语词典》，汉语标准音节共 418 个</p>
+<h2 id="2-音频的表示"><a href="#2-音频的表示" class="headerlink" title="2 音频的表示"></a>2 音频的表示</h2><h3 id="2-1-波形表示"><a href="#2-1-波形表示" class="headerlink" title="2.1 波形表示"></a>2.1 波形表示</h3><p>波形表示是大家很熟悉的波形表示，就是直接表示出在观测点上所测量到的振幅和时间的关系。当然为了能够将连续的波形记录为数字形式，我们需要对这个波形进行采样（每隔一个固定的时间采取一次测量）和数字化（将连续的数字转化为可用二进制表达的格式）。</p>
+<p><img src="/images/blog/voice_wave_represtation.jpg" alt="音频的波形表示"></p>
+<p>在上面的图中，展示了一秒钟的人声音频片段，以及截取其中一毫秒的数据的放大图</p>
+<p><img src="/images/blog/voice_wave_represtation1ms.jpg" alt="音频的波形表示"></p>
+<p>我们最熟悉的CD音频，每秒钟采样44100次（这是因为，根据Nyquist采样定理，如果要完美重现20kHz的音频，那么我们最少需要每秒采样40k次，而20kHz是人类的听觉上限），而每个样本都用16位的二进制来表示。</p>
+<p>这样每一个样本可以表示最多65,536种不同的振幅。如果假定每一个时间点采用8位的二进制数字来表示，那么总共可能会有256种可能的值，我们就用一个256位的one－hot向量来表示它，最后在计算机中保存的声音片段，就可能是这样的。</p>
+<p><img src="/images/blog/voice_wave_represtation_onehot.jpg" alt="音频的波形表示">  </p>
+<h3 id="2-2-频域表示"><a href="#2-2-频域表示" class="headerlink" title="2.2 频域表示"></a>2.2 频域表示</h3><p>如果对输入的波形做一次傅立叶变换，会发现，一个复杂的sine波形，实际上在转换后的“频谱”上，可以被很简单的表示出来。</p>
+<p>转换后的音频，是一种频率的表示——我们只关心这个波形到底是以什么样的频率在震动，而恰好，我们人类对于声音的认知，也是基于频率而不是振幅的——实际上这样的表示，更加符合人类对于声音的认知，也更容易对其进行数字处理（DSP）。</p>
+<p><img src="/images/blog/voice_wave_represtation_fluir.jpg" alt="音频的傅里叶变换"> </p>
+<h2 id="3-语音的初步处理"><a href="#3-语音的初步处理" class="headerlink" title="3 语音的初步处理"></a>3 语音的初步处理</h2><p>我们知道声音实际上是一种波。常见的mp3等格式都是压缩格式，必须转成非压缩的纯波形文件来处理，比如Windows PCM文件，也就是俗称的wav文件。wav文件里存储的除了一个文件头以外，就是声音波形的一个个点了。下图是一个波形的示例。</p>
+<p><img src="/images/blog/voice_wave_example.jpg" alt="音频的傅里叶变换">  </p>
+<p>在开始语音识别之前，有时需要把首尾端的静音切除，降低对后续步骤造成的干扰。这个静音切除的操作一般称为VAD，需要用到信号处理的一些技术。要对声音进行分析，需要对声音分帧，也就是把声音切开成一小段一小段，每小段称为一帧。分帧操作一般不是简单的切开，而是使用移动窗函数来实现。帧与帧之间一般是有交叠的，就像下图这样：</p>
+<p><img src="/images/blog/voice_wave_segmentation.jpg" alt="音频的傅里叶变换">  </p>
+<p>图中，每帧的长度为25毫秒，每两帧之间有25-10=15毫秒的交叠。我们称为以帧长25ms、帧移10ms分帧。</p>
+<p>分帧后，语音就变成了很多小段。但波形在时域上几乎没有描述能力，因此必须将波形作变换。常见的一种变换方法是提取MFCC特征，根据人耳的生理特性，把每一帧波形变成一个多维向量，可以简单地理解为这个向量包含了这帧语音的内容信息。这个过程叫做声学特征提取。实际应用中，这一步有很多细节，声学特征也不止有MFCC这一种，具体这里不讲。</p>
+<p>至此，声音就成了一个12行（假设声学特征是12维）、N列的一个矩阵，称之为观察序列，这里N为总帧数。观察序列如下图所示，图中，每一帧都用一个12维的向量表示，色块的颜色深浅表示向量值的大小。</p>
+<p><img src="/images/blog/voice_mfcc.jpg" alt="音频的处理MFCC">  </p>
+<p>接下来就要介绍怎样把这个矩阵变成文本了。首先要介绍两个概念：</p>
+<ul>
+<li><p>音素：单词的发音由音素构成。对英语，一种常用的音素集是卡内基梅隆大学的一套由39个音素构成的音素集，参见The CMU Pronouncing Dictionary‎。汉语一般直接用全部声母和韵母作为音素集，另外汉语识别还分有调无调，不详述。</p>
+</li>
+<li><p>状态：这里理解成比音素更细致的语音单位就行啦。通常把一个音素划分成3个状态。</p>
+</li>
+</ul>
+<p><img src="/images/blog/voice_frames.jpg" alt="音频的处理MFCC">  </p>
+<p>图中，每个小竖条代表一帧，若干帧语音对应一个状态，每三个状态组合成一个音素，若干个音素组合成一个单词。也就是说，只要知道每帧语音对应哪个状态了，语音识别的结果也就出来了。</p>
+<p><strong>参考</strong></p>
+<p><a href="https://zhuanlan.zhihu.com/p/25784028" target="_blank" rel="noopener">Emotibot Tech | WaveNet语音合成与深度生成模型解析 - 知乎专栏</a></p>
+]]></content>
+      <categories>
+        <category>语音</category>
       </categories>
   </entry>
   <entry>
@@ -9907,68 +10364,6 @@ Z =
       </categories>
   </entry>
   <entry>
-    <title>大数据：spark mllib python使用示例</title>
-    <url>/2016/10/02/spark-python-example/</url>
-    <content><![CDATA[<h2 id="机器学习的背景知识"><a href="#机器学习的背景知识" class="headerlink" title="机器学习的背景知识"></a>机器学习的背景知识</h2><blockquote>
-<p>监督学习的中点是<strong> 在规则化参数的同时最小化误差</strong>。最小化误差是为了让我们的模型拟合我们的训练数据，而规则化参数是防止我们的模型过分拟合我们的训练数据。参数太多，会导致我们的模型复杂度上升，容易过拟合，也就是我们的训练误差会很小。但<strong>训练误差</strong>小并不是我们的最终目标，我们的目标是希望模型的<strong>测试误差</strong>小，也就是能准确的预测新的样本。所以，我们需要保证模型“简单”的基础上最小化训练误差，这样得到的参数才具有好的泛化性能（也就是测试误差也小），而模型“简单”就是通过规则函数来实现的。另外，规则项的使用还可以约束我们的模型的特性。这样就可以将人对这个模型的先验知识融入到模型的学习当中，强行地让学习到的模型具有人想要的特性，例如稀疏、低秩、平滑等等。要知道，有时候人的先验是非常重要的。</p>
-</blockquote>
-<p>来源于：   <a href="http://blog.csdn.net/zouxy09/article/details/24971995" target="_blank" rel="noopener">http://blog.csdn.net/zouxy09/article/details/24971995</a></p>
-<h1 id="线性模型"><a href="#线性模型" class="headerlink" title="线性模型"></a>线性模型</h1><h2 id="一-数学公式"><a href="#一-数学公式" class="headerlink" title="一  数学公式"></a>一  数学公式</h2><p>&emsp; &emsp; 许多机器学习方法都可以被转换为一个凸函数优化问题，比如查找凸函数f（自变量是w，在代码中称为权重，自变量有d维）最小值。通常，我们可以将这些写成 $ min_{w\epsilon R^d}f(w) $ ，其目标函数是以下形式</p>
-<script type="math/tex; mode=display">f(w) := \lambda\, R(w) +\ frac1n \sum_{i=1}^n L(w;x_i,y_i) \label{eq:regPrimal}</script><p>&emsp;<br>&emsp;<br>此处向量$x<em>{i}\epsilon R^d$是训练数据，对于$1\leq i\leq n$ 和 $y</em>{i}\epsilon R$是我们需要预测的标签。如果$L(w;x,y)$可以被表示为 $W^T x$和$y$的函数，则可以调用 <strong><em>linear</em></strong>方法。</p>
-<p>&emsp;<br>&emsp;<br>目标函数<strong><em>f</em></strong>分为两部分：控制模型复杂度的正则化部分，模型在训练数据集上误差评估的损失度量部分。损失度量函数$L(w;.)$是一个在域$w$上的凸函数。固定的正则化参数$\lambda \geq 0$(代码中是参数<strong><em>regParam</em></strong>)定义了权衡最小化损失（比如训练误差）和最小化模型复杂度（比如，防止过拟合）之间的平衡。</p>
-<h2 id="二-误差函数"><a href="#二-误差函数" class="headerlink" title="二 误差函数"></a>二 误差函数</h2><p>下表概括了损失函数和它们在spark.mllib支持的的梯度和分梯度方法. </p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>损失</th>
-<th>loss function $L(w;x,y)$$\;\;\;\;\;\;\;\;$</th>
-<th>梯度或分梯度</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>hinge loss(SVM)</td>
-<td>$max${0,$1-yw^{T}x$},$y \epsilon$ {-1,+1}</td>
-<td>$ -y\cdot x (if\, yw^Tx &lt; 1)\;\; 0 (otherwise))$</td>
-</tr>
-<tr>
-<td>logstic loss(逻辑回归)</td>
-<td>$log(1+exp(-yw^Tx)),y\epsilon {-1,+1}$</td>
-<td>$-y(1-\frac {1}{1+exp(-yw^Tx)})\cdot x$</td>
-</tr>
-<tr>
-<td>squared loss(最小二乘)</td>
-<td>$\frac {1}{2}(w^Tx-y)^2, y\epsilon R$</td>
-<td>$(w^Tx-y)\cdot x$</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="三-规则化"><a href="#三-规则化" class="headerlink" title="三 规则化"></a>三 规则化</h2><p>  &emsp;&emsp;规则化的目的是简化模型并避免过拟合，规则化函数Ω(w)也有很多种选择，一般是模型复杂度的单调递增函数，模型越复杂，规则化值就越大。比如，规则化项可以是模型参数向量的范数。然而，不同的选择对参数w的约束不同，取得的效果也不同<br>&emsp;&emsp;关于L1范式和L2范式:</p>
-<ul>
-<li>L0 范式：L0范数是指向量中非0的元素的个数。如果我们用L0范数来规则化一个参数矩阵W的话，就是希望W的大部分元素都是0，换句话说，让参数W是稀疏的。</li>
-<li>L1 范式:  L1范数是指向量中各个元素绝对值之和，也称叫“稀疏规则算子”（Lasso regularization）。<br>既然L0可以实现稀疏，为什么不用L0，而要用L1呢？一是因为L0范数很难优化求解（NP难问题），二是L1范数是L0范数的最优凸近似，而且它比L0范数要容易优化求解。</li>
-<li>L2范式：<br>在回归里面，有人把有它的回归叫“岭回归”（Ridge Regression），有人也叫它“权值衰减weight decay”。它的作用是改善过拟合。<br>L2范数是指向量各元素的平方和然后求平方根。我们让L2范数的规则项||W||2最小，可以使得W的每个元素都很小，都接近于0，但与L1范数不同，它不会让它等于0，而是接近于0。而越小的参数说明模型越简单，越简单的模型则越不容易产生过拟合现象。<br>&emsp;&emsp;目前在 spark.mllib中支持的正则化如下：<br>|范式|      regularizer $R(w)$      |            梯度或子梯度       |<br>|——|—————-|———-|<br>|zero(unregularized)|0|0|<br>|L2|$\frac{1}{2}$||w||$_2^2$|w|<br>|L1|$||w||_1$|$sign(w)$|<br>|elastic net|$\alpha||w||_1+(1-\alpha)\frac{1}{2}||w||_2^2$|$\alpha sign(w)+(1-\alpha)w$|</li>
-</ul>
-<p><em>此处$sign(w)$是由项$w$中所有$sign(-1,+1)$组成的向量</em></p>
-<h2 id="三-优化"><a href="#三-优化" class="headerlink" title="三 优化"></a>三 优化</h2><p>&emsp;&emsp;线性方法使用凸函数来优化目标函数. spark.mllib使用两个方法，SGD和LBFGS（Limited-Memory Quasi-Newton Method）。当前，大多数算法API都支持Stochastic Gradient Descent（随机梯度下降），和少部分支持LBFGS。</p>
-<h2 id="四-分类"><a href="#四-分类" class="headerlink" title="四  分类"></a>四  分类</h2><p>&emsp;&emsp;分类旨在将数据项切分到不同类别。<strong><em>spark.mllib</em></strong>提供了两个线性分类方法：线性SVM和逻辑回归。线性SVM只支持二分类，逻辑回归既支持二分类也支持多分类。这两种方法，<strong><em>spark.mllib</em></strong>都支持L1和L2范式规则化。在<strong>MLlib</strong>中训练数据集合以 <em>LabeledPoint</em>类型的RDD代表，其中label（标签）是从0开始0,1,2…的类别索引。<br>&emsp;&emsp;<strong>注意</strong>：指导手册中的，二分类标签$y$要么是 1 要么是 -1，这是为了方便在公式里，但是在<strong>*spark.mllib</strong>里面是以0代表公式中的-1的</p>
-<h2 id="五-线性SVM"><a href="#五-线性SVM" class="headerlink" title="五 线性SVM"></a>五 线性SVM</h2><h3 id="5-1-线性SVM概要"><a href="#5-1-线性SVM概要" class="headerlink" title="5.1 线性SVM概要"></a>5.1 线性SVM概要</h3><p>&emsp;&amp;emsp线性SVM的误差函数是由hingle loss给出:<script type="math/tex">L(w;x,y) :=max\lbrace0,1-yw^Tx\rbrace</script><br>线性SVM默认使用L2范式规则化训练数据，同时是支持L1范式规则的，此时就变成一个线性问题。<br>线性SVM的输出是一个SVM模型。对于一个新数据点，以$x$表示，模型将会基于$w^Tx$的值预测。默认情况下，如果$w^Tx\geq 0$那么输出为1，否则输出为0。</p>
-<h3 id="5-2-示例代码"><a href="#5-2-示例代码" class="headerlink" title="5.2 示例代码"></a>5.2 示例代码</h3><p>&emsp;&emsp;一下代码展示了如何载入数据，创建SVM模型，根据模型预测并计算训练误差。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">学习使用spark.mllib中 SVM模型。代码展示了如何载入数据，创建SVM模型，根据模型预测并计算训练误差。</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">from pyspark.mllib.classification import SVMWithSGD,SVMModel</span><br><span class="line">from pyspark.mllib.regression import LabeledPoint</span><br><span class="line">from pyspark import SparkContext</span><br><span class="line">from pyspark import SparkConf</span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">import logging</span><br><span class="line"># Path for spark source folder</span><br><span class="line">os.environ[&#39;SPARK_HOME&#39;]&#x3D;&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6&quot;</span><br><span class="line"># Append pyspark  to Python Path</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python&quot;)</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python\lib\py4j-0.9-src.zip&quot;)</span><br><span class="line"></span><br><span class="line">conf &#x3D; SparkConf()</span><br><span class="line">conf.set(&quot;YARN_CONF_DIR &quot;, &quot;D:\javaPackages\hadoop_conf_dir\yarn-conf&quot;)</span><br><span class="line">conf.set(&quot;spark.driver.memory&quot;, &quot;2g&quot;)</span><br><span class="line">conf.setMaster(&quot;yarn-client&quot;)</span><br><span class="line">conf.setAppName(&quot;TestSVM&quot;)</span><br><span class="line">logger &#x3D; logging.getLogger(&#39;pyspark&#39;)</span><br><span class="line">sc &#x3D; SparkContext(conf&#x3D;conf)</span><br><span class="line">mylog &#x3D; []</span><br><span class="line">#载入数据并解析</span><br><span class="line">def parsePoint(line):</span><br><span class="line">  values &#x3D; [float(x) for x in line.split(&quot; &quot;)]</span><br><span class="line">    return LabeledPoint(values[0],values[1:])</span><br><span class="line">data &#x3D; sc.textFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;SVM&#x2F;sample_svm_data.txt&quot;)</span><br><span class="line"></span><br><span class="line">parseData &#x3D; data.map(parsePoint)</span><br><span class="line">#创建SVM模型</span><br><span class="line">model &#x3D; SVMWithSGD.train(parseData,iterations&#x3D;100)</span><br><span class="line"># 评估模型</span><br><span class="line">labelsAndPoints &#x3D; parseData.map(lambda p:(p.label,model.predict(p.features)))</span><br><span class="line">trainError &#x3D; labelsAndPoints.filter(lambda (v,p):v!&#x3D;p).count()&#x2F;float(parseData.count())</span><br><span class="line">mylog.append(&quot;SVM模型测试，训练误差是:&quot;)</span><br><span class="line">mylog.append(str(trainError))</span><br><span class="line">sc.parallelize(mylog).saveAsTextFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;SVM&#x2F;log&#x2F;&quot;)</span><br><span class="line">#存储和载入模型</span><br><span class="line">model.save(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;SVM&#x2F;SVMModelSave&quot;)</span><br><span class="line">sameModel &#x3D; SVMModel.load(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;SVM&#x2F;SVMModelSave&quot;)</span><br></pre></td></tr></table></figure>
-<h2 id="六-逻辑回归"><a href="#六-逻辑回归" class="headerlink" title="六 逻辑回归"></a>六 逻辑回归</h2><h3 id="6-1-逻辑回归概要"><a href="#6-1-逻辑回归概要" class="headerlink" title="6.1 逻辑回归概要"></a>6.1 逻辑回归概要</h3><p>&emsp;&emsp;逻辑回归在二分类预测中广泛使用，其误差函数是下式 logistic loss:<script type="math/tex">L(w;x,y):=log(1+\exp(-yw^Tx))</script><br>对于二分类问题，算法的输出结果是一个二项式逻辑回归模型。对于给定新数据点，以$x$表示，使用logistic函数来预测:<script type="math/tex">f(z) =\frac{1}{1+e^{-z}}</script>。其中$z =w^Tx$，如果$f(w^Tx)&gt;0.5$输出为正，否则为负。与线性SVM不同的是，逻辑回归模型的原始输出有一个概率解释（即，x是正的概率）。<br>&emsp;&emsp;二项式逻辑回归可以生成多项式逻辑回归并用来训练和预测多分类问题。比如说，对于<strong>K</strong>个可能的输出结果，其中一个可以选定为轴，其余<strong>k-1</strong>则与此轴对立。在spark.mllib中第一个被选中的类0就是轴类。<br>&emsp;&emsp;对于多分类问题，算法将会输出一个多项式逻辑回归模型，包含了<strong>k-1</strong>个与第一个类对立的二项式逻辑回归模型。对于新数据点，<strong>k-1</strong>个模型将会运行，其中有最大概率的模型即预测的模型。<br>&emsp;&emsp;spark中实现了两个算法来解决逻辑回归问题：mini-batch gradient（梯度下降）和L-BFGS。参考<a href="http://www.bubuko.com/infodetail-898846.html" target="_blank" rel="noopener">batch-GD， SGD， Mini-batch-GD， Stochastic GD， Online-GD区别</a>  spark推荐L-BFGS梯度下降以获得更快的收敛。</p>
-<h3 id="6-2-逻辑回归代码"><a href="#6-2-逻辑回归代码" class="headerlink" title="6.2 逻辑回归代码"></a>6.2 逻辑回归代码</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line"></span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">测试逻辑回归代码</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">from pyspark.mllib.classification import  LogisticRegressionWithSGD,LogisticRegressionModel</span><br><span class="line">from pyspark.mllib.regression import LabeledPoint</span><br><span class="line">from pyspark import SparkContext</span><br><span class="line">from pyspark import SparkConf</span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">import logging</span><br><span class="line"></span><br><span class="line"># Path for spark source folder</span><br><span class="line">os.environ[&#39;SPARK_HOME&#39;]&#x3D;&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6&quot;</span><br><span class="line"># Append pyspark  to Python Path</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python&quot;)</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python\lib\py4j-0.9-src.zip&quot;)</span><br><span class="line"></span><br><span class="line">conf &#x3D; SparkConf()</span><br><span class="line">conf.set(&quot;YARN_CONF_DIR &quot;, &quot;D:\javaPackages\hadoop_conf_dir\yarn-conf&quot;)</span><br><span class="line">conf.set(&quot;spark.driver.memory&quot;, &quot;2g&quot;)</span><br><span class="line">conf.setMaster(&quot;yarn-client&quot;)</span><br><span class="line">conf.setAppName(</span><br><span class="line">&quot;TestLogisticRegression&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">logger &#x3D; logging.getLogger(&#39;pyspark&#39;)</span><br><span class="line"></span><br><span class="line">sc &#x3D; SparkContext(conf&#x3D;conf)</span><br><span class="line">mylog &#x3D; []</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#载入和解析数据</span><br><span class="line">def parsePoint(line):</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">values &#x3D; [float(x) for x in line.split(&quot; &quot;)]</span><br><span class="line">return LabeledPoint(values[0],values[1:])</span><br><span class="line"></span><br><span class="line">data &#x3D; sc.textFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;logistic_regression&#x2F;sample_svm_data.txt&quot;)</span><br><span class="line">parseData  &#x3D; data.map(parsePoint)</span><br><span class="line">#创建模型</span><br><span class="line">model &#x3D; LogisticRegressionWithSGD.train(parseData)</span><br><span class="line"></span><br><span class="line">#评估模型</span><br><span class="line">labelaAndPoints &#x3D; parseData.map(lambda p:(p.label,model.predict(p.features)))</span><br><span class="line">trainError &#x3D; labelaAndPoints.filter(lambda (k,v):k!&#x3D;v).count()</span><br><span class="line">&#x2F;</span><br><span class="line">float(parseData.count())</span><br><span class="line">mylog.append(&quot;逻辑回归的误差是:&quot;)</span><br><span class="line">mylog.append(trainError)</span><br><span class="line"></span><br><span class="line"># 存储和载入模型</span><br><span class="line">model.save(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;logistic_regression&#x2F;logisticregression_model&#x2F;&quot;)</span><br><span class="line">sc.parallelize(mylog).saveAsTextFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;logistic_regression&#x2F;log&#x2F;&quot;)</span><br><span class="line">logisticregression_model &#x3D; LogisticRegressionModel.load(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;logistic_regression&#x2F;logisticregression_model&quot;)</span><br></pre></td></tr></table></figure>
-<h2 id="7-回归"><a href="#7-回归" class="headerlink" title="7 回归"></a>7 回归</h2><p>&emsp;&emsp;<strong>Linear least squares, Lasso, and ridge regression</strong><br>&emsp;&emsp;Linear least squares是回归问题最常用的公式，其误差函数如下：<script type="math/tex">L(w;x,y):=\frac{1}{2}(w^Tx-y)^{2}</script><br>使用不同的规则参数将会派生出不同的相关回归方法；其中的 <strong>ordinary least squares</strong>和<strong>linear least squares</strong>不使用规则参数，ridge regression(岭回归)使用L2规则参数，Lasso使用L1规则参数。所有的这些模型，其平均误差或者训练误差<script type="math/tex">\frac{1}{n}\sum_{i=1}^n(w^Tx-y_i)^2</script> 即均方差。<br>&emsp;&emsp;一下代码展示了如何载入数据、转换为LabeledPoint类型的RDD。然后使用 LinearRegressionWithSGD来创建简单线性模型来预测标签值。最后再计算均方差来评估适应度。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line">from pyspark.mllib.regression import LabeledPoint,LinearRegressionWithSGD,LinearRegressionModel</span><br><span class="line">from pyspark import SparkContext</span><br><span class="line">from pyspark import SparkConf</span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">import logging</span><br><span class="line"># Path for spark source folder</span><br><span class="line">os.environ[&#39;SPARK_HOME&#39;]&#x3D;&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6&quot;</span><br><span class="line"># Append pyspark  to Python Path</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python&quot;)</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python\lib\py4j-0.9-src.zip&quot;)</span><br><span class="line"></span><br><span class="line">conf &#x3D; SparkConf()</span><br><span class="line">conf.set(&quot;YARN_CONF_DIR &quot;, &quot;D:\javaPackages\hadoop_conf_dir\yarn-conf&quot;)</span><br><span class="line">conf.set(&quot;spark.driver.memory&quot;, &quot;2g&quot;)</span><br><span class="line">conf.setMaster(&quot;yarn-client&quot;)</span><br><span class="line">conf.setAppName(&quot;TestSimpleLinearRegression&quot;)</span><br><span class="line">logger &#x3D; logging.getLogger(&#39;pyspark&#39;)</span><br><span class="line">sc &#x3D; SparkContext(conf&#x3D;conf)</span><br><span class="line"></span><br><span class="line">#载入数据</span><br><span class="line">def parsePoint(line):</span><br><span class="line">  values &#x3D; [float(x) for x in line.replace(&#39;,&#39;,&#39; &#39;).split(&#39; &#39;)]</span><br><span class="line">    return LabeledPoint(values[0],values[1:])</span><br><span class="line"></span><br><span class="line">mylog &#x3D; []</span><br><span class="line">data &#x3D; sc.textFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;linear_regression&#x2F;data&#x2F;lpsa.data&quot;)</span><br><span class="line">parseData &#x3D; data.map(parsePoint)</span><br><span class="line">#创建模型</span><br><span class="line">model &#x3D; LinearRegressionWithSGD.train(parseData,iterations &#x3D; 10,step&#x3D;0.000001)</span><br><span class="line">#评估模型误差</span><br><span class="line">valuesAndPres &#x3D; parseData.map(lambda p:(p.label,model.predict(p.features)))</span><br><span class="line">MSE &#x3D; valuesAndPres.map(lambda (v,p):(v-p)**2).reduce(lambda x,y:x+y)&#x2F;valuesAndPres.count()</span><br><span class="line">mylog.append(&quot;简单线性回归误差是：&quot;)</span><br><span class="line">mylog.append(MSE)</span><br><span class="line">sc.parallelize(mylog).saveAsTextFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;linear_regression&#x2F;log&quot;)</span><br><span class="line">#存储 和使用模型</span><br><span class="line">model.save(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;linear_regression&#x2F;SimpleLinearRegressionModel&quot;)</span><br><span class="line">sameMode &#x3D; LinearRegressionModel.load(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;linear_regression&#x2F;SimpleLinearRegressionModel&quot;)&lt;&#x2F;pre&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="流线性回归"><a href="#流线性回归" class="headerlink" title="流线性回归"></a>流线性回归</h3><p>如果数据是以流的形式到达，在线适配回归模型、新数据到达时跟更新模型参数是很有用的。<em>spark.mllib</em>当前支持使用 <strong>ordinary least squares</strong>的线性回归。适应过程类似于离线使用，一批新数据到达时预测适应值，以此来不断地更新流中的新数据的回应值（回归值）。<br>&emsp;&emsp;如下代码演示了如何训练和测试来自两个不同文本格式的输入流，将流解析成labeled point,使用第一个流来拟合回归模型，并在第二个流中作预测。注意，当训练目录 <em>“/home/xiatao/machine_learing/streaming_linear_regression/data</em> 新增数据时，相应的预测目录<em>/home/xiatao/machine_learing/streaming_linear_regression/predict</em>就会产生相应的结果。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line"># 流线性回归模型测试</span><br><span class="line">from pyspark.mllib.linalg import Vectors</span><br><span class="line">from pyspark.mllib.regression import StreamingLinearRegressionWithSGD</span><br><span class="line">from pyspark.streaming import StreamingContext</span><br><span class="line">from pyspark.mllib.regression import LabeledPoint</span><br><span class="line">from pyspark import SparkContext</span><br><span class="line">from pyspark import SparkConf</span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">import logging</span><br><span class="line"># Path for spark source folder</span><br><span class="line">os.environ[&#39;SPARK_HOME&#39;]&#x3D;&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6&quot;</span><br><span class="line"># Append pyspark  to Python Path</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python&quot;)</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python\lib\py4j-0.9-src.zip&quot;)</span><br><span class="line"></span><br><span class="line">conf &#x3D; SparkConf()</span><br><span class="line">conf.set(&quot;YARN_CONF_DIR &quot;, &quot;D:\javaPackages\hadoop_conf_dir\yarn-conf&quot;)</span><br><span class="line">conf.set(&quot;spark.driver.memory&quot;, &quot;2g&quot;)</span><br><span class="line">conf.setMaster(&quot;yarn-client&quot;)</span><br><span class="line">conf.setAppName(&quot;TestStreamLinearRegression&quot;)</span><br><span class="line">logger &#x3D; logging.getLogger(&#39;pyspark&#39;)</span><br><span class="line">sc &#x3D; SparkContext(conf&#x3D;conf)</span><br><span class="line">mylog &#x3D; []</span><br><span class="line"></span><br><span class="line">#第一步创建 StreamingContextssc &#x3D; StreamingContext(sc,1)</span><br><span class="line"></span><br><span class="line">#载入和解析数据</span><br><span class="line">def parse(lp):</span><br><span class="line">  label &#x3D; float(lp[ lp.find(&#39;(&#39;)+1:lp.find(&#39;,&#39;)  ])</span><br><span class="line">    vec &#x3D; Vectors.dense(lp[lp.find(&#39;[&#39;)+1:lp.find(&#39;,&#39;)].split(&#39;,&#39;))</span><br><span class="line">    return LabeledPoint(label,vec)</span><br><span class="line"># 训练集和测试集的数据每行的格式为 (y,[x1,x2,x3]),其中y是标签，x1,x2,x3是特征。</span><br><span class="line"># 训练集中数据更新时，测试集目录就会出现预测值。并且数据越多，预测越准确</span><br><span class="line">trainingData &#x3D; ssc.textFileStream(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;streaming_linear_regression&#x2F;data&quot;).map(parse).cache()</span><br><span class="line">testData &#x3D; ssc.textFileStream(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;streaming_linear_regression&#x2F;predict&quot;).map(parse)</span><br><span class="line">#创建 权值为0的初始化模型</span><br><span class="line">numFeatures&#x3D; 3</span><br><span class="line">model &#x3D; StreamingLinearRegressionWithSGD()</span><br><span class="line">model.setInitialWeights([0.0,0.0,0.0])</span><br><span class="line"># 为训练流和测试流登记，并启动作业</span><br><span class="line">model.trainOn(trainingData)</span><br><span class="line">mylog.append(model.predictOnValues(testData.map(lambda lp:(lp.label,lp.features))))</span><br><span class="line"></span><br><span class="line">ssc.start()</span><br><span class="line">ssc.awaitTermination()&lt;&#x2F;pre&gt;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>大数据</category>
-      </categories>
-  </entry>
-  <entry>
     <title>大数据：spark mllib决策树</title>
     <url>/2016/10/02/spark-mllib-desciontree/</url>
     <content><![CDATA[<h1 id="一-基本算法"><a href="#一-基本算法" class="headerlink" title="一 基本算法"></a>一 基本算法</h1><p>&emsp;&emsp;决策树是一个在特征空间递归执行二分类的贪心算法。决策树预测所有叶子节点分区的标签。为了在树的每个节点最大化信息增益，其每个分区都是基于贪心策略从可能分裂集合里选择一个最佳分裂(split)。也即，每个数节点分裂的选择是从集合 $argmaxIG(D,s)$，其中$IG(D,s)$是信息增益，而s是应用到数据集D上的分裂。</p>
@@ -10061,6 +10456,68 @@ IG(D,s) = Impurity(D)-\frac{N_{left}}{N}Impurity(D_{left})-\frac{N_{right}}{N}Im
 </ul>
 <h2 id="九-代码实例"><a href="#九-代码实例" class="headerlink" title="九 代码实例"></a>九 代码实例</h2><p>以下代码展示了如何载入一个<strong>LIBSVM</strong>数据文件，解析成一个<strong>LabeledPoint</strong>RDD，然后使用决策树，使用Gini不纯度作为不纯度衡量指标，最大树深度是5.测试误差用来计算算法准确率。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">测试决策树</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">import logging</span><br><span class="line">from pyspark.mllib.tree import DecisionTree,DecisionTreeModel</span><br><span class="line">from pyspark.mllib.util import MLUtils</span><br><span class="line"></span><br><span class="line"># Path for spark source folder</span><br><span class="line">os.environ[&#39;SPARK_HOME&#39;]&#x3D;&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6&quot;</span><br><span class="line"># Append pyspark  to Python Path</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python&quot;)</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python\lib\py4j-0.9-src.zip&quot;)</span><br><span class="line"></span><br><span class="line">from pyspark import SparkContext</span><br><span class="line">from pyspark import SparkConf</span><br><span class="line"></span><br><span class="line">conf &#x3D; SparkConf()</span><br><span class="line">conf.set(&quot;YARN_CONF_DIR &quot;, &quot;D:\javaPackages\hadoop_conf_dir\yarn-conf&quot;)</span><br><span class="line">conf.set(&quot;spark.driver.memory&quot;, &quot;2g&quot;)</span><br><span class="line"></span><br><span class="line">#conf.set(&quot;spark.executor.memory&quot;, &quot;1g&quot;)</span><br><span class="line">#conf.set(&quot;spark.python.worker.memory&quot;, &quot;1g&quot;)</span><br><span class="line">conf.setMaster(&quot;yarn-client&quot;)</span><br><span class="line">conf.setAppName(&quot;TestDecisionTree&quot;)</span><br><span class="line">logger &#x3D; logging.getLogger(&#39;pyspark&#39;)</span><br><span class="line">sc &#x3D; SparkContext(conf&#x3D;conf)</span><br><span class="line"></span><br><span class="line">mylog &#x3D; []</span><br><span class="line">#载入和解析数据文件为 LabeledPoint RDDdata &#x3D; MLUtils.loadLibSVMFile(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;&quot;)</span><br><span class="line">#将数据拆分成训练集合测试集</span><br><span class="line">(trainingData,testData) &#x3D; data.randomSplit([0.7,0.3])</span><br><span class="line"></span><br><span class="line">##训练决策树模型</span><br><span class="line">#空的 categoricalFeauresInfo 代表了所有的特征都是连续的</span><br><span class="line">model &#x3D; DecisionTree.trainClassifier(trainingData, numClasses&#x3D;2,categoricalFeaturesInfo&#x3D;&#123;&#125;,impurity&#x3D;&#39;gini&#39;,maxDepth&#x3D;5,maxBins&#x3D;32)</span><br><span class="line"></span><br><span class="line"># 在测试实例上评估模型并计算测试误差</span><br><span class="line"></span><br><span class="line">predictions &#x3D; model.predict(testData.map(lambda x:x.features))</span><br><span class="line">labelsAndPoint &#x3D; testData.map(lambda lp:lp.label).zip(predictions)</span><br><span class="line">testMSE &#x3D; labelsAndPoint.map(lambda (v,p):(v-p)**2).sum()&#x2F;float(testData.count())</span><br><span class="line">mylog.append(&quot;测试误差是&quot;)</span><br><span class="line">mylog.append(testMSE)</span><br><span class="line"></span><br><span class="line">#存储模型</span><br><span class="line"></span><br><span class="line">model.save(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;&quot;)</span><br><span class="line">sc.parallelize(mylog).saveAsTextFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;log&quot;)</span><br><span class="line">sameModel &#x3D; DecisionTreeModel.load(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;&quot;)</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>大数据</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>大数据：spark mllib python使用示例</title>
+    <url>/2016/10/02/spark-python-example/</url>
+    <content><![CDATA[<h2 id="机器学习的背景知识"><a href="#机器学习的背景知识" class="headerlink" title="机器学习的背景知识"></a>机器学习的背景知识</h2><blockquote>
+<p>监督学习的中点是<strong> 在规则化参数的同时最小化误差</strong>。最小化误差是为了让我们的模型拟合我们的训练数据，而规则化参数是防止我们的模型过分拟合我们的训练数据。参数太多，会导致我们的模型复杂度上升，容易过拟合，也就是我们的训练误差会很小。但<strong>训练误差</strong>小并不是我们的最终目标，我们的目标是希望模型的<strong>测试误差</strong>小，也就是能准确的预测新的样本。所以，我们需要保证模型“简单”的基础上最小化训练误差，这样得到的参数才具有好的泛化性能（也就是测试误差也小），而模型“简单”就是通过规则函数来实现的。另外，规则项的使用还可以约束我们的模型的特性。这样就可以将人对这个模型的先验知识融入到模型的学习当中，强行地让学习到的模型具有人想要的特性，例如稀疏、低秩、平滑等等。要知道，有时候人的先验是非常重要的。</p>
+</blockquote>
+<p>来源于：   <a href="http://blog.csdn.net/zouxy09/article/details/24971995" target="_blank" rel="noopener">http://blog.csdn.net/zouxy09/article/details/24971995</a></p>
+<h1 id="线性模型"><a href="#线性模型" class="headerlink" title="线性模型"></a>线性模型</h1><h2 id="一-数学公式"><a href="#一-数学公式" class="headerlink" title="一  数学公式"></a>一  数学公式</h2><p>&emsp; &emsp; 许多机器学习方法都可以被转换为一个凸函数优化问题，比如查找凸函数f（自变量是w，在代码中称为权重，自变量有d维）最小值。通常，我们可以将这些写成 $ min_{w\epsilon R^d}f(w) $ ，其目标函数是以下形式</p>
+<script type="math/tex; mode=display">f(w) := \lambda\, R(w) +\ frac1n \sum_{i=1}^n L(w;x_i,y_i) \label{eq:regPrimal}</script><p>&emsp;<br>&emsp;<br>此处向量$x<em>{i}\epsilon R^d$是训练数据，对于$1\leq i\leq n$ 和 $y</em>{i}\epsilon R$是我们需要预测的标签。如果$L(w;x,y)$可以被表示为 $W^T x$和$y$的函数，则可以调用 <strong><em>linear</em></strong>方法。</p>
+<p>&emsp;<br>&emsp;<br>目标函数<strong><em>f</em></strong>分为两部分：控制模型复杂度的正则化部分，模型在训练数据集上误差评估的损失度量部分。损失度量函数$L(w;.)$是一个在域$w$上的凸函数。固定的正则化参数$\lambda \geq 0$(代码中是参数<strong><em>regParam</em></strong>)定义了权衡最小化损失（比如训练误差）和最小化模型复杂度（比如，防止过拟合）之间的平衡。</p>
+<h2 id="二-误差函数"><a href="#二-误差函数" class="headerlink" title="二 误差函数"></a>二 误差函数</h2><p>下表概括了损失函数和它们在spark.mllib支持的的梯度和分梯度方法. </p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>损失</th>
+<th>loss function $L(w;x,y)$$\;\;\;\;\;\;\;\;$</th>
+<th>梯度或分梯度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hinge loss(SVM)</td>
+<td>$max${0,$1-yw^{T}x$},$y \epsilon$ {-1,+1}</td>
+<td>$ -y\cdot x (if\, yw^Tx &lt; 1)\;\; 0 (otherwise))$</td>
+</tr>
+<tr>
+<td>logstic loss(逻辑回归)</td>
+<td>$log(1+exp(-yw^Tx)),y\epsilon {-1,+1}$</td>
+<td>$-y(1-\frac {1}{1+exp(-yw^Tx)})\cdot x$</td>
+</tr>
+<tr>
+<td>squared loss(最小二乘)</td>
+<td>$\frac {1}{2}(w^Tx-y)^2, y\epsilon R$</td>
+<td>$(w^Tx-y)\cdot x$</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="三-规则化"><a href="#三-规则化" class="headerlink" title="三 规则化"></a>三 规则化</h2><p>  &emsp;&emsp;规则化的目的是简化模型并避免过拟合，规则化函数Ω(w)也有很多种选择，一般是模型复杂度的单调递增函数，模型越复杂，规则化值就越大。比如，规则化项可以是模型参数向量的范数。然而，不同的选择对参数w的约束不同，取得的效果也不同<br>&emsp;&emsp;关于L1范式和L2范式:</p>
+<ul>
+<li>L0 范式：L0范数是指向量中非0的元素的个数。如果我们用L0范数来规则化一个参数矩阵W的话，就是希望W的大部分元素都是0，换句话说，让参数W是稀疏的。</li>
+<li>L1 范式:  L1范数是指向量中各个元素绝对值之和，也称叫“稀疏规则算子”（Lasso regularization）。<br>既然L0可以实现稀疏，为什么不用L0，而要用L1呢？一是因为L0范数很难优化求解（NP难问题），二是L1范数是L0范数的最优凸近似，而且它比L0范数要容易优化求解。</li>
+<li>L2范式：<br>在回归里面，有人把有它的回归叫“岭回归”（Ridge Regression），有人也叫它“权值衰减weight decay”。它的作用是改善过拟合。<br>L2范数是指向量各元素的平方和然后求平方根。我们让L2范数的规则项||W||2最小，可以使得W的每个元素都很小，都接近于0，但与L1范数不同，它不会让它等于0，而是接近于0。而越小的参数说明模型越简单，越简单的模型则越不容易产生过拟合现象。<br>&emsp;&emsp;目前在 spark.mllib中支持的正则化如下：<br>|范式|      regularizer $R(w)$      |            梯度或子梯度       |<br>|——|—————-|———-|<br>|zero(unregularized)|0|0|<br>|L2|$\frac{1}{2}$||w||$_2^2$|w|<br>|L1|$||w||_1$|$sign(w)$|<br>|elastic net|$\alpha||w||_1+(1-\alpha)\frac{1}{2}||w||_2^2$|$\alpha sign(w)+(1-\alpha)w$|</li>
+</ul>
+<p><em>此处$sign(w)$是由项$w$中所有$sign(-1,+1)$组成的向量</em></p>
+<h2 id="三-优化"><a href="#三-优化" class="headerlink" title="三 优化"></a>三 优化</h2><p>&emsp;&emsp;线性方法使用凸函数来优化目标函数. spark.mllib使用两个方法，SGD和LBFGS（Limited-Memory Quasi-Newton Method）。当前，大多数算法API都支持Stochastic Gradient Descent（随机梯度下降），和少部分支持LBFGS。</p>
+<h2 id="四-分类"><a href="#四-分类" class="headerlink" title="四  分类"></a>四  分类</h2><p>&emsp;&emsp;分类旨在将数据项切分到不同类别。<strong><em>spark.mllib</em></strong>提供了两个线性分类方法：线性SVM和逻辑回归。线性SVM只支持二分类，逻辑回归既支持二分类也支持多分类。这两种方法，<strong><em>spark.mllib</em></strong>都支持L1和L2范式规则化。在<strong>MLlib</strong>中训练数据集合以 <em>LabeledPoint</em>类型的RDD代表，其中label（标签）是从0开始0,1,2…的类别索引。<br>&emsp;&emsp;<strong>注意</strong>：指导手册中的，二分类标签$y$要么是 1 要么是 -1，这是为了方便在公式里，但是在<strong>*spark.mllib</strong>里面是以0代表公式中的-1的</p>
+<h2 id="五-线性SVM"><a href="#五-线性SVM" class="headerlink" title="五 线性SVM"></a>五 线性SVM</h2><h3 id="5-1-线性SVM概要"><a href="#5-1-线性SVM概要" class="headerlink" title="5.1 线性SVM概要"></a>5.1 线性SVM概要</h3><p>&emsp;&amp;emsp线性SVM的误差函数是由hingle loss给出:<script type="math/tex">L(w;x,y) :=max\lbrace0,1-yw^Tx\rbrace</script><br>线性SVM默认使用L2范式规则化训练数据，同时是支持L1范式规则的，此时就变成一个线性问题。<br>线性SVM的输出是一个SVM模型。对于一个新数据点，以$x$表示，模型将会基于$w^Tx$的值预测。默认情况下，如果$w^Tx\geq 0$那么输出为1，否则输出为0。</p>
+<h3 id="5-2-示例代码"><a href="#5-2-示例代码" class="headerlink" title="5.2 示例代码"></a>5.2 示例代码</h3><p>&emsp;&emsp;一下代码展示了如何载入数据，创建SVM模型，根据模型预测并计算训练误差。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">学习使用spark.mllib中 SVM模型。代码展示了如何载入数据，创建SVM模型，根据模型预测并计算训练误差。</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">from pyspark.mllib.classification import SVMWithSGD,SVMModel</span><br><span class="line">from pyspark.mllib.regression import LabeledPoint</span><br><span class="line">from pyspark import SparkContext</span><br><span class="line">from pyspark import SparkConf</span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">import logging</span><br><span class="line"># Path for spark source folder</span><br><span class="line">os.environ[&#39;SPARK_HOME&#39;]&#x3D;&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6&quot;</span><br><span class="line"># Append pyspark  to Python Path</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python&quot;)</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python\lib\py4j-0.9-src.zip&quot;)</span><br><span class="line"></span><br><span class="line">conf &#x3D; SparkConf()</span><br><span class="line">conf.set(&quot;YARN_CONF_DIR &quot;, &quot;D:\javaPackages\hadoop_conf_dir\yarn-conf&quot;)</span><br><span class="line">conf.set(&quot;spark.driver.memory&quot;, &quot;2g&quot;)</span><br><span class="line">conf.setMaster(&quot;yarn-client&quot;)</span><br><span class="line">conf.setAppName(&quot;TestSVM&quot;)</span><br><span class="line">logger &#x3D; logging.getLogger(&#39;pyspark&#39;)</span><br><span class="line">sc &#x3D; SparkContext(conf&#x3D;conf)</span><br><span class="line">mylog &#x3D; []</span><br><span class="line">#载入数据并解析</span><br><span class="line">def parsePoint(line):</span><br><span class="line">  values &#x3D; [float(x) for x in line.split(&quot; &quot;)]</span><br><span class="line">    return LabeledPoint(values[0],values[1:])</span><br><span class="line">data &#x3D; sc.textFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;SVM&#x2F;sample_svm_data.txt&quot;)</span><br><span class="line"></span><br><span class="line">parseData &#x3D; data.map(parsePoint)</span><br><span class="line">#创建SVM模型</span><br><span class="line">model &#x3D; SVMWithSGD.train(parseData,iterations&#x3D;100)</span><br><span class="line"># 评估模型</span><br><span class="line">labelsAndPoints &#x3D; parseData.map(lambda p:(p.label,model.predict(p.features)))</span><br><span class="line">trainError &#x3D; labelsAndPoints.filter(lambda (v,p):v!&#x3D;p).count()&#x2F;float(parseData.count())</span><br><span class="line">mylog.append(&quot;SVM模型测试，训练误差是:&quot;)</span><br><span class="line">mylog.append(str(trainError))</span><br><span class="line">sc.parallelize(mylog).saveAsTextFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;SVM&#x2F;log&#x2F;&quot;)</span><br><span class="line">#存储和载入模型</span><br><span class="line">model.save(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;SVM&#x2F;SVMModelSave&quot;)</span><br><span class="line">sameModel &#x3D; SVMModel.load(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;SVM&#x2F;SVMModelSave&quot;)</span><br></pre></td></tr></table></figure>
+<h2 id="六-逻辑回归"><a href="#六-逻辑回归" class="headerlink" title="六 逻辑回归"></a>六 逻辑回归</h2><h3 id="6-1-逻辑回归概要"><a href="#6-1-逻辑回归概要" class="headerlink" title="6.1 逻辑回归概要"></a>6.1 逻辑回归概要</h3><p>&emsp;&emsp;逻辑回归在二分类预测中广泛使用，其误差函数是下式 logistic loss:<script type="math/tex">L(w;x,y):=log(1+\exp(-yw^Tx))</script><br>对于二分类问题，算法的输出结果是一个二项式逻辑回归模型。对于给定新数据点，以$x$表示，使用logistic函数来预测:<script type="math/tex">f(z) =\frac{1}{1+e^{-z}}</script>。其中$z =w^Tx$，如果$f(w^Tx)&gt;0.5$输出为正，否则为负。与线性SVM不同的是，逻辑回归模型的原始输出有一个概率解释（即，x是正的概率）。<br>&emsp;&emsp;二项式逻辑回归可以生成多项式逻辑回归并用来训练和预测多分类问题。比如说，对于<strong>K</strong>个可能的输出结果，其中一个可以选定为轴，其余<strong>k-1</strong>则与此轴对立。在spark.mllib中第一个被选中的类0就是轴类。<br>&emsp;&emsp;对于多分类问题，算法将会输出一个多项式逻辑回归模型，包含了<strong>k-1</strong>个与第一个类对立的二项式逻辑回归模型。对于新数据点，<strong>k-1</strong>个模型将会运行，其中有最大概率的模型即预测的模型。<br>&emsp;&emsp;spark中实现了两个算法来解决逻辑回归问题：mini-batch gradient（梯度下降）和L-BFGS。参考<a href="http://www.bubuko.com/infodetail-898846.html" target="_blank" rel="noopener">batch-GD， SGD， Mini-batch-GD， Stochastic GD， Online-GD区别</a>  spark推荐L-BFGS梯度下降以获得更快的收敛。</p>
+<h3 id="6-2-逻辑回归代码"><a href="#6-2-逻辑回归代码" class="headerlink" title="6.2 逻辑回归代码"></a>6.2 逻辑回归代码</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line"></span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">测试逻辑回归代码</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">from pyspark.mllib.classification import  LogisticRegressionWithSGD,LogisticRegressionModel</span><br><span class="line">from pyspark.mllib.regression import LabeledPoint</span><br><span class="line">from pyspark import SparkContext</span><br><span class="line">from pyspark import SparkConf</span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">import logging</span><br><span class="line"></span><br><span class="line"># Path for spark source folder</span><br><span class="line">os.environ[&#39;SPARK_HOME&#39;]&#x3D;&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6&quot;</span><br><span class="line"># Append pyspark  to Python Path</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python&quot;)</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python\lib\py4j-0.9-src.zip&quot;)</span><br><span class="line"></span><br><span class="line">conf &#x3D; SparkConf()</span><br><span class="line">conf.set(&quot;YARN_CONF_DIR &quot;, &quot;D:\javaPackages\hadoop_conf_dir\yarn-conf&quot;)</span><br><span class="line">conf.set(&quot;spark.driver.memory&quot;, &quot;2g&quot;)</span><br><span class="line">conf.setMaster(&quot;yarn-client&quot;)</span><br><span class="line">conf.setAppName(</span><br><span class="line">&quot;TestLogisticRegression&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">logger &#x3D; logging.getLogger(&#39;pyspark&#39;)</span><br><span class="line"></span><br><span class="line">sc &#x3D; SparkContext(conf&#x3D;conf)</span><br><span class="line">mylog &#x3D; []</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#载入和解析数据</span><br><span class="line">def parsePoint(line):</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">values &#x3D; [float(x) for x in line.split(&quot; &quot;)]</span><br><span class="line">return LabeledPoint(values[0],values[1:])</span><br><span class="line"></span><br><span class="line">data &#x3D; sc.textFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;logistic_regression&#x2F;sample_svm_data.txt&quot;)</span><br><span class="line">parseData  &#x3D; data.map(parsePoint)</span><br><span class="line">#创建模型</span><br><span class="line">model &#x3D; LogisticRegressionWithSGD.train(parseData)</span><br><span class="line"></span><br><span class="line">#评估模型</span><br><span class="line">labelaAndPoints &#x3D; parseData.map(lambda p:(p.label,model.predict(p.features)))</span><br><span class="line">trainError &#x3D; labelaAndPoints.filter(lambda (k,v):k!&#x3D;v).count()</span><br><span class="line">&#x2F;</span><br><span class="line">float(parseData.count())</span><br><span class="line">mylog.append(&quot;逻辑回归的误差是:&quot;)</span><br><span class="line">mylog.append(trainError)</span><br><span class="line"></span><br><span class="line"># 存储和载入模型</span><br><span class="line">model.save(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;logistic_regression&#x2F;logisticregression_model&#x2F;&quot;)</span><br><span class="line">sc.parallelize(mylog).saveAsTextFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;logistic_regression&#x2F;log&#x2F;&quot;)</span><br><span class="line">logisticregression_model &#x3D; LogisticRegressionModel.load(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;logistic_regression&#x2F;logisticregression_model&quot;)</span><br></pre></td></tr></table></figure>
+<h2 id="7-回归"><a href="#7-回归" class="headerlink" title="7 回归"></a>7 回归</h2><p>&emsp;&emsp;<strong>Linear least squares, Lasso, and ridge regression</strong><br>&emsp;&emsp;Linear least squares是回归问题最常用的公式，其误差函数如下：<script type="math/tex">L(w;x,y):=\frac{1}{2}(w^Tx-y)^{2}</script><br>使用不同的规则参数将会派生出不同的相关回归方法；其中的 <strong>ordinary least squares</strong>和<strong>linear least squares</strong>不使用规则参数，ridge regression(岭回归)使用L2规则参数，Lasso使用L1规则参数。所有的这些模型，其平均误差或者训练误差<script type="math/tex">\frac{1}{n}\sum_{i=1}^n(w^Tx-y_i)^2</script> 即均方差。<br>&emsp;&emsp;一下代码展示了如何载入数据、转换为LabeledPoint类型的RDD。然后使用 LinearRegressionWithSGD来创建简单线性模型来预测标签值。最后再计算均方差来评估适应度。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line">from pyspark.mllib.regression import LabeledPoint,LinearRegressionWithSGD,LinearRegressionModel</span><br><span class="line">from pyspark import SparkContext</span><br><span class="line">from pyspark import SparkConf</span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">import logging</span><br><span class="line"># Path for spark source folder</span><br><span class="line">os.environ[&#39;SPARK_HOME&#39;]&#x3D;&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6&quot;</span><br><span class="line"># Append pyspark  to Python Path</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python&quot;)</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python\lib\py4j-0.9-src.zip&quot;)</span><br><span class="line"></span><br><span class="line">conf &#x3D; SparkConf()</span><br><span class="line">conf.set(&quot;YARN_CONF_DIR &quot;, &quot;D:\javaPackages\hadoop_conf_dir\yarn-conf&quot;)</span><br><span class="line">conf.set(&quot;spark.driver.memory&quot;, &quot;2g&quot;)</span><br><span class="line">conf.setMaster(&quot;yarn-client&quot;)</span><br><span class="line">conf.setAppName(&quot;TestSimpleLinearRegression&quot;)</span><br><span class="line">logger &#x3D; logging.getLogger(&#39;pyspark&#39;)</span><br><span class="line">sc &#x3D; SparkContext(conf&#x3D;conf)</span><br><span class="line"></span><br><span class="line">#载入数据</span><br><span class="line">def parsePoint(line):</span><br><span class="line">  values &#x3D; [float(x) for x in line.replace(&#39;,&#39;,&#39; &#39;).split(&#39; &#39;)]</span><br><span class="line">    return LabeledPoint(values[0],values[1:])</span><br><span class="line"></span><br><span class="line">mylog &#x3D; []</span><br><span class="line">data &#x3D; sc.textFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;linear_regression&#x2F;data&#x2F;lpsa.data&quot;)</span><br><span class="line">parseData &#x3D; data.map(parsePoint)</span><br><span class="line">#创建模型</span><br><span class="line">model &#x3D; LinearRegressionWithSGD.train(parseData,iterations &#x3D; 10,step&#x3D;0.000001)</span><br><span class="line">#评估模型误差</span><br><span class="line">valuesAndPres &#x3D; parseData.map(lambda p:(p.label,model.predict(p.features)))</span><br><span class="line">MSE &#x3D; valuesAndPres.map(lambda (v,p):(v-p)**2).reduce(lambda x,y:x+y)&#x2F;valuesAndPres.count()</span><br><span class="line">mylog.append(&quot;简单线性回归误差是：&quot;)</span><br><span class="line">mylog.append(MSE)</span><br><span class="line">sc.parallelize(mylog).saveAsTextFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;linear_regression&#x2F;log&quot;)</span><br><span class="line">#存储 和使用模型</span><br><span class="line">model.save(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;linear_regression&#x2F;SimpleLinearRegressionModel&quot;)</span><br><span class="line">sameMode &#x3D; LinearRegressionModel.load(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;linear_regression&#x2F;SimpleLinearRegressionModel&quot;)&lt;&#x2F;pre&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="流线性回归"><a href="#流线性回归" class="headerlink" title="流线性回归"></a>流线性回归</h3><p>如果数据是以流的形式到达，在线适配回归模型、新数据到达时跟更新模型参数是很有用的。<em>spark.mllib</em>当前支持使用 <strong>ordinary least squares</strong>的线性回归。适应过程类似于离线使用，一批新数据到达时预测适应值，以此来不断地更新流中的新数据的回应值（回归值）。<br>&emsp;&emsp;如下代码演示了如何训练和测试来自两个不同文本格式的输入流，将流解析成labeled point,使用第一个流来拟合回归模型，并在第二个流中作预测。注意，当训练目录 <em>“/home/xiatao/machine_learing/streaming_linear_regression/data</em> 新增数据时，相应的预测目录<em>/home/xiatao/machine_learing/streaming_linear_regression/predict</em>就会产生相应的结果。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line"># 流线性回归模型测试</span><br><span class="line">from pyspark.mllib.linalg import Vectors</span><br><span class="line">from pyspark.mllib.regression import StreamingLinearRegressionWithSGD</span><br><span class="line">from pyspark.streaming import StreamingContext</span><br><span class="line">from pyspark.mllib.regression import LabeledPoint</span><br><span class="line">from pyspark import SparkContext</span><br><span class="line">from pyspark import SparkConf</span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">import logging</span><br><span class="line"># Path for spark source folder</span><br><span class="line">os.environ[&#39;SPARK_HOME&#39;]&#x3D;&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6&quot;</span><br><span class="line"># Append pyspark  to Python Path</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python&quot;)</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python\lib\py4j-0.9-src.zip&quot;)</span><br><span class="line"></span><br><span class="line">conf &#x3D; SparkConf()</span><br><span class="line">conf.set(&quot;YARN_CONF_DIR &quot;, &quot;D:\javaPackages\hadoop_conf_dir\yarn-conf&quot;)</span><br><span class="line">conf.set(&quot;spark.driver.memory&quot;, &quot;2g&quot;)</span><br><span class="line">conf.setMaster(&quot;yarn-client&quot;)</span><br><span class="line">conf.setAppName(&quot;TestStreamLinearRegression&quot;)</span><br><span class="line">logger &#x3D; logging.getLogger(&#39;pyspark&#39;)</span><br><span class="line">sc &#x3D; SparkContext(conf&#x3D;conf)</span><br><span class="line">mylog &#x3D; []</span><br><span class="line"></span><br><span class="line">#第一步创建 StreamingContextssc &#x3D; StreamingContext(sc,1)</span><br><span class="line"></span><br><span class="line">#载入和解析数据</span><br><span class="line">def parse(lp):</span><br><span class="line">  label &#x3D; float(lp[ lp.find(&#39;(&#39;)+1:lp.find(&#39;,&#39;)  ])</span><br><span class="line">    vec &#x3D; Vectors.dense(lp[lp.find(&#39;[&#39;)+1:lp.find(&#39;,&#39;)].split(&#39;,&#39;))</span><br><span class="line">    return LabeledPoint(label,vec)</span><br><span class="line"># 训练集和测试集的数据每行的格式为 (y,[x1,x2,x3]),其中y是标签，x1,x2,x3是特征。</span><br><span class="line"># 训练集中数据更新时，测试集目录就会出现预测值。并且数据越多，预测越准确</span><br><span class="line">trainingData &#x3D; ssc.textFileStream(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;streaming_linear_regression&#x2F;data&quot;).map(parse).cache()</span><br><span class="line">testData &#x3D; ssc.textFileStream(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;streaming_linear_regression&#x2F;predict&quot;).map(parse)</span><br><span class="line">#创建 权值为0的初始化模型</span><br><span class="line">numFeatures&#x3D; 3</span><br><span class="line">model &#x3D; StreamingLinearRegressionWithSGD()</span><br><span class="line">model.setInitialWeights([0.0,0.0,0.0])</span><br><span class="line"># 为训练流和测试流登记，并启动作业</span><br><span class="line">model.trainOn(trainingData)</span><br><span class="line">mylog.append(model.predictOnValues(testData.map(lambda lp:(lp.label,lp.features))))</span><br><span class="line"></span><br><span class="line">ssc.start()</span><br><span class="line">ssc.awaitTermination()&lt;&#x2F;pre&gt;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>大数据</category>

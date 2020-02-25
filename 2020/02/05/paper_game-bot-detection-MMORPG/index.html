@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="baidu-site-verification" content="93f8r6fzoB" />
+<meta name="google-site-verification" content="TRFlJTt2XTd9bCvpogqNRWkuoxwFeOUBf8ouiChVFyQ" />
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/science_256px_1075043_easyicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/science_128px_1075043_easyicon.ico">
+  <link rel="mask-icon" href="/images/stars.svg" color="#222">
+  <meta name="google-site-verification" content="TRFlJTt2XTd9bCvpogqNRWkuoxwFeOUBf8ouiChVFyQ">
+  <meta name="baidu-site-verification" content="93f8r6fzoB">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://shartoo.github.io').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="游戏安全论文">
+<meta property="og:type" content="article">
+<meta property="og:title" content="l论文:MMORPG游戏中人机检测方法总结">
+<meta property="og:url" content="https://shartoo.github.io/2020/02/05/paper_game-bot-detection-MMORPG/index.html">
+<meta property="og:site_name" content="数据与算法">
+<meta property="og:description" content="游戏安全论文">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/game_bot_detection_0.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/game_bot_detection_1.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/game_bot_detection_2.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/game_bot_detection_3.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/game_bot_detection_4.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/game_bot_detection_5.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/game_bot_detection_6.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/game_bot_detection_7.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/game_bot_detection_8.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/game_bot_detection_9.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/game_bot_detection_10.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/game_bot_detection_11.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/game_bot_detection_12.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/game_bot_detection_13.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/game_bot_detection_14.png">
+<meta property="article:published_time" content="2020-02-05T00:00:00.000Z">
+<meta property="article:modified_time" content="2020-02-25T07:35:01.385Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shartoo.github.io/images/blog/game_bot_detection_0.png">
+
+<link rel="canonical" href="https://shartoo.github.io/2020/02/05/paper_game-bot-detection-MMORPG/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>l论文:MMORPG游戏中人机检测方法总结 | 数据与算法</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">数据与算法</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://shartoo.github.io/2020/02/05/paper_game-bot-detection-MMORPG/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/me.jpg">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="有数据有算法就能重构">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="数据与算法">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          l论文:MMORPG游戏中人机检测方法总结
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-02-05 00:00:00" itemprop="dateCreated datePublished" datetime="2020-02-05T00:00:00+00:00">2020-02-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-25 07:35:01" itemprop="dateModified" datetime="2020-02-25T07:35:01+00:00">2020-02-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B8%B8%E6%88%8F%E5%AE%89%E5%85%A8/" itemprop="url" rel="index">
+                    <span itemprop="name">游戏安全</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+            <div class="post-description">游戏安全论文</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="0-背景"><a href="#0-背景" class="headerlink" title="0 背景"></a>0 背景</h3><ul>
+<li>此论文整理的是: Ah Reum Kang1, Seong Hoon Jeong2, Aziz Mohaisen1 and Huy Kang Kim :Multimodal game bot detection using user behavioral characteristics</li>
+</ul>
+<p>游戏中人机检测方法可以分为三类。</p>
+<ul>
+<li>客户端：大部分公司采用客户端，分析人机与普通玩家的显著区别。可以使用人机程序的名字，处理器信息，内存状态。工作原理类似于杀毒程序。但是此类方法很容易被人机程序开发者避开，所以此方法并非最优</li>
+<li>网络端：<code>网络通信监督</code>,<code>网络协议改变分析</code>,这些方法会导致网络过载或者游戏延迟，给游戏体验带来不好。</li>
+<li>服务端：主要是分析游戏日志数据，基于数据挖掘方法。游戏公司可以在服务端直接检测人机，不必在客户端部署程序。</li>
+</ul>
+<p>下表整理了一些服务端人机检测的关键论文，并做了一些分类。</p>
+<ul>
+<li><strong>动作频率分析</strong>：准确率高，但是只聚焦于短时窗口的观察，很容易被规避；只集中于有限特征空间，容易误分人机和重度玩家<ul>
+<li><a href="https://www.researchgate.net/publication/221391430_User_identification_based_on_game-play_activity_patterns" target="_blank" rel="noopener">User identification based on game-play activity patterns</a>玩家特定动作的动态性，证明了玩家的活跃和休息时间可以区分人机</li>
+<li><a href="https://www.researchgate.net/publication/220705240_Detection_of_MMORPG_Misconducts_Based_on_Action_Frequencies_Types_and_Time-Intervals" target="_blank" rel="noopener">Detection of MMORPG misconducts based on action frequencies, types and timeintervals</a>使用日志数据中动作频率、类别、间隔</li>
+<li><a href="https://arxiv.org/ftp/arxiv/papers/1509/1509.02458.pdf" target="_blank" rel="noopener">Game behavior pattern modeling for game bots detection in MMORPG</a>:选取六种游戏特征。<code>换地图</code>,<code>counter-turn（逆转）</code>,<code>休息状态</code>,<code>击杀时间</code>,<code>经验点</code>,<code>留在城镇内</code>。</li>
+<li><a href="https://onlinelibrary.wiley.com/doi/full/10.4218/etrij.13.2013.0049" target="_blank" rel="noopener">Game bot detection approach based on behavior analy‑ sis and consideration of various play styles.</a>根据玩家游戏风格划分为4种玩家类型：<code>杀手</code>，<code>成就者</code>,<code>探险者</code>,<code>社交爱好者</code>。</li>
+<li><a href="https://www.researchgate.net/publication/308850232_Detection_of_Illegal_Players_in_Massively_Multiplayer_Online_Role_Playing_Game_by_Classification_Algorithms" target="_blank" rel="noopener">Detection of illegal players in massively multiplayer online role playing game by classification algorithms</a>根据游戏时间划分游戏行为</li>
+</ul>
+</li>
+<li><strong>社交活动分析</strong>：无法检测游戏中不当行为<ul>
+<li><a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.165.4976&amp;rep=rep1&amp;type=pdf" target="_blank" rel="noopener">Second life: a social network of humans and bots</a>:聚焦于玩家社交网络中玩家之间连接分析</li>
+<li><a href="https://www.researchgate.net/publication/275653414_Chatting_pattern_based_game_BOT_detection_Do_they_talk_like_us" target="_blank" rel="noopener">Chatting pattern based game bot detection: do they talk like us?</a>:聊天日志分析玩家沟通模式。</li>
+<li><a href="https://www.researchgate.net/publication/261310404_Bot_detection_based_on_social_interactions_in_MMORPGs" target="_blank" rel="noopener">Bot detection based on social interactions in MMORPGs</a> 人机和人类倾向于各自相反的自有社交网络。</li>
+<li><a href="https://www.sciencedirect.com/science/article/pii/S0898122112000442" target="_blank" rel="noopener">Online game bot detection based on party‑play log analysis</a> 人机和玩家组团游戏的目标不同。</li>
+</ul>
+</li>
+<li><strong>掘金(Gold Farming group)组分析</strong>：分析游戏中虚拟经济，并追踪由金币农民、中间商、币商(banker)、买家形成的交易网络。尽管不是直接分析人机，但是有助于理解网络中每个玩家的角色。<ul>
+<li><a href="https://www.researchgate.net/publication/220982695_Exploiting_MMORPG_log_data_toward_efficient_RMT_player_detection" target="_blank" rel="noopener">Exploiting MMORPG log data toward efficient rmt player detection</a>:分析四种统计数据,<code>总动作数</code>,<code>活动时间(activity time)</code>,<code>总聊天次数</code>,<code>一段时间内游戏内总货币流通量</code>。</li>
+<li><a href="https://www.researchgate.net/publication/264033427_Detecting_gold-farmers&#39;_group_in_MMORPG_by_analyzing_connection_pattern" target="_blank" rel="noopener">Detecting gold‑farmers’ groups in MMORPG by connection information</a>使用路由和源定位信息分析了金币农民的连接模式。</li>
+<li><a href="https://www.researchgate.net/publication/269305755_Surgical_strike_A_novel_approach_to_minimize_collateral_damage_to_game_BOT_detection" target="_blank" rel="noopener">Surgical strike: a novel approach to minimize collateral damage to game bot detection.</a>调查了金币农民网络并检测到整个金币农民组的网络结构</li>
+</ul>
+</li>
+<li><strong>序列分析</strong>：分析用户游戏中动作序列，但是因为分析上欠缺场景上下文，很容易被人机设置操纵。<ul>
+<li><a href="https://www.researchgate.net/publication/220775532_Mining_for_Gold_Farmers_Automatic_Detection_of_Deviant_Players_in_MMOGs" target="_blank" rel="noopener">Mining for gold farmers: automatic detection of deviant players in MMOGs</a>研究了活动序列特征，定义玩家参与某个活动的次数，玩家击杀怪物次数和被怪物击杀次数。</li>
+<li><a href="https://sci-hub.tw/10.1109/ICICS.2011.6174239" target="_blank" rel="noopener">Sequence‑based bot detection in massive multiplayer online games</a>分析玩家在游戏中战斗(combat)序列</li>
+<li><a href="https://www.researchgate.net/publication/275653312_In-Game_Action_Sequence_Analysis_for_Game_BOT_Detection_on_the_Big_Data_Analysis_Platform" target="_blank" rel="noopener">In‑game action sequence analysis for game bot detection on the big data analysis<br>platform</a>基于大数据平台分析了用户的全部动作序列。</li>
+</ul>
+</li>
+<li><strong>相似度分析</strong>：基于一个事实，即人机有强烈的行为模式因为它们的目标是赚更多金币，需要大量的特定行为动作的数据。<ul>
+<li><a href="https://www.researchgate.net/publication/275653327_Self-similarity_based_Bot_Detection_System_in_MMORPG" target="_blank" rel="noopener">Self‑similarity based bot detection system in MMORPG</a>使用每个事件的频率(量化为向量)并计算与单位向量的的余弦相似度，人机会重复做高度重复的动作序列，所以其动作序列有非常高的自相似度。</li>
+<li><a href="https://pdfs.semanticscholar.org/444f/0ceb312e98609914faf886f2ff0dcfebd58c.pdf?_ga=2.54103150.790611450.1582517402-1588539036.1582517402" target="_blank" rel="noopener">You are a game bot!: uncovering game bots in MMORPGs via self-similarity in the wild.</a>提出了自相似度衡量方法并在几个主要MMOPRG游戏(“Lineage”,”AION”,”Blade &amp; Soul”)中测试</li>
+</ul>
+</li>
+<li><strong>移动路径分析</strong>：人机有特定的移动路径，而人类则有各种各样的路径。此类方法容易被噪音干扰或者被类人的行为模式规避。<ul>
+<li><a href="https://www.researchgate.net/publication/220222180_Detection_of_Landmarks_for_Clustering_of_Online-Game_Players" target="_blank" rel="noopener">Detection of landmarks for clustering of online‑game players</a>使用玩家角色在游戏地图中遍历位置的分布的加权熵来检测其坐标(landmark),基于坐标转移概率做了玩家聚类。</li>
+<li><a href="https://www.researchgate.net/publication/290512402_A_step_in_the_right_direction_Botdetection_in_MMORPGs_using_movement_analysis" target="_blank" rel="noopener">A step in the right direction: bot detection in MMORPGs using movement analysis</a>借由人机和人类移动模式的差异进行分类。</li>
+<li><a href="http://www.eurecom.fr/en/publication/2860/download/rs-publi-2860.pdf" target="_blank" rel="noopener">Server‑side bot detection in massively multiplayer online games</a>基于重复的运动模式检测出由脚本控制的人机。</li>
+<li><a href="https://www.iis.sinica.edu.tw/~swc/pub/bot_detection_trajectory.html" target="_blank" rel="noopener">Game bot detection via avatar trajectory analysis</a>使用玩家路径和一系列位置坐标的熵值，使用马尔科夫链模型来描述目标路径的行为。</li>
+<li><a href="https://www.researchgate.net/publication/262293070_Trajectory_analysis_for_user_verifcation_and_recognition" target="_blank" rel="noopener">Trajectory analysis for user verification and recognition</a>将它们的方法(上面这一篇马尔科夫链的论文)应用于各种各样的路径，包括手写字、鼠标、游戏路径</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-数据集"><a href="#1-数据集" class="headerlink" title="1  数据集"></a>1  数据集</h3><p>使用的是现实世界中游戏Aion的操作数据</p>
+<ul>
+<li>类型：游戏中动作日志</li>
+<li>持续事件：88天。 0.4/09/2010-07/05/2010</li>
+<li>角色数量：49739</li>
+<li>角色最小游戏时间: &gt;3小时</li>
+</ul>
+<h3 id="2-分析架构和工作流"><a href="#2-分析架构和工作流" class="headerlink" title="2 分析架构和工作流"></a>2 分析架构和工作流</h3><p>将游戏中人机识别当作一个<strong>二分类任务</strong>。总体流程如下</p>
+<p><img src="/images/blog/game_bot_detection_0.png" alt="game_bot_detection_0"> </p>
+<ul>
+<li><strong>数据采集</strong>： 从游戏日志和聊天内容中收集</li>
+<li><p><strong>数据探索</strong></p>
+<ul>
+<li>在特征表征阶段，我们遵循标准方法来统一数据来降维。例如，量化每个网络并使用k-means聚类成低、中、高三个不同值。</li>
+<li>在特征探索阶段，我们选取数据向量的组件并预处理。例如，我们决定了7种活动为社交互动，并使用香农多样性熵来量化社交互动的多样性。</li>
+<li>特征选取阶段，我们使用best-first搜索逐步贪婪搜索以及信息增益排序过滤来避免过拟合并减少特征的方法来选取显著特征。</li>
+</ul>
+</li>
+<li><p><strong>机器学习</strong>：选取算法（决策树、随机森林、逻辑回归和朴素贝叶斯等）和参数（k折交叉验证，特定算法参数等）</p>
+</li>
+<li><strong>评估</strong>：根据公司提供的已经被划入黑名单的账户列表来统计每个分类器的性能。统计精确度、召回率、F-score等。</li>
+<li><p><strong>已用特征和它们的差距</strong>：如下表，我们将使用过的特征分类为<code>个人</code>和<code>社交</code>。鉴于人机的目的是赚取更多利润，其个人特征与人类用户有区别。</p>
+</li>
+<li><p>个人特征</p>
+<ul>
+<li>玩家信息：登录频率，游戏时间，游戏金钱，IP地址数目</li>
+<li>玩家动作：端坐(玩家用以回复生命状态的动作（人机端坐更频繁以恢复生命值）)，挣经验点，获得物品项(其他玩家赠送)，挣游戏金币，挣玩家击杀点(人类玩家击杀越多，排名越高，人机不在乎排名)，收获物品(击杀boss掉落)，复活，restore经验点，被非玩家或非玩家角色击杀，使用门户(using portals)</li>
+</ul>
+</li>
+<li>社交特征(人机不热衷社交)<ul>
+<li>群组活动：组团游戏(人机可能也组团，但是他们更在乎高效打钱和掉落物品，人类玩家更在乎完成任务)，工会活动</li>
+<li>社交互动多样性：组团游戏，游戏，交易，私信，邮件，商铺，工会。人类为了在线游戏会执行多种任务，而人机只会集中在几个固定动作。</li>
+<li>网络度量：节点中心度(Degree centrality(与此节点连接的数目))，中间性(betweenness centrality(两个节点之间的最短路径)),亲密度(某节点与与其他所有节点越近代表越重要)，特征向量中心性(eigenvector centrality(好几个邻居节点的特征向量中心性值很高)),偏心度(eccentricity),authority(被很多好的hub指向的节点),hub（指向很多好的authority的节点）,PageRank,聚集系数(clustering coefficient(团体聚合程度))</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-结果和讨论"><a href="#3-结果和讨论" class="headerlink" title="3 结果和讨论"></a>3 结果和讨论</h3><ul>
+<li><p>行为特征</p>
+<ul>
+<li>玩家信息：人机会24小时一直在线，并且会在上班时间也在线。下图展示了人机是多么密集地玩游戏。下图图c展示了用户每天收获物品项地最大值地累计分布，用户每天要收获超过1000个物品基本不可能，但是60%的人机每天收获物品超过5000个。这是一个显著特征</li>
+<li><img src="/images/blog/game_bot_detection_1.png" alt="game_bot_detection_0"> </li>
+<li>玩家动作：下图展示了人机/人类玩家的活动比率,红色点代表人机，蓝色点代表人类。人机挣游戏币的比率基本接近人类。但是人机挣取经验点和获取物品项比率远超人类。人机的<code>挣取经验点</code>,<code>获得物品项</code>,<code>挣取游戏币</code>的累计比率都是0.5，而人类只有0.33。这表明人机集中于利润相关活动，而人类享受 各种各样的活动。相反的，人类玩家的击杀玩家点是人机的三倍。人机不太在乎排名。</li>
+<li><img src="/images/blog/game_bot_detection_2.png" alt="game_bot_detection_0"> </li>
+</ul>
+</li>
+<li><p>组团活动</p>
+<ul>
+<li>下图展示了人机和人类玩家的平均组团时间。人机组团的游戏模式比较异常，人机中间会配合不被怪物杀死。<strong>80%的人机组团时间超过4h10min，而80%人类组团不超过2h20min</strong>。即便异常困难的组团，人类时间也不如人机。</li>
+<li><img src="/images/blog/game_bot_detection_3.png" alt="game_bot_detection_0"> </li>
+</ul>
+</li>
+<li>社交多样性<ul>
+<li>下图展示了社交熵的累计分布。被定义为社交活动的有：组团，合伙，交易，私信，邮件，商店，工会。量化社交活动多样的方法是香浓多样性熵 $H^=-\sum _{i=1} ^n p_iln p_i\quad n为社交活动类型,p_i为第i个社交活动类型的相对比例$ 。人类玩家比人机更享受多种活动。</li>
+<li><img src="/images/blog/game_bot_detection_4.png" alt="game_bot_detection_0"> </li>
+</ul>
+</li>
+<li><p>网络度量</p>
+<ul>
+<li>下表分析了人机和人类玩家的组团行为。首先，我们可以看到玩家网络中<strong>人类组团的平均度是人机的18倍</strong>。因为人类玩家网络中会存在很多不认识的，而人机只跟特定其他人机玩。<strong>人类团体的网络友谊度差不多是人机的4倍</strong>。<strong>交易网络中人类玩家的平均度是人机的2.5倍</strong>。但是，人机网络的cluster coeffcient聚合系数是人类玩家的5倍。在邮件网络中，我们也看到人机之间会发送一些垃圾邮件，同时也注意到存在5个收集者从其他人机那里搜集到6000个物品。这表明存在其中存在掘金团体。同时，由于在商人模式下，玩家无法移动，所以人机很少处于商人模式。</li>
+<li><img src="/images/blog/game_bot_detection_5.png" alt="game_bot_detection_0"> </li>
+</ul>
+</li>
+<li><p>三角调查</p>
+<ul>
+<li>下图中的13个三角网络主题中的相对问题表明网络中更细节的互动模式。对于当前的Aion游戏网络，在图b以每个主题类型的比例和与空模型对比的Z-score($Z_i = \frac{N_i ^{real}-N_i ^{random}}{\sigma _i ^{random}}\quad 其中N_i ^{real}是真实观测到的主题i数目，N_i ^{random}是随机网络中的期望值,\sigma _i ^{random}是随机网络中主题数期望值的标准差$)分值展示了互动模式。</li>
+<li><strong>结论</strong>：我们发现，人机的好友网络、私信、邮件、商店网络，以及人类玩家的游戏和商店网络表现出一中主导类型的主题类型。例如，好友网络，类型7占据了90%的三元组关系，这充分展现了互动的倒数性质。相反的性质可以用于商店，低倒数反映出存在大商家。在人机的私信和邮件网络中，类型1的账户占据了80%的节点三元组关系。这表明，在私信网络中一些人机发送怪物的坐标信息给其他人机。</li>
+<li><img src="/images/blog/game_bot_detection_6.png" alt="game_bot_detection_0"> </li>
+<li>将主题的缺失与空模型的对比使得我们能够检测到由于随机值造成的损耗，这个可以通过Z-score值完成。这在其他两个网络(组团party和交易网络)也很有必要，将空网络考虑在内的时候，我们可以发现尽管多种主题可能是相似的丰富（上图b），但是一些可能是十分显著或者未被表达出来。在人类团体中，过度表达的主题类型5($\hat Z&gt;0.4，标准化的版本\hat Z=Z_i\sqrt{\sum_i(Z_i ^2)}$)实际上十分接近于三角形，这与组团party网络中的高聚合度趋势一致。在人机组团中，过度表示的类型13表明网络中观测到的主题数目与在随机网络中出现的主题数目的期望值之间存在巨大差距。这表明，人机内部存在自己的组团来帮助彼此并交易。</li>
+<li><img src="/images/blog/game_bot_detection_7.png" alt="game_bot_detection_0"> </li>
+</ul>
+</li>
+<li><p>网络重叠</p>
+<ul>
+<li>为研究配对网络之间的相关度，我们研究了人机和人类组团之间的网络相似度。例如，两个网络可能展示出相似的聚类值，但这并不能保证与某节点相连的其他节点在另外一个网络也与其相连，或者节点表现出相似的活跃度。有两种方式来衡量网络的重叠度。第一个是<strong>雅可比相似度</strong>，第二个是<strong>网络对(pairs)</strong>的节点度的<strong>Pearson相关系数</strong>。下图是人机和人类组团的10个网络对(pairs)的链接和度重叠的结果。通过链接重叠（图a），我们发现人机组团在party-friendship(组团-好友)网络对以及party-trade(组团-交易)网络对中有更高的雅可比相似度。这是因为人机的主要活动是组团游戏和交易物品。图b中节点度重叠是另外一种发现互动的关联。例如，人类团体的party-trade(组团-交易)网络表现出大于0.7的正的Pearson相关系数，这可以理解为人类的组团活动，例如在团战或者狩猎时需要交易物品。相反的，人机网络中的Pearson系数就非常低。</li>
+<li><img src="/images/blog/game_bot_detection_8.png" alt="game_bot_detection_0"> </li>
+</ul>
+</li>
+</ul>
+<h3 id="4-检测方法详述"><a href="#4-检测方法详述" class="headerlink" title="4 检测方法详述"></a>4 检测方法详述</h3><ul>
+<li>使用了一种<strong>判别式方法</strong>来学习人机和人类玩家的特征差异。使用了<strong>10-折交叉验证</strong>,将数据分为10份</li>
+<li>特征选取：我们对比了模型结果与公司提供的黑名单来评估选取的特征。进行特征选取的步骤是先使用best-first，逐步贪婪，以及信息增益排名过滤算法类提升选取过程。下图显示了使用了如下三种特征的分类算法的结果<ul>
+<li>Feature_Set1包含了上面<code>方法</code>小节提到的全部的特征114个</li>
+<li>Feature_Set2是由信息增益过滤器算法抽取的前62个特征,结果与Feature_Set1接近，但是特征数少很多。所以选取此特征集。</li>
+<li>Feature_Set3 是由best-first和逐步贪婪算法组合选取的6个特征。结果不如上面两个</li>
+<li><img src="/images/blog/game_bot_detection_9.png" alt="game_bot_detection_0"> </li>
+</ul>
+</li>
+<li>分类与评估：人机的行为模式检测结果如下表。四种分类器用于训练算法，<code>决策树</code>，<code>随机森林</code>，<code>逻辑回归</code>，<code>朴素贝叶斯</code>。使用的都是Feature_Set2的特征。其中随机森林表现最好。训练数据集中有85%人类玩家和15%的人机玩家，随机森林算法能应对数据不均衡<ul>
+<li><img src="/images/blog/game_bot_detection_10.png" alt="game_bot_detection_0"> </li>
+<li>尽管我们进行了特征选取，但是还是有很多相关特征。例如，获取物品数目，挣取经验点数目，最大收获物品数目，组团偏心性(party_eccentricity) ，游戏时间，获得物品比例都是不显著的特征。尽管这些特征不显著，但是他们天然相关，不可以简单地剔除掉。</li>
+<li>下表显示了分别类评估结果的相对相似性和差异性：TP,FP,FN,TN。为获得相对相似性，我们通过最低分类数目标准化所有分类，来比较相对结果。对除去最低分类的每个分类，计算其除以最低分类得到的比例。相对相似度的模式与大部分特征和分类是一致的，除了<code>mail_between_centrality(邮件网络的中介性)</code>和<code>mail_outdegree(邮件网络的节点出度)</code></li>
+<li><img src="/images/blog/game_bot_detection_11.png" alt="game_bot_detection_0"> </li>
+</ul>
+</li>
+</ul>
+<h4 id="其他数据"><a href="#其他数据" class="headerlink" title="其他数据"></a>其他数据</h4><p><img src="/images/blog/game_bot_detection_12.png" alt="game_bot_detection_0"><br><img src="/images/blog/game_bot_detection_13.png" alt="game_bot_detection_0"><br><img src="/images/blog/game_bot_detection_14.png" alt="game_bot_detection_0"> </p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/01/22/paper_game-bot-detection-after2017-summary/" rel="prev" title="论文:游戏中人机检测2017年之后论文概述">
+      <i class="fa fa-chevron-left"></i> 论文:游戏中人机检测2017年之后论文概述
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/02/06/paper_game-bot-analysis-from-free-money/" rel="next" title="论文:游戏黑市中免费金币可以检测出什么">
+      论文:游戏黑市中免费金币可以检测出什么 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0-背景"><span class="nav-number">1.</span> <span class="nav-text">0 背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-数据集"><span class="nav-number">2.</span> <span class="nav-text">1  数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-分析架构和工作流"><span class="nav-number">3.</span> <span class="nav-text">2 分析架构和工作流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-结果和讨论"><span class="nav-number">4.</span> <span class="nav-text">3 结果和讨论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-检测方法详述"><span class="nav-number">5.</span> <span class="nav-text">4 检测方法详述</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#其他数据"><span class="nav-number">5.1.</span> <span class="nav-text">其他数据</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="shartoo"
+      src="/images/me.jpg">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description">有数据有算法就能重构</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">99</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">608k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">9:13</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.6.0
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'c656cd038e01f710e260',
+      clientSecret: 'e6de2ccaaf0f7069292125b8f50e27f25b95810d',
+      repo: 'shartoo.github.io',
+      owner: 'shartoo',
+      admin: ['shartoo'],
+      id: '11041bea9975ba118967c430c586529a',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+</body>
+</html>
