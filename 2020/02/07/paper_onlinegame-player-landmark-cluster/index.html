@@ -69,7 +69,7 @@
 <meta property="og:image" content="https://shartoo.github.io/images/blog/paper_onlinegame_player_landmark_cluster_9.jpg">
 <meta property="og:image" content="https://shartoo.github.io/images/blog/paper_onlinegame_player_landmark_cluster_10.jpg">
 <meta property="article:published_time" content="2020-02-07T00:00:00.000Z">
-<meta property="article:modified_time" content="2020-02-25T07:35:01.385Z">
+<meta property="article:modified_time" content="2020-02-25T08:07:32.978Z">
 <meta property="article:author" content="shartoo">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://shartoo.github.io/images/blog/paper_onlinegame_player_landmark_cluster_0.jpg">
@@ -255,7 +255,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-02-25 07:35:01" itemprop="dateModified" datetime="2020-02-25T07:35:01+00:00">2020-02-25</time>
+                <time title="修改时间：2020-02-25 08:07:32" itemprop="dateModified" datetime="2020-02-25T08:07:32+00:00">2020-02-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -303,7 +303,9 @@
 
       
         <h3 id="1-玩家聚类"><a href="#1-玩家聚类" class="headerlink" title="1 玩家聚类"></a>1 玩家聚类</h3><p>首先，我们提出一个方法来检测坐标，然后描述如何使用MDS(multidimensional scaling)和一个称为prefuse的方法计算坐标之间的转移权重概率(weighted transition probabilities between landmarks(WTPL))，这些用于可视化玩家聚类。研究证明，MDS在多维数据集聚类时中要优于SOM。在prefuse阶段，我们使用一种等价于MDS的力导向(force-directed)的模型。文中的<strong>坐标点(Landmark)</strong> 与普通的定义不同。</p>
-<h4 id="1-1-坐标-landmark-检测"><a href="#1-1-坐标-landmark-检测" class="headerlink" title="1.1 坐标(landmark)检测"></a>1.1 坐标(landmark)检测</h4><p>首先，要分析的地图划分为$m\times n$的网格，假设有N个玩家遍历地图。其中用户经过网格$(i,j)$的数目标识为$v<em>{i,k}(k)$，我们将大部分玩家都高频率经过的网格定义为坐标。对于网格$(i,j)$,玩家经过的分布可以用加权熵H来表示$H</em>{i,j}=-\frac{V<em>{i,j}}{\hat V}\sum </em>{k=1} ^N\frac{v<em>{i,j}(k)}{V</em>{i,j}}log(\frac{v<em>{i,j}(k)}{V</em>{i,j}}),其中V<em>{i,j}=\sum </em>{k=1} ^Nv<em>{i,j}(k)\quad ,\hat V = argmax</em>{i,j}V_{i,j}$ 。检测坐标L的算法如下</p>
+<h4 id="1-1-坐标-landmark-检测"><a href="#1-1-坐标-landmark-检测" class="headerlink" title="1.1 坐标(landmark)检测"></a>1.1 坐标(landmark)检测</h4><p>首先，要分析的地图划分为$m\times n$的网格，假设有N个玩家遍历地图。其中用户经过网格<script type="math/tex">(i,j)</script>的数目标识为 $v_{i,k}(k)$，我们将大部分玩家都高频率经过的网格定义为坐标。对于网格 $(i,j)$ ,玩家经过的分布可以用加权熵H来表示</p>
+<script type="math/tex; mode=display">
+H_{i,j}=-\frac{V_{i,j}}{\hat V}\sum _{k=1} ^N\frac{v_{i,j}(k)}{V_{i,j}}log(\frac{v_{i,j}(k)}{V_{i,j}}),其中V_{i,j}=\sum _{k=1} ^Nv_{i,j}(k)\quad ,\hat V = argmax_{i,j}V_{i,j}</script><p>检测坐标L的算法如下</p>
 <ol>
 <li>所有的网格为未标记状态，所有坐标都是空</li>
 <li>在所有未标记网格中，将有最大H的网格标记为1，并将此网格加入到坐标集中。然后将其8个邻居也标记为1。 此处标记邻居是防止被连续标记。</li>
@@ -317,7 +319,9 @@ p_{1,1}(k) & p_{1,2}(k) & ... p_{1,L}(k) \\
 p_{2,1}(k) & p_{2,2}(k) & ... p_{2,L}(k) \\
 ... & ... & ...  \\
 p_{L,1}(k) & p_{L,2}(k) & ... p_{L,L}(k)
-\end{array}\right]</script><p>上式中，$P<em>{a,b}(k)$为玩家k从坐标a移动到坐标b的加权转移概率。其累加公式为$P</em>{a,b}(k)=\frac{c<em>{a,b}(k)}{\hat c</em>{a,b}}\frac{c<em>{a,b}(k)}{C(k)}\quad 其中c</em>{a,b}(k)为玩家从坐标a移动到坐标b的次数,\hat c<em>{a,b}(k)=argmax_kc</em>{a,b}(k)\quad C(k)=\sum <em>{i=1} ^L\sum </em>{j=1} ^Lc_{i,k}(k)$。</p>
+\end{array}\right]</script><p>上式中，$P_{a,b}(k)$为玩家k从坐标a移动到坐标b的加权转移概率。其累加公式为</p>
+<p>$$<br>P<em>{a,b}(k)=\frac{c</em>{a,b}(k)}{\hat c<em>{a,b}}\frac{c</em>{a,b}(k)}{C(k)}\quad 其中c<em>{a,b}(k)为玩家从坐标a移动到坐标b的次数,\hat c</em>{a,b}(k)=argmax<em>kc</em>{a,b}(k)\quad C(k)=\sum <em>{i=1} ^L\sum </em>{j=1} ^Lc_{i,k}(k)</p>
+<p>$$。</p>
 <p>当前版本中为计算$X(k)$中各个元素值，玩家所在位置(coordinate)由其轨迹的附近坐标(landmark)来表示。假设首先已经检测到5个坐标$(A,B,C,D,E)$，那么玩家的轨迹可能是$BBBAAAACEEEE$，其转移序列为$B\rightarrow A\rightarrow C\rightarrow E$。当前不考虑自循环转移序列，如$A\rightarrow A,B\rightarrow B$</p>
 <h4 id="1-3-Multildimensional-Scal-MDS-多维缩放"><a href="#1-3-Multildimensional-Scal-MDS-多维缩放" class="headerlink" title="1.3 Multildimensional Scal(MDS(多维缩放))"></a>1.3 Multildimensional Scal(MDS(多维缩放))</h4><p>为可视化基于其运动模式的玩家聚类，我们使用简单的分类MDS(CMDS(论文1))。CMDS的输入为矩阵D，给定一对玩家的差异性，然后输出一个坐标矩阵，矩阵以配置了最小损失函数来保留两点之间的距离。当前论文中矩阵D中的第$ij$个元素为$X(i)和X(j)$之间的欧氏距离。我们只选取结构坐标的前两个维度，并使用Matlab中的统计工具包中的$cmdscale$函数来计算CMDS。</p>
 <h4 id="1-4-prefuse-预测"><a href="#1-4-prefuse-预测" class="headerlink" title="1.4 prefuse(预测)"></a>1.4 prefuse(预测)</h4><p>我们同时在预测阶段中使用一个力导向的模型，其输出一个图分布，图中每个节点代表一个玩家，节点之间的连接长度与两个节点间距离成正比。为减少计算复杂度，我们提前删除节点间距离小于一定阈值的，当前可以设定为所有节点距离中值的0.5.在预测阶段用户可以交互地操作图节点布局来定位聚类簇</p>
@@ -488,7 +492,7 @@ p_{L,1}(k) & p_{L,2}(k) & ... p_{L,L}(k)
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">9:13</span>
+    <span title="站点阅读时长">9:12</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
   </div>
