@@ -12,7 +12,12 @@ mathjax: true
 
 #### 1.1 坐标(landmark)检测
 
-首先，要分析的地图划分为$m\times n$的网格，假设有N个玩家遍历地图。其中用户经过网格$(i,j)$的数目标识为$v_{i,k}(k)$，我们将大部分玩家都高频率经过的网格定义为坐标。对于网格$(i,j)$,玩家经过的分布可以用加权熵H来表示$H_{i,j}=-\frac{V_{i,j}}{\hat V}\sum _{k=1} ^N\frac{v_{i,j}(k)}{V_{i,j}}log(\frac{v_{i,j}(k)}{V_{i,j}}),其中V_{i,j}=\sum _{k=1} ^Nv_{i,j}(k)\quad ,\hat V = argmax_{i,j}V_{i,j}$ 。检测坐标L的算法如下
+首先，要分析的地图划分为$m\times n$的网格，假设有N个玩家遍历地图。其中用户经过网格$$(i,j)$$的数目标识为 $v_{i,k}(k)$，我们将大部分玩家都高频率经过的网格定义为坐标。对于网格 $(i,j)$ ,玩家经过的分布可以用加权熵H来表示
+$$
+H_{i,j}=-\frac{V_{i,j}}{\hat V}\sum _{k=1} ^N\frac{v_{i,j}(k)}{V_{i,j}}log(\frac{v_{i,j}(k)}{V_{i,j}}),其中V_{i,j}=\sum _{k=1} ^Nv_{i,j}(k)\quad ,\hat V = argmax_{i,j}V_{i,j}
+$$ 
+
+检测坐标L的算法如下
 1. 所有的网格为未标记状态，所有坐标都是空
 2. 在所有未标记网格中，将有最大H的网格标记为1，并将此网格加入到坐标集中。然后将其8个邻居也标记为1。 此处标记邻居是防止被连续标记。
 3. 重复步骤2直至坐标集达到L个
@@ -29,7 +34,10 @@ p_{2,1}(k) & p_{2,2}(k) & ... p_{2,L}(k) \\
 p_{L,1}(k) & p_{L,2}(k) & ... p_{L,L}(k)
 \end{array}\right]
 $$
-上式中，$P_{a,b}(k)$为玩家k从坐标a移动到坐标b的加权转移概率。其累加公式为$P_{a,b}(k)=\frac{c_{a,b}(k)}{\hat c_{a,b}}\frac{c_{a,b}(k)}{C(k)}\quad 其中c_{a,b}(k)为玩家从坐标a移动到坐标b的次数,\hat c_{a,b}(k)=argmax_kc_{a,b}(k)\quad C(k)=\sum _{i=1} ^L\sum _{j=1} ^Lc_{i,k}(k)$。
+上式中，$P_{a,b}(k)$为玩家k从坐标a移动到坐标b的加权转移概率。其累加公式为
+$$
+P_{a,b}(k)=\frac{c_{a,b}(k)}{\hat c_{a,b}}\frac{c_{a,b}(k)}{C(k)}\quad 其中c_{a,b}(k)为玩家从坐标a移动到坐标b的次数,\hat c_{a,b}(k)=argmax_kc_{a,b}(k)\quad C(k)=\sum _{i=1} ^L\sum _{j=1} ^Lc_{i,k}(k)
+$$。
 
 当前版本中为计算$X(k)$中各个元素值，玩家所在位置(coordinate)由其轨迹的附近坐标(landmark)来表示。假设首先已经检测到5个坐标$(A,B,C,D,E)$，那么玩家的轨迹可能是$BBBAAAACEEEE$，其转移序列为$B\rightarrow A\rightarrow C\rightarrow E$。当前不考虑自循环转移序列，如$A\rightarrow A,B\rightarrow B$
 
