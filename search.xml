@@ -1,6 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>复杂网络社区发现算法python实战准备.</title>
+    <url>/2020/02/11/network-community-python-pratice/</url>
+    <content><![CDATA[<h3 id="1-要安装的包"><a href="#1-要安装的包" class="headerlink" title="1 要安装的包"></a>1 要安装的包</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 不要单独安装networkx和community ，会导致Graph没有best_parition属性</span><br><span class="line"># 安装与networkx 2.x 版本对应的python-louvain(它内部包含了community)</span><br><span class="line">pip install -U git+https:&#x2F;&#x2F;github.com&#x2F;taynaud&#x2F;python-louvain.git@networkx2</span><br><span class="line"># 安装 networkx,理论上应该默认安装最新版版的 2.4</span><br><span class="line">pip install networkx</span><br><span class="line"># 如果上述安装之后，&#39;Graph&#39; object has no attribute &#39;edges_iter&#39;</span><br><span class="line">#需要卸载networkx 2.x版本，只能使用1.x版本。注意networkx1.x版本的函数API 不一样，</span><br><span class="line">pip install  networkx&#x3D;&#x3D;1.9.1</span><br></pre></td></tr></table></figure>
+<h3 id="2-数据和参考资料"><a href="#2-数据和参考资料" class="headerlink" title="2 数据和参考资料"></a>2 数据和参考资料</h3><ul>
+<li><a href="http://www-personal.umich.edu/~mejn/netdata/" target="_blank" rel="noopener">Network data</a> : 下载其中某些数据。</li>
+<li><a href="https://blog.csdn.net/dreamhome_s/category_7179396.html" target="_blank" rel="noopener">csdn 社区发现算法研究专题</a></li>
+<li><a href="https://stackoverflow.com/questions/43541376/how-to-draw-communities-with-networkx" target="_blank" rel="noopener">stackoverflow 使用community画图参考代码</a></li>
+</ul>
+<h4 id="3-测试代码"><a href="#3-测试代码" class="headerlink" title="3 测试代码"></a>3 测试代码</h4><p>我们下载使用 <a href="http://www-personal.umich.edu/~mejn/netdata/astro-ph.zip" target="_blank" rel="noopener">astro-gh</a>数据集。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import community</span><br><span class="line">from community import community_louvain</span><br><span class="line">data &#x3D; &quot;.&#x2F;data&#x2F;astro-ph&#x2F;astro-ph.gml&quot;</span><br><span class="line">Graph&#x3D;nx.read_gml(data)</span><br><span class="line"># network2.x的图划分</span><br><span class="line">part &#x3D; community_louvain.best_partition(Graph)</span><br><span class="line"># network1.x的图划分</span><br><span class="line">part &#x3D;community.best_partition(Graph)</span><br></pre></td></tr></table></figure>
+<p>测试代码2</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import community</span><br><span class="line">import networkx as nx</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line"></span><br><span class="line">#better with karate_graph() as defined in networkx example.</span><br><span class="line">#erdos renyi don&#39;t have true community structure</span><br><span class="line">#G &#x3D; nx.erdos_renyi_graph(30, 0.05)</span><br><span class="line">data &#x3D; &quot;.&#x2F;data&#x2F;astro-ph&#x2F;astro-ph.gml&quot;</span><br><span class="line">G&#x3D;nx.read_gml(data)</span><br><span class="line"></span><br><span class="line">#first compute the best partition</span><br><span class="line">partition &#x3D; community.best_partition(G)</span><br><span class="line">#drawing</span><br><span class="line">size &#x3D; float(len(set(partition.values())))</span><br><span class="line">pos &#x3D; nx.spring_layout(G)</span><br><span class="line">count &#x3D; 0.</span><br><span class="line">for com in set(partition.values()) :</span><br><span class="line">    count &#x3D; count + 1.</span><br><span class="line">    list_nodes &#x3D; [nodes for nodes in partition.keys()</span><br><span class="line">                                if partition[nodes] &#x3D;&#x3D; com]</span><br><span class="line">    nx.draw_networkx_nodes(G, pos, list_nodes, node_size &#x3D; 20,</span><br><span class="line">                                node_color &#x3D; str(count &#x2F; size))</span><br><span class="line">nx.draw_networkx_edges(G, pos, alpha&#x3D;0.5)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>运行时间有点长，大概需要10分钟，效果如下</p>
+<p><img src="/images/blog/network_community_detection_python_pratice_0.png" alt="network_community_detection_python_pratice"></p>
+<h3 id="4-相关API"><a href="#4-相关API" class="headerlink" title="4 相关API"></a>4 相关API</h3><h4 id="4-1-community"><a href="#4-1-community" class="headerlink" title="4.1 community"></a>4.1 community</h4><p><a href="https://python-louvain.readthedocs.io/en/latest/api.html" target="_blank" rel="noopener">community API</a> 函数比较少，主要是从网络中划分社区，而社区划分算法又只有一个默认实现。网络部分由另外一个包networkx实现。</p>
+<ul>
+<li><p><code>community.best_partition(graph, partition=None, weight=&#39;weight&#39;, resolution=1.0, randomize=None, random_state=None)</code>:使用<a href="https://blog.csdn.net/xuanyuansen/article/details/68941507" target="_blank" rel="noopener">Louvain heuristices</a>方法划分的获得最高模块度的社区发现算法。</p>
+<ul>
+<li><code>graph:networkx.Graph</code>:需要划分的网络图。一般由直接读取的数据得到<code>networkx.read_gml(data)</code></li>
+<li><code>partition:dict, optional</code>:里面是词典形式的数据，k为节点id，value为节点的标签。算法将以此为基础开始运算得到新的划分。</li>
+<li><code>weight:str, optional</code>:字符串形式的权重。作为权重的运算</li>
+<li><code>resolution:double, optional</code>: 改变社区的规模尺寸，默认为1.描述的是论文<a href="https://www.researchgate.net/publication/23637801_Laplacian_Dynamics_and_Multiscale_Modular_Structure_in_Networks" target="_blank" rel="noopener">Laplacian Dynamics and Multiscale Modular Structure in Networks</a>中所说的规模。</li>
+<li><code>randomize:boolean, optional</code>: 是否随机节点和社区的评估顺序，来获得不同的划分结果</li>
+<li><code>random_state:int,optional</code>:上面随机数的随机种子</li>
+<li><code>返回结果</code>：新的词典形式的划分结果，key为节点id或名字，value为新的所属社区id(从0开始增长)</li>
+</ul>
+</li>
+<li><p><code>community.generate_dendrogram(graph, part_init=None, weight=&#39;weight&#39;, resolution=1.0, randomize=None, random_state=None)</code>:以层次图的形式划分社区。树状图中每一层都是图中节点的一个划分。第0层为第一个划分，包含了最小的社区，最佳社区长度是树状图层次减去1，层次越高社区规模越大。</p>
+<ul>
+<li><code>graph:networkx.Graph</code>；需要划分的网络图</li>
+<li><code>part_init:dict, optional</code>: 算法起始社区划分，词典形式，key为节点，value为节点对应的社区</li>
+<li>其他参数与上面一样</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import community</span><br><span class="line">from community import community_louvain</span><br><span class="line">import networkx as nx</span><br><span class="line"></span><br><span class="line">G&#x3D;nx.erdos_renyi_graph(50, 0.1)</span><br><span class="line">dendo &#x3D;community_louvain.generate_dendrogram(G)</span><br><span class="line">for level in range(len(dendo) - 1) :</span><br><span class="line">     print(&quot;partition at level&quot;, level,&quot;is&quot;, community_louvain.partition_at_level(dendo, level))</span><br></pre></td></tr></table></figure>
+<p>效果如下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">partition at level 0 is &#123;0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 5, 7: 6, 8: 7, 9: 3, 10: 8, 11: 5, 12: 9, 13: 10, 14: 11, 15: 12, 16: 10, 17: 11, 18: 3, 19: 11, 20: 8, 21: 10, 22: 13, 23: 7, 24: 6, 25: 14, 26: 13, 27: 2, 28: 0, 29: 13, 30: 13, 31: 5, 32: 9, 33: 6, 34: 7, 35: 15, 36: 14, 37: 10, 38: 11, 39: 2, 40: 13, 41: 15, 42: 12, 43: 3, 44: 1, 45: 0, 46: 4, 47: 12, 48: 16, 49: 16&#125;</span><br><span class="line">partition at level 1 is &#123;0: 0, 1: 1, 2: 2, 3: 1, 4: 3, 5: 3, 6: 3, 7: 2, 8: 4, 9: 1, 10: 4, 11: 3, 12: 0, 13: 2, 14: 3, 15: 2, 16: 2, 17: 3, 18: 1, 19: 3, 20: 4, 21: 2, 22: 5, 23: 4, 24: 2, 25: 1, 26: 5, 27: 2, 28: 0, 29: 5, 30: 5, 31: 3, 32: 0, 33: 2, 34: 4, 35: 1, 36: 1, 37: 2, 38: 3, 39: 2, 40: 5, 41: 1, 42: 2, 43: 1, 44: 1, 45: 0, 46: 3, 47: 2, 48: 5, 49: 5&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><code>community.partition_at_level(dendrogram, level)</code>:返回指定层次的社区划分结果。使用示例如上代码。</p>
+</li>
+<li><p><code>community.induced_graph(partition, graph, weight=&#39;weight&#39;)</code>:产生社区聚合图，在社区之间产生一条带权重w的边，如果社区内边的总权重为w的话。</p>
+<ul>
+<li>其他参数跟上面一样</li>
+<li><code>返回值</code>:一个新的图，其中节点为划分。</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-2-networkx"><a href="#4-2-networkx" class="headerlink" title="4.2 networkx"></a>4.2 networkx</h4><p><a href="https://networkx.github.io/documentation/stable/tutorial.html" target="_blank" rel="noopener">networkx</a> 包括网络(图)的构建，添加/删除节点、边等。使用networkx构建网络图时，节点可以是任意可哈希的对象，边可以与任意对象关联。</p>
+<ul>
+<li><strong>构建网络图</strong>: <code>G=networkx.Grapgh()</code>即可构建一个空的网络图。网络是由节点和边组成的集合。</li>
+<li><strong>节点</strong><ul>
+<li>添加一个节点: <code>G.add_node(1)</code></li>
+<li>添加节点列表：<code>G.add_nodes_from([2, 3])</code></li>
+<li>使用包含节点的迭代器添加节点：<code>H=networkx.path_graph(10),G.add_nodes_from(H)</code>，此时的图H包含了一些节点，但是被视为新的节点，也可以用G.add_node(H)的方式将H作为一个节点来添加。</li>
+<li>节点删除。<code>Graph.remove_node()</code>删除一个节点，<code>Graph.remove_nodes_from()</code>删除多个节点</li>
+</ul>
+</li>
+<li><strong>边</strong>:如果边已经存在，再次添加不会报错。<ul>
+<li>可以一次添加一条边。<code>G.add_edge(1,2)</code></li>
+<li>也可以一次添加多条边。边列表添加，<code>G.add_edges_from([(1, 2), (1, 3)])</code>。也可以使用边迭代器<code>G.add_edges_from(H.edges)</code></li>
+<li>边删除。<code>Graph.remove_edge(1,3)</code>删除一条边，<code>Graph.remove_edges_from()</code>删除多条边</li>
+</ul>
+</li>
+<li><strong>图的统计属性</strong>。我们可以查看的属性有<code>G.nodes</code>,<code>G.edges</code>,<code>G.adj</code>,<code>G.degree</code>(都是集合形式存放)。效果如下</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">list(G.nodes)</span><br><span class="line">[1, 2, 3, &#39;spam&#39;, &#39;s&#39;, &#39;p&#39;, &#39;a&#39;, &#39;m&#39;]</span><br><span class="line">list(G.edges)</span><br><span class="line">[(1, 2), (1, 3), (3, &#39;m&#39;)]</span><br><span class="line">list(G.adj[1]) # or list(G.neighbors(1))</span><br><span class="line">[2, 3]</span><br><span class="line">G.degree[1] # the number of edges incident to 1</span><br><span class="line">2</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>图的子集的统计属性</strong>。上面的四种属性都接收参数以指定特定的节点或边或节点子集。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">G.edges([2, &#39;m&#39;])</span><br><span class="line">EdgeDataView([(2, 1), (&#39;m&#39;, 3)])</span><br><span class="line">G.degree([2, 3])</span><br><span class="line">DegreeView(&#123;2: 1, 3: 2&#125;)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>其他方式得到节点邻居。比如<code>Graph[1]</code>就可以得到节点1的所有邻居，<code>Graph[1][2]</code>得到节点1和2之间的边的属性。甚至可以修改属性，<code>Graph[1][2][&#39;color&#39;]=&quot;&quot;blue</code>等同于<code>Graph.edges[1,2][&#39;color&#39;]=&quot;blue&quot;</code>。</li>
+<li>使用<code>G.adjacency()</code>或<code>G.adj.items()</code>即可访问所有(节点,邻居)对。注意，如果是无向图，每条边可能会出现两次。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">FG &#x3D; nx.Graph()</span><br><span class="line">FG.add_weighted_edges_from([(1, 2, 0.125), (1, 3, 0.75), (2, 4, 1.2), (3, 4, 0.375)])</span><br><span class="line">for n, nbrs in FG.adj.items():</span><br><span class="line">    for nbr, eattr in nbrs.items():</span><br><span class="line">        wt &#x3D; eattr[&#39;weight&#39;]</span><br><span class="line">        if wt &lt; 0.5: print(&#39;(%d, %d, %.3f)&#39; % (n, nbr, wt))</span><br><span class="line"></span><br><span class="line">(1, 2, 0.125)</span><br><span class="line">(2, 1, 0.125)</span><br><span class="line">(3, 4, 0.375)</span><br><span class="line">(4, 3, 0.375)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>给图，节点，边添加属性，权重、标签、颜色等，可以是任意Python对象</p>
+<ul>
+<li>给图加/修改属性。<code>networkx.Graph(day=&quot;Friday&quot;)</code>,修改<code>G.graph[&#39;day&#39;] = &quot;Monday&quot;</code></li>
+<li>节点属性。 <code>add_node()</code>,<code>add_nodes_from()</code>,<code>G.nodes</code></li>
+<li>边属性。使用<code>add_edge()</code>和<code>add_edges_from()</code><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 节点属性添加和修改</span><br><span class="line">&gt;&gt;&gt; G.add_node(1, time&#x3D;&#39;5pm&#39;)</span><br><span class="line">&gt;&gt;&gt; G.add_nodes_from([3], time&#x3D;&#39;2pm&#39;)</span><br><span class="line">&gt;&gt;&gt; G.nodes[1]</span><br><span class="line">&#123;&#39;time&#39;: &#39;5pm&#39;&#125;</span><br><span class="line">&gt;&gt;&gt; G.nodes[1][&#39;room&#39;] &#x3D; 714</span><br><span class="line">&gt;&gt;&gt; G.nodes.data()</span><br><span class="line">NodeDataView(&#123;1: &#123;&#39;time&#39;: &#39;5pm&#39;, &#39;room&#39;: 714&#125;, 3: &#123;&#39;time&#39;: &#39;2pm&#39;&#125;&#125;)</span><br><span class="line"># 边属性修改&#x2F;添加</span><br><span class="line">&gt;&gt;&gt; G.add_edge(1, 2, weight&#x3D;4.7 )</span><br><span class="line">&gt;&gt;&gt; G.add_edges_from([(3, 4), (4, 5)], color&#x3D;&#39;red&#39;)</span><br><span class="line">&gt;&gt;&gt; G.add_edges_from([(1, 2, &#123;&#39;color&#39;: &#39;blue&#39;&#125;), (2, 3, &#123;&#39;weight&#39;: 8&#125;)])</span><br><span class="line">&gt;&gt;&gt; G[1][2][&#39;weight&#39;] &#x3D; 4.7</span><br><span class="line">&gt;&gt;&gt; G.edges[3, 4][&#39;weight&#39;] &#x3D; 4.2</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>有向图</strong>：使用<code>DG = networkx.DiGraph()</code>可以构建有向图。特有的属性是<code>DiGraph.out_edges()</code>,<code>DiGraph.in_degree()</code>, <code>DiGraph.predecessors()</code>,<code>DiGraph.successors()</code>,有向图的节点度数等于入度和出度之和。有向图的<code>neighbours()</code>等同于<code>successors()</code>。如果你想把有向图转换为无向图可以直接使用<code>Graph.to_undirected()</code>或者<code>networkx.Graph(G)</code></p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt;&gt;&gt; DG &#x3D; nx.DiGraph()</span><br><span class="line">&gt;&gt;&gt; DG.add_weighted_edges_from([(1, 2, 0.5), (3, 1, 0.75)])</span><br><span class="line">&gt;&gt;&gt; DG.out_degree(1, weight&#x3D;&#39;weight&#39;)</span><br><span class="line">0.5</span><br><span class="line">&gt;&gt;&gt; DG.degree(1, weight&#x3D;&#39;weight&#39;)</span><br><span class="line">1.25</span><br><span class="line">&gt;&gt;&gt; list(DG.successors(1))</span><br><span class="line">[2]</span><br><span class="line">&gt;&gt;&gt; list(DG.neighbors(1))</span><br><span class="line">[2]</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><strong>多边图</strong>：如果两个节点之间要存在多条边，可以使用<code>MG = nx.MultiGraph()</code>，节点1和2之间添加多条不同权重的边的示例<code>MG.add_weighted_edges_from([(1, 2, 0.5), (1, 2, 0.75), (2, 3, 0.5)])</code>,可以使用此图来计算最短路径。</p>
+</li>
+<li><p><strong>图的计算和操作</strong>:</p>
+<ul>
+<li>subgraph(G, nbunch):抽取图G的子图，子图中节点由nbunch给出</li>
+<li>union(G1,G2): 图合并</li>
+<li>disjoint_union(G1,G2)：假定所有节点都不同，合并两个图</li>
+<li>cartesian_product(G1,G2)：计算两个图的笛卡尔积</li>
+<li>compose(G1,G2):合并两个图根据两个图中共有节点</li>
+<li>complement(G)：补充图</li>
+<li>create_empty_copy(G)：构造一个该图子类的空备份</li>
+<li>to_undirected(G)：转化为无向图</li>
+<li>to_directed(G)：转化为有向图</li>
+</ul>
+</li>
+<li><p><strong>生成图</strong></p>
+<ul>
+<li>各种<strong>经典小图</strong>数据。如彼得森图<code>networkx.petersen_graph()</code>会生成一个有固定节点和边的<a href="https://baike.baidu.com/item/%E5%BD%BC%E5%BE%97%E6%A3%AE%E5%9B%BE/1505830?fr=aladdin" target="_blank" rel="noopener">彼得森图</a></li>
+<li>也可以按照<strong>给定节点数生成其他经典图</strong>，如5个节点的完全图<code>networkx.complete_graph(5)</code>,完全二分图<code>nx.complete_bipartite_graph(3, 5)</code></li>
+<li><strong>随机图生成器</strong>：<code>er = nx.erdos_renyi_graph(100, 0.15)</code>,<code>red = nx.random_lobster(100, 0.9, 0.9)</code>等。</li>
+<li><strong>从数据源格式读取</strong>：支持各种图存储格式读取。边列表，邻居列表，GML,GraphML,pickle,LEDA等。</li>
+</ul>
+</li>
+<li><p><strong>分析图</strong>：可以对图做各种分析，比如连通图分析，最短路径分析等。<a href="https://networkx.github.io/documentation/stable/reference/algorithms/index.html" target="_blank" rel="noopener">所有支持的计算算法</a> 特别多。。</p>
+</li>
+<li><p><strong>画图</strong>：此包并非用于画图，但是可以用Python matplotlib和Graphviz软件包接口一起画图。</p>
+</li>
+</ul>
+<p><img src="/images/blog/network_community_detection_python_pratice_1.png" alt="network_community_detection_python_pratice"></p>
+]]></content>
+      <categories>
+        <category>复杂网络</category>
+      </categories>
+  </entry>
+  <entry>
     <title>论文:使用LSTM对MMORPG游戏中金融序列分析检测人机</title>
     <url>/2020/02/08/paper_MMORPG-LSTM-fiance-sequence-analysis/</url>
     <content><![CDATA[<p>特征工程有点用，模型构建基本没说</p>
