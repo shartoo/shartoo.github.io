@@ -67,14 +67,14 @@ https://shartoo.github.io/2016/11/06/deepfeedforwardnn/
 https://shartoo.github.io/2016/10/25/SVD-decomponent/
 https://shartoo.github.io/2016/10/19/optimization-deep-models/
 https://shartoo.github.io/2016/10/09/regularization-deeplearning/
-https://shartoo.github.io/2016/10/02/spark-python-example/
 https://shartoo.github.io/2016/10/02/spark-mllib-desciontree/
+https://shartoo.github.io/2016/10/02/spark-python-example/
 https://shartoo.github.io/2016/10/01/regular-attachment/
 https://shartoo.github.io/2016/09/26/pyspark-moiverecommand/
 https://shartoo.github.io/2016/09/25/sparkmllib/
 https://shartoo.github.io/2016/09/21/bp_tricks/
-https://shartoo.github.io/2016/09/20/batch_sizesetup/
 https://shartoo.github.io/2016/09/20/pyspark-mllibuse/
+https://shartoo.github.io/2016/09/20/batch_sizesetup/
 https://shartoo.github.io/2016/09/09/tensorflow-retainmodel/
 https://shartoo.github.io/2016/09/02/tensorflow-inputpipeline/
 https://shartoo.github.io/2016/08/24/network-imageclassify/

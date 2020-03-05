@@ -59,8 +59,9 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://shartoo.github.io/images/blog/network_community_detection_python_pratice_0.png">
 <meta property="og:image" content="https://shartoo.github.io/images/blog/network_community_detection_python_pratice_1.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/network_community_detection_python_pratice_2.png">
 <meta property="article:published_time" content="2020-02-11T00:00:00.000Z">
-<meta property="article:modified_time" content="2020-02-26T10:07:02.466Z">
+<meta property="article:modified_time" content="2020-03-05T04:06:30.050Z">
 <meta property="article:author" content="shartoo">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://shartoo.github.io/images/blog/network_community_detection_python_pratice_0.png">
@@ -246,7 +247,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-02-26 10:07:02" itemprop="dateModified" datetime="2020-02-26T10:07:02+00:00">2020-02-26</time>
+                <time title="修改时间：2020-03-05 04:06:30" itemprop="dateModified" datetime="2020-03-05T04:06:30+00:00">2020-03-05</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -273,14 +274,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>7.3k</span>
+              <span>12k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>7 分钟</span>
+              <span>11 分钟</span>
             </span>
             <div class="post-description">复杂网络</div>
 
@@ -298,6 +299,7 @@
 <li><a href="http://www-personal.umich.edu/~mejn/netdata/" target="_blank" rel="noopener">Network data</a> : 下载其中某些数据。</li>
 <li><a href="https://blog.csdn.net/dreamhome_s/category_7179396.html" target="_blank" rel="noopener">csdn 社区发现算法研究专题</a></li>
 <li><a href="https://stackoverflow.com/questions/43541376/how-to-draw-communities-with-networkx" target="_blank" rel="noopener">stackoverflow 使用community画图参考代码</a></li>
+<li><a href="https://programminghistorian.org/en/lessons/exploring-and-analyzing-network-data-with-python" target="_blank" rel="noopener">使用networkx实际分析网络数据</a></li>
 </ul>
 <h4 id="3-测试代码"><a href="#3-测试代码" class="headerlink" title="3 测试代码"></a>3 测试代码</h4><p>我们下载使用 <a href="http://www-personal.umich.edu/~mejn/netdata/astro-ph.zip" target="_blank" rel="noopener">astro-gh</a>数据集。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import community</span><br><span class="line">from community import community_louvain</span><br><span class="line">data &#x3D; &quot;.&#x2F;data&#x2F;astro-ph&#x2F;astro-ph.gml&quot;</span><br><span class="line">Graph&#x3D;nx.read_gml(data)</span><br><span class="line"># network2.x的图划分</span><br><span class="line">part &#x3D; community_louvain.best_partition(Graph)</span><br><span class="line"># network1.x的图划分</span><br><span class="line">part &#x3D;community.best_partition(Graph)</span><br></pre></td></tr></table></figure>
@@ -368,16 +370,16 @@
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">FG &#x3D; nx.Graph()</span><br><span class="line">FG.add_weighted_edges_from([(1, 2, 0.125), (1, 3, 0.75), (2, 4, 1.2), (3, 4, 0.375)])</span><br><span class="line">for n, nbrs in FG.adj.items():</span><br><span class="line">    for nbr, eattr in nbrs.items():</span><br><span class="line">        wt &#x3D; eattr[&#39;weight&#39;]</span><br><span class="line">        if wt &lt; 0.5: print(&#39;(%d, %d, %.3f)&#39; % (n, nbr, wt))</span><br><span class="line"></span><br><span class="line">(1, 2, 0.125)</span><br><span class="line">(2, 1, 0.125)</span><br><span class="line">(3, 4, 0.375)</span><br><span class="line">(4, 3, 0.375)</span><br></pre></td></tr></table></figure>
 <ul>
-<li><p>给图，节点，边添加属性，权重、标签、颜色等，可以是任意Python对象</p>
-<ul>
+<li>给图，节点，边添加属性，权重、标签、颜色等，可以是任意Python对象<ul>
 <li>给图加/修改属性。<code>networkx.Graph(day=&quot;Friday&quot;)</code>,修改<code>G.graph[&#39;day&#39;] = &quot;Monday&quot;</code></li>
 <li>节点属性。 <code>add_node()</code>,<code>add_nodes_from()</code>,<code>G.nodes</code></li>
-<li>边属性。使用<code>add_edge()</code>和<code>add_edges_from()</code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 节点属性添加和修改</span><br><span class="line">&gt;&gt;&gt; G.add_node(1, time&#x3D;&#39;5pm&#39;)</span><br><span class="line">&gt;&gt;&gt; G.add_nodes_from([3], time&#x3D;&#39;2pm&#39;)</span><br><span class="line">&gt;&gt;&gt; G.nodes[1]</span><br><span class="line">&#123;&#39;time&#39;: &#39;5pm&#39;&#125;</span><br><span class="line">&gt;&gt;&gt; G.nodes[1][&#39;room&#39;] &#x3D; 714</span><br><span class="line">&gt;&gt;&gt; G.nodes.data()</span><br><span class="line">NodeDataView(&#123;1: &#123;&#39;time&#39;: &#39;5pm&#39;, &#39;room&#39;: 714&#125;, 3: &#123;&#39;time&#39;: &#39;2pm&#39;&#125;&#125;)</span><br><span class="line"># 边属性修改&#x2F;添加</span><br><span class="line">&gt;&gt;&gt; G.add_edge(1, 2, weight&#x3D;4.7 )</span><br><span class="line">&gt;&gt;&gt; G.add_edges_from([(3, 4), (4, 5)], color&#x3D;&#39;red&#39;)</span><br><span class="line">&gt;&gt;&gt; G.add_edges_from([(1, 2, &#123;&#39;color&#39;: &#39;blue&#39;&#125;), (2, 3, &#123;&#39;weight&#39;: 8&#125;)])</span><br><span class="line">&gt;&gt;&gt; G[1][2][&#39;weight&#39;] &#x3D; 4.7</span><br><span class="line">&gt;&gt;&gt; G.edges[3, 4][&#39;weight&#39;] &#x3D; 4.2</span><br></pre></td></tr></table></figure>
-</li>
+<li>边属性。使用<code>add_edge()</code>和<code>add_edges_from()</code></li>
 </ul>
 </li>
-<li><p><strong>有向图</strong>：使用<code>DG = networkx.DiGraph()</code>可以构建有向图。特有的属性是<code>DiGraph.out_edges()</code>,<code>DiGraph.in_degree()</code>, <code>DiGraph.predecessors()</code>,<code>DiGraph.successors()</code>,有向图的节点度数等于入度和出度之和。有向图的<code>neighbours()</code>等同于<code>successors()</code>。如果你想把有向图转换为无向图可以直接使用<code>Graph.to_undirected()</code>或者<code>networkx.Graph(G)</code></p>
-</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 节点属性添加和修改</span><br><span class="line">&gt;&gt;&gt; G.add_node(1, time&#x3D;&#39;5pm&#39;)</span><br><span class="line">&gt;&gt;&gt; G.add_nodes_from([3], time&#x3D;&#39;2pm&#39;)</span><br><span class="line">&gt;&gt;&gt; G.nodes[1]</span><br><span class="line">&#123;&#39;time&#39;: &#39;5pm&#39;&#125;</span><br><span class="line">&gt;&gt;&gt; G.nodes[1][&#39;room&#39;] &#x3D; 714</span><br><span class="line">&gt;&gt;&gt; G.nodes.data()</span><br><span class="line">NodeDataView(&#123;1: &#123;&#39;time&#39;: &#39;5pm&#39;, &#39;room&#39;: 714&#125;, 3: &#123;&#39;time&#39;: &#39;2pm&#39;&#125;&#125;)</span><br><span class="line"># 边属性修改&#x2F;添加</span><br><span class="line">&gt;&gt;&gt; G.add_edge(1, 2, weight&#x3D;4.7 )</span><br><span class="line">&gt;&gt;&gt; G.add_edges_from([(3, 4), (4, 5)], color&#x3D;&#39;red&#39;)</span><br><span class="line">&gt;&gt;&gt; G.add_edges_from([(1, 2, &#123;&#39;color&#39;: &#39;blue&#39;&#125;), (2, 3, &#123;&#39;weight&#39;: 8&#125;)])</span><br><span class="line">&gt;&gt;&gt; G[1][2][&#39;weight&#39;] &#x3D; 4.7</span><br><span class="line">&gt;&gt;&gt; G.edges[3, 4][&#39;weight&#39;] &#x3D; 4.2</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>有向图</strong>：使用<code>DG = networkx.DiGraph()</code>可以构建有向图。特有的属性是<code>DiGraph.out_edges()</code>,<code>DiGraph.in_degree()</code>, <code>DiGraph.predecessors()</code>,<code>DiGraph.successors()</code>,有向图的节点度数等于入度和出度之和。有向图的<code>neighbours()</code>等同于<code>successors()</code>。如果你想把有向图转换为无向图可以直接使用<code>Graph.to_undirected()</code>或者<code>networkx.Graph(G)</code></li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; DG &#x3D; nx.DiGraph()</span><br><span class="line">&gt;&gt;&gt; DG.add_weighted_edges_from([(1, 2, 0.5), (3, 1, 0.75)])</span><br><span class="line">&gt;&gt;&gt; DG.out_degree(1, weight&#x3D;&#39;weight&#39;)</span><br><span class="line">0.5</span><br><span class="line">&gt;&gt;&gt; DG.degree(1, weight&#x3D;&#39;weight&#39;)</span><br><span class="line">1.25</span><br><span class="line">&gt;&gt;&gt; list(DG.successors(1))</span><br><span class="line">[2]</span><br><span class="line">&gt;&gt;&gt; list(DG.neighbors(1))</span><br><span class="line">[2]</span><br></pre></td></tr></table></figure>
 <ul>
@@ -410,6 +412,42 @@
 </li>
 </ul>
 <p><img src="/images/blog/network_community_detection_python_pratice_1.png" alt="network_community_detection_python_pratice"></p>
+<h3 id="5-使用Python实际分析网络数据"><a href="#5-使用Python实际分析网络数据" class="headerlink" title="5 使用Python实际分析网络数据"></a>5 使用Python实际分析网络数据</h3><h4 id="5-1-构建网络"><a href="#5-1-构建网络" class="headerlink" title="5.1 构建网络"></a>5.1 构建网络</h4><p>参考<a href="https://programminghistorian.org/en/lessons/exploring-and-analyzing-network-data-with-python" target="_blank" rel="noopener">教程</a></p>
+<p>载入相关包和数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import csv</span><br><span class="line">from operator import itemgetter</span><br><span class="line">import networkx as nx</span><br><span class="line">#This part of networkx, for community detection, needs to be imported separately.</span><br><span class="line">from networkx.algorithms import community </span><br><span class="line"># 载入数据，假设节点名称列表和边列表分别位于两个不同的csv文件 quakers_nodelist.csv 和 quakers_edgelist.csv</span><br><span class="line">with open(&#39;quakers_nodelist.csv&#39;, &#39;r&#39;) as nodecsv:                      </span><br><span class="line">    nodereader &#x3D; csv.reader(nodecsv)    </span><br><span class="line">    nodes &#x3D; [n for n in nodereader][1:]                     </span><br><span class="line"></span><br><span class="line">node_names &#x3D; [n[0] for n in nodes] # Get a list of only the node names                                       </span><br><span class="line"></span><br><span class="line">with open(&#39;quakers_edgelist.csv&#39;, &#39;r&#39;) as edgecsv:</span><br><span class="line">    edgereader &#x3D; csv.reader(edgecsv)      </span><br><span class="line">    edges &#x3D; [tuple(e) for e in edgereader][1:]</span><br></pre></td></tr></table></figure>
+<p>创建网络图，并加入节点和边,并输出基本信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">G &#x3D; nx.Graph()</span><br><span class="line">G.add_nodes_from(nodes)</span><br><span class="line">G.add_edges_from(edges)</span><br><span class="line">print(nx.info(G))</span><br></pre></td></tr></table></figure>
+<p>得到网络基本信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Name:</span><br><span class="line">Type: Graph</span><br><span class="line">Number of nodes: 119</span><br><span class="line">Number of edges: 174</span><br><span class="line">Average degree: 2.9244</span><br></pre></td></tr></table></figure>
+<p>假若上述的节点信息列表包含了其他列，比如<code>name</code>,<code>historical significance</code>,<code>gender</code>,<code>birth year</code>,<code>death year</code>,<code>SDFB ID</code>属性，你想将这些属性也加入到网络中。networkx允许给节点和边添加属性<code>nx.set_node_attributes()</code>和<code>nx.set_edge_attributes()</code>。你需要将这些<strong>属性转化为词典形式，key为节点名，value为属性值，需要对每个属性创建一个词典</strong>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hist_sig_dict &#x3D; &#123;&#125;</span><br><span class="line">gender_dict &#x3D; &#123;&#125;</span><br><span class="line">birth_dict &#x3D; &#123;&#125;</span><br><span class="line">death_dict &#x3D; &#123;&#125;</span><br><span class="line">id_dict &#x3D; &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>循环遍历所有节点，给不同属性赋值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># 一个节点有多列，依次为 name,historical significance,gender,birth year,death year,SDFB ID</span><br><span class="line">for node in nodes: # Loop through the list, one row at a time</span><br><span class="line">    hist_sig_dict[node[0]] &#x3D; node[1] </span><br><span class="line">    gender_dict[node[0]] &#x3D; node[2]</span><br><span class="line">    birth_dict[node[0]] &#x3D; node[3]</span><br><span class="line">    death_dict[node[0]] &#x3D; node[4]</span><br><span class="line">    id_dict[node[0]] &#x3D; node[5]</span><br></pre></td></tr></table></figure>
+<p>然后通过<code>set_node_attributes</code>将所有属性词典添加到网络图</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">nx.set_node_attributes(G, hist_sig_dict, &#39;historical_significance&#39;)</span><br><span class="line">nx.set_node_attributes(G, gender_dict, &#39;gender&#39;)</span><br><span class="line">nx.set_node_attributes(G, birth_dict, &#39;birth_year&#39;)</span><br><span class="line">nx.set_node_attributes(G, death_dict, &#39;death_year&#39;)</span><br><span class="line">nx.set_node_attributes(G, id_dict, &#39;sdfb_id&#39;)</span><br><span class="line"># 测试访问节点的birth_year属性</span><br><span class="line">for n in G.nodes(): </span><br><span class="line">    print(n, G.nodes[n][&#39;birth_year&#39;])</span><br></pre></td></tr></table></figure>
+<h4 id="5-2-网络分析"><a href="#5-2-网络分析" class="headerlink" title="5.2 网络分析"></a>5.2 网络分析</h4><p>分析之前我们需要知道要分析的网络数据的大体情况，比如有多少节点，多少边。节点太少(小于15个节点，不如直接画出来)或太多(比如150万个节点，分析子集)都不利于分析。当前无向图网络相对于有向图更容易分析。</p>
+<h5 id="5-2-1-网络图外观"><a href="#5-2-1-网络图外观" class="headerlink" title="5.2.1 网络图外观"></a>5.2.1 网络图外观</h5><p>网络图外观显示了节点之间如何连接的，因为<strong>网络图有拓扑结构</strong>，可以看出连接关系，数据分布中心化还是去中心化的，稠密的还是稀疏的，圆形 还是线型连接居多，是聚合在一起还是分散的。当前分析的数据集(Quaker)使用Gephi(Force-directed分布(对于小数据集可以创建干净、易于理解的图))可视化效果如下</p>
+<p><img src="/images/blog/network_community_detection_python_pratice_2.png" alt="network_community_detection_python_pratice"></p>
+<p>可视化能分析到的东西基本到此为止。更详细的分析需要<strong>量化</strong>。</p>
+<ul>
+<li><code>稠密度(density)</code>:一个不错的开始分析指标。所有节点实际边数目除以所有可能连接数。此参数可以让你快速了解网络连接情况。<code>nx.density(G)</code></li>
+<li><code>最短路径分析</code>：相对复杂，并且在大网络可视化时不容易发现。主要适用于找到朋友的朋友，参考六度定律。假若我们要计算节点A到B之间最短路径。<code>nx.shortest_path(G, source=&quot;A&quot;, target=&quot;B&quot;)</code>，会输出从A到B节点的中间节点列表。如果某个节点是位于很多最短路径中间，此节点一般是<strong>Hub</strong>,并且重要性较高。<ul>
+<li><code>半径</code>：顺着最短路径分析，可以分析很多其他指标。比如半径(<strong>diameter</strong>),如果直接对当前网络计算半径会出错，因为网络包含很多子图，子图之间不连通。可以分析网络找到最大连通图，然后计算其半径。<code>components = nx.connected_components(G);largest_component = max(components, key=len)</code>。如果最大连通图的半径为8，表明最长的最短路径为8.</li>
+</ul>
+</li>
+<li><code>三重闭合度(triadic closure)</code>:如果两个人都认识同一个人，那么这两个人也可能彼此认识，这会在网络中形成一个三角形。网络中这些闭合三角形的数量可以用于发现网络中聚类簇和社区。<code>nx.transitivity(G)</code><ul>
+<li><code>聚类系数clustering coefficient</code>：衡量网络中三角闭合度的一般称为聚类系数，因为它表示的是聚集的倾向。但是结构化的网络图使用的是<code>transitivity</code>代表的是所有存在的三角数量除以所有可能的三角数量的比例。刻画的是网络内部的连接。</li>
+<li>切记，考察如<code>transitivity</code>和稠密度(density)时多考虑似然度(likehoods)而非certainties。transitivity让你能顺着连接性理解网络，</li>
+</ul>
+</li>
+</ul>
+<h5 id="5-2-2-中心度"><a href="#5-2-2-中心度" class="headerlink" title="5.2.2 中心度"></a>5.2.2 中心度</h5><p>下一步是分析网络中哪些节点比较重要。分析节点重要程度的方法有很多。包括<code>degree(度)</code>,<code>betweenness centrality(中介性)</code>,<code>eigenvector centrality(特征向量中心性)</code>。</p>
+<p>有较多度数的节点称之为<code>hub</code>，计算节点度数是找到hub的最快方法。这些hub是网络中关键，比如当前数据集中最高度数的节点是此关系网创建人，其他度数少一些的是共同创建人。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 计算所有节点的度，然后将其作为网络属性词典</span><br><span class="line">degree_dict &#x3D; dict(G.degree(G.nodes()))</span><br><span class="line">nx.set_node_attributes(G, degree_dict, &#39;degree&#39;)</span><br><span class="line">print(G.nodes[&#39;William Penn&#39;])</span><br><span class="line"># 对所有节点按照度从大到小排序</span><br><span class="line">import itemgetter</span><br><span class="line"># itemgetter(1) 代表要对degree_dict.items中第2个列排序</span><br><span class="line">sorted_degree &#x3D; sorted(degree_dict.items(), key&#x3D;itemgetter(1), reverse&#x3D;True)</span><br></pre></td></tr></table></figure>
+<p><strong>eigenvector centrality(特征向量中心性)</strong>是度数的一种拓展，结合了<strong>节点的边以及节点的邻居</strong>。它计算的是如果你是一个hub，以及你与都少个hub连接。其取值范围是0到1,值越大越具有中心性。对于理解哪些节点能迅速传递信息十分有帮助。PageRanke算法是特征向量中心性的拓展。</p>
+<p><strong>betweenness centrality(介中性)</strong>与另外两种度量方法不同，它不关心某个/些节点的边数目。它关心的是所有通过单个节点的最短路径。为计算这些最短路径，首先得计算网络中所有可能的最短路径，所以此度量计算比较耗时，其取值范围也是0到1。使用它很容易找到<strong>网络中分离的两个子网</strong>。如果两个聚类簇之间仅存在一个节点，这两个聚类簇之间的所有社区都必须经过此节点。与hub相反，此节点称之为<code>broker</code>。尽管介中性不是发现broker的唯一手段，但是是最有效率的。<strong>它让你知道，某些节点虽然与它们相连的节点数少，但是它们是网络子网之间桥梁</strong></p>
+<p>计算方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">betweenness_dict &#x3D; nx.betweenness_centrality(G) # Run betweenness centrality</span><br><span class="line">eigenvector_dict &#x3D; nx.eigenvector_centrality(G) # Run eigenvector centrality</span><br><span class="line"># 将属性赋予网络</span><br><span class="line">nx.set_node_attributes(G, betweenness_dict, &#39;betweenness&#39;)</span><br><span class="line">nx.set_node_attributes(G, eigenvector_dict, &#39;eigenvector&#39;)</span><br><span class="line"># 根据介中性 排序</span><br><span class="line">sorted_betweenness &#x3D; sorted(betweenness_dict.items(), key&#x3D;itemgetter(1), reverse&#x3D;True)</span><br><span class="line">print(&quot;Top 20 nodes by betweenness centrality:&quot;)</span><br><span class="line">for b in sorted_betweenness[:20]:</span><br><span class="line">    print(b)</span><br></pre></td></tr></table></figure>
 
     </div>
 
@@ -489,7 +527,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-要安装的包"><span class="nav-number">1.</span> <span class="nav-text">1 要安装的包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-数据和参考资料"><span class="nav-number">2.</span> <span class="nav-text">2 数据和参考资料</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-测试代码"><span class="nav-number">2.1.</span> <span class="nav-text">3 测试代码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-相关API"><span class="nav-number">3.</span> <span class="nav-text">4 相关API</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-community"><span class="nav-number">3.1.</span> <span class="nav-text">4.1 community</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-networkx"><span class="nav-number">3.2.</span> <span class="nav-text">4.2 networkx</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-要安装的包"><span class="nav-number">1.</span> <span class="nav-text">1 要安装的包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-数据和参考资料"><span class="nav-number">2.</span> <span class="nav-text">2 数据和参考资料</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-测试代码"><span class="nav-number">2.1.</span> <span class="nav-text">3 测试代码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-相关API"><span class="nav-number">3.</span> <span class="nav-text">4 相关API</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-community"><span class="nav-number">3.1.</span> <span class="nav-text">4.1 community</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-networkx"><span class="nav-number">3.2.</span> <span class="nav-text">4.2 networkx</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-使用Python实际分析网络数据"><span class="nav-number">4.</span> <span class="nav-text">5 使用Python实际分析网络数据</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-构建网络"><span class="nav-number">4.1.</span> <span class="nav-text">5.1 构建网络</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-网络分析"><span class="nav-number">4.2.</span> <span class="nav-text">5.2 网络分析</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#5-2-1-网络图外观"><span class="nav-number">4.2.1.</span> <span class="nav-text">5.2.1 网络图外观</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-2-2-中心度"><span class="nav-number">4.2.2.</span> <span class="nav-text">5.2.2 中心度</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -552,12 +590,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">615k</span>
+    <span title="站点总字数">619k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">9:19</span>
+    <span title="站点阅读时长">9:23</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
   </div>

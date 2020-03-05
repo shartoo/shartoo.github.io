@@ -8,6 +8,7 @@
 <li><a href="http://www-personal.umich.edu/~mejn/netdata/" target="_blank" rel="noopener">Network data</a> : 下载其中某些数据。</li>
 <li><a href="https://blog.csdn.net/dreamhome_s/category_7179396.html" target="_blank" rel="noopener">csdn 社区发现算法研究专题</a></li>
 <li><a href="https://stackoverflow.com/questions/43541376/how-to-draw-communities-with-networkx" target="_blank" rel="noopener">stackoverflow 使用community画图参考代码</a></li>
+<li><a href="https://programminghistorian.org/en/lessons/exploring-and-analyzing-network-data-with-python" target="_blank" rel="noopener">使用networkx实际分析网络数据</a></li>
 </ul>
 <h4 id="3-测试代码"><a href="#3-测试代码" class="headerlink" title="3 测试代码"></a>3 测试代码</h4><p>我们下载使用 <a href="http://www-personal.umich.edu/~mejn/netdata/astro-ph.zip" target="_blank" rel="noopener">astro-gh</a>数据集。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import community</span><br><span class="line">from community import community_louvain</span><br><span class="line">data &#x3D; &quot;.&#x2F;data&#x2F;astro-ph&#x2F;astro-ph.gml&quot;</span><br><span class="line">Graph&#x3D;nx.read_gml(data)</span><br><span class="line"># network2.x的图划分</span><br><span class="line">part &#x3D; community_louvain.best_partition(Graph)</span><br><span class="line"># network1.x的图划分</span><br><span class="line">part &#x3D;community.best_partition(Graph)</span><br></pre></td></tr></table></figure>
@@ -78,16 +79,16 @@
 </ul>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">FG &#x3D; nx.Graph()</span><br><span class="line">FG.add_weighted_edges_from([(1, 2, 0.125), (1, 3, 0.75), (2, 4, 1.2), (3, 4, 0.375)])</span><br><span class="line">for n, nbrs in FG.adj.items():</span><br><span class="line">    for nbr, eattr in nbrs.items():</span><br><span class="line">        wt &#x3D; eattr[&#39;weight&#39;]</span><br><span class="line">        if wt &lt; 0.5: print(&#39;(%d, %d, %.3f)&#39; % (n, nbr, wt))</span><br><span class="line"></span><br><span class="line">(1, 2, 0.125)</span><br><span class="line">(2, 1, 0.125)</span><br><span class="line">(3, 4, 0.375)</span><br><span class="line">(4, 3, 0.375)</span><br></pre></td></tr></table></figure>
 <ul>
-<li><p>给图，节点，边添加属性，权重、标签、颜色等，可以是任意Python对象</p>
-<ul>
+<li>给图，节点，边添加属性，权重、标签、颜色等，可以是任意Python对象<ul>
 <li>给图加/修改属性。<code>networkx.Graph(day=&quot;Friday&quot;)</code>,修改<code>G.graph[&#39;day&#39;] = &quot;Monday&quot;</code></li>
 <li>节点属性。 <code>add_node()</code>,<code>add_nodes_from()</code>,<code>G.nodes</code></li>
-<li>边属性。使用<code>add_edge()</code>和<code>add_edges_from()</code><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 节点属性添加和修改</span><br><span class="line">&gt;&gt;&gt; G.add_node(1, time&#x3D;&#39;5pm&#39;)</span><br><span class="line">&gt;&gt;&gt; G.add_nodes_from([3], time&#x3D;&#39;2pm&#39;)</span><br><span class="line">&gt;&gt;&gt; G.nodes[1]</span><br><span class="line">&#123;&#39;time&#39;: &#39;5pm&#39;&#125;</span><br><span class="line">&gt;&gt;&gt; G.nodes[1][&#39;room&#39;] &#x3D; 714</span><br><span class="line">&gt;&gt;&gt; G.nodes.data()</span><br><span class="line">NodeDataView(&#123;1: &#123;&#39;time&#39;: &#39;5pm&#39;, &#39;room&#39;: 714&#125;, 3: &#123;&#39;time&#39;: &#39;2pm&#39;&#125;&#125;)</span><br><span class="line"># 边属性修改&#x2F;添加</span><br><span class="line">&gt;&gt;&gt; G.add_edge(1, 2, weight&#x3D;4.7 )</span><br><span class="line">&gt;&gt;&gt; G.add_edges_from([(3, 4), (4, 5)], color&#x3D;&#39;red&#39;)</span><br><span class="line">&gt;&gt;&gt; G.add_edges_from([(1, 2, &#123;&#39;color&#39;: &#39;blue&#39;&#125;), (2, 3, &#123;&#39;weight&#39;: 8&#125;)])</span><br><span class="line">&gt;&gt;&gt; G[1][2][&#39;weight&#39;] &#x3D; 4.7</span><br><span class="line">&gt;&gt;&gt; G.edges[3, 4][&#39;weight&#39;] &#x3D; 4.2</span><br></pre></td></tr></table></figure>
-</li>
+<li>边属性。使用<code>add_edge()</code>和<code>add_edges_from()</code></li>
 </ul>
 </li>
-<li><p><strong>有向图</strong>：使用<code>DG = networkx.DiGraph()</code>可以构建有向图。特有的属性是<code>DiGraph.out_edges()</code>,<code>DiGraph.in_degree()</code>, <code>DiGraph.predecessors()</code>,<code>DiGraph.successors()</code>,有向图的节点度数等于入度和出度之和。有向图的<code>neighbours()</code>等同于<code>successors()</code>。如果你想把有向图转换为无向图可以直接使用<code>Graph.to_undirected()</code>或者<code>networkx.Graph(G)</code></p>
-</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 节点属性添加和修改</span><br><span class="line">&gt;&gt;&gt; G.add_node(1, time&#x3D;&#39;5pm&#39;)</span><br><span class="line">&gt;&gt;&gt; G.add_nodes_from([3], time&#x3D;&#39;2pm&#39;)</span><br><span class="line">&gt;&gt;&gt; G.nodes[1]</span><br><span class="line">&#123;&#39;time&#39;: &#39;5pm&#39;&#125;</span><br><span class="line">&gt;&gt;&gt; G.nodes[1][&#39;room&#39;] &#x3D; 714</span><br><span class="line">&gt;&gt;&gt; G.nodes.data()</span><br><span class="line">NodeDataView(&#123;1: &#123;&#39;time&#39;: &#39;5pm&#39;, &#39;room&#39;: 714&#125;, 3: &#123;&#39;time&#39;: &#39;2pm&#39;&#125;&#125;)</span><br><span class="line"># 边属性修改&#x2F;添加</span><br><span class="line">&gt;&gt;&gt; G.add_edge(1, 2, weight&#x3D;4.7 )</span><br><span class="line">&gt;&gt;&gt; G.add_edges_from([(3, 4), (4, 5)], color&#x3D;&#39;red&#39;)</span><br><span class="line">&gt;&gt;&gt; G.add_edges_from([(1, 2, &#123;&#39;color&#39;: &#39;blue&#39;&#125;), (2, 3, &#123;&#39;weight&#39;: 8&#125;)])</span><br><span class="line">&gt;&gt;&gt; G[1][2][&#39;weight&#39;] &#x3D; 4.7</span><br><span class="line">&gt;&gt;&gt; G.edges[3, 4][&#39;weight&#39;] &#x3D; 4.2</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>有向图</strong>：使用<code>DG = networkx.DiGraph()</code>可以构建有向图。特有的属性是<code>DiGraph.out_edges()</code>,<code>DiGraph.in_degree()</code>, <code>DiGraph.predecessors()</code>,<code>DiGraph.successors()</code>,有向图的节点度数等于入度和出度之和。有向图的<code>neighbours()</code>等同于<code>successors()</code>。如果你想把有向图转换为无向图可以直接使用<code>Graph.to_undirected()</code>或者<code>networkx.Graph(G)</code></li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt;&gt;&gt; DG &#x3D; nx.DiGraph()</span><br><span class="line">&gt;&gt;&gt; DG.add_weighted_edges_from([(1, 2, 0.5), (3, 1, 0.75)])</span><br><span class="line">&gt;&gt;&gt; DG.out_degree(1, weight&#x3D;&#39;weight&#39;)</span><br><span class="line">0.5</span><br><span class="line">&gt;&gt;&gt; DG.degree(1, weight&#x3D;&#39;weight&#39;)</span><br><span class="line">1.25</span><br><span class="line">&gt;&gt;&gt; list(DG.successors(1))</span><br><span class="line">[2]</span><br><span class="line">&gt;&gt;&gt; list(DG.neighbors(1))</span><br><span class="line">[2]</span><br></pre></td></tr></table></figure>
 <ul>
@@ -120,6 +121,42 @@
 </li>
 </ul>
 <p><img src="/images/blog/network_community_detection_python_pratice_1.png" alt="network_community_detection_python_pratice"></p>
+<h3 id="5-使用Python实际分析网络数据"><a href="#5-使用Python实际分析网络数据" class="headerlink" title="5 使用Python实际分析网络数据"></a>5 使用Python实际分析网络数据</h3><h4 id="5-1-构建网络"><a href="#5-1-构建网络" class="headerlink" title="5.1 构建网络"></a>5.1 构建网络</h4><p>参考<a href="https://programminghistorian.org/en/lessons/exploring-and-analyzing-network-data-with-python" target="_blank" rel="noopener">教程</a></p>
+<p>载入相关包和数据</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import csv</span><br><span class="line">from operator import itemgetter</span><br><span class="line">import networkx as nx</span><br><span class="line">#This part of networkx, for community detection, needs to be imported separately.</span><br><span class="line">from networkx.algorithms import community </span><br><span class="line"># 载入数据，假设节点名称列表和边列表分别位于两个不同的csv文件 quakers_nodelist.csv 和 quakers_edgelist.csv</span><br><span class="line">with open(&#39;quakers_nodelist.csv&#39;, &#39;r&#39;) as nodecsv:                      </span><br><span class="line">    nodereader &#x3D; csv.reader(nodecsv)    </span><br><span class="line">    nodes &#x3D; [n for n in nodereader][1:]                     </span><br><span class="line"></span><br><span class="line">node_names &#x3D; [n[0] for n in nodes] # Get a list of only the node names                                       </span><br><span class="line"></span><br><span class="line">with open(&#39;quakers_edgelist.csv&#39;, &#39;r&#39;) as edgecsv:</span><br><span class="line">    edgereader &#x3D; csv.reader(edgecsv)      </span><br><span class="line">    edges &#x3D; [tuple(e) for e in edgereader][1:]</span><br></pre></td></tr></table></figure>
+<p>创建网络图，并加入节点和边,并输出基本信息</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">G &#x3D; nx.Graph()</span><br><span class="line">G.add_nodes_from(nodes)</span><br><span class="line">G.add_edges_from(edges)</span><br><span class="line">print(nx.info(G))</span><br></pre></td></tr></table></figure>
+<p>得到网络基本信息</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Name:</span><br><span class="line">Type: Graph</span><br><span class="line">Number of nodes: 119</span><br><span class="line">Number of edges: 174</span><br><span class="line">Average degree: 2.9244</span><br></pre></td></tr></table></figure>
+<p>假若上述的节点信息列表包含了其他列，比如<code>name</code>,<code>historical significance</code>,<code>gender</code>,<code>birth year</code>,<code>death year</code>,<code>SDFB ID</code>属性，你想将这些属性也加入到网络中。networkx允许给节点和边添加属性<code>nx.set_node_attributes()</code>和<code>nx.set_edge_attributes()</code>。你需要将这些<strong>属性转化为词典形式，key为节点名，value为属性值，需要对每个属性创建一个词典</strong>。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hist_sig_dict &#x3D; &#123;&#125;</span><br><span class="line">gender_dict &#x3D; &#123;&#125;</span><br><span class="line">birth_dict &#x3D; &#123;&#125;</span><br><span class="line">death_dict &#x3D; &#123;&#125;</span><br><span class="line">id_dict &#x3D; &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>循环遍历所有节点，给不同属性赋值</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 一个节点有多列，依次为 name,historical significance,gender,birth year,death year,SDFB ID</span><br><span class="line">for node in nodes: # Loop through the list, one row at a time</span><br><span class="line">    hist_sig_dict[node[0]] &#x3D; node[1] </span><br><span class="line">    gender_dict[node[0]] &#x3D; node[2]</span><br><span class="line">    birth_dict[node[0]] &#x3D; node[3]</span><br><span class="line">    death_dict[node[0]] &#x3D; node[4]</span><br><span class="line">    id_dict[node[0]] &#x3D; node[5]</span><br></pre></td></tr></table></figure>
+<p>然后通过<code>set_node_attributes</code>将所有属性词典添加到网络图</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nx.set_node_attributes(G, hist_sig_dict, &#39;historical_significance&#39;)</span><br><span class="line">nx.set_node_attributes(G, gender_dict, &#39;gender&#39;)</span><br><span class="line">nx.set_node_attributes(G, birth_dict, &#39;birth_year&#39;)</span><br><span class="line">nx.set_node_attributes(G, death_dict, &#39;death_year&#39;)</span><br><span class="line">nx.set_node_attributes(G, id_dict, &#39;sdfb_id&#39;)</span><br><span class="line"># 测试访问节点的birth_year属性</span><br><span class="line">for n in G.nodes(): </span><br><span class="line">    print(n, G.nodes[n][&#39;birth_year&#39;])</span><br></pre></td></tr></table></figure>
+<h4 id="5-2-网络分析"><a href="#5-2-网络分析" class="headerlink" title="5.2 网络分析"></a>5.2 网络分析</h4><p>分析之前我们需要知道要分析的网络数据的大体情况，比如有多少节点，多少边。节点太少(小于15个节点，不如直接画出来)或太多(比如150万个节点，分析子集)都不利于分析。当前无向图网络相对于有向图更容易分析。</p>
+<h5 id="5-2-1-网络图外观"><a href="#5-2-1-网络图外观" class="headerlink" title="5.2.1 网络图外观"></a>5.2.1 网络图外观</h5><p>网络图外观显示了节点之间如何连接的，因为<strong>网络图有拓扑结构</strong>，可以看出连接关系，数据分布中心化还是去中心化的，稠密的还是稀疏的，圆形 还是线型连接居多，是聚合在一起还是分散的。当前分析的数据集(Quaker)使用Gephi(Force-directed分布(对于小数据集可以创建干净、易于理解的图))可视化效果如下</p>
+<p><img src="/images/blog/network_community_detection_python_pratice_2.png" alt="network_community_detection_python_pratice"></p>
+<p>可视化能分析到的东西基本到此为止。更详细的分析需要<strong>量化</strong>。</p>
+<ul>
+<li><code>稠密度(density)</code>:一个不错的开始分析指标。所有节点实际边数目除以所有可能连接数。此参数可以让你快速了解网络连接情况。<code>nx.density(G)</code></li>
+<li><code>最短路径分析</code>：相对复杂，并且在大网络可视化时不容易发现。主要适用于找到朋友的朋友，参考六度定律。假若我们要计算节点A到B之间最短路径。<code>nx.shortest_path(G, source=&quot;A&quot;, target=&quot;B&quot;)</code>，会输出从A到B节点的中间节点列表。如果某个节点是位于很多最短路径中间，此节点一般是<strong>Hub</strong>,并且重要性较高。<ul>
+<li><code>半径</code>：顺着最短路径分析，可以分析很多其他指标。比如半径(<strong>diameter</strong>),如果直接对当前网络计算半径会出错，因为网络包含很多子图，子图之间不连通。可以分析网络找到最大连通图，然后计算其半径。<code>components = nx.connected_components(G);largest_component = max(components, key=len)</code>。如果最大连通图的半径为8，表明最长的最短路径为8.</li>
+</ul>
+</li>
+<li><code>三重闭合度(triadic closure)</code>:如果两个人都认识同一个人，那么这两个人也可能彼此认识，这会在网络中形成一个三角形。网络中这些闭合三角形的数量可以用于发现网络中聚类簇和社区。<code>nx.transitivity(G)</code><ul>
+<li><code>聚类系数clustering coefficient</code>：衡量网络中三角闭合度的一般称为聚类系数，因为它表示的是聚集的倾向。但是结构化的网络图使用的是<code>transitivity</code>代表的是所有存在的三角数量除以所有可能的三角数量的比例。刻画的是网络内部的连接。</li>
+<li>切记，考察如<code>transitivity</code>和稠密度(density)时多考虑似然度(likehoods)而非certainties。transitivity让你能顺着连接性理解网络，</li>
+</ul>
+</li>
+</ul>
+<h5 id="5-2-2-中心度"><a href="#5-2-2-中心度" class="headerlink" title="5.2.2 中心度"></a>5.2.2 中心度</h5><p>下一步是分析网络中哪些节点比较重要。分析节点重要程度的方法有很多。包括<code>degree(度)</code>,<code>betweenness centrality(中介性)</code>,<code>eigenvector centrality(特征向量中心性)</code>。</p>
+<p>有较多度数的节点称之为<code>hub</code>，计算节点度数是找到hub的最快方法。这些hub是网络中关键，比如当前数据集中最高度数的节点是此关系网创建人，其他度数少一些的是共同创建人。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 计算所有节点的度，然后将其作为网络属性词典</span><br><span class="line">degree_dict &#x3D; dict(G.degree(G.nodes()))</span><br><span class="line">nx.set_node_attributes(G, degree_dict, &#39;degree&#39;)</span><br><span class="line">print(G.nodes[&#39;William Penn&#39;])</span><br><span class="line"># 对所有节点按照度从大到小排序</span><br><span class="line">import itemgetter</span><br><span class="line"># itemgetter(1) 代表要对degree_dict.items中第2个列排序</span><br><span class="line">sorted_degree &#x3D; sorted(degree_dict.items(), key&#x3D;itemgetter(1), reverse&#x3D;True)</span><br></pre></td></tr></table></figure>
+<p><strong>eigenvector centrality(特征向量中心性)</strong>是度数的一种拓展，结合了<strong>节点的边以及节点的邻居</strong>。它计算的是如果你是一个hub，以及你与都少个hub连接。其取值范围是0到1,值越大越具有中心性。对于理解哪些节点能迅速传递信息十分有帮助。PageRanke算法是特征向量中心性的拓展。</p>
+<p><strong>betweenness centrality(介中性)</strong>与另外两种度量方法不同，它不关心某个/些节点的边数目。它关心的是所有通过单个节点的最短路径。为计算这些最短路径，首先得计算网络中所有可能的最短路径，所以此度量计算比较耗时，其取值范围也是0到1。使用它很容易找到<strong>网络中分离的两个子网</strong>。如果两个聚类簇之间仅存在一个节点，这两个聚类簇之间的所有社区都必须经过此节点。与hub相反，此节点称之为<code>broker</code>。尽管介中性不是发现broker的唯一手段，但是是最有效率的。<strong>它让你知道，某些节点虽然与它们相连的节点数少，但是它们是网络子网之间桥梁</strong></p>
+<p>计算方法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">betweenness_dict &#x3D; nx.betweenness_centrality(G) # Run betweenness centrality</span><br><span class="line">eigenvector_dict &#x3D; nx.eigenvector_centrality(G) # Run eigenvector centrality</span><br><span class="line"># 将属性赋予网络</span><br><span class="line">nx.set_node_attributes(G, betweenness_dict, &#39;betweenness&#39;)</span><br><span class="line">nx.set_node_attributes(G, eigenvector_dict, &#39;eigenvector&#39;)</span><br><span class="line"># 根据介中性 排序</span><br><span class="line">sorted_betweenness &#x3D; sorted(betweenness_dict.items(), key&#x3D;itemgetter(1), reverse&#x3D;True)</span><br><span class="line">print(&quot;Top 20 nodes by betweenness centrality:&quot;)</span><br><span class="line">for b in sorted_betweenness[:20]:</span><br><span class="line">    print(b)</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>复杂网络</category>
@@ -218,14 +255,46 @@
 </ol>
 <h4 id="2-2-特征工程"><a href="#2-2-特征工程" class="headerlink" title="2.2 特征工程"></a>2.2 特征工程</h4><p>特征工程分两步：</p>
 <ol>
-<li><p>剔除没有影响的特征：为使用神经网络方法，模型需要学习到人机和普通用户动态数据的差异。因此我们设定了下面一些规则来过滤掉不重要的特征。剔除之后的重要特征表2</p>
-<ul>
+<li>剔除没有影响的特征：为使用神经网络方法，模型需要学习到人机和普通用户动态数据的差异。因此我们设定了下面一些规则来过滤掉不重要的特征。剔除之后的重要特征表2<ul>
 <li>规则1表明，模型无法学习模式差异。如果人机和人类的某个特征值相同，它便是没有区分力的，可以删去。</li>
-<li>规则2证明，如果特征值为0，其标准差也为0，会带来训练数据集稀疏性。剔除满足规则2的特征，以减少稀疏性。<br>|序号|类型|特征|描述|<br>|—-|—-|—-|—-|<br>|1|物品|物品数量|一个角色拥有的全部物品数量|<br>|2|金币|$总金币数\账户中金币余额\角色银行中的金币\在供应商手里的金币$|$角色拥有的总金币数\角色在库存(inventory)中持有的总金币数\角色寄存在warehouse(账房)的总金币数\与供应商或者拍卖行交易的金币数量$|<br>|3|评估的资产值|$评估的资产值\邮件中资产估值\<em>角色</em>银行资产估值\<em>账户</em>银行资产估值$|$所有物品和金币的总价值估价\所有经过邮件发送和接受到的物品的估值\<em>角色</em>存储在warehouse中所有物品和金币总估值\<em>账户</em>存储在warehouse中所有物品和金币总估值$|</li>
+<li>规则2证明，如果特征值为0，其标准差也为0，会带来训练数据集稀疏性。剔除满足规则2的特征，以减少稀疏性。</li>
 </ul>
 </li>
-<li><p>缩放的时间滑窗。日志级别的数据需要做一些处理来训练神经网络。神经网络擅长从固定长度的数据中学习规律，长的时间序列数据需要剪切。我们设定固定长度的时间窗口，并做不同缩放以不同规模的数据。根据公式$X_{normalization}=\frac{X_i-Min(X_i)}{Max(X_i)}$ ，我们将数据缩放到0-1之间。我们比较了特征的统计差异看它们是否与标签一致。如下表1，特征如总金币数，账户中金币数，物品数以相同缩放尺寸是表现出不同分布。考虑到这些差异，我们认为金融特征可以用来区分人机和普通玩家。</p>
-</li>
+</ol>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>类型</th>
+<th>特征</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>物品</td>
+<td>物品数量</td>
+<td>一个角色拥有的全部物品数量</td>
+</tr>
+<tr>
+<td>2</td>
+<td>金币</td>
+<td>$总金币数\ 账户中金币余额\ 角色银行中的金币\ 在供应商手里的金币$</td>
+<td>$角色拥有的总金币数\ 角色在库存(inventory)中持有的总金币数\ 角色寄存在warehouse(账房)的总金币数\与供应商或者拍卖行交易的金币数量$</td>
+</tr>
+<tr>
+<td>3</td>
+<td>评估的资产值</td>
+<td>$评估的资产值\ 邮件中资产估值\ <em>角色</em>银行资产估值\ <em>账户</em>银行资产估值$</td>
+<td>$所有物品和金币的总价值估价\ 所有经过邮件发送和接受到的物品的估值\ <em>角色</em>存储在warehouse中所有物品和金币总估值\<em>账户</em>存储在warehouse中所有物品和金币总估值$</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol>
+<li>缩放的时间滑窗。日志级别的数据需要做一些处理来训练神经网络。神经网络擅长从固定长度的数据中学习规律，长的时间序列数据需要剪切。我们设定固定长度的时间窗口，并做不同缩放以不同规模的数据。根据公式$X_{normalization}=\frac{X_i-Min(X_i)}{Max(X_i)}$ ，我们将数据缩放到0-1之间。我们比较了特征的统计差异看它们是否与标签一致。如下表1，特征如总金币数，账户中金币数，物品数以相同缩放尺寸是表现出不同分布。考虑到这些差异，我们认为金融特征可以用来区分人机和普通玩家。</li>
 </ol>
 <p><img src="/images/blog/paper_LSTM_MMORPG_finance_sequence_0.png" alt="game_bot_detection_0"></p>
 <h4 id="2-3-模型"><a href="#2-3-模型" class="headerlink" title="2.3 模型"></a>2.3 模型</h4><p>我们使用的是LSTM模型，使用固定batchsize，同时使用正则化技术防止过拟合。</p>
@@ -10581,68 +10650,6 @@ Z =
       </categories>
   </entry>
   <entry>
-    <title>大数据：spark mllib python使用示例</title>
-    <url>/2016/10/02/spark-python-example/</url>
-    <content><![CDATA[<h2 id="机器学习的背景知识"><a href="#机器学习的背景知识" class="headerlink" title="机器学习的背景知识"></a>机器学习的背景知识</h2><blockquote>
-<p>监督学习的中点是<strong> 在规则化参数的同时最小化误差</strong>。最小化误差是为了让我们的模型拟合我们的训练数据，而规则化参数是防止我们的模型过分拟合我们的训练数据。参数太多，会导致我们的模型复杂度上升，容易过拟合，也就是我们的训练误差会很小。但<strong>训练误差</strong>小并不是我们的最终目标，我们的目标是希望模型的<strong>测试误差</strong>小，也就是能准确的预测新的样本。所以，我们需要保证模型“简单”的基础上最小化训练误差，这样得到的参数才具有好的泛化性能（也就是测试误差也小），而模型“简单”就是通过规则函数来实现的。另外，规则项的使用还可以约束我们的模型的特性。这样就可以将人对这个模型的先验知识融入到模型的学习当中，强行地让学习到的模型具有人想要的特性，例如稀疏、低秩、平滑等等。要知道，有时候人的先验是非常重要的。</p>
-</blockquote>
-<p>来源于：   <a href="http://blog.csdn.net/zouxy09/article/details/24971995" target="_blank" rel="noopener">http://blog.csdn.net/zouxy09/article/details/24971995</a></p>
-<h1 id="线性模型"><a href="#线性模型" class="headerlink" title="线性模型"></a>线性模型</h1><h2 id="一-数学公式"><a href="#一-数学公式" class="headerlink" title="一  数学公式"></a>一  数学公式</h2><p>&emsp; &emsp; 许多机器学习方法都可以被转换为一个凸函数优化问题，比如查找凸函数f（自变量是w，在代码中称为权重，自变量有d维）最小值。通常，我们可以将这些写成 $ min_{w\epsilon R^d}f(w) $ ，其目标函数是以下形式</p>
-<script type="math/tex; mode=display">f(w) := \lambda\, R(w) +\ frac1n \sum_{i=1}^n L(w;x_i,y_i) \label{eq:regPrimal}</script><p>&emsp;<br>&emsp;<br>此处向量$x<em>{i}\epsilon R^d$是训练数据，对于$1\leq i\leq n$ 和 $y</em>{i}\epsilon R$是我们需要预测的标签。如果$L(w;x,y)$可以被表示为 $W^T x$和$y$的函数，则可以调用 <strong><em>linear</em></strong>方法。</p>
-<p>&emsp;<br>&emsp;<br>目标函数<strong><em>f</em></strong>分为两部分：控制模型复杂度的正则化部分，模型在训练数据集上误差评估的损失度量部分。损失度量函数$L(w;.)$是一个在域$w$上的凸函数。固定的正则化参数$\lambda \geq 0$(代码中是参数<strong><em>regParam</em></strong>)定义了权衡最小化损失（比如训练误差）和最小化模型复杂度（比如，防止过拟合）之间的平衡。</p>
-<h2 id="二-误差函数"><a href="#二-误差函数" class="headerlink" title="二 误差函数"></a>二 误差函数</h2><p>下表概括了损失函数和它们在spark.mllib支持的的梯度和分梯度方法. </p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>损失</th>
-<th>loss function $L(w;x,y)$$\;\;\;\;\;\;\;\;$</th>
-<th>梯度或分梯度</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>hinge loss(SVM)</td>
-<td>$max${0,$1-yw^{T}x$},$y \epsilon$ {-1,+1}</td>
-<td>$ -y\cdot x (if\, yw^Tx &lt; 1)\;\; 0 (otherwise))$</td>
-</tr>
-<tr>
-<td>logstic loss(逻辑回归)</td>
-<td>$log(1+exp(-yw^Tx)),y\epsilon {-1,+1}$</td>
-<td>$-y(1-\frac {1}{1+exp(-yw^Tx)})\cdot x$</td>
-</tr>
-<tr>
-<td>squared loss(最小二乘)</td>
-<td>$\frac {1}{2}(w^Tx-y)^2, y\epsilon R$</td>
-<td>$(w^Tx-y)\cdot x$</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="三-规则化"><a href="#三-规则化" class="headerlink" title="三 规则化"></a>三 规则化</h2><p>  &emsp;&emsp;规则化的目的是简化模型并避免过拟合，规则化函数Ω(w)也有很多种选择，一般是模型复杂度的单调递增函数，模型越复杂，规则化值就越大。比如，规则化项可以是模型参数向量的范数。然而，不同的选择对参数w的约束不同，取得的效果也不同<br>&emsp;&emsp;关于L1范式和L2范式:</p>
-<ul>
-<li>L0 范式：L0范数是指向量中非0的元素的个数。如果我们用L0范数来规则化一个参数矩阵W的话，就是希望W的大部分元素都是0，换句话说，让参数W是稀疏的。</li>
-<li>L1 范式:  L1范数是指向量中各个元素绝对值之和，也称叫“稀疏规则算子”（Lasso regularization）。<br>既然L0可以实现稀疏，为什么不用L0，而要用L1呢？一是因为L0范数很难优化求解（NP难问题），二是L1范数是L0范数的最优凸近似，而且它比L0范数要容易优化求解。</li>
-<li>L2范式：<br>在回归里面，有人把有它的回归叫“岭回归”（Ridge Regression），有人也叫它“权值衰减weight decay”。它的作用是改善过拟合。<br>L2范数是指向量各元素的平方和然后求平方根。我们让L2范数的规则项||W||2最小，可以使得W的每个元素都很小，都接近于0，但与L1范数不同，它不会让它等于0，而是接近于0。而越小的参数说明模型越简单，越简单的模型则越不容易产生过拟合现象。<br>&emsp;&emsp;目前在 spark.mllib中支持的正则化如下：<br>|范式|      regularizer $R(w)$      |            梯度或子梯度       |<br>|——|—————-|———-|<br>|zero(unregularized)|0|0|<br>|L2|$\frac{1}{2}$||w||$_2^2$|w|<br>|L1|$||w||_1$|$sign(w)$|<br>|elastic net|$\alpha||w||_1+(1-\alpha)\frac{1}{2}||w||_2^2$|$\alpha sign(w)+(1-\alpha)w$|</li>
-</ul>
-<p><em>此处$sign(w)$是由项$w$中所有$sign(-1,+1)$组成的向量</em></p>
-<h2 id="三-优化"><a href="#三-优化" class="headerlink" title="三 优化"></a>三 优化</h2><p>&emsp;&emsp;线性方法使用凸函数来优化目标函数. spark.mllib使用两个方法，SGD和LBFGS（Limited-Memory Quasi-Newton Method）。当前，大多数算法API都支持Stochastic Gradient Descent（随机梯度下降），和少部分支持LBFGS。</p>
-<h2 id="四-分类"><a href="#四-分类" class="headerlink" title="四  分类"></a>四  分类</h2><p>&emsp;&emsp;分类旨在将数据项切分到不同类别。<strong><em>spark.mllib</em></strong>提供了两个线性分类方法：线性SVM和逻辑回归。线性SVM只支持二分类，逻辑回归既支持二分类也支持多分类。这两种方法，<strong><em>spark.mllib</em></strong>都支持L1和L2范式规则化。在<strong>MLlib</strong>中训练数据集合以 <em>LabeledPoint</em>类型的RDD代表，其中label（标签）是从0开始0,1,2…的类别索引。<br>&emsp;&emsp;<strong>注意</strong>：指导手册中的，二分类标签$y$要么是 1 要么是 -1，这是为了方便在公式里，但是在<strong>*spark.mllib</strong>里面是以0代表公式中的-1的</p>
-<h2 id="五-线性SVM"><a href="#五-线性SVM" class="headerlink" title="五 线性SVM"></a>五 线性SVM</h2><h3 id="5-1-线性SVM概要"><a href="#5-1-线性SVM概要" class="headerlink" title="5.1 线性SVM概要"></a>5.1 线性SVM概要</h3><p>&emsp;&amp;emsp线性SVM的误差函数是由hingle loss给出:<script type="math/tex">L(w;x,y) :=max\lbrace0,1-yw^Tx\rbrace</script><br>线性SVM默认使用L2范式规则化训练数据，同时是支持L1范式规则的，此时就变成一个线性问题。<br>线性SVM的输出是一个SVM模型。对于一个新数据点，以$x$表示，模型将会基于$w^Tx$的值预测。默认情况下，如果$w^Tx\geq 0$那么输出为1，否则输出为0。</p>
-<h3 id="5-2-示例代码"><a href="#5-2-示例代码" class="headerlink" title="5.2 示例代码"></a>5.2 示例代码</h3><p>&emsp;&emsp;一下代码展示了如何载入数据，创建SVM模型，根据模型预测并计算训练误差。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">学习使用spark.mllib中 SVM模型。代码展示了如何载入数据，创建SVM模型，根据模型预测并计算训练误差。</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">from pyspark.mllib.classification import SVMWithSGD,SVMModel</span><br><span class="line">from pyspark.mllib.regression import LabeledPoint</span><br><span class="line">from pyspark import SparkContext</span><br><span class="line">from pyspark import SparkConf</span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">import logging</span><br><span class="line"># Path for spark source folder</span><br><span class="line">os.environ[&#39;SPARK_HOME&#39;]&#x3D;&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6&quot;</span><br><span class="line"># Append pyspark  to Python Path</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python&quot;)</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python\lib\py4j-0.9-src.zip&quot;)</span><br><span class="line"></span><br><span class="line">conf &#x3D; SparkConf()</span><br><span class="line">conf.set(&quot;YARN_CONF_DIR &quot;, &quot;D:\javaPackages\hadoop_conf_dir\yarn-conf&quot;)</span><br><span class="line">conf.set(&quot;spark.driver.memory&quot;, &quot;2g&quot;)</span><br><span class="line">conf.setMaster(&quot;yarn-client&quot;)</span><br><span class="line">conf.setAppName(&quot;TestSVM&quot;)</span><br><span class="line">logger &#x3D; logging.getLogger(&#39;pyspark&#39;)</span><br><span class="line">sc &#x3D; SparkContext(conf&#x3D;conf)</span><br><span class="line">mylog &#x3D; []</span><br><span class="line">#载入数据并解析</span><br><span class="line">def parsePoint(line):</span><br><span class="line">  values &#x3D; [float(x) for x in line.split(&quot; &quot;)]</span><br><span class="line">    return LabeledPoint(values[0],values[1:])</span><br><span class="line">data &#x3D; sc.textFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;SVM&#x2F;sample_svm_data.txt&quot;)</span><br><span class="line"></span><br><span class="line">parseData &#x3D; data.map(parsePoint)</span><br><span class="line">#创建SVM模型</span><br><span class="line">model &#x3D; SVMWithSGD.train(parseData,iterations&#x3D;100)</span><br><span class="line"># 评估模型</span><br><span class="line">labelsAndPoints &#x3D; parseData.map(lambda p:(p.label,model.predict(p.features)))</span><br><span class="line">trainError &#x3D; labelsAndPoints.filter(lambda (v,p):v!&#x3D;p).count()&#x2F;float(parseData.count())</span><br><span class="line">mylog.append(&quot;SVM模型测试，训练误差是:&quot;)</span><br><span class="line">mylog.append(str(trainError))</span><br><span class="line">sc.parallelize(mylog).saveAsTextFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;SVM&#x2F;log&#x2F;&quot;)</span><br><span class="line">#存储和载入模型</span><br><span class="line">model.save(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;SVM&#x2F;SVMModelSave&quot;)</span><br><span class="line">sameModel &#x3D; SVMModel.load(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;SVM&#x2F;SVMModelSave&quot;)</span><br></pre></td></tr></table></figure>
-<h2 id="六-逻辑回归"><a href="#六-逻辑回归" class="headerlink" title="六 逻辑回归"></a>六 逻辑回归</h2><h3 id="6-1-逻辑回归概要"><a href="#6-1-逻辑回归概要" class="headerlink" title="6.1 逻辑回归概要"></a>6.1 逻辑回归概要</h3><p>&emsp;&emsp;逻辑回归在二分类预测中广泛使用，其误差函数是下式 logistic loss:<script type="math/tex">L(w;x,y):=log(1+\exp(-yw^Tx))</script><br>对于二分类问题，算法的输出结果是一个二项式逻辑回归模型。对于给定新数据点，以$x$表示，使用logistic函数来预测:<script type="math/tex">f(z) =\frac{1}{1+e^{-z}}</script>。其中$z =w^Tx$，如果$f(w^Tx)&gt;0.5$输出为正，否则为负。与线性SVM不同的是，逻辑回归模型的原始输出有一个概率解释（即，x是正的概率）。<br>&emsp;&emsp;二项式逻辑回归可以生成多项式逻辑回归并用来训练和预测多分类问题。比如说，对于<strong>K</strong>个可能的输出结果，其中一个可以选定为轴，其余<strong>k-1</strong>则与此轴对立。在spark.mllib中第一个被选中的类0就是轴类。<br>&emsp;&emsp;对于多分类问题，算法将会输出一个多项式逻辑回归模型，包含了<strong>k-1</strong>个与第一个类对立的二项式逻辑回归模型。对于新数据点，<strong>k-1</strong>个模型将会运行，其中有最大概率的模型即预测的模型。<br>&emsp;&emsp;spark中实现了两个算法来解决逻辑回归问题：mini-batch gradient（梯度下降）和L-BFGS。参考<a href="http://www.bubuko.com/infodetail-898846.html" target="_blank" rel="noopener">batch-GD， SGD， Mini-batch-GD， Stochastic GD， Online-GD区别</a>  spark推荐L-BFGS梯度下降以获得更快的收敛。</p>
-<h3 id="6-2-逻辑回归代码"><a href="#6-2-逻辑回归代码" class="headerlink" title="6.2 逻辑回归代码"></a>6.2 逻辑回归代码</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line"></span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">测试逻辑回归代码</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">from pyspark.mllib.classification import  LogisticRegressionWithSGD,LogisticRegressionModel</span><br><span class="line">from pyspark.mllib.regression import LabeledPoint</span><br><span class="line">from pyspark import SparkContext</span><br><span class="line">from pyspark import SparkConf</span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">import logging</span><br><span class="line"></span><br><span class="line"># Path for spark source folder</span><br><span class="line">os.environ[&#39;SPARK_HOME&#39;]&#x3D;&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6&quot;</span><br><span class="line"># Append pyspark  to Python Path</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python&quot;)</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python\lib\py4j-0.9-src.zip&quot;)</span><br><span class="line"></span><br><span class="line">conf &#x3D; SparkConf()</span><br><span class="line">conf.set(&quot;YARN_CONF_DIR &quot;, &quot;D:\javaPackages\hadoop_conf_dir\yarn-conf&quot;)</span><br><span class="line">conf.set(&quot;spark.driver.memory&quot;, &quot;2g&quot;)</span><br><span class="line">conf.setMaster(&quot;yarn-client&quot;)</span><br><span class="line">conf.setAppName(</span><br><span class="line">&quot;TestLogisticRegression&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">logger &#x3D; logging.getLogger(&#39;pyspark&#39;)</span><br><span class="line"></span><br><span class="line">sc &#x3D; SparkContext(conf&#x3D;conf)</span><br><span class="line">mylog &#x3D; []</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#载入和解析数据</span><br><span class="line">def parsePoint(line):</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">values &#x3D; [float(x) for x in line.split(&quot; &quot;)]</span><br><span class="line">return LabeledPoint(values[0],values[1:])</span><br><span class="line"></span><br><span class="line">data &#x3D; sc.textFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;logistic_regression&#x2F;sample_svm_data.txt&quot;)</span><br><span class="line">parseData  &#x3D; data.map(parsePoint)</span><br><span class="line">#创建模型</span><br><span class="line">model &#x3D; LogisticRegressionWithSGD.train(parseData)</span><br><span class="line"></span><br><span class="line">#评估模型</span><br><span class="line">labelaAndPoints &#x3D; parseData.map(lambda p:(p.label,model.predict(p.features)))</span><br><span class="line">trainError &#x3D; labelaAndPoints.filter(lambda (k,v):k!&#x3D;v).count()</span><br><span class="line">&#x2F;</span><br><span class="line">float(parseData.count())</span><br><span class="line">mylog.append(&quot;逻辑回归的误差是:&quot;)</span><br><span class="line">mylog.append(trainError)</span><br><span class="line"></span><br><span class="line"># 存储和载入模型</span><br><span class="line">model.save(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;logistic_regression&#x2F;logisticregression_model&#x2F;&quot;)</span><br><span class="line">sc.parallelize(mylog).saveAsTextFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;logistic_regression&#x2F;log&#x2F;&quot;)</span><br><span class="line">logisticregression_model &#x3D; LogisticRegressionModel.load(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;logistic_regression&#x2F;logisticregression_model&quot;)</span><br></pre></td></tr></table></figure>
-<h2 id="7-回归"><a href="#7-回归" class="headerlink" title="7 回归"></a>7 回归</h2><p>&emsp;&emsp;<strong>Linear least squares, Lasso, and ridge regression</strong><br>&emsp;&emsp;Linear least squares是回归问题最常用的公式，其误差函数如下：<script type="math/tex">L(w;x,y):=\frac{1}{2}(w^Tx-y)^{2}</script><br>使用不同的规则参数将会派生出不同的相关回归方法；其中的 <strong>ordinary least squares</strong>和<strong>linear least squares</strong>不使用规则参数，ridge regression(岭回归)使用L2规则参数，Lasso使用L1规则参数。所有的这些模型，其平均误差或者训练误差<script type="math/tex">\frac{1}{n}\sum_{i=1}^n(w^Tx-y_i)^2</script> 即均方差。<br>&emsp;&emsp;一下代码展示了如何载入数据、转换为LabeledPoint类型的RDD。然后使用 LinearRegressionWithSGD来创建简单线性模型来预测标签值。最后再计算均方差来评估适应度。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line">from pyspark.mllib.regression import LabeledPoint,LinearRegressionWithSGD,LinearRegressionModel</span><br><span class="line">from pyspark import SparkContext</span><br><span class="line">from pyspark import SparkConf</span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">import logging</span><br><span class="line"># Path for spark source folder</span><br><span class="line">os.environ[&#39;SPARK_HOME&#39;]&#x3D;&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6&quot;</span><br><span class="line"># Append pyspark  to Python Path</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python&quot;)</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python\lib\py4j-0.9-src.zip&quot;)</span><br><span class="line"></span><br><span class="line">conf &#x3D; SparkConf()</span><br><span class="line">conf.set(&quot;YARN_CONF_DIR &quot;, &quot;D:\javaPackages\hadoop_conf_dir\yarn-conf&quot;)</span><br><span class="line">conf.set(&quot;spark.driver.memory&quot;, &quot;2g&quot;)</span><br><span class="line">conf.setMaster(&quot;yarn-client&quot;)</span><br><span class="line">conf.setAppName(&quot;TestSimpleLinearRegression&quot;)</span><br><span class="line">logger &#x3D; logging.getLogger(&#39;pyspark&#39;)</span><br><span class="line">sc &#x3D; SparkContext(conf&#x3D;conf)</span><br><span class="line"></span><br><span class="line">#载入数据</span><br><span class="line">def parsePoint(line):</span><br><span class="line">  values &#x3D; [float(x) for x in line.replace(&#39;,&#39;,&#39; &#39;).split(&#39; &#39;)]</span><br><span class="line">    return LabeledPoint(values[0],values[1:])</span><br><span class="line"></span><br><span class="line">mylog &#x3D; []</span><br><span class="line">data &#x3D; sc.textFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;linear_regression&#x2F;data&#x2F;lpsa.data&quot;)</span><br><span class="line">parseData &#x3D; data.map(parsePoint)</span><br><span class="line">#创建模型</span><br><span class="line">model &#x3D; LinearRegressionWithSGD.train(parseData,iterations &#x3D; 10,step&#x3D;0.000001)</span><br><span class="line">#评估模型误差</span><br><span class="line">valuesAndPres &#x3D; parseData.map(lambda p:(p.label,model.predict(p.features)))</span><br><span class="line">MSE &#x3D; valuesAndPres.map(lambda (v,p):(v-p)**2).reduce(lambda x,y:x+y)&#x2F;valuesAndPres.count()</span><br><span class="line">mylog.append(&quot;简单线性回归误差是：&quot;)</span><br><span class="line">mylog.append(MSE)</span><br><span class="line">sc.parallelize(mylog).saveAsTextFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;linear_regression&#x2F;log&quot;)</span><br><span class="line">#存储 和使用模型</span><br><span class="line">model.save(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;linear_regression&#x2F;SimpleLinearRegressionModel&quot;)</span><br><span class="line">sameMode &#x3D; LinearRegressionModel.load(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;linear_regression&#x2F;SimpleLinearRegressionModel&quot;)&lt;&#x2F;pre&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="流线性回归"><a href="#流线性回归" class="headerlink" title="流线性回归"></a>流线性回归</h3><p>如果数据是以流的形式到达，在线适配回归模型、新数据到达时跟更新模型参数是很有用的。<em>spark.mllib</em>当前支持使用 <strong>ordinary least squares</strong>的线性回归。适应过程类似于离线使用，一批新数据到达时预测适应值，以此来不断地更新流中的新数据的回应值（回归值）。<br>&emsp;&emsp;如下代码演示了如何训练和测试来自两个不同文本格式的输入流，将流解析成labeled point,使用第一个流来拟合回归模型，并在第二个流中作预测。注意，当训练目录 <em>“/home/xiatao/machine_learing/streaming_linear_regression/data</em> 新增数据时，相应的预测目录<em>/home/xiatao/machine_learing/streaming_linear_regression/predict</em>就会产生相应的结果。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line"># 流线性回归模型测试</span><br><span class="line">from pyspark.mllib.linalg import Vectors</span><br><span class="line">from pyspark.mllib.regression import StreamingLinearRegressionWithSGD</span><br><span class="line">from pyspark.streaming import StreamingContext</span><br><span class="line">from pyspark.mllib.regression import LabeledPoint</span><br><span class="line">from pyspark import SparkContext</span><br><span class="line">from pyspark import SparkConf</span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">import logging</span><br><span class="line"># Path for spark source folder</span><br><span class="line">os.environ[&#39;SPARK_HOME&#39;]&#x3D;&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6&quot;</span><br><span class="line"># Append pyspark  to Python Path</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python&quot;)</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python\lib\py4j-0.9-src.zip&quot;)</span><br><span class="line"></span><br><span class="line">conf &#x3D; SparkConf()</span><br><span class="line">conf.set(&quot;YARN_CONF_DIR &quot;, &quot;D:\javaPackages\hadoop_conf_dir\yarn-conf&quot;)</span><br><span class="line">conf.set(&quot;spark.driver.memory&quot;, &quot;2g&quot;)</span><br><span class="line">conf.setMaster(&quot;yarn-client&quot;)</span><br><span class="line">conf.setAppName(&quot;TestStreamLinearRegression&quot;)</span><br><span class="line">logger &#x3D; logging.getLogger(&#39;pyspark&#39;)</span><br><span class="line">sc &#x3D; SparkContext(conf&#x3D;conf)</span><br><span class="line">mylog &#x3D; []</span><br><span class="line"></span><br><span class="line">#第一步创建 StreamingContextssc &#x3D; StreamingContext(sc,1)</span><br><span class="line"></span><br><span class="line">#载入和解析数据</span><br><span class="line">def parse(lp):</span><br><span class="line">  label &#x3D; float(lp[ lp.find(&#39;(&#39;)+1:lp.find(&#39;,&#39;)  ])</span><br><span class="line">    vec &#x3D; Vectors.dense(lp[lp.find(&#39;[&#39;)+1:lp.find(&#39;,&#39;)].split(&#39;,&#39;))</span><br><span class="line">    return LabeledPoint(label,vec)</span><br><span class="line"># 训练集和测试集的数据每行的格式为 (y,[x1,x2,x3]),其中y是标签，x1,x2,x3是特征。</span><br><span class="line"># 训练集中数据更新时，测试集目录就会出现预测值。并且数据越多，预测越准确</span><br><span class="line">trainingData &#x3D; ssc.textFileStream(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;streaming_linear_regression&#x2F;data&quot;).map(parse).cache()</span><br><span class="line">testData &#x3D; ssc.textFileStream(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;streaming_linear_regression&#x2F;predict&quot;).map(parse)</span><br><span class="line">#创建 权值为0的初始化模型</span><br><span class="line">numFeatures&#x3D; 3</span><br><span class="line">model &#x3D; StreamingLinearRegressionWithSGD()</span><br><span class="line">model.setInitialWeights([0.0,0.0,0.0])</span><br><span class="line"># 为训练流和测试流登记，并启动作业</span><br><span class="line">model.trainOn(trainingData)</span><br><span class="line">mylog.append(model.predictOnValues(testData.map(lambda lp:(lp.label,lp.features))))</span><br><span class="line"></span><br><span class="line">ssc.start()</span><br><span class="line">ssc.awaitTermination()&lt;&#x2F;pre&gt;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>大数据</category>
-      </categories>
-  </entry>
-  <entry>
     <title>大数据：spark mllib决策树</title>
     <url>/2016/10/02/spark-mllib-desciontree/</url>
     <content><![CDATA[<h1 id="一-基本算法"><a href="#一-基本算法" class="headerlink" title="一 基本算法"></a>一 基本算法</h1><p>&emsp;&emsp;决策树是一个在特征空间递归执行二分类的贪心算法。决策树预测所有叶子节点分区的标签。为了在树的每个节点最大化信息增益，其每个分区都是基于贪心策略从可能分裂集合里选择一个最佳分裂(split)。也即，每个数节点分裂的选择是从集合 $argmaxIG(D,s)$，其中$IG(D,s)$是信息增益，而s是应用到数据集D上的分裂。</p>
@@ -10735,6 +10742,68 @@ IG(D,s) = Impurity(D)-\frac{N_{left}}{N}Impurity(D_{left})-\frac{N_{right}}{N}Im
 </ul>
 <h2 id="九-代码实例"><a href="#九-代码实例" class="headerlink" title="九 代码实例"></a>九 代码实例</h2><p>以下代码展示了如何载入一个<strong>LIBSVM</strong>数据文件，解析成一个<strong>LabeledPoint</strong>RDD，然后使用决策树，使用Gini不纯度作为不纯度衡量指标，最大树深度是5.测试误差用来计算算法准确率。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">测试决策树</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">import logging</span><br><span class="line">from pyspark.mllib.tree import DecisionTree,DecisionTreeModel</span><br><span class="line">from pyspark.mllib.util import MLUtils</span><br><span class="line"></span><br><span class="line"># Path for spark source folder</span><br><span class="line">os.environ[&#39;SPARK_HOME&#39;]&#x3D;&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6&quot;</span><br><span class="line"># Append pyspark  to Python Path</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python&quot;)</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python\lib\py4j-0.9-src.zip&quot;)</span><br><span class="line"></span><br><span class="line">from pyspark import SparkContext</span><br><span class="line">from pyspark import SparkConf</span><br><span class="line"></span><br><span class="line">conf &#x3D; SparkConf()</span><br><span class="line">conf.set(&quot;YARN_CONF_DIR &quot;, &quot;D:\javaPackages\hadoop_conf_dir\yarn-conf&quot;)</span><br><span class="line">conf.set(&quot;spark.driver.memory&quot;, &quot;2g&quot;)</span><br><span class="line"></span><br><span class="line">#conf.set(&quot;spark.executor.memory&quot;, &quot;1g&quot;)</span><br><span class="line">#conf.set(&quot;spark.python.worker.memory&quot;, &quot;1g&quot;)</span><br><span class="line">conf.setMaster(&quot;yarn-client&quot;)</span><br><span class="line">conf.setAppName(&quot;TestDecisionTree&quot;)</span><br><span class="line">logger &#x3D; logging.getLogger(&#39;pyspark&#39;)</span><br><span class="line">sc &#x3D; SparkContext(conf&#x3D;conf)</span><br><span class="line"></span><br><span class="line">mylog &#x3D; []</span><br><span class="line">#载入和解析数据文件为 LabeledPoint RDDdata &#x3D; MLUtils.loadLibSVMFile(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;&quot;)</span><br><span class="line">#将数据拆分成训练集合测试集</span><br><span class="line">(trainingData,testData) &#x3D; data.randomSplit([0.7,0.3])</span><br><span class="line"></span><br><span class="line">##训练决策树模型</span><br><span class="line">#空的 categoricalFeauresInfo 代表了所有的特征都是连续的</span><br><span class="line">model &#x3D; DecisionTree.trainClassifier(trainingData, numClasses&#x3D;2,categoricalFeaturesInfo&#x3D;&#123;&#125;,impurity&#x3D;&#39;gini&#39;,maxDepth&#x3D;5,maxBins&#x3D;32)</span><br><span class="line"></span><br><span class="line"># 在测试实例上评估模型并计算测试误差</span><br><span class="line"></span><br><span class="line">predictions &#x3D; model.predict(testData.map(lambda x:x.features))</span><br><span class="line">labelsAndPoint &#x3D; testData.map(lambda lp:lp.label).zip(predictions)</span><br><span class="line">testMSE &#x3D; labelsAndPoint.map(lambda (v,p):(v-p)**2).sum()&#x2F;float(testData.count())</span><br><span class="line">mylog.append(&quot;测试误差是&quot;)</span><br><span class="line">mylog.append(testMSE)</span><br><span class="line"></span><br><span class="line">#存储模型</span><br><span class="line"></span><br><span class="line">model.save(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;&quot;)</span><br><span class="line">sc.parallelize(mylog).saveAsTextFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;log&quot;)</span><br><span class="line">sameModel &#x3D; DecisionTreeModel.load(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;&quot;)</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>大数据</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>大数据：spark mllib python使用示例</title>
+    <url>/2016/10/02/spark-python-example/</url>
+    <content><![CDATA[<h2 id="机器学习的背景知识"><a href="#机器学习的背景知识" class="headerlink" title="机器学习的背景知识"></a>机器学习的背景知识</h2><blockquote>
+<p>监督学习的中点是<strong> 在规则化参数的同时最小化误差</strong>。最小化误差是为了让我们的模型拟合我们的训练数据，而规则化参数是防止我们的模型过分拟合我们的训练数据。参数太多，会导致我们的模型复杂度上升，容易过拟合，也就是我们的训练误差会很小。但<strong>训练误差</strong>小并不是我们的最终目标，我们的目标是希望模型的<strong>测试误差</strong>小，也就是能准确的预测新的样本。所以，我们需要保证模型“简单”的基础上最小化训练误差，这样得到的参数才具有好的泛化性能（也就是测试误差也小），而模型“简单”就是通过规则函数来实现的。另外，规则项的使用还可以约束我们的模型的特性。这样就可以将人对这个模型的先验知识融入到模型的学习当中，强行地让学习到的模型具有人想要的特性，例如稀疏、低秩、平滑等等。要知道，有时候人的先验是非常重要的。</p>
+</blockquote>
+<p>来源于：   <a href="http://blog.csdn.net/zouxy09/article/details/24971995" target="_blank" rel="noopener">http://blog.csdn.net/zouxy09/article/details/24971995</a></p>
+<h1 id="线性模型"><a href="#线性模型" class="headerlink" title="线性模型"></a>线性模型</h1><h2 id="一-数学公式"><a href="#一-数学公式" class="headerlink" title="一  数学公式"></a>一  数学公式</h2><p>&emsp; &emsp; 许多机器学习方法都可以被转换为一个凸函数优化问题，比如查找凸函数f（自变量是w，在代码中称为权重，自变量有d维）最小值。通常，我们可以将这些写成 $ min_{w\epsilon R^d}f(w) $ ，其目标函数是以下形式</p>
+<script type="math/tex; mode=display">f(w) := \lambda\, R(w) +\ frac1n \sum_{i=1}^n L(w;x_i,y_i) \label{eq:regPrimal}</script><p>&emsp;<br>&emsp;<br>此处向量$x<em>{i}\epsilon R^d$是训练数据，对于$1\leq i\leq n$ 和 $y</em>{i}\epsilon R$是我们需要预测的标签。如果$L(w;x,y)$可以被表示为 $W^T x$和$y$的函数，则可以调用 <strong><em>linear</em></strong>方法。</p>
+<p>&emsp;<br>&emsp;<br>目标函数<strong><em>f</em></strong>分为两部分：控制模型复杂度的正则化部分，模型在训练数据集上误差评估的损失度量部分。损失度量函数$L(w;.)$是一个在域$w$上的凸函数。固定的正则化参数$\lambda \geq 0$(代码中是参数<strong><em>regParam</em></strong>)定义了权衡最小化损失（比如训练误差）和最小化模型复杂度（比如，防止过拟合）之间的平衡。</p>
+<h2 id="二-误差函数"><a href="#二-误差函数" class="headerlink" title="二 误差函数"></a>二 误差函数</h2><p>下表概括了损失函数和它们在spark.mllib支持的的梯度和分梯度方法. </p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>损失</th>
+<th>loss function $L(w;x,y)$$\;\;\;\;\;\;\;\;$</th>
+<th>梯度或分梯度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hinge loss(SVM)</td>
+<td>$max${0,$1-yw^{T}x$},$y \epsilon$ {-1,+1}</td>
+<td>$ -y\cdot x (if\, yw^Tx &lt; 1)\;\; 0 (otherwise))$</td>
+</tr>
+<tr>
+<td>logstic loss(逻辑回归)</td>
+<td>$log(1+exp(-yw^Tx)),y\epsilon {-1,+1}$</td>
+<td>$-y(1-\frac {1}{1+exp(-yw^Tx)})\cdot x$</td>
+</tr>
+<tr>
+<td>squared loss(最小二乘)</td>
+<td>$\frac {1}{2}(w^Tx-y)^2, y\epsilon R$</td>
+<td>$(w^Tx-y)\cdot x$</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="三-规则化"><a href="#三-规则化" class="headerlink" title="三 规则化"></a>三 规则化</h2><p>  &emsp;&emsp;规则化的目的是简化模型并避免过拟合，规则化函数Ω(w)也有很多种选择，一般是模型复杂度的单调递增函数，模型越复杂，规则化值就越大。比如，规则化项可以是模型参数向量的范数。然而，不同的选择对参数w的约束不同，取得的效果也不同<br>&emsp;&emsp;关于L1范式和L2范式:</p>
+<ul>
+<li>L0 范式：L0范数是指向量中非0的元素的个数。如果我们用L0范数来规则化一个参数矩阵W的话，就是希望W的大部分元素都是0，换句话说，让参数W是稀疏的。</li>
+<li>L1 范式:  L1范数是指向量中各个元素绝对值之和，也称叫“稀疏规则算子”（Lasso regularization）。<br>既然L0可以实现稀疏，为什么不用L0，而要用L1呢？一是因为L0范数很难优化求解（NP难问题），二是L1范数是L0范数的最优凸近似，而且它比L0范数要容易优化求解。</li>
+<li>L2范式：<br>在回归里面，有人把有它的回归叫“岭回归”（Ridge Regression），有人也叫它“权值衰减weight decay”。它的作用是改善过拟合。<br>L2范数是指向量各元素的平方和然后求平方根。我们让L2范数的规则项||W||2最小，可以使得W的每个元素都很小，都接近于0，但与L1范数不同，它不会让它等于0，而是接近于0。而越小的参数说明模型越简单，越简单的模型则越不容易产生过拟合现象。<br>&emsp;&emsp;目前在 spark.mllib中支持的正则化如下：<br>|范式|      regularizer $R(w)$      |            梯度或子梯度       |<br>|——|—————-|———-|<br>|zero(unregularized)|0|0|<br>|L2|$\frac{1}{2}$||w||$_2^2$|w|<br>|L1|$||w||_1$|$sign(w)$|<br>|elastic net|$\alpha||w||_1+(1-\alpha)\frac{1}{2}||w||_2^2$|$\alpha sign(w)+(1-\alpha)w$|</li>
+</ul>
+<p><em>此处$sign(w)$是由项$w$中所有$sign(-1,+1)$组成的向量</em></p>
+<h2 id="三-优化"><a href="#三-优化" class="headerlink" title="三 优化"></a>三 优化</h2><p>&emsp;&emsp;线性方法使用凸函数来优化目标函数. spark.mllib使用两个方法，SGD和LBFGS（Limited-Memory Quasi-Newton Method）。当前，大多数算法API都支持Stochastic Gradient Descent（随机梯度下降），和少部分支持LBFGS。</p>
+<h2 id="四-分类"><a href="#四-分类" class="headerlink" title="四  分类"></a>四  分类</h2><p>&emsp;&emsp;分类旨在将数据项切分到不同类别。<strong><em>spark.mllib</em></strong>提供了两个线性分类方法：线性SVM和逻辑回归。线性SVM只支持二分类，逻辑回归既支持二分类也支持多分类。这两种方法，<strong><em>spark.mllib</em></strong>都支持L1和L2范式规则化。在<strong>MLlib</strong>中训练数据集合以 <em>LabeledPoint</em>类型的RDD代表，其中label（标签）是从0开始0,1,2…的类别索引。<br>&emsp;&emsp;<strong>注意</strong>：指导手册中的，二分类标签$y$要么是 1 要么是 -1，这是为了方便在公式里，但是在<strong>*spark.mllib</strong>里面是以0代表公式中的-1的</p>
+<h2 id="五-线性SVM"><a href="#五-线性SVM" class="headerlink" title="五 线性SVM"></a>五 线性SVM</h2><h3 id="5-1-线性SVM概要"><a href="#5-1-线性SVM概要" class="headerlink" title="5.1 线性SVM概要"></a>5.1 线性SVM概要</h3><p>&emsp;&amp;emsp线性SVM的误差函数是由hingle loss给出:<script type="math/tex">L(w;x,y) :=max\lbrace0,1-yw^Tx\rbrace</script><br>线性SVM默认使用L2范式规则化训练数据，同时是支持L1范式规则的，此时就变成一个线性问题。<br>线性SVM的输出是一个SVM模型。对于一个新数据点，以$x$表示，模型将会基于$w^Tx$的值预测。默认情况下，如果$w^Tx\geq 0$那么输出为1，否则输出为0。</p>
+<h3 id="5-2-示例代码"><a href="#5-2-示例代码" class="headerlink" title="5.2 示例代码"></a>5.2 示例代码</h3><p>&emsp;&emsp;一下代码展示了如何载入数据，创建SVM模型，根据模型预测并计算训练误差。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">学习使用spark.mllib中 SVM模型。代码展示了如何载入数据，创建SVM模型，根据模型预测并计算训练误差。</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">from pyspark.mllib.classification import SVMWithSGD,SVMModel</span><br><span class="line">from pyspark.mllib.regression import LabeledPoint</span><br><span class="line">from pyspark import SparkContext</span><br><span class="line">from pyspark import SparkConf</span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">import logging</span><br><span class="line"># Path for spark source folder</span><br><span class="line">os.environ[&#39;SPARK_HOME&#39;]&#x3D;&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6&quot;</span><br><span class="line"># Append pyspark  to Python Path</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python&quot;)</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python\lib\py4j-0.9-src.zip&quot;)</span><br><span class="line"></span><br><span class="line">conf &#x3D; SparkConf()</span><br><span class="line">conf.set(&quot;YARN_CONF_DIR &quot;, &quot;D:\javaPackages\hadoop_conf_dir\yarn-conf&quot;)</span><br><span class="line">conf.set(&quot;spark.driver.memory&quot;, &quot;2g&quot;)</span><br><span class="line">conf.setMaster(&quot;yarn-client&quot;)</span><br><span class="line">conf.setAppName(&quot;TestSVM&quot;)</span><br><span class="line">logger &#x3D; logging.getLogger(&#39;pyspark&#39;)</span><br><span class="line">sc &#x3D; SparkContext(conf&#x3D;conf)</span><br><span class="line">mylog &#x3D; []</span><br><span class="line">#载入数据并解析</span><br><span class="line">def parsePoint(line):</span><br><span class="line">  values &#x3D; [float(x) for x in line.split(&quot; &quot;)]</span><br><span class="line">    return LabeledPoint(values[0],values[1:])</span><br><span class="line">data &#x3D; sc.textFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;SVM&#x2F;sample_svm_data.txt&quot;)</span><br><span class="line"></span><br><span class="line">parseData &#x3D; data.map(parsePoint)</span><br><span class="line">#创建SVM模型</span><br><span class="line">model &#x3D; SVMWithSGD.train(parseData,iterations&#x3D;100)</span><br><span class="line"># 评估模型</span><br><span class="line">labelsAndPoints &#x3D; parseData.map(lambda p:(p.label,model.predict(p.features)))</span><br><span class="line">trainError &#x3D; labelsAndPoints.filter(lambda (v,p):v!&#x3D;p).count()&#x2F;float(parseData.count())</span><br><span class="line">mylog.append(&quot;SVM模型测试，训练误差是:&quot;)</span><br><span class="line">mylog.append(str(trainError))</span><br><span class="line">sc.parallelize(mylog).saveAsTextFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;SVM&#x2F;log&#x2F;&quot;)</span><br><span class="line">#存储和载入模型</span><br><span class="line">model.save(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;SVM&#x2F;SVMModelSave&quot;)</span><br><span class="line">sameModel &#x3D; SVMModel.load(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;SVM&#x2F;SVMModelSave&quot;)</span><br></pre></td></tr></table></figure>
+<h2 id="六-逻辑回归"><a href="#六-逻辑回归" class="headerlink" title="六 逻辑回归"></a>六 逻辑回归</h2><h3 id="6-1-逻辑回归概要"><a href="#6-1-逻辑回归概要" class="headerlink" title="6.1 逻辑回归概要"></a>6.1 逻辑回归概要</h3><p>&emsp;&emsp;逻辑回归在二分类预测中广泛使用，其误差函数是下式 logistic loss:<script type="math/tex">L(w;x,y):=log(1+\exp(-yw^Tx))</script><br>对于二分类问题，算法的输出结果是一个二项式逻辑回归模型。对于给定新数据点，以$x$表示，使用logistic函数来预测:<script type="math/tex">f(z) =\frac{1}{1+e^{-z}}</script>。其中$z =w^Tx$，如果$f(w^Tx)&gt;0.5$输出为正，否则为负。与线性SVM不同的是，逻辑回归模型的原始输出有一个概率解释（即，x是正的概率）。<br>&emsp;&emsp;二项式逻辑回归可以生成多项式逻辑回归并用来训练和预测多分类问题。比如说，对于<strong>K</strong>个可能的输出结果，其中一个可以选定为轴，其余<strong>k-1</strong>则与此轴对立。在spark.mllib中第一个被选中的类0就是轴类。<br>&emsp;&emsp;对于多分类问题，算法将会输出一个多项式逻辑回归模型，包含了<strong>k-1</strong>个与第一个类对立的二项式逻辑回归模型。对于新数据点，<strong>k-1</strong>个模型将会运行，其中有最大概率的模型即预测的模型。<br>&emsp;&emsp;spark中实现了两个算法来解决逻辑回归问题：mini-batch gradient（梯度下降）和L-BFGS。参考<a href="http://www.bubuko.com/infodetail-898846.html" target="_blank" rel="noopener">batch-GD， SGD， Mini-batch-GD， Stochastic GD， Online-GD区别</a>  spark推荐L-BFGS梯度下降以获得更快的收敛。</p>
+<h3 id="6-2-逻辑回归代码"><a href="#6-2-逻辑回归代码" class="headerlink" title="6.2 逻辑回归代码"></a>6.2 逻辑回归代码</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line"></span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">测试逻辑回归代码</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">from pyspark.mllib.classification import  LogisticRegressionWithSGD,LogisticRegressionModel</span><br><span class="line">from pyspark.mllib.regression import LabeledPoint</span><br><span class="line">from pyspark import SparkContext</span><br><span class="line">from pyspark import SparkConf</span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">import logging</span><br><span class="line"></span><br><span class="line"># Path for spark source folder</span><br><span class="line">os.environ[&#39;SPARK_HOME&#39;]&#x3D;&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6&quot;</span><br><span class="line"># Append pyspark  to Python Path</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python&quot;)</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python\lib\py4j-0.9-src.zip&quot;)</span><br><span class="line"></span><br><span class="line">conf &#x3D; SparkConf()</span><br><span class="line">conf.set(&quot;YARN_CONF_DIR &quot;, &quot;D:\javaPackages\hadoop_conf_dir\yarn-conf&quot;)</span><br><span class="line">conf.set(&quot;spark.driver.memory&quot;, &quot;2g&quot;)</span><br><span class="line">conf.setMaster(&quot;yarn-client&quot;)</span><br><span class="line">conf.setAppName(</span><br><span class="line">&quot;TestLogisticRegression&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">logger &#x3D; logging.getLogger(&#39;pyspark&#39;)</span><br><span class="line"></span><br><span class="line">sc &#x3D; SparkContext(conf&#x3D;conf)</span><br><span class="line">mylog &#x3D; []</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#载入和解析数据</span><br><span class="line">def parsePoint(line):</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">values &#x3D; [float(x) for x in line.split(&quot; &quot;)]</span><br><span class="line">return LabeledPoint(values[0],values[1:])</span><br><span class="line"></span><br><span class="line">data &#x3D; sc.textFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;logistic_regression&#x2F;sample_svm_data.txt&quot;)</span><br><span class="line">parseData  &#x3D; data.map(parsePoint)</span><br><span class="line">#创建模型</span><br><span class="line">model &#x3D; LogisticRegressionWithSGD.train(parseData)</span><br><span class="line"></span><br><span class="line">#评估模型</span><br><span class="line">labelaAndPoints &#x3D; parseData.map(lambda p:(p.label,model.predict(p.features)))</span><br><span class="line">trainError &#x3D; labelaAndPoints.filter(lambda (k,v):k!&#x3D;v).count()</span><br><span class="line">&#x2F;</span><br><span class="line">float(parseData.count())</span><br><span class="line">mylog.append(&quot;逻辑回归的误差是:&quot;)</span><br><span class="line">mylog.append(trainError)</span><br><span class="line"></span><br><span class="line"># 存储和载入模型</span><br><span class="line">model.save(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;logistic_regression&#x2F;logisticregression_model&#x2F;&quot;)</span><br><span class="line">sc.parallelize(mylog).saveAsTextFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;logistic_regression&#x2F;log&#x2F;&quot;)</span><br><span class="line">logisticregression_model &#x3D; LogisticRegressionModel.load(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;logistic_regression&#x2F;logisticregression_model&quot;)</span><br></pre></td></tr></table></figure>
+<h2 id="7-回归"><a href="#7-回归" class="headerlink" title="7 回归"></a>7 回归</h2><p>&emsp;&emsp;<strong>Linear least squares, Lasso, and ridge regression</strong><br>&emsp;&emsp;Linear least squares是回归问题最常用的公式，其误差函数如下：<script type="math/tex">L(w;x,y):=\frac{1}{2}(w^Tx-y)^{2}</script><br>使用不同的规则参数将会派生出不同的相关回归方法；其中的 <strong>ordinary least squares</strong>和<strong>linear least squares</strong>不使用规则参数，ridge regression(岭回归)使用L2规则参数，Lasso使用L1规则参数。所有的这些模型，其平均误差或者训练误差<script type="math/tex">\frac{1}{n}\sum_{i=1}^n(w^Tx-y_i)^2</script> 即均方差。<br>&emsp;&emsp;一下代码展示了如何载入数据、转换为LabeledPoint类型的RDD。然后使用 LinearRegressionWithSGD来创建简单线性模型来预测标签值。最后再计算均方差来评估适应度。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line">from pyspark.mllib.regression import LabeledPoint,LinearRegressionWithSGD,LinearRegressionModel</span><br><span class="line">from pyspark import SparkContext</span><br><span class="line">from pyspark import SparkConf</span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">import logging</span><br><span class="line"># Path for spark source folder</span><br><span class="line">os.environ[&#39;SPARK_HOME&#39;]&#x3D;&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6&quot;</span><br><span class="line"># Append pyspark  to Python Path</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python&quot;)</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python\lib\py4j-0.9-src.zip&quot;)</span><br><span class="line"></span><br><span class="line">conf &#x3D; SparkConf()</span><br><span class="line">conf.set(&quot;YARN_CONF_DIR &quot;, &quot;D:\javaPackages\hadoop_conf_dir\yarn-conf&quot;)</span><br><span class="line">conf.set(&quot;spark.driver.memory&quot;, &quot;2g&quot;)</span><br><span class="line">conf.setMaster(&quot;yarn-client&quot;)</span><br><span class="line">conf.setAppName(&quot;TestSimpleLinearRegression&quot;)</span><br><span class="line">logger &#x3D; logging.getLogger(&#39;pyspark&#39;)</span><br><span class="line">sc &#x3D; SparkContext(conf&#x3D;conf)</span><br><span class="line"></span><br><span class="line">#载入数据</span><br><span class="line">def parsePoint(line):</span><br><span class="line">  values &#x3D; [float(x) for x in line.replace(&#39;,&#39;,&#39; &#39;).split(&#39; &#39;)]</span><br><span class="line">    return LabeledPoint(values[0],values[1:])</span><br><span class="line"></span><br><span class="line">mylog &#x3D; []</span><br><span class="line">data &#x3D; sc.textFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;linear_regression&#x2F;data&#x2F;lpsa.data&quot;)</span><br><span class="line">parseData &#x3D; data.map(parsePoint)</span><br><span class="line">#创建模型</span><br><span class="line">model &#x3D; LinearRegressionWithSGD.train(parseData,iterations &#x3D; 10,step&#x3D;0.000001)</span><br><span class="line">#评估模型误差</span><br><span class="line">valuesAndPres &#x3D; parseData.map(lambda p:(p.label,model.predict(p.features)))</span><br><span class="line">MSE &#x3D; valuesAndPres.map(lambda (v,p):(v-p)**2).reduce(lambda x,y:x+y)&#x2F;valuesAndPres.count()</span><br><span class="line">mylog.append(&quot;简单线性回归误差是：&quot;)</span><br><span class="line">mylog.append(MSE)</span><br><span class="line">sc.parallelize(mylog).saveAsTextFile(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;linear_regression&#x2F;log&quot;)</span><br><span class="line">#存储 和使用模型</span><br><span class="line">model.save(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;linear_regression&#x2F;SimpleLinearRegressionModel&quot;)</span><br><span class="line">sameMode &#x3D; LinearRegressionModel.load(sc,&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;linear_regression&#x2F;SimpleLinearRegressionModel&quot;)&lt;&#x2F;pre&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="流线性回归"><a href="#流线性回归" class="headerlink" title="流线性回归"></a>流线性回归</h3><p>如果数据是以流的形式到达，在线适配回归模型、新数据到达时跟更新模型参数是很有用的。<em>spark.mllib</em>当前支持使用 <strong>ordinary least squares</strong>的线性回归。适应过程类似于离线使用，一批新数据到达时预测适应值，以此来不断地更新流中的新数据的回应值（回归值）。<br>&emsp;&emsp;如下代码演示了如何训练和测试来自两个不同文本格式的输入流，将流解析成labeled point,使用第一个流来拟合回归模型，并在第二个流中作预测。注意，当训练目录 <em>“/home/xiatao/machine_learing/streaming_linear_regression/data</em> 新增数据时，相应的预测目录<em>/home/xiatao/machine_learing/streaming_linear_regression/predict</em>就会产生相应的结果。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># -*- coding:utf-8 -*-</span><br><span class="line"># 流线性回归模型测试</span><br><span class="line">from pyspark.mllib.linalg import Vectors</span><br><span class="line">from pyspark.mllib.regression import StreamingLinearRegressionWithSGD</span><br><span class="line">from pyspark.streaming import StreamingContext</span><br><span class="line">from pyspark.mllib.regression import LabeledPoint</span><br><span class="line">from pyspark import SparkContext</span><br><span class="line">from pyspark import SparkConf</span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line">import sys</span><br><span class="line">import logging</span><br><span class="line"># Path for spark source folder</span><br><span class="line">os.environ[&#39;SPARK_HOME&#39;]&#x3D;&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6&quot;</span><br><span class="line"># Append pyspark  to Python Path</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python&quot;)</span><br><span class="line">sys.path.append(&quot;D:\javaPackages\spark-1.6.0-bin-hadoop2.6\python\lib\py4j-0.9-src.zip&quot;)</span><br><span class="line"></span><br><span class="line">conf &#x3D; SparkConf()</span><br><span class="line">conf.set(&quot;YARN_CONF_DIR &quot;, &quot;D:\javaPackages\hadoop_conf_dir\yarn-conf&quot;)</span><br><span class="line">conf.set(&quot;spark.driver.memory&quot;, &quot;2g&quot;)</span><br><span class="line">conf.setMaster(&quot;yarn-client&quot;)</span><br><span class="line">conf.setAppName(&quot;TestStreamLinearRegression&quot;)</span><br><span class="line">logger &#x3D; logging.getLogger(&#39;pyspark&#39;)</span><br><span class="line">sc &#x3D; SparkContext(conf&#x3D;conf)</span><br><span class="line">mylog &#x3D; []</span><br><span class="line"></span><br><span class="line">#第一步创建 StreamingContextssc &#x3D; StreamingContext(sc,1)</span><br><span class="line"></span><br><span class="line">#载入和解析数据</span><br><span class="line">def parse(lp):</span><br><span class="line">  label &#x3D; float(lp[ lp.find(&#39;(&#39;)+1:lp.find(&#39;,&#39;)  ])</span><br><span class="line">    vec &#x3D; Vectors.dense(lp[lp.find(&#39;[&#39;)+1:lp.find(&#39;,&#39;)].split(&#39;,&#39;))</span><br><span class="line">    return LabeledPoint(label,vec)</span><br><span class="line"># 训练集和测试集的数据每行的格式为 (y,[x1,x2,x3]),其中y是标签，x1,x2,x3是特征。</span><br><span class="line"># 训练集中数据更新时，测试集目录就会出现预测值。并且数据越多，预测越准确</span><br><span class="line">trainingData &#x3D; ssc.textFileStream(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;streaming_linear_regression&#x2F;data&quot;).map(parse).cache()</span><br><span class="line">testData &#x3D; ssc.textFileStream(&quot;&#x2F;home&#x2F;xiatao&#x2F;machine_learing&#x2F;streaming_linear_regression&#x2F;predict&quot;).map(parse)</span><br><span class="line">#创建 权值为0的初始化模型</span><br><span class="line">numFeatures&#x3D; 3</span><br><span class="line">model &#x3D; StreamingLinearRegressionWithSGD()</span><br><span class="line">model.setInitialWeights([0.0,0.0,0.0])</span><br><span class="line"># 为训练流和测试流登记，并启动作业</span><br><span class="line">model.trainOn(trainingData)</span><br><span class="line">mylog.append(model.predictOnValues(testData.map(lambda lp:(lp.label,lp.features))))</span><br><span class="line"></span><br><span class="line">ssc.start()</span><br><span class="line">ssc.awaitTermination()&lt;&#x2F;pre&gt;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>大数据</category>
@@ -11016,51 +11085,6 @@ W(t+1)=W(t)-\eta\frac{\partial E^t}{\partial W}</script></li>
       </categories>
   </entry>
   <entry>
-    <title>深度学习：batch_size的设置与影响</title>
-    <url>/2016/09/20/batch_sizesetup/</url>
-    <content><![CDATA[<p>注意：本文根据知乎<strong>程引</strong>的<a href="https://www.zhihu.com/question/32673260" target="_blank" rel="noopener">回答</a>整理</p>
-<h2 id="为何需要batch-size参数"><a href="#为何需要batch-size参数" class="headerlink" title="为何需要batch_size参数"></a>为何需要batch_size参数</h2><p> Batch的选择，<strong>首先决定的是下降的方向</strong>。如果数据集比较小，完全可以采用 <strong>全数据集(Full Batch Learning)</strong> 的形式。这样做有如下好处：</p>
-<ul>
-<li>全数据集确定的方向能够更好的代表样本总体，从而更准确的朝着极值所在方向。</li>
-<li><p>由于不同权值的梯度值差别较大，因此选取一个全局的学习率很困难。</p>
-<p>Full Batch Learning可以使用Rprop只基于梯度符号并且针对性单独更新各权值。<br>但是对于非常大的数据集，上述两个好处变成了两个坏处：</p>
-</li>
-<li><p>随着数据集的海量增加和内存限制，一次载入所有数据不现实。</p>
-</li>
-<li>以Rprop的方式迭代，会由于各个batch之间的采样差异性，各此梯度修正值相互抵消，无法修正。这才有了后来的<strong>RMSprop</strong>的妥协方案。</li>
-</ul>
-<h2 id="Full-Batch-Learning的另一个极端-Online-Learning"><a href="#Full-Batch-Learning的另一个极端-Online-Learning" class="headerlink" title="Full Batch Learning的另一个极端 Online Learning"></a>Full Batch Learning的另一个极端 Online Learning</h2><p> 既然 Full Batch Learning 并不适用大数据集，那么走向另一个极端怎么样？所谓另一个极端，就是每次只训练一个样本，即 Batch_Size = 1。这就是<strong>在线学习(Online Learning)</strong> 。线性神经元在均方误差代价函数的错误面是一个抛物面，横截面是椭圆。对于多层神经元、非线性网络，在局部依然近似是抛物面。使用在线学习，每次修正方向以各自样本的梯度方向修正，横冲直撞各自为政，<strong>难以达到收敛</strong></p>
-<p> <img src="/images/blog/batch_size1.png" alt="batch_size"></p>
-<h2 id="选取适中的batch-size"><a href="#选取适中的batch-size" class="headerlink" title="选取适中的batch_size"></a>选取适中的batch_size</h2><p>  可不可以选择一个适中的 Batch_Size 值呢？当然可以，这就是<strong>批梯度下降法（Mini-batches Learning）</strong>。因为如果数据集足够充分，那么用一半（<em>甚至少得多</em>）的数据训练算出来的梯度与用全部数据训练出来的梯度是<strong>几乎一样</strong>的。<br>  在合理范围内，增大 Batch_Size 有何好处？</p>
-<ul>
-<li>内存利用率提高了，大矩阵乘法的并行化效率提高。</li>
-<li>跑完一次 epoch（全数据集）所需的迭代次数减少，对于相同数据量的处理速度进一步加快。</li>
-<li><p>在一定范围内，一般来说 Batch_Size 越大，其确定的下降方向越准，引起训练震荡越小。</p>
-<p>盲目增大 Batch_Size 有何<u>坏处</p>
-</li>
-<li><p>内存利用率提高了，但是内存容量可能撑不住了。</p>
-</li>
-<li>跑完一次 epoch（全数据集）所需的迭代次数减少，要想达到相同的精度，其所花费的时间大大增加了，从而对参数的修正也就显得更加缓慢。</li>
-<li>Batch_Size 增大到一定程度，其确定的下降方向已经基本不再变化。</li>
-</ul>
-<h2 id="调节-Batch-Size-对训练效果影响到底如何？"><a href="#调节-Batch-Size-对训练效果影响到底如何？" class="headerlink" title="调节 Batch_Size 对训练效果影响到底如何？"></a>调节 Batch_Size 对训练效果影响到底如何？</h2><p>  这里跑一个 LeNet 在 MNIST 数据集上的效果。MNIST 是一个手写体标准库</p>
-<p>   <img src="/images/blog/batch_size2.png" alt="batch_size"></p>
-<p>  运行结果如上图所示，其中绝对时间做了标准化处理。运行结果与上文分析相印证：</p>
-<ul>
-<li>Batch_Size 太小，算法在 200 epoches 内不收敛。</li>
-<li>随着 Batch_Size 增大，处理相同数据量的速度越快。</li>
-<li>随着 Batch_Size 增大，达到相同精度所需要的 epoch 数量越来越多。</li>
-<li>由于上述两种因素的矛盾， Batch_Size 增大到<u>某个</u>时候，达到<b>时间上</b>的最优。</li>
-<li>由于最终收敛精度会陷入不同的局部极值，因此 Batch_Size 增大到<u>某些</u>时候，达到最终收敛<strong>精度上</strong>的最优。</li>
-</ul>
-<h2 id="caffe中batch-size影响"><a href="#caffe中batch-size影响" class="headerlink" title="caffe中batch size影响"></a>caffe中batch size影响</h2><p> caffe的代码实现上选取一个batch的时候似乎是按着数据库的图片顺序选取输入图片的，所以在生成数据库的时候切记要shuffle一下图片顺序。caffe中完成这一步的代码为</p>
- <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$caffe_root&#x2F;build&#x2F;tools&#x2F;convert_imageset -shuffle -resize_height&#x3D;256 -resize_width&#x3D;256</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>深度学习</category>
-      </categories>
-  </entry>
-  <entry>
     <title>pyspark机器学习库使用</title>
     <url>/2016/09/20/pyspark-mllibuse/</url>
     <content><![CDATA[<h2 id="示例：垃圾邮件分类器"><a href="#示例：垃圾邮件分类器" class="headerlink" title="示例：垃圾邮件分类器"></a>示例：垃圾邮件分类器</h2><p> 以下代码使用两个 MLlib算法，HashingTF（从文本中构建词频特征向量的）和 LogisticRegressionWithSGD（使用随机梯度下降法来执行逻辑回归的算法）。</p>
@@ -11144,6 +11168,51 @@ W(t+1)=W(t)-\eta\frac{\partial E^t}{\partial W}</script></li>
 ]]></content>
       <categories>
         <category>大数据</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>深度学习：batch_size的设置与影响</title>
+    <url>/2016/09/20/batch_sizesetup/</url>
+    <content><![CDATA[<p>注意：本文根据知乎<strong>程引</strong>的<a href="https://www.zhihu.com/question/32673260" target="_blank" rel="noopener">回答</a>整理</p>
+<h2 id="为何需要batch-size参数"><a href="#为何需要batch-size参数" class="headerlink" title="为何需要batch_size参数"></a>为何需要batch_size参数</h2><p> Batch的选择，<strong>首先决定的是下降的方向</strong>。如果数据集比较小，完全可以采用 <strong>全数据集(Full Batch Learning)</strong> 的形式。这样做有如下好处：</p>
+<ul>
+<li>全数据集确定的方向能够更好的代表样本总体，从而更准确的朝着极值所在方向。</li>
+<li><p>由于不同权值的梯度值差别较大，因此选取一个全局的学习率很困难。</p>
+<p>Full Batch Learning可以使用Rprop只基于梯度符号并且针对性单独更新各权值。<br>但是对于非常大的数据集，上述两个好处变成了两个坏处：</p>
+</li>
+<li><p>随着数据集的海量增加和内存限制，一次载入所有数据不现实。</p>
+</li>
+<li>以Rprop的方式迭代，会由于各个batch之间的采样差异性，各此梯度修正值相互抵消，无法修正。这才有了后来的<strong>RMSprop</strong>的妥协方案。</li>
+</ul>
+<h2 id="Full-Batch-Learning的另一个极端-Online-Learning"><a href="#Full-Batch-Learning的另一个极端-Online-Learning" class="headerlink" title="Full Batch Learning的另一个极端 Online Learning"></a>Full Batch Learning的另一个极端 Online Learning</h2><p> 既然 Full Batch Learning 并不适用大数据集，那么走向另一个极端怎么样？所谓另一个极端，就是每次只训练一个样本，即 Batch_Size = 1。这就是<strong>在线学习(Online Learning)</strong> 。线性神经元在均方误差代价函数的错误面是一个抛物面，横截面是椭圆。对于多层神经元、非线性网络，在局部依然近似是抛物面。使用在线学习，每次修正方向以各自样本的梯度方向修正，横冲直撞各自为政，<strong>难以达到收敛</strong></p>
+<p> <img src="/images/blog/batch_size1.png" alt="batch_size"></p>
+<h2 id="选取适中的batch-size"><a href="#选取适中的batch-size" class="headerlink" title="选取适中的batch_size"></a>选取适中的batch_size</h2><p>  可不可以选择一个适中的 Batch_Size 值呢？当然可以，这就是<strong>批梯度下降法（Mini-batches Learning）</strong>。因为如果数据集足够充分，那么用一半（<em>甚至少得多</em>）的数据训练算出来的梯度与用全部数据训练出来的梯度是<strong>几乎一样</strong>的。<br>  在合理范围内，增大 Batch_Size 有何好处？</p>
+<ul>
+<li>内存利用率提高了，大矩阵乘法的并行化效率提高。</li>
+<li>跑完一次 epoch（全数据集）所需的迭代次数减少，对于相同数据量的处理速度进一步加快。</li>
+<li><p>在一定范围内，一般来说 Batch_Size 越大，其确定的下降方向越准，引起训练震荡越小。</p>
+<p>盲目增大 Batch_Size 有何<u>坏处</p>
+</li>
+<li><p>内存利用率提高了，但是内存容量可能撑不住了。</p>
+</li>
+<li>跑完一次 epoch（全数据集）所需的迭代次数减少，要想达到相同的精度，其所花费的时间大大增加了，从而对参数的修正也就显得更加缓慢。</li>
+<li>Batch_Size 增大到一定程度，其确定的下降方向已经基本不再变化。</li>
+</ul>
+<h2 id="调节-Batch-Size-对训练效果影响到底如何？"><a href="#调节-Batch-Size-对训练效果影响到底如何？" class="headerlink" title="调节 Batch_Size 对训练效果影响到底如何？"></a>调节 Batch_Size 对训练效果影响到底如何？</h2><p>  这里跑一个 LeNet 在 MNIST 数据集上的效果。MNIST 是一个手写体标准库</p>
+<p>   <img src="/images/blog/batch_size2.png" alt="batch_size"></p>
+<p>  运行结果如上图所示，其中绝对时间做了标准化处理。运行结果与上文分析相印证：</p>
+<ul>
+<li>Batch_Size 太小，算法在 200 epoches 内不收敛。</li>
+<li>随着 Batch_Size 增大，处理相同数据量的速度越快。</li>
+<li>随着 Batch_Size 增大，达到相同精度所需要的 epoch 数量越来越多。</li>
+<li>由于上述两种因素的矛盾， Batch_Size 增大到<u>某个</u>时候，达到<b>时间上</b>的最优。</li>
+<li>由于最终收敛精度会陷入不同的局部极值，因此 Batch_Size 增大到<u>某些</u>时候，达到最终收敛<strong>精度上</strong>的最优。</li>
+</ul>
+<h2 id="caffe中batch-size影响"><a href="#caffe中batch-size影响" class="headerlink" title="caffe中batch size影响"></a>caffe中batch size影响</h2><p> caffe的代码实现上选取一个batch的时候似乎是按着数据库的图片顺序选取输入图片的，所以在生成数据库的时候切记要shuffle一下图片顺序。caffe中完成这一步的代码为</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$caffe_root&#x2F;build&#x2F;tools&#x2F;convert_imageset -shuffle -resize_height&#x3D;256 -resize_width&#x3D;256</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>深度学习</category>
       </categories>
   </entry>
   <entry>
