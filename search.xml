@@ -1032,7 +1032,7 @@ min _{w'}|C(D|W')-C(D|W)|\quad s.t\quad ||W'||_0\le B</script><p>注意：使用
 <h3 id="5-安装使用PyOD"><a href="#5-安装使用PyOD" class="headerlink" title="5 安装使用PyOD"></a>5 安装使用PyOD</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pip install pyod</span><br><span class="line">pip install --upgrade pyod # to make sure that the latest version is installed!</span><br></pre></td></tr></table></figure>
 <p>注意，PyOD包含了一些神经网络模型，基于keras。但是它不会自动安装Keras或者Tensorflow。需要手动安装这两个库，才能使用其神经网络模型。安装过程的依赖有点多。</p>
 <h3 id="6-使用PyOD来做离群点检测"><a href="#6-使用PyOD来做离群点检测" class="headerlink" title="6 使用PyOD来做离群点检测"></a>6 使用PyOD来做离群点检测</h3><p>注意，我们使用的是<strong>离群得分</strong>，即每个模型都会给每个数据点打分而非直接根据一个阈值判定某个点是否为离群点。</p>
-<p><strong>Angle_Based Outlier Detection (ABOD)</strong></p>
+<p><strong><a href="https://www.dbs.ifi.lmu.de/Publikationen/Papers/KDD2008.pdf" target="_blank" rel="noopener">Angle_Based Outlier Detection (ABOD)</a></strong></p>
 <ul>
 <li>它考虑了每个数据点和其邻居的关系，但是不考虑邻居之间的关系。<ul>
 <li>ABOD在多维度数据上表现较好</li>
@@ -1052,7 +1052,7 @@ min _{w'}|C(D|W')-C(D|W)|\quad s.t\quad ||W'||_0\le B</script><p>注意：使用
 </ul>
 </li>
 </ul>
-<p><strong>Isolation Forest</strong></p>
+<p><strong><a href="https://zhuanlan.zhihu.com/p/27777266" target="_blank" rel="noopener">Isolation Forest</a></strong></p>
 <ul>
 <li>内部使用sklearn，此方法中，使用一个集合的树来完成数据分区。孤立森林提供农一个离群得分来判定一个数据点在结构中有多孤立。其离群得分用来将它与正常观测数据区分开来。</li>
 <li>孤立森林在多维数据上表现很好</li>
