@@ -55,7 +55,7 @@ pip install --upgrade pyod # to make sure that the latest version is installed!
 
 注意，我们使用的是**离群得分**，即每个模型都会给每个数据点打分而非直接根据一个阈值判定某个点是否为离群点。
 
-**Angle_Based Outlier Detection (ABOD)**
+**[Angle_Based Outlier Detection (ABOD)](https://www.dbs.ifi.lmu.de/Publikationen/Papers/KDD2008.pdf)**
 
   - 它考虑了每个数据点和其邻居的关系，但是不考虑邻居之间的关系。
 + ABOD在多维度数据上表现较好
@@ -71,7 +71,7 @@ pip install --upgrade pyod # to make sure that the latest version is installed!
   -  `Mean`: 使用全部k个邻居的平均距离作为离群得分
   -  `Median`:使用k个邻居的距离的中位数作为离群得分
 
-**Isolation Forest**
+**[Isolation Forest](https://zhuanlan.zhihu.com/p/27777266)**
 
 + 内部使用sklearn，此方法中，使用一个集合的树来完成数据分区。孤立森林提供农一个离群得分来判定一个数据点在结构中有多孤立。其离群得分用来将它与正常观测数据区分开来。
 + 孤立森林在多维数据上表现很好
