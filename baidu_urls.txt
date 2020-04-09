@@ -47,8 +47,8 @@ https://shartoo.github.io/2017/06/12/sim_predict/
 https://shartoo.github.io/2017/04/20/texttospeech/
 https://shartoo.github.io/2017/04/18/classic_cnn/
 https://shartoo.github.io/2017/04/16/merlin-tts/
-https://shartoo.github.io/2017/04/01/voice-basic/
 https://shartoo.github.io/2017/04/01/mevislab/
+https://shartoo.github.io/2017/04/01/voice-basic/
 https://shartoo.github.io/2017/03/11/autoseg-bylungvolumne/
 https://shartoo.github.io/2017/03/09/lungseg-bignodule-detect/
 https://shartoo.github.io/2017/03/08/lungseg-localfeature/
@@ -73,8 +73,8 @@ https://shartoo.github.io/2016/10/01/regular-attachment/
 https://shartoo.github.io/2016/09/26/pyspark-moiverecommand/
 https://shartoo.github.io/2016/09/25/sparkmllib/
 https://shartoo.github.io/2016/09/21/bp_tricks/
-https://shartoo.github.io/2016/09/20/pyspark-mllibuse/
 https://shartoo.github.io/2016/09/20/batch_sizesetup/
+https://shartoo.github.io/2016/09/20/pyspark-mllibuse/
 https://shartoo.github.io/2016/09/09/tensorflow-retainmodel/
 https://shartoo.github.io/2016/09/02/tensorflow-inputpipeline/
 https://shartoo.github.io/2016/08/24/network-imageclassify/
@@ -86,7 +86,6 @@ https://shartoo.github.io/2016/03/16/bigdata-hadooplzo/
 https://shartoo.github.io/2016/03/12/spark-envirnoment/
 https://shartoo.github.io/2016/03/10/kafkaquestion/
 https://shartoo.github.io/2016/03/09/bigdata-cluster-opt/
-https://shartoo.github.io/2016/03/05/me/
 https://shartoo.github.io/2015/09/25/mapreduce-introduce/
 https://shartoo.github.io/2014/05/17/bigdata-streamdata-introduce/
 https://shartoo.github.io/2014/05/15/javafoundamention-newObjectAndRubCollection/

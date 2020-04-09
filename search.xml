@@ -7002,75 +7002,6 @@ min_F \sum_{i=1}^n \mid \mid F_c(\phi (x_i,\hat S_i))-y_i \mid \mid ^2+\lambda \
       </categories>
   </entry>
   <entry>
-    <title>语音处理0：基础</title>
-    <url>/2017/04/01/voice-basic/</url>
-    <content><![CDATA[<h2 id="一-语音的基础概念"><a href="#一-语音的基础概念" class="headerlink" title="一 语音的基础概念"></a>一 语音的基础概念</h2><h3 id="1-1-什么是语音"><a href="#1-1-什么是语音" class="headerlink" title="1.1 什么是语音"></a>1.1 什么是语音</h3><p>语音是一个连续的音频流，它是由大部分的稳定态和部分动态改变的状态混合构成</p>
-<h3 id="1-2-声音如何产生"><a href="#1-2-声音如何产生" class="headerlink" title="1.2 声音如何产生"></a>1.2 声音如何产生</h3><p><img src="/images/blog/voice_produce.png" alt="声音产生"></p>
-<p>声音由肺部气流并经过声带，此为声源。当我们发<strong>元音</strong>时，声带被气流震动并生成<strong>脉冲序列</strong>。此脉冲决定了语音的<strong>基准频率</strong>。</p>
-<p>当我们发出<strong>辅音</strong>时，声带没有被震动，并产生<strong>噪音</strong>。然后脉冲或噪声被声带转换或者个性化。</p>
-<h3 id="1-3-语音的组成"><a href="#1-3-语音的组成" class="headerlink" title="1.3 语音的组成"></a>1.3 语音的组成</h3><p>最小单元是<strong>音素</strong>，音素组合为<strong>音节</strong>。</p>
-<h4 id="1-3-1-音素"><a href="#1-3-1-音素" class="headerlink" title="1.3.1 音素"></a>1.3.1 音素</h4><p>音素是最小的语音单位，它是从音色的角度划分出来的。例如，汉语里的 ɑ、i、u都是音素。一种语言的语音系统大都是由几十个不同的音素组成的</p>
-<p>音素分为元音和辅音</p>
-<ul>
-<li><p><strong>元音</strong>： 如ɑ、o、e、i、u。</p>
-</li>
-<li><p><strong>辅音</strong>：如b、p、d、t、ɡ、k、s、r。</p>
-</li>
-</ul>
-<p><strong>元音和辅音的区别</strong></p>
-<ol>
-<li>元音发音时，气流不受阻碍；辅音发音时，气流通过口腔、鼻腔时要受到阻碍</li>
-</ol>
-<p>2．元音发音时，发音器官各部位保持均衡的紧张状态；辅音发音时，构成阻碍的部位比较紧张，其他部位比较松弛</p>
-<p>3．元音发音时，气流较弱；辅音发音时，气流较强。</p>
-<p>4．元音发音时，声带要颤动，发出的声音比较响亮；辅音发音时，有的声带颤动，声音响亮，如m、n、l、r，有的不颤动，声音不响亮，如b、t、z、c。</p>
-<h4 id="1-3-2-音节（只适用于汉语）"><a href="#1-3-2-音节（只适用于汉语）" class="headerlink" title="1.3.2 音节（只适用于汉语）"></a>1.3.2 音节（只适用于汉语）</h4><p>音节是由音素构成的。如啊”（ā）（1个音素），“地”（dì）（2个音素），“民”（mín）（3个音素）。</p>
-<p>音节示例：如“建设”是两个音节，“图书馆”是三个音节，“社会主义”是四个音节。汉语音节和汉字基本上是一对一，一个汉字也就是一个音节。</p>
-<p>音节包含了<strong>声母</strong>、<strong>韵母</strong>、<strong>音调</strong>三个部分。</p>
-<ul>
-<li><p><strong>声母</strong>： 声母指音节开头的辅音，共有23个。如dā（搭）的声母是d</p>
-</li>
-<li><p><strong>韵母</strong>： 韵母指音节里声母后面的部分，共38。jiǎ（甲）的韵母是iǎ</p>
-</li>
-<li><p><strong>音节</strong>： 声调指整个音节的高低升降的变化。普通话里dū（督）、dú（毒）、dǔ（赌）、dù（度）</p>
-</li>
-</ul>
-<p>根据《现代汉语词典》，汉语标准音节共 418 个</p>
-<h2 id="2-音频的表示"><a href="#2-音频的表示" class="headerlink" title="2 音频的表示"></a>2 音频的表示</h2><h3 id="2-1-波形表示"><a href="#2-1-波形表示" class="headerlink" title="2.1 波形表示"></a>2.1 波形表示</h3><p>波形表示是大家很熟悉的波形表示，就是直接表示出在观测点上所测量到的振幅和时间的关系。当然为了能够将连续的波形记录为数字形式，我们需要对这个波形进行采样（每隔一个固定的时间采取一次测量）和数字化（将连续的数字转化为可用二进制表达的格式）。</p>
-<p><img src="/images/blog/voice_wave_represtation.jpg" alt="音频的波形表示"></p>
-<p>在上面的图中，展示了一秒钟的人声音频片段，以及截取其中一毫秒的数据的放大图</p>
-<p><img src="/images/blog/voice_wave_represtation1ms.jpg" alt="音频的波形表示"></p>
-<p>我们最熟悉的CD音频，每秒钟采样44100次（这是因为，根据Nyquist采样定理，如果要完美重现20kHz的音频，那么我们最少需要每秒采样40k次，而20kHz是人类的听觉上限），而每个样本都用16位的二进制来表示。</p>
-<p>这样每一个样本可以表示最多65,536种不同的振幅。如果假定每一个时间点采用8位的二进制数字来表示，那么总共可能会有256种可能的值，我们就用一个256位的one－hot向量来表示它，最后在计算机中保存的声音片段，就可能是这样的。</p>
-<p><img src="/images/blog/voice_wave_represtation_onehot.jpg" alt="音频的波形表示">  </p>
-<h3 id="2-2-频域表示"><a href="#2-2-频域表示" class="headerlink" title="2.2 频域表示"></a>2.2 频域表示</h3><p>如果对输入的波形做一次傅立叶变换，会发现，一个复杂的sine波形，实际上在转换后的“频谱”上，可以被很简单的表示出来。</p>
-<p>转换后的音频，是一种频率的表示——我们只关心这个波形到底是以什么样的频率在震动，而恰好，我们人类对于声音的认知，也是基于频率而不是振幅的——实际上这样的表示，更加符合人类对于声音的认知，也更容易对其进行数字处理（DSP）。</p>
-<p><img src="/images/blog/voice_wave_represtation_fluir.jpg" alt="音频的傅里叶变换"> </p>
-<h2 id="3-语音的初步处理"><a href="#3-语音的初步处理" class="headerlink" title="3 语音的初步处理"></a>3 语音的初步处理</h2><p>我们知道声音实际上是一种波。常见的mp3等格式都是压缩格式，必须转成非压缩的纯波形文件来处理，比如Windows PCM文件，也就是俗称的wav文件。wav文件里存储的除了一个文件头以外，就是声音波形的一个个点了。下图是一个波形的示例。</p>
-<p><img src="/images/blog/voice_wave_example.jpg" alt="音频的傅里叶变换">  </p>
-<p>在开始语音识别之前，有时需要把首尾端的静音切除，降低对后续步骤造成的干扰。这个静音切除的操作一般称为VAD，需要用到信号处理的一些技术。要对声音进行分析，需要对声音分帧，也就是把声音切开成一小段一小段，每小段称为一帧。分帧操作一般不是简单的切开，而是使用移动窗函数来实现。帧与帧之间一般是有交叠的，就像下图这样：</p>
-<p><img src="/images/blog/voice_wave_segmentation.jpg" alt="音频的傅里叶变换">  </p>
-<p>图中，每帧的长度为25毫秒，每两帧之间有25-10=15毫秒的交叠。我们称为以帧长25ms、帧移10ms分帧。</p>
-<p>分帧后，语音就变成了很多小段。但波形在时域上几乎没有描述能力，因此必须将波形作变换。常见的一种变换方法是提取MFCC特征，根据人耳的生理特性，把每一帧波形变成一个多维向量，可以简单地理解为这个向量包含了这帧语音的内容信息。这个过程叫做声学特征提取。实际应用中，这一步有很多细节，声学特征也不止有MFCC这一种，具体这里不讲。</p>
-<p>至此，声音就成了一个12行（假设声学特征是12维）、N列的一个矩阵，称之为观察序列，这里N为总帧数。观察序列如下图所示，图中，每一帧都用一个12维的向量表示，色块的颜色深浅表示向量值的大小。</p>
-<p><img src="/images/blog/voice_mfcc.jpg" alt="音频的处理MFCC">  </p>
-<p>接下来就要介绍怎样把这个矩阵变成文本了。首先要介绍两个概念：</p>
-<ul>
-<li><p>音素：单词的发音由音素构成。对英语，一种常用的音素集是卡内基梅隆大学的一套由39个音素构成的音素集，参见The CMU Pronouncing Dictionary‎。汉语一般直接用全部声母和韵母作为音素集，另外汉语识别还分有调无调，不详述。</p>
-</li>
-<li><p>状态：这里理解成比音素更细致的语音单位就行啦。通常把一个音素划分成3个状态。</p>
-</li>
-</ul>
-<p><img src="/images/blog/voice_frames.jpg" alt="音频的处理MFCC">  </p>
-<p>图中，每个小竖条代表一帧，若干帧语音对应一个状态，每三个状态组合成一个音素，若干个音素组合成一个单词。也就是说，只要知道每帧语音对应哪个状态了，语音识别的结果也就出来了。</p>
-<p><strong>参考</strong></p>
-<p><a href="https://zhuanlan.zhihu.com/p/25784028" target="_blank" rel="noopener">Emotibot Tech | WaveNet语音合成与深度生成模型解析 - 知乎专栏</a></p>
-]]></content>
-      <categories>
-        <category>语音</category>
-      </categories>
-  </entry>
-  <entry>
     <title>医疗软件Mevislab使用</title>
     <url>/2017/04/01/mevislab/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在阅读肺结节CT图像处理的相关论文时，注意到很多作者都使用的是一款软件Mevislab。Mevislab是一款用于图像处理，尤其是医疗CT图像领域的，快速原型开发平台，做学术研究和个人学习是免费自由使用的（可自由开发的模块有限），<br>商业环境下使用时收费的。我曾发邮件咨询过，大概每年2万2(2017年3月份)。下图是工作台样例:</p>
@@ -7383,6 +7314,75 @@ min_F \sum_{i=1}^n \mid \mid F_c(\phi (x_i,\hat S_i))-y_i \mid \mid ^2+\lambda \
 ]]></content>
       <categories>
         <category>医疗</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>语音处理0：基础</title>
+    <url>/2017/04/01/voice-basic/</url>
+    <content><![CDATA[<h2 id="一-语音的基础概念"><a href="#一-语音的基础概念" class="headerlink" title="一 语音的基础概念"></a>一 语音的基础概念</h2><h3 id="1-1-什么是语音"><a href="#1-1-什么是语音" class="headerlink" title="1.1 什么是语音"></a>1.1 什么是语音</h3><p>语音是一个连续的音频流，它是由大部分的稳定态和部分动态改变的状态混合构成</p>
+<h3 id="1-2-声音如何产生"><a href="#1-2-声音如何产生" class="headerlink" title="1.2 声音如何产生"></a>1.2 声音如何产生</h3><p><img src="/images/blog/voice_produce.png" alt="声音产生"></p>
+<p>声音由肺部气流并经过声带，此为声源。当我们发<strong>元音</strong>时，声带被气流震动并生成<strong>脉冲序列</strong>。此脉冲决定了语音的<strong>基准频率</strong>。</p>
+<p>当我们发出<strong>辅音</strong>时，声带没有被震动，并产生<strong>噪音</strong>。然后脉冲或噪声被声带转换或者个性化。</p>
+<h3 id="1-3-语音的组成"><a href="#1-3-语音的组成" class="headerlink" title="1.3 语音的组成"></a>1.3 语音的组成</h3><p>最小单元是<strong>音素</strong>，音素组合为<strong>音节</strong>。</p>
+<h4 id="1-3-1-音素"><a href="#1-3-1-音素" class="headerlink" title="1.3.1 音素"></a>1.3.1 音素</h4><p>音素是最小的语音单位，它是从音色的角度划分出来的。例如，汉语里的 ɑ、i、u都是音素。一种语言的语音系统大都是由几十个不同的音素组成的</p>
+<p>音素分为元音和辅音</p>
+<ul>
+<li><p><strong>元音</strong>： 如ɑ、o、e、i、u。</p>
+</li>
+<li><p><strong>辅音</strong>：如b、p、d、t、ɡ、k、s、r。</p>
+</li>
+</ul>
+<p><strong>元音和辅音的区别</strong></p>
+<ol>
+<li>元音发音时，气流不受阻碍；辅音发音时，气流通过口腔、鼻腔时要受到阻碍</li>
+</ol>
+<p>2．元音发音时，发音器官各部位保持均衡的紧张状态；辅音发音时，构成阻碍的部位比较紧张，其他部位比较松弛</p>
+<p>3．元音发音时，气流较弱；辅音发音时，气流较强。</p>
+<p>4．元音发音时，声带要颤动，发出的声音比较响亮；辅音发音时，有的声带颤动，声音响亮，如m、n、l、r，有的不颤动，声音不响亮，如b、t、z、c。</p>
+<h4 id="1-3-2-音节（只适用于汉语）"><a href="#1-3-2-音节（只适用于汉语）" class="headerlink" title="1.3.2 音节（只适用于汉语）"></a>1.3.2 音节（只适用于汉语）</h4><p>音节是由音素构成的。如啊”（ā）（1个音素），“地”（dì）（2个音素），“民”（mín）（3个音素）。</p>
+<p>音节示例：如“建设”是两个音节，“图书馆”是三个音节，“社会主义”是四个音节。汉语音节和汉字基本上是一对一，一个汉字也就是一个音节。</p>
+<p>音节包含了<strong>声母</strong>、<strong>韵母</strong>、<strong>音调</strong>三个部分。</p>
+<ul>
+<li><p><strong>声母</strong>： 声母指音节开头的辅音，共有23个。如dā（搭）的声母是d</p>
+</li>
+<li><p><strong>韵母</strong>： 韵母指音节里声母后面的部分，共38。jiǎ（甲）的韵母是iǎ</p>
+</li>
+<li><p><strong>音节</strong>： 声调指整个音节的高低升降的变化。普通话里dū（督）、dú（毒）、dǔ（赌）、dù（度）</p>
+</li>
+</ul>
+<p>根据《现代汉语词典》，汉语标准音节共 418 个</p>
+<h2 id="2-音频的表示"><a href="#2-音频的表示" class="headerlink" title="2 音频的表示"></a>2 音频的表示</h2><h3 id="2-1-波形表示"><a href="#2-1-波形表示" class="headerlink" title="2.1 波形表示"></a>2.1 波形表示</h3><p>波形表示是大家很熟悉的波形表示，就是直接表示出在观测点上所测量到的振幅和时间的关系。当然为了能够将连续的波形记录为数字形式，我们需要对这个波形进行采样（每隔一个固定的时间采取一次测量）和数字化（将连续的数字转化为可用二进制表达的格式）。</p>
+<p><img src="/images/blog/voice_wave_represtation.jpg" alt="音频的波形表示"></p>
+<p>在上面的图中，展示了一秒钟的人声音频片段，以及截取其中一毫秒的数据的放大图</p>
+<p><img src="/images/blog/voice_wave_represtation1ms.jpg" alt="音频的波形表示"></p>
+<p>我们最熟悉的CD音频，每秒钟采样44100次（这是因为，根据Nyquist采样定理，如果要完美重现20kHz的音频，那么我们最少需要每秒采样40k次，而20kHz是人类的听觉上限），而每个样本都用16位的二进制来表示。</p>
+<p>这样每一个样本可以表示最多65,536种不同的振幅。如果假定每一个时间点采用8位的二进制数字来表示，那么总共可能会有256种可能的值，我们就用一个256位的one－hot向量来表示它，最后在计算机中保存的声音片段，就可能是这样的。</p>
+<p><img src="/images/blog/voice_wave_represtation_onehot.jpg" alt="音频的波形表示">  </p>
+<h3 id="2-2-频域表示"><a href="#2-2-频域表示" class="headerlink" title="2.2 频域表示"></a>2.2 频域表示</h3><p>如果对输入的波形做一次傅立叶变换，会发现，一个复杂的sine波形，实际上在转换后的“频谱”上，可以被很简单的表示出来。</p>
+<p>转换后的音频，是一种频率的表示——我们只关心这个波形到底是以什么样的频率在震动，而恰好，我们人类对于声音的认知，也是基于频率而不是振幅的——实际上这样的表示，更加符合人类对于声音的认知，也更容易对其进行数字处理（DSP）。</p>
+<p><img src="/images/blog/voice_wave_represtation_fluir.jpg" alt="音频的傅里叶变换"> </p>
+<h2 id="3-语音的初步处理"><a href="#3-语音的初步处理" class="headerlink" title="3 语音的初步处理"></a>3 语音的初步处理</h2><p>我们知道声音实际上是一种波。常见的mp3等格式都是压缩格式，必须转成非压缩的纯波形文件来处理，比如Windows PCM文件，也就是俗称的wav文件。wav文件里存储的除了一个文件头以外，就是声音波形的一个个点了。下图是一个波形的示例。</p>
+<p><img src="/images/blog/voice_wave_example.jpg" alt="音频的傅里叶变换">  </p>
+<p>在开始语音识别之前，有时需要把首尾端的静音切除，降低对后续步骤造成的干扰。这个静音切除的操作一般称为VAD，需要用到信号处理的一些技术。要对声音进行分析，需要对声音分帧，也就是把声音切开成一小段一小段，每小段称为一帧。分帧操作一般不是简单的切开，而是使用移动窗函数来实现。帧与帧之间一般是有交叠的，就像下图这样：</p>
+<p><img src="/images/blog/voice_wave_segmentation.jpg" alt="音频的傅里叶变换">  </p>
+<p>图中，每帧的长度为25毫秒，每两帧之间有25-10=15毫秒的交叠。我们称为以帧长25ms、帧移10ms分帧。</p>
+<p>分帧后，语音就变成了很多小段。但波形在时域上几乎没有描述能力，因此必须将波形作变换。常见的一种变换方法是提取MFCC特征，根据人耳的生理特性，把每一帧波形变成一个多维向量，可以简单地理解为这个向量包含了这帧语音的内容信息。这个过程叫做声学特征提取。实际应用中，这一步有很多细节，声学特征也不止有MFCC这一种，具体这里不讲。</p>
+<p>至此，声音就成了一个12行（假设声学特征是12维）、N列的一个矩阵，称之为观察序列，这里N为总帧数。观察序列如下图所示，图中，每一帧都用一个12维的向量表示，色块的颜色深浅表示向量值的大小。</p>
+<p><img src="/images/blog/voice_mfcc.jpg" alt="音频的处理MFCC">  </p>
+<p>接下来就要介绍怎样把这个矩阵变成文本了。首先要介绍两个概念：</p>
+<ul>
+<li><p>音素：单词的发音由音素构成。对英语，一种常用的音素集是卡内基梅隆大学的一套由39个音素构成的音素集，参见The CMU Pronouncing Dictionary‎。汉语一般直接用全部声母和韵母作为音素集，另外汉语识别还分有调无调，不详述。</p>
+</li>
+<li><p>状态：这里理解成比音素更细致的语音单位就行啦。通常把一个音素划分成3个状态。</p>
+</li>
+</ul>
+<p><img src="/images/blog/voice_frames.jpg" alt="音频的处理MFCC">  </p>
+<p>图中，每个小竖条代表一帧，若干帧语音对应一个状态，每三个状态组合成一个音素，若干个音素组合成一个单词。也就是说，只要知道每帧语音对应哪个状态了，语音识别的结果也就出来了。</p>
+<p><strong>参考</strong></p>
+<p><a href="https://zhuanlan.zhihu.com/p/25784028" target="_blank" rel="noopener">Emotibot Tech | WaveNet语音合成与深度生成模型解析 - 知乎专栏</a></p>
+]]></content>
+      <categories>
+        <category>语音</category>
       </categories>
   </entry>
   <entry>
@@ -11085,6 +11085,51 @@ W(t+1)=W(t)-\eta\frac{\partial E^t}{\partial W}</script></li>
       </categories>
   </entry>
   <entry>
+    <title>深度学习：batch_size的设置与影响</title>
+    <url>/2016/09/20/batch_sizesetup/</url>
+    <content><![CDATA[<p>注意：本文根据知乎<strong>程引</strong>的<a href="https://www.zhihu.com/question/32673260" target="_blank" rel="noopener">回答</a>整理</p>
+<h2 id="为何需要batch-size参数"><a href="#为何需要batch-size参数" class="headerlink" title="为何需要batch_size参数"></a>为何需要batch_size参数</h2><p> Batch的选择，<strong>首先决定的是下降的方向</strong>。如果数据集比较小，完全可以采用 <strong>全数据集(Full Batch Learning)</strong> 的形式。这样做有如下好处：</p>
+<ul>
+<li>全数据集确定的方向能够更好的代表样本总体，从而更准确的朝着极值所在方向。</li>
+<li><p>由于不同权值的梯度值差别较大，因此选取一个全局的学习率很困难。</p>
+<p>Full Batch Learning可以使用Rprop只基于梯度符号并且针对性单独更新各权值。<br>但是对于非常大的数据集，上述两个好处变成了两个坏处：</p>
+</li>
+<li><p>随着数据集的海量增加和内存限制，一次载入所有数据不现实。</p>
+</li>
+<li>以Rprop的方式迭代，会由于各个batch之间的采样差异性，各此梯度修正值相互抵消，无法修正。这才有了后来的<strong>RMSprop</strong>的妥协方案。</li>
+</ul>
+<h2 id="Full-Batch-Learning的另一个极端-Online-Learning"><a href="#Full-Batch-Learning的另一个极端-Online-Learning" class="headerlink" title="Full Batch Learning的另一个极端 Online Learning"></a>Full Batch Learning的另一个极端 Online Learning</h2><p> 既然 Full Batch Learning 并不适用大数据集，那么走向另一个极端怎么样？所谓另一个极端，就是每次只训练一个样本，即 Batch_Size = 1。这就是<strong>在线学习(Online Learning)</strong> 。线性神经元在均方误差代价函数的错误面是一个抛物面，横截面是椭圆。对于多层神经元、非线性网络，在局部依然近似是抛物面。使用在线学习，每次修正方向以各自样本的梯度方向修正，横冲直撞各自为政，<strong>难以达到收敛</strong></p>
+<p> <img src="/images/blog/batch_size1.png" alt="batch_size"></p>
+<h2 id="选取适中的batch-size"><a href="#选取适中的batch-size" class="headerlink" title="选取适中的batch_size"></a>选取适中的batch_size</h2><p>  可不可以选择一个适中的 Batch_Size 值呢？当然可以，这就是<strong>批梯度下降法（Mini-batches Learning）</strong>。因为如果数据集足够充分，那么用一半（<em>甚至少得多</em>）的数据训练算出来的梯度与用全部数据训练出来的梯度是<strong>几乎一样</strong>的。<br>  在合理范围内，增大 Batch_Size 有何好处？</p>
+<ul>
+<li>内存利用率提高了，大矩阵乘法的并行化效率提高。</li>
+<li>跑完一次 epoch（全数据集）所需的迭代次数减少，对于相同数据量的处理速度进一步加快。</li>
+<li><p>在一定范围内，一般来说 Batch_Size 越大，其确定的下降方向越准，引起训练震荡越小。</p>
+<p>盲目增大 Batch_Size 有何<u>坏处</p>
+</li>
+<li><p>内存利用率提高了，但是内存容量可能撑不住了。</p>
+</li>
+<li>跑完一次 epoch（全数据集）所需的迭代次数减少，要想达到相同的精度，其所花费的时间大大增加了，从而对参数的修正也就显得更加缓慢。</li>
+<li>Batch_Size 增大到一定程度，其确定的下降方向已经基本不再变化。</li>
+</ul>
+<h2 id="调节-Batch-Size-对训练效果影响到底如何？"><a href="#调节-Batch-Size-对训练效果影响到底如何？" class="headerlink" title="调节 Batch_Size 对训练效果影响到底如何？"></a>调节 Batch_Size 对训练效果影响到底如何？</h2><p>  这里跑一个 LeNet 在 MNIST 数据集上的效果。MNIST 是一个手写体标准库</p>
+<p>   <img src="/images/blog/batch_size2.png" alt="batch_size"></p>
+<p>  运行结果如上图所示，其中绝对时间做了标准化处理。运行结果与上文分析相印证：</p>
+<ul>
+<li>Batch_Size 太小，算法在 200 epoches 内不收敛。</li>
+<li>随着 Batch_Size 增大，处理相同数据量的速度越快。</li>
+<li>随着 Batch_Size 增大，达到相同精度所需要的 epoch 数量越来越多。</li>
+<li>由于上述两种因素的矛盾， Batch_Size 增大到<u>某个</u>时候，达到<b>时间上</b>的最优。</li>
+<li>由于最终收敛精度会陷入不同的局部极值，因此 Batch_Size 增大到<u>某些</u>时候，达到最终收敛<strong>精度上</strong>的最优。</li>
+</ul>
+<h2 id="caffe中batch-size影响"><a href="#caffe中batch-size影响" class="headerlink" title="caffe中batch size影响"></a>caffe中batch size影响</h2><p> caffe的代码实现上选取一个batch的时候似乎是按着数据库的图片顺序选取输入图片的，所以在生成数据库的时候切记要shuffle一下图片顺序。caffe中完成这一步的代码为</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$caffe_root&#x2F;build&#x2F;tools&#x2F;convert_imageset -shuffle -resize_height&#x3D;256 -resize_width&#x3D;256</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>深度学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>pyspark机器学习库使用</title>
     <url>/2016/09/20/pyspark-mllibuse/</url>
     <content><![CDATA[<h2 id="示例：垃圾邮件分类器"><a href="#示例：垃圾邮件分类器" class="headerlink" title="示例：垃圾邮件分类器"></a>示例：垃圾邮件分类器</h2><p> 以下代码使用两个 MLlib算法，HashingTF（从文本中构建词频特征向量的）和 LogisticRegressionWithSGD（使用随机梯度下降法来执行逻辑回归的算法）。</p>
@@ -11168,51 +11213,6 @@ W(t+1)=W(t)-\eta\frac{\partial E^t}{\partial W}</script></li>
 ]]></content>
       <categories>
         <category>大数据</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>深度学习：batch_size的设置与影响</title>
-    <url>/2016/09/20/batch_sizesetup/</url>
-    <content><![CDATA[<p>注意：本文根据知乎<strong>程引</strong>的<a href="https://www.zhihu.com/question/32673260" target="_blank" rel="noopener">回答</a>整理</p>
-<h2 id="为何需要batch-size参数"><a href="#为何需要batch-size参数" class="headerlink" title="为何需要batch_size参数"></a>为何需要batch_size参数</h2><p> Batch的选择，<strong>首先决定的是下降的方向</strong>。如果数据集比较小，完全可以采用 <strong>全数据集(Full Batch Learning)</strong> 的形式。这样做有如下好处：</p>
-<ul>
-<li>全数据集确定的方向能够更好的代表样本总体，从而更准确的朝着极值所在方向。</li>
-<li><p>由于不同权值的梯度值差别较大，因此选取一个全局的学习率很困难。</p>
-<p>Full Batch Learning可以使用Rprop只基于梯度符号并且针对性单独更新各权值。<br>但是对于非常大的数据集，上述两个好处变成了两个坏处：</p>
-</li>
-<li><p>随着数据集的海量增加和内存限制，一次载入所有数据不现实。</p>
-</li>
-<li>以Rprop的方式迭代，会由于各个batch之间的采样差异性，各此梯度修正值相互抵消，无法修正。这才有了后来的<strong>RMSprop</strong>的妥协方案。</li>
-</ul>
-<h2 id="Full-Batch-Learning的另一个极端-Online-Learning"><a href="#Full-Batch-Learning的另一个极端-Online-Learning" class="headerlink" title="Full Batch Learning的另一个极端 Online Learning"></a>Full Batch Learning的另一个极端 Online Learning</h2><p> 既然 Full Batch Learning 并不适用大数据集，那么走向另一个极端怎么样？所谓另一个极端，就是每次只训练一个样本，即 Batch_Size = 1。这就是<strong>在线学习(Online Learning)</strong> 。线性神经元在均方误差代价函数的错误面是一个抛物面，横截面是椭圆。对于多层神经元、非线性网络，在局部依然近似是抛物面。使用在线学习，每次修正方向以各自样本的梯度方向修正，横冲直撞各自为政，<strong>难以达到收敛</strong></p>
-<p> <img src="/images/blog/batch_size1.png" alt="batch_size"></p>
-<h2 id="选取适中的batch-size"><a href="#选取适中的batch-size" class="headerlink" title="选取适中的batch_size"></a>选取适中的batch_size</h2><p>  可不可以选择一个适中的 Batch_Size 值呢？当然可以，这就是<strong>批梯度下降法（Mini-batches Learning）</strong>。因为如果数据集足够充分，那么用一半（<em>甚至少得多</em>）的数据训练算出来的梯度与用全部数据训练出来的梯度是<strong>几乎一样</strong>的。<br>  在合理范围内，增大 Batch_Size 有何好处？</p>
-<ul>
-<li>内存利用率提高了，大矩阵乘法的并行化效率提高。</li>
-<li>跑完一次 epoch（全数据集）所需的迭代次数减少，对于相同数据量的处理速度进一步加快。</li>
-<li><p>在一定范围内，一般来说 Batch_Size 越大，其确定的下降方向越准，引起训练震荡越小。</p>
-<p>盲目增大 Batch_Size 有何<u>坏处</p>
-</li>
-<li><p>内存利用率提高了，但是内存容量可能撑不住了。</p>
-</li>
-<li>跑完一次 epoch（全数据集）所需的迭代次数减少，要想达到相同的精度，其所花费的时间大大增加了，从而对参数的修正也就显得更加缓慢。</li>
-<li>Batch_Size 增大到一定程度，其确定的下降方向已经基本不再变化。</li>
-</ul>
-<h2 id="调节-Batch-Size-对训练效果影响到底如何？"><a href="#调节-Batch-Size-对训练效果影响到底如何？" class="headerlink" title="调节 Batch_Size 对训练效果影响到底如何？"></a>调节 Batch_Size 对训练效果影响到底如何？</h2><p>  这里跑一个 LeNet 在 MNIST 数据集上的效果。MNIST 是一个手写体标准库</p>
-<p>   <img src="/images/blog/batch_size2.png" alt="batch_size"></p>
-<p>  运行结果如上图所示，其中绝对时间做了标准化处理。运行结果与上文分析相印证：</p>
-<ul>
-<li>Batch_Size 太小，算法在 200 epoches 内不收敛。</li>
-<li>随着 Batch_Size 增大，处理相同数据量的速度越快。</li>
-<li>随着 Batch_Size 增大，达到相同精度所需要的 epoch 数量越来越多。</li>
-<li>由于上述两种因素的矛盾， Batch_Size 增大到<u>某个</u>时候，达到<b>时间上</b>的最优。</li>
-<li>由于最终收敛精度会陷入不同的局部极值，因此 Batch_Size 增大到<u>某些</u>时候，达到最终收敛<strong>精度上</strong>的最优。</li>
-</ul>
-<h2 id="caffe中batch-size影响"><a href="#caffe中batch-size影响" class="headerlink" title="caffe中batch size影响"></a>caffe中batch size影响</h2><p> caffe的代码实现上选取一个batch的时候似乎是按着数据库的图片顺序选取输入图片的，所以在生成数据库的时候切记要shuffle一下图片顺序。caffe中完成这一步的代码为</p>
- <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$caffe_root&#x2F;build&#x2F;tools&#x2F;convert_imageset -shuffle -resize_height&#x3D;256 -resize_width&#x3D;256</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>深度学习</category>
       </categories>
   </entry>
   <entry>
@@ -12277,49 +12277,6 @@ hadoop jar /path/to/hadoop-lzo.jarcom.hadoop.compression.lzo.LzoIndexerhdfs://na
 ]]></content>
       <categories>
         <category>大数据</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>个人简历</title>
-    <url>/2016/03/05/me/</url>
-    <content><![CDATA[<h2 id="this-is-my-profile"><a href="#this-is-my-profile" class="headerlink" title="this is my profile"></a>this is my profile</h2><h2 id="Well-this-is-not-the-right-time-to-introduce-myself"><a href="#Well-this-is-not-the-right-time-to-introduce-myself" class="headerlink" title="Well,this is not the right time to introduce myself."></a>Well,this is not the right time to introduce myself.</h2><h3 id="基本情况"><a href="#基本情况" class="headerlink" title="基本情况"></a>基本情况</h3><div class="table-container">
-<table>
-<thead>
-<tr>
-<th></th>
-<th></th>
-<th></th>
-<th></th>
-<th></th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>姓名</strong></td>
-<td>&nbsp;&nbsp; 夏涛 &nbsp;&nbsp;</td>
-<td><strong>性别</strong></td>
-<td>男 &nbsp;&nbsp;</td>
-<td><strong>出生年月</strong></td>
-<td>1989-05&nbsp;&nbsp;</td>
-</tr>
-<tr>
-<td><strong>民族</strong></td>
-<td>汉</td>
-<td><strong>籍贯</strong></td>
-<td>湖北&nbsp;黄冈&nbsp;&nbsp;</td>
-<td><strong>联系方式</strong></td>
-<td>17705694468&nbsp;&nbsp;</td>
-<td><strong>邮件</strong></td>
-<td>shartoo518@gmail.com</td>
-</tr>
-</tbody>
-</table>
-</div>
-]]></content>
-      <categories>
-        <category>blog</category>
       </categories>
   </entry>
   <entry>
