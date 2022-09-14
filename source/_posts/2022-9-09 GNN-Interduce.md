@@ -1,3 +1,11 @@
+---
+layout: post
+title: 图神经网络A Gentle Introduction to Graph Neural Networks
+description: 深度学习
+category: 深度学习
+mathjax: true
+---
+
 ### 说明
 文章来源[A Gentle Introduction to Graph Neural Networks](https://distill.pub/2021/gnn-intro/)
 ### 1 引入
