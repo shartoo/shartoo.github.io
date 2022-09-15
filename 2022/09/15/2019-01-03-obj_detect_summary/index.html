@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="baidu-site-verification" content="93f8r6fzoB" />
+<meta name="google-site-verification" content="TRFlJTt2XTd9bCvpogqNRWkuoxwFeOUBf8ouiChVFyQ" />
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/science_256px_1075043_easyicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/science_128px_1075043_easyicon.ico">
+  <link rel="mask-icon" href="/images/stars.svg" color="#222">
+  <meta name="google-site-verification" content="TRFlJTt2XTd9bCvpogqNRWkuoxwFeOUBf8ouiChVFyQ">
+  <meta name="baidu-site-verification" content="93f8r6fzoB">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://shartoo.github.io').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="深度学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习目标检测网络汇总对比">
+<meta property="og:url" content="https://shartoo.github.io/2022/09/15/2019-01-03-obj_detect_summary/index.html">
+<meta property="og:site_name" content="数据与算法">
+<meta property="og:description" content="深度学习">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/obj_detect_summary-1.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/obj_detect_summary-2.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/obj_detect_summary-3.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/obj_detect_summary-4.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/obj_detect_summary-5.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/obj_detect_summary-6.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/obj_detect_summary-7.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/obj_detect_summary-8.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/obj_detect_summary-9.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/obj_detect_summary-10.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/obj_detect_summary-11.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/obj_detect_summary-12.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/obj_detect_summary-13.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/obj_detect_summary-13.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/obj_detect_summary-14.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/obj_detect_summary-15.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/obj_detect_summary-16.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/obj_detect_summary-17.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/obj_detect_summary-18.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/obj_detect_summary-19.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/obj_detect_summary-20.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/obj_detect_summary-21.png">
+<meta property="article:published_time" content="2022-09-15T08:16:12.754Z">
+<meta property="article:modified_time" content="2022-09-15T08:16:12.754Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shartoo.github.io/images/blog/obj_detect_summary-1.png">
+
+<link rel="canonical" href="https://shartoo.github.io/2022/09/15/2019-01-03-obj_detect_summary/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>深度学习目标检测网络汇总对比 | 数据与算法</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">数据与算法</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">重新出发</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://shartoo.github.io/2022/09/15/2019-01-03-obj_detect_summary/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/me.jpg">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="数据与算法">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深度学习目标检测网络汇总对比
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-15 16:16:12" itemprop="dateCreated datePublished" datetime="2022-09-15T16:16:12+08:00">2022-09-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">深度学习</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>参考 ：<a target="_blank" rel="noopener" href="https://medium.com/@jonathan_hui/object-detection-speed-and-accuracy-comparison-faster-r-cnn-r-fcn-ssd-and-yolo-5425656ae359">https://medium.com/@jonathan_hui/object-detection-speed-and-accuracy-comparison-faster-r-cnn-r-fcn-ssd-and-yolo-5425656ae359</a></p>
+<p><strong>概览图</strong></p>
+<p><img src="/images/blog/obj_detect_summary-1.png" alt="目标检测概览"></p>
+<h3 id="0-说明"><a href="#0-说明" class="headerlink" title="0 说明"></a>0 说明</h3><p>关于目标检测的好坏，很难有一个统一明确的比较。我们一般都是在速度和准确率之间妥协，除此之外，我们还需要注意，以下因素会影响性能</p>
+<ul>
+<li>特征抽取网络(<code>VGG16</code>,<code>ResNet</code>,<code>Inception</code>,<code>MobileNet</code>)</li>
+<li>特征抽取网络的输出strides</li>
+<li>输入图像的分辨率</li>
+<li>匹配策略和IOU阈值（在预测时计算损失的方法）</li>
+<li>NMS IOU阈值</li>
+<li>难样本挖掘比率(即正负样本anchor比例)</li>
+<li>候选或者预测的数目</li>
+<li>bounding box的编码</li>
+<li>数据增强</li>
+<li>训练集</li>
+<li>训练或测试时是否使用多尺度图像(图像裁剪)</li>
+<li>哪个特征map层用来做目标检测</li>
+<li>定位损失函数</li>
+<li>所使用的深度学习平台</li>
+<li>训练配置包括batch_size,输入图像的resize，学习率，以及学习率的递减</li>
+</ul>
+<h2 id="1性能评测结果"><a href="#1性能评测结果" class="headerlink" title="1性能评测结果"></a>1性能评测结果</h2><h3 id="1-1-FasterRCNN"><a href="#1-1-FasterRCNN" class="headerlink" title="1.1 FasterRCNN"></a>1.1 FasterRCNN</h3><p>在PASCAL VOC 2012测试集上的表现</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>生成的区域候选数目</th>
+<th>测试数据</th>
+<th>mAP(%)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SelectiveSearch</td>
+<td>2000</td>
+<td>voc2012</td>
+<td>65.7</td>
+</tr>
+<tr>
+<td>SelectiveSearch</td>
+<td>2000</td>
+<td>voc2007+voc2012</td>
+<td>68.4</td>
+</tr>
+<tr>
+<td>RPN+VGG,shared</td>
+<td>300</td>
+<td>voc2012</td>
+<td>67.0</td>
+</tr>
+<tr>
+<td>RPN+VGG,shared</td>
+<td>300</td>
+<td>voc2007+voc2012</td>
+<td>70.4</td>
+</tr>
+<tr>
+<td>RPN+VGG,shared</td>
+<td>300</td>
+<td>voc2007+voc2012+coco</td>
+<td>75.9</td>
+</tr>
+</tbody></table>
+<p><strong>coco数据集</strong></p>
+<p><img src="/images/blog/obj_detect_summary-2.png" alt="目标检测概览"></p>
+<h3 id="1-2-R-FCN"><a href="#1-2-R-FCN" class="headerlink" title="1.2 R-FCN"></a>1.2 R-FCN</h3><p><strong>voc数据集</strong></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>训练集</th>
+<th>mAP(%)</th>
+<th>测试时间(sec&#x2F;image)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>FasterRCNN</td>
+<td>voc 2007+voc2012</td>
+<td>73.8</td>
+<td>0.42</td>
+</tr>
+<tr>
+<td>FasterRCNN++</td>
+<td>voc 2007+voc2012+coco</td>
+<td>83.8</td>
+<td>3.36</td>
+</tr>
+<tr>
+<td>F-FCN多尺度训练</td>
+<td>voc2007+voc2012</td>
+<td>77.6</td>
+<td>0.17</td>
+</tr>
+<tr>
+<td>F-FCN多尺度训练</td>
+<td>voc2007+voc2012+coco</td>
+<td>82.0</td>
+<td>0.17</td>
+</tr>
+</tbody></table>
+<p><strong>coco数据集</strong></p>
+<p><img src="/images/blog/obj_detect_summary-3.png" alt="目标检测概览"></p>
+<h3 id="1-3-SSD"><a href="#1-3-SSD" class="headerlink" title="1.3 SSD"></a>1.3 SSD</h3><p><strong>voc数据集</strong></p>
+<p><img src="/images/blog/obj_detect_summary-4.png" alt="目标检测概览"></p>
+<p>性能</p>
+<p><img src="/images/blog/obj_detect_summary-5.png" alt="目标检测概览"></p>
+<p><strong>coco数据集</strong></p>
+<p><img src="/images/blog/obj_detect_summary-6.png" alt="目标检测概览"></p>
+<h3 id="1-4-YOLO"><a href="#1-4-YOLO" class="headerlink" title="1.4 YOLO"></a>1.4 YOLO</h3><p><strong>voc2007</strong></p>
+<p><img src="/images/blog/obj_detect_summary-7.png" alt="目标检测概览"></p>
+<p><strong>coco数据集</strong></p>
+<p><img src="/images/blog/obj_detect_summary-8.png" alt="目标检测概览"></p>
+<h3 id="1-5-yolov3"><a href="#1-5-yolov3" class="headerlink" title="1.5 yolov3"></a>1.5 yolov3</h3><p><strong>coco数据集</strong></p>
+<p><img src="/images/blog/obj_detect_summary-9.png" alt="目标检测概览"></p>
+<p><strong>性能</strong></p>
+<p><img src="/images/blog/obj_detect_summary-10.png" alt="目标检测概览"></p>
+<h3 id="1-6-FPN"><a href="#1-6-FPN" class="headerlink" title="1.6 FPN"></a>1.6 FPN</h3><p><strong>coco数据集</strong></p>
+<p><img src="/images/blog/obj_detect_summary-11.png" alt="目标检测概览"></p>
+<h3 id="1-7-RetinaNet"><a href="#1-7-RetinaNet" class="headerlink" title="1.7 RetinaNet"></a>1.7 RetinaNet</h3><p><strong>coco数据集</strong></p>
+<p><img src="/images/blog/obj_detect_summary-12.png" alt="目标检测概览"></p>
+<p><strong>性能</strong></p>
+<p><img src="/images/blog/obj_detect_summary-13.png" alt="目标检测概览"></p>
+<h2 id="2-论文结果比较"><a href="#2-论文结果比较" class="headerlink" title="2 论文结果比较"></a>2 论文结果比较</h2><p>下图是用VOC2007+voc2012的数据集训练的，mAP的计算方式是VOC2012。</p>
+<ul>
+<li>对于SSD，输入图像尺寸有300x300和512x512</li>
+<li>对于yolo，输入图像尺寸有288x288,416x416,544x544<br>更高的分辨率可以得到更好的准确率，但是速度会相应下降。</li>
+</ul>
+<p><img src="/images/blog/obj_detect_summary-13.png" alt="目标检测概览"></p>
+<p>输入图像的分辨率和特征抽取对速度有极大影响。下面是最高和最低的FPS，当然下图可能在使用不同mAP时结果有较大出入</p>
+<p><img src="/images/blog/obj_detect_summary-14.png" alt="目标检测概览"></p>
+<p><strong>coco数据集的表现</strong></p>
+<p><img src="/images/blog/obj_detect_summary-15.png" alt="目标检测概览"></p>
+<p>可以看到，FPN和FasterRCNN有很高的准确率，但是RetinaNet最高。取得最高准确率的RetinaNet是借助了</p>
+<ul>
+<li>金字塔特征</li>
+<li>特征抽取器的复杂</li>
+<li>Focal Loss</li>
+</ul>
+<h2 id="3-google的研究结果"><a href="#3-google的研究结果" class="headerlink" title="3 google的研究结果"></a>3 google的研究结果</h2><h3 id="3-1-特征抽取器"><a href="#3-1-特征抽取器" class="headerlink" title="3.1 特征抽取器"></a>3.1 特征抽取器</h3><p>研究了特征抽取器对准确率的影响，其中FasterRCNN和R-FCN可以利用一个更好的特征抽取器，但是对SSD效果提升程度不大。</p>
+<p><img src="/images/blog/obj_detect_summary-16.png" alt="目标检测概览"></p>
+<p>上图中x轴 是每个特征抽取器在分类上的top1的准确率。</p>
+<h3 id="3-2-物体尺寸"><a href="#3-2-物体尺寸" class="headerlink" title="3.2 物体尺寸"></a>3.2 物体尺寸</h3><p>对于大目标SSD即使使用很简单的抽取器也可以表现很好，如果使用更好的抽取其，SSD甚至可以达到其他分类器的准确率。但是<strong>SSD在小目标上表现很差</strong></p>
+<p><img src="/images/blog/obj_detect_summary-17.png" alt="目标检测概览"></p>
+<h3 id="3-3-输入图像的分辨率"><a href="#3-3-输入图像的分辨率" class="headerlink" title="3.3 输入图像的分辨率"></a>3.3 输入图像的分辨率</h3><p>更高的分辨率有利于提升小目标的检测准确率，对大目标也有帮助。对分辨率在长宽维度上以因子2递减，准确率平均降低15.88%，但是对应的inference时间也会平均以因子 27.4%下降。</p>
+<p><img src="/images/blog/obj_detect_summary-18.png" alt="目标检测概览"></p>
+<h3 id="3-4-区域候选的数目"><a href="#3-4-区域候选的数目" class="headerlink" title="3.4 区域候选的数目"></a>3.4 区域候选的数目</h3><p>区域候选的数目可以极大地影响FasterRCNN(FRCNN)，而对准确率不会有太大降低。例如，Inception ResNet,FasterRCNN可以提升三倍速度，如果使用50个区域候选而不是300个的话，对应的准确率只降低了4%。但是R-FCN对每个ROI只有少得多的操作需要做，所以减少区域候选，对它的速度的提升并不显著。</p>
+<p><img src="/images/blog/obj_detect_summary-19.png" alt="目标检测概览"></p>
+<h3 id="3-5-GPU时间"><a href="#3-5-GPU时间" class="headerlink" title="3.5 GPU时间"></a>3.5 GPU时间</h3><p>下面是不同模型使用不同特征抽取器的GPU时间</p>
+<p><img src="/images/blog/obj_detect_summary-20.png" alt="目标检测概览"></p>
+<p>大部分论文使用FLOPS(浮点运算)来衡量模型复杂度，但是这个没法反映准确的速度。模型密度(稀疏和稠密模型)影响的是所耗费的时间。讽刺的是，欠稠密模型通常平均需要更长的时间来完成一个浮点运算。</p>
+<h3 id="3-6-内存"><a href="#3-6-内存" class="headerlink" title="3.6 内存"></a>3.6 内存</h3><p>MobileNet有最少的参数，它需要不到1GB的内存。</p>
+<p><img src="/images/blog/obj_detect_summary-21.png" alt="目标检测概览"></p>
+<h2 id="4-结论"><a href="#4-结论" class="headerlink" title="4 结论"></a>4 结论</h2><ul>
+<li>R-FCN和SSD模型平均速度更快，但是如果不考虑速度，它们准确率不如FasterRCNN</li>
+<li>FasterRCNN每张图需要至少100ms</li>
+<li>只使用低分辨率的feature map会极大地损伤检测准确率</li>
+<li>输入分辨率极大的影响准确率。减少一半的图像尺寸(长和宽都减少一半)会导致准确率下降15.88%，对应的inference时间减少27.4%</li>
+<li>特征抽取器的选取对FasterRCNN和R-FCN有较大影响，但是对SSD没太大影响。</li>
+<li>后续处理，包括NMS(只能在CPU上运行)，对最快的模型耗费了最多的时间，大概有40ms，这也导致了其速度降到25FPS</li>
+<li>如果mAP的计算只使用了单一IoU，那么使用mAP@IoU&#x3D;0.75</li>
+<li>在使用InceptionResNet网络作为特征抽取器时，stride&#x3D;8比stride&#x3D;16会将mAP提升5%，但是运行时间增加了63%。</li>
+</ul>
+<p><strong>最准确的模型</strong></p>
+<ul>
+<li>最准确的单一模型，使用FasterRCNN，使用InceptionResNet，和300个候选。一张图片的检测需要1秒钟。</li>
+<li>最准确的模型是一个多次裁剪inference的模型集合。它使用平均准确率向量来选取5个最不同的模型</li>
+</ul>
+<p><strong>最快的模型</strong></p>
+<ul>
+<li>使用mobilenet的SSD是在最快速度和最佳准确率之间一个最好的均衡</li>
+<li>SSD表现卓越，但是对小目标较差</li>
+<li>对于大目标，SSD可以达到与FasterRCNN和R-FCN一样的准确率，但是用的是更小更轻的特征抽取器。</li>
+</ul>
+<p><strong>速度与准确率之间的均衡</strong></p>
+<ul>
+<li>FasterRCNN如果只使用50个区域候选的话，它可以达到与R-FCN和SSD一样的速度，准确率为32mAP</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/09/15/2019-01-07-merlin_summary/" rel="prev" title="语音合成：merlin使用概览">
+      <i class="fa fa-chevron-left"></i> 语音合成：merlin使用概览
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/09/15/2019-01-02-efficient_tinynet/" rel="next" title="Mobilenet以及其变种网络高效的原因">
+      Mobilenet以及其变种网络高效的原因 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0-%E8%AF%B4%E6%98%8E"><span class="nav-number">1.</span> <span class="nav-text">0 说明</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E6%80%A7%E8%83%BD%E8%AF%84%E6%B5%8B%E7%BB%93%E6%9E%9C"><span class="nav-number"></span> <span class="nav-text">1性能评测结果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-FasterRCNN"><span class="nav-number">1.</span> <span class="nav-text">1.1 FasterRCNN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-R-FCN"><span class="nav-number">2.</span> <span class="nav-text">1.2 R-FCN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-SSD"><span class="nav-number">3.</span> <span class="nav-text">1.3 SSD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-YOLO"><span class="nav-number">4.</span> <span class="nav-text">1.4 YOLO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-yolov3"><span class="nav-number">5.</span> <span class="nav-text">1.5 yolov3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-6-FPN"><span class="nav-number">6.</span> <span class="nav-text">1.6 FPN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-7-RetinaNet"><span class="nav-number">7.</span> <span class="nav-text">1.7 RetinaNet</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%AE%BA%E6%96%87%E7%BB%93%E6%9E%9C%E6%AF%94%E8%BE%83"><span class="nav-number"></span> <span class="nav-text">2 论文结果比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-google%E7%9A%84%E7%A0%94%E7%A9%B6%E7%BB%93%E6%9E%9C"><span class="nav-number"></span> <span class="nav-text">3 google的研究结果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E7%89%B9%E5%BE%81%E6%8A%BD%E5%8F%96%E5%99%A8"><span class="nav-number">1.</span> <span class="nav-text">3.1 特征抽取器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E7%89%A9%E4%BD%93%E5%B0%BA%E5%AF%B8"><span class="nav-number">2.</span> <span class="nav-text">3.2 物体尺寸</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E8%BE%93%E5%85%A5%E5%9B%BE%E5%83%8F%E7%9A%84%E5%88%86%E8%BE%A8%E7%8E%87"><span class="nav-number">3.</span> <span class="nav-text">3.3 输入图像的分辨率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E5%8C%BA%E5%9F%9F%E5%80%99%E9%80%89%E7%9A%84%E6%95%B0%E7%9B%AE"><span class="nav-number">4.</span> <span class="nav-text">3.4 区域候选的数目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-GPU%E6%97%B6%E9%97%B4"><span class="nav-number">5.</span> <span class="nav-text">3.5 GPU时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-6-%E5%86%85%E5%AD%98"><span class="nav-number">6.</span> <span class="nav-text">3.6 内存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E7%BB%93%E8%AE%BA"><span class="nav-number"></span> <span class="nav-text">4 结论</span></a></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="shartoo"
+      src="/images/me.jpg">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v6.3.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.6.0
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'c656cd038e01f710e260',
+      clientSecret: 'e6de2ccaaf0f7069292125b8f50e27f25b95810d',
+      repo: 'shartoo.github.io',
+      owner: 'shartoo',
+      admin: ['shartoo'],
+      id: 'f973a20f8363e9d23f30b91b593141fc',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+</body>
+</html>

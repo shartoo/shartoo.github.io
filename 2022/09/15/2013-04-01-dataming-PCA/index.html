@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="baidu-site-verification" content="93f8r6fzoB" />
+<meta name="google-site-verification" content="TRFlJTt2XTd9bCvpogqNRWkuoxwFeOUBf8ouiChVFyQ" />
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/science_256px_1075043_easyicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/science_128px_1075043_easyicon.ico">
+  <link rel="mask-icon" href="/images/stars.svg" color="#222">
+  <meta name="google-site-verification" content="TRFlJTt2XTd9bCvpogqNRWkuoxwFeOUBf8ouiChVFyQ">
+  <meta name="baidu-site-verification" content="93f8r6fzoB">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://shartoo.github.io').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="数据挖掘专题之一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据挖掘方法之一：主成份分析">
+<meta property="og:url" content="https://shartoo.github.io/2022/09/15/2013-04-01-dataming-PCA/index.html">
+<meta property="og:site_name" content="数据与算法">
+<meta property="og:description" content="数据挖掘专题之一">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-09-15T08:16:12.746Z">
+<meta property="article:modified_time" content="2022-09-15T08:16:12.746Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://shartoo.github.io/2022/09/15/2013-04-01-dataming-PCA/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>数据挖掘方法之一：主成份分析 | 数据与算法</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">数据与算法</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">重新出发</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://shartoo.github.io/2022/09/15/2013-04-01-dataming-PCA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/me.jpg">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="数据与算法">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数据挖掘方法之一：主成份分析
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-15 16:16:12" itemprop="dateCreated datePublished" datetime="2022-09-15T16:16:12+08:00">2022-09-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">数据挖掘专题之一</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="一-概念"><a href="#一-概念" class="headerlink" title="一 概念"></a>一 概念</h2><p>主成分分析（principle componentsanalysis,PCA）是指将多个变量通过线性组合，选出较少个数的重要变量集合来描述相关结构的额一种统计分析方法，这些线性组合被称为“成分”。由m个变量组成的数据集的总变异，可以由k个线性组合变量组成的子集来标示（k&lt;m）。这意味着k个变量与原来的变量反应了几乎同样多的信息  </p>
+<h2 id="二-步骤"><a href="#二-步骤" class="headerlink" title="二 步骤"></a>二 步骤</h2><ol>
+<li>原始指标数据的标准化采集p维随机向量</li>
+</ol>
+<p>  $$x &#x3D; (x_1,x_2,…x_p)^T$$</p>
+<p>  $n$个样本<br>  $x_i&#x3D; (x_{i1},x_{i2},x_{i3},…x_{ip})^T,i&#x3D;1,2..n, n&gt;p$</p>
+<p> 构造样本阵，对样本元素进行如下标准化变换</p>
+<p>$$Z_{ij}&#x3D;\frac{x_{ij}-\bar x_j}{s_J},i &#x3D;1,2,..\pi, j &#x3D;1,2,…p$$</p>
+<p>其中$$\bar x_j &#x3D;\frac{\sum^n_{i-1}x_{ij}}{n},s^2_j&#x3D;\frac{\sum^n_{i-1}(x_{ij}-\bar x_j)^2}{n-1}$$</p>
+<p>   得标准化矩阵Z。</p>
+<ol start="2">
+<li><p>对标准化矩阵Z求相关系数矩阵    </p>
+<p> $$R &#x3D; [r_{ij}] xp &#x3D;\frac{Z^TZ}{n-1}其中r_{ij}&#x3D;\frac{\sum z_{kj}\cdot z_{kj}}{n-1}, i,j &#x3D; 1,2…p$$</p>
+</li>
+<li><p>求解样本相关矩阵R的特征方程</p>
+<p>$R-\lambda I_p &#x3D;0$ 得 $p$ 个特征根，按<br>$$\frac{sum^m_{j-1}\lambda <em>j}{\sum^p</em>{j-1}\lambda _j}\geq 0.85<br>确定n的值，使信息的利用率达85%以上。对每个 $\lambda_j,i&#x3D;1,2,..m$ 解方程组$R_b&#x3D; \lambda_jb$得单位特征向量$b^0_j$$</p>
+</li>
+<li><p>将标准化后的指标变量转换成主成分。</p>
+<p>$U_{ij}&#x3D;z^Tb^0_j,j&#x3D;1,2,…m$</p>
+<p>$U_1$称为第一主成分，$U_2$称为第二主成分，$U_3$称为第三主成分，…</p>
+<p>对n个主成份进行综合评价。对n个主成份进行加权求和，即得最终评价值，权数为每个主成份的方差贡献率。</p>
+</li>
+</ol>
+<h2 id="三-关键性结论"><a href="#三-关键性结论" class="headerlink" title="三 关键性结论"></a>三 关键性结论</h2><p>以下结论对主成份分析非常重要</p>
+<p><strong>结论1</strong>：标准化数据集州农工的总体变动性等于所有Z向量方差之和，等于每个成分方差之和，等于特征权值之和，等于变量的个数。即<br>$$<br>  \sum^m_{i-1}Var(Y_i)&#x3D;\sum^m_{i-1}Var(Z_i)&#x3D;\sum^m_{i-1}\lambda _i&#x3D;m<br>$$</p>
+<p><strong>结论2</strong>：给定成分与给定变量间的偏相关性是特征向量与特征值的函数。</p>
+<p>具体来说<br>$$Corr(Y_i,Z_i)&#x3D;e_{ii}\sqrt\lambda _i,i,j&#x3D;1,2,..m,\lambda _1\gt\lambda _2\geq\lambda _3…\geq\lambda _m$$<br>其中 $(\lambda _1,e_1),(\lambda _2,e_2),(\lambda _3,e_3),..(\lambda _m,e_m)$<br>是相关系数矩阵p的<font color="gray">特征值-特征向量</font>对，并且偏相关系数包括了所有变量之间的影响。</p>
+<p><strong>结论3</strong>：Z中第i个主成份解释了变量的总体变异的百分比，等于第i个特征根与变量个数之间的比率 $\frac{\lambda _i}{m}$</p>
+<h2 id="四-应用于实际数据"><a href="#四-应用于实际数据" class="headerlink" title="四 应用于实际数据"></a>四 应用于实际数据</h2><table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>最小值</th>
+<th>最大值</th>
+<th>均值</th>
+<th>标准差</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>房屋价值中位数</td>
+<td>Range</td>
+<td>14999</td>
+<td>500001</td>
+<td>206918.067</td>
+<td>115485.040</td>
+</tr>
+<tr>
+<td>收入中位数</td>
+<td>Range</td>
+<td>0.500</td>
+<td>15.000</td>
+<td>3.873</td>
+<td>1.906</td>
+</tr>
+<tr>
+<td>平均房龄中位数</td>
+<td>Range</td>
+<td>1</td>
+<td>52</td>
+<td>28.656</td>
+<td>12.582</td>
+</tr>
+<tr>
+<td>总房间数</td>
+<td>Range</td>
+<td>2</td>
+<td>37937</td>
+<td>2621.653</td>
+<td>2131.644</td>
+</tr>
+<tr>
+<td>总卧室数</td>
+<td>Range</td>
+<td>1</td>
+<td>6445</td>
+<td>535.096</td>
+<td>413.541</td>
+</tr>
+<tr>
+<td>人口数</td>
+<td>Range</td>
+<td>3</td>
+<td>35682</td>
+<td>1418.971</td>
+<td>1122.534</td>
+</tr>
+<tr>
+<td>家庭数</td>
+<td>Range</td>
+<td>1</td>
+<td>6082</td>
+<td>479.332</td>
+<td>377.378</td>
+</tr>
+<tr>
+<td>北纬</td>
+<td>Range</td>
+<td>32.540</td>
+<td>41.950</td>
+<td>35.630</td>
+<td>2.137</td>
+</tr>
+<tr>
+<td>西经</td>
+<td>Range</td>
+<td>-124.350</td>
+<td>-114.310</td>
+<td>-119.567</td>
+<td>2.003</td>
+</tr>
+</tbody></table>
+<p>1.使用上图的均值和标准差对变量进行标准化，得到Z向量。<br>2.研究下图中变量矩阵图以检验变量间是否存在相关性。<br> 可以看到 总房数、卧室数、人口数和家庭数之间表现出正相关性，西经和北纬表现出负相关性。再来观察变量的相关性矩阵：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>平均收入</th>
+<th>平均房龄</th>
+<th>总房数</th>
+<th>总卧室数</th>
+<th>人口数</th>
+<th>家庭数</th>
+<th>北纬</th>
+<th>西经</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>平均收入</td>
+<td>1.000</td>
+<td>-0.117</td>
+<td>0.199</td>
+<td>-0.012</td>
+<td>0.002</td>
+<td>0.010</td>
+<td>-0.083</td>
+<td>-0.012</td>
+</tr>
+<tr>
+<td>平均房龄</td>
+<td>-0.117</td>
+<td>1.000</td>
+<td>-0.360</td>
+<td>-0.318</td>
+<td>-0.292</td>
+<td>-0.300</td>
+<td>0.011</td>
+<td>-0.107</td>
+</tr>
+<tr>
+<td>总房数</td>
+<td>0.199</td>
+<td>-0.360</td>
+<td>1.000</td>
+<td>0.928</td>
+<td>0.856</td>
+<td>0.919</td>
+<td>-0.035</td>
+<td>0.041</td>
+</tr>
+<tr>
+<td>总卧室数</td>
+<td>-0.012</td>
+<td>-0.318</td>
+<td>0.928</td>
+<td>1.000</td>
+<td>0.878</td>
+<td>0.981</td>
+<td>-0.064</td>
+<td>0.064</td>
+</tr>
+<tr>
+<td>人口数</td>
+<td>0.002</td>
+<td>-0.292</td>
+<td>0.856</td>
+<td>0.878</td>
+<td>1.000</td>
+<td>0.907</td>
+<td>-0.107</td>
+<td>0.097</td>
+</tr>
+<tr>
+<td>家庭数</td>
+<td>0.010</td>
+<td>-0.300</td>
+<td>0.919</td>
+<td>0.981</td>
+<td>0.907</td>
+<td>1.000</td>
+<td>-0.069</td>
+<td>0.051</td>
+</tr>
+<tr>
+<td>北纬</td>
+<td>-0.083</td>
+<td>0.011</td>
+<td>-0.035</td>
+<td>-0.064</td>
+<td>-0.107</td>
+<td>-0.069</td>
+<td>1.000</td>
+<td>-0.925</td>
+</tr>
+<tr>
+<td>西经</td>
+<td>-0.012</td>
+<td>-0.107</td>
+<td>0.041</td>
+<td>0.064</td>
+<td>0.097</td>
+<td>0.051</td>
+<td>-0.925</td>
+<td>1.000</td>
+</tr>
+</tbody></table>
+<p> 矩阵图和相关矩阵式常用的两种方法，用来观察预测变量之间的相关性结构。<br>  如果完成一次住房价预测的多元回归分析，但不考虑数据集中的多重共线性将导致回归结果非常不稳定，预测值的微小变化将会导致回归系数的极大变化，而得不到任何结论。此时需要用主成分分析，其可以通过相关化结构，确定相关变量的基本组成部分<br>3. 采用主成分分析对房屋数据集进行分析，该要素矩阵（下图）中每个栏目代表成分Yi&#x3D;e’Z中的一项。栏目中元素为成分的权重，代表了变量与成分的偏相关。结论2 表明这些成分的权重等于Corr(Yi,Zi),成分涉及第i个特征向量和特征值</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>平均收入</td>
+<td>0.086</td>
+<td>-0.058</td>
+<td>0.922</td>
+<td>0.370</td>
+<td>-0.02</td>
+<td>-0.018</td>
+<td>0.037</td>
+<td>-0.004</td>
+</tr>
+<tr>
+<td>平均房龄</td>
+<td>-0.429</td>
+<td>0.025</td>
+<td>-0.407</td>
+<td>0.806</td>
+<td>0.014</td>
+<td>0.026</td>
+<td>0.009</td>
+<td>-0.001</td>
+</tr>
+<tr>
+<td>总房数</td>
+<td>0.956</td>
+<td>0.100</td>
+<td>0.102</td>
+<td>0.104</td>
+<td>0.120</td>
+<td>0.162</td>
+<td>-0.119</td>
+<td>0.015</td>
+</tr>
+<tr>
+<td>总卧室数</td>
+<td>0.970</td>
+<td>0.083</td>
+<td>-0.121</td>
+<td>0.056</td>
+<td>0.144</td>
+<td>-0.068</td>
+<td>0.051</td>
+<td>-0.083</td>
+</tr>
+<tr>
+<td>人口数</td>
+<td>0.933</td>
+<td>0.034</td>
+<td>-0.121</td>
+<td>0.076</td>
+<td>-0.327</td>
+<td>0.034</td>
+<td>0.006</td>
+<td>-0.015</td>
+</tr>
+<tr>
+<td>家庭数</td>
+<td>0.972</td>
+<td>0.086</td>
+<td>-0.113</td>
+<td>0.087</td>
+<td>0.058</td>
+<td>-0.112</td>
+<td>0.061</td>
+<td>0.083</td>
+</tr>
+<tr>
+<td>北纬</td>
+<td>-0.140</td>
+<td>0.970</td>
+<td>0.017</td>
+<td>-0.088</td>
+<td>0.017</td>
+<td>0.132</td>
+<td>0.113</td>
+<td>0.005</td>
+</tr>
+<tr>
+<td>西经</td>
+<td>0.144</td>
+<td>-0.969</td>
+<td>-0.062</td>
+<td>-0.063</td>
+<td>0.037</td>
+<td>0.136</td>
+<td>0.109</td>
+<td>0.007</td>
+</tr>
+</tbody></table>
+<ol start="4">
+<li>结论3表明，Z的总变异种第i个主成分所占的比例是ri&#x2F;m(其中ri是特征值)，即第i个特征值与变量数的比例。由下图可以看出，第一特征值是 3.091,因为有8个预测变量，第一主成分解释 $\frac{3.091}{8}&#x3D;48.767$ 的变异。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>成分</th>
+<th>合计</th>
+<th>变化百分比</th>
+<th>累计百分比%</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>3.901</td>
+<td>48.767</td>
+<td>48.767</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1.910</td>
+<td>23.881</td>
+<td>72.648</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1.073</td>
+<td>13.409</td>
+<td>86.057</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0.825</td>
+<td>10.311</td>
+<td>96.368</td>
+</tr>
+<tr>
+<td>5</td>
+<td>0.148</td>
+<td>1.847</td>
+<td>98.215</td>
+</tr>
+<tr>
+<td>6</td>
+<td>0.082</td>
+<td>1.020</td>
+<td>99.235</td>
+</tr>
+<tr>
+<td>7</td>
+<td>0.047</td>
+<td>0.586</td>
+<td>99.821</td>
+</tr>
+<tr>
+<td>8</td>
+<td>0.014</td>
+<td>0.179</td>
+<td>100.00</td>
+</tr>
+</tbody></table>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/09/15/2013-04-20-datamining-regression/" rel="prev" title="数据挖掘方法之二：回归模型（简单线性回归）">
+      <i class="fa fa-chevron-left"></i> 数据挖掘方法之二：回归模型（简单线性回归）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/09/15/2016-11-24-represationlearning/" rel="next" title="深度学习：表征学习">
+      深度学习：表征学习 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80-%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">一 概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C-%E6%AD%A5%E9%AA%A4"><span class="nav-number">2.</span> <span class="nav-text">二 步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89-%E5%85%B3%E9%94%AE%E6%80%A7%E7%BB%93%E8%AE%BA"><span class="nav-number">3.</span> <span class="nav-text">三 关键性结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B-%E5%BA%94%E7%94%A8%E4%BA%8E%E5%AE%9E%E9%99%85%E6%95%B0%E6%8D%AE"><span class="nav-number">4.</span> <span class="nav-text">四 应用于实际数据</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="shartoo"
+      src="/images/me.jpg">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v6.3.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.6.0
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'c656cd038e01f710e260',
+      clientSecret: 'e6de2ccaaf0f7069292125b8f50e27f25b95810d',
+      repo: 'shartoo.github.io',
+      owner: 'shartoo',
+      admin: ['shartoo'],
+      id: '175fbe14bf92e9bdd8736c36b805cdcd',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+</body>
+</html>

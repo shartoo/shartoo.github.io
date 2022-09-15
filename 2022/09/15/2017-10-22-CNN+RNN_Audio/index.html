@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="baidu-site-verification" content="93f8r6fzoB" />
+<meta name="google-site-verification" content="TRFlJTt2XTd9bCvpogqNRWkuoxwFeOUBf8ouiChVFyQ" />
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/science_256px_1075043_easyicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/science_128px_1075043_easyicon.ico">
+  <link rel="mask-icon" href="/images/stars.svg" color="#222">
+  <meta name="google-site-verification" content="TRFlJTt2XTd9bCvpogqNRWkuoxwFeOUBf8ouiChVFyQ">
+  <meta name="baidu-site-verification" content="93f8r6fzoB">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://shartoo.github.io').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="深度学习实践">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CNN+RNN来做口语识别">
+<meta property="og:url" content="https://shartoo.github.io/2022/09/15/2017-10-22-CNN+RNN_Audio/index.html">
+<meta property="og:site_name" content="数据与算法">
+<meta property="og:description" content="深度学习实践">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/cnn+rnn_rnn1.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/cnn+rnn_cnn-multi-rnn.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/cnn+rnn_cnn-multi-rnn2.png">
+<meta property="article:published_time" content="2022-09-15T08:16:12.754Z">
+<meta property="article:modified_time" content="2022-09-15T08:16:12.754Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shartoo.github.io/images/blog/cnn+rnn_rnn1.png">
+
+<link rel="canonical" href="https://shartoo.github.io/2022/09/15/2017-10-22-CNN+RNN_Audio/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>CNN+RNN来做口语识别 | 数据与算法</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">数据与算法</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">重新出发</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://shartoo.github.io/2022/09/15/2017-10-22-CNN+RNN_Audio/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/me.jpg">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="数据与算法">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CNN+RNN来做口语识别
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-15 16:16:12" itemprop="dateCreated datePublished" datetime="2022-09-15T16:16:12+08:00">2022-09-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AF%AD%E9%9F%B3/" itemprop="url" rel="index">
+                    <span itemprop="name">语音</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">深度学习实践</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>翻译自： <a target="_blank" rel="noopener" href="https://yerevann.github.io/2016/06/26/combining-cnn-and-rnn-for-spoken-language-identification/">combining-cnn-and-rnn-for-spoken-language-identificatio</a></p>
+<p>github：<a target="_blank" rel="noopener" href="https://github.com/harvitronix/continuous-online-video-classification-blog">源码</a></p>
+<p><strong>翻译的原因是觉得示意图很好</strong></p>
+<h2 id="输入和输出"><a href="#输入和输出" class="headerlink" title="输入和输出"></a>输入和输出</h2><p>正如以前一样，网络的输入是语音记录的图谱。图谱似乎是语音的作为深度学习系统的标准表征形式。</p>
+<p>一些网络使用多达11khz的频率(858x256的图像)，而其他使用5.5khz的频率(858x128)。通常情况下，使用5.5khz的结果要相对好一点（可能是因为更高的频率没有包含太多有用的信息，反倒更容易过拟合）。</p>
+<p>所有网络的输出层都是全连接的softmax层，176个神经元。</p>
+<h2 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h2><p>我们测试了几个网络结构。第一个是纯粹的类似Alex-Net的卷积网络。第二个没有使用任何卷积层，并将（语音）图谱的列作为RNN的序列输入。第三个使用的是，将卷积神经网络抽取出的特征输入到RNN。所有的网络都用Theano和Lasagne。</p>
+<p>几乎所有的网络都可以很轻易地在训练集上达到100%的准确率。下表描述的是在验证集上的准确率。</p>
+<h2 id="卷积网络"><a href="#卷积网络" class="headerlink" title="卷积网络"></a>卷积网络</h2><p>网络结构由6块(block) 2D卷积组成，Relu激活函数，2D maxpooling和BatchNormalization。第一个卷积层的kernel尺寸是 $7\times 7$，第二个是 $5\times 5$,剩下的都是 $3\times 3$。Pooling的尺寸一直都是 $3\times 3$，步长为2.</p>
+<p><strong>BatchNormalization</strong>可以显著提升训练速度。我们最后只在最后的一个Pooling层和softmax层之间使用了一个全连接层，并使用了50%的dropout。</p>
+<table>
+<thead>
+<tr>
+<th>网络</th>
+<th>准确率</th>
+<th>注意</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/YerevaNN/Spoken-language-identification/blob/master/theano/networks/tc_net.py">tc_net</a></td>
+<td>&lt;80%</td>
+<td>此网络与前面描述的CNN的区别在于，这个网络只有一个全连接层。我们并没有怎么训练这个网络，因为<code>ignore_border=False</code>，这个会拖慢训练过程</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/YerevaNN/Spoken-language-identification/blob/master/theano/networks/tc_net_mod.py">tc_net_mod</a></td>
+<td>97.14%</td>
+<td>与tc_net相同，只不过这里不是 <code>ignore_border=False</code>而是加入了<code>pad=2</code></td>
+</tr>
+<tr>
+<td>tc_net_mod_5khz_small</td>
+<td>96.49%</td>
+<td>是tc_net_mod的较小副本，使用的是5.5khz</td>
+</tr>
+</tbody></table>
+<p>Lasagne设置<code>ignore_border=False</code>  会使得Theano不使用CuDnn，将其设置为True，可以显著提升速度。</p>
+<p>下面是<code>tc_net_mod</code>的详细网络结构：</p>
+<table>
+<thead>
+<tr>
+<th>Nr</th>
+<th>Type</th>
+<th>Channel</th>
+<th>Width</th>
+<th>Height</th>
+<th>Kernel size&#x2F;stride</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>input</td>
+<td>1</td>
+<td>858</td>
+<td>256</td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td>Conv</td>
+<td>16</td>
+<td>852</td>
+<td>250</td>
+<td>7x7&#x2F;1</td>
+</tr>
+<tr>
+<td></td>
+<td>Relu</td>
+<td>16</td>
+<td>852</td>
+<td>250</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>MaxPooling</td>
+<td>16</td>
+<td>427</td>
+<td>126</td>
+<td>3x3&#x2F;,pad&#x3D;2</td>
+</tr>
+<tr>
+<td></td>
+<td>BatchNorm</td>
+<td>16</td>
+<td>427</td>
+<td>126</td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td>Conv</td>
+<td>16</td>
+<td>852</td>
+<td>250</td>
+<td>7x7&#x2F;1</td>
+</tr>
+<tr>
+<td></td>
+<td>Relu</td>
+<td>16</td>
+<td>852</td>
+<td>250</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>MaxPooling</td>
+<td>16</td>
+<td>427</td>
+<td>126</td>
+<td>3x3&#x2F;,pad&#x3D;2</td>
+</tr>
+<tr>
+<td></td>
+<td>BatchNorm</td>
+<td>16</td>
+<td>427</td>
+<td>126</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Conv</td>
+<td>32</td>
+<td>423</td>
+<td>122</td>
+<td>5x5&#x2F;1</td>
+</tr>
+<tr>
+<td></td>
+<td>Relu</td>
+<td>32</td>
+<td>423</td>
+<td>122</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>MaxPooling</td>
+<td>32</td>
+<td>213</td>
+<td>62</td>
+<td>3x3&#x2F;2,pad&#x3D;2</td>
+</tr>
+<tr>
+<td></td>
+<td>BatchNorm</td>
+<td>32</td>
+<td>213</td>
+<td>62</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Conv</td>
+<td>64</td>
+<td>211</td>
+<td>60</td>
+<td>3x3&#x2F;1</td>
+</tr>
+<tr>
+<td></td>
+<td>Relu</td>
+<td>64</td>
+<td>211</td>
+<td>60</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>MaxPooling</td>
+<td>64</td>
+<td>107</td>
+<td>31</td>
+<td>3x3&#x2F;2,pad&#x3D;2</td>
+</tr>
+<tr>
+<td></td>
+<td>BatchNorm</td>
+<td>64</td>
+<td>107</td>
+<td>31</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Conv</td>
+<td>128</td>
+<td>105</td>
+<td>29</td>
+<td>3x3&#x2F;1</td>
+</tr>
+<tr>
+<td></td>
+<td>Relu</td>
+<td>128</td>
+<td>105</td>
+<td>29</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>MaxPooling</td>
+<td>128</td>
+<td>54</td>
+<td>16</td>
+<td>3x3&#x2F;,pad&#x3D;2</td>
+</tr>
+<tr>
+<td></td>
+<td>BatchNorm</td>
+<td>128</td>
+<td>54</td>
+<td>16</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>Conv</td>
+<td>128</td>
+<td>52</td>
+<td>13</td>
+<td>3x3&#x2F;1</td>
+</tr>
+<tr>
+<td></td>
+<td>Relu</td>
+<td>128</td>
+<td>52</td>
+<td>14</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>MaxPooling</td>
+<td>128</td>
+<td>27</td>
+<td>8</td>
+<td>3x3&#x2F;2,pad&#x3D;2</td>
+</tr>
+<tr>
+<td></td>
+<td>BatchNorm</td>
+<td>128</td>
+<td>27</td>
+<td>8</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>Conv</td>
+<td>256</td>
+<td>25</td>
+<td>6</td>
+<td>3x3&#x2F;1</td>
+</tr>
+<tr>
+<td></td>
+<td>Relu</td>
+<td>256</td>
+<td>25</td>
+<td>6</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>MaxPooling</td>
+<td>256</td>
+<td>14</td>
+<td>3</td>
+<td>3x3&#x2F;2,pad&#x3D;2</td>
+</tr>
+<tr>
+<td></td>
+<td>BatchNorm</td>
+<td>256</td>
+<td>14</td>
+<td>3</td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td>Fully connected</td>
+<td>1024</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Relu</td>
+<td>1024</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>BatchNorm</td>
+<td>1024</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Dropout</td>
+<td>1024</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td>Fully Connected</td>
+<td>176</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Softmax Loss</td>
+<td>176</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="RNN"><a href="#RNN" class="headerlink" title="RNN"></a>RNN</h2><p>图谱可以看做列向量序列，其中列向量由256（或者128，如果只使用&lt;5.5khz）个数字组成。我们使用了RNN，其中每一层500个GRU Cell，结构图如下：</p>
+<p><img src="/images/blog/cnn+rnn_rnn1.png" alt="RNN"></p>
+<table>
+<thead>
+<tr>
+<th>网络</th>
+<th>准确率</th>
+<th>注意事项</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>rnn</td>
+<td>93.27</td>
+<td>在输入层上只有一个GRU层</td>
+</tr>
+<tr>
+<td>rnn_2layers</td>
+<td>95.66</td>
+<td>输入层上两个GRU层</td>
+</tr>
+<tr>
+<td>rnn_2layers_5khz</td>
+<td>98.42</td>
+<td>输入层上两个GRU层，最大频率是5.5khz</td>
+</tr>
+</tbody></table>
+<p>CNN和RNN都在几个epoch中使用了$adadelta$ 参数，然后再使用冲量SGD（0.003或0.0003）。如果从一开始就使用带冲量的SGD，收敛得很慢。带$adadelta$ 的收敛速度会快一点，但是一般不会得到很高的准确率。</p>
+<h2 id="结合CNN和RNN"><a href="#结合CNN和RNN" class="headerlink" title="结合CNN和RNN"></a>结合CNN和RNN</h2><p>CNN与RNN结合的框架一般是卷积抽取的特征作为输入，RNN作为输出，然后再在RNN的输出之后连接一个全连接层，最后是一个softmax层。</p>
+<p>CNN的输出是几个channel（即feature map）的集合。我们可以在每个channel上使用几个独立的GRU(可以使用或者不适用权值共享)，如下图：</p>
+<p><img src="/images/blog/cnn+rnn_cnn-multi-rnn.png" alt="CNN+RNN"></p>
+<p>另外一种做法是，将CNN的输出作为一个3D-tensor，然后在那个tensor的2D slice上运行<strong>单个</strong>GRU。</p>
+<p><img src="/images/blog/cnn+rnn_cnn-multi-rnn2.png" alt="CNN+RNN"></p>
+<p>后一个做法需要更多的参数，但是<strong>不同channel的信息会在GRU中混淆，这看起来会提升一点性能</strong>。这种架构类似于<a target="_blank" rel="noopener" href="http://static.googleusercontent.com/media/research.google.com/en//pubs/archive/43455.pdf">这篇语音识别论文</a>，除了他们会使用一些从输入到RNN和CNN到全连接层的残差(residual)连接。注意到类似的架构在<a target="_blank" rel="noopener" href="http://arxiv.org/abs/1602.00367">文本分类</a>上效果较好。</p>
+<p><strong>下面的网络对应的代码位于<a target="_blank" rel="noopener" href="https://github.com/YerevaNN/Spoken-language-identification/tree/master/theano/networks">网络</a></strong></p>
+<table>
+<thead>
+<tr>
+<th>网络</th>
+<th>准确率</th>
+<th>注意</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>tc_net_rnn</td>
+<td>92.4</td>
+<td>CNN由3个卷积块组成，输出32个channel，尺寸为104x13。每个channel以104个尺寸为13的向量序列输入喂入独立的GRU。GRU的输出会最终融合，然后输入到一个全连接层</td>
+</tr>
+<tr>
+<td>tc_net_rnn_nodense</td>
+<td>91.94</td>
+<td>与上一个网络一样，只是GRU之后没有全连接层，GRU的输出直接喂入softmax层</td>
+</tr>
+<tr>
+<td>fc_net_rnn_shared</td>
+<td>96.96</td>
+<td>与上一个网络一样。但是32个GRU单元之间共享权重，这可用于对抗过拟合</td>
+</tr>
+<tr>
+<td>tc_net_rnn_shared_pad</td>
+<td>98.11</td>
+<td>4个卷积块使用<code>pad=2</code>，而不是<code>ignore_border=False</code>.CNN的输出是32个尺寸为 $54\times 8$的channels。使用32个GRU（每个channel与一个GRU对应），同时共享权重，同时不使用全连接层</td>
+</tr>
+<tr>
+<td>tc_net_deeprnn_shared_pad</td>
+<td>96.57</td>
+<td>4个卷积块与上面的一样，但是在CNN的输出之后使用了2层共享权重的GRU。由于使用了2层，所以过拟合会严重一点</td>
+</tr>
+<tr>
+<td>tc_net_shared_pad_agum</td>
+<td>98.68</td>
+<td>与tc_net_rnn_shared_pad一样，但是网络会在输入上做随机裁剪，并间隔9秒。性能提升了一点</td>
+</tr>
+<tr>
+<td>tc_net_rnn_onernn</td>
+<td>99.2</td>
+<td>4个卷积块的输出被分组为一个 $32\time 54\times 8$ 的3D-tensor，单个GRU运行于54个尺寸为 $32\times 8$的序列上</td>
+</tr>
+<tr>
+<td>tc_net_rnn_onernn_notimepool</td>
+<td>99.24</td>
+<td>与上面的网络类似，但是pool层在时间轴上的步长设为1。因为CNN的输出是32个尺寸为 $852\times 8$的channels</td>
+</tr>
+</tbody></table>
+<p>第二层GRU并没有什么用，因为会产生过拟合。</p>
+<p>看起来<strong>在时间维度的子抽样并不是什么好办法。在子抽样过程中丢失的信息，被RNN用起来效果更好</strong>。在论文<a target="_blank" rel="noopener" href="http://arxiv.org/abs/1602.00367v1">文本分类</a>中，作者直接建议所有的池化层&#x2F;子抽样层都可以用RNN层来代替。本文没有尝试这种方法，不过应该是蛮有前景的。</p>
+<p>这些网络都使用了带冲量的SGD。学习率在10个epoches左右时设置为0.003，然后手工缩减到0.001，然后到0.0003。平均大概需要35个epoches来训练这些网络。</p>
+<h2 id="Ensembling（集成学习）"><a href="#Ensembling（集成学习）" class="headerlink" title="Ensembling（集成学习）"></a>Ensembling（集成学习）</h2><p>最好的单模型在验证集上取得了99.24%的准确率。所有的这些模型做了33个预测（不同的epoches之后，一些模型不止预测一次），我们只是简单的累加预测概率，并获得99.67%的准确率。出乎意料之外的是，其他集成学习尝试，（只是在所有模型的某些子集上集成）并没有获得更好的结果。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>这些CNN+RNN混合模型的超参数数量十分之多。受限于硬件，我们只覆盖了很少一部分可能的配置。</p>
+<p>由于原始的<a target="_blank" rel="noopener" href="https://apps.topcoder.com/forums/?module=Thread&threadID=866217&start=0&mc=3">竞赛</a>是非公开的数据集，所以我们没法发布全部的源代码在<a target="_blank" rel="noopener" href="https://github.com/YerevaNN/Spoken-language-identification/tree/master/theano">Github</a>。</p>
+<p>参考：　<a target="_blank" rel="noopener" href="http://blog.revolutionanalytics.com/2016/09/deep-learning-part-3.html">http://blog.revolutionanalytics.com/2016/09/deep-learning-part-3.html</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/09/15/2017-11-14-darknet_on_tx2/" rel="prev" title="darknet在nvidia tx2上的训练自己的数据">
+      <i class="fa fa-chevron-left"></i> darknet在nvidia tx2上的训练自己的数据
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/09/15/2017-09-21-tf_obj_detect_api_train_owndata/" rel="next" title="使用tensorflow object detection api训练自己的数据">
+      使用tensorflow object detection api训练自己的数据 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E5%92%8C%E8%BE%93%E5%87%BA"><span class="nav-number">1.</span> <span class="nav-text">输入和输出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">网络结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%B7%E7%A7%AF%E7%BD%91%E7%BB%9C"><span class="nav-number">3.</span> <span class="nav-text">卷积网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RNN"><span class="nav-number">4.</span> <span class="nav-text">RNN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E5%90%88CNN%E5%92%8CRNN"><span class="nav-number">5.</span> <span class="nav-text">结合CNN和RNN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ensembling%EF%BC%88%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0%EF%BC%89"><span class="nav-number">6.</span> <span class="nav-text">Ensembling（集成学习）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%90%8E"><span class="nav-number">7.</span> <span class="nav-text">最后</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="shartoo"
+      src="/images/me.jpg">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v6.3.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.6.0
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'c656cd038e01f710e260',
+      clientSecret: 'e6de2ccaaf0f7069292125b8f50e27f25b95810d',
+      repo: 'shartoo.github.io',
+      owner: 'shartoo',
+      admin: ['shartoo'],
+      id: '2ec1630d607f0469a4f7804d7bf14b27',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+</body>
+</html>

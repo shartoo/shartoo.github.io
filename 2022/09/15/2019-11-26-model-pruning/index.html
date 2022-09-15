@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="baidu-site-verification" content="93f8r6fzoB" />
+<meta name="google-site-verification" content="TRFlJTt2XTd9bCvpogqNRWkuoxwFeOUBf8ouiChVFyQ" />
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/science_256px_1075043_easyicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/science_128px_1075043_easyicon.ico">
+  <link rel="mask-icon" href="/images/stars.svg" color="#222">
+  <meta name="google-site-verification" content="TRFlJTt2XTd9bCvpogqNRWkuoxwFeOUBf8ouiChVFyQ">
+  <meta name="baidu-site-verification" content="93f8r6fzoB">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://shartoo.github.io').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="深度学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="模型剪枝和优化-torch和Tensorflow为例">
+<meta property="og:url" content="https://shartoo.github.io/2022/09/15/2019-11-26-model-pruning/index.html">
+<meta property="og:site_name" content="数据与算法">
+<meta property="og:description" content="深度学习">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/model_pruning_1.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/model_pruning_2.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/model_pruning_3.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/model_pruning_4.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/model_pruning_5.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/model_pruning_6.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/model_pruning_7.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/model_pruning_8.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/model_pruning_9.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/model_pruning_10.png">
+<meta property="article:published_time" content="2022-09-15T08:16:12.758Z">
+<meta property="article:modified_time" content="2022-09-15T08:16:12.758Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shartoo.github.io/images/blog/model_pruning_1.png">
+
+<link rel="canonical" href="https://shartoo.github.io/2022/09/15/2019-11-26-model-pruning/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>模型剪枝和优化-torch和Tensorflow为例 | 数据与算法</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">数据与算法</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">重新出发</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://shartoo.github.io/2022/09/15/2019-11-26-model-pruning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/me.jpg">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="数据与算法">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          模型剪枝和优化-torch和Tensorflow为例
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-15 16:16:12" itemprop="dateCreated datePublished" datetime="2022-09-15T16:16:12+08:00">2022-09-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">深度学习</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="1-基本概念"><a href="#1-基本概念" class="headerlink" title="1 基本概念"></a>1 基本概念</h2><h3 id="1-1-基本问题"><a href="#1-1-基本问题" class="headerlink" title="1.1 基本问题"></a>1.1 基本问题</h3><p>网络剪枝目标是</p>
+<ul>
+<li>更小的模型</li>
+<li>更快的推理(inference)速度</li>
+<li>不对准确率精度等造成过多损失</li>
+</ul>
+<p>相关技术有</p>
+<ul>
+<li>权重共享</li>
+<li>量化(quantization)</li>
+<li>低阶近似(Low-Rank Approximation)</li>
+<li>二元&#x2F;三元网络(Binary &#x2F; Ternary Net)</li>
+<li>Winograd Transformation</li>
+</ul>
+<h3 id="1-2-当前神经网络遇到的一些挑战"><a href="#1-2-当前神经网络遇到的一些挑战" class="headerlink" title="1.2 当前神经网络遇到的一些挑战"></a>1.2 当前神经网络遇到的一些挑战</h3><ol>
+<li>模型变得越来越大</li>
+</ol>
+<p><img src="/images/blog/model_pruning_1.png" alt="模型剪枝和优化"></p>
+<ol start="2">
+<li>速度越来越慢</li>
+</ol>
+<p><img src="/images/blog/model_pruning_2.png" alt="模型剪枝和优化"></p>
+<ol start="3">
+<li>能源效率</li>
+</ol>
+<p>AlphaGo 使用了1920个CPU和280个GPU，每场比赛消耗3000美元的电力。</p>
+<h3 id="1-3-网络剪枝的原理"><a href="#1-3-网络剪枝的原理" class="headerlink" title="1.3 网络剪枝的原理"></a>1.3 网络剪枝的原理</h3><p>将原本的稠密连接网络，删去不必要的连接，变成右边相对稀疏的网络。<strong>稀疏网络易于压缩，并且可以在预测时跳过零值，提高推理速度</strong>。</p>
+<p><img src="/images/blog/model_pruning_3.png" alt="模型剪枝和优化"></p>
+<p>如果可以对网络的所有神经元贡献度排序，我们可以删除排在末尾的神经元，这样可就可以减小网络获得更快的推理速度。</p>
+<p>可以使用神经元的权重的L1&#x2F;L2正则来做排序。剪枝之后，准确率将会降低。通常会执行<code>训练</code>$\rightarrow$<code>剪枝</code>$\rightarrow$<code>训练</code>$\rightarrow$<code>剪枝</code>..的循环中。如果一次剪枝过多，网络可能会损坏，无法恢复。所以在实践中，这是一个迭代执行的步骤。</p>
+<h2 id="2-剪枝技术"><a href="#2-剪枝技术" class="headerlink" title="2 剪枝技术"></a>2 剪枝技术</h2><h3 id="2-1-权重剪枝"><a href="#2-1-权重剪枝" class="headerlink" title="2.1 权重剪枝"></a>2.1 权重剪枝</h3><ul>
+<li>将权重矩阵中孤立(没有与其他权重项有连接的)的权重设置为0。这对应着上图中删除了连接</li>
+<li>此处，为了达到k%的稀疏度，我们将孤立的权重排序。在权重矩阵中，W对应了梯度，然后将最小的k%设置为0。下面的代码演示了这个过程</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">f = h5py.File(&quot;model_weights.h5&quot;,&#x27;r+&#x27;)</span><br><span class="line">for k in [.25, .50, .60, .70, .80, .90, .95, .97, .99]:</span><br><span class="line"> ranks = &#123;&#125;</span><br><span class="line"> for l in list(f[‘model_weights’])[:-1]:</span><br><span class="line"> data = f[‘model_weights’][l][l][‘kernel:0’]</span><br><span class="line"> w = np.array(data)</span><br><span class="line"> ranks[l]=(rankdata(np.abs(w),method=’dense’) — 1).astype(int).reshape(w.shape)</span><br><span class="line"> lower_bound_rank = np.ceil(np.max(ranks[l])*k).astype(int)</span><br><span class="line"> ranks[l][ranks[l]&lt;=lower_bound_rank] = 0</span><br><span class="line"> ranks[l][ranks[l]&gt;lower_bound_rank] = 1</span><br><span class="line"> w = w*ranks[l]</span><br><span class="line"> data[…] = w</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-神经元剪枝"><a href="#2-2-神经元剪枝" class="headerlink" title="2.2 神经元剪枝"></a>2.2 神经元剪枝</h3><ul>
+<li>将神经元对应的权重矩阵中的一整列的值全部设为0，这等同于删除了对应的输出神经元</li>
+<li>此处，要达到k%的稀疏度，我们对权重矩阵的列排序，排序规则是它们的L2正则，然后删除最小的k%。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">f = h5py.File(&quot;model_weights.h5&quot;,&#x27;r+&#x27;)</span><br><span class="line">for k in [.25, .50, .60, .70, .80, .90, .95, .97, .99]:</span><br><span class="line"> ranks = &#123;&#125;</span><br><span class="line"> for l in list(f[‘model_weights’])[:-1]:</span><br><span class="line">     data = f[‘model_weights’][l][l][‘kernel:0’]</span><br><span class="line">     w = np.array(data)</span><br><span class="line">     norm = LA.norm(w,axis=0)</span><br><span class="line">     norm = np.tile(norm,(w.shape[0],1))</span><br><span class="line">     ranks[l] = (rankdata(norm,method=’dense’) — 1).astype(int).reshape(norm.shape)</span><br><span class="line">     lower_bound_rank = np.ceil(np.max(ranks[l])*k).astype(int)</span><br><span class="line">     ranks[l][ranks[l]&lt;=lower_bound_rank] = 0</span><br><span class="line">     ranks[l][ranks[l]&gt;lower_bound_rank] = 1</span><br><span class="line">     w = w*ranks[l]</span><br><span class="line">     data[…] = w</span><br></pre></td></tr></table></figure>
+<p>通常随着你增加稀疏度，并且删除越来越多的神经元，模型的性能会下降，此时就需要对模型性能和稀疏度作出取舍了。</p>
+<h3 id="2-3-权重稀疏和神经元稀疏的对比"><a href="#2-3-权重稀疏和神经元稀疏的对比" class="headerlink" title="2.3 权重稀疏和神经元稀疏的对比"></a>2.3 权重稀疏和神经元稀疏的对比</h3><p><img src="/images/blog/model_pruning_4.png" alt="模型剪枝和优化"></p>
+<p>看起来权重稀疏更柔和一些。</p>
+<p><img src="/images/blog/model_pruning_5.png" alt="模型剪枝和优化"></p>
+<p>权重稀疏和神经元稀疏在减小网络尺寸上效果相同。</p>
+<h3 id="2-4-剪枝的问题"><a href="#2-4-剪枝的问题" class="headerlink" title="2.4 剪枝的问题"></a>2.4 剪枝的问题</h3><p>参考自<a target="_blank" rel="noopener" href="https://jacobgil.github.io/deeplearning/pruning-deep-learning">Pruning deep neural networks to make them fast and small</a>，说明尽管有诸多剪枝的论文，但是在现实世界里很少使用剪枝，究其原因，可能有如下</p>
+<ul>
+<li>按照贡献度排序的方法目前为止上不够完善，精度损失过高</li>
+<li>难以实现</li>
+<li>一些公司使用了剪枝技术，但是没有公开这个秘密</li>
+</ul>
+<h2 id="3-剪枝实践"><a href="#3-剪枝实践" class="headerlink" title="3 剪枝实践"></a>3 剪枝实践</h2><h3 id="3-1-剪枝为了速度VS为了更小的模型"><a href="#3-1-剪枝为了速度VS为了更小的模型" class="headerlink" title="3.1 剪枝为了速度VS为了更小的模型"></a>3.1 剪枝为了速度VS为了更小的模型</h3><p>VGG模型90%的权重在后面的全连接层，但是只贡献了1%的浮点运算。最近，人们才开始专注裁剪全连接层，通过替换全连接层模型尺寸会大幅度缩减。此处只关注于裁剪整个卷积层，但是它有个很好的副作用就是同事减小了内存消耗，如论文<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1611.06440">1611.06440 Pruning Convolutional Neural Networks for Resource Efficient Inference</a>所述，网络层越深，越容易被裁剪。这表明最后的卷积层会大幅度被裁剪，全连接后面的诸多神经元也会被抛弃。</p>
+<p>对卷积层裁剪时，同时也可以对每个卷积核做权重衰减，或者移除某个卷积核的某个特定维度(列)，这样会得到稀疏的卷积核，这么得来的结果无法得到计算速度的提升。最近的研究提倡<code>结构稀疏</code>,即整个卷积核被裁剪掉。</p>
+<p>另外一个重要提示是<strong>通过训练然后裁剪一个大网络，尤其在迁移学习时，其结果比从头训练一个小网络要好得多</strong></p>
+<h3 id="3-2-裁剪卷积核"><a href="#3-2-裁剪卷积核" class="headerlink" title="3.2 裁剪卷积核"></a>3.2 裁剪卷积核</h3><p>参考论文<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1608.08710">Pruning filters for effecient convents</a>.</p>
+<p>此论文提倡裁剪掉整个卷积核。裁剪一个卷积核的索引k，影响的是它所在网络层，以及后续的网络层。所有在索引k处的输入通道，在后续网络层会被移除掉，如下图。</p>
+<p><img src="/images/blog/model_pruning_6.png" alt="模型剪枝和优化"></p>
+<p>假若后续层是全连接层，以及feature map的通道的尺寸会是$M\times N$，那么将会从全连接层中移除$M\times N$个神经元。</p>
+<p><strong>神经元的排序相当简单，即它们每个卷积核的权重的L1 norm。</strong></p>
+<p>每次剪枝迭代都会对所有卷积核的权重L1 norm排序，裁剪掉末尾的m个filter，重新训练，并重复。</p>
+<h3 id="3-3-结构剪枝"><a href="#3-3-结构剪枝" class="headerlink" title="3.3 结构剪枝"></a>3.3 结构剪枝</h3><p>参考论文<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1512.08571">1512.08571 Structured Pruning of Deep Convolutional Neural Networks</a></p>
+<p>论文内容与上面差不多，但是排序算法复杂得多。论文使用了一个有N个粒子过滤器(particle filters)的集合，保存了N个即将被裁剪的卷积核。</p>
+<p>如果粒子(particle)所代表的卷积核没有被mask划出，每个粒子(particle)被分配一个基于网络在验证集上准确率的得分。然后基于新的得分，会得到新的裁剪mask。<br>由于此步骤执行起来相对繁琐，论文使用了较小的验证集以衡量粒子得分。</p>
+<h3 id="3-4-nvidia裁剪：卷积核裁剪以提升资源推理效率-Resource-Efficient-Inference"><a href="#3-4-nvidia裁剪：卷积核裁剪以提升资源推理效率-Resource-Efficient-Inference" class="headerlink" title="3.4 nvidia裁剪：卷积核裁剪以提升资源推理效率(Resource Efficient Inference)"></a>3.4 nvidia裁剪：卷积核裁剪以提升资源推理效率(Resource Efficient Inference)</h3><p>参考论文<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1611.06440">1611.06440 Pruning Convolutional Neural Networks for Resource Efficient Inference</a>。</p>
+<p>首先，他们提出了<strong>将一个裁剪问题视为某种优化问题：选取权重B的子集，如果裁剪它们使得网络的损失变化得最小</strong></p>
+<p>$$<br>min _{w’}|C(D|W’)-C(D|W)|\quad s.t\quad ||W’||_0\le B<br>$$</p>
+<p>注意：使用的是绝对值差异而非简单的差异，这样裁剪网络不会太多地缩减网络的性能，但是也应该不会增加。</p>
+<p>这样一来，所有的排序方法可以使用此损失函数来衡量了。</p>
+<h3 id="3-5-Oracle裁剪"><a href="#3-5-Oracle裁剪" class="headerlink" title="3.5  Oracle裁剪"></a>3.5  Oracle裁剪</h3><p>VGG16有4224个卷积核，完美的排序方法应该使用暴力裁剪每个卷积核，然后观察在训练集上损失函数变化，此方法称为oracle排序，最可能的排序方法。为了衡量其他排序方法的的效率，他们计算了其他方法与oracle的speraman协相关系数。令人惊讶的是，它们想到的排序方法(下文提到)与oracle协相关程度最高。</p>
+<p>它们想到一个新的基于损失函数的泰勒一阶展开(代表最快的计算)神经元排序方法，裁剪一个卷积核$h$与将其清零相同。</p>
+<p>$C(W,D)$是网络权重被设为W时在数据集D上的平均损失。现在，我们可以评估$C(W,D)$的在$C(W,D,h&#x3D;0)$处的展开，它们 应该十分相近，因为移除单一卷积核不会对损失值造成太大影响。</p>
+<p>$h$的排序为$C(W,D,h&#x3D;0)-C(W,D)$的绝对值。</p>
+<p>$$<br>\Theta <em>{TE}(h_i)&#x3D;|\triangle C(h_i)|&#x3D;|C(D,h_i)-\frac{\partial C}{\partial h_i}h_i-C(D,h_i)|&#x3D;|\frac{\partial C}{\partial h_i}h_i|\<br>\Theta <em>{TE}(z_l ^{k})&#x3D;|\frac{1}{M}\sum_m \frac{\partial C}{\partial z</em>{l,m} ^{(k)}}z</em>{l,m} ^{(k)}<br>$$</p>
+<p>每一层的排序都会那一整层的排序的L2 norm的排序再次normalized。这有点经验主义，不太确定是否真有必要，但是极大地影响剪枝质量。</p>
+<p>这种排序是相当直觉性的，我们不能同时使用排序方法本身所使用的激活函数、梯度。如果(激活函数、梯度)任意一个很高，代表其对输出有较大影响。将它们相乘，根据梯度或者激活函数值非常高或低，可以让我们得以衡量，是抛弃还是继续保留该卷积核。</p>
+<p>这让我很好奇，他们到底有没有将剪枝问题视为最小化网络损失函数值差异，然后想出的泰勒展开式，还是说相反的，网络损失值差异是他们的某种备份的新方法。</p>
+<h2 id="4-剪枝实践：对一个猫狗二分类器裁剪，使用泰勒展开式为排序准则"><a href="#4-剪枝实践：对一个猫狗二分类器裁剪，使用泰勒展开式为排序准则" class="headerlink" title="4 剪枝实践：对一个猫狗二分类器裁剪，使用泰勒展开式为排序准则"></a>4 剪枝实践：对一个猫狗二分类器裁剪，使用泰勒展开式为排序准则</h2><p>使用1000张狗和1000张猫的图片，对VGG模型做迁移学习训练。猫狗图片来自<a target="_blank" rel="noopener" href="https://www.kaggle.com/c/dogs-vs-cats">kaggle猫狗分类</a>,使用400张猫和400张狗的图片作为测试集。</p>
+<h3 id="4-1-剪枝之后的结果说明"><a href="#4-1-剪枝之后的结果说明" class="headerlink" title="4.1 剪枝之后的结果说明"></a>4.1 剪枝之后的结果说明</h3><ul>
+<li>准确率从98.7%掉到97.5%</li>
+<li>网络模型从538MB减小到150MB</li>
+<li>在i7 CPU上推理时间从0.78秒减小到0.227秒。基本是原来的三分之一</li>
+</ul>
+<h3 id="4-2-第一步-训练一个大网络"><a href="#4-2-第一步-训练一个大网络" class="headerlink" title="4.2 第一步:训练一个大网络"></a>4.2 第一步:训练一个大网络</h3><p>使用一个VGG16，然后丢弃最后三个全连接层，然后添加新的三个全连接层，此过程会freeze所有的卷积层，只训练新的三个全连接层。</p>
+<p>我们先准备数据集，从kaggle下载数据之后，从总分别选取1400张猫和1400张狗，其中1000张猫和1000张狗作为训练集，放在<code>train1000</code>目录下的<code>cat</code>和<code>dog</code>目录下，另外的400张猫和400张狗放在<code>val</code>目录下的<code>cat</code>和<code>dog</code>目录下。使用Tensorflow2.0的代码示例如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">import tensorflow as tf</span><br><span class="line">from keras_applications.vgg16 import VGG16</span><br><span class="line">from tensorflow.keras.preprocessing.image import ImageDataGenerator</span><br><span class="line">from tensorflow.keras.optimizers import Adam</span><br><span class="line">from tensorflow.keras.callbacks import TensorBoard,ModelCheckpoint,ReduceLROnPlateau,Callback</span><br><span class="line"></span><br><span class="line">## global parameters</span><br><span class="line"></span><br><span class="line">lr = 1e-4</span><br><span class="line">input_width,input_height = 224,224</span><br><span class="line"></span><br><span class="line">weight_save_path = &quot;./vgg16_catdog_weights/&quot;</span><br><span class="line">record_save_path = &quot;./vgg16_catdog_tensorboard/&quot;</span><br><span class="line">model_weight_file = weight_save_path + &quot;vgg16_catdog_binary.h5&quot;</span><br><span class="line">optimizer = Adam(lr=0.0001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)</span><br><span class="line"># Callback for early stopping the training</span><br><span class="line">early_stopping = tf.keras.callbacks.EarlyStopping(monitor=&#x27;val_accuracy&#x27;, min_delta=0, patience=15, verbose=1, mode=&#x27;auto&#x27;)</span><br><span class="line"># set model checkpoint callback (model weights will auto save in weight_save_path)</span><br><span class="line">checkpoint = ModelCheckpoint(model_weight_file, monitor=&#x27;val_accuracy&#x27;, verbose=1, save_best_only=True, mode=&#x27;max&#x27;, period=1)</span><br><span class="line"># monitor a learning indicator(reduce learning rate when learning effect is stagnant)</span><br><span class="line">reduceLRcallback = ReduceLROnPlateau(monitor=&#x27;val_acc&#x27;, factor=0.7, patience=5,</span><br><span class="line">                                     verbose=1, mode=&#x27;auto&#x27;, cooldown=0, min_lr=0)</span><br><span class="line"></span><br><span class="line">class LossHistory(Callback):</span><br><span class="line">    def on_train_begin(self, logs=&#123;&#125;):</span><br><span class="line">        self.losses = []</span><br><span class="line">        self.val_losses = []</span><br><span class="line">        self.acc = []</span><br><span class="line">        self.val_acc = []</span><br><span class="line">        self.recall = []</span><br><span class="line"></span><br><span class="line">    def on_epoch_end(self, batch, logs=&#123;&#125;):</span><br><span class="line">        self.losses.append(logs.get(&#x27;loss&#x27;))</span><br><span class="line">        self.val_losses.append(logs.get(&#x27;val_loss&#x27;))</span><br><span class="line">        self.acc.append(logs.get(&#x27;acc&#x27;))</span><br><span class="line">        self.val_acc.append(logs.get(&#x27;val_accuracy&#x27;))</span><br><span class="line">        self.recall.append(logs.get(&#x27;recall&#x27;))</span><br><span class="line"></span><br><span class="line">def build_model(input_width,input_height,drop_prob=0.5):</span><br><span class="line">    vgg = VGG16(include_top=False,weights=&quot;imagenet&quot;,classes=2,input_shape=(input_width,input_height,3),backend = tf.keras.backend, layers = tf.keras.layers, models = tf.keras.models, utils = tf.keras.utils)</span><br><span class="line">    for layer in vgg.layers:</span><br><span class="line">        layer.trainable =False</span><br><span class="line">    print(vgg.summary())</span><br><span class="line">    out = tf.keras.layers.Flatten()(vgg.output)</span><br><span class="line">    dense1 =tf.keras.layers.Dense(4096,activation=&quot;relu&quot;)(out)</span><br><span class="line">    drop1 = tf.keras.layers.Dropout(drop_prob)(dense1)</span><br><span class="line">    dense2 =tf.keras.layers.Dense(4096,activation=&quot;relu&quot;)(drop1)</span><br><span class="line">    drop2 = tf.keras.layers.Dropout(drop_prob)(dense2)</span><br><span class="line">    dense3 =tf.keras.layers.Dense(1,activation=&quot;sigmoid&quot;)(drop2)</span><br><span class="line">    merged_model = tf.keras.models.Model(vgg.input,dense3)</span><br><span class="line">    print(merged_model.summary())</span><br><span class="line">    return merged_model</span><br><span class="line"></span><br><span class="line">def train_val_generator(train_img_path,val_img_path):</span><br><span class="line">    train_datagen = ImageDataGenerator(rescale=1 / 255.,</span><br><span class="line">                                           rotation_range=45,</span><br><span class="line">                                           width_shift_range=0.2,</span><br><span class="line">                                           # degree of horizontal offset(a ratio relative to image width)</span><br><span class="line">                                           height_shift_range=0.2,</span><br><span class="line">                                           # degree of vertical offset(a ratio relatice to image height)</span><br><span class="line">                                           shear_range=0.2, # the range of shear transformation(a ratio in 0 ~ 1)</span><br><span class="line">                                           zoom_range=0.25,</span><br><span class="line">                                           # degree of random zoom(the zoom range will be [1 - zoom_range, 1 + zoom_range])</span><br><span class="line">                                           horizontal_flip=True, # whether to perform horizontal flip</span><br><span class="line">                                           vertical_flip=True, # whether to perform vertical flip</span><br><span class="line">                                           fill_mode=&#x27;nearest&#x27; # mode list: nearest, constant, reflect, wrap</span><br><span class="line">                                           )</span><br><span class="line">    val_datagen = ImageDataGenerator(rescale=1 / 255.)</span><br><span class="line"></span><br><span class="line">    train_generator = train_datagen.flow_from_directory(</span><br><span class="line">            train_img_path,</span><br><span class="line">            shuffle=True,</span><br><span class="line">            target_size=(input_width,input_height),</span><br><span class="line">            batch_size=batch_size,</span><br><span class="line">            class_mode=&#x27;binary&#x27;)</span><br><span class="line"></span><br><span class="line">    validation_generator = val_datagen.flow_from_directory(</span><br><span class="line">            val_img_path,</span><br><span class="line">            target_size=(input_width,input_height),</span><br><span class="line">            batch_size=batch_size,</span><br><span class="line">            class_mode=&#x27;binary&#x27;)</span><br><span class="line">    return train_generator,validation_generator</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def train_model(train_img_path,val_img_path,batch_size,epochs):</span><br><span class="line">    if os.path.exists(model_weight_file):</span><br><span class="line">        model = tf.keras.models.load_model(model_weight_file)</span><br><span class="line">    else:</span><br><span class="line">        model = build_model(input_width,input_height)</span><br><span class="line">        model.compile(optimizer=optimizer,</span><br><span class="line">                      loss=&#x27;binary_crossentropy&#x27;,</span><br><span class="line">                      metrics=[&#x27;accuracy&#x27;])</span><br><span class="line">    train_generator, validation_generator = train_val_generator(train_img_path,val_img_path)</span><br><span class="line">    train_sample_count = len(train_generator.filenames)</span><br><span class="line">    val_sample_count = len(validation_generator.filenames)</span><br><span class="line">    print(train_sample_count, val_sample_count)</span><br><span class="line">    history = LossHistory()</span><br><span class="line">    model.fit_generator(</span><br><span class="line">        train_generator,</span><br><span class="line">        steps_per_epoch=int(train_sample_count / batch_size) + 1,</span><br><span class="line">        epochs=epochs,</span><br><span class="line">        validation_data=validation_generator,</span><br><span class="line">        validation_steps=int(val_sample_count / batch_size) + 1,</span><br><span class="line">        callbacks=[TensorBoard(log_dir=record_save_path), early_stopping, history, checkpoint, reduceLRcallback]</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">if __name__== &#x27;__main__&#x27;:</span><br><span class="line">    train_set_path = &#x27;E:/data/images/dogs-vs-cats/train1000&#x27;</span><br><span class="line">    valid_set_path = &#x27;E:/data/images/dogs-vs-cats/val&#x27;</span><br><span class="line">    batch_size = 8</span><br><span class="line">    epochs = 20</span><br><span class="line">    train_model(train_set_path, valid_set_path, batch_size,epochs)</span><br></pre></td></tr></table></figure>
+
+<p>最后的准确率，没有作者那么高，只有90%，如下:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">236/251 [===========================&gt;..] - ETA: 2s - loss: 0.3744 - accuracy: 0.8231</span><br><span class="line">237/251 [===========================&gt;..] - ETA: 2s - loss: 0.3738 - accuracy: 0.8233</span><br><span class="line">238/251 [===========================&gt;..] - ETA: 2s - loss: 0.3747 - accuracy: 0.8230</span><br><span class="line">239/251 [===========================&gt;..] - ETA: 1s - loss: 0.3746 - accuracy: 0.8232</span><br><span class="line">240/251 [===========================&gt;..] - ETA: 1s - loss: 0.3746 - accuracy: 0.8229</span><br><span class="line">241/251 [===========================&gt;..] - ETA: 1s - loss: 0.3747 - accuracy: 0.8231</span><br><span class="line">242/251 [===========================&gt;..] - ETA: 1s - loss: 0.3738 - accuracy: 0.8239</span><br><span class="line">243/251 [============================&gt;.] - ETA: 1s - loss: 0.3735 - accuracy: 0.8236</span><br><span class="line">244/251 [============================&gt;.] - ETA: 1s - loss: 0.3728 - accuracy: 0.8243</span><br><span class="line">245/251 [============================&gt;.] - ETA: 0s - loss: 0.3728 - accuracy: 0.8240</span><br><span class="line">246/251 [============================&gt;.] - ETA: 0s - loss: 0.3718 - accuracy: 0.8242</span><br><span class="line">247/251 [============================&gt;.] - ETA: 0s - loss: 0.3735 - accuracy: 0.8239</span><br><span class="line">248/251 [============================&gt;.] - ETA: 0s - loss: 0.3746 - accuracy: 0.8231</span><br><span class="line">249/251 [============================&gt;.] - ETA: 0s - loss: 0.3745 - accuracy: 0.8228</span><br><span class="line">250/251 [============================&gt;.] - ETA: 0s - loss: 0.3736 - accuracy: 0.8235</span><br><span class="line">Epoch 00020: val_accuracy did not improve from 0.90274</span><br><span class="line"></span><br><span class="line">251/251 [==============================] - 47s 188ms/step - loss: 0.3742 - accuracy: 0.8227 - val_loss: 0.2761 - val_accuracy: 0.8815</span><br></pre></td></tr></table></figure>
+<p>查看对应的验证集的tensorboard如下</p>
+<p><img src="/images/blog/model_pruning_7.jpg" alt="模型剪枝和优化"></p>
+<h3 id="4-3-对卷积核排序"><a href="#4-3-对卷积核排序" class="headerlink" title="4.3  对卷积核排序"></a>4.3  对卷积核排序</h3><p>为了计算泰勒展开指标，我们需要在数据集上做一个<code>前向+后向传播</code>(可以在一个较小的数据集上)。</p>
+<p>现在需要获取卷积层的梯度和激活函数。可以在梯度计算时注册一个hook，当这些东西就绪时会调用这个callback。</p>
+<p>现在，我们可以从<code>self.activations</code>中获得激活函数值，当梯度就绪时会执行计算排序的方法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">def compute_rank(self, grad):</span><br><span class="line"> activation_index = len(self.activations) - self.grad_index - 1</span><br><span class="line"> activation = self.activations[activation_index]</span><br><span class="line"> values = \</span><br><span class="line">  torch.sum((activation * grad), dim = 0).\</span><br><span class="line">   sum(dim=2).sum(dim=3)[0, :, 0, 0].data</span><br><span class="line">	</span><br><span class="line"> # Normalize the rank by the filter dimensions</span><br><span class="line"> values = \</span><br><span class="line">  values / (activation.size(0) * activation.size(2) * activation.size(3))</span><br><span class="line"></span><br><span class="line"> if activation_index not in self.filter_ranks:</span><br><span class="line">  self.filter_ranks[activation_index] = \</span><br><span class="line">   torch.FloatTensor(activation.size(1)).zero_().cuda()</span><br><span class="line"></span><br><span class="line"> self.filter_ranks[activation_index] += values</span><br><span class="line"> self.grad_index += 1</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-剪枝实践：使用Tensorflow-训练剪枝MNIST模型为例"><a href="#5-剪枝实践：使用Tensorflow-训练剪枝MNIST模型为例" class="headerlink" title="5. 剪枝实践：使用Tensorflow 训练剪枝MNIST模型为例"></a>5. 剪枝实践：使用Tensorflow 训练剪枝MNIST模型为例</h2><p>下面使用tensorflow api为例，其他API也有类似功能。基于keras api的权重剪枝，在训练过程中迭代的删除一些没用的连接，基于连接的梯度。下面示范通过简单的使用一种通用文件压缩算法(如zip压缩)，就可以缩减keras模型</p>
+<h3 id="5-1-训练一个剪枝的模型"><a href="#5-1-训练一个剪枝的模型" class="headerlink" title="5.1 训练一个剪枝的模型"></a>5.1 训练一个剪枝的模型</h3><p>tensorflow提供一个<code>prune_low_magnitude()</code>的API来训练模型，模型中会移除一些连接。基于Keras的API可以应用于独立的网络层，或者整个网络。在高层级，此技术是在给定规划和目标稀疏度的前提下，通过迭代的移除(即zeroing out)网络层之间的连接。</p>
+<p>例如，典型的配置是目标稀疏度为75%，通过每迭代100步(epoch)裁剪一些连接，从第2000步(epoch)开始。更多配置需要查看官方文档。</p>
+<h3 id="5-2-一层一层的构建一个剪枝的模型"><a href="#5-2-一层一层的构建一个剪枝的模型" class="headerlink" title="5.2 一层一层的构建一个剪枝的模型"></a>5.2 一层一层的构建一个剪枝的模型</h3><p>下面展示如何在网络层层面使用API，构建一个剪枝的分类模型。</p>
+<ul>
+<li>此时，<code>prune_low_magnitude()</code>接收一个想要被裁剪的网络层作为参数。</li>
+<li>此函数需要一个剪枝参数，配置的是在训练过程中的剪枝算法。以下是相关参数的意义<ul>
+<li><strong>Sparsity</strong>: 整个训练过程中使用的是多项式递减(PolynomialDecay)。从50%的稀疏度开始，然后逐渐地训练模型以达到90%的稀疏度。x%的稀疏度代表x%的权重标量将会被裁剪掉</li>
+<li><strong>Schedule</strong>：从第2000步开始到训练结束，网络层之间的连接会逐渐被裁剪掉，并且是每100步执行一次。究其原因是，要训练一个在几个步骤内稳定达到一定准确率的模型，以帮助其收敛。同时，也让模型在每次裁剪之后能恢复，所以并不是每一步都要裁剪。我们可以将裁剪频率设为100.</li>
+</ul>
+</li>
+</ul>
+<p>为了演示如何保存并重新载入裁剪的模型，我们先训练一个模型10个epoch，保存，然后载入模型并继续训练2个epoch。逐渐地稀疏，四个重要参数是**<code>begin_sparsity</code>,<code>final_sparsity</code>,<code>begin_step</code>,<code>end_step</code>**。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">from tensorflow_model_optimization.sparsity import keras as sparsity</span><br><span class="line"></span><br><span class="line">epochs = 12</span><br><span class="line">l = tf.keras.layers</span><br><span class="line">num_train_samples = x_train.shape[0]</span><br><span class="line">end_step = np.ceil(1.0 * num_train_samples / batch_size).astype(np.int32) * epochs</span><br><span class="line">print(&#x27;End step: &#x27; + str(end_step))</span><br><span class="line">pruning_params = &#123;</span><br><span class="line">      &#x27;pruning_schedule&#x27;: sparsity.PolynomialDecay(initial_sparsity=0.50,</span><br><span class="line">                                                   final_sparsity=0.90,</span><br><span class="line">                                                   begin_step=2000,</span><br><span class="line">                                                   end_step=end_step,</span><br><span class="line">                                                   frequency=100)</span><br><span class="line">&#125;</span><br><span class="line">pruned_model = tf.keras.Sequential([</span><br><span class="line">    sparsity.prune_low_magnitude(</span><br><span class="line">        l.Conv2D(32, 5, padding=&#x27;same&#x27;, activation=&#x27;relu&#x27;),</span><br><span class="line">        input_shape=input_shape,</span><br><span class="line">        **pruning_params),</span><br><span class="line">    l.MaxPooling2D((2, 2), (2, 2), padding=&#x27;same&#x27;),</span><br><span class="line">    l.BatchNormalization(),</span><br><span class="line">    sparsity.prune_low_magnitude(</span><br><span class="line">        l.Conv2D(64, 5, padding=&#x27;same&#x27;, activation=&#x27;relu&#x27;), **pruning_params),</span><br><span class="line">    l.MaxPooling2D((2, 2), (2, 2), padding=&#x27;same&#x27;),</span><br><span class="line">    l.Flatten(),</span><br><span class="line">    sparsity.prune_low_magnitude(l.Dense(1024, activation=&#x27;relu&#x27;),</span><br><span class="line">                                 **pruning_params),</span><br><span class="line">    l.Dropout(0.4),</span><br><span class="line">    sparsity.prune_low_magnitude(l.Dense(num_classes, activation=&#x27;softmax&#x27;),</span><br><span class="line">                                 **pruning_params)</span><br><span class="line">])</span><br><span class="line">pruned_model.summary()</span><br></pre></td></tr></table></figure>
+
+<p>作为对比，我们训练了一个MNSIT数据集的分类模型，首先，我们准备的数据和参数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line">import tempfile</span><br><span class="line">import zipfile</span><br><span class="line">import os</span><br><span class="line">import tensorboard</span><br><span class="line">import numpy as np</span><br><span class="line"></span><br><span class="line">from tensorflow_model_optimization.sparsity import keras as sparsity</span><br><span class="line"></span><br><span class="line">## global parameters</span><br><span class="line">batch_size = 128</span><br><span class="line">num_classes = 10</span><br><span class="line">epochs = 10</span><br><span class="line"># input image dimensions</span><br><span class="line">img_rows, img_cols = 28, 28</span><br><span class="line">logdir = tempfile.mkdtemp()</span><br><span class="line">print(&#x27;Writing training logs to &#x27; + logdir)</span><br><span class="line"></span><br><span class="line">def prepare_trainval(img_rows, img_cols):</span><br><span class="line">    # the data, shuffled and split between train and test sets</span><br><span class="line">    (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()</span><br><span class="line"></span><br><span class="line">    if tf.keras.backend.image_data_format() == &#x27;channels_first&#x27;:</span><br><span class="line">      x_train = x_train.reshape(x_train.shape[0], 1, img_rows, img_cols)</span><br><span class="line">      x_test = x_test.reshape(x_test.shape[0], 1, img_rows, img_cols)</span><br><span class="line">      input_shape = (1, img_rows, img_cols)</span><br><span class="line">    else:</span><br><span class="line">      x_train = x_train.reshape(x_train.shape[0], img_rows, img_cols, 1)</span><br><span class="line">      x_test = x_test.reshape(x_test.shape[0], img_rows, img_cols, 1)</span><br><span class="line">      input_shape = (img_rows, img_cols, 1)</span><br><span class="line"></span><br><span class="line">    x_train = x_train.astype(&#x27;float32&#x27;)</span><br><span class="line">    x_test = x_test.astype(&#x27;float32&#x27;)</span><br><span class="line">    x_train /= 255</span><br><span class="line">    x_test /= 255</span><br><span class="line">    print(&#x27;x_train shape:&#x27;, x_train.shape)</span><br><span class="line">    print(x_train.shape[0], &#x27;train samples&#x27;)</span><br><span class="line">    print(x_test.shape[0], &#x27;test samples&#x27;)</span><br><span class="line"></span><br><span class="line">    # convert class vectors to binary class matrices</span><br><span class="line">    y_train = tf.keras.utils.to_categorical(y_train, num_classes)</span><br><span class="line">    y_test = tf.keras.utils.to_categorical(y_test, num_classes)</span><br><span class="line">    return x_train,x_test,y_train,y_test</span><br></pre></td></tr></table></figure>
+<h4 id="5-2-1-构建原始的MNIST分类模型"><a href="#5-2-1-构建原始的MNIST分类模型" class="headerlink" title="5.2.1 构建原始的MNIST分类模型"></a>5.2.1 构建原始的MNIST分类模型</h4><p>使用keras构建一个简单的keras模型如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">def build_clean_model(input_shape):</span><br><span class="line">    l = tf.keras.layers</span><br><span class="line">    model = tf.keras.Sequential([</span><br><span class="line">        l.Conv2D(</span><br><span class="line">            32, 5, padding=&#x27;same&#x27;, activation=&#x27;relu&#x27;, input_shape=input_shape),</span><br><span class="line">        l.MaxPooling2D((2, 2), (2, 2), padding=&#x27;same&#x27;),</span><br><span class="line">        l.BatchNormalization(),</span><br><span class="line">        l.Conv2D(64, 5, padding=&#x27;same&#x27;, activation=&#x27;relu&#x27;),</span><br><span class="line">        l.MaxPooling2D((2, 2), (2, 2), padding=&#x27;same&#x27;),</span><br><span class="line">        l.Flatten(),</span><br><span class="line">        l.Dense(1024, activation=&#x27;relu&#x27;),</span><br><span class="line">        l.Dropout(0.4),</span><br><span class="line">        l.Dense(num_classes, activation=&#x27;softmax&#x27;)</span><br><span class="line">    ])</span><br><span class="line">    model.compile(</span><br><span class="line">        loss=tf.keras.losses.categorical_crossentropy,</span><br><span class="line">        optimizer=&#x27;adam&#x27;,</span><br><span class="line">        metrics=[&#x27;accuracy&#x27;])</span><br><span class="line">    model.summary()</span><br><span class="line">    return model</span><br></pre></td></tr></table></figure>
+<p>训练模型代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">def train_clean_model(x_train,x_test,y_train,y_test,epochs,ori_mnist_model_file):</span><br><span class="line">    callbacks = [tf.keras.callbacks.TensorBoard(log_dir=logdir, profile_batch=0)]</span><br><span class="line">    input_shape = (img_rows, img_cols, 1)</span><br><span class="line">    model = build_clean_model(input_shape)</span><br><span class="line">    model.fit(x_train, y_train,</span><br><span class="line">              batch_size=batch_size,</span><br><span class="line">              epochs=epochs,</span><br><span class="line">              verbose=1,</span><br><span class="line">              callbacks=callbacks,</span><br><span class="line">              validation_data=(x_test, y_test))</span><br><span class="line">    score = model.evaluate(x_test, y_test, verbose=0)</span><br><span class="line">    print(&#x27;Saving model to: &#x27;,ori_mnist_model_file)</span><br><span class="line">    tf.keras.models.save_model(model,ori_mnist_model_file, include_optimizer=False)</span><br><span class="line">    print(&#x27;Test loss:&#x27;, score[0])</span><br><span class="line">    print(&#x27;Test accuracy:&#x27;, score[1])</span><br><span class="line"></span><br><span class="line">x_train,x_test,y_train,y_test = prepare_trainval(img_rows, img_cols)</span><br><span class="line">ori_mnist_model_file = &quot;./ori_mnist_classifier.h5&quot;</span><br><span class="line">train_clean_model(x_train,x_test,y_train,y_test,epochs,ori_mnist_model_file)</span><br></pre></td></tr></table></figure>
+<p>模型训练结果输出:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">45568/60000 [=====================&gt;........] - ETA: 0s - loss: 0.0119 - accuracy: 0.9962</span><br><span class="line">46720/60000 [======================&gt;.......] - ETA: 0s - loss: 0.0120 - accuracy: 0.9962</span><br><span class="line">47872/60000 [======================&gt;.......] - ETA: 0s - loss: 0.0122 - accuracy: 0.9961</span><br><span class="line">49024/60000 [=======================&gt;......] - ETA: 0s - loss: 0.0123 - accuracy: 0.9961</span><br><span class="line">50176/60000 [========================&gt;.....] - ETA: 0s - loss: 0.0123 - accuracy: 0.9961</span><br><span class="line">51328/60000 [========================&gt;.....] - ETA: 0s - loss: 0.0122 - accuracy: 0.9961</span><br><span class="line">52480/60000 [=========================&gt;....] - ETA: 0s - loss: 0.0123 - accuracy: 0.9961</span><br><span class="line">53632/60000 [=========================&gt;....] - ETA: 0s - loss: 0.0121 - accuracy: 0.9962</span><br><span class="line">54784/60000 [==========================&gt;...] - ETA: 0s - loss: 0.0125 - accuracy: 0.9961</span><br><span class="line">56064/60000 [===========================&gt;..] - ETA: 0s - loss: 0.0126 - accuracy: 0.9961</span><br><span class="line">57216/60000 [===========================&gt;..] - ETA: 0s - loss: 0.0126 - accuracy: 0.9961</span><br><span class="line">58368/60000 [============================&gt;.] - ETA: 0s - loss: 0.0125 - accuracy: 0.9961</span><br><span class="line">59520/60000 [============================&gt;.] - ETA: 0s - loss: 0.0127 - accuracy: 0.9962</span><br><span class="line">60000/60000 [==============================] - 3s 49us/sample - loss: 0.0127 - accuracy: 0.9961 - val_loss: 0.0297 - val_accuracy: 0.9919</span><br><span class="line">Saving model to: ./ori_mnist_classifier.h5</span><br><span class="line">Test loss: 0.029679151664800906</span><br><span class="line">Test accuracy: 0.9919</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-2-2-构建剪枝的MNIST分类模型"><a href="#5-2-2-构建剪枝的MNIST分类模型" class="headerlink" title="5.2.2 构建剪枝的MNIST分类模型"></a>5.2.2 构建剪枝的MNIST分类模型</h4><p>注意和上面的5.2.1构建原始分类模型的代码对比</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">def build_prune_model(input_shape,end_step):</span><br><span class="line">    l = tf.keras.layers</span><br><span class="line">    print(&#x27;End step: &#x27; + str(end_step))</span><br><span class="line">    pruning_params = &#123;</span><br><span class="line">          &#x27;pruning_schedule&#x27;: sparsity.PolynomialDecay(initial_sparsity=0.50,</span><br><span class="line">                                                       final_sparsity=0.90,</span><br><span class="line">                                                       begin_step=2000,</span><br><span class="line">                                                       end_step=end_step,</span><br><span class="line">                                                       frequency=100)</span><br><span class="line">    &#125;</span><br><span class="line">    pruned_model = tf.keras.Sequential([</span><br><span class="line">        sparsity.prune_low_magnitude(</span><br><span class="line">            l.Conv2D(32, 5, padding=&#x27;same&#x27;, activation=&#x27;relu&#x27;),</span><br><span class="line">            input_shape=input_shape,</span><br><span class="line">            **pruning_params),</span><br><span class="line">        l.MaxPooling2D((2, 2), (2, 2), padding=&#x27;same&#x27;),</span><br><span class="line">        l.BatchNormalization(),</span><br><span class="line">        sparsity.prune_low_magnitude(</span><br><span class="line">            l.Conv2D(64, 5, padding=&#x27;same&#x27;, activation=&#x27;relu&#x27;), **pruning_params),</span><br><span class="line">        l.MaxPooling2D((2, 2), (2, 2), padding=&#x27;same&#x27;),</span><br><span class="line">        l.Flatten(),</span><br><span class="line">        sparsity.prune_low_magnitude(l.Dense(1024, activation=&#x27;relu&#x27;),</span><br><span class="line">                                     **pruning_params),</span><br><span class="line">        l.Dropout(0.4),</span><br><span class="line">        sparsity.prune_low_magnitude(l.Dense(num_classes, activation=&#x27;softmax&#x27;),</span><br><span class="line">                                     **pruning_params)</span><br><span class="line">    ])</span><br><span class="line">    pruned_model.compile(</span><br><span class="line">        loss=tf.keras.losses.categorical_crossentropy,</span><br><span class="line">        optimizer=&#x27;adam&#x27;,</span><br><span class="line">        metrics=[&#x27;accuracy&#x27;])</span><br><span class="line"></span><br><span class="line">    pruned_model.summary()</span><br><span class="line">    return pruned_model</span><br></pre></td></tr></table></figure>
+<p>训练剪枝模型</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">def train_prune_model(x_train,x_test,y_train,y_test,epochs,prune_model_file):</span><br><span class="line">    input_shape = (img_rows, img_cols,1)</span><br><span class="line">    num_train_samples = x_train.shape[0]</span><br><span class="line">    end_step = np.ceil(1.0 * num_train_samples / batch_size).astype(np.int32) * epochs</span><br><span class="line">    pruned_model = build_prune_model(input_shape,end_step)</span><br><span class="line">    # Add a pruning step callback to peg the pruning step to the optimizer&#x27;s</span><br><span class="line">    # step. Also add a callback to add pruning summaries to tensorboard</span><br><span class="line">    callbacks = [</span><br><span class="line">        sparsity.UpdatePruningStep(),</span><br><span class="line">        sparsity.PruningSummaries(log_dir=logdir, profile_batch=0)</span><br><span class="line">    ]</span><br><span class="line">    pruned_model.fit(x_train, y_train,</span><br><span class="line">              batch_size=batch_size,</span><br><span class="line">              epochs=10,</span><br><span class="line">              verbose=1,</span><br><span class="line">              callbacks=callbacks,</span><br><span class="line">              validation_data=(x_test, y_test))</span><br><span class="line">    score = pruned_model.evaluate(x_test, y_test, verbose=0)</span><br><span class="line">    print(&#x27;Saving pruned model to: &#x27;, prune_model_file)</span><br><span class="line">    # 保存模型时要设置 include_optimizer 为True by default.</span><br><span class="line">    tf.keras.models.save_model(pruned_model,prune_model_file, include_optimizer=True)</span><br><span class="line">    print(&#x27;Test loss:&#x27;, score[0])</span><br><span class="line">    print(&#x27;Test accuracy:&#x27;, score[1])</span><br><span class="line"></span><br><span class="line">x_train,x_test,y_train,y_test = prepare_trainval(img_rows, img_cols)</span><br><span class="line">prune_model_file = &quot;./prune_mnist_classifier.h5&quot;</span><br><span class="line">train_prune_model(x_train,x_test,y_train,y_test,epochs,prune_model_file)</span><br></pre></td></tr></table></figure>
+
+<p>训练结果输出</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">52224/60000 [=========================&gt;....] - ETA: 0s - loss: 0.0127 - accuracy: 0.9961</span><br><span class="line">53120/60000 [=========================&gt;....] - ETA: 0s - loss: 0.0126 - accuracy: 0.9961</span><br><span class="line">54016/60000 [==========================&gt;...] - ETA: 0s - loss: 0.0125 - accuracy: 0.9962</span><br><span class="line">54912/60000 [==========================&gt;...] - ETA: 0s - loss: 0.0124 - accuracy: 0.9962</span><br><span class="line">55808/60000 [==========================&gt;...] - ETA: 0s - loss: 0.0124 - accuracy: 0.9962</span><br><span class="line">56704/60000 [===========================&gt;..] - ETA: 0s - loss: 0.0123 - accuracy: 0.9962</span><br><span class="line">57600/60000 [===========================&gt;..] - ETA: 0s - loss: 0.0123 - accuracy: 0.9962</span><br><span class="line">58368/60000 [============================&gt;.] - ETA: 0s - loss: 0.0123 - accuracy: 0.9962</span><br><span class="line">59264/60000 [============================&gt;.] - ETA: 0s - loss: 0.0123 - accuracy: 0.9962</span><br><span class="line">60000/60000 [==============================] - 4s 69us/sample - loss: 0.0123 - accuracy: 0.9962 - val_loss: 0.0226 - val_accuracy: 0.9920</span><br><span class="line">Saving pruned model to: ./prune_mnist_classifier.h5</span><br><span class="line">Test loss: 0.022609539373161534</span><br><span class="line">Test accuracy: 0.992</span><br></pre></td></tr></table></figure>
+
+<p>如果我们要载入剪枝的模型，我们得使用<strong>prune_scope()会话</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">with sparsity.prune_scope():</span><br><span class="line">  restored_model = tf.keras.models.load_model(checkpoint_file)</span><br><span class="line"></span><br><span class="line">restored_model.fit(x_train, y_train,</span><br><span class="line">                   batch_size=batch_size,</span><br><span class="line">                   epochs=2,</span><br><span class="line">                   verbose=1,</span><br><span class="line">                   callbacks=callbacks,</span><br><span class="line">                   validation_data=(x_test, y_test))</span><br><span class="line"></span><br><span class="line">score = restored_model.evaluate(x_test, y_test, verbose=0)</span><br><span class="line">print(&#x27;Test loss:&#x27;, score[0])</span><br><span class="line">print(&#x27;Test accuracy:&#x27;, score[1])</span><br></pre></td></tr></table></figure>
+
+<p>在训练和载入剪枝模型时有两点需要注意</p>
+<ol>
+<li>保存模型时， <code>include_optimizer</code>必须设置为<code>True</code>。因为剪枝过程需要保存optimizer的状态。</li>
+<li>载入剪枝模型时需要在<code>prune_scope()</code>会话中来解序列化。</li>
+</ol>
+<h4 id="5-2-3-对照：如何使用剪枝模型"><a href="#5-2-3-对照：如何使用剪枝模型" class="headerlink" title="5.2.3 对照：如何使用剪枝模型"></a>5.2.3 对照：如何使用剪枝模型</h4><p><strong>构建模型时</strong></p>
+<p><img src="/images/blog/model_pruning_8.png" alt="模型剪枝和优化"></p>
+<p>我们对比发现，只有需要计算梯度的网络层需要使用剪枝的包装。同时需要设定好剪枝的规划。</p>
+<p><strong>训练模型时</strong></p>
+<p><img src="/images/blog/model_pruning_9.png" alt="模型剪枝和优化"></p>
+<p>没有太大的区别，除了以下两点</p>
+<ol>
+<li>需要新增关于剪枝的统计</li>
+<li>保存模型时需要将optimizer也一起保存</li>
+</ol>
+<p>使用netron打开两个保存的模型，效果如下，可以看到裁剪的模型都被放在了<code>PruneLowMagnitude</code>中。</p>
+<p><img src="/images/blog/model_pruning_10.png" alt="模型剪枝和优化"></p>
+<h3 id="5-3-对整个模型剪枝"><a href="#5-3-对整个模型剪枝" class="headerlink" title="5.3 对整个模型剪枝"></a>5.3 对整个模型剪枝</h3><p>函数<code>prune_low_magnitude</code>可以应用于整个keras模型。此时算法会被应用于所有对权重剪枝<strong>友好</strong>(Keras api的知道的)的网络层，<strong>不友好</strong>的网络层会直接忽略掉，<strong>未知</strong>的网络层可能会报错。</p>
+<p>如果模型的网络层是API不知道如何剪枝的，但是非常适合不剪枝，那么交给API来修剪每层的basis即可(即不修剪卷积核的权重，只修剪basis)。</p>
+<p>除去剪枝配置参数，相同的配置可以应用于网络的所有的剪枝层。同时需要注意的是，剪枝不保留原模型的优化器optimizer，需要对剪枝的模型重新训练一个新的优化器optimizer。</p>
+<p>开始之前，假设我们已经有一个已经序列化过的预训练的Keras模型，想对其权重剪枝。以前面的MNIST模型为例。先载入模型</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># Load the serialized model</span><br><span class="line">loaded_model = tf.keras.models.load_model(keras_file)</span><br></pre></td></tr></table></figure>
+<p>然后可以剪枝模型然后编译剪枝之后的模型并训练。此时的训练将重新从第0步开始，鉴于模型此时已经达到了一定的准确率，我们可以直接开始剪枝。将开始步骤设置为0，然后只训练4个epochs。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">epochs = 4</span><br><span class="line">end_step = np.ceil(1.0 * num_train_samples / batch_size).astype(np.int32) * epochs</span><br><span class="line">print(end_step)</span><br><span class="line"></span><br><span class="line">new_pruning_params = &#123;</span><br><span class="line">      &#x27;pruning_schedule&#x27;: sparsity.PolynomialDecay(initial_sparsity=0.50,</span><br><span class="line">                                                   final_sparsity=0.90,</span><br><span class="line">                                                   begin_step=0,</span><br><span class="line">                                                   end_step=end_step,</span><br><span class="line">                                                   frequency=100)</span><br><span class="line">&#125;</span><br><span class="line">new_pruned_model = sparsity.prune_low_magnitude(model, **new_pruning_params)</span><br><span class="line">new_pruned_model.summary()</span><br><span class="line">new_pruned_model.compile(</span><br><span class="line">    loss=tf.keras.losses.categorical_crossentropy,</span><br><span class="line">    optimizer=&#x27;adam&#x27;,</span><br><span class="line">    metrics=[&#x27;accuracy&#x27;])</span><br></pre></td></tr></table></figure>
+<p>再训练4个epochs</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># Add a pruning step callback to peg the pruning step to the optimizer&#x27;s</span><br><span class="line"># step. Also add a callback to add pruning summaries to tensorboard</span><br><span class="line">callbacks = [</span><br><span class="line">    sparsity.UpdatePruningStep(),</span><br><span class="line">    sparsity.PruningSummaries(log_dir=logdir, profile_batch=0)</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">new_pruned_model.fit(x_train, y_train,</span><br><span class="line">          batch_size=batch_size,</span><br><span class="line">          epochs=epochs,</span><br><span class="line">          verbose=1,</span><br><span class="line">          callbacks=callbacks,</span><br><span class="line">          validation_data=(x_test, y_test))</span><br><span class="line"></span><br><span class="line">score = new_pruned_model.evaluate(x_test, y_test, verbose=0)</span><br><span class="line">print(&#x27;Test loss:&#x27;, score[0])</span><br><span class="line">print(&#x27;Test accuracy:&#x27;, score[1])</span><br></pre></td></tr></table></figure>
+<p>模型导出到serving</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">final_model = sparsity.strip_pruning(pruned_model)</span><br><span class="line">final_model.summary()</span><br><span class="line"></span><br><span class="line">_, new_pruned_keras_file = tempfile.mkstemp(&#x27;.h5&#x27;)</span><br><span class="line">print(&#x27;Saving pruned model to: &#x27;, new_pruned_keras_file)</span><br><span class="line">tf.keras.models.save_model(final_model, new_pruned_keras_file, </span><br><span class="line">                        include_optimizer=False)</span><br><span class="line"></span><br><span class="line"># 压缩之后的模型大小与前面一层层剪枝的大小一样</span><br><span class="line">_, zip3 = tempfile.mkstemp(&#x27;.zip&#x27;)</span><br><span class="line">with zipfile.ZipFile(zip3, &#x27;w&#x27;, compression=zipfile.ZIP_DEFLATED) as f:</span><br><span class="line">  f.write(new_pruned_keras_file)</span><br><span class="line">print(&quot;Size of the pruned model before compression: %.2f Mb&quot; </span><br><span class="line">      % (os.path.getsize(new_pruned_keras_file) / float(2**20)))</span><br><span class="line">print(&quot;Size of the pruned model after compression: %.2f Mb&quot; </span><br><span class="line">      % (os.path.getsize(zip3) / float(2**20)))</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ol>
+<li><a target="_blank" rel="noopener" href="https://towardsdatascience.com/pruning-deep-neural-network-56cae1ec5505">medium Pruning Deep Neural Networks</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/tensorflow/model-optimization/blob/master/tensorflow_model_optimization/g3doc/guide/pruning/pruning_with_keras.ipynb">tensorflow mnist 剪枝</a></li>
+<li><a target="_blank" rel="noopener" href="https://jacobgil.github.io/deeplearning/pruning-deep-learning">Pruning deep neural networks to make them fast and small</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/43839431/tensorflow-how-to-replace-or-modify-gradient/43948872">stackoverflow 如何在tensorflow计算梯度时更改计算方式</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.tensorflow.org/api_docs/python/tf/custom_gradient">Tensorflow官方API 如何更改梯度计算方式</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/09/15/2017-04-01-voice-basic/" rel="prev" title="语音处理0：基础">
+      <i class="fa fa-chevron-left"></i> 语音处理0：基础
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/09/15/2022-09-09-GNN-Interduce/" rel="next" title="图神经网络A Gentle Introduction to Graph Neural Networks">
+      图神经网络A Gentle Introduction to Graph Neural Networks <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">1 基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 基本问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%BD%93%E5%89%8D%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8C%91%E6%88%98"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 当前神经网络遇到的一些挑战</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E7%BD%91%E7%BB%9C%E5%89%AA%E6%9E%9D%E7%9A%84%E5%8E%9F%E7%90%86"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 网络剪枝的原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%89%AA%E6%9E%9D%E6%8A%80%E6%9C%AF"><span class="nav-number">2.</span> <span class="nav-text">2 剪枝技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E6%9D%83%E9%87%8D%E5%89%AA%E6%9E%9D"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 权重剪枝</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E7%A5%9E%E7%BB%8F%E5%85%83%E5%89%AA%E6%9E%9D"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 神经元剪枝</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E6%9D%83%E9%87%8D%E7%A8%80%E7%96%8F%E5%92%8C%E7%A5%9E%E7%BB%8F%E5%85%83%E7%A8%80%E7%96%8F%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 权重稀疏和神经元稀疏的对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E5%89%AA%E6%9E%9D%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 剪枝的问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%89%AA%E6%9E%9D%E5%AE%9E%E8%B7%B5"><span class="nav-number">3.</span> <span class="nav-text">3 剪枝实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E5%89%AA%E6%9E%9D%E4%B8%BA%E4%BA%86%E9%80%9F%E5%BA%A6VS%E4%B8%BA%E4%BA%86%E6%9B%B4%E5%B0%8F%E7%9A%84%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 剪枝为了速度VS为了更小的模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E8%A3%81%E5%89%AA%E5%8D%B7%E7%A7%AF%E6%A0%B8"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 裁剪卷积核</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E7%BB%93%E6%9E%84%E5%89%AA%E6%9E%9D"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 结构剪枝</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-nvidia%E8%A3%81%E5%89%AA%EF%BC%9A%E5%8D%B7%E7%A7%AF%E6%A0%B8%E8%A3%81%E5%89%AA%E4%BB%A5%E6%8F%90%E5%8D%87%E8%B5%84%E6%BA%90%E6%8E%A8%E7%90%86%E6%95%88%E7%8E%87-Resource-Efficient-Inference"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 nvidia裁剪：卷积核裁剪以提升资源推理效率(Resource Efficient Inference)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-Oracle%E8%A3%81%E5%89%AA"><span class="nav-number">3.5.</span> <span class="nav-text">3.5  Oracle裁剪</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%89%AA%E6%9E%9D%E5%AE%9E%E8%B7%B5%EF%BC%9A%E5%AF%B9%E4%B8%80%E4%B8%AA%E7%8C%AB%E7%8B%97%E4%BA%8C%E5%88%86%E7%B1%BB%E5%99%A8%E8%A3%81%E5%89%AA%EF%BC%8C%E4%BD%BF%E7%94%A8%E6%B3%B0%E5%8B%92%E5%B1%95%E5%BC%80%E5%BC%8F%E4%B8%BA%E6%8E%92%E5%BA%8F%E5%87%86%E5%88%99"><span class="nav-number">4.</span> <span class="nav-text">4 剪枝实践：对一个猫狗二分类器裁剪，使用泰勒展开式为排序准则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E5%89%AA%E6%9E%9D%E4%B9%8B%E5%90%8E%E7%9A%84%E7%BB%93%E6%9E%9C%E8%AF%B4%E6%98%8E"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 剪枝之后的结果说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E7%AC%AC%E4%B8%80%E6%AD%A5-%E8%AE%AD%E7%BB%83%E4%B8%80%E4%B8%AA%E5%A4%A7%E7%BD%91%E7%BB%9C"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 第一步:训练一个大网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E5%AF%B9%E5%8D%B7%E7%A7%AF%E6%A0%B8%E6%8E%92%E5%BA%8F"><span class="nav-number">4.3.</span> <span class="nav-text">4.3  对卷积核排序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E5%89%AA%E6%9E%9D%E5%AE%9E%E8%B7%B5%EF%BC%9A%E4%BD%BF%E7%94%A8Tensorflow-%E8%AE%AD%E7%BB%83%E5%89%AA%E6%9E%9DMNIST%E6%A8%A1%E5%9E%8B%E4%B8%BA%E4%BE%8B"><span class="nav-number">5.</span> <span class="nav-text">5. 剪枝实践：使用Tensorflow 训练剪枝MNIST模型为例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E8%AE%AD%E7%BB%83%E4%B8%80%E4%B8%AA%E5%89%AA%E6%9E%9D%E7%9A%84%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 训练一个剪枝的模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E4%B8%80%E5%B1%82%E4%B8%80%E5%B1%82%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%89%AA%E6%9E%9D%E7%9A%84%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 一层一层的构建一个剪枝的模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-1-%E6%9E%84%E5%BB%BA%E5%8E%9F%E5%A7%8B%E7%9A%84MNIST%E5%88%86%E7%B1%BB%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.2.1.</span> <span class="nav-text">5.2.1 构建原始的MNIST分类模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-2-%E6%9E%84%E5%BB%BA%E5%89%AA%E6%9E%9D%E7%9A%84MNIST%E5%88%86%E7%B1%BB%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.2.2.</span> <span class="nav-text">5.2.2 构建剪枝的MNIST分类模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-3-%E5%AF%B9%E7%85%A7%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E5%89%AA%E6%9E%9D%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.2.3.</span> <span class="nav-text">5.2.3 对照：如何使用剪枝模型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%E5%AF%B9%E6%95%B4%E4%B8%AA%E6%A8%A1%E5%9E%8B%E5%89%AA%E6%9E%9D"><span class="nav-number">5.3.</span> <span class="nav-text">5.3 对整个模型剪枝</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">5.3.1.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="shartoo"
+      src="/images/me.jpg">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v6.3.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.6.0
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'c656cd038e01f710e260',
+      clientSecret: 'e6de2ccaaf0f7069292125b8f50e27f25b95810d',
+      repo: 'shartoo.github.io',
+      owner: 'shartoo',
+      admin: ['shartoo'],
+      id: 'd671e3a020896d6a10921c3b5f4019a8',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+</body>
+</html>

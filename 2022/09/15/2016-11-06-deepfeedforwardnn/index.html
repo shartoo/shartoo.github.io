@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="baidu-site-verification" content="93f8r6fzoB" />
+<meta name="google-site-verification" content="TRFlJTt2XTd9bCvpogqNRWkuoxwFeOUBf8ouiChVFyQ" />
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/science_256px_1075043_easyicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/science_128px_1075043_easyicon.ico">
+  <link rel="mask-icon" href="/images/stars.svg" color="#222">
+  <meta name="google-site-verification" content="TRFlJTt2XTd9bCvpogqNRWkuoxwFeOUBf8ouiChVFyQ">
+  <meta name="baidu-site-verification" content="93f8r6fzoB">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://shartoo.github.io').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="深度学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习：深度前馈网络">
+<meta property="og:url" content="https://shartoo.github.io/2022/09/15/2016-11-06-deepfeedforwardnn/index.html">
+<meta property="og:site_name" content="数据与算法">
+<meta property="og:description" content="深度学习">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/dnn1.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/dnn2.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/dfn1.jpg">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/dfn2.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/dnn3.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/dnn4.png">
+<meta property="article:published_time" content="2022-09-15T08:16:12.750Z">
+<meta property="article:modified_time" content="2022-09-15T08:16:12.750Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shartoo.github.io/images/blog/dnn1.png">
+
+<link rel="canonical" href="https://shartoo.github.io/2022/09/15/2016-11-06-deepfeedforwardnn/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>深度学习：深度前馈网络 | 数据与算法</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">数据与算法</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">重新出发</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://shartoo.github.io/2022/09/15/2016-11-06-deepfeedforwardnn/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/me.jpg">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="数据与算法">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深度学习：深度前馈网络
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-15 16:16:12" itemprop="dateCreated datePublished" datetime="2022-09-15T16:16:12+08:00">2022-09-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">深度学习</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="一-如何理解"><a href="#一-如何理解" class="headerlink" title="一 如何理解"></a>一 如何理解</h2><p> 前馈网络之所以称为网络，是因为它们是由多种不同函数组成。网络模型可以看做一个有向无环图，该图描述了函数之间是如何关联的。<br> 例如，我们有三个函数 $f^{(1)},f^{(2)},f^{(3)}$ 链式相连，形成 $f(x) &#x3D;f^{(3)}(f^{(2)}(f^{(1)}))$ ，这种链式结构是神经网络中最常用的结构。其中 $f^{(1)}$ 被称为网络的第一层，$f^{(1)}$ 称为第二层…链式的长度即为网络的深度，网络的最后一层为输出层，这也是深度学习的来源。</p>
+<p> 网络训练过程中，我们让 $f(x)$ 逐渐匹配 $f^*(x)$ (为我们需要拟合的函数) 。训练样本提供了由  $f^*(x)$ 在不同点的带有噪音的近似的样本。每个样本 $x$ 都有一个相对应的标签 $y\sim f^*(x)$  ，训练样本直接指明了输出层在每个点 $x$ 的行为，它应该输出一个近似于 $y$ 的输出。</p>
+<h2 id="二-示例：学习XOR"><a href="#二-示例：学习XOR" class="headerlink" title="二 示例：学习XOR"></a>二 示例：学习XOR</h2><p>  我们通过一个学习XOR函数的任务来让前馈网络的概念更具体。XOR函数是一个在两个二值变量 $x_1,x_2$ 上的操作。当 $x_1,x_2$ 中的某一个值为1时，XOR函数返回1，否则返回0。XOR函数提供了一个目标函数 $y&#x3D;f^*(x)$ 。我们的模型提供了函数 $y&#x3D;f(x;\theta)$ ，我们的学习算法将会逐步调整参数 $\theta$  来使得 $f$ 尽可能地趋近于 $f^*$。</p>
+<p>  此实例中，我们的目标是使得网络能够正确的预测变量 $x_1,x_2$ 在全部的域值空间的四个点 $X&#x3D;{[0,0]^T,[0,1],[1,0],[1,1]}$。可以将此问题看做回归问题，选择均方误差作为损失函数，在全部训练数据集中，MSE(均方误差)损失函数如下:</p>
+<p>  $$<br>    J(\theta) &#x3D; \frac{1}{4}\sum_{x\epsilon X}(f^*(x)-f(x;\theta))^2 \tag {6.1}<br>  $$</p>
+<h3 id="2-1-模型"><a href="#2-1-模型" class="headerlink" title="2.1 模型"></a>2.1 模型</h3><p>  此时我们需要选择模型的形式 $f(x;\theta)$。假若我选择了一个线性模型，其中 $\theta$ 由 $w$ 和 $b$ 组成。我们的模型定义如下</p>
+<p>   $$<br>     f(x;w,b) &#x3D; x^Tw+b<br>   $$</p>
+<p>将四个训练样本带入可求解得 $w&#x3D;0,b&#x3D;1&#x2F;2$ 此时的线性模型将一直输出0.5。 下图演示了线性模型无法表述 XOR函数。</p>
+<p><img src="/images/blog/dnn1.png"></p>
+<p>图中四个点是学习函数需要在四个坐标输出的值（左下点坐标是(0,0)，要输出0），从左边可以看出线性模型无法实现XOR功能。图右是被神经网络抽取特征的变换空间，此时线性模型可以解决XOR问题了。在样本解中，输出值为1的两个点在特征空间中合并为一个点了</p>
+<p>下图演示了一个包含了一个隐藏层（有两个神经元）的网络(之前只有两层，输入和输出)，隐藏层神经元的作用函数 $h$ 为 $f^{(1)}(x;w,c)$ ,隐藏单元的输出将作为第二层的输入。输出层依然是一个线性回归模型，但是它作用对象是 $h$  而不是之前的直接的 $x$ 了。</p>
+<p><img src="/images/blog/dnn2.png"></p>
+<p>网络此时包含两个链式函数，$h&#x3D;f^{(1)}(w;w,c)$ 和 $y&#x3D;f^{(2)}(h;w,b)$ 。完整的模型可以表述为:</p>
+<p>$$<br>   f(x;W,c,w,b) &#x3D;f^{(2)}(f^{(1)}(x))<br>$$</p>
+<p>此时，函数 $f^{(1)}$ 该如何计算呢。如果使用线性模型，将会导致整个网络都沦为输入的线性函数（ $f^{(2)}$(x) 是线性回归）。假若 $f^{(1)}(W^Tx)$ 而 $f^{(2)}(h)&#x3D;h^Tw$ ，此时整个网络可以表述为 $f(x)&#x3D;w^TW^Tx$  依然是线性的。</p>
+<p>很显然，我们必须使用一个非线性函数来描述这些特征。大多数神经网络是通过一个由学习参数控制的映射转换，加上一个固定的称为激活函数的非线性函数。大多数网络选用 ReLU作为激活函数</p>
+<h3 id="2-2-ReLU激活函数"><a href="#2-2-ReLU激活函数" class="headerlink" title="2.2 ReLU激活函数"></a>2.2 ReLU激活函数</h3><p> ReLU作为激活函数的依据是，生物的稀疏激活性。人脑神经元同时被激活的只有1%-4%，这可提高学习精度，更好更快地提取稀疏特征。ReLU的<strong>非线性</strong>来源于神经元的部分选择性激活。</p>
+<p> 使用ReLU的另一个原因是，Sigmod（另外一种激活函数）网络会出现梯度消失情况。误差反向传播时，梯度</p>
+<p> $$<br>   Gradient &#x3D; (y-y^{‘})sigmod^{‘}*x \<br>   sigmod^{‘}(x) \quad\quad\epsilon (0,1) \<br>   x \quad \epsilon (0,1)<br> $$</p>
+<p> 会成倍衰减（ $sigmod^{‘}(x) \quad\epsilon (0,1)$ ,$x\epsilon (0,1)$）。而ReLU的梯度为 $max{0,W^Tx+b}$ 始终为1，只有一端饱和，梯度易流动，同时提高了训练速度。</p>
+<p> 关于ReLU的详细可参考 <a target="_blank" rel="noopener" href="http://www.cnblogs.com/neopenx/p/4453161.html">ReLU激活函数</a></p>
+<h2 id="三-基于梯度的学习"><a href="#三-基于梯度的学习" class="headerlink" title="三 基于梯度的学习"></a>三 基于梯度的学习</h2><p> 神经网络的非线性将导致损失函数非凸，没法全局收敛。应用于非凸的损失函数的SGD（随机梯度下降）方法也无法全局收敛，而且对初始值敏感。对于<strong>前馈网络而言，初始权重应随机初始化为很小的值，偏置 $b$ 初始化为0，或很小的值</strong>。 梯度下降方法应用在各种网络中，用来最小化损失函数。其实在训练SVM，线性回归模型中都可以使用梯度下降方法</p>
+<h3 id="3-1-损失函数"><a href="#3-1-损失函数" class="headerlink" title="3.1 损失函数"></a>3.1 损失函数</h3><p>设计神经网咯时，一个重要的组成部分是损失函数的选择，尽管大部分神经网络的损失函数都与参数模型相似。</p>
+<p>大多数情况下，参数模型的定义了一个概率分布 $p(y|x;\theta)$ ,我们使用的是最大似然定理（深度学习，机器学习的本质，将训练时最优的参数当做实际最优的参数），即，使用训练数据和模型预测值的交叉熵作为损失函数。</p>
+<p>交叉熵定义：</p>
+<p>$$<br>  c &#x3D; -\frac{1}{n}\sum_{x}[ylna+(1-y)ln(1-a)]<br>$$</p>
+<p>交叉熵特性:</p>
+<ul>
+<li>非负性</li>
+<li>期望与实际误差小时，损失值小，反之则大。</li>
+</ul>
+<p>有时候我们会使用一种简化解，不使用全部的 $y$的概率分布，仅预测满足一定条件的x对应的输出y的概率分布。</p>
+<h4 id="3-1-1-1-学习条件最大似然的条件分布"><a href="#3-1-1-1-学习条件最大似然的条件分布" class="headerlink" title="3.1.1.1 学习条件最大似然的条件分布"></a>3.1.1.1 学习条件最大似然的条件分布</h4><p> 使用最大似然方法训练网络，其损失函数即负的对数似然，可定义为</p>
+<p>$$<br>  J(\theta) &#x3D; -E_{x,y\sim p^{\sim}<em>{data}}logp</em>{model}(y|x)<br>$$</p>
+<p>不同的参数模型，具体的损失函数不一样。</p>
+<p>线性模型的输出的概率分布的最大似然估计等价于最小均方误差（损失函数的一种），实际上，这种等价是以忽略 $f(x;\theta)$ 对高斯分布的均值预测为前提的。</p>
+<p>设计神经网络时的一个常见问题是：梯度需要足够大，且易于预测。饱和函数（上面一章中ReLU参考文章中有解释饱和函数）会破坏这一期望，它会将梯度变得特别小，这会导致网络很难调整。如果网络输出层是 $e^x$ 类的函数，若 $x$ 为较小负数，也会饱和。在这样的函数上应用对数函数可以有效化解饱和问题（对数和 $e^x$ 相互抵消）。</p>
+<p>交叉熵损失函数可用来完成类似的最大似然估计的功能，因为它没有最小值，但可以无限逼近于0或1，这可同时用于离散化输出，logistic回归就是一个类似的模型。<strong>问题</strong>：若模型可控制输出分布的密度，就有可能给正确的训练集极高的密度，这会使得交叉熵趋于无穷大，使用正则化可用来避免这个问题。</p>
+<h4 id="3-1-1-2-学习条件概率"><a href="#3-1-1-2-学习条件概率" class="headerlink" title="3.1.1.2 学习条件概率"></a>3.1.1.2 学习条件概率</h4><p>相比于 $p(y|x,\theta)$ 的完全概率分布，我们一般仅学习一个给定$x$ 的 $y$ 的条件概率分布。假若我们使用一个足够强大的网络，我们可以认为网络能够表述任意函数 $f$ (函数有足够多的分类),此时函数的分类仅受限于特征，比如特征的连续性和无界性，而不是某种固定的参数形式。从这个视角来看，我们可以将损失函数视为<strong>函数式</strong>而非简单的<strong>函数</strong>。<strong>函数式</strong>指的是从函数到实数的映射，而学习过程将会是选择一个函数，而不是一系列参数。此时，我们设计<strong>损失函数式</strong>为在某些期望函数上才取得最小值。比如，我们设计的损失函数式取得最小值的时候，对于给定的特征 $x$ 刚好输出了期望的 $y$ 。</p>
+<h3 id="3-2-输出神经元"><a href="#3-2-输出神经元" class="headerlink" title="3.2 输出神经元"></a>3.2 输出神经元</h3><p> 损失函数的选择与输出神经元的选择直接相关。下文简述了一些不同输出分布时对应的神经元。</p>
+<h4 id="3-2-1-高斯分布输出的线性神经元"><a href="#3-2-1-高斯分布输出的线性神经元" class="headerlink" title="3.2.1 高斯分布输出的线性神经元"></a>3.2.1 高斯分布输出的线性神经元</h4><p> 对于给定特征 $h$ ，线性输出神经元的输出为 $\bar y &#x3D;W^Th+B$ 。线性输出层通常用来生产条件高斯分布的均值，此时求对数似然的最大值等价于最小化均方误差。(方差越小，分布越集中)。</p>
+<p> 最大似然框架易于学习高斯分布的方差，使得高斯分布的协方差成为输入的一个函数。但是所有的输入其输出必须为正的有限的矩阵。</p>
+<h4 id="3-2-2-Bernoulli输出分布的Sigmoid神经元"><a href="#3-2-2-Bernoulli输出分布的Sigmoid神经元" class="headerlink" title="3.2.2 Bernoulli输出分布的Sigmoid神经元"></a>3.2.2 Bernoulli输出分布的Sigmoid神经元</h4><p>许多二分类问题都可以使用Sigmoid神经元输出。最大似然估计的方法是定义一个在条件 $x$ 上的 $y$ 的Bernoulli分布。</p>
+<p>定义Bernoulli 分布只需要一个参数（概率），神经网络只需预测概率 $P(y&#x3D;1|x)$ 即可。假若使用线性激活神经元，网络输出的预测概率</p>
+<p>$$<br>  P(y&#x3D;1\mid x) &#x3D;max \lbrace 0,min\lbrace 1,w^Th+b\rbrace \rbrace<br>$$</p>
+<p>其中 $w^Th+b$ 很容易就不在区间 [0,1]上，为0.梯度为0，如何保证一直有较强的梯度呢？我们选用 Sigmoid 作为激活函数即可。Sigmoid激活神经元的输出为</p>
+<p>$$<br>  \bar y &#x3D; \sigma (w^Th+b)<br>$$</p>
+<p>而 $\sigma (x) &#x3D;\frac{1}{1+e^{-x}}$ 。我们可以把 $sigma$ 输出单元看做两个组成部分：1.第一步是一个线性层，计算输出 $z&#x3D; w^Th+b$ 即可。2. 使用<strong>Sigmoid</strong>将输出 $z$ 转换为概率。</p>
+<p>我们考虑如何使用上面提到的 $z$ 来定义 $y$ 上的概率分布。我们可以通过构建一个非正态概率分布 $\tilde p(y)$(概率和不等于1)来理解 <strong>Sigmoid</strong>。下面是公式推导过程:</p>
+<p>先假设对数概率在y,z上是线性</p>
+<p>$$<br>  log\tilde p(y)&#x3D;yz \quad \<br>$$</p>
+<p>取指数得非正态概率</p>
+<p>$$<br>  \tilde p(y)  &#x3D;exp(yz)<br>$$</p>
+<p>对每个概率除以总概率即可归一化（概率和为1）</p>
+<p>$$<br>  p(y) &#x3D;\frac{exp(yz)}{\sum^1_{y’&#x3D;0}exp(y’z)}<br>$$</p>
+<p>通过对 $z$ 的Sigmoid转换，获取一个Bernoulli分布</p>
+<p>$$<br> p(y) &#x3D;\sigma ((2y-1)z)<br>$$</p>
+<p>此方法来预测对数空间的概率可以用最大似然方法。因为最大似然的代价函数是 $-log p(y\mid x)$ ，这个对数log 移除了Sigmoid中的指数式exp。如果没有这一步，sigmoid的饱和性会阻止梯度学习。</p>
+<p>使用sigmoid参数化的Bernoulli分布的最大似然学习过程的损失函数如下:</p>
+<p>$$<br> J(\theta) &#x3D; -log P(y\mid x) \<br> &#x3D;-log \sigma ((2y-1)z) \<br> &#x3D;\varsigma ((2y-1)z)<br>$$</p>
+<p>重写softplus损失函数中的部分项，我们可以看到当(1-2y)z，是负数且很大时，损失函数loss才会饱和。**只有当模型基本准确时，才会出现饱和现象，其中 $y&#x3D;1$ 时，z将会是很大的正数(very positive), $y&#x3D;0$ 时，z是很小的负数(very negative)**。如果使用其他损失函数，如均方差， $\sigma (z)$ 饱和时，损失函数就会饱和。</p>
+<h4 id="3-2-3-多重Bernoulli分布Softmax输出神经元"><a href="#3-2-3-多重Bernoulli分布Softmax输出神经元" class="headerlink" title="3.2.3  多重Bernoulli分布Softmax输出神经元"></a>3.2.3  多重Bernoulli分布Softmax输出神经元</h4><p>softmax是sigmoid函数的普遍形式，用于多分类。用在输出层，作为一个分类器，表述为多个分类上的概率分布。 softmax函数的常见形式如下：</p>
+<p>对于二分类变量，我们一般只产生单一输出（两个分类，输出某个分类的概率）。公式:</p>
+<p>$$<br>  \hat y&#x3D;P(y&#x3D;1\mid x) \quad \epsilon (0,1)<br>$$</p>
+<p>上式<strong>值区间为(0,1)<strong>，如果想让此值的</strong>log对数</strong>能在基于梯度的算法中应用，我们选择预测一个值 $z&#x3D;log \tilde P(y&#x3D;1 \mid x)$ (概率的log对数)。指数化和归一化，外加一个Sigmoid函数，即可得到一个Bernoulli分布。</p>
+<p><strong>推广</strong>：假若我们将其推广到有<strong>n个离散值</strong>的场景中，输出向量 $\hat y$ ，其中 $\hat y$ 中每个分量 $\hat y_i&#x3D;P(y&#x3D;i \mid x)$ 取值区间为(0,1)，向量各分量之和为1。一个线性层预测的<strong>非正态对数概率</strong>为: $z&#x3D;W^Th+b$ ，其中 $z_i&#x3D;log \tilde P(y&#x3D;i \mid x)$</p>
+<p>$$<br>  P(i) &#x3D;\frac{exp(\theta_i^Tx)}{\sum _{i&#x3D;1}^Kexp(\theta_i^Tx)}<br>$$</p>
+<p>通过softmax函数，可以使得 $P(i)$ 的范围在[0,1]之间。在回归和分类问题中，通常θ是待求参数，通过寻找使得 $P(i)$ 最大的 $\theta_i$作为最佳参数。回顾logistic函数形式.</p>
+<p>对于logistic simoid，使用最大似然框架来训练softmax输出目标y时，exp函数效果很好。此时我们期望最大化 $log\quad P(y&#x3D;i;z)&#x3D;log\quad softmax(z)_i$ ，将softmax定义为指数形式是因为最大虽然估计中的log可以抵消。比如:</p>
+<p>$$<br> log\quad softmax(z)_i&#x3D;z_i-log\sum_iexp(z_j)<br>$$</p>
+<p>最大化此等式即最大化 $z_i$,后面一项 $log\sum _iexp(z_j)$ 不显著。最大化此等式时，会使得 $z_i$ 增大，而其他所有 $z$ 变小。</p>
+<p><strong>通过近似，我们发现负的对数似然损失函数会惩罚大部分错误的激活函数。</strong></p>
+<h3 id="3-2-4-softmax评价"><a href="#3-2-4-softmax评价" class="headerlink" title="3.2.4 softmax评价"></a>3.2.4 softmax评价</h3><p> 除了对数似然目标函数外，许多目标函数与softmax搭配效果不好，尤其是那些没有使用Log来抵消指数部分的。</p>
+<p> 如果损失函数没有设计好，将导致网络很难学习，在某些区域网络的学习速度极慢。以神经网络的角度来看，softmax实际上是创建了一个竞争环境，总和为1，一方增加时会导致其他所有减少，极端情况下某一方为1，其他全为0.</p>
+<h3 id="3-2-5-其他输出神经元"><a href="#3-2-5-其他输出神经元" class="headerlink" title="3.2.5  其他输出神经元"></a>3.2.5  其他输出神经元</h3><p> 最大似然框架指导如何根据输出层来设计一个好的损失函数。如果定义了一个条件分布 $P(y\mid x;\theta)$ 则建议使用 $logP(y\mid x;\theta)$ 作为损失函数。</p>
+<p> 通常，我们可以将神经网络看做函数 $f(x;\theta)$ 的表述，函数输出不会直接预测 $y$ 的值，而是提供 $y$ 分布上的参数，此时的损失函数为 $-logp(y;w(x))$。</p>
+<h2 id="3-3-隐藏神经元"><a href="#3-3-隐藏神经元" class="headerlink" title="3.3 隐藏神经元"></a>3.3 隐藏神经元</h2><p>隐藏神经元的设计并没有权威的指导原则。一般选择Relu作为隐藏神经元的激活函数。隐藏神经元的激活函数需要不断去尝试，无法预知使用哪种激活函数最好。</p>
+<p>有些神经元的激活函数并不是严格可微的，比如Relu在 $z&#x3D;0$ 时不可导（只是在部分点上）。而实际应用梯度方法依然表现很好，因为训练算法不会使损失函数达到局部最小，而只是大幅度减小。</p>
+<p>神经元中的激活函数一般有左右导数，Relu中 $z&#x3D;0$ 处左导数为0，右导数为1。但是程序实现时，一般只返回单侧导数，而且即便我们在求 $g(0)$ 的值，也只是逼近0的极小值，不是真的 $x&#x3D;0$时的值。所以，实际上我们可以放心地无视激活函数中的不可微点。</p>
+<h3 id="3-3-1-Relu神经元和其泛化"><a href="#3-3-1-Relu神经元和其泛化" class="headerlink" title="3.3.1 Relu神经元和其泛化"></a>3.3.1 Relu神经元和其泛化</h3><p>可以参考两篇博客</p>
+<p><a target="_blank" rel="noopener" href="http://www.cnblogs.com/neopenx/p/4453161.html">Relu激活函数，全面</a></p>
+<p><a target="_blank" rel="noopener" href="http://blog.csdn.net/lg1259156776/article/details/48379321">Relu，更学术，前沿</a></p>
+<p> Relu线性神经元的激活函数为 $g(z)&#x3D;max\lbrace 0,z \rbrace$ 。</p>
+<p> Relu与线性神经元很像，唯一的不同是，Relu的输出取值范围有一半为0（非激活）。这使得其导数一直很大，梯度不仅大而且连续。激活的神经元的二阶导数几乎处处为0，一阶导数处处为1。</p>
+<p> <strong>Relu一般用在外层映射，比如 $h&#x3D;g(W^Tx+b)$ 。初始化Relu时，建议取较小的b</strong>，这会使得Relu对大部分输入都是激活的。</p>
+<p> 缺点：激活函数输出为0时（ $z_i&lt;0$ ），Relu无法通过梯度学习，需要做一个泛化补充。<br> $z_i&lt;0$ 时使用一种基于非0的斜率 $\alpha _i$ 来作变换，Relu变为:</p>
+<p> $$<br>  h_i&#x3D;g(z,\alpha)_i&#x3D;max(0,z_i)+\alpha_imin(0,z_i)<br> $$</p>
+<p> 有如下三种方法:</p>
+<ul>
+<li><p>绝对值Relu:令 $\alpha_i&#x3D;-1$，那么 $g(z)&#x3D;\mid z\mid$ 。可以用在图像识别中寻找极性反转时特征不变的特征。</p>
+</li>
+<li><p>leaky Relu:令 $\alpha &#x3D;0.001$ 取一个较小值。</p>
+</li>
+<li><p>参数化Relu:将 $\alpha$ 作为一个可以学习的参数。</p>
+</li>
+</ul>
+<h2 id="3-4-其他隐藏神经元"><a href="#3-4-其他隐藏神经元" class="headerlink" title="3.4 其他隐藏神经元"></a>3.4 其他隐藏神经元</h2><p> 许多未公开发表的激活函数其实与现在流行的激活函数一样有效。比如 $h&#x3D;cos(Wx+b)$ 在 <strong>MNIST</strong>数据集上错误率只有1%，这完全可以媲美于使用多种卷积激活函数。通常情况下只有当新的隐藏神经元能够取得非常大提升时才会被公开发表。</p>
+<p> 神经网络中某些层可以使用纯线性激活函数，有助于减少网络参数。softmax一般用在输出层，但是也可以用于隐藏层。</p>
+<p> 其他可使用的隐藏层激活函数：</p>
+<ul>
+<li><p>Radial basis function（RBF）：$h_i &#x3D;exp(-\frac{1}{\sigma <em>i^2\mid \mid W</em>{:,i}-x\mid \mid ^2})$ 。只有当x接近于模板 $W_{:,i}$ 时函数才会被激活，由于其对大多数的x都是饱和状态，所以很难优化。</p>
+</li>
+<li><p>softplus ：$g(a)&#x3D;\varsigma (a)&#x3D;log(1+e^a)$ 是Relu的平滑版本，通常不鼓励使用softplus。</p>
+</li>
+<li><p>Hard tanh：形状与tanh和Relu很像，但是与Relu不同的是，它是有界的。 $g(a)&#x3D;max(-1,min(1,a))$ 。</p>
+</li>
+</ul>
+<h2 id="3-5-网络架构设计"><a href="#3-5-网络架构设计" class="headerlink" title="3.5 网络架构设计"></a>3.5 网络架构设计</h2><p>网络架构设计关乎，需要多少个神经元，神经元之间是如何连接等问题。网络由一层层的神经元组成，每层由一组神经元构成。假设我们有第一层网络</p>
+<p>$$<br>  h^{(1)}&#x3D;g^{(1)}(W^{(1)T}x+b^{(1)})<br>$$</p>
+<p>其中 $x$ 为网络输入， $g^{(1)}$ 为第一层的激活函数。网络的第二层如下</p>
+<p>$$<br>  h^{(2)}&#x3D;g^{(2)}(W^{(2)T}h^{(1)}+b^{(2)})<br>$$</p>
+<p>其中 $h^{1}$ 为第一层的输出。</p>
+<p>在这种链式结构中，<strong>网络架构需要考虑的是网络的深度和宽度</strong>,一般，更深的网络需要更少神经元，更少参数，但是难以优化。</p>
+<h3 id="3-5-1-通用近似属性和深度"><a href="#3-5-1-通用近似属性和深度" class="headerlink" title="3.5.1 通用近似属性和深度"></a>3.5.1 通用近似属性和深度</h3><p>通用近似定理表明，使用 至少一个隐藏层和线性输出层，以及激活函数的神经网络可以拟合任意Borel测度的函数。</p>
+<p>多层前馈网络能表述任意函数，但是不能保证我们的训练算法可以学习此函数。有两个如下原因：</p>
+<ul>
+<li>用来训练的优化函数，可能无法找到拟合目标函数的正确参数。</li>
+<li>训练算法有可能因为过拟合选择错误的函数。</li>
+</ul>
+<p>给定任意函数，必然存在可以拟合的神经网络，但是目前并没有一种通用的方法来校验特定训练样本和函数来泛化不在训练集中的数据点。</p>
+<p>广义近似定律表明，存在一个大网络可以拟合任意准确率的预测函数，但是没有提及网络究竟会有多大。最新论文表明，最坏情况下，有隐藏层指数级数量的复杂度。比如一个向量 $V\epsilon \lbrace 0,1 \rbrace$ 上的可能的2分类函数有 $2^{2^n}$ 个，存储这些函数需要 $2^n$ 字节。</p>
+<p>在选择机器学习算法时，其实我们是在表述算法所需要学习哪种先验知识。在选择深度学习模型时，其实是在将一个函数表述为几个简单的函数组合，此时学习问题变为挖掘变量间隐藏的关联参数问题，而这可进一步分解为更简单的变量之间的参数问题。</p>
+<h3 id="3-5-2-其他架构考虑"><a href="#3-5-2-其他架构考虑" class="headerlink" title="3.5.2  其他架构考虑"></a>3.5.2  其他架构考虑</h3><p> 在设计网络时，需要明白不同的网络有不同用途，比如CNN用于图像处理，RNN用于做序列处理。网络也不必完全链式，从第 $i$ 层网络直接连接到第 $i+3$ 层这样的跳跃，使得梯度更容易从输出反馈到输入。</p>
+<p> 另外一个需要考虑的问题是，网络之间是如何连接的。默认是一个以矩阵 $w$ 的全连接，许多网络只是部分连接。比如CNN中用于图像处理，此时参数更少，计算速度快，这与具体问题相关。</p>
+<p> <img src="/images/blog/dfn1.jpg"></p>
+<p> 上图显示的是一个参数数量与测试准确率之间的关系。图中显示，<strong>增加CNN的参数而不增加深度并不能提升性能</strong> 。浅层网络在参数达到2000万时过拟合而深层网络在参数达到6000万时性能更强。表明，<strong>网络应该由更多更简单的函数组成。</strong></p>
+<h2 id="4-反向传播算法"><a href="#4-反向传播算法" class="headerlink" title="4 反向传播算法"></a>4 反向传播算法</h2><p>后向传播算法并不是指整个网络，<strong>它只是计算梯度的一个方法，有其他方法，如随机梯度下降，它还可以用于对任意函数求导</strong>。</p>
+<p>以下解释来自知乎 <a target="_blank" rel="noopener" href="https://www.zhihu.com/question/27239198?rf=24827633">反向传播算法</a></p>
+<p>假若我们有如下简单网络：</p>
+<p><img src="/images/blog/dfn2.png" alt="简单神经网络"></p>
+<p>对应的函数表达式如下:</p>
+<p>$$<br> a_1^{(2)}&#x3D;f(W_{11}^{(1)}x_1+W_{12}^{(1)}x_2+W_{13}^{(1)}x_3+b_1^{(1)}) \</p>
+<p> a_2^{(2)}&#x3D;f(W_{21}^{(1)}x_1+W_{22}^{(1)}x_2+W_{23}^{(1)}x_3+b_2^{(1)}) \</p>
+<p> a_3^{(2)}&#x3D;f(W_{31}^{(1)}x_1+W_{32}^{(1)}x_2+W_{33}^{(1)}x_3+b_3^{(1)}) \</p>
+<p> h_{W,b}(x)&#x3D;a_1^{(3)}&#x3D;f(W^{(2)}<em>{11}a_1^{(2)}+W</em>{12}^{(2)}a_2^{(2)}+W_{13}^{(2)}a^{(2)}_3+b_1^{(2)})<br>$$</p>
+<p>上面式中的 $W_{ij}$ 就是相邻两层神经元之间的权值，它们就是深度学习需要学习的参数，也就相当于直线拟合 $y&#x3D;k*x+b$ 中的待求参数k和b。</p>
+<p>和直线拟合一样，深度学习的训练也有一个<strong>目标函数</strong>，这个目标函数定义了什么样的参数才算一组“好参数”，不过在机器学习中，一般是采用 **成本函数（cost function)**，然后，训练目标就是通过调整每一个权值 $W_{ij}$ 来使得cost达到最小。cost函数也可以看成是由所有待求权值 $W_{ij}$ 为自变量的复合函数，而且基本上是非凸的，即含有许多局部最小值。但实际中发现，采用我们常用的梯度下降法就可以有效的求解最小化cost函数的问题。</p>
+<p>梯度下降法需要给定一个初始点，并求出该点的梯度向量，然后以负梯度方向为搜索方向，以一定的步长进行搜索，从而确定下一个迭代点，再计算该新的梯度方向，如此重复直到cost收敛。那么如何计算梯度呢？</p>
+<p>我们把cost函数定义为 $H(W_{11},W_{12},W_{13},..W_{ij},..,W_{mn})$ ,那么它的梯度向量就等于</p>
+<p>$$<br>   \triangledown H&#x3D;\frac{\partial H}{\partial W_{11}}e_{11}+…\frac{\partial H}{\partial W_{mn}}e_{mn}<br>$$</p>
+<p>此，我们需求出cost函数H对每一个权值 $W_{ij}$ 的偏导数。而BP算法正是用来求解这种多层复合函数的所有变量的偏导数的利器。我们以求 $e&#x3D;(a+b)*(b+1)$ 的偏导为例。它的复合关系画出图可以表示如下：</p>
+<p><img src="/images/blog/dnn3.png" alt="简单神经网络"></p>
+<p>在图中，引入了中间变量c,d。</p>
+<p>为了求出a&#x3D;2, b&#x3D;1时，e的梯度，我们可以先利用偏导数的定义求出不同层之间相邻节点的偏导关系，如下图所示。</p>
+<p><img src="/images/blog/dnn4.png" alt="简单神经网络"></p>
+<p>利用链式法则我们知道:</p>
+<p>$$<br>  \frac{\partial e}{\partial a}&#x3D;\frac{\partial e}{\partial c}\frac{\partial c}{\partial a} \</p>
+<p>  \frac{\partial e}{\partial b}&#x3D;\frac{\partial e}{\partial c}\frac{\partial c}{\partial b}+\frac{\partial e}{\partial d}\frac{\partial d}{\partial b}<br>$$</p>
+<p>链式法则在上图中的意义是什么呢？其实不难发现， $\frac{\partial e}{\partial a}$ 的值等于从 $a$ 到 $e$ 的路径上的偏导值的乘积，而 $\frac{\partial e}{\partial b}$ 的值等于从 $b$ 到 $e$ 的路径 $1(b-c-e)$ 上的偏导值的乘积加上路径 $2(b-d-e)$ 上的偏导值的乘积。也就是说，对于上层节点p和下层节点q，要求得 $\frac{\partial p}{\partial q}$ ，需要找到从 $q$ 节点到 $p$ 节点的所有路径，并且对每条路径，求得该路径上的所有偏导数之乘积，然后将所有路径的 “乘积” 累加起来才能得到 $\frac{\partial p}{\partial q}$ 的值。</p>
+<p>大家也许已经注意到，这样做是十分冗余的， <strong>因为很多路径被重复访问</strong>了。比如上图中，a-c-e和b-c-e就都走了路径c-e。对于权值动则数万的深度模型中的神经网络，这样的冗余所导致的计算量是相当大的。</p>
+<p>同样是 <strong>利用链式法则，BP算法则机智地避开了这种冗余，它对于每一个路径只访问一次就能求顶点对所有下层节点的偏导值。正如反向传播(BP)算法的名字说的那样，BP算法是反向(自上往下)来寻找路径的</strong>。</p>
+<p>从最上层的节点e开始，初始值为1，以层为单位进行处理。对于e的下一层的所有子节点，将1乘以e到某个节点路径上的偏导值，并将结果“堆放”在该子节点中。等e所在的层按照这样传播完毕后，第二层的每一个节点都“堆放”些值，然后我们针对每个节点，把它里面所有 <strong>“堆放”</strong> 的值求和，就得到了顶点e对该节点的偏导。然后将这些第二层的节点各自作为起始顶点，初始值设为顶点e对它们的偏导值，以”层”为单位重复上述传播过程，即可求出顶点e对每一层节点的偏导数。</p>
+<p>以上图为例，节点c接受e发送的1<em>2并堆放起来，节点d接受e发送的1</em>3并堆放起来，至此第二层完毕，求出各节点总堆放量并继续向下一层发送。节点c向a发送2<em>1并对堆放起来，节点c向b发送2</em>1并堆放起来，节点d向b发送3<em>1并堆放起来，至此第三层完毕，节点a堆放起来的量为2，节点b堆放起来的量为2</em>1+3*1&#x3D;5, 即顶点e对b的偏导数为5.</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/09/15/2017-01-13-RCNN-series/" rel="prev" title="RCNN,Fast RCNN,Faster RCNN 总结">
+      <i class="fa fa-chevron-left"></i> RCNN,Fast RCNN,Faster RCNN 总结
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/09/15/2016-10-25-SVD-decomponent/" rel="next" title="深度学习基础：SVD奇异值分解及其意义【转】">
+      深度学习基础：SVD奇异值分解及其意义【转】 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80-%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3"><span class="nav-number">1.</span> <span class="nav-text">一 如何理解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C-%E7%A4%BA%E4%BE%8B%EF%BC%9A%E5%AD%A6%E4%B9%A0XOR"><span class="nav-number">2.</span> <span class="nav-text">二 示例：学习XOR</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-ReLU%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 ReLU激活函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89-%E5%9F%BA%E4%BA%8E%E6%A2%AF%E5%BA%A6%E7%9A%84%E5%AD%A6%E4%B9%A0"><span class="nav-number">3.</span> <span class="nav-text">三 基于梯度的学习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 损失函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-1-1-%E5%AD%A6%E4%B9%A0%E6%9D%A1%E4%BB%B6%E6%9C%80%E5%A4%A7%E4%BC%BC%E7%84%B6%E7%9A%84%E6%9D%A1%E4%BB%B6%E5%88%86%E5%B8%83"><span class="nav-number">3.1.1.</span> <span class="nav-text">3.1.1.1 学习条件最大似然的条件分布</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-1-2-%E5%AD%A6%E4%B9%A0%E6%9D%A1%E4%BB%B6%E6%A6%82%E7%8E%87"><span class="nav-number">3.1.2.</span> <span class="nav-text">3.1.1.2 学习条件概率</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E8%BE%93%E5%87%BA%E7%A5%9E%E7%BB%8F%E5%85%83"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 输出神经元</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-1-%E9%AB%98%E6%96%AF%E5%88%86%E5%B8%83%E8%BE%93%E5%87%BA%E7%9A%84%E7%BA%BF%E6%80%A7%E7%A5%9E%E7%BB%8F%E5%85%83"><span class="nav-number">3.2.1.</span> <span class="nav-text">3.2.1 高斯分布输出的线性神经元</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-2-Bernoulli%E8%BE%93%E5%87%BA%E5%88%86%E5%B8%83%E7%9A%84Sigmoid%E7%A5%9E%E7%BB%8F%E5%85%83"><span class="nav-number">3.2.2.</span> <span class="nav-text">3.2.2 Bernoulli输出分布的Sigmoid神经元</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-3-%E5%A4%9A%E9%87%8DBernoulli%E5%88%86%E5%B8%83Softmax%E8%BE%93%E5%87%BA%E7%A5%9E%E7%BB%8F%E5%85%83"><span class="nav-number">3.2.3.</span> <span class="nav-text">3.2.3  多重Bernoulli分布Softmax输出神经元</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-4-softmax%E8%AF%84%E4%BB%B7"><span class="nav-number">3.3.</span> <span class="nav-text">3.2.4 softmax评价</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-5-%E5%85%B6%E4%BB%96%E8%BE%93%E5%87%BA%E7%A5%9E%E7%BB%8F%E5%85%83"><span class="nav-number">3.4.</span> <span class="nav-text">3.2.5  其他输出神经元</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-%E9%9A%90%E8%97%8F%E7%A5%9E%E7%BB%8F%E5%85%83"><span class="nav-number">4.</span> <span class="nav-text">3.3 隐藏神经元</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-1-Relu%E7%A5%9E%E7%BB%8F%E5%85%83%E5%92%8C%E5%85%B6%E6%B3%9B%E5%8C%96"><span class="nav-number">4.1.</span> <span class="nav-text">3.3.1 Relu神经元和其泛化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-%E5%85%B6%E4%BB%96%E9%9A%90%E8%97%8F%E7%A5%9E%E7%BB%8F%E5%85%83"><span class="nav-number">5.</span> <span class="nav-text">3.4 其他隐藏神经元</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">6.</span> <span class="nav-text">3.5 网络架构设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-1-%E9%80%9A%E7%94%A8%E8%BF%91%E4%BC%BC%E5%B1%9E%E6%80%A7%E5%92%8C%E6%B7%B1%E5%BA%A6"><span class="nav-number">6.1.</span> <span class="nav-text">3.5.1 通用近似属性和深度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-2-%E5%85%B6%E4%BB%96%E6%9E%B6%E6%9E%84%E8%80%83%E8%99%91"><span class="nav-number">6.2.</span> <span class="nav-text">3.5.2  其他架构考虑</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E7%AE%97%E6%B3%95"><span class="nav-number">7.</span> <span class="nav-text">4 反向传播算法</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="shartoo"
+      src="/images/me.jpg">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v6.3.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.6.0
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'c656cd038e01f710e260',
+      clientSecret: 'e6de2ccaaf0f7069292125b8f50e27f25b95810d',
+      repo: 'shartoo.github.io',
+      owner: 'shartoo',
+      admin: ['shartoo'],
+      id: '9e08452a1bfda4649a374cc79818bb21',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+</body>
+</html>

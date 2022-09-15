@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="baidu-site-verification" content="93f8r6fzoB" />
+<meta name="google-site-verification" content="TRFlJTt2XTd9bCvpogqNRWkuoxwFeOUBf8ouiChVFyQ" />
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/science_256px_1075043_easyicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/science_128px_1075043_easyicon.ico">
+  <link rel="mask-icon" href="/images/stars.svg" color="#222">
+  <meta name="google-site-verification" content="TRFlJTt2XTd9bCvpogqNRWkuoxwFeOUBf8ouiChVFyQ">
+  <meta name="baidu-site-verification" content="93f8r6fzoB">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://shartoo.github.io').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="数据挖掘专栏">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据挖掘方法之分类">
+<meta property="og:url" content="https://shartoo.github.io/2022/09/15/2013-05-24-datamining-classfy-main/index.html">
+<meta property="og:site_name" content="数据与算法">
+<meta property="og:description" content="数据挖掘专栏">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/classfymain1.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/classfymain2.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/classfymain4.png">
+<meta property="article:published_time" content="2022-09-15T08:16:12.746Z">
+<meta property="article:modified_time" content="2022-09-15T08:16:12.746Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shartoo.github.io/images/blog/classfymain1.png">
+
+<link rel="canonical" href="https://shartoo.github.io/2022/09/15/2013-05-24-datamining-classfy-main/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>数据挖掘方法之分类 | 数据与算法</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">数据与算法</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">重新出发</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://shartoo.github.io/2022/09/15/2013-05-24-datamining-classfy-main/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/me.jpg">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="数据与算法">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数据挖掘方法之分类
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-15 16:16:12" itemprop="dateCreated datePublished" datetime="2022-09-15T16:16:12+08:00">2022-09-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">数据挖掘专栏</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>博文参考《数据挖掘概念与技术》：韩家威著（机械工业出版社）</p>
+<h2 id="一-分类的概念"><a href="#一-分类的概念" class="headerlink" title="一 分类的概念"></a>一 分类的概念</h2><p>在面向对象编程（OOP）中我们说“一切皆对象”，在数据挖掘中，我们应该认为“一切皆数据”。而分类就是按照您的选择评估标准将数据进行分离，使得具有某些相同特性的数据属于一个类，不相同的数据不在一个类。</p>
+<h2 id="二-分类的一般过程"><a href="#二-分类的一般过程" class="headerlink" title="二 分类的一般过程"></a>二 分类的一般过程</h2><p>分类一般分为两个阶段：<code>学习阶段(构建模型)</code>和<code>分类阶段（使用分类模型给测试数据的赋予类标号）</code>。</p>
+<ul>
+<li>学习阶段：通过分析或从训练集“学习”来构造分类器。训练集由数据元组和相应的类标号组成。</li>
+<li><strong>元组</strong>：是用n维向量 $X&#x3D;(x_1,x_2,x_3…)$ 表示的一条数据记录，其中n维向量表示的是元组X在n个属性上的度量。例如下图中黑边框标记的一条记录的元组表示为：<em>X&#x3D;(“Ricky Field”,”Middle_aged”,”Low”)</em> 该数据有4个属性，分别是 <em>“name”,”age”,”income”,”Loan_descision”</em> ，其中属性”Loan_descision”也是分类属性，类标号为”Risky”。 <img src="/images/blog/classfymain1.png"></li>
+<li>分类阶段，如下图所示，它属于一种映射过程。根据分类模型中的规则，给予测试数据元组X特定的类标号<img src="/images/blog/classfymain2.png"></li>
+</ul>
+<h2 id="三-分类的评估"><a href="#三-分类的评估" class="headerlink" title="三 分类的评估"></a>三 分类的评估</h2><h3 id="3-1-度量的基础术语"><a href="#3-1-度量的基础术语" class="headerlink" title="3.1 度量的基础术语"></a>3.1 度量的基础术语</h3><ul>
+<li><strong>正元组</strong>：感兴趣的主要元组，即我们要在第二章图中的数据中找到类标号”Loan_edscision”为”safe”的记录。</li>
+<li><strong>负元组</strong>：除去正元组以外的其他元组（或称为记录）。</li>
+</ul>
+<h3 id="3-2-度量的四个构件"><a href="#3-2-度量的四个构件" class="headerlink" title="3.2 度量的四个构件"></a>3.2 度量的四个构件</h3><ul>
+<li><strong>真正例&#x2F;真阳例（True Positive ,TP）</strong>：指的是被分类器正确分类的我们”感兴趣”的元组。</li>
+<li><strong>真负例&#x2F;真阴例（True Negative ,TN）</strong>：指的是被分类器正确分类的我们”不感兴趣”的元组。</li>
+<li><strong>假正例&#x2F;假阳例（False Positive,FP）</strong>：指的是被分类器错误的分类的元组，即将我们”不感兴趣”的元组分成了”感兴趣”的元组。</li>
+<li><strong>假负例&#x2F;假阳例（False Negative,FN）</strong>：指的是被分类器错误的分类的元组，即将我们”感兴趣”的元组分成了”不感兴趣”的元组。</li>
+</ul>
+<h3 id="3-3-评估度量"><a href="#3-3-评估度量" class="headerlink" title="3.3 评估度量"></a>3.3 评估度量</h3><p>有了度量的四个构件，我们可以得到常用的评估度量公式。如下</p>
+<table>
+<thead>
+<tr>
+<th>度量</th>
+<th>公式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>准确率(识别率)</td>
+<td>$\frac{TP+TN}{P+N}$</td>
+</tr>
+<tr>
+<td>错误率(误分类率)</td>
+<td>$\frac{FP+FN}{P+N}$</td>
+</tr>
+<tr>
+<td>敏感率(真正例率、召回率)</td>
+<td>$\frac{TP}{P}$</td>
+</tr>
+<tr>
+<td>特效性(真负例率)</td>
+<td>$\frac{TN}{N}$</td>
+</tr>
+<tr>
+<td>精度</td>
+<td>$\frac{TP}{TP+FP}$</td>
+</tr>
+<tr>
+<td>F分数(精度和召回率的调和均值)</td>
+<td>$\frac{2<em>精度</em>召回率}{精度+召回率}$</td>
+</tr>
+</tbody></table>
+<p>如何理解：</p>
+<ul>
+<li>准确率和错误率是相对的：前者计算的是<B>全部记录</B>中，分类器正确分类的元组数量，包括正确分类的”感兴趣”元组和”不感兴趣”元组；而后者计算的是<B>全部记录</B>中分类器错误分类的元组，也包括错误分类的”感兴趣”元组和”不感兴趣”元组。</li>
+<li>敏感度和特效性是相对的：前者计算的是<B>“感兴趣”元组</B>中，被正确分类的元组数量，可以理解为“我们得到的”感兴趣”元组，有多少是真正的”感兴趣”元组”；特效性计算的是<B>“不感兴趣”元组</B>中被正确分类的元组数量，可以理解为“我们的得到的”不感兴趣”元组，有多少真正是”不感兴趣”元组”。</li>
+<li>精度：是一个完全关乎”感兴趣”元组的统计项，一般情况下与敏感度等同。</li>
+</ul>
+<h2 id="四-对模型的评估"><a href="#四-对模型的评估" class="headerlink" title="四 对模型的评估"></a>四 对模型的评估</h2><h3 id="4-1-保持-holdout-方法和随机二次抽样"><a href="#4-1-保持-holdout-方法和随机二次抽样" class="headerlink" title="4.1 保持(holdout)方法和随机二次抽样"></a>4.1 保持(holdout)方法和随机二次抽样</h3><ul>
+<li><strong>保持(holdout)方法</strong> 是我们在讨论准确率时默认使用的方法。此方法中，数据会被随机地划分为两个独立的集合：<br><code>训练数据集合</code>和<code>检验数据集合</code>。通常,2&#x2F;3的数据分配到训练集，其余1&#x2F;3分配到检验集。</li>
+<li><strong>随机二次抽样方法</strong> ，是保持方法的一种变形，只是将保持方法重复k次，总准确率取每次迭代准确率的平均值。</li>
+</ul>
+<h3 id="4-2-k折交叉验证"><a href="#4-2-k折交叉验证" class="headerlink" title="4.2 k折交叉验证"></a>4.2 k折交叉验证</h3><p>将数据分成互不相交的k等份 $D_1,D_2,D_3,…D_k$，训练和校验进行k次。第i次迭代时，将第i个等份(“折”)作为校验集，而其他等份(“折”)全体作为训练集合。注意，在保持方法中数据是随机分的，而此处是均分，并且每份数据集合都有一次机会作为校验集。下图显示的是第四次迭代时的一个示例：<br><img src="/images/blog/classfymain4.png"></p>
+<h3 id="4-3-自助法"><a href="#4-3-自助法" class="headerlink" title="4.3 自助法"></a>4.3 自助法</h3>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/09/15/2014-05-11-javafoundamention1/" rel="prev" title="Java基础笔记-Java内存区域">
+      <i class="fa fa-chevron-left"></i> Java基础笔记-Java内存区域
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/09/15/2013-05-16-datamining-logicregressionsample/" rel="next" title="数据挖掘方法之六：解读逻辑回归">
+      数据挖掘方法之六：解读逻辑回归 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80-%E5%88%86%E7%B1%BB%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">一 分类的概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C-%E5%88%86%E7%B1%BB%E7%9A%84%E4%B8%80%E8%88%AC%E8%BF%87%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">二 分类的一般过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89-%E5%88%86%E7%B1%BB%E7%9A%84%E8%AF%84%E4%BC%B0"><span class="nav-number">3.</span> <span class="nav-text">三 分类的评估</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E5%BA%A6%E9%87%8F%E7%9A%84%E5%9F%BA%E7%A1%80%E6%9C%AF%E8%AF%AD"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 度量的基础术语</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E5%BA%A6%E9%87%8F%E7%9A%84%E5%9B%9B%E4%B8%AA%E6%9E%84%E4%BB%B6"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 度量的四个构件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E8%AF%84%E4%BC%B0%E5%BA%A6%E9%87%8F"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 评估度量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B-%E5%AF%B9%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%AF%84%E4%BC%B0"><span class="nav-number">4.</span> <span class="nav-text">四 对模型的评估</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E4%BF%9D%E6%8C%81-holdout-%E6%96%B9%E6%B3%95%E5%92%8C%E9%9A%8F%E6%9C%BA%E4%BA%8C%E6%AC%A1%E6%8A%BD%E6%A0%B7"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 保持(holdout)方法和随机二次抽样</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-k%E6%8A%98%E4%BA%A4%E5%8F%89%E9%AA%8C%E8%AF%81"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 k折交叉验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E8%87%AA%E5%8A%A9%E6%B3%95"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 自助法</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="shartoo"
+      src="/images/me.jpg">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v6.3.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.6.0
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'c656cd038e01f710e260',
+      clientSecret: 'e6de2ccaaf0f7069292125b8f50e27f25b95810d',
+      repo: 'shartoo.github.io',
+      owner: 'shartoo',
+      admin: ['shartoo'],
+      id: 'f3e273393ece85f686491bede714f249',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+</body>
+</html>

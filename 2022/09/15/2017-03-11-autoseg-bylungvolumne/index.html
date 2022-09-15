@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="baidu-site-verification" content="93f8r6fzoB" />
+<meta name="google-site-verification" content="TRFlJTt2XTd9bCvpogqNRWkuoxwFeOUBf8ouiChVFyQ" />
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/science_256px_1075043_easyicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/science_128px_1075043_easyicon.ico">
+  <link rel="mask-icon" href="/images/stars.svg" color="#222">
+  <meta name="google-site-verification" content="TRFlJTt2XTd9bCvpogqNRWkuoxwFeOUBf8ouiChVFyQ">
+  <meta name="baidu-site-verification" content="93f8r6fzoB">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://shartoo.github.io').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="图像处理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Morphological Segmentation and Partial Volume of Solid Pulmonary Lesions in Thoracic CT Scans">
+<meta property="og:url" content="https://shartoo.github.io/2022/09/15/2017-03-11-autoseg-bylungvolumne/index.html">
+<meta property="og:site_name" content="数据与算法">
+<meta property="og:description" content="图像处理">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/lungvolumne1.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/lungvolumne2.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/lungvolumne3.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/lungvolumne4.png">
+<meta property="article:published_time" content="2022-09-15T08:16:12.750Z">
+<meta property="article:modified_time" content="2022-09-15T08:16:12.750Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shartoo.github.io/images/blog/lungvolumne1.png">
+
+<link rel="canonical" href="https://shartoo.github.io/2022/09/15/2017-03-11-autoseg-bylungvolumne/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>Morphological Segmentation and Partial Volume of Solid Pulmonary Lesions in Thoracic CT Scans | 数据与算法</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">数据与算法</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">重新出发</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://shartoo.github.io/2022/09/15/2017-03-11-autoseg-bylungvolumne/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/me.jpg">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="数据与算法">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Morphological Segmentation and Partial Volume of Solid Pulmonary Lesions in Thoracic CT Scans
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-15 16:16:12" itemprop="dateCreated datePublished" datetime="2022-09-15T16:16:12+08:00">2022-09-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" itemprop="url" rel="index">
+                    <span itemprop="name">图像处理</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">图像处理</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>本文基于形态学处理方法提出了一个快速的、自动肺分割方法，并适用于病变的大结节和小结节。除此之外，提出的方法称述了容积评估的一些挑战，比如图像协议的多样性，或者通过引入一种基于分割方法的部分容积分析(segmentation-based partial volume analysis (SPVA))的灵感状态(inspiration state)。</p>
+<h2 id="一-分割方法"><a href="#一-分割方法" class="headerlink" title="一 分割方法"></a>一 分割方法</h2><h3 id="1-1-描述"><a href="#1-1-描述" class="headerlink" title="1.1 描述"></a>1.1 描述</h3><p>算法基于立方块输入容积VOI(Volume of interest)。下面的集合V代表了所有位于输入容积内的体素。强度值区间范围为 -1024HU到3071HU。在各向异性的情形中，在分割之前需要将体素重新取样为各向同性以允许3D体素矩阵中获得一致的图像处理过程。VOI的假设先决条件是</p>
+<ul>
+<li><p>P1):种子节点S位于结节内</p>
+</li>
+<li><p>P2):结节完全位于VOI内部，并且没有触碰到VOI边缘</p>
+</li>
+</ul>
+<p>按照标准图像处理的流程来做，阈值、区域增长、相连组件分析、凸壳和欧几里得距离转换。</p>
+<p>下一节中，新的分割方法是逐步描述的。首先，初始阈值分割创建了目标结节mask的超集。接着，在完成边界细化步骤之前，到胸壁的连接和血管组织的连接被移除。</p>
+<h3 id="1-2-初始化"><a href="#1-2-初始化" class="headerlink" title="1.2 初始化"></a>1.2 初始化</h3><p>初始分割使用的是区域增长算法，从种子点S开始的，固定阈值。阈值-400HU选为结节放射强度的经验值，它是50个HU值的算术均值，以及-850作为薄壁组织的经验值。此步骤的结果是一个初始的体素 $N_0$ 集合，第一个结节区域评估如下图2b。</p>
+<p> 接着，在 $N_0$ 上执行相连组件分析。最大的相连的，非分割区域P被抽取。它对应了环绕目标结节的VOI里面的肺薄壁组织的最大的连接区域（上图2c）。对于分割，P以两种方式使用：其一，对于没有胸壁关联的结节，P基本上就是 $N_0$ 的补充，除了结节内部的一些暗的区域（比如坏死或噪声）。我们定义了一个 $N_0$ 的超集 $N_1 &#x3D; V-P$ ，最终 $N_0$ 中的孔洞闭合。其二，对于包含胸壁黏连的结节，P对接下来的分离步骤至关重要。</p>
+<p><img src="/images/blog/lungvolumne1.png"></p>
+<h3 id="1-3-从胸壁分离"><a href="#1-3-从胸壁分离" class="headerlink" title="1.3 从胸壁分离"></a>1.3 从胸壁分离</h3><p>如上图所示，不仅邻接脉管组织，同时胸壁的部分也可能会被包含在初始的分割集 $N_0$中。通过衡量V中的由 $N_0$ 覆盖的边界体素的占比，来决定是否需要进一步的胸壁分离算法。边界占比10%经验上可作为合适的阈值，并被用在小节IV中。由于结果在没有胸壁连接的情形中不会受到影响，此检测步骤可以被抹去并且仅仅使用于避免不必要的时间消耗中。</p>
+<p>CT图像中通常在结节与胸壁黏连之间并不表现出可见的强度对比。因此，此步骤仅重现使用形态学操作从胸壁分离的结节。</p>
+<h3 id="1-4-从黏连的脉管组织分离"><a href="#1-4-从黏连的脉管组织分离" class="headerlink" title="1.4 从黏连的脉管组织分离"></a>1.4 从黏连的脉管组织分离</h3><p>由于肺分离仅能够mask out不属于肺的部分结构，邻接组织依然被包含在$N_2$ 中。算法特地关注大结节转移的容积，因此与脉管组织相连的拓展连接也是在期望之内(上图的c和d)。CT图像上的强度信息不足以允许基于强度的分割步骤，但是结节和血管组织在形态学上区别明显。结节与外部脉管组织的连接通常比结节自身的连接要纤细。因此，可以使用形态学开运算(先腐蚀后膨胀)完成结构分离。但是形态学开运算不适于移除完全被病变结节包围的脉管组织的部分。因而，我们仅分离那些部分与脉管组织相连的并且容易被形态学特征清晰区分的。</p>
+<p>有多种方法实现二分形态学操作。相比于经典方法，kernel-based的形态学操作，使用球形结构元素的腐蚀和膨胀操作可以以计算mask的内部或者外部边界的欧式距离以及紧接的在结果距离map上的过滤体素操作来模拟。距离转换被用来实现形态学操作。距离转换操作方法被用于一些相关问题，如从血管组织中分离动脉瘤。</p>
+<p>对于当前任务，从紧凑病变邻接的血管移除血管，对形态学开运算使用距离map的主要原因是，一旦它们被计算，它们包含了仅仅使用阈值获得的任意腐蚀和膨胀的结果的形态学信息。除此之外的一些参数，比如血管半径可以直接从距离map中获得。接下来描述的是如何有效的计算这些特征</p>
+<ol>
+<li><p><strong>基本距离转换</strong> ：为实现腐蚀和接下来的膨胀操作，使用两个相反的距离变换。首先是一个基本的3D欧几里得距离转换，从 $E:V\rightarrow R$ ,计算 $N_2$ 中每个体素到背景的最小距离。世界坐标用来计       算体素的各向异性：</p>
+<p>$$<br> E(v):&#x3D;min\lbrace||world(v)-world(v’)||_2:v’\notin N_2\rbrace</p>
+</li>
+</ol>
+<p>  $$<br>  接着在距离map中再使用低阈值 $threshold$ 来实现形态学腐蚀操作，称为腐蚀阈值。此操作的关键部分是找到合适的 $threshold$ ，在切除不想要的邻接结构时无须切除显著的结节边界特征。</p>
+<ol start="2">
+<li><strong>种子优化</strong>：为了优化初始种子节点<code>S</code>，目标病变区域的中心需要被近似。基本距离map E对 $N_2$ 中的每个体素到最邻近的体素的距离做了编码。从初始的定义的结节上的种子节点<code>S</code>出发，E上的局部最大搜索可以近似得到病变区域中心，如下图。</li>
+</ol>
+<p><img src="/images/blog/lungvolumne2.png"></p>
+<p>  这并不仅仅提供了一个新的种子节点<code>S&#39;</code>，同时也为得到了其边界距离 $E(S’)$（实际的结节半径） ，一个很好的近似 </p>
+<p>  $$<br>    \tilde{r}:&#x3D;E(S’)<br>  $$</p>
+<p>  通过构造，新的种子节点 <code>S&#39;</code>位于局部边界距离最大点，同时由于结节大部分是凸的，局部最大值很可能就是全局最大。使用一个大于 $\tilde{r}$ 的腐蚀阈值会导致所有的结节体素在腐蚀时被根除。因而，腐蚀   阈值  $\tilde{r}$  对应了100%的腐蚀强度，使得我们可以更加公式化的定义这一项，关于边界距离的腐蚀比例。由于腐蚀强度的定义使得我们可以对决定方法定义个更加启发式的描述，并且腐蚀阈值的绝对值    对于方法描述是不显著的，我们对任意 $e\in R$ 定义了归一化距离 $\phi$  </p>
+<p> $$<br>   \phi (e):&#x3D;\frac{e}{\tilde{r}}<br>  $$</p>
+<p> 并在接下来检验归一化距离map $E_{\phi}$ ，其定义如下</p>
+<p> $$<br>  E_{\phi} :&#x3D;\phi(E(v))<br> $$</p>
+<p> 为最小化体素误差，每个将从病变组织分离的黏连结构尽可能地在靠近病变组织切除，这对于分割处理是至关重要的。在归一化的距离map $E_{\phi}$上 使用阈值来实现腐蚀操作。 如果腐蚀强度值存在如下:</p>
+<ul>
+<li><p><strong>C1</strong>:大到足以切除所有靠近连接点的邻接结构</p>
+</li>
+<li><p><strong>C2</strong>: 与边界上限 $E_{\phi}(S’)$ 一致</p>
+</li>
+</ul>
+<p> 其中最小的接着会被称为**最优腐蚀强度 $\theta_{\star}$ ** ，在满足条件 <strong>C1</strong> 和 <strong>C2</strong>的同时尽可能保留病变组织的原始形状。它是接下来提出的模型的最优。我们需要研究的是，在何种情况下存在此类最  优强度，以及如何高效地计算。</p>
+<ol start="3">
+<li><strong>血管连接性模型</strong>：这些问题的答案取决于邻接结构和目标病变区域本身的形态学特征。我们为此提出了一个讨论框架，我们定义为<strong>血管连接性模型</strong>，对血管黏连做了如下两个假设：</li>
+</ol>
+<ul>
+<li><p><strong>A1</strong>：每个肺组织最终源于肺门区域</p>
+</li>
+<li><p><strong>A2</strong>：每个组织的半径随着其到肺门距离的增加而单调递减。</p>
+</li>
+</ul>
+<p>鉴于模型以及其他约束，总是存在一个最优强度的，并且也是可以高效计算的。</p>
+<ol start="4">
+<li><strong>最优强度存在</strong>：由于我们期望算法能够区分非常规结节边界特征和邻接组织，我们需要利用先决条件P2:结节本身完全位于VOI内部并且没有触及其边界。由于假设A2，组织的半径在从肺门进入VOI之后不会增加。最终，它要么衰退为一个无法再追踪的度，要么再次离开了VOI。两种情况下，以特定腐蚀强度腐蚀的后果是，如果组织在某些点被腐蚀操作根除，此点之外的组织部分将会消失。</li>
+</ol>
+<p>如果一个或多个组织连接到一个结节，会出现两种情况（如上图）：组织在结节内部完结，或者穿过结节继续拓展。两种情况下，实体点的组织的半径需待确定，由于任意大于此半径的腐蚀强度不仅会在实体点将结节从组织打断，而且由于假设A2，完全抹去留在结节中的组织部分。这暗含了一个约束：如果VOI与模型一致，但是在实体点结节半径小于组织半径，条件C2无法满足，并且最优腐蚀强度不存在。换句话说，基于脉管组织模型 假设A1和A2，当且仅当结节内的实体点处任意黏连组织半径都小于 $\tilde{r}$ 时从黏连的脉管组织分离结节才有可能。由于这些情形非常少，（700例中不到5例）,所以有理由认为可以通过全局形态学腐蚀操作完成从脉管组织分离。</p>
+<ol start="5">
+<li><strong>最优腐蚀强度计算</strong>：下一步是高效的计算最优强度。利用 $E_{\phi}$ ，条件可以以最优种子节点S’到VOI边界的路径来表述。以 $P_{N_2}^{\gamma}$表示 $N_2$ 中任意长度 $n$ 的所有的路径集合 $(v_0,v_1,v_2,…v_n)$ ，从 $v_0&#x3D;S’$ 开始在VOI边界上（基于3D邻居关系 $\gamma$）的体素 $v_n$ 终止。那么最优腐蚀强度 $\theta_{\star}$ 可以被定义为 :</li>
+</ol>
+<p>$$<br> \theta <em>{\star} &#x3D; max\lbrace min\lbrace E</em>{\phi}(v):v\in p \rbrace :p\in P^{\gamma}_{N_2}\rbrace<br>$$</p>
+<p>换句话说，$\theta <em>{\star}$ 沿着 $P^{\gamma}</em>{N_2}$ 路径中所有最小半径的最大半径。为了高效的计算 $\theta <em>{\star}$ ，在 $E</em>{\phi}$ 使用 一个动态的阈值区域增长方法 。从S’开始，阈值无上限，下限为1，达到VOI边界后一次递减。最优的腐蚀强度即为终止之前的最后一个阈值下限。</p>
+<p>考虑到现实生活中的一些场景，离散效应，运动伪影，噪声和解剖异常。这可能会导致与假设A1（出现非常小的组织）和假设A2（关于半径单调性）的不符合。因而，在现实中原理上最优的腐蚀强度并不一定有最佳效果。为解决极小组织触及病变组织但无法全路径追踪到VOI边界的，结果值不仅仅aganist上限1剪切（确保腐蚀操作不会完全剔除病变组织），而且aganist人工下限 $\epsilon$ 。作为一种可能出现的单调性不一致的妥协，腐蚀强度值一般会比计算得到的最优值稍微高一点，如果检测到连接则加上一个偏移 $\mu$ ，从实际方法出发，有如下定义:</p>
+<p>$$<br>  \theta _ :&#x3D; \lbrace\quad 1,\quad \theta_{\star}\gt 1\ \epsilon ,\quad \theta <em>{\star} \lg \epsilon \ \theta</em>{\star} +\mu,\quad otherwise<br>$$</p>
+<p>参数 $\mu$ 和 $\epsilon$ 是一种百分比形式独立定义于实际病变组织半径，由于它们会与腐蚀强度比如归一化的腐蚀阈值关联。$\mu$ 的一般值是 10%到30%之间，对于 $\epsilon$ 经验设置的最优值为25%。</p>
+<ol start="6">
+<li><strong>腐蚀：</strong>既然已经决定了合适的强度，在移除距离低于绝对腐蚀阈值 $\circleddash _:&#x3D;\phi ^{-1}(\theta_)$的非归一化、基本距离mapE上可以做腐蚀操作。第一张图的图e显示了在距离map上使用阈值 $\circleddash _$之后的结果，结果得到的腐蚀过后的结节mask $N_$定义如下</li>
+</ol>
+<p>$$<br>  N_:&#x3D; \lbrace v\in N_2|E(v)\ge \circleddash _<br>$$<br>注意到，此形态学操作通常无法成功将结节从胸壁上分离，由于肺连接通常更广，以及任意以必要强度完成的腐蚀操作要么会抹去任意非常规结节形态，要么移除整个结节。</p>
+<p>鉴于腐蚀操作的目标是在连接点切除每个组织，组织的更远部分可能在膨胀操作之后然与结节相连。然而，通过重建这些阈值，这些组织部分以邻近关系 $\gamma$ 从结节部件中断开。考虑到目标结节部件是由修改后的种子点 <code>S&#39;</code> 唯一定义的，可以通过 $\gamma$ 连接性分析轻易得到。</p>
+<ol start="7">
+<li><strong>二次距离变换</strong>：从 $N_$ 开始，开运算的第二步，膨胀操作使用了一个二次距离变换map D，将每个体素映射到其到腐蚀结节mask $N _$ 的距离：</li>
+</ol>
+<p>$$<br> D(v):&#x3D; min \lbrace ||world(v)-world(v’)||_2:v’ \in N_<br>$$</p>
+<p>为了获得较好的结节近似，腐蚀阈值 $\circleddash _$ 本身初看起来是个在D上实现膨胀操作的上限阈值。然而，基于腐蚀强度，此结果可能会得到不精确的分割边界和在剪切得更精细的边界特征（下图左图）</p>
+<p><img src="/images/blog/lungvolumne3.png"></p>
+<p> 为避免这种欠分割，需要额外的边界重修，可以重现上图右边的精确的边界。</p>
+<h3 id="1-5-边界重修"><a href="#1-5-边界重修" class="headerlink" title="1.5 边界重修"></a>1.5 边界重修</h3><p>为了纳入被前面步骤中腐蚀操作抹去的结节边界更小的不规则性，膨胀阈值 $\circleddash _{+}$ 的选择会比 $\circleddash _$ 稍大。即 $\circleddash <em>{+}:&#x3D;\circleddash _+\delta$ 。膨胀操作的mask $N</em>+$ 定义为：</p>
+<p>$$<br> N_+:&#x3D; \lbrace v\in V:D(v)\lg \circleddash \rbrace<br>$$</p>
+<p>此步骤不仅添加了一些肺周围的薄壁组织和胸壁，这很容易通过与 $N_2$ 的交集运算来移除，同时也会无意将之前步骤已经移除过的组织纳入。我们因此接着计算初始分割和膨胀mask的交集，$I:&#x3D;N_0\cap \partial  N_+$ 。用 结果 $I_{\partial}$ 中的 $\partial$ 来膨胀I，用来移除不需要的结构。最终的分割结果集 $N_{\star}$  定义为 </p>
+<p>$$<br> N_{\star} :&#x3D; (N_+\cap N_2) &#x2F;I_{\partial}<br>$$</p>
+<h3 id="1-6-交互式校验"><a href="#1-6-交互式校验" class="headerlink" title="1.6 交互式校验"></a>1.6 交互式校验</h3><p>分割步骤基于一些假设。一些特殊情况下，比如解剖异常，成像或运动伪影，或者与其他疾病相关的条件可能会导致不好的结果。这些情况下，需要医生的专业知识来交互式地纠正。为方便纠正，需要预定义一个带有启发式值域范围的形状参数。更新后的结果应该立即呈现，以完成交互式优化。</p>
+<p>在提出的分割框架中，腐蚀强度参数满足这些条件。自动分割过程之后，初始值 $\theta_$ 可以在指定步骤迭代的增加或减少，可能的值域为0到100%之间。由于预处理，胸壁分割以及最优腐蚀阈值的计算，可以在交互式地腐蚀强度修改之后留出，腐蚀步骤之后仅需要对所有处理步骤的进行一次更新。因而，与初始分割步骤相比，更新所需的时间后续被减少。</p>
+<h2 id="二-基于分割的部分体积分析方法（SPVA）"><a href="#二-基于分割的部分体积分析方法（SPVA）" class="headerlink" title="二 基于分割的部分体积分析方法（SPVA）"></a>二 基于分割的部分体积分析方法（SPVA）</h2><p>不使用分割和仅仅引用手工画在中心slice的结节中心的区域，意味着纯粹结节组织和周围薄壁组织的强度（密度）是可以从数据评估。对每个slice，通过累加每个slice内的体素强度和用纯粹的组织均值为权重，来计算容积。现存的一些研究证明，在CT图像上的海量的潜在的密度分析，并不适用于体内结节评估，由于黏连的高密度结构可能被算入结节容积。除此之外，结节和薄壁组织减去平均衰减需要完全自动化，同时保持鲁棒性和可靠性，以及在VOI内不被其他肺结构干扰。</p>
+<p>为克服这些问题，我们的方法结合了先前的使用强度直方图分析的分割得到的形态学信息。某篇论文的模型中，假设暗示着所有体素的平均强度对于扫描和重建的变化是不变的参数。在一个已知强度的两种组织的双峰设置中，这种假设使得出现在任意容积内的组织容积均值变得可重现计算，使用平均频率直方图分析。为避免部分容积分析上的VOI中的脉管组织和胸壁区域的影响，使用分割结果。首先，由于容积均值只出现在结节边界，足以将部分容积分析限制在其直接的邻近。其次，所有连接到结节的高密度结构都在分割步骤被确定，并且可以在分析步骤明确的剔除。</p>
+<p>SPVA分析定义如下：基于最终分析结果 $N_{\star}$ ，三个不同的区域，结节中心(nodule core NC)，薄壁组织区域(parenchyma area PC)，以及部分容积区域(partial volume PV)可以通过它们到最终mask $N_{\star}$ 边界的距离来自动确定。如下图</p>
+<p><img src="/images/blog/lungvolumne4.png"></p>
+<p>参数 $\triangle _{PC}$ 描述了PV内任意体素到分割边界的最大距离，然后定义区域PV，必须足够大来纳入所有结节组织非零比例的体素，必须足够小而不包含邻接的高密度结构的部分容积。同时，这些直接黏在结节上的结构在分割步骤已经确定，没有与结节相连的结构没有被删除。因此，如果位于PV区域内部，它们无法从容积上剔除。但是可以通过对每个scan和重构协议调整 $\triangle _{PC}$获得更加精确的结果，固定经验值2mm被证明是一个调和两方面的较好的折中。从NC和PC中减去平均衰减 $\mu <em>{SC}$ 和 $\mu</em> {PC}$，为PV内的体素对整个结节容积有个权重化的贡献，其中体素v的权重w被定义为</p>
+<p>$$<br>  w(v):&#x3D; \lbrace 1\quad v\in NC \ \frac{i(v)-\mu _{PC}}{\mu _{NC}-\mu _{pc}},\quad v \in PV \ 0 ,\quad otherwise<br>$$</p>
+<p>其中 $i(v)$ 代表了在输入VOI中体素v的密度值。接着，最终结节容积通过累加所有VOI内的体素权重乘以体素容积得到。 </p>
+<p>对重要的场合，区域NC太小二无法减去均值 $\mu _{NC}$ ，没办法决定纯粹的结节组织衰减。由于 增加NC会导致一些不纯的体素被纳入，在欠评估的结节密度和过度评估的结节容积中，对solid结节使用预定义的密度值来替代 $\mu _{SC}$。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/09/15/2016-11-24-represationlearning/" rel="prev" title="深度学习：表征学习">
+      <i class="fa fa-chevron-left"></i> 深度学习：表征学习
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/09/15/2017-03-09-lungseg-bignodule-detect/" rel="next" title="肺部CT大结节检测">
+      肺部CT大结节检测 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%91%98%E8%A6%81"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80-%E5%88%86%E5%89%B2%E6%96%B9%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">一 分割方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%8F%8F%E8%BF%B0"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E4%BB%8E%E8%83%B8%E5%A3%81%E5%88%86%E7%A6%BB"><span class="nav-number">2.3.</span> <span class="nav-text">1.3 从胸壁分离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E4%BB%8E%E9%BB%8F%E8%BF%9E%E7%9A%84%E8%84%89%E7%AE%A1%E7%BB%84%E7%BB%87%E5%88%86%E7%A6%BB"><span class="nav-number">2.4.</span> <span class="nav-text">1.4 从黏连的脉管组织分离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-%E8%BE%B9%E7%95%8C%E9%87%8D%E4%BF%AE"><span class="nav-number">2.5.</span> <span class="nav-text">1.5 边界重修</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-6-%E4%BA%A4%E4%BA%92%E5%BC%8F%E6%A0%A1%E9%AA%8C"><span class="nav-number">2.6.</span> <span class="nav-text">1.6 交互式校验</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C-%E5%9F%BA%E4%BA%8E%E5%88%86%E5%89%B2%E7%9A%84%E9%83%A8%E5%88%86%E4%BD%93%E7%A7%AF%E5%88%86%E6%9E%90%E6%96%B9%E6%B3%95%EF%BC%88SPVA%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">二 基于分割的部分体积分析方法（SPVA）</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="shartoo"
+      src="/images/me.jpg">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v6.3.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.6.0
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'c656cd038e01f710e260',
+      clientSecret: 'e6de2ccaaf0f7069292125b8f50e27f25b95810d',
+      repo: 'shartoo.github.io',
+      owner: 'shartoo',
+      admin: ['shartoo'],
+      id: '8d3a1b0d96757322447505098e8497a8',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+</body>
+</html>

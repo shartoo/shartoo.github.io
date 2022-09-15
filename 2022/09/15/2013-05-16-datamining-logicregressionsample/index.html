@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="baidu-site-verification" content="93f8r6fzoB" />
+<meta name="google-site-verification" content="TRFlJTt2XTd9bCvpogqNRWkuoxwFeOUBf8ouiChVFyQ" />
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/science_256px_1075043_easyicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/science_128px_1075043_easyicon.ico">
+  <link rel="mask-icon" href="/images/stars.svg" color="#222">
+  <meta name="google-site-verification" content="TRFlJTt2XTd9bCvpogqNRWkuoxwFeOUBf8ouiChVFyQ">
+  <meta name="baidu-site-verification" content="93f8r6fzoB">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://shartoo.github.io').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="数据挖掘专栏">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据挖掘方法之六：解读逻辑回归">
+<meta property="og:url" content="https://shartoo.github.io/2022/09/15/2013-05-16-datamining-logicregressionsample/index.html">
+<meta property="og:site_name" content="数据与算法">
+<meta property="og:description" content="数据挖掘专栏">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/loginregressionsample1.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/loginregressionsample4.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/loginregressionsample8.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/loginregressionsample14.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/loginregressionsample18.png">
+<meta property="og:image" content="https://shartoo.github.io/images/blog/loginregressionsample19.png">
+<meta property="article:published_time" content="2022-09-15T08:16:12.746Z">
+<meta property="article:modified_time" content="2022-09-15T08:16:12.746Z">
+<meta property="article:author" content="shartoo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shartoo.github.io/images/blog/loginregressionsample1.png">
+
+<link rel="canonical" href="https://shartoo.github.io/2022/09/15/2013-05-16-datamining-logicregressionsample/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>数据挖掘方法之六：解读逻辑回归 | 数据与算法</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">数据与算法</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">重新出发</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://shartoo.github.io/2022/09/15/2013-05-16-datamining-logicregressionsample/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/me.jpg">
+      <meta itemprop="name" content="shartoo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="数据与算法">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数据挖掘方法之六：解读逻辑回归
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-15 16:16:12" itemprop="dateCreated datePublished" datetime="2022-09-15T16:16:12+08:00">2022-09-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">数据挖掘专栏</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="一-使用数据"><a href="#一-使用数据" class="headerlink" title="一 使用数据"></a>一 使用数据</h2><p>本文着重示例如何使用逻辑回归<br><br><a herf="http://download.csdn.net/detail/huangxia73/7059709">数据来源:电信数据集合</a><br><br><B>描述：</B>电信数据，有多个属性，用来预测客户流失。<br><br>载入数据：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">call_consumer&lt;-read.table(file=&quot;d:/LabData/RData/churn.txt&quot;,header=TRUE,sep=&quot;,&quot;)  </span><br><span class="line">   Warning message:  </span><br><span class="line">   In read.table(file = &quot;d:/LabData/RData/churn.txt&quot;, header = TRUE,  :  </span><br><span class="line">    incomplete final line found by readTableHeader on &#x27;d:/LabData/RData/churn.txt&#x27;  </span><br><span class="line"> &gt; edit(call_consumer)</span><br></pre></td></tr></table></figure>
+
+<img src="/images/blog/loginregressionsample1.png">
+
+<h2 id="二-解读逻辑回归模型"><a href="#二-解读逻辑回归模型" class="headerlink" title="二 .解读逻辑回归模型"></a>二 .解读逻辑回归模型</h2><p>分三种：</p>
+<ul>
+<li>一个两分预测变量的模型</li>
+<li>多分预测变量</li>
+<li>连续的预测变量</li>
+</ul>
+<h3 id="2-1-两分预测变量模型"><a href="#2-1-两分预测变量模型" class="headerlink" title="2.1 两分预测变量模型"></a>2.1 两分预测变量模型</h3><p>假定唯一的预测变量是语音邮箱套餐（Intl.plan），这是一个表示是否为套餐会员的标记变量。下表显示了语音邮箱套餐会员流失情况。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>语音邮箱&#x3D;否(x&#x3D;0)</th>
+<th>语音邮箱&#x3D;是(x&#x3D;1)</th>
+<th>合计</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>流失&#x3D;假(y&#x3D;0)</td>
+<td>2008</td>
+<td>842</td>
+<td>2850</td>
+</tr>
+<tr>
+<td>流失&#x3D;真(y&#x3D;1)</td>
+<td>403</td>
+<td>80</td>
+<td>483</td>
+</tr>
+<tr>
+<td>合计</td>
+<td>2411</td>
+<td>922</td>
+<td>3333</td>
+</tr>
+</tbody></table>
+<p>似然函数可以表示为：</p>
+<p>$$<br> L(b|x)&#x3D;[\pi(0)]^{403}<em>[1-\pi(0)]^{2008}</em>[\pi(1)]^{80}[1-\pi(1)]^{842}<br>$$</p>
+<p>使用语音邮箱套餐的客户流失的发生比＝ $\frac{\pi(1)}{1-\pi(1)} &#x3D;\frac{80}{842}&#x3D;0.095$</p>
+<p>没有使用语音邮箱套餐的客户流失的发生比＝ $\frac{\pi(0)}{1-\pi(0)}&#x3D;\frac{403}{2008}&#x3D;0.2007$  </p>
+<p> OR&#x3D;0.095&#x2F;0.2007&#x3D;0.47</p>
+<p>也即　使用语音邮箱套餐的客户与没有使用语音邮箱套餐的客户相比，流失概率只有47%</p>
+<p>下图显示了语音套餐会员流失的逻辑回归结果<br><img src="/images/blog/loginregressionsample4.png"><br>可以得到 $b_0$＝-1.60596和 $b_1$&#x3D;-0.747795。所以用于语音邮箱套餐（x&#x3D;1）的客户或者没有语音套餐（x&#x3D;0）的客户流失的估计值为：</p>
+<p>$$<br> \pi(x)&#x3D;\frac{e^{g(x)}}{1+e^{g(x)}}&#x3D;\frac{e^{-1.60596-0.747795}}{1+e^{-1.60596-0.747795}}<br>$$</p>
+<ul>
+<li><p>对于一个拥有此套餐的客户，估计他的流失概率为： $\pi(1)&#x3D;0.0868$（也可以直接计算 P(流失|语音邮箱计划)&#x3D;80&#x2F;922&#x3D;0.0868)，这一概率比数据集中给出的客户流失的总比例14.5%要小，说明开通语音邮箱套餐有利于减少客户流失。</p>
+</li>
+<li><p>对于一个没有拥有此套餐的客户，估计他的流失概率为：$\pi(0)&#x3D;0.16715$ （也可以直接计算 P(流失\｜语音邮箱计划)&#x3D;403&#x2F;2411&#x3D;0.16715，这一概率比数据集中给出的客户流失的总比例14.5%要高，说明没有开通语音邮箱套餐对于客户流失不大。</p>
+</li>
+<li><p>进一步地，可以利用Wald检验法检验语音邮箱套餐参数的显著性。这里, $b_1$ &#x3D;-0.747795, $SE(b_1)$ &#x3D;0.129101得 $Z_{wald}&#x3D;-0.747795&#x2F;0.129101&#x3D;-5.79$ P值为P(|Z|&gt;-5.79)趋近于0</p>
+</li>
+</ul>
+<h3 id="2-2-多分预测变量模型"><a href="#2-2-多分预测变量模型" class="headerlink" title="2.2 多分预测变量模型"></a>2.2 多分预测变量模型</h3><p>假定将客户服务电话数（customers services calls)看做一个新的变量<font color="red">“-CSC”</font>，分类如下：</p>
+<ul>
+<li>0个或1个客户服务电话：CSC＝低</li>
+<li>2个或3个客户服务电话：CSC＝中</li>
+<li>4个以上客户服务电话：CSC＝高</li>
+</ul>
+<p>此时，分析人员需要用指示变量（虚拟变量）和参考单元编码法来给数据集编码，假定选择“ＣＳＣ＝低”作为参考单元，则可把指示变量值分配给另外两个变量。使用指示变量之后：</p>
+<p align="center">使用参考单元编码的客户电话指示变量</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>CSC-中</th>
+<th>csc-高</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>低(0个或1个电话)</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>中(2个或3个电话)</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>高( $\ge4个电话$ )</td>
+<td>0</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<p>使用CSC展示客户流失情况列表汇总如下：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>CSC-低</th>
+<th>CSC-中</th>
+<th>CSC-高</th>
+<th>合计</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>流失&#x3D;假(y&#x3D;0)</td>
+<td>1664</td>
+<td>1057</td>
+<td>129</td>
+<td>2850</td>
+</tr>
+<tr>
+<td>流失&#x3D;真(y&#x3D;1)</td>
+<td>214</td>
+<td>131</td>
+<td>138</td>
+<td>483</td>
+</tr>
+<tr>
+<td>合计</td>
+<td>1878</td>
+<td>1188</td>
+<td>267</td>
+<td>3333</td>
+</tr>
+</tbody></table>
+<p>此时再对数据进行逻辑回归分析，得到的结果如下（<font color="blue">注意：没有CSC－低</font>）：<br><img src="/images/blog/loginregressionsample8.png"></p>
+<ul>
+<li>对于CSC－中：$\bar {OR}＝ｅ^{b1}＝ｅ^{-0.03698}&#x3D;0.96$</li>
+<li>对于CSC－高：$\bar {OR}＝ｅ^{b2}＝ｅ^{2.11844}&#x3D;8.32$</li>
+</ul>
+<p>这里， $b_0＝-2.501,b_1&#x3D;-0.03698，b_2&#x3D;2.11844$ 所以客户流失概率的估计量为：</p>
+<p>$$<br>  \pi(x)&#x3D;\frac{e^{g(x)}}{1+e^{g(x)}}<br>  \ 其中g(x)&#x3D;e^{-2.051-0.036989(csc-中)+2.11844(csc-高)}<br>$$</p>
+<p>有：</p>
+<ul>
+<li>对于那些很少拨打客服电话的客户：$g(x)&#x3D;e^{-2.051-0.036989(0)+2.11844(0)}&#x3D;e^{-2.501}$ 概率为：$\pi(x)&#x3D;\frac{e^{-2.501}}{1+e^{-2.501}}&#x3D;0.114$<br>。此概率比全部数据样本集中客户流失的概率14.5%要小。这表明这一类客户的流失率一定程度上比总体客　　户的流失率要小。</li>
+<li>对于拨打客服电话处于中等水平的客户，同上，此时<br>$g(x)&#x3D;e^{-2.051-0.036989(1)+2.11844(0)}&#x3D;e^{-2.088}$ <font color="blue">注意系数的差别,上一条中的系数是0，0，这个是1，0</li>
+<li>对于经常拨打客服电话的客户，同上，此时<br>$g(x)&#x3D;e^{-2.051-0.036989(0)+2.11844(1)}&#x3D;e^{-2.501}$ 注意系数的差别,上一条中的系数是1，0，这个是0，1</font></li>
+</ul>
+<h4 id="Wald检验"><a href="#Wald检验" class="headerlink" title="Wald检验"></a>Wald检验</h4><p>如下：</p>
+<ul>
+<li>对于<font color="blue">CSC－中</font> 的参数进行Wald检验，$b_1&#x3D;-0.036989,SE(b_1)&#x3D;0.11771$<br>　故而，<br>$$<br>Z_{wald}＝-0.036989&#x2F;0.117701&#x3D;-0.31426<br>$$</li>
+</ul>
+<p>此时，P值P(|Z|&gt;0.31426)&#x3D;0.753，不显著，所以没有证据表明<font color="blue">CSC－中</font>与<font color="blue">CSC－低</font>的差异能有效预测客户流失。</p>
+<ul>
+<li>对于<font color="blue">CSC－高</font>的参数进行Wald检验，$b_1&#x3D;2.11844,SE(b_1)&#x3D;0.142380$故而<font align="center">$Z_{wald}&#x3D;2.11844&#x2F;0.142380&#x3D;14.88$</font><br>此时，P值P(|Z|&gt;14.88)&#x3D;0.000，显著，表明<font color="blue">CSC－高</font>与<font color="blue">CSC－低</font>的差异能有效预测客户流失。</li>
+</ul>
+<p><B>所以，对于多分预测变量模型，关键是指示变量和参照单元编码</B>   </p>
+<h3 id="2-3-解读连续预测变量模型"><a href="#2-3-解读连续预测变量模型" class="headerlink" title="2.3　解读连续预测变量模型"></a>2.3　解读连续预测变量模型</h3><p>假定我们考虑以客户日使用分钟数作为预测变量，则相应的逻辑回归分析结果如下：<br><img src="/images/blog/loginregressionsample14.png"><br>因此对于一个给定日使用分钟数的顾客，流失概率：</p>
+<p>$$<br>  \pi(x)&#x3D;\frac{e^{g(x)}}{1+e^{g(x)}}&#x3D;\frac{e^{-3.929-0.112717(日分钟数)}}{1+e^{-3.929-0.112717(日分钟数)}}<br>$$</p>
+<ul>
+<li>对于一个日使用分钟数为100的顾客流失的概率估计为：</li>
+</ul>
+<p>$$<br>ｇ(x)＝-3.9292+0.112717(100)&#x3D;-2.80212<br>$$</p>
+<p>概率π(100)＝0.0572,比数据集中总比例14.5%要小，表明低的日使用分钟数会在一定程度上防止顾客流失</p>
+<ul>
+<li>对于一个日使用分钟数为300的顾客流失的概率估计为：</li>
+</ul>
+<p>$$<br>ｇ(x)&#x3D;-3.9292+0.0112717(300)＝-0.054778<br>$$</p>
+<p>概率π(300)＝0.3664，比数据集中总比例14.5%要大，表明日使用分钟数越多顾客流失越多</p>
+<p>“日使用分钟数”，这一实例的<strong>偏差Ｇ</strong>为：</p>
+<p>$$<br>  G&#x3D;偏差(没有预测变量的模型)-偏差(有预测变量的模型)<br>  \&#x3D;-2ln\frac{没有预测变量的似然值}{有预测变量的似然值}<br>  \&#x3D;2{-1307.129-[483ln(483)+2850ln(2850)-3333ln(3333)]}<br>  \&#x3D;144.035<br>$$</p>
+<p>对Ｇ进行卡方检验，</p>
+<p>$$<br>  P(x^2)\gt G_{观测值}即P(x^2)\gt 144.035&#x3D;0.0000<br>$$</p>
+<p>因此强有力的证据表明日使用分钟数有助于预测顾客的流失情况。</p>
+<p>对“日使用分钟数”进行Ｗａｌｄ检验，可以得到同样的结论。</p>
+<h2 id="三-多元逻辑回归"><a href="#三-多元逻辑回归" class="headerlink" title="三.多元逻辑回归"></a>三.多元逻辑回归</h2><p>多元逻辑回归与简单逻辑回归十分相似，需要注意的是选择恰当的预测变量，其方法主要有</p>
+<ul>
+<li>针对单个变量的挑选：Wald检验某个变量是否有助于预测</li>
+<li>针对多个变量总体挑选：总体显著性Ｇ</li>
+</ul>
+<p>下图一个简单示例：<br><img src="/images/blog/loginregressionsample18.png"><br><img src="/images/blog/loginregressionsample19.png"><br>由上面两幅图可以看出，其中的“账户时长”变量其Wald检验的Ｐ值没有拒绝零假设检验，因而需要从全体预测变量中剔除。最后的Ｇ偏差，卡方检验虽然两幅图中都能表明，多元预测变量能显著预测结果（Ｇ检验的Ｐ值＝０），但是剔除账户长度后更好。</p>
+<h2 id="四-逻辑回归中引入高阶项"><a href="#四-逻辑回归中引入高阶项" class="headerlink" title="四 逻辑回归中引入高阶项"></a>四 逻辑回归中引入高阶项</h2><h4 id="为何需要高阶项"><a href="#为何需要高阶项" class="headerlink" title="为何需要高阶项"></a>为何需要高阶项</h4><p>如果逻辑回归转换函数在连续变量中不是线性的，让步比的估计和置信区间的应用可能会有问题。原因在与估计的让步比在预测变量取值域上是一个常数。例如，不论是第23分钟还是第323分钟，日使用分钟数每增加1个单位，让步比都是1.01.这种让步比为常数的假设并不总是成立。<br><br>此时，分析人员需要做一些非线性的调整，如使用指示变量（见多分预测变量模型）和高阶项（如：$x^2，x^3．．$）。<br></p>
+<h4 id="高阶项的作用"><a href="#高阶项的作用" class="headerlink" title="高阶项的作用"></a>高阶项的作用</h4><p>高阶项的引入可以作为惩罚函数，减少该变量不正常的分布。使用高阶项（和起始变量一起运用）的优势在于，高阶项可以是连续的并且可以提供更严格的估计。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/09/15/2013-05-24-datamining-classfy-main/" rel="prev" title="数据挖掘方法之分类">
+      <i class="fa fa-chevron-left"></i> 数据挖掘方法之分类
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/09/15/2013-05-12-datamining-logicregression/" rel="next" title="数据挖掘方法之五：逻辑回归">
+      数据挖掘方法之五：逻辑回归 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80-%E4%BD%BF%E7%94%A8%E6%95%B0%E6%8D%AE"><span class="nav-number">1.</span> <span class="nav-text">一 使用数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C-%E8%A7%A3%E8%AF%BB%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">二 .解读逻辑回归模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E4%B8%A4%E5%88%86%E9%A2%84%E6%B5%8B%E5%8F%98%E9%87%8F%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 两分预测变量模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%A4%9A%E5%88%86%E9%A2%84%E6%B5%8B%E5%8F%98%E9%87%8F%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 多分预测变量模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Wald%E6%A3%80%E9%AA%8C"><span class="nav-number">2.2.1.</span> <span class="nav-text">Wald检验</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E8%A7%A3%E8%AF%BB%E8%BF%9E%E7%BB%AD%E9%A2%84%E6%B5%8B%E5%8F%98%E9%87%8F%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.3.</span> <span class="nav-text">2.3　解读连续预测变量模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89-%E5%A4%9A%E5%85%83%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92"><span class="nav-number">3.</span> <span class="nav-text">三.多元逻辑回归</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B-%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92%E4%B8%AD%E5%BC%95%E5%85%A5%E9%AB%98%E9%98%B6%E9%A1%B9"><span class="nav-number">4.</span> <span class="nav-text">四 逻辑回归中引入高阶项</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BA%E4%BD%95%E9%9C%80%E8%A6%81%E9%AB%98%E9%98%B6%E9%A1%B9"><span class="nav-number">4.0.1.</span> <span class="nav-text">为何需要高阶项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%AB%98%E9%98%B6%E9%A1%B9%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number">4.0.2.</span> <span class="nav-text">高阶项的作用</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="shartoo"
+      src="/images/me.jpg">
+  <p class="site-author-name" itemprop="name">shartoo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">shartoo</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v6.3.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.6.0
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'c656cd038e01f710e260',
+      clientSecret: 'e6de2ccaaf0f7069292125b8f50e27f25b95810d',
+      repo: 'shartoo.github.io',
+      owner: 'shartoo',
+      admin: ['shartoo'],
+      id: 'aa408f705a3eed9716fd59fa9f788326',
+        language: '',
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+</body>
+</html>
